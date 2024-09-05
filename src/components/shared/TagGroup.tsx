@@ -1,5 +1,5 @@
 import { XIcon } from "lucide-react";
-import React, { createContext, useContext } from "react";
+import { createContext, useContext } from "react";
 import {
   Tag as AriaTag,
   TagGroup as AriaTagGroup,
