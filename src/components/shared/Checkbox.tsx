@@ -57,10 +57,10 @@ const boxStyles = tv({
       true: "bg-[--color] border-[--color] [--color:theme(colors.gray.700)] group-pressed:[--color:theme(colors.gray.800)] dark:[--color:theme(colors.gray.300)] dark:group-pressed:[--color:theme(colors.gray.200)] forced-colors:![--color:Highlight]",
     },
     isInvalid: {
-      true: "[--color:theme(colors.red.700)] dark:[--color:theme(colors.red.600)] forced-colors:![--color:Mark] group-pressed:[--color:theme(colors.red.800)] dark:group-pressed:[--color:theme(colors.red.700)]",
+      true: "text-red-9 dark:text-reddark-9 forced-colors:![--color:Mark] group-pressed:[--color:theme(colors.red.800)] dark:group-pressed:[--color:theme(colors.red.700)]",
     },
     isDisabled: {
-      true: "[--color:theme(colors.gray.200)] dark:[--color:theme(colors.gray.700)] forced-colors:![--color:GrayText]",
+      true: "text-gray-7 dark:text-graydark-7 forced-colors:![--color:GrayText]",
     },
   },
 });
