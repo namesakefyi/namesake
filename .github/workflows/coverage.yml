@@ -1,0 +1,83 @@
+name: Coverage
+
+on: 
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  test-coverage:
+    name: Test Coverage
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        branch:
+          - ${{ github.head_ref }}
+          - main
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.branch }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Test coverage
+        run: npx vitest --coverage.enabled true
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.branch }}
+          path: coverage
+          overwrite: true
+
+  report-coverage:
+    needs: test-coverage
+    name: Report Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+  
+      - name: Download coverage (${{ github.head_ref }})
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-${{ github.head_ref }}
+          path: coverage
+
+      - name: Download coverage (main)
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-main
+          path: coverage
+
+      - name: Report coverage
+        if: always() 
+        uses: davelosert/vitest-coverage-report-action@v2.5.1
+        with:
+          file-coverage-mode: all
+          json-summary-compare-path: coverage-main/coverage-summary.json
