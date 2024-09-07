@@ -5,7 +5,6 @@ import {
   createRootRouteWithContext,
   useRouter,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import type { ConvexAuthState } from "convex/react";
 import { RouterProvider } from "react-aria-components";
 import { AppHeader } from "../components/shared";
@@ -38,7 +37,6 @@ function RootRoute() {
         <AppHeader />
         <Outlet />
       </main>
-      <TanStackRouterDevtools />
     </RouterProvider>
   );
 }
