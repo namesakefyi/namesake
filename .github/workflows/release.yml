@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Create release pull request
+      - name: Create release pull request or bump version tag
         uses: changesets/action@v1
         with:
           title: 'ci: Release'
