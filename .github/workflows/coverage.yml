@@ -2,10 +2,16 @@ name: Coverage
 
 on: 
   pull_request:
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   test-coverage:
@@ -16,9 +22,6 @@ jobs:
         branch:
           - ${{ github.head_ref }}
           - main
-
-    permissions:
-      contents: read
 
     steps:
       - name: Checkout repo
@@ -55,10 +58,6 @@ jobs:
     needs: test-coverage
     name: Report Coverage
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      pull-requests: write
 
     steps:
       - name: Download coverage (${{ github.head_ref }})
