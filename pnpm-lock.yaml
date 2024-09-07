@@ -39,6 +39,9 @@ importers:
       convex:
         specifier: ^1.15.0
         version: 1.15.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      convex-helpers:
+        specifier: ^0.1.56
+        version: 0.1.56(convex@1.15.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(zod@3.23.8)
       lucide-react:
         specifier: ^0.438.0
         version: 0.438.0(react@18.3.1)
@@ -2344,6 +2347,22 @@ packages:
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  convex-helpers@0.1.56:
+    resolution: {integrity: sha512-+q0XXCLygCgH35v1ioL1NU6L699CSLYyPiYNMBwfDeISHTM12tPpHtakzzUt3gQ83/+qg1315NwTi11rnpL40g==}
+    hasBin: true
+    peerDependencies:
+      convex: ^1.13.0
+      hono: ^4.0.5
+      react: ^17.0.2 || ^18.0.0
+      zod: ^3.22.4
+    peerDependenciesMeta:
+      hono:
+        optional: true
+      react:
+        optional: true
+      zod:
+        optional: true
 
   convex-test@0.0.28:
     resolution: {integrity: sha512-xqk45yqL3F6595t0fYRxERwI7WGeYbzRvIwzHOHfKNNEpyNmHkutnO7FdBSpCu1Om3O6gfnaJv1tNbCULVNFIA==}
@@ -7569,6 +7588,13 @@ snapshots:
     optional: true
 
   convert-source-map@2.0.0: {}
+
+  convex-helpers@0.1.56(convex@1.15.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(zod@3.23.8):
+    dependencies:
+      convex: 1.15.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+    optionalDependencies:
+      react: 18.3.1
+      zod: 3.23.8
 
   convex-test@0.0.28(convex@1.15.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
     dependencies:

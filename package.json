@@ -33,6 +33,7 @@
     "@remixicon/react": "^4.2.0",
     "@tanstack/react-router": "^1.52.5",
     "convex": "^1.15.0",
+    "convex-helpers": "^0.1.56",
     "lucide-react": "^0.438.0",
     "next-themes": "^0.3.0",
     "postcss": "^8.4.44",
