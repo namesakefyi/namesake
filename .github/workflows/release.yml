@@ -34,5 +34,6 @@ jobs:
         uses: changesets/action@v1
         with:
           title: 'ci: Release'
+          publish: pnpm changeset tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
