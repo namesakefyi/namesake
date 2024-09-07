@@ -1,4 +1,5 @@
 /// <reference types="vitest" />
+
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react-swc";
 import autoprefixer from "autoprefixer";
@@ -27,7 +28,8 @@ export default defineConfig({
     server: { deps: { inline: ["convex-test"] } },
     exclude: [...configDefaults.exclude],
     coverage: {
-      reporter: ["text", "json-summary"],
+      reporter: ["text", "json-summary", "json"],
+      reportOnFailure: true,
       exclude: [
         ...coverageConfigDefaults.exclude,
         "**/*.config.?(c|m)[jt]s?(x)",
