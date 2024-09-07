@@ -60,6 +60,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+  
       - name: Download coverage (${{ github.head_ref }})
         uses: actions/download-artifact@v4
         with:
