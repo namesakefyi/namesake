@@ -14,6 +14,7 @@ export default defineConfig({
     server: { deps: { inline: ["convex-test"] } },
     exclude: [...configDefaults.exclude],
     coverage: {
+      reporter: ["text", "json-summary"],
       exclude: [
         ...coverageConfigDefaults.exclude,
         "**/*.config.?(c|m)[jt]s?(x)",
