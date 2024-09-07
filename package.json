@@ -20,12 +20,8 @@
     "test": "vitest",
     "test:once": "vitest run",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
-    "test:coverage": "vitest run --coverage --coverage.reporter=text"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pnpm check:fix && git add -A"
-    }
+    "test:coverage": "vitest run --coverage --coverage.reporter=text",
+    "prepare": "husky"
   },
   "dependencies": {
     "@auth/core": "^0.34.2",
