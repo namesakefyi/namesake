@@ -26,7 +26,7 @@ export default defineConfig({
       ["**", "jsdom"],
     ],
     server: { deps: { inline: ["convex-test"] } },
-    exclude: [...configDefaults.exclude],
+    exclude: [...configDefaults.exclude, "e2e/**"],
     coverage: {
       reporter: ["text", "json-summary", "json"],
       reportOnFailure: true,

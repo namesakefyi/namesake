@@ -50,11 +50,11 @@ View all dependencies in [package.json](/package.json).
 
 ```shell
 📂 convex          # Backend queries, mutations, and schema definitions
+📂 e2e             # End-to-end Playwright tests
 📂 public          # Images, favicons, and other unprocessed assets
 📂 src             # Frontend application
 ├── 📂 components  # Shared components
 ├── 📂 routes      # File-based routing using TanStack Router
 ├── 📂 styles      # Global CSS (not much here, most of it's in Tailwind!)
 └── main.tsx       # Base of the project including common Providers
-📂 src             # End-to-end Playwright tests
 ```
