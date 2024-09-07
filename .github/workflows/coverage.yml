@@ -73,11 +73,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: coverage-main
-          path: coverage
+          path: coverage-main
 
       - name: Report coverage
-        if: always() 
+        if: always()
         uses: davelosert/vitest-coverage-report-action@v2.5.1
         with:
-          file-coverage-mode: all
           json-summary-compare-path: coverage-main/coverage-summary.json
