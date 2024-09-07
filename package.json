@@ -14,13 +14,18 @@
     "lint:fix": "biome lint --write",
     "format": "biome format",
     "format:fix": "biome format --write",
-    "check": "tsc && biome check",
-    "check:fix": "tsc && biome check --write",
+    "check": "tsc -b && biome check",
+    "check:fix": "tsc -b && biome check --write",
     "preview": "vite preview",
     "test": "vitest",
     "test:once": "vitest run",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
     "test:coverage": "vitest run --coverage --coverage.reporter=text"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pnpm check:fix && git add -A"
+    }
   },
   "dependencies": {
     "@auth/core": "^0.34.2",
