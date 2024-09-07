@@ -76,5 +76,6 @@ jobs:
         if: always() 
         uses: davelosert/vitest-coverage-report-action@v2.5.1
         with:
+          vite-config-path: vite.config.ts
           file-coverage-mode: all
           json-summary-compare-path: coverage-main/coverage-summary.json
