@@ -45,7 +45,9 @@ function IndexRoute() {
         <PageHeader title="My Quests" />
         <MyQuests />
       </Authenticated>
-      <Unauthenticated>Please log in</Unauthenticated>
+      <Unauthenticated>
+        <h1>Please log in</h1>
+      </Unauthenticated>
     </Container>
   );
 }

@@ -12,6 +12,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+artifacts
 coverage
 *.tmp
 
@@ -32,3 +33,7 @@ node_modules
 
 # Local files
 *.local
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
