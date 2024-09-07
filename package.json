@@ -20,7 +20,8 @@
     "test": "vitest",
     "test:once": "vitest run",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
-    "test:coverage": "vitest run --coverage --coverage.reporter=text",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
     "prepare": "husky"
   },
   "dependencies": {
@@ -50,10 +51,12 @@
     "use-debounce": "^10.0.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
     "@babel/preset-react": "^7.24.1",
     "@biomejs/biome": "1.8.3",
     "@changesets/cli": "^2.27.8",
     "@edge-runtime/vm": "^4.0.2",
+    "@playwright/test": "^1.47.0",
     "@tanstack/router-devtools": "^1.52.5",
     "@tanstack/router-plugin": "^1.52.0",
     "@types/node": "^22.5.2",
@@ -63,6 +66,7 @@
     "@vitest/coverage-v8": "^2.0.5",
     "@vitest/ui": "^2.0.5",
     "autoprefixer": "^10.4.20",
+    "axe-html-reporter": "^2.2.11",
     "convex-test": "^0.0.28",
     "cssnano": "^7.0.5",
     "globals": "^15.9.0",

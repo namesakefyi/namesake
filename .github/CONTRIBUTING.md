@@ -50,6 +50,7 @@ View all dependencies in [package.json](/package.json).
 
 ```shell
 📂 convex          # Backend queries, mutations, and schema definitions
+📂 e2e             # End-to-end Playwright tests
 📂 public          # Images, favicons, and other unprocessed assets
 📂 src             # Frontend application
 ├── 📂 components  # Shared components

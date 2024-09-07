@@ -12,8 +12,15 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-coverage
 *.tmp
+
+# Tests
+artifacts
+coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # Dependencies
 node_modules
