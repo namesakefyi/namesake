@@ -1,6 +1,11 @@
-name: 'Coverage'
+name: Coverage
+
 on: 
   pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test-coverage:
@@ -72,5 +77,5 @@ jobs:
         if: always() 
         uses: davelosert/vitest-coverage-report-action@v2.5.1
         with:
-          working-directory: './'
+          file-coverage-mode: all
           json-summary-compare-path: coverage-main/coverage-summary.json
