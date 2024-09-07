@@ -67,13 +67,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: coverage-${{ github.head_ref }}
-          path: coverage-${{ github.head_ref }}
+          path: coverage
 
       - name: Download coverage (main)
         uses: actions/download-artifact@v4
         with:
           name: coverage-main
-          path: coverage-main
+          path: coverage
 
       - name: Report coverage
         if: always() 
