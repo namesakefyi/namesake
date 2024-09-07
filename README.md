@@ -1,3 +1,6 @@
+> [!NOTE]
+> This app is still in active development and is not yet available to the public. Stay tuned for more info at the [Namesake Discord](https://namesake.fyi/chat)!
+
 # Namesake
 
 Namesake is a web application which helps people in the U.S. navigate the legal name and gender marker change process. Learn more at [https://namesake.fyi](https://namesake.fyi).
