@@ -30,6 +30,7 @@ export default defineConfig({
     coverage: {
       reporter: ["text", "json-summary", "json"],
       reportOnFailure: true,
+      include: ["src/**", "convex/**"],
       exclude: [
         ...coverageConfigDefaults.exclude,
         "**/*.config.?(c|m)[jt]s?(x)",
