@@ -36,7 +36,7 @@ jobs:
       - name: Biome Linter, Formatter, and Import Sorter
         run: pnpm biome ci
 
-  smoke:
+  e2e:
     name: End-to-end Test
     runs-on: ubuntu-latest
     steps:
@@ -59,7 +59,7 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Run Playwright end-to-end tests
-        run: pnpm playwright
+        run: pnpm test:e2e
 
       - uses: actions/upload-artifact@v4
         if: always()
