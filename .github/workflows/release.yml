@@ -8,8 +8,8 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  changelog:
-    name: Changelog PR or Release
+  release:
+    name: Release
     runs-on: ubuntu-latest
     permissions:
       contents: write
