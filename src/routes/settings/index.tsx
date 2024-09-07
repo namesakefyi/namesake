@@ -8,6 +8,7 @@ import { api } from "../../../convex/_generated/api";
 import {
   Button,
   Container,
+  Link,
   Modal,
   PageHeader,
   Switch,
@@ -28,6 +29,7 @@ export const Route = createFileRoute("/settings/")({
 function SettingsRoute() {
   const { signOut } = useAuthActions();
   const user = useQuery(api.users.getCurrentUser);
+  const version = "APP_VERSION";
 
   // Name change field
   // TODO: Extract all this debounce logic + field as a component for reuse
@@ -132,6 +134,12 @@ function SettingsRoute() {
           </Modal>
         </div>
       )}
+      <a
+        href={`https://github.com/namesakefyi/namesake/releases/tag/v${APP_VERSION}`}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-block mt-4"
+      >{`Namesake v${APP_VERSION}`}</a>
     </Container>
   );
 }

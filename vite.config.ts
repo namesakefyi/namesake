@@ -8,6 +8,9 @@ import { defineConfig } from "vite";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [TanStackRouterVite(), react()],
+  define: {
+    APP_VERSION: JSON.stringify(process.env.npm_package_version),
+  },
   css: {
     postcss: {
       plugins: [autoprefixer(), tailwindcss(), cssnano()],
