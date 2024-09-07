@@ -56,4 +56,5 @@ View all dependencies in [package.json](/package.json).
 ├── 📂 routes      # File-based routing using TanStack Router
 ├── 📂 styles      # Global CSS (not much here, most of it's in Tailwind!)
 └── main.tsx       # Base of the project including common Providers
+📂 src             # End-to-end Playwright tests
 ```
