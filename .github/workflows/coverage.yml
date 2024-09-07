@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-${{ matrix.branch }}
-          path: coverage-${{ matrix.branch }}
+          path: coverage
           overwrite: true
 
   report-coverage:
