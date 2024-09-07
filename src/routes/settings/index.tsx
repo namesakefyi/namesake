@@ -8,7 +8,6 @@ import { api } from "../../../convex/_generated/api";
 import {
   Button,
   Container,
-  Link,
   Modal,
   PageHeader,
   Switch,
@@ -29,7 +28,6 @@ export const Route = createFileRoute("/settings/")({
 function SettingsRoute() {
   const { signOut } = useAuthActions();
   const user = useQuery(api.users.getCurrentUser);
-  const version = "APP_VERSION";
 
   // Name change field
   // TODO: Extract all this debounce logic + field as a component for reuse
