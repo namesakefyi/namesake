@@ -1,9 +1,8 @@
 {
   "name": "namesake",
-  "private": true,
   "version": "0.0.1",
+  "private": true,
   "type": "module",
-  "packageManager": "pnpm@9.9.0",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "npm-run-all --parallel dev:frontend dev:backend",
@@ -23,6 +22,10 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "prepare": "husky"
+  },
+  "resolutions": {
+    "@types/mime": "3.0.4",
+    "jackspeak": "2.1.1"
   },
   "dependencies": {
     "@auth/core": "^0.34.2",
@@ -82,8 +85,5 @@
     "vite": "^5.4.1",
     "vitest": "^2.0.5"
   },
-  "resolutions": {
-    "@types/mime": "3.0.4",
-    "jackspeak": "2.1.1"
-  }
+  "packageManager": "pnpm@9.9.0"
 }
