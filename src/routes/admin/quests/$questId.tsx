@@ -10,11 +10,7 @@ import {
   Card,
   Form,
   PageHeader,
-  Tab,
-  TabList,
-  TabPanel,
-  Tabs,
-  TextArea,
+  RichTextEditor,
   TextField,
 } from "../../../components/shared";
 
@@ -56,7 +52,7 @@ function AdminQuestDetailRoute() {
       />
       <div className="flex flex-col gap-6">
         {quest.steps ? (
-          <ol>
+          <ol className="flex flex-col gap-4">
             {quest.steps.map((step, i) => (
               <li key={`${quest.title}-step-${i}`}>
                 <Card className="flex flex-col gap-2">
@@ -86,19 +82,7 @@ function AdminQuestDetailRoute() {
                 onChange={setTitle}
                 description="Use sentence case and no punctuation"
               />
-              <Tabs>
-                <TabList aria-label="Editor">
-                  <Tab id="write">Write</Tab>
-                  <Tab id="preview">Preview</Tab>
-                </TabList>
-                <TabPanel id="write">
-                  <TextArea label="Body" value={body} onChange={setBody} />
-                </TabPanel>
-                <TabPanel id="preview">
-                  {/* TODO: Empty state */}
-                  {body ? <Markdown>{body}</Markdown> : "No content"}
-                </TabPanel>
-              </Tabs>
+              <RichTextEditor markdown={body} onChange={setBody} />
               <div className="flex gap-2 justify-end">
                 <Button onPress={() => setIsNewStepFormVisible(false)}>
                   Cancel

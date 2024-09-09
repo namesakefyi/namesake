@@ -33,6 +33,7 @@ import { Popover } from "./Popover";
 import { ProgressBar } from "./ProgressBar";
 import { Radio, RadioGroup } from "./RadioGroup";
 import { RangeCalendar } from "./RangeCalendar";
+import { RichTextEditor } from "./RichTextEditor";
 import { SearchField } from "./SearchField";
 import { Select, SelectItem, SelectSection } from "./Select";
 import { Separator } from "./Separator";
@@ -105,6 +106,7 @@ export {
   Radio,
   RadioGroup,
   RangeCalendar,
+  RichTextEditor,
   SearchField,
   Select,
   SelectItem,
