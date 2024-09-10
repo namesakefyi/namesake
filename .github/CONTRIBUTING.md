@@ -4,26 +4,43 @@
 
 Namesake uses pnpm for package management. You may need to [install pnpm](https://pnpm.io/installation) globally if you don't have it installed.
 
-### Setting up your local repo
+### Set up your local repo
 
 ```shell
 git clone https://github.com/namesakefyi/namesake.git
 cd namesake
 ```
 
-Once you are within the directory for the repo, install packages:
+Within the `namesake` directory, install packages:
 
 ```shell
 pnpm install
 ```
 
-And start up the dev server:
+### Connect to Convex (first time only)
+
+The first time you set up the app, you will need to connect to Convex. Run:
+
+```shell
+npx convex dev
+```
+
+Select "choose an existing project" and affirm "configure project namesake".
+
+Convex will generate an `.env.local` file which points to a dev database for you to use.
+
+### Start the dev server
+
+To start developing locally, run:
 
 ```shell
 pnpm dev
 ```
 
-The `dev` command will spin up the convex backend and the app's frontend in parallel. To run them individually, run `pnpm dev:frontend` or `pnpm dev:backend`.
+The app will be available at http://localhost:5173.
+
+> [!NOTE]
+> The `dev` command will spin up the convex backend and the app's frontend in parallel. To run them individually, run `pnpm dev:frontend` or `pnpm dev:backend`.
 
 ## Dependencies
 
