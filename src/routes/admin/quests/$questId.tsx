@@ -58,7 +58,9 @@ function AdminQuestDetailRoute() {
                 <Card className="flex flex-col gap-2">
                   <h2 className="text-xl font-semibold">{step.title}</h2>
                   <div>
-                    <Markdown>{step.body}</Markdown>
+                    <Markdown className="prose dark:prose-invert">
+                      {step.body}
+                    </Markdown>
                   </div>
                 </Card>
               </li>

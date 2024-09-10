@@ -18,3 +18,36 @@ body {
   @apply bg-gray-app;
   color-scheme: dark light;
 }
+
+.mdxeditor-root-contenteditable li {
+  margin: 0;
+}
+
+.prose {
+  line-height: 1.5;
+
+  p,
+  ul,
+  ol {
+    margin-block: 0.75em;
+  }
+
+  li {
+    margin-block: 0;
+  }
+
+  ul ul,
+  ul ol,
+  ol ul,
+  ol ol {
+    margin-block: 0;
+  }
+
+  > *:first-child {
+    margin-top: 0;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}

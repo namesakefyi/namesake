@@ -7,8 +7,6 @@ import {
   type MDXEditorProps,
   Separator,
   UndoRedo,
-  linkDialogPlugin,
-  linkPlugin,
   listsPlugin,
   markdownShortcutPlugin,
   toolbarPlugin,
@@ -24,19 +22,19 @@ export function RichTextEditor(props: RichTextEditorProps) {
   return (
     <MDXEditor
       className="dark-theme dark-editor border border-gray-dim rounded-lg flex flex-col"
+      contentEditableClassName="prose dark:prose-invert"
+      suppressHtmlProcessing
       {...props}
       ref={ref}
       plugins={[
         listsPlugin(),
-        linkPlugin(),
-        linkDialogPlugin(),
         markdownShortcutPlugin(),
         toolbarPlugin({
           toolbarContents: () => (
             <>
               <UndoRedo />
               <Separator />
-              <BoldItalicUnderlineToggles />
+              <BoldItalicUnderlineToggles options={["Bold", "Italic"]} />
               <Separator />
               <ListsToggle options={["bullet", "number"]} />
               <CreateLink />

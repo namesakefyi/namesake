@@ -61,6 +61,7 @@
     "@changesets/cli": "^2.27.8",
     "@edge-runtime/vm": "^4.0.2",
     "@playwright/test": "^1.47.0",
+    "@tailwindcss/typography": "^0.5.15",
     "@tanstack/router-devtools": "^1.52.5",
     "@tanstack/router-plugin": "^1.52.0",
     "@types/node": "^22.5.2",
