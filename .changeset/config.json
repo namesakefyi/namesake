@@ -1,6 +1,9 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.3/schema.json",
-  "changelog": "@changesets/changelog-github",
+  "changelog": [
+    "@changesets/changelog-github",
+    { "repo": "namesakefyi/namesake" }
+  ],
   "commit": false,
   "access": "restricted",
   "baseBranch": "main",
