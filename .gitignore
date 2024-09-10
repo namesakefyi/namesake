@@ -2,7 +2,7 @@
 build
 dist
 dist-ssr
-tsconfig.tsbuildinfo
+*.tsbuildinfo
 
 # Logs
 logs
