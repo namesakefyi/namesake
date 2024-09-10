@@ -35,12 +35,12 @@ export function Table(props: TableProps) {
 
 const columnStyles = tv({
   extend: focusRing,
-  base: "px-3 h-6 flex-1 flex gap-1 items-center overflow-hidden",
+  base: "px-3 flex-1 flex gap-1 items-center overflow-hidden",
 });
 
 const resizerStyles = tv({
   extend: focusRing,
-  base: "w-px px-[8px] translate-x-[8px] box-content py-1 h-5 bg-clip-content bg-gray-4 dark:bg-gray-5 forced-colors:bg-[ButtonBorder] cursor-col-resize rounded resizing:bg-blue-9 forced-colors:resizing:bg-[Highlight] resizing:w-[2px] resizing:pl-[7px] -outline-offset-2",
+  base: "w-px px-[8px] translate-x-[8px] box-content py-1 h-6 bg-clip-content bg-gray-5 dark:bg-graydark-5 forced-colors:bg-[ButtonBorder] cursor-col-resize rounded resizing:bg-blue-9 forced-colors:resizing:bg-[Highlight] resizing:w-[2px] resizing:pl-[7px] -outline-offset-2",
 });
 
 export function TableColumn(props: ColumnProps) {
