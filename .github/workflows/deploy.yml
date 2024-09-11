@@ -30,6 +30,8 @@ jobs:
         run: pnpm install
 
       - name: Deploy Convex and build app
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
         run: npx convex deploy --cmd 'pnpm build'
 
       - name: Deploy to Cloudflare Pages
