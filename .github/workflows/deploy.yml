@@ -1,6 +1,7 @@
 name: Deploy
 
 on:
+  workflow_dispatch:
   push:
     tags:
     - '*'
@@ -40,4 +41,3 @@ jobs:
           directory: 'dist'
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           branch: main
-          
