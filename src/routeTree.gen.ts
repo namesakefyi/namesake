@@ -16,6 +16,7 @@ import { Route as AdminRouteImport } from './routes/admin/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as SettingsIndexImport } from './routes/settings/index'
 import { Route as QuestsIndexImport } from './routes/quests/index'
+import { Route as LawsIndexImport } from './routes/laws/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as AdminQuestsIndexImport } from './routes/admin/quests/index'
 import { Route as AdminFormsIndexImport } from './routes/admin/forms/index'
@@ -46,6 +47,11 @@ const SettingsIndexRoute = SettingsIndexImport.update({
 
 const QuestsIndexRoute = QuestsIndexImport.update({
   path: '/quests/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LawsIndexRoute = LawsIndexImport.update({
+  path: '/laws/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -106,6 +112,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexImport
       parentRoute: typeof AdminRouteImport
     }
+    '/laws/': {
+      id: '/laws/'
+      path: '/laws'
+      fullPath: '/laws'
+      preLoaderRoute: typeof LawsIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/quests/': {
       id: '/quests/'
       path: '/quests'
@@ -153,19 +166,131 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexRoute,
-  AdminRouteRoute: AdminRouteRoute.addChildren({
-    AdminIndexRoute,
-    AdminFormsFormIdRoute,
-    AdminQuestsQuestIdRoute,
-    AdminFormsIndexRoute,
-    AdminQuestsIndexRoute,
-  }),
-  SigninRoute,
-  QuestsIndexRoute,
-  SettingsIndexRoute,
-})
+interface AdminRouteRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminFormsFormIdRoute: typeof AdminFormsFormIdRoute
+  AdminQuestsQuestIdRoute: typeof AdminQuestsQuestIdRoute
+  AdminFormsIndexRoute: typeof AdminFormsIndexRoute
+  AdminQuestsIndexRoute: typeof AdminQuestsIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+  AdminFormsFormIdRoute: AdminFormsFormIdRoute,
+  AdminQuestsQuestIdRoute: AdminQuestsQuestIdRoute,
+  AdminFormsIndexRoute: AdminFormsIndexRoute,
+  AdminQuestsIndexRoute: AdminQuestsIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/signin': typeof SigninRoute
+  '/admin/': typeof AdminIndexRoute
+  '/laws': typeof LawsIndexRoute
+  '/quests': typeof QuestsIndexRoute
+  '/settings': typeof SettingsIndexRoute
+  '/admin/forms/$formId': typeof AdminFormsFormIdRoute
+  '/admin/quests/$questId': typeof AdminQuestsQuestIdRoute
+  '/admin/forms': typeof AdminFormsIndexRoute
+  '/admin/quests': typeof AdminQuestsIndexRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/signin': typeof SigninRoute
+  '/admin': typeof AdminIndexRoute
+  '/laws': typeof LawsIndexRoute
+  '/quests': typeof QuestsIndexRoute
+  '/settings': typeof SettingsIndexRoute
+  '/admin/forms/$formId': typeof AdminFormsFormIdRoute
+  '/admin/quests/$questId': typeof AdminQuestsQuestIdRoute
+  '/admin/forms': typeof AdminFormsIndexRoute
+  '/admin/quests': typeof AdminQuestsIndexRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/signin': typeof SigninRoute
+  '/admin/': typeof AdminIndexRoute
+  '/laws/': typeof LawsIndexRoute
+  '/quests/': typeof QuestsIndexRoute
+  '/settings/': typeof SettingsIndexRoute
+  '/admin/forms/$formId': typeof AdminFormsFormIdRoute
+  '/admin/quests/$questId': typeof AdminQuestsQuestIdRoute
+  '/admin/forms/': typeof AdminFormsIndexRoute
+  '/admin/quests/': typeof AdminQuestsIndexRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/signin'
+    | '/admin/'
+    | '/laws'
+    | '/quests'
+    | '/settings'
+    | '/admin/forms/$formId'
+    | '/admin/quests/$questId'
+    | '/admin/forms'
+    | '/admin/quests'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/signin'
+    | '/admin'
+    | '/laws'
+    | '/quests'
+    | '/settings'
+    | '/admin/forms/$formId'
+    | '/admin/quests/$questId'
+    | '/admin/forms'
+    | '/admin/quests'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/signin'
+    | '/admin/'
+    | '/laws/'
+    | '/quests/'
+    | '/settings/'
+    | '/admin/forms/$formId'
+    | '/admin/quests/$questId'
+    | '/admin/forms/'
+    | '/admin/quests/'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  SigninRoute: typeof SigninRoute
+  LawsIndexRoute: typeof LawsIndexRoute
+  QuestsIndexRoute: typeof QuestsIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
+  SigninRoute: SigninRoute,
+  LawsIndexRoute: LawsIndexRoute,
+  QuestsIndexRoute: QuestsIndexRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 
@@ -178,6 +303,7 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/admin",
         "/signin",
+        "/laws/",
         "/quests/",
         "/settings/"
       ]
@@ -201,6 +327,9 @@ export const routeTree = rootRoute.addChildren({
     "/admin/": {
       "filePath": "admin/index.tsx",
       "parent": "/admin"
+    },
+    "/laws/": {
+      "filePath": "laws/index.tsx"
     },
     "/quests/": {
       "filePath": "quests/index.tsx"

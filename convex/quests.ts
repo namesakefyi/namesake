@@ -1,7 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { usState } from "./schema";
+import { jurisdictions } from "./schema";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -31,13 +31,13 @@ export const getQuest = query({
 });
 
 export const createQuest = mutation({
-  args: { title: v.string(), state: v.optional(usState) },
+  args: { title: v.string(), jurisdiction: v.optional(jurisdictions) },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (userId === null) throw new Error("Not authenticated");
     return await ctx.db.insert("quests", {
       title: args.title,
-      state: args.state,
+      jurisdiction: args.jurisdiction,
       creationUser: userId,
     });
   },

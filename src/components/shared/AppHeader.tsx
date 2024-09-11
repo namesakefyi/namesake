@@ -10,6 +10,7 @@ export const AppHeader = () => {
     <div className="flex gap-4 items-center w-screen py-3 px-4 border-b border-gray-dim">
       <Link href={{ to: "/" }}>Namesake</Link>
       <Link href={{ to: "/quests" }}>Quests</Link>
+      <Link href={{ to: "/laws" }}>Laws</Link>
       <Authenticated>
         {/* TODO: Gate this by role */}
         <Link href={{ to: "/admin" }}>Admin</Link>

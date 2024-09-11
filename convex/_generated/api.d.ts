@@ -18,6 +18,7 @@ import type * as constants from "../constants.js";
 import type * as formFields from "../formFields.js";
 import type * as forms from "../forms.js";
 import type * as http from "../http.js";
+import type * as openlaws from "../openlaws.js";
 import type * as quests from "../quests.js";
 import type * as users from "../users.js";
 import type * as usersQuests from "../usersQuests.js";
@@ -36,6 +37,7 @@ declare const fullApi: ApiFromModules<{
   formFields: typeof formFields;
   forms: typeof forms;
   http: typeof http;
+  openlaws: typeof openlaws;
   quests: typeof quests;
   users: typeof users;
   usersQuests: typeof usersQuests;

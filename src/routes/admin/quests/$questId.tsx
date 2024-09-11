@@ -48,7 +48,7 @@ function AdminQuestDetailRoute() {
     <div>
       <PageHeader
         title={quest.title}
-        badge={<Badge size="lg">{quest.state}</Badge>}
+        badge={<Badge size="lg">{quest.jurisdiction}</Badge>}
       />
       <div className="flex flex-col gap-6">
         {quest.steps ? (
