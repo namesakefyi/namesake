@@ -7,6 +7,12 @@ export const jurisdictions = v.union(
   ...Object.keys(JURISDICTIONS).map((jurisdiction) => v.literal(jurisdiction)),
 );
 
+export const themes = v.union(
+  v.literal("system"),
+  v.literal("light"),
+  v.literal("dark"),
+);
+
 export default defineSchema({
   ...authTables,
 
@@ -96,6 +102,7 @@ export default defineSchema({
    * @param emailVerificationTime - Time in ms since epoch when the user verified their email.
    * @param isAnonymous - Denotes anonymous/unauthenticated users.
    * @param isMinor - Denotes users under 18.
+   * @param preferredTheme - The user's preferred color scheme.
    */
   users: defineTable({
     name: v.optional(v.string()),
@@ -104,6 +111,7 @@ export default defineSchema({
     emailVerificationTime: v.optional(v.number()),
     isAnonymous: v.optional(v.boolean()),
     isMinor: v.optional(v.boolean()),
+    theme: v.optional(themes),
   }).index("email", ["email"]),
 
   /**

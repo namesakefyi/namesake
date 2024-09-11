@@ -42,7 +42,7 @@ export const itemStyles = tv({
       true: "bg-blue-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white dark:outline-white forced-colors:outline-[HighlightText]",
     },
     isDisabled: {
-      true: "text-gray-3 dark:text-gray-6 forced-colors:text-[GrayText]",
+      true: "text-gray-7 dark:text-graydark-7 forced-colors:text-[GrayText]",
     },
   },
 });
@@ -71,7 +71,7 @@ export const dropdownItemStyles = tv({
       true: "text-gray-dim forced-colors:text-[GrayText]",
     },
     isFocused: {
-      true: "bg-purple-action text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
+      true: "bg-purple-9 dark:bg-purpledark-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
     },
   },
   compoundVariants: [
