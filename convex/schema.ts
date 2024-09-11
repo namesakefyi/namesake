@@ -1,10 +1,10 @@
 import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { US_STATES } from "./constants";
+import { JURISDICTIONS } from "./constants";
 
-export const usState = v.union(
-  ...Object.keys(US_STATES).map((state) => v.literal(state)),
+export const jurisdictions = v.union(
+  ...Object.keys(JURISDICTIONS).map((jurisdiction) => v.literal(jurisdiction)),
 );
 
 export default defineSchema({
@@ -24,7 +24,7 @@ export default defineSchema({
     formCode: v.optional(v.string()),
     creationUser: v.id("users"),
     file: v.optional(v.id("_storage")),
-    state: usState,
+    jurisdiction: jurisdictions,
     deletionTime: v.optional(v.number()),
   }),
 
@@ -76,7 +76,7 @@ export default defineSchema({
   quests: defineTable({
     title: v.string(),
     creationUser: v.id("users"),
-    state: v.optional(usState),
+    jurisdiction: v.optional(jurisdictions),
     deletionTime: v.optional(v.number()),
     steps: v.optional(
       v.array(

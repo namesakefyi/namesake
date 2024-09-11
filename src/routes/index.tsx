@@ -30,7 +30,7 @@ function IndexRoute() {
             <GridListItem textValue={quest.title} key={quest._id}>
               <div className="flex items-baseline gap-2">
                 <p className="font-bold text-lg">{quest.title}</p>
-                {quest.state && <Badge>{quest.state}</Badge>}
+                {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
               </div>
             </GridListItem>
           );

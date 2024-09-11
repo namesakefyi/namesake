@@ -27,10 +27,10 @@ function QuestsRoute() {
         items={allQuests}
         renderEmptyState={() => "No quests found"}
       >
-        {allQuests.map(({ _id, title, state }) => (
+        {allQuests.map(({ _id, title, jurisdiction }) => (
           <GridListItem textValue={title} key={_id}>
             {title}
-            {state && <Badge>{state}</Badge>}
+            {jurisdiction && <Badge>{jurisdiction}</Badge>}
           </GridListItem>
         ))}
       </GridList>

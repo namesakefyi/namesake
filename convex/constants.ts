@@ -1,4 +1,4 @@
-export enum US_STATES {
+export enum JURISDICTIONS {
   AK = "Alaska",
   AL = "Alabama",
   AR = "Arkansas",
@@ -8,6 +8,7 @@ export enum US_STATES {
   CT = "Connecticut",
   DC = "District of Columbia",
   DE = "Delaware",
+  FED = "Federal",
   FL = "Florida",
   GA = "Georgia",
   HI = "Hawaii",
@@ -38,6 +39,7 @@ export enum US_STATES {
   OK = "Oklahoma",
   OR = "Oregon",
   PA = "Pennsylvania",
+  PR = "Puerto Rico",
   RI = "Rhode Island",
   SC = "South Carolina",
   SD = "South Dakota",

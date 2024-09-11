@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 import { api } from "../../../../convex/_generated/api";
 import type { DataModel } from "../../../../convex/_generated/dataModel";
-import { US_STATES } from "../../../../convex/constants";
+import { JURISDICTIONS } from "../../../../convex/constants";
 import {
   Badge,
   Button,
@@ -46,23 +46,23 @@ const NewFormModal = ({
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [formCode, setFormCode] = useState("");
-  const [state, setState] = useState<US_STATES | null>(null);
+  const [jurisdiction, setJurisdiction] = useState<JURISDICTIONS | null>(null);
 
   const clearForm = () => {
     setFile(null);
     setTitle("");
     setFormCode("");
-    setState(null);
+    setJurisdiction(null);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (state === null) throw new Error("State is required");
+    if (jurisdiction === null) throw new Error("Jurisdiction is required");
     if (file === null) throw new Error("File is required");
 
     setIsSubmitting(true);
-    const formId = await createForm({ title, state, formCode });
+    const formId = await createForm({ title, jurisdiction, formCode });
 
     const postUrl = await generateUploadUrl();
     const result = await fetch(postUrl, {
@@ -111,14 +111,14 @@ const NewFormModal = ({
           description="Legal reference codes like “CJP 27”. Optional."
         />
         <Select
-          label="State"
-          name="state"
-          selectedKey={state}
-          onSelectionChange={(key) => setState(key as US_STATES)}
-          placeholder="Select a state"
+          label="Jurisdiction"
+          name="jurisdiction"
+          selectedKey={jurisdiction}
+          onSelectionChange={(key) => setJurisdiction(key as JURISDICTIONS)}
+          placeholder="Select a jurisdiction"
           isRequired
         >
-          {Object.entries(US_STATES).map(([value, label]) => (
+          {Object.entries(JURISDICTIONS).map(([value, label]) => (
             <SelectItem key={value} id={value}>
               {label}
             </SelectItem>
@@ -158,7 +158,9 @@ const FormTableRow = ({ form }: { form: DataModel["forms"]["document"] }) => {
           </span>
         )}
       </TableCell>
-      <TableCell>{form.state && <Badge>{form.state}</Badge>}</TableCell>
+      <TableCell>
+        {form.jurisdiction && <Badge>{form.jurisdiction}</Badge>}
+      </TableCell>
       <TableCell>{new Date(form._creationTime).toLocaleString()}</TableCell>
       <TableCell>
         <MenuTrigger>
@@ -214,7 +216,7 @@ function FormsRoute() {
       <Table aria-label="Forms">
         <TableHeader>
           <TableColumn isRowHeader>Title</TableColumn>
-          <TableColumn>State</TableColumn>
+          <TableColumn>Jurisdiction</TableColumn>
           <TableColumn>Created</TableColumn>
           <TableColumn />
         </TableHeader>
