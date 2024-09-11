@@ -1,7 +1,7 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
-import { Button, Form, TextField } from "../components/shared";
+import { Button, Form, TextField } from "../components";
 
 export const Route = createFileRoute("/signin")({
   beforeLoad: ({ context }) => {

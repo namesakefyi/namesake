@@ -7,7 +7,6 @@ import {
   type ButtonProps,
   type ValidationResult,
 } from "react-aria-components";
-import { composeTailwindRenderProps } from "../utils";
 import {
   Description,
   FieldError,
@@ -15,7 +14,8 @@ import {
   Input,
   Label,
   fieldBorderStyles,
-} from "./Field";
+} from "..";
+import { composeTailwindRenderProps } from "../utils";
 
 export interface NumberFieldProps extends AriaNumberFieldProps {
   label?: string;

@@ -4,8 +4,7 @@ import {
   type TimeValue,
   type ValidationResult,
 } from "react-aria-components";
-import { DateInput } from "./DateField";
-import { Description, FieldError, Label } from "./Field";
+import { DateInput, Description, FieldError, Label } from "..";
 
 export interface TimeFieldProps<T extends TimeValue>
   extends AriaTimeFieldProps<T> {

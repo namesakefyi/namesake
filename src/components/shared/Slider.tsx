@@ -6,8 +6,8 @@ import {
   SliderTrack,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { Label } from "..";
 import { composeTailwindRenderProps, focusRing } from "../utils";
-import { Label } from "./Field";
 
 const trackStyles = tv({
   base: "rounded-full",

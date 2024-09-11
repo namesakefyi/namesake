@@ -22,8 +22,8 @@ import {
   useTableOptions,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { Checkbox } from "..";
 import { composeTailwindRenderProps, focusRing } from "../utils";
-import { Checkbox } from "./Checkbox";
 
 export function Table(props: TableProps) {
   return (
@@ -40,7 +40,7 @@ const columnStyles = tv({
 
 const resizerStyles = tv({
   extend: focusRing,
-  base: "w-px px-[8px] translate-x-[8px] box-content py-1 h-6 bg-clip-content bg-gray-5 dark:bg-graydark-5 forced-colors:bg-[ButtonBorder] cursor-col-resize rounded resizing:bg-blue-9 forced-colors:resizing:bg-[Highlight] resizing:w-[2px] resizing:pl-[7px] -outline-offset-2",
+  base: "w-px px-[8px] translate-x-[8px] box-content py-1 h-6 bg-clip-content bg-gray-3 dark:bg-graydark-3 forced-colors:bg-[ButtonBorder] cursor-col-resize rounded resizing:bg-blue-9 forced-colors:resizing:bg-[Highlight] resizing:w-[2px] resizing:pl-[7px] -outline-offset-2",
 });
 
 export function TableColumn(props: ColumnProps) {
@@ -49,7 +49,7 @@ export function TableColumn(props: ColumnProps) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "[&:hover]:z-20 [&:focus-within]:z-20 text-start text-sm font-semibold text-gray-dim cursor-default",
+        "[&:hover]:z-20 [&:focus-within]:z-20 text-start text-sm font-semibold text-gray-dim cursor-default border-b border-gray-dim",
       )}
     >
       {composeRenderProps(
@@ -90,7 +90,7 @@ export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "sticky top-0 z-10 bg-gray-subtle forced-colors:bg-[Canvas] rounded-t-lg",
+        "sticky top-0 z-10 bg-gray forced-colors:bg-[Canvas] rounded-t-lg",
       )}
     >
       {/* Add extra columns for drag and drop and selection. */}

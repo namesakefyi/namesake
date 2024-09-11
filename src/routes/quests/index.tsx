@@ -7,7 +7,7 @@ import {
   GridList,
   GridListItem,
   PageHeader,
-} from "../../components/shared";
+} from "../../components";
 
 export const Route = createFileRoute("/quests/")({
   component: QuestsRoute,

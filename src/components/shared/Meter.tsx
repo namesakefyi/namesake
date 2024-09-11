@@ -3,8 +3,8 @@ import {
   Meter as AriaMeter,
   type MeterProps as AriaMeterProps,
 } from "react-aria-components";
+import { Label } from "..";
 import { composeTailwindRenderProps } from "../utils";
-import { Label } from "./Field";
 
 export interface MeterProps extends AriaMeterProps {
   label?: string;

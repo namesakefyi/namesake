@@ -1,7 +1,7 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { RiAccountCircleFill } from "@remixicon/react";
 import { Authenticated, Unauthenticated } from "convex/react";
-import { Button, Link, Menu, MenuItem, MenuTrigger } from ".";
+import { Button, Link, Menu, MenuItem, MenuTrigger } from "..";
 
 export const AppHeader = () => {
   const { signOut } = useAuthActions();

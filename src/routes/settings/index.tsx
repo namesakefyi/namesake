@@ -16,7 +16,7 @@ import {
   RadioGroup,
   Switch,
   TextField,
-} from "../../components/shared";
+} from "../../components";
 
 export const Route = createFileRoute("/settings/")({
   beforeLoad: ({ context }) => {
