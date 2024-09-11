@@ -58,7 +58,7 @@ const NewFormModal = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (jurisdiction === null) throw new Error("State is required");
+    if (jurisdiction === null) throw new Error("Jurisdiction is required");
     if (file === null) throw new Error("File is required");
 
     setIsSubmitting(true);
@@ -216,7 +216,7 @@ function FormsRoute() {
       <Table aria-label="Forms">
         <TableHeader>
           <TableColumn isRowHeader>Title</TableColumn>
-          <TableColumn>State</TableColumn>
+          <TableColumn>Jurisdiction</TableColumn>
           <TableColumn>Created</TableColumn>
           <TableColumn />
         </TableHeader>

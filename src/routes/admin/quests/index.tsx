@@ -172,7 +172,7 @@ function QuestsRoute() {
       <Table aria-label="Quests">
         <TableHeader>
           <TableColumn isRowHeader>Quest</TableColumn>
-          <TableColumn>State</TableColumn>
+          <TableColumn>Jurisdiction</TableColumn>
           <TableColumn>Used By</TableColumn>
           <TableColumn>Created</TableColumn>
           <TableColumn />

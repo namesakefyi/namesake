@@ -2,14 +2,18 @@ import { useAuthActions } from "@convex-dev/auth/react";
 import { RiCheckLine, RiLoader4Line } from "@remixicon/react";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { api } from "../../../convex/_generated/api";
+import type { Theme } from "../../../convex/constants";
 import {
   Button,
   Container,
   Modal,
   PageHeader,
+  Radio,
+  RadioGroup,
   Switch,
   TextField,
 } from "../../components/shared";
@@ -27,17 +31,19 @@ export const Route = createFileRoute("/settings/")({
 
 function SettingsRoute() {
   const { signOut } = useAuthActions();
+  const { setTheme } = useTheme();
   const user = useQuery(api.users.getCurrentUser);
 
   // Name change field
   // TODO: Extract all this debounce logic + field as a component for reuse
   const updateName = useMutation(api.users.setCurrentUserName);
-  const [name, setName] = useState(user?.name);
+  const [name, setName] = useState<string>(user?.name ?? "");
   const [isUpdatingName, setIsUpdatingName] = useState(false);
   const [didUpdateName, setDidUpdateName] = useState(false);
 
   useEffect(() => {
-    setName(user?.name);
+    if (!user?.name) return;
+    setName(user.name);
   }, [user]);
 
   let timeout: NodeJS.Timeout | null = null;
@@ -78,6 +84,14 @@ function SettingsRoute() {
   // Is minor switch
   const updateIsMinor = useMutation(api.users.setCurrentUserIsMinor);
 
+  // Theme change
+  const updateTheme = useMutation(api.users.setUserTheme);
+
+  const handleUpdateTheme = (value: string) => {
+    updateTheme({ theme: value as Theme });
+    setTheme(value);
+  };
+
   // Account deletion
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const deleteAccount = useMutation(api.users.deleteCurrentUser);
@@ -106,6 +120,15 @@ function SettingsRoute() {
           >
             Is minor
           </Switch>
+          <RadioGroup
+            label="Theme"
+            value={user.theme}
+            onChange={handleUpdateTheme}
+          >
+            <Radio value="system">System</Radio>
+            <Radio value="light">Light</Radio>
+            <Radio value="dark">Dark</Radio>
+          </RadioGroup>
           <Button onPress={signOut}>Sign out</Button>
           <Button onPress={() => setIsDeleteModalOpen(true)}>
             Delete account
