@@ -2,4 +2,4 @@
 "namesake": patch
 ---
 
-Display default 404 empty state
+Display "Page not found" message for 404 pages
