@@ -1,11 +1,13 @@
 import "./styles/index.css";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
+import { RiErrorWarningLine } from "@remixicon/react";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { ConvexReactClient, useConvexAuth } from "convex/react";
 import { ThemeProvider } from "next-themes";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
+import { Empty } from "./components";
 import { routeTree } from "./routeTree.gen";
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
@@ -16,6 +18,13 @@ const router = createRouter({
     title: undefined!,
     auth: undefined!,
   },
+  defaultNotFoundComponent: () => (
+    <Empty
+      title="Page not found"
+      subtitle="We couldn't find that page."
+      icon={RiErrorWarningLine}
+    />
+  ),
 });
 
 declare module "@tanstack/react-router" {
