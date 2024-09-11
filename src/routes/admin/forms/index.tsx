@@ -1,4 +1,4 @@
-import { RiMoreFill } from "@remixicon/react";
+import { RiAddLine, RiFileTextLine, RiMoreFill } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
@@ -8,6 +8,8 @@ import { JURISDICTIONS } from "../../../../convex/constants";
 import {
   Badge,
   Button,
+  Empty,
+  FileTrigger,
   Form,
   Menu,
   MenuItem,
@@ -23,8 +25,7 @@ import {
   TableHeader,
   TableRow,
   TextField,
-} from "../../../components/shared";
-import { FileTrigger } from "../../../components/shared/FileTrigger";
+} from "../../../components";
 
 export const Route = createFileRoute("/admin/forms/")({
   component: FormsRoute,
@@ -210,6 +211,7 @@ function FormsRoute() {
     <div>
       <PageHeader title="Forms">
         <Button onPress={() => setIsNewFormModalOpen(true)} variant="primary">
+          <RiAddLine />
           Upload New Form
         </Button>
       </PageHeader>
@@ -220,7 +222,19 @@ function FormsRoute() {
           <TableColumn>Created</TableColumn>
           <TableColumn />
         </TableHeader>
-        <TableBody items={forms} renderEmptyState={() => "No results found."}>
+        <TableBody
+          items={forms}
+          renderEmptyState={() => (
+            <Empty
+              title="No forms"
+              icon={RiFileTextLine}
+              button={{
+                children: "New Form",
+                onPress: () => setIsNewFormModalOpen(true),
+              }}
+            />
+          )}
+        >
           {forms?.map((form) => (
             <FormTableRow key={form._id} form={form} />
           ))}

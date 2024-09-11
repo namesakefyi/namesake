@@ -1,4 +1,4 @@
-import { RiMoreFill } from "@remixicon/react";
+import { RiAddLine, RiMoreFill, RiSignpostLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import { JURISDICTIONS } from "../../../../convex/constants";
 import {
   Badge,
   Button,
+  Empty,
   Form,
   Menu,
   MenuItem,
@@ -23,7 +24,7 @@ import {
   TableHeader,
   TableRow,
   TextField,
-} from "../../../components/shared";
+} from "../../../components";
 
 export const Route = createFileRoute("/admin/quests/")({
   component: QuestsRoute,
@@ -166,6 +167,7 @@ function QuestsRoute() {
     <div>
       <PageHeader title="Quests">
         <Button onPress={() => setIsNewQuestModalOpen(true)} variant="primary">
+          <RiAddLine />
           New Quest
         </Button>
       </PageHeader>
@@ -177,7 +179,19 @@ function QuestsRoute() {
           <TableColumn>Created</TableColumn>
           <TableColumn />
         </TableHeader>
-        <TableBody items={quests} renderEmptyState={() => "No results found."}>
+        <TableBody
+          items={quests}
+          renderEmptyState={() => (
+            <Empty
+              title="No quests"
+              icon={RiSignpostLine}
+              button={{
+                children: "New Quest",
+                onPress: () => setIsNewQuestModalOpen(true),
+              }}
+            />
+          )}
+        >
           {quests?.map((quest) => (
             <QuestTableRow key={quest._id} quest={quest} />
           ))}

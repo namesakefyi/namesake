@@ -4,14 +4,14 @@ import {
   type ValidationResult,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
-import { composeTailwindRenderProps, focusRing } from "../utils";
 import {
   Description,
   FieldError,
   InputTextArea,
   Label,
   fieldBorderStyles,
-} from "./Field";
+} from "..";
+import { composeTailwindRenderProps, focusRing } from "../utils";
 
 const inputStyles = tv({
   extend: focusRing,
@@ -22,7 +22,7 @@ const inputStyles = tv({
   },
 });
 
-export interface TextFieldProps extends AriaTextFieldProps {
+export interface TextAreaProps extends AriaTextFieldProps {
   label?: string;
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);
@@ -33,7 +33,7 @@ export function TextArea({
   description,
   errorMessage,
   ...props
-}: TextFieldProps) {
+}: TextAreaProps) {
   return (
     <AriaTextField
       {...props}

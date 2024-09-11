@@ -6,8 +6,8 @@ import {
   type GridListProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { Checkbox } from "..";
 import { composeTailwindRenderProps, focusRing } from "../utils";
-import { Checkbox } from "./Checkbox";
 
 export function GridList<T extends object>({
   children,

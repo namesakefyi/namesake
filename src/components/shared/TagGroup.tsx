@@ -13,8 +13,8 @@ import {
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
+import { Description, Label } from "..";
 import { focusRing } from "../utils";
-import { Description, Label } from "./Field";
 
 const colors = {
   gray: "bg-gray-1 text-gray-6 border-gray-2 hover:border-gray-3 dark:bg-gray-8 dark:text-gray-3 dark:border-gray-6 dark:hover:border-gray-5",

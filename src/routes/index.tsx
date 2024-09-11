@@ -1,13 +1,15 @@
+import { RiSignpostLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import {
   Badge,
   Container,
+  Empty,
   GridList,
   GridListItem,
   PageHeader,
-} from "../components/shared";
+} from "../components";
 
 export const Route = createFileRoute("/")({
   component: IndexRoute,
@@ -19,7 +21,8 @@ function IndexRoute() {
 
     if (myQuests === undefined) return;
 
-    if (myQuests === null || myQuests.length === 0) return "No quests";
+    if (myQuests === null || myQuests.length === 0)
+      return <Empty title="No quests" icon={RiSignpostLine} />;
 
     return (
       <GridList aria-label="My quests">

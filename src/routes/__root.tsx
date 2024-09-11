@@ -7,7 +7,7 @@ import {
 } from "@tanstack/react-router";
 import type { ConvexAuthState } from "convex/react";
 import { RouterProvider } from "react-aria-components";
-import { AppHeader } from "../components/shared";
+import { AppHeader } from "../components";
 
 declare module "react-aria-components" {
   interface RouterConfig {

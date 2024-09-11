@@ -12,7 +12,7 @@ import {
   PageHeader,
   RichTextEditor,
   TextField,
-} from "../../../components/shared";
+} from "../../../components";
 
 export const Route = createFileRoute("/admin/quests/$questId")({
   component: AdminQuestDetailRoute,

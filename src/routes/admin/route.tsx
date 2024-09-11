@@ -1,5 +1,11 @@
+import {
+  RiFileTextFill,
+  RiFileTextLine,
+  RiSignpostFill,
+  RiSignpostLine,
+} from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
-import { Container, Nav } from "../../components/shared";
+import { Container, Nav } from "../../components";
 
 export const Route = createFileRoute("/admin")({
   component: AdminRoute,
@@ -12,8 +18,22 @@ function AdminRoute() {
     <div className="flex flex-1 max-w-screen">
       <Nav
         routes={[
-          { href: { to: "/admin/quests" }, label: "Quests" },
-          { href: { to: "/admin/forms" }, label: "Forms" },
+          {
+            icon: {
+              default: RiSignpostLine,
+              active: RiSignpostFill,
+            },
+            href: { to: "/admin/quests" },
+            label: "Quests",
+          },
+          {
+            icon: {
+              default: RiFileTextLine,
+              active: RiFileTextFill,
+            },
+            href: { to: "/admin/forms" },
+            label: "Forms",
+          },
         ]}
       />
       <Container>

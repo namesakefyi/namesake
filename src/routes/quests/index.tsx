@@ -1,13 +1,15 @@
+import { RiSignpostLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import {
   Badge,
   Container,
+  Empty,
   GridList,
   GridListItem,
   PageHeader,
-} from "../../components/shared";
+} from "../../components";
 
 export const Route = createFileRoute("/quests/")({
   component: QuestsRoute,
@@ -25,7 +27,9 @@ function QuestsRoute() {
       <GridList
         aria-label="All quests"
         items={allQuests}
-        renderEmptyState={() => "No quests found"}
+        renderEmptyState={() => (
+          <Empty title="No quests" icon={RiSignpostLine} />
+        )}
       >
         {allQuests.map(({ _id, title, jurisdiction }) => (
           <GridListItem textValue={title} key={_id}>
