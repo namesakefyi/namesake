@@ -2,4 +2,4 @@
 "namesake": minor
 ---
 
-Support modifying preferred theme
+Allow users to toggle between system, light, and dark themes
