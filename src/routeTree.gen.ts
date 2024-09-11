@@ -153,19 +153,123 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexRoute,
-  AdminRouteRoute: AdminRouteRoute.addChildren({
-    AdminIndexRoute,
-    AdminFormsFormIdRoute,
-    AdminQuestsQuestIdRoute,
-    AdminFormsIndexRoute,
-    AdminQuestsIndexRoute,
-  }),
-  SigninRoute,
-  QuestsIndexRoute,
-  SettingsIndexRoute,
-})
+interface AdminRouteRouteChildren {
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminFormsFormIdRoute: typeof AdminFormsFormIdRoute
+  AdminQuestsQuestIdRoute: typeof AdminQuestsQuestIdRoute
+  AdminFormsIndexRoute: typeof AdminFormsIndexRoute
+  AdminQuestsIndexRoute: typeof AdminQuestsIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminIndexRoute: AdminIndexRoute,
+  AdminFormsFormIdRoute: AdminFormsFormIdRoute,
+  AdminQuestsQuestIdRoute: AdminQuestsQuestIdRoute,
+  AdminFormsIndexRoute: AdminFormsIndexRoute,
+  AdminQuestsIndexRoute: AdminQuestsIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/signin': typeof SigninRoute
+  '/admin/': typeof AdminIndexRoute
+  '/quests': typeof QuestsIndexRoute
+  '/settings': typeof SettingsIndexRoute
+  '/admin/forms/$formId': typeof AdminFormsFormIdRoute
+  '/admin/quests/$questId': typeof AdminQuestsQuestIdRoute
+  '/admin/forms': typeof AdminFormsIndexRoute
+  '/admin/quests': typeof AdminQuestsIndexRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/signin': typeof SigninRoute
+  '/admin': typeof AdminIndexRoute
+  '/quests': typeof QuestsIndexRoute
+  '/settings': typeof SettingsIndexRoute
+  '/admin/forms/$formId': typeof AdminFormsFormIdRoute
+  '/admin/quests/$questId': typeof AdminQuestsQuestIdRoute
+  '/admin/forms': typeof AdminFormsIndexRoute
+  '/admin/quests': typeof AdminQuestsIndexRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
+  '/signin': typeof SigninRoute
+  '/admin/': typeof AdminIndexRoute
+  '/quests/': typeof QuestsIndexRoute
+  '/settings/': typeof SettingsIndexRoute
+  '/admin/forms/$formId': typeof AdminFormsFormIdRoute
+  '/admin/quests/$questId': typeof AdminQuestsQuestIdRoute
+  '/admin/forms/': typeof AdminFormsIndexRoute
+  '/admin/quests/': typeof AdminQuestsIndexRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/signin'
+    | '/admin/'
+    | '/quests'
+    | '/settings'
+    | '/admin/forms/$formId'
+    | '/admin/quests/$questId'
+    | '/admin/forms'
+    | '/admin/quests'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/signin'
+    | '/admin'
+    | '/quests'
+    | '/settings'
+    | '/admin/forms/$formId'
+    | '/admin/quests/$questId'
+    | '/admin/forms'
+    | '/admin/quests'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/signin'
+    | '/admin/'
+    | '/quests/'
+    | '/settings/'
+    | '/admin/forms/$formId'
+    | '/admin/quests/$questId'
+    | '/admin/forms/'
+    | '/admin/quests/'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  SigninRoute: typeof SigninRoute
+  QuestsIndexRoute: typeof QuestsIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
+  SigninRoute: SigninRoute,
+  QuestsIndexRoute: QuestsIndexRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 

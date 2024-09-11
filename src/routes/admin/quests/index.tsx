@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 import { api } from "../../../../convex/_generated/api";
 import type { DataModel } from "../../../../convex/_generated/dataModel";
-import { US_STATES } from "../../../../convex/constants";
+import { JURISDICTIONS } from "../../../../convex/constants";
 import {
   Badge,
   Button,
@@ -40,16 +40,16 @@ const NewQuestModal = ({
 }) => {
   const createQuest = useMutation(api.quests.createQuest);
   const [title, setTitle] = useState("");
-  const [state, setState] = useState<US_STATES | null>(null);
+  const [jurisdiction, setJurisdiction] = useState<JURISDICTIONS | null>(null);
 
   const clearForm = () => {
     setTitle("");
-    setState(null);
+    setJurisdiction(null);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createQuest({ title, state: state ?? undefined });
+    createQuest({ title, jurisdiction: jurisdiction ?? undefined });
 
     clearForm();
     onSubmit();
@@ -67,13 +67,13 @@ const NewQuestModal = ({
           onChange={(value) => setTitle(value)}
         />
         <Select
-          label="State"
-          name="state"
-          selectedKey={state}
-          onSelectionChange={(key) => setState(key as US_STATES)}
-          placeholder="Select a state"
+          label="Jurisdiction"
+          name="jurisdiction"
+          selectedKey={jurisdiction}
+          onSelectionChange={(key) => setJurisdiction(key as JURISDICTIONS)}
+          placeholder="Select a jurisdiction"
         >
-          {Object.entries(US_STATES).map(([value, label]) => (
+          {Object.entries(JURISDICTIONS).map(([value, label]) => (
             <SelectItem key={value} id={value}>
               {label}
             </SelectItem>
@@ -117,8 +117,8 @@ const QuestTableRow = ({
         )}
       </TableCell>
       <TableCell>
-        {quest.state ? (
-          <Badge>{quest.state}</Badge>
+        {quest.jurisdiction ? (
+          <Badge>{quest.jurisdiction}</Badge>
         ) : (
           <span className="text-gray-dim opacity-50">—</span>
         )}

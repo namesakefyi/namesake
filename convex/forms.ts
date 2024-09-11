@@ -1,7 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { usState } from "./schema";
+import { jurisdictions } from "./schema";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -63,7 +63,7 @@ export const uploadPDF = mutation({
 export const createForm = mutation({
   args: {
     title: v.string(),
-    state: usState,
+    jurisdiction: jurisdictions,
     formCode: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -71,7 +71,7 @@ export const createForm = mutation({
     if (userId === null) throw new Error("Not authenticated");
     return await ctx.db.insert("forms", {
       title: args.title,
-      state: args.state,
+      jurisdiction: args.jurisdiction,
       formCode: args.formCode,
       creationUser: userId,
     });
