@@ -1,6 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { themes } from "./schema";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -36,6 +37,17 @@ export const setCurrentUserIsMinor = mutation({
     const userId = await getAuthUserId(ctx);
     if (userId === null) throw new Error("Not authenticated");
     await ctx.db.patch(userId, { isMinor: args.isMinor });
+  },
+});
+
+export const setUserTheme = mutation({
+  args: {
+    theme: themes,
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (userId === null) throw new Error("Not authenticated");
+    await ctx.db.patch(userId, { theme: args.theme });
   },
 });
 
