@@ -170,13 +170,8 @@ const FormTableRow = ({ form }: { form: DataModel["forms"]["document"] }) => {
           </Button>
           <Menu>
             {formUrl && (
-              <MenuItem>
-                {/* TODO: Relocate this `href` to parent MenuItem and delete `a`;
-                requires react-aria-components to support external links
-                https://github.com/adobe/react-spectrum/issues/6397 */}
-                <a href={formUrl} target="_blank" rel="noreferrer">
-                  View PDF
-                </a>
+              <MenuItem href={formUrl} target="_blank" rel="noreferrer">
+                View PDF
               </MenuItem>
             )}
             {form.deletionTime ? (

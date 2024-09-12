@@ -11,7 +11,7 @@ import { AppHeader } from "../components";
 
 declare module "react-aria-components" {
   interface RouterConfig {
-    href: ToOptions;
+    href: ToOptions | string;
     routerOptions: Omit<NavigateOptions, keyof ToOptions>;
   }
 }
@@ -30,8 +30,14 @@ function RootRoute() {
 
   return (
     <RouterProvider
-      navigate={(path, options) => router.navigate({ ...path, ...options })}
-      useHref={(path) => router.buildLocation(path).href}
+      navigate={(path, options) =>
+        router.navigate(
+          typeof path === "string" ? { ...options } : { ...path, ...options },
+        )
+      }
+      useHref={(path) =>
+        typeof path === "string" ? path : router.buildLocation(path!).href
+      }
     >
       <main className="flex flex-col flex-1 min-h-screen text-gray-normal">
         <AppHeader />
