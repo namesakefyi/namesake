@@ -38,7 +38,7 @@ function RootRoute() {
         )
       }
       useHref={(path) =>
-        typeof path === "string" ? path : router.buildLocation(path!).href
+        typeof path === "string" ? path : router.buildLocation(path).href
       }
     >
       <main className="flex flex-col flex-1 min-h-screen text-gray-normal">
