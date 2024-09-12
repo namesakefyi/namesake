@@ -29,6 +29,8 @@ function RootRoute() {
   const router = useRouter();
 
   return (
+    // TODO: Improve this API
+    // https://github.com/adobe/react-spectrum/issues/6587
     <RouterProvider
       navigate={(path, options) =>
         router.navigate(
