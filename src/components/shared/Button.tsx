@@ -12,13 +12,13 @@ export interface ButtonProps extends AriaButtonProps {
 
 const button = tv({
   extend: focusRing,
-  base: "px-3 py-2 text-sm font-medium text-center transition rounded-lg border border-black/10 dark:border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] dark:shadow-none cursor-pointer",
+  base: "px-3 py-2 h-10 text-sm font-medium transition rounded-lg flex gap-1 items-center justify-center border border-black/10 dark:border-white/10 cursor-pointer",
   variants: {
     variant: {
       primary: "bg-purple-solid",
       secondary: "bg-gray-ghost",
       destructive: "bg-red-solid",
-      icon: "bg-gray-ghost border-0 p-1 flex items-center justify-center",
+      icon: "bg-gray-ghost border-0 p-2 flex items-center justify-center rounded-full",
     },
     isDisabled: {
       true: "cursor-default text-gray-dim opacity-50 forced-colors:text-[GrayText]",

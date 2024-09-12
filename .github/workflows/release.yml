@@ -8,7 +8,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   release:
-    name: Release
+    name: Update changelog and tags
     runs-on: ubuntu-latest
     permissions: write-all
     steps:

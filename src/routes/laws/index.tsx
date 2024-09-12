@@ -13,7 +13,7 @@ import {
   SearchField,
   Select,
   SelectItem,
-} from "../../components/shared";
+} from "../../components";
 
 export const Route = createFileRoute("/laws/")({
   component: LawsRoute,

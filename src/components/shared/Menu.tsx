@@ -13,9 +13,10 @@ import {
 import {
   DropdownSection,
   type DropdownSectionProps,
+  Popover,
+  type PopoverProps,
   dropdownItemStyles,
-} from "./ListBox";
-import { Popover, type PopoverProps } from "./Popover";
+} from "..";
 
 interface MenuProps<T> extends AriaMenuProps<T> {
   placement?: PopoverProps["placement"];

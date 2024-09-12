@@ -10,13 +10,14 @@ import type { Theme } from "../../../convex/constants";
 import {
   Button,
   Container,
+  Link,
   Modal,
   PageHeader,
   Radio,
   RadioGroup,
   Switch,
   TextField,
-} from "../../components/shared";
+} from "../../components";
 
 export const Route = createFileRoute("/settings/")({
   beforeLoad: ({ context }) => {
@@ -155,12 +156,20 @@ function SettingsRoute() {
           </Modal>
         </div>
       )}
-      <a
-        href={`https://github.com/namesakefyi/namesake/releases/tag/v${APP_VERSION}`}
-        target="_blank"
-        rel="noreferrer"
-        className="inline-block mt-4"
-      >{`Namesake v${APP_VERSION}`}</a>
+      <div className="flex gap-2 items-center mt-4">
+        <Link
+          href="https://github.com/namesakefyi/namesake/releases"
+          target="_blank"
+          rel="noreferrer"
+        >{`Namesake v${APP_VERSION}`}</Link>
+        <Link
+          href="https://status.namesake.fyi"
+          target="_blank"
+          rel="noreferrer"
+        >
+          System Status
+        </Link>
+      </div>
     </Container>
   );
 }

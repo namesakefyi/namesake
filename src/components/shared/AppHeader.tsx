@@ -1,7 +1,7 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { RiAccountCircleFill } from "@remixicon/react";
 import { Authenticated, Unauthenticated } from "convex/react";
-import { Button, Link, Menu, MenuItem, MenuTrigger } from ".";
+import { Button, Link, Menu, MenuItem, MenuTrigger } from "..";
 
 export const AppHeader = () => {
   const { signOut } = useAuthActions();
@@ -9,7 +9,6 @@ export const AppHeader = () => {
   return (
     <div className="flex gap-4 items-center w-screen py-3 px-4 border-b border-gray-dim">
       <Link href={{ to: "/" }}>Namesake</Link>
-      <Link href={{ to: "/quests" }}>Quests</Link>
       <Link href={{ to: "/laws" }}>Laws</Link>
       <Authenticated>
         {/* TODO: Gate this by role */}

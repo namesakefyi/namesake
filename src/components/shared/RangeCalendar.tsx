@@ -8,8 +8,8 @@ import {
   Text,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { CalendarGridHeader, CalendarHeader } from "..";
 import { focusRing } from "../utils";
-import { CalendarGridHeader, CalendarHeader } from "./Calendar";
 
 export interface RangeCalendarProps<T extends DateValue>
   extends Omit<AriaRangeCalendarProps<T>, "visibleDuration"> {
