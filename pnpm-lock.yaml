@@ -13,11 +13,11 @@ importers:
   .:
     dependencies:
       '@auth/core':
-        specifier: ^0.35.0
-        version: 0.35.0
+        specifier: ^0.34.2
+        version: 0.34.2
       '@convex-dev/auth':
-        specifier: ^0.0.66
-        version: 0.0.66(convex@1.16.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        specifier: ^0.0.67
+        version: 0.0.67(convex@1.16.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@mdxeditor/editor':
         specifier: ^3.11.4
         version: 3.11.4(@codemirror/language@6.10.2)(@lezer/common@1.2.1)(@lezer/highlight@1.2.1)(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.18)
@@ -129,7 +129,7 @@ importers:
         version: 3.7.0(@swc/helpers@0.5.13)(vite@5.4.5(@types/node@22.5.5))
       '@vitest/coverage-v8':
         specifier: ^2.1.1
-        version: 2.1.1(vitest@2.1.1(@edge-runtime/vm@4.0.3)(@types/node@22.5.5)(@vitest/ui@2.1.1)(jsdom@25.0.0(canvas@2.11.2)))
+        version: 2.1.1(vitest@2.1.1(@edge-runtime/vm@4.0.3)(@types/node@22.5.5)(@vitest/ui@2.1.1)(jsdom@25.0.0))
       '@vitest/ui':
         specifier: ^2.1.1
         version: 2.1.1(vitest@2.1.1)
@@ -180,7 +180,7 @@ importers:
         version: 5.4.5(@types/node@22.5.5)
       vitest:
         specifier: ^2.1.1
-        version: 2.1.1(@edge-runtime/vm@4.0.3)(@types/node@22.5.5)(@vitest/ui@2.1.1)(jsdom@25.0.0(canvas@2.11.2))
+        version: 2.1.1(@edge-runtime/vm@4.0.3)(@types/node@22.5.5)(@vitest/ui@2.1.1)(jsdom@25.0.0)
 
 packages:
 
@@ -250,8 +250,8 @@ packages:
       nodemailer:
         optional: true
 
-  '@auth/core@0.35.0':
-    resolution: {integrity: sha512-XvMALiYn5ZQd1hVeG1t+jCU89jRrc7ortl/05wkBrPHnRWZScxAK5jKuzBz+AOBQXewDjYcMpzeF5tTqg6rDhQ==}
+  '@auth/core@0.34.2':
+    resolution: {integrity: sha512-KywHKRgLiF3l7PLyL73fjLSIBe1YNcA6sMeew4yMP6cfCWGXZrkkXd32AjRi1hlJ9nvovUBGZHvbn+LijO6ZeQ==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
@@ -615,8 +615,8 @@ packages:
       react: ^16.8.0 || ^17 || ^18
       react-dom: ^16.8.0 || ^17 || ^18
 
-  '@convex-dev/auth@0.0.66':
-    resolution: {integrity: sha512-T/RhG4lSGoMMGcGyd9pDbdp99JMNeUjbYRH+NuHtqXJcf5DgHjilcZEUQqL3htIsCA8RbiPhZyKy5oIyra316Q==}
+  '@convex-dev/auth@0.0.67':
+    resolution: {integrity: sha512-XUNTe3X7qxzAkpgP/qekuQ7Fc3qE1i2BrbBjyKO5jyFJ0qrvoNr0PRSKofnLYnjTrjG12wkm9KJx56og4pyJUw==}
     hasBin: true
     peerDependencies:
       convex: ^1.14.4
@@ -6345,7 +6345,7 @@ snapshots:
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
 
-  '@auth/core@0.35.0':
+  '@auth/core@0.34.2':
     dependencies:
       '@panva/hkdf': 1.2.1
       '@types/cookie': 0.6.0
@@ -7017,7 +7017,7 @@ snapshots:
     transitivePeerDependencies:
       - '@lezer/common'
 
-  '@convex-dev/auth@0.0.66(convex@1.16.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
+  '@convex-dev/auth@0.0.67(convex@1.16.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@auth/core': 0.31.0
       arctic: 1.9.2
@@ -9621,7 +9621,7 @@ snapshots:
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  '@vitest/coverage-v8@2.1.1(vitest@2.1.1(@edge-runtime/vm@4.0.3)(@types/node@22.5.5)(@vitest/ui@2.1.1)(jsdom@25.0.0(canvas@2.11.2)))':
+  '@vitest/coverage-v8@2.1.1(vitest@2.1.1(@edge-runtime/vm@4.0.3)(@types/node@22.5.5)(@vitest/ui@2.1.1)(jsdom@25.0.0))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -9635,7 +9635,7 @@ snapshots:
       std-env: 3.7.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.1.1(@edge-runtime/vm@4.0.3)(@types/node@22.5.5)(@vitest/ui@2.1.1)(jsdom@25.0.0(canvas@2.11.2))
+      vitest: 2.1.1(@edge-runtime/vm@4.0.3)(@types/node@22.5.5)(@vitest/ui@2.1.1)(jsdom@25.0.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -9682,7 +9682,7 @@ snapshots:
       sirv: 2.0.4
       tinyglobby: 0.2.6
       tinyrainbow: 1.2.0
-      vitest: 2.1.1(@edge-runtime/vm@4.0.3)(@types/node@22.5.5)(@vitest/ui@2.1.1)(jsdom@25.0.0(canvas@2.11.2))
+      vitest: 2.1.1(@edge-runtime/vm@4.0.3)(@types/node@22.5.5)(@vitest/ui@2.1.1)(jsdom@25.0.0)
 
   '@vitest/utils@2.1.1':
     dependencies:
@@ -11230,7 +11230,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  jsdom@25.0.0(canvas@2.11.2):
+  jsdom@25.0.0:
     dependencies:
       cssstyle: 4.1.0
       data-urls: 5.0.0
@@ -11253,8 +11253,6 @@ snapshots:
       whatwg-url: 14.0.0
       ws: 8.18.0
       xml-name-validator: 5.0.0
-    optionalDependencies:
-      canvas: 2.11.2
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -13769,7 +13767,7 @@ snapshots:
       '@types/node': 22.5.5
       fsevents: 2.3.3
 
-  vitest@2.1.1(@edge-runtime/vm@4.0.3)(@types/node@22.5.5)(@vitest/ui@2.1.1)(jsdom@25.0.0(canvas@2.11.2)):
+  vitest@2.1.1(@edge-runtime/vm@4.0.3)(@types/node@22.5.5)(@vitest/ui@2.1.1)(jsdom@25.0.0):
     dependencies:
       '@vitest/expect': 2.1.1
       '@vitest/mocker': 2.1.1(@vitest/spy@2.1.1)(vite@5.4.5(@types/node@22.5.5))
@@ -13794,7 +13792,7 @@ snapshots:
       '@edge-runtime/vm': 4.0.3
       '@types/node': 22.5.5
       '@vitest/ui': 2.1.1(vitest@2.1.1)
-      jsdom: 25.0.0(canvas@2.11.2)
+      jsdom: 25.0.0
     transitivePeerDependencies:
       - less
       - lightningcss
