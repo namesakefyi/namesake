@@ -1,5 +1,12 @@
 # namesake
 
+## 0.1.1
+
+### Patch Changes
+
+- 20f0624: Send login emails from no-reply@namesake.fyi
+- 99aef0d: Add link to system status from settings page
+
 ## 0.1.0
 
 ### Minor Changes
