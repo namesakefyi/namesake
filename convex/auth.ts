@@ -5,7 +5,7 @@ export const { auth, signIn, signOut, store } = convexAuth({
   providers: [
     Resend({
       apiKey: process.env.AUTH_RESEND_KEY,
-      from: "no-reply@namesake.fyi",
+      from: process.env.AUTH_EMAIL ?? "Namesake <no-reply@namesake.fyi>",
     }),
   ],
 });
