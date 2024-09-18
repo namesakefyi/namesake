@@ -70,3 +70,38 @@ export const create = userMutation({
     });
   },
 });
+
+export const getUserQuestByQuestId = userQuery({
+  args: { questId: v.id("quests") },
+  handler: async (ctx, args) => {
+    const userQuest = await ctx.db
+      .query("usersQuests")
+      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
+      .filter((q) => q.eq(q.field("questId"), args.questId))
+      .first();
+
+    return userQuest;
+  },
+});
+
+export const markComplete = userMutation({
+  args: { questId: v.id("quests") },
+  handler: async (ctx, args) => {
+    const userQuest = await getUserQuestByQuestId(ctx, {
+      questId: args.questId,
+    });
+    if (userQuest === null) throw new Error("Quest not found");
+    await ctx.db.patch(userQuest._id, { completionTime: Date.now() });
+  },
+});
+
+export const markIncomplete = userMutation({
+  args: { questId: v.id("quests") },
+  handler: async (ctx, args) => {
+    const userQuest = await getUserQuestByQuestId(ctx, {
+      questId: args.questId,
+    });
+    if (userQuest === null) throw new Error("Quest not found");
+    await ctx.db.patch(userQuest._id, { completionTime: undefined });
+  },
+});

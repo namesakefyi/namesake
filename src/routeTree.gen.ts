@@ -12,10 +12,12 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SigninImport } from './routes/signin'
+import { Route as QuestsRouteImport } from './routes/quests/route'
 import { Route as AdminRouteImport } from './routes/admin/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as SettingsIndexImport } from './routes/settings/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
+import { Route as QuestsQuestIdImport } from './routes/quests/$questId'
 import { Route as AdminQuestsIndexImport } from './routes/admin/quests/index'
 import { Route as AdminFormsIndexImport } from './routes/admin/forms/index'
 import { Route as AdminQuestsQuestIdImport } from './routes/admin/quests/$questId'
@@ -25,6 +27,11 @@ import { Route as AdminFormsFormIdImport } from './routes/admin/forms/$formId'
 
 const SigninRoute = SigninImport.update({
   path: '/signin',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const QuestsRouteRoute = QuestsRouteImport.update({
+  path: '/quests',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -46,6 +53,11 @@ const SettingsIndexRoute = SettingsIndexImport.update({
 const AdminIndexRoute = AdminIndexImport.update({
   path: '/',
   getParentRoute: () => AdminRouteRoute,
+} as any)
+
+const QuestsQuestIdRoute = QuestsQuestIdImport.update({
+  path: '/$questId',
+  getParentRoute: () => QuestsRouteRoute,
 } as any)
 
 const AdminQuestsIndexRoute = AdminQuestsIndexImport.update({
@@ -86,12 +98,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRoute
     }
+    '/quests': {
+      id: '/quests'
+      path: '/quests'
+      fullPath: '/quests'
+      preLoaderRoute: typeof QuestsRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/signin': {
       id: '/signin'
       path: '/signin'
       fullPath: '/signin'
       preLoaderRoute: typeof SigninImport
       parentRoute: typeof rootRoute
+    }
+    '/quests/$questId': {
+      id: '/quests/$questId'
+      path: '/$questId'
+      fullPath: '/quests/$questId'
+      preLoaderRoute: typeof QuestsQuestIdImport
+      parentRoute: typeof QuestsRouteImport
     }
     '/admin/': {
       id: '/admin/'
@@ -160,10 +186,24 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface QuestsRouteRouteChildren {
+  QuestsQuestIdRoute: typeof QuestsQuestIdRoute
+}
+
+const QuestsRouteRouteChildren: QuestsRouteRouteChildren = {
+  QuestsQuestIdRoute: QuestsQuestIdRoute,
+}
+
+const QuestsRouteRouteWithChildren = QuestsRouteRoute._addFileChildren(
+  QuestsRouteRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/quests': typeof QuestsRouteRouteWithChildren
   '/signin': typeof SigninRoute
+  '/quests/$questId': typeof QuestsQuestIdRoute
   '/admin/': typeof AdminIndexRoute
   '/settings': typeof SettingsIndexRoute
   '/admin/forms/$formId': typeof AdminFormsFormIdRoute
@@ -174,7 +214,9 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/quests': typeof QuestsRouteRouteWithChildren
   '/signin': typeof SigninRoute
+  '/quests/$questId': typeof QuestsQuestIdRoute
   '/admin': typeof AdminIndexRoute
   '/settings': typeof SettingsIndexRoute
   '/admin/forms/$formId': typeof AdminFormsFormIdRoute
@@ -187,7 +229,9 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/quests': typeof QuestsRouteRouteWithChildren
   '/signin': typeof SigninRoute
+  '/quests/$questId': typeof QuestsQuestIdRoute
   '/admin/': typeof AdminIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/admin/forms/$formId': typeof AdminFormsFormIdRoute
@@ -201,7 +245,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/quests'
     | '/signin'
+    | '/quests/$questId'
     | '/admin/'
     | '/settings'
     | '/admin/forms/$formId'
@@ -211,7 +257,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/quests'
     | '/signin'
+    | '/quests/$questId'
     | '/admin'
     | '/settings'
     | '/admin/forms/$formId'
@@ -222,7 +270,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/quests'
     | '/signin'
+    | '/quests/$questId'
     | '/admin/'
     | '/settings/'
     | '/admin/forms/$formId'
@@ -235,6 +285,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  QuestsRouteRoute: typeof QuestsRouteRouteWithChildren
   SigninRoute: typeof SigninRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
 }
@@ -242,6 +293,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
+  QuestsRouteRoute: QuestsRouteRouteWithChildren,
   SigninRoute: SigninRoute,
   SettingsIndexRoute: SettingsIndexRoute,
 }
@@ -260,6 +312,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/admin",
+        "/quests",
         "/signin",
         "/settings/"
       ]
@@ -277,8 +330,18 @@ export const routeTree = rootRoute
         "/admin/quests/"
       ]
     },
+    "/quests": {
+      "filePath": "quests/route.tsx",
+      "children": [
+        "/quests/$questId"
+      ]
+    },
     "/signin": {
       "filePath": "signin.tsx"
+    },
+    "/quests/$questId": {
+      "filePath": "quests/$questId.tsx",
+      "parent": "/quests"
     },
     "/admin/": {
       "filePath": "admin/index.tsx",
