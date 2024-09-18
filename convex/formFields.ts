@@ -5,9 +5,7 @@ import { query } from "./_generated/server";
 // https://docs.convex.dev/functions/validation
 
 export const getAllFieldsForForm = query({
-  args: {
-    formId: v.id("forms"),
-  },
+  args: { formId: v.id("forms") },
   handler: async (ctx, args) => {
     return await ctx.db
       .query("formFields")

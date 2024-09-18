@@ -1,7 +1,7 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { jurisdictions } from "./schema";
+import { userMutation } from "./helpers";
+import { jurisdiction } from "./validators";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -51,7 +51,7 @@ export const generateUploadUrl = mutation(async (ctx) => {
   return await ctx.storage.generateUploadUrl();
 });
 
-export const uploadPDF = mutation({
+export const uploadPDF = userMutation({
   args: { formId: v.id("forms"), storageId: v.id("_storage") },
   handler: async (ctx, args) => {
     return await ctx.db.patch(args.formId, {
@@ -60,48 +60,39 @@ export const uploadPDF = mutation({
   },
 });
 
-export const createForm = mutation({
+export const createForm = userMutation({
   args: {
     title: v.string(),
-    jurisdiction: jurisdictions,
+    jurisdiction: jurisdiction,
     formCode: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
     return await ctx.db.insert("forms", {
       title: args.title,
       jurisdiction: args.jurisdiction,
       formCode: args.formCode,
-      creationUser: userId,
+      creationUser: ctx.userId,
     });
   },
 });
 
-export const deleteForm = mutation({
+export const deleteForm = userMutation({
   args: { formId: v.id("forms") },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
     await ctx.db.patch(args.formId, { deletionTime: Date.now() });
   },
 });
 
-export const undeleteForm = mutation({
+export const undeleteForm = userMutation({
   args: { formId: v.id("forms") },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
     await ctx.db.patch(args.formId, { deletionTime: undefined });
   },
 });
 
-export const permanentlyDeleteForm = mutation({
+export const permanentlyDeleteForm = userMutation({
   args: { formId: v.id("forms") },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
-
     // TODO: Delete form references in other tables
 
     // Delete the form

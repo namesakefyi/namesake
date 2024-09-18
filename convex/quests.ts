@@ -1,7 +1,7 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
-import { jurisdictions } from "./schema";
+import { query } from "./_generated/server";
+import { userMutation } from "./helpers";
+import { jurisdiction } from "./validators";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -30,25 +30,20 @@ export const getQuest = query({
   },
 });
 
-export const createQuest = mutation({
-  args: { title: v.string(), jurisdiction: v.optional(jurisdictions) },
+export const createQuest = userMutation({
+  args: { title: v.string(), jurisdiction: v.optional(jurisdiction) },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
     return await ctx.db.insert("quests", {
       title: args.title,
       jurisdiction: args.jurisdiction,
-      creationUser: userId,
+      creationUser: ctx.userId,
     });
   },
 });
 
-export const addQuestStep = mutation({
+export const addQuestStep = userMutation({
   args: { questId: v.id("quests"), title: v.string(), body: v.string() },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
-
     const existingSteps = (await ctx.db.get(args.questId))?.steps ?? [];
 
     await ctx.db.patch(args.questId, {
@@ -63,30 +58,23 @@ export const addQuestStep = mutation({
   },
 });
 
-export const deleteQuest = mutation({
+export const deleteQuest = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
     await ctx.db.patch(args.questId, { deletionTime: Date.now() });
   },
 });
 
-export const undeleteQuest = mutation({
+export const undeleteQuest = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
     await ctx.db.patch(args.questId, { deletionTime: undefined });
   },
 });
 
-export const permanentlyDeleteQuest = mutation({
+export const permanentlyDeleteQuest = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
-
     // Delete userQuests
     const userQuests = await ctx.db
       .query("usersQuests")

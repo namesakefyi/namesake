@@ -1,19 +1,16 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { query } from "./_generated/server";
+import { userMutation, userQuery } from "./helpers";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
 
-export const getQuestsForCurrentUser = query({
+export const getQuestsForCurrentUser = userQuery({
   args: {},
   handler: async (ctx, _args) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
-
     const userQuests = await ctx.db
       .query("usersQuests")
-      .withIndex("userId", (q) => q.eq("userId", userId))
+      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .collect();
 
     const quests = Promise.all(
@@ -24,15 +21,12 @@ export const getQuestsForCurrentUser = query({
   },
 });
 
-export const getAvailableQuestsForUser = query({
+export const getAvailableQuestsForUser = userQuery({
   args: {},
   handler: async (ctx, _args) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
-
     const userQuests = await ctx.db
       .query("usersQuests")
-      .withIndex("userId", (q) => q.eq("userId", userId))
+      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .collect();
 
     const userQuestIds = userQuests.map((quest) => quest.questId);
@@ -47,9 +41,7 @@ export const getAvailableQuestsForUser = query({
 });
 
 export const getQuestCount = query({
-  args: {
-    questId: v.id("quests"),
-  },
+  args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     const quests = await ctx.db
       .query("usersQuests")
@@ -60,25 +52,20 @@ export const getQuestCount = query({
   },
 });
 
-export const create = mutation({
-  args: {
-    questId: v.id("quests"),
-  },
+export const create = userMutation({
+  args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
-
     // Check if quest already exists for user
     const existing = await ctx.db
       .query("usersQuests")
-      .withIndex("userId", (q) => q.eq("userId", userId))
+      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .filter((q) => q.eq(q.field("questId"), args.questId))
       .collect();
 
     if (existing.length > 0) throw new Error("Quest already exists for user");
 
     await ctx.db.insert("usersQuests", {
-      userId,
+      userId: ctx.userId,
       questId: args.questId,
     });
   },

@@ -1,17 +1,7 @@
 import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { JURISDICTIONS } from "./constants";
-
-export const jurisdictions = v.union(
-  ...Object.keys(JURISDICTIONS).map((jurisdiction) => v.literal(jurisdiction)),
-);
-
-export const themes = v.union(
-  v.literal("system"),
-  v.literal("light"),
-  v.literal("dark"),
-);
+import { jurisdiction, theme } from "./validators";
 
 export default defineSchema({
   ...authTables,
@@ -30,7 +20,7 @@ export default defineSchema({
     formCode: v.optional(v.string()),
     creationUser: v.id("users"),
     file: v.optional(v.id("_storage")),
-    jurisdiction: jurisdictions,
+    jurisdiction: jurisdiction,
     deletionTime: v.optional(v.number()),
   }),
 
@@ -82,7 +72,7 @@ export default defineSchema({
   quests: defineTable({
     title: v.string(),
     creationUser: v.id("users"),
-    jurisdiction: v.optional(jurisdictions),
+    jurisdiction: v.optional(jurisdiction),
     deletionTime: v.optional(v.number()),
     steps: v.optional(
       v.array(
@@ -111,7 +101,7 @@ export default defineSchema({
     emailVerificationTime: v.optional(v.number()),
     isAnonymous: v.optional(v.boolean()),
     isMinor: v.optional(v.boolean()),
-    theme: v.optional(themes),
+    theme: v.optional(theme),
   }).index("email", ["email"]),
 
   /**
