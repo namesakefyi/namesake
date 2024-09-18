@@ -10,3 +10,9 @@ export const theme = v.union(
   v.literal("light"),
   v.literal("dark"),
 );
+
+export const role = v.union(
+  v.literal("user"),
+  v.literal("editor"),
+  v.literal("admin"),
+);

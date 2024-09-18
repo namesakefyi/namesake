@@ -94,6 +94,9 @@ function SettingsRoute() {
   };
 
   // Account deletion
+  const clearLocalStorage = () => {
+    localStorage.removeItem("theme");
+  };
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const deleteAccount = useMutation(api.users.deleteCurrentUser);
 
@@ -146,6 +149,7 @@ function SettingsRoute() {
               <Button
                 variant="destructive"
                 onPress={() => {
+                  clearLocalStorage();
                   deleteAccount();
                   signOut();
                 }}

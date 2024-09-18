@@ -55,3 +55,5 @@ export enum JURISDICTIONS {
 }
 
 export type Theme = "system" | "light" | "dark";
+
+export type Role = "user" | "editor" | "admin";

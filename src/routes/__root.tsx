@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-router";
 import type { ConvexAuthState } from "convex/react";
 import { RouterProvider } from "react-aria-components";
+import type { Role } from "../../convex/constants";
 import { AppHeader } from "../components";
 
 declare module "react-aria-components" {
@@ -19,6 +20,7 @@ declare module "react-aria-components" {
 interface RouterContext {
   title: string;
   auth: ConvexAuthState;
+  role: Role;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({

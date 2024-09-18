@@ -2,11 +2,12 @@ import "./styles/index.css";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import { RiErrorWarningLine } from "@remixicon/react";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
-import { ConvexReactClient, useConvexAuth } from "convex/react";
+import { ConvexReactClient, useConvexAuth, useQuery } from "convex/react";
 import { ThemeProvider } from "next-themes";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
+import { api } from "../convex/_generated/api";
 import { Empty } from "./components";
 import { routeTree } from "./routeTree.gen";
 
@@ -17,6 +18,7 @@ const router = createRouter({
   context: {
     title: undefined!,
     auth: undefined!,
+    role: undefined!,
   },
   defaultNotFoundComponent: () => (
     <Empty
@@ -36,7 +38,9 @@ declare module "@tanstack/react-router" {
 const InnerApp = () => {
   const title = "Namesake";
   const auth = useConvexAuth();
-  return <RouterProvider router={router} context={{ title, auth }} />;
+  const role = useQuery(api.users.getCurrentUserRole);
+
+  return <RouterProvider router={router} context={{ title, auth, role }} />;
 };
 
 const rootElement = document.getElementById("root")!;
