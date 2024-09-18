@@ -1,56 +1,9 @@
-import { RiSignpostLine } from "@remixicon/react";
-import { createFileRoute } from "@tanstack/react-router";
-import { Authenticated, Unauthenticated, useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import {
-  Badge,
-  Container,
-  Empty,
-  GridList,
-  GridListItem,
-  PageHeader,
-} from "../components";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
-  component: IndexRoute,
+  beforeLoad: () => {
+    throw redirect({
+      to: "/quests",
+    });
+  },
 });
-
-function IndexRoute() {
-  const MyQuests = () => {
-    const myQuests = useQuery(api.usersQuests.getQuestsForCurrentUser);
-
-    if (myQuests === undefined) return;
-
-    if (myQuests === null || myQuests.length === 0)
-      return <Empty title="No quests" icon={RiSignpostLine} />;
-
-    return (
-      <GridList aria-label="My quests">
-        {myQuests.map((quest) => {
-          if (quest === null) return null;
-
-          return (
-            <GridListItem textValue={quest.title} key={quest._id}>
-              <div className="flex items-baseline gap-2">
-                <p className="font-bold text-lg">{quest.title}</p>
-                {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
-              </div>
-            </GridListItem>
-          );
-        })}
-      </GridList>
-    );
-  };
-
-  return (
-    <Container>
-      <Authenticated>
-        <PageHeader title="My Quests" />
-        <MyQuests />
-      </Authenticated>
-      <Unauthenticated>
-        <h1>Please log in</h1>
-      </Unauthenticated>
-    </Container>
-  );
-}
