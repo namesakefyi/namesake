@@ -1,5 +1,11 @@
 # namesake
 
+## 0.2.1
+
+### Patch Changes
+
+- f22c6d8: Fix query error when checking for current user role
+
 ## 0.2.0
 
 ### Minor Changes
