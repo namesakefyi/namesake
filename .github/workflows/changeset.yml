@@ -1,0 +1,39 @@
+name: Changeset
+
+on:
+  push:
+    branches: main
+  workflow_dispatch:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  changeset:
+    name: Update changelog and tags
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Create release pull request or bump version tag
+        uses: changesets/action@v1
+        with:
+          title: 'ci: Release'
+          publish: pnpm changeset tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
