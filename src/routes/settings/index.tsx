@@ -173,6 +173,9 @@ function SettingsRoute() {
         >
           System Status
         </Link>
+        <Link href="https://namesake.fyi/chat" target="_blank" rel="noreferrer">
+          Support
+        </Link>
       </div>
     </Container>
   );

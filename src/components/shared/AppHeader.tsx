@@ -1,7 +1,7 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { RiAccountCircleFill } from "@remixicon/react";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
-import { Button, Link, Menu, MenuItem, MenuTrigger } from "..";
+import { Button, Link, Menu, MenuItem, MenuSeparator, MenuTrigger } from "..";
 import { api } from "../../../convex/_generated/api";
 
 export const AppHeader = () => {
@@ -23,6 +23,15 @@ export const AppHeader = () => {
             </Button>
             <Menu>
               <MenuItem href={{ to: "/settings" }}>Settings</MenuItem>
+              <MenuSeparator />
+              <MenuItem
+                href="https://namesake.fyi/chat"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Support&hellip;
+              </MenuItem>
+              <MenuSeparator />
               <MenuItem onAction={signOut}>Sign Out</MenuItem>
             </Menu>
           </MenuTrigger>
