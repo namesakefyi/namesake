@@ -15,7 +15,6 @@ export const userQuery = customQuery(
   }),
 );
 
-// Use `apiMutation` instead of `mutation` to apply this behavior.
 export const userMutation = customMutation(mutation, {
   args: {},
   input: async (ctx) => {
