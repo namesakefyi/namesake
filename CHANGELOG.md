@@ -1,5 +1,15 @@
 # namesake
 
+## 0.2.0
+
+### Minor Changes
+
+- 4acd9bd: Add user roles
+
+### Patch Changes
+
+- 0673382: Add support link to user dropdown menu and settings page
+
 ## 0.1.1
 
 ### Patch Changes
