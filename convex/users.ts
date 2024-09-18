@@ -20,6 +20,25 @@ export const getCurrentUser = userQuery({
   },
 });
 
+export const getCurrentUserRole = userQuery({
+  args: {},
+  handler: async (ctx) => {
+    const user = await ctx.db.get(ctx.userId);
+    if (!user) throw new Error("User not found");
+    return user.role;
+  },
+});
+
+export const getUserByEmail = query({
+  args: { email: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("users")
+      .withIndex("email", (q) => q.eq("email", args.email))
+      .first();
+  },
+});
+
 export const setCurrentUserName = userMutation({
   args: { name: v.optional(v.string()) },
   handler: async (ctx, args) => {
@@ -41,6 +60,9 @@ export const setUserTheme = userMutation({
   },
 });
 
+// TODO: This throws an error when deleting own account
+// Implement RLS check for whether this is the user's own account
+// or a different account being deleted by an admin
 export const deleteCurrentUser = userMutation({
   args: {},
   handler: async (ctx) => {

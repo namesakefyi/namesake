@@ -4,14 +4,23 @@ import {
   RiSignpostFill,
   RiSignpostLine,
 } from "@remixicon/react";
-import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import { Container, Nav } from "../../components";
 
 export const Route = createFileRoute("/admin")({
+  beforeLoad: ({ context }) => {
+    const isAdmin = context.role === "admin";
+
+    if (!isAdmin) {
+      throw redirect({
+        to: "/",
+        statusCode: 401,
+        replace: true,
+      });
+    }
+  },
   component: AdminRoute,
 });
-
-// TODO: Protect this route for admins only
 
 function AdminRoute() {
   return (

@@ -1,7 +1,7 @@
 import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { jurisdiction, theme } from "./validators";
+import { jurisdiction, role, theme } from "./validators";
 
 export default defineSchema({
   ...authTables,
@@ -87,6 +87,7 @@ export default defineSchema({
   /**
    * Represents a user of Namesake.
    * @param name - The user's preferred first name.
+   * @param role - The user's role: "admin", "editor", or "user".
    * @param image - A URL to the user's profile picture.
    * @param email - The user's email address.
    * @param emailVerificationTime - Time in ms since epoch when the user verified their email.
@@ -96,12 +97,13 @@ export default defineSchema({
    */
   users: defineTable({
     name: v.optional(v.string()),
+    role: role,
     image: v.optional(v.string()),
     email: v.optional(v.string()),
-    emailVerificationTime: v.optional(v.number()),
+    emailVerified: v.boolean(),
     isAnonymous: v.optional(v.boolean()),
     isMinor: v.optional(v.boolean()),
-    theme: v.optional(theme),
+    theme: theme,
   }).index("email", ["email"]),
 
   /**

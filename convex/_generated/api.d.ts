@@ -1,3 +1,5 @@
+/* prettier-ignore-start */
+
 /* eslint-disable */
 /**
  * Generated `api` utility.
@@ -17,10 +19,12 @@ import type * as auth from "../auth.js";
 import type * as constants from "../constants.js";
 import type * as formFields from "../formFields.js";
 import type * as forms from "../forms.js";
+import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
 import type * as quests from "../quests.js";
 import type * as users from "../users.js";
 import type * as usersQuests from "../usersQuests.js";
+import type * as validators from "../validators.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -35,10 +39,12 @@ declare const fullApi: ApiFromModules<{
   constants: typeof constants;
   formFields: typeof formFields;
   forms: typeof forms;
+  helpers: typeof helpers;
   http: typeof http;
   quests: typeof quests;
   users: typeof users;
   usersQuests: typeof usersQuests;
+  validators: typeof validators;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,
@@ -48,3 +54,5 @@ export declare const internal: FilterApi<
   typeof fullApi,
   FunctionReference<any, "internal">
 >;
+
+/* prettier-ignore-end */
