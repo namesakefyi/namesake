@@ -38,7 +38,7 @@ declare module "@tanstack/react-router" {
 const InnerApp = () => {
   const title = "Namesake";
   const auth = useConvexAuth();
-  const role = useQuery(api.users.getCurrentUserRole);
+  const role = useQuery(api.users.getCurrentUserRole) ?? undefined;
 
   return <RouterProvider router={router} context={{ title, auth, role }} />;
 };

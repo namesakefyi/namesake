@@ -1,3 +1,4 @@
+import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { query } from "./_generated/server";
 import { userMutation, userQuery } from "./helpers";
@@ -20,11 +21,13 @@ export const getCurrentUser = userQuery({
   },
 });
 
-export const getCurrentUserRole = userQuery({
+export const getCurrentUserRole = query({
   args: {},
   handler: async (ctx) => {
-    const user = await ctx.db.get(ctx.userId);
-    if (!user) throw new Error("User not found");
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return undefined;
+    const user = await ctx.db.get(userId);
+    if (!user) return undefined;
     return user.role;
   },
 });
