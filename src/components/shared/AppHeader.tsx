@@ -12,6 +12,7 @@ export const AppHeader = () => {
   return (
     <div className="flex gap-4 items-center w-screen py-3 px-4 border-b border-gray-dim">
       <Link href={{ to: "/" }}>Namesake</Link>
+      <Link href={{ to: "/laws" }}>Laws</Link>
       <Authenticated>
         {isAdmin && <Link href={{ to: "/admin" }}>Admin</Link>}
       </Authenticated>
