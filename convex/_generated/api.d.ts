@@ -26,7 +26,6 @@ import type * as seed from "../seed.js";
 import type * as types from "../types.js";
 import type * as users from "../users.js";
 import type * as usersQuests from "../usersQuests.js";
-import type * as validators from "../validators.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -48,7 +47,6 @@ declare const fullApi: ApiFromModules<{
   types: typeof types;
   users: typeof users;
   usersQuests: typeof usersQuests;
-  validators: typeof validators;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

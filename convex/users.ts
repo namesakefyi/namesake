@@ -2,7 +2,7 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { query } from "./_generated/server";
 import { userMutation, userQuery } from "./helpers";
-import { theme } from "./validators";
+import { theme } from "./types";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
