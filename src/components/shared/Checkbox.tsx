@@ -53,8 +53,8 @@ const boxStyles = tv({
   variants: {
     isSelected: {
       false:
-        "bg-white dark:bg-gray-12 border-[--color] [--color:theme(colors.gray-4)] dark:[--color:colors.gray-4)] group-pressed:[--color:theme(colors.gray-5)] dark:group-pressed:[--color:theme(colors.gray-3)]",
-      true: "bg-[--color] border-[--color] [--color:theme(colors.gray-7)] group-pressed:[--color:theme(colors.gray-8)] dark:[--color:theme(colors.gray-3] dark:group-pressed:[--color:theme(colors.gray-2)] forced-colors:![--color:Highlight]",
+        "bg-white dark:bg-gray-12 border-[--color] [--color:theme(colors.gray.400)] dark:[--color:colors.gray-4)] group-pressed:[--color:theme(colors.gray.500)] dark:group-pressed:[--color:theme(colors.gray.300)]",
+      true: "bg-[--color] border-[--color] [--color:theme(colors.gray.700)] group-pressed:[--color:theme(colors.gray.800)] dark:[--color:theme(colors.gray.300)] dark:group-pressed:[--color:theme(colors.gray.200)] forced-colors:![--color:Highlight]",
     },
     isInvalid: {
       true: "text-red-9 dark:text-reddark-9 forced-colors:![--color:Mark] group-pressed:[--color:theme(colors.red.800)] dark:group-pressed:[--color:theme(colors.red.700)]",
