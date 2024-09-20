@@ -1,7 +1,7 @@
 import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { jurisdiction, role, theme } from "./validators";
+import { jurisdiction, role, theme } from "./types";
 
 export default defineSchema({
   ...authTables,

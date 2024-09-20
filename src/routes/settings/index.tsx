@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { api } from "../../../convex/_generated/api";
-import type { Theme } from "../../../convex/constants";
+import type { Theme } from "../../../convex/types";
 import {
   Button,
   Container,

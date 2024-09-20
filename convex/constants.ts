@@ -53,7 +53,3 @@ export enum JURISDICTIONS {
   WV = "West Virginia",
   WY = "Wyoming",
 }
-
-export type Theme = "system" | "light" | "dark";
-
-export type Role = "user" | "editor" | "admin";
