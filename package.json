@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
+    "predev": "convex dev --run seed --until-success",
     "dev": "npm-run-all --parallel dev:frontend dev:backend",
     "dev:frontend": "vite",
     "dev:backend": "convex dev",
@@ -30,6 +31,7 @@
   "dependencies": {
     "@auth/core": "^0.34.2",
     "@convex-dev/auth": "^0.0.67",
+    "@faker-js/faker": "^9.0.1",
     "@mdxeditor/editor": "^3.11.4",
     "@pdfme/common": "^4.5.2",
     "@pdfme/generator": "^4.5.2",

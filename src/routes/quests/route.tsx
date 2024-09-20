@@ -80,7 +80,7 @@ const NewQuestModal = ({
             ))}
           </GridList>
         ) : (
-          <Empty title="No more quests" icon={RiSignpostLine} />
+          <Empty title="No quests available" icon={RiSignpostLine} />
         )}
         <div className="flex gap-2 justify-end">
           <Button type="button" onPress={() => onOpenChange(false)}>

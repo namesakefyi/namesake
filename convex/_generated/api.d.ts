@@ -22,6 +22,7 @@ import type * as forms from "../forms.js";
 import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
 import type * as quests from "../quests.js";
+import type * as seed from "../seed.js";
 import type * as users from "../users.js";
 import type * as usersQuests from "../usersQuests.js";
 import type * as validators from "../validators.js";
@@ -42,6 +43,7 @@ declare const fullApi: ApiFromModules<{
   helpers: typeof helpers;
   http: typeof http;
   quests: typeof quests;
+  seed: typeof seed;
   users: typeof users;
   usersQuests: typeof usersQuests;
   validators: typeof validators;
