@@ -39,3 +39,5 @@ node_modules
 
 # Local files
 *.local
+
+*storybook.log

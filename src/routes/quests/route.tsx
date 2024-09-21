@@ -1,3 +1,13 @@
+import {
+  Badge,
+  Button,
+  Container,
+  Empty,
+  Form,
+  GridList,
+  GridListItem,
+  Modal,
+} from "@/components";
 import { RiAddLine, RiSignpostLine } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import {
@@ -10,16 +20,6 @@ import { useState } from "react";
 import type { Selection } from "react-aria-components";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
-import {
-  Badge,
-  Button,
-  Container,
-  Empty,
-  Form,
-  GridList,
-  GridListItem,
-  Modal,
-} from "../../components";
 
 export const Route = createFileRoute("/quests")({
   component: IndexRoute,

@@ -1,0 +1,13 @@
+import type { Meta } from "@storybook/react";
+import { Checkbox } from ".";
+
+const meta: Meta<typeof Checkbox> = {
+  component: Checkbox,
+  parameters: {
+    layout: "centered",
+  },
+};
+
+export default meta;
+
+export const Example = (args: any) => <Checkbox {...args} />;

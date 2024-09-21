@@ -7,7 +7,7 @@ import tailwindcssReactAriaComponents from "tailwindcss-react-aria-components";
 
 export default {
   content: ["./src/**/*.{ts,tsx}"],
-  darkMode: "selector",
+  darkMode: "class",
   plugins: [
     tailwindcssReactAriaComponents,
     tailwindcssAnimate,

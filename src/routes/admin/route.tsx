@@ -1,3 +1,4 @@
+import { Container, Nav } from "@/components";
 import {
   RiFileTextFill,
   RiFileTextLine,
@@ -5,7 +6,6 @@ import {
   RiSignpostLine,
 } from "@remixicon/react";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import { Container, Nav } from "../../components";
 
 export const Route = createFileRoute("/admin")({
   beforeLoad: ({ context }) => {

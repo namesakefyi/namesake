@@ -1,10 +1,3 @@
-import { RiAddLine, RiMoreFill, RiSignpostLine } from "@remixicon/react";
-import { createFileRoute } from "@tanstack/react-router";
-import { useMutation, useQuery } from "convex/react";
-import { useState } from "react";
-import { api } from "../../../../convex/_generated/api";
-import type { DataModel } from "../../../../convex/_generated/dataModel";
-import { JURISDICTIONS } from "../../../../convex/constants";
 import {
   Badge,
   Button,
@@ -24,7 +17,14 @@ import {
   TableHeader,
   TableRow,
   TextField,
-} from "../../../components";
+} from "@/components";
+import { RiAddLine, RiMoreFill, RiSignpostLine } from "@remixicon/react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useMutation, useQuery } from "convex/react";
+import { useState } from "react";
+import { api } from "../../../../convex/_generated/api";
+import type { DataModel } from "../../../../convex/_generated/dataModel";
+import { JURISDICTIONS } from "../../../../convex/constants";
 
 export const Route = createFileRoute("/admin/quests/")({
   component: QuestsRoute,
