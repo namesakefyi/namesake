@@ -123,7 +123,7 @@ function RootRoute() {
           <Logo className="mb-4" />
           {isClosed ? <ClosedSignups /> : <SignIn />}
           <div className="flex gap-4 justify-center">
-            <Link href="https://namesake.fyi">Namesake.fyi</Link>
+            <Link href="https://namesake.fyi">Namesake</Link>
             <Link href="https://namesake.fyi/chat">Support</Link>
             <Link href="https://status.namesake.fyi">System Status</Link>
           </div>
