@@ -19,6 +19,9 @@ export default defineConfig({
       plugins: [autoprefixer(), tailwindcss(), cssnano()],
     },
   },
+  resolve: {
+    alias: [{ find: "@", replacement: "/src" }],
+  },
   test: {
     environment: "edge-runtime",
     environmentMatchGlobs: [
