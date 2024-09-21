@@ -3,9 +3,6 @@ import { Switch } from ".";
 
 const meta: Meta<typeof Switch> = {
   component: Switch,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

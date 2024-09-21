@@ -3,9 +3,6 @@ import { Breadcrumb, Breadcrumbs } from ".";
 
 const meta: Meta<typeof Breadcrumbs> = {
   component: Breadcrumbs,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

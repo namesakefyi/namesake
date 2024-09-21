@@ -7,9 +7,6 @@ import { Dialog, DialogTrigger } from "../Dialog";
 
 const meta: Meta<typeof Popover> = {
   component: Popover,
-  parameters: {
-    layout: "centered",
-  },
 
   args: {
     showArrow: true,

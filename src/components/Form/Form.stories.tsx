@@ -6,9 +6,6 @@ import { TextField } from "../TextField";
 
 const meta: Meta<typeof Form> = {
   component: Form,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

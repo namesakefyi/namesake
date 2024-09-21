@@ -3,9 +3,6 @@ import { ListBox, ListBoxItem } from ".";
 
 const meta: Meta<typeof ListBox> = {
   component: ListBox,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

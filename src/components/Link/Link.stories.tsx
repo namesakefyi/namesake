@@ -3,9 +3,6 @@ import { Link } from ".";
 
 const meta: Meta<typeof Link> = {
   component: Link,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

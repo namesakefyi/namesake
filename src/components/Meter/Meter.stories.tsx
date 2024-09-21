@@ -3,9 +3,6 @@ import { Meter } from ".";
 
 const meta: Meta<typeof Meter> = {
   component: Meter,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

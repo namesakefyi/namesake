@@ -4,9 +4,6 @@ import { Form } from "../Form";
 
 export default {
   component: RadioGroup,
-  parameters: {
-    layout: "centered",
-  },
 
   argTypes: {},
   args: {

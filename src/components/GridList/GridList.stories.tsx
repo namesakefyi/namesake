@@ -3,9 +3,6 @@ import { GridList, GridListItem } from ".";
 
 const meta: Meta<typeof GridList> = {
   component: GridList,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

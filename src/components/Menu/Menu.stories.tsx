@@ -13,9 +13,6 @@ import { Popover } from "../Popover";
 
 const meta: Meta<typeof Menu> = {
   component: Menu,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

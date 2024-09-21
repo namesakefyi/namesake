@@ -2,9 +2,6 @@ import { Button } from ".";
 
 export default {
   component: Button,
-  parameters: {
-    layout: "centered",
-  },
 
   argTypes: {
     variant: {

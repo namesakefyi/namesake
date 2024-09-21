@@ -10,9 +10,6 @@ import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof Toolbar> = {
   component: Toolbar,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

@@ -5,9 +5,6 @@ import { Form } from "../Form";
 
 const meta: Meta<typeof SearchField> = {
   component: SearchField,
-  parameters: {
-    layout: "centered",
-  },
 
   args: {
     label: "Search",

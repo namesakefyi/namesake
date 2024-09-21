@@ -54,9 +54,8 @@ const boxStyles = tv({
   base: "w-5 h-5 flex-shrink-0 rounded flex items-center justify-center border-2 transition",
   variants: {
     isSelected: {
-      false:
-        "bg-white dark:bg-gray-12 border-[--color] [--color:theme(colors.gray.400)] dark:[--color:colors.gray-4)] group-pressed:[--color:theme(colors.gray.500)] dark:group-pressed:[--color:theme(colors.gray.300)]",
-      true: "bg-[--color] border-[--color] [--color:theme(colors.gray.700)] group-pressed:[--color:theme(colors.gray.800)] dark:[--color:theme(colors.gray.300)] dark:group-pressed:[--color:theme(colors.gray.200)] forced-colors:![--color:Highlight]",
+      false: "bg-white dark:bg-gray-12 border-gray-dim",
+      true: "bg-purple-9 dark:bg-purpledark-9 border-transparent",
     },
     isInvalid: {
       true: "text-red-9 dark:text-reddark-9 forced-colors:![--color:Mark] group-pressed:[--color:theme(colors.red.800)] dark:group-pressed:[--color:theme(colors.red.700)]",
@@ -68,7 +67,7 @@ const boxStyles = tv({
 });
 
 const iconStyles =
-  "w-4 h-4 text-white group-disabled:text-gray-4 dark:text-gray-12 dark:group-disabled:text-gray-9 forced-colors:text-[HighlightText]";
+  "w-4 h-4 text-white group-disabled:text-gray-4 dark:group-disabled:text-gray-9 forced-colors:text-[HighlightText]";
 
 export function Checkbox(props: CheckboxProps) {
   return (

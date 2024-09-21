@@ -5,9 +5,6 @@ import { Form } from "../Form";
 
 const meta: Meta<typeof DateField> = {
   component: DateField,
-  parameters: {
-    layout: "centered",
-  },
 
   args: {
     label: "Event date",

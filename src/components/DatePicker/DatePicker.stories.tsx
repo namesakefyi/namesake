@@ -5,9 +5,6 @@ import { Form } from "../Form";
 
 const meta: Meta<typeof DatePicker> = {
   component: DatePicker,
-  parameters: {
-    layout: "centered",
-  },
 
   args: {
     label: "Event date",

@@ -3,9 +3,6 @@ import { Tab, TabList, TabPanel, Tabs } from ".";
 
 const meta: Meta<typeof Tabs> = {
   component: Tabs,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

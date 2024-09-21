@@ -13,6 +13,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 *.tmp
+*storybook.log
 
 # Tests
 artifacts
@@ -39,5 +40,3 @@ node_modules
 
 # Local files
 *.local
-
-*storybook.log

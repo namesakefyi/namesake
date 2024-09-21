@@ -5,9 +5,6 @@ import { Form } from "../Form";
 
 const meta: Meta<typeof Select> = {
   component: Select,
-  parameters: {
-    layout: "centered",
-  },
 
   args: {
     label: "Ice cream flavor",

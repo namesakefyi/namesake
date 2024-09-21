@@ -3,9 +3,6 @@ import { Tag, TagGroup } from ".";
 
 const meta: Meta<typeof Example> = {
   component: TagGroup,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

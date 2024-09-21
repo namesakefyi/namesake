@@ -3,9 +3,6 @@ import { ProgressBar } from ".";
 
 const meta: Meta<typeof ProgressBar> = {
   component: ProgressBar,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

@@ -3,9 +3,6 @@ import { RangeCalendar } from ".";
 
 const meta: Meta<typeof RangeCalendar> = {
   component: RangeCalendar,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

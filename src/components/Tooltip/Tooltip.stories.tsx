@@ -5,9 +5,6 @@ import { Button } from "../Button";
 
 const meta: Meta<typeof Tooltip> = {
   component: Tooltip,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

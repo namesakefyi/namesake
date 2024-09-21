@@ -5,9 +5,6 @@ import { Form } from "../Form";
 
 const meta: Meta<typeof TextField> = {
   component: TextField,
-  parameters: {
-    layout: "centered",
-  },
 
   args: {
     label: "Name",

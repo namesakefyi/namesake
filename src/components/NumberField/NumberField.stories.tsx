@@ -5,9 +5,6 @@ import { Form } from "../Form";
 
 const meta: Meta<typeof NumberField> = {
   component: NumberField,
-  parameters: {
-    layout: "centered",
-  },
 
   args: {
     label: "Cookies",

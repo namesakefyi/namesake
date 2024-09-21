@@ -3,9 +3,6 @@ import { ToggleButton } from ".";
 
 const meta: Meta<typeof ToggleButton> = {
   component: ToggleButton,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

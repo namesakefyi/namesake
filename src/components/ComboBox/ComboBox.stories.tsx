@@ -5,9 +5,6 @@ import { Form } from "../Form";
 
 const meta: Meta<typeof ComboBox> = {
   component: ComboBox,
-  parameters: {
-    layout: "centered",
-  },
 
   args: {
     label: "Ice cream flavor",

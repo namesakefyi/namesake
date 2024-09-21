@@ -11,9 +11,6 @@ import {
 
 const meta: Meta<typeof Table> = {
   component: Table,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;

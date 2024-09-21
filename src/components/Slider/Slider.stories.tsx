@@ -3,9 +3,6 @@ import { Slider } from ".";
 
 const meta: Meta<typeof Slider> = {
   component: Slider,
-  parameters: {
-    layout: "centered",
-  },
 };
 
 export default meta;
