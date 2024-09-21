@@ -1,4 +1,12 @@
-import { AppHeader, Button, Form, Logo, TextField } from "@/components";
+import {
+  AppHeader,
+  Button,
+  Card,
+  Form,
+  Link,
+  Logo,
+  TextField,
+} from "@/components";
 import { useAuthActions } from "@convex-dev/auth/react";
 import {
   type NavigateOptions,
@@ -32,6 +40,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function RootRoute() {
   const router = useRouter();
   const { isAuthenticated } = useConvexAuth();
+  const isProd = process.env.NODE_ENV === "production";
 
   const SignInWithMagicLink = ({
     handleLinkSent,
@@ -78,29 +87,57 @@ function RootRoute() {
     const [step, setStep] = useState<"signIn" | "linkSent">("signIn");
 
     return (
-      <div className="flex flex-col w-screen h-screen place-content-center gap-12">
-        <Logo />
-        <div className="p-6 rounded-lg bg-gray-subtle border border-gray-dim w-96 max-w-full mx-auto">
-          {step === "signIn" ? (
-            <SignInWithMagicLink handleLinkSent={() => setStep("linkSent")} />
-          ) : (
-            <div>
-              <p>Check your email.</p>
-              <p>A sign-in link has been sent to your email address.</p>
-              <Button onPress={() => setStep("signIn")}>Cancel</Button>
-            </div>
-          )}
-        </div>
-      </div>
+      <Card>
+        {step === "signIn" ? (
+          <SignInWithMagicLink handleLinkSent={() => setStep("linkSent")} />
+        ) : (
+          <div>
+            <p>Check your email.</p>
+            <p>A sign-in link has been sent to your email address.</p>
+            <Button onPress={() => setStep("signIn")}>Cancel</Button>
+          </div>
+        )}
+      </Card>
     );
   };
 
-  const App = () => (
-    <main className="flex flex-col flex-1 min-h-screen text-gray-normal">
-      <AppHeader />
-      <Outlet />
-    </main>
+  const ClosedSignups = () => (
+    <Card>
+      <p>
+        Namesake is in active development and currently closed to signups. For
+        name change support, join us on{" "}
+        <Link href="https://namesake.fyi/chat">Discord</Link>.
+      </p>
+    </Card>
   );
+
+  type AppProps = {
+    isAuthenticated: boolean;
+    isClosed: boolean;
+  };
+
+  const App = ({ isAuthenticated, isClosed }: AppProps) => {
+    if (isClosed || !isAuthenticated) {
+      return (
+        <div className="flex flex-col w-96 max-w-full mx-auto h-screen place-content-center gap-8">
+          <Logo className="mb-4" />
+          {isClosed ? <ClosedSignups /> : <SignIn />}
+          <div className="flex gap-4 justify-center">
+            <Link href="https://namesake.fyi">Namesake</Link>
+            <Link href="https://namesake.fyi/chat">Support</Link>
+            <Link href="https://status.namesake.fyi">System Status</Link>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <main className="flex flex-col flex-1 min-h-screen text-gray-normal">
+        <AppHeader />
+        <Outlet />
+      </main>
+    );
+  };
 
   return (
     // TODO: Improve this API
@@ -115,7 +152,7 @@ function RootRoute() {
         typeof path === "string" ? path : router.buildLocation(path).href
       }
     >
-      {!isAuthenticated ? <SignIn /> : <App />}
+      <App isAuthenticated={isAuthenticated} isClosed={isProd} />
     </RouterProvider>
   );
 }
