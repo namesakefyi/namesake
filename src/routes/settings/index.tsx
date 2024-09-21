@@ -1,6 +1,6 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { RiCheckLine, RiLoader4Line } from "@remixicon/react";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -20,13 +20,6 @@ import {
 } from "../../components";
 
 export const Route = createFileRoute("/settings/")({
-  beforeLoad: ({ context }) => {
-    if (!context.auth.isAuthenticated) {
-      throw redirect({
-        to: "/signin",
-      });
-    }
-  },
   component: SettingsRoute,
 });
 
