@@ -19,6 +19,7 @@ export * from "./shared/Form";
 export * from "./shared/GridList";
 export * from "./shared/Link";
 export * from "./shared/ListBox";
+export * from "./shared/Logo";
 export * from "./shared/Menu";
 export * from "./shared/Meter";
 export * from "./shared/Modal";
