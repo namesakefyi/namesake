@@ -28,14 +28,14 @@ export function GridList<T extends object>({
 
 const itemStyles = tv({
   extend: focusRing,
-  base: "relative flex items-center gap-3 cursor-default select-none py-2 px-3 text-sm border-y border-y-gray-6 dark:border-y-graydark-6 first:border-t-0 last:border-b-0 first:rounded-t-md last:rounded-b-md -mb-px last:mb-0 -outline-offset-2",
+  base: "relative text-gray-normal flex items-center gap-3 cursor-pointer select-none py-2 px-3 text-sm border-y border-gray-dim first:border-t-0 last:border-b-0 first:rounded-t-md last:rounded-b-md -mb-px last:mb-0 -outline-offset-2",
   variants: {
     isSelected: {
-      false: "hover:bg-gray-3 dark:hover:bg-graydark-3",
-      true: "bg-blue-1 dark:bg-blue-10/30 hover:bg-blue-2 dark:hover:bg-blue-10/40 border-y-blue-2 dark:border-y-blue-12 z-20",
+      false: "",
+      true: "bg-purple-subtle border-y border-purple-dim z-20",
     },
     isDisabled: {
-      true: "opacity-50 forced-colors:text-[GrayText] z-10",
+      true: "opacity-50 cursor-default forced-colors:text-[GrayText] z-10",
     },
   },
 });

@@ -1,4 +1,4 @@
-import { ArrowUp } from "lucide-react";
+import { RiArrowUpSLine } from "@remixicon/react";
 import {
   Cell as AriaCell,
   Column as AriaColumn,
@@ -64,7 +64,7 @@ export function TableColumn(props: ColumnProps) {
                   }`}
                 >
                   {sortDirection && (
-                    <ArrowUp
+                    <RiArrowUpSLine
                       aria-hidden
                       className="w-4 h-4 text-gray-dim forced-colors:text-[ButtonText]"
                     />
@@ -96,8 +96,8 @@ export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
       {allowsDragging && <TableColumn />}
       {selectionBehavior === "toggle" && (
         <AriaColumn
-          width={36}
-          minWidth={36}
+          width={40}
+          minWidth={40}
           className="text-start text-sm font-semibold cursor-default p-2"
         >
           {selectionMode === "multiple" && <Checkbox slot="selection" />}
@@ -110,7 +110,7 @@ export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
 
 const rowStyles = tv({
   extend: focusRing,
-  base: "group/row relative cursor-default select-none -outline-offset-2 text-sm bg-gray-ghost selected:bg-purple-subtle",
+  base: "group/row relative cursor-default select-none -outline-offset-2 text-sm text-gray-normal selected:bg-purple-subtle",
 });
 
 export function TableRow<T extends object>({
@@ -140,8 +140,7 @@ export function TableRow<T extends object>({
 
 const cellStyles = tv({
   extend: focusRing,
-  // TODO: Fix these selected styles to use Radix colors
-  base: "border-b border-gray-dim group-last/row:border-b-0 [--selected-border:theme(colors.blue.200)] dark:[--selected-border:theme(colors.blue.900)] group-selected/row:border-[--selected-border] [:has(+[data-selected])_&]:border-[--selected-border] p-3 truncate -outline-offset-2",
+  base: "border-b border-gray-dim group-last/row:border-b-0 group-selected/row:border-purple-dim [:has(+[data-selected])_&]:border-purple-dim p-2 truncate -outline-offset-2",
 });
 
 export function TableCell(props: CellProps) {

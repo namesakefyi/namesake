@@ -22,7 +22,7 @@ export function Label(props: LabelProps) {
     <AriaLabel
       {...props}
       className={twMerge(
-        "text-sm text-gray-normal font-medium cursor-default w-fit",
+        "text-sm text-gray-dim cursor-default w-fit",
         props.className,
       )}
     />
@@ -55,7 +55,7 @@ export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
       false: "border-gray-dim forced-colors:border-[ButtonBorder]",
-      true: "border-gray-dim forced-colors:border-[Highlight]",
+      true: "border-gray-normal forced-colors:border-[Highlight]",
     },
     isInvalid: {
       true: "border-red-normal bg-red-subtle forced-colors:border-[Mark]",
@@ -83,8 +83,8 @@ export function FieldGroup(props: GroupProps) {
   );
 }
 
-const inputStyles =
-  "px-3 py-2 flex-1 min-w-0 outline outline-0 bg-gray-subtle text-gray-normal disabled:text-gray-dim";
+export const inputStyles =
+  "px-3 py-2 flex-1 min-w-0 outline outline-0 bg-transparent text-gray-normal disabled:text-gray-dim";
 
 export function Input(props: InputProps) {
   return (

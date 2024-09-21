@@ -46,16 +46,16 @@ export function DateField<T extends DateValue>({
 }
 
 const segmentStyles = tv({
-  base: "inline p-0.5 type-literal:px-0 rounded outline outline-0 forced-color-adjust-none caret-transparent text-gray-10 dark:text-gray-2 forced-colors:text-[ButtonText]",
+  base: "inline p-0.5 type-literal:px-0 rounded outline outline-0 forced-color-adjust-none caret-transparent text-gray-normal forced-colors:text-[ButtonText]",
   variants: {
     isPlaceholder: {
-      true: "text-gray-6 dark:text-gray-4 italic",
+      true: "text-gray-9 dark:text-graydark-9",
     },
     isDisabled: {
       true: "text-gray-2 dark:text-gray-6 forced-colors:text-[GrayText]",
     },
     isFocused: {
-      true: "bg-blue-9 text-white dark:text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
+      true: "bg-purple-9 text-white dark:text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
     },
   },
 });
@@ -66,7 +66,7 @@ export function DateInput(props: Omit<DateInputProps, "children">) {
       className={(renderProps) =>
         fieldGroupStyles({
           ...renderProps,
-          class: "block min-w-[150px] px-2 py-1.5 text-sm",
+          class: "block min-w-[150px] px-3 py-2",
         })
       }
       {...props}

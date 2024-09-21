@@ -1,5 +1,4 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
-
+import { RiArrowLeftSLine, RiArrowRightSLine } from "@remixicon/react";
 import {
   Calendar as AriaCalendar,
   CalendarGridHeader as AriaCalendarGridHeader,
@@ -66,17 +65,17 @@ export function CalendarHeader() {
     <header className="flex items-center gap-1 pb-4 px-1 w-full">
       <Button variant="icon" slot="previous">
         {direction === "rtl" ? (
-          <ChevronRight aria-hidden />
+          <RiArrowRightSLine aria-hidden />
         ) : (
-          <ChevronLeft aria-hidden />
+          <RiArrowLeftSLine aria-hidden />
         )}
       </Button>
-      <Heading className="flex-1 font-semibold text-xl text-center mx-2 text-gray-12 dark:text-gray-2" />
+      <Heading className="flex-1 font-medium text-xl text-center mx-2 text-gray-normal" />
       <Button variant="icon" slot="next">
         {direction === "rtl" ? (
-          <ChevronLeft aria-hidden />
+          <RiArrowLeftSLine aria-hidden />
         ) : (
-          <ChevronRight aria-hidden />
+          <RiArrowRightSLine aria-hidden />
         )}
       </Button>
     </header>
@@ -87,7 +86,7 @@ export function CalendarGridHeader() {
   return (
     <AriaCalendarGridHeader>
       {(day) => (
-        <CalendarHeaderCell className="text-xs text-gray-5 dark:text-graydark-5 font-semibold">
+        <CalendarHeaderCell className="text-xs text-gray-9 dark:text-graydark-9 font-semibold">
           {day}
         </CalendarHeaderCell>
       )}

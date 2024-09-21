@@ -1,4 +1,4 @@
-import { Check, Minus } from "lucide-react";
+import { RiCheckLine, RiSubtractLine } from "@remixicon/react";
 import type { ReactNode } from "react";
 import {
   Checkbox as AriaCheckbox,
@@ -43,15 +43,15 @@ const checkboxStyles = tv({
   base: "flex gap-2 items-center group text-sm transition",
   variants: {
     isDisabled: {
-      false: "text-gray-10 dark:text-gray-2",
-      true: "text-gray-3 dark:text-gray-6 forced-colors:text-[GrayText]",
+      false: "text-gray-normal cursor-pointer",
+      true: "opacity-50 forced-colors:text-[GrayText] cursor-default",
     },
   },
 });
 
 const boxStyles = tv({
   extend: focusRing,
-  base: "w-5 h-5 flex-shrink-0 rounded flex items-center justify-center border-2 transition",
+  base: "w-6 h-6 flex-shrink-0 rounded flex items-center justify-center border-2 transition",
   variants: {
     isSelected: {
       false: "bg-white dark:bg-gray-12 border-gray-dim",
@@ -67,7 +67,7 @@ const boxStyles = tv({
 });
 
 const iconStyles =
-  "w-4 h-4 text-white group-disabled:text-gray-4 dark:group-disabled:text-gray-9 forced-colors:text-[HighlightText]";
+  "w-5 h-5 text-white group-disabled:text-gray-4 dark:group-disabled:text-gray-9 forced-colors:text-[HighlightText]";
 
 export function Checkbox(props: CheckboxProps) {
   return (
@@ -86,9 +86,9 @@ export function Checkbox(props: CheckboxProps) {
             })}
           >
             {isIndeterminate ? (
-              <Minus aria-hidden className={iconStyles} />
+              <RiSubtractLine aria-hidden className={iconStyles} />
             ) : isSelected ? (
-              <Check aria-hidden className={iconStyles} />
+              <RiCheckLine aria-hidden className={iconStyles} />
             ) : null}
           </div>
           {props.children}

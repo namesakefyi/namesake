@@ -18,7 +18,7 @@ const button = tv({
       primary: "bg-purple-solid",
       secondary: "bg-gray-ghost text-gray-normal",
       destructive: "bg-red-solid",
-      icon: "bg-gray-ghost border-0 p-2 flex items-center justify-center rounded-full",
+      icon: "bg-gray-ghost text-gray-dim hover:text-gray-normal border-0 p-2 flex items-center justify-center rounded-full",
     },
     isDisabled: {
       true: "cursor-default text-gray-dim opacity-50 forced-colors:text-[GrayText]",

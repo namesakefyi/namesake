@@ -1,4 +1,4 @@
-import { SearchIcon, XIcon } from "lucide-react";
+import { RiCloseLine, RiSearchLine } from "@remixicon/react";
 import {
   SearchField as AriaSearchField,
   type SearchFieldProps as AriaSearchFieldProps,
@@ -36,13 +36,16 @@ export function SearchField({
     >
       {label && <Label>{label}</Label>}
       <FieldGroup>
-        <SearchIcon
+        <RiSearchLine
           aria-hidden
-          className="w-4 h-4 ml-2 text-gray-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText]"
+          className="w-4 h-4 ml-3 text-gray-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText]"
         />
         <Input className="[&::-webkit-search-cancel-button]:hidden" />
-        <Button variant="icon" className="mr-1 w-6 group-empty:invisible">
-          <XIcon aria-hidden className="w-4 h-4" />
+        <Button
+          variant="icon"
+          className="mr-1 w-7 h-7 p-0 group-empty:invisible"
+        >
+          <RiCloseLine aria-hidden className="w-4 h-4" />
         </Button>
       </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}

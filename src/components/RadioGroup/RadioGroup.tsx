@@ -43,9 +43,8 @@ const styles = tv({
   base: "w-5 h-5 rounded-full border bg-white dark:bg-gray-12 transition-all cursor-pointer",
   variants: {
     isSelected: {
-      false:
-        "border-gray-5 dark:border-graydark-5 group-pressed:border-gray-6 dark:group-pressed:border-graydark-6",
-      true: "border-[7px] dark:bg-white border-purple-9 dark:border-purpledark-9 forced-colors:!border-[Highlight] group-pressed:border-gray-10 dark:group-pressed:border-graydark-10",
+      false: "border-gray-normal",
+      true: "border-[7px] dark:bg-white border-purple-9 dark:border-purpledark-9 forced-colors:!border-[Highlight] group-pressed:border-purple-10 dark:group-pressed:border-purpledark-10",
     },
     isInvalid: {
       true: "border-red-9 dark:border-reddark-9 group-pressed:border-red-11 dark:group-pressed:border-reddark-11 forced-colors:!border-[Mark]",
@@ -62,7 +61,7 @@ export function Radio(props: RadioProps) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "flex gap-2 items-center group text-gray-default disabled:opacity-50 forced-colors:disabled:text-[GrayText] text-sm transition",
+        "flex gap-2 items-center group text-gray-normal disabled:opacity-50 forced-colors:disabled:text-[GrayText] transition",
       )}
     >
       {(renderProps) => (
