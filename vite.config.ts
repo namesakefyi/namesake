@@ -39,6 +39,8 @@ export default defineConfig({
         "**/*.config.?(c|m)[jt]s?(x)",
         "convex/_generated/**",
         "src/routeTree.gen.ts",
+        "**/*.stories.tsx",
+        "src/components/**/index.ts",
       ],
     },
   },
