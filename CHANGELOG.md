@@ -1,5 +1,12 @@
 # namesake
 
+## 0.3.2
+
+### Patch Changes
+
+- 53d4407: Consolidate icon libraries
+- 53d4407: Fix broken component styles
+
 ## 0.3.1
 
 ### Patch Changes
