@@ -1,5 +1,12 @@
 # namesake
 
+## 0.3.1
+
+### Patch Changes
+
+- 6071539: Display support, system status, and home links on signin
+- 6071539: Display closed signup notice while in beta
+
 ## 0.3.0
 
 ### Minor Changes
