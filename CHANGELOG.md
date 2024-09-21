@@ -1,5 +1,16 @@
 # namesake
 
+## 0.3.0
+
+### Minor Changes
+
+- 0c3a56e: Add quest detail routes, add the ability to mark quests complete/incomplete, and support adding new quests from the global quest list
+
+### Patch Changes
+
+- 32edce3: Fix secondary button text styles
+- 375b2ad: Update sign-in screen design, display Namesake logo
+
 ## 0.2.1
 
 ### Patch Changes
