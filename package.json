@@ -22,7 +22,9 @@
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "prepare": "husky"
+    "prepare": "husky",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "resolutions": {
     "@types/mime": "3.0.4",
@@ -51,6 +53,7 @@
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
     "react-markdown": "^9.0.1",
+    "storybook": "^8.3.2",
     "tailwind-variants": "^0.2.1",
     "tailwindcss": "^3.4.11",
     "tailwindcss-animate": "^1.0.7",
@@ -63,6 +66,11 @@
     "@changesets/cli": "^2.27.8",
     "@edge-runtime/vm": "^4.0.3",
     "@playwright/test": "^1.47.1",
+    "@storybook/addon-themes": "^8.3.2",
+    "@storybook/manager-api": "^8.3.2",
+    "@storybook/react": "^8.3.2",
+    "@storybook/react-vite": "^8.3.2",
+    "@storybook/test": "^8.3.2",
     "@tailwindcss/typography": "^0.5.15",
     "@tanstack/router-devtools": "^1.57.15",
     "@tanstack/router-plugin": "^1.57.15",

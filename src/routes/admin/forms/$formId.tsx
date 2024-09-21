@@ -1,8 +1,8 @@
+import { Badge, PageHeader } from "@/components";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import type { Id } from "../../../../convex/_generated/dataModel";
-import { Badge, PageHeader } from "../../../components";
 
 export const Route = createFileRoute("/admin/forms/$formId")({
   component: AdminFormDetailRoute,

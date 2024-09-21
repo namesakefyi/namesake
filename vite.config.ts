@@ -19,6 +19,9 @@ export default defineConfig({
       plugins: [autoprefixer(), tailwindcss(), cssnano()],
     },
   },
+  resolve: {
+    alias: [{ find: "@", replacement: "/src" }],
+  },
   test: {
     environment: "edge-runtime",
     environmentMatchGlobs: [
@@ -36,6 +39,8 @@ export default defineConfig({
         "**/*.config.?(c|m)[jt]s?(x)",
         "convex/_generated/**",
         "src/routeTree.gen.ts",
+        "**/*.stories.tsx",
+        "src/components/**/index.ts",
       ],
     },
   },

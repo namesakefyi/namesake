@@ -1,9 +1,3 @@
-import { RiMoreLine } from "@remixicon/react";
-import { createFileRoute } from "@tanstack/react-router";
-import { useMutation, useQuery } from "convex/react";
-import Markdown from "react-markdown";
-import { api } from "../../../convex/_generated/api";
-import type { Id } from "../../../convex/_generated/dataModel";
 import {
   Badge,
   Button,
@@ -11,7 +5,13 @@ import {
   MenuItem,
   MenuTrigger,
   PageHeader,
-} from "../../components";
+} from "@/components";
+import { RiMoreLine } from "@remixicon/react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useMutation, useQuery } from "convex/react";
+import Markdown from "react-markdown";
+import { api } from "../../../convex/_generated/api";
+import type { Id } from "../../../convex/_generated/dataModel";
 
 export const Route = createFileRoute("/quests/$questId")({
   component: QuestDetailRoute,

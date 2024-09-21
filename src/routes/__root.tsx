@@ -1,3 +1,4 @@
+import { AppHeader, Button, Form, Logo, TextField } from "@/components";
 import { useAuthActions } from "@convex-dev/auth/react";
 import {
   type NavigateOptions,
@@ -10,7 +11,6 @@ import { type ConvexAuthState, useConvexAuth } from "convex/react";
 import { useState } from "react";
 import { RouterProvider } from "react-aria-components";
 import type { Role } from "../../convex/types";
-import { AppHeader, Button, Form, Logo, TextField } from "../components";
 
 declare module "react-aria-components" {
   interface RouterConfig {
