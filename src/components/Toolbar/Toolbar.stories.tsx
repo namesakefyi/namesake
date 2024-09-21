@@ -1,4 +1,4 @@
-import { BoldIcon, ItalicIcon, UnderlineIcon } from "lucide-react";
+import { RiBold, RiItalic, RiUnderline } from "@remixicon/react";
 import { Group } from "react-aria-components";
 import { Toolbar } from ".";
 import { Button } from "../Button";
@@ -18,13 +18,13 @@ export const Example = (args: any) => (
   <Toolbar aria-label="Text formatting" {...args}>
     <Group aria-label="Style" className="contents">
       <ToggleButton aria-label="Bold" className="p-2.5">
-        <BoldIcon className="w-4 h-4" />
+        <RiBold className="w-4 h-4" />
       </ToggleButton>
       <ToggleButton aria-label="Italic" className="p-2.5">
-        <ItalicIcon className="w-4 h-4" />
+        <RiItalic className="w-4 h-4" />
       </ToggleButton>
       <ToggleButton aria-label="Underline" className="p-2.5">
-        <UnderlineIcon className="w-4 h-4" />
+        <RiUnderline className="w-4 h-4" />
       </ToggleButton>
     </Group>
     <Separator

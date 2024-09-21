@@ -1,5 +1,5 @@
+import { RiQuestionLine } from "@remixicon/react";
 import type { Meta } from "@storybook/react";
-import { HelpCircle } from "lucide-react";
 import { Heading } from "react-aria-components";
 import { Popover } from ".";
 import { Button } from "../Button";
@@ -7,10 +7,7 @@ import { Dialog, DialogTrigger } from "../Dialog";
 
 const meta: Meta<typeof Popover> = {
   component: Popover,
-
-  args: {
-    showArrow: true,
-  },
+  args: {},
 };
 
 export default meta;
@@ -18,7 +15,7 @@ export default meta;
 export const Example = (args: any) => (
   <DialogTrigger>
     <Button variant="icon" aria-label="Help">
-      <HelpCircle className="w-4 h-4" />
+      <RiQuestionLine />
     </Button>
     <Popover {...args} className="max-w-[250px]">
       <Dialog>

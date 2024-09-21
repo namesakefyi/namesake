@@ -1,5 +1,4 @@
-import { CalendarIcon } from "lucide-react";
-
+import { RiCalendarLine } from "@remixicon/react";
 import {
   DateRangePicker as AriaDateRangePicker,
   type DateRangePickerProps as AriaDateRangePickerProps,
@@ -37,16 +36,16 @@ export function DateRangePicker<T extends DateValue>({
     >
       {label && <Label>{label}</Label>}
       <FieldGroup className="min-w-[208px] w-auto">
-        <DateInput slot="start" className="px-2 py-1.5 text-sm" />
+        <DateInput slot="start" className="px-3 py-2" />
         <span
           aria-hidden="true"
           className="text-gray-10 dark:text-gray-2 forced-colors:text-[ButtonText] group-disabled:text-gray-2 group-disabled:dark:text-gray-6 group-disabled:forced-colors:text-[GrayText]"
         >
           –
         </span>
-        <DateInput slot="end" className="flex-1 px-2 py-1.5 text-sm" />
-        <Button variant="icon" className="w-6 mr-1 rounded outline-offset-0">
-          <CalendarIcon aria-hidden className="w-4 h-4" />
+        <DateInput slot="end" className="flex-1 px-3 py-2" />
+        <Button variant="icon" className="w-7 h-7 p-0 mr-1 outline-offset-0">
+          <RiCalendarLine aria-hidden className="w-4 h-4" />
         </Button>
       </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}

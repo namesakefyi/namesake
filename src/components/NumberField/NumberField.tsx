@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { RiArrowDownSLine, RiArrowUpSLine } from "@remixicon/react";
 import {
   NumberField as AriaNumberField,
   type NumberFieldProps as AriaNumberFieldProps,
@@ -44,20 +44,20 @@ export function NumberField({
             <div
               className={fieldBorderStyles({
                 ...renderProps,
-                class: "flex flex-col border-s-2",
+                class: "flex flex-col border-s h-10",
               })}
             >
               <StepperButton slot="increment">
-                <ChevronUp aria-hidden className="w-4 h-4" />
+                <RiArrowUpSLine aria-hidden className="w-4 h-4" />
               </StepperButton>
               <div
                 className={fieldBorderStyles({
                   ...renderProps,
-                  class: "border-b-2",
+                  class: "border-b",
                 })}
               />
               <StepperButton slot="decrement">
-                <ChevronDown aria-hidden className="w-4 h-4" />
+                <RiArrowDownSLine aria-hidden className="w-4 h-4" />
               </StepperButton>
             </div>
           </>
@@ -73,7 +73,7 @@ function StepperButton(props: ButtonProps) {
   return (
     <Button
       {...props}
-      className="px-0.5 cursor-default text-gray-dim group-disabled:text-gray-2 dark:text-gray-4 dark:pressed:bg-gray-11 dark:group-disabled:text-gray-6 forced-colors:group-disabled:text-[GrayText]"
+      className="p-0.5 cursor-pointer text-gray-dim group-disabled:text-gray-2 dark:text-gray-4 dark:pressed:bg-gray-11 dark:group-disabled:text-gray-6 forced-colors:group-disabled:text-[GrayText]"
     />
   );
 }

@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { RiArrowDownSLine } from "@remixicon/react";
 import type React from "react";
 import {
   Select as AriaSelect,
@@ -21,12 +21,12 @@ import { composeTailwindRenderProps, focusRing } from "../utils";
 
 const styles = tv({
   extend: focusRing,
-  base: "flex items-center text-start gap-4 w-full cursor-default border border-black/10 dark:border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] dark:shadow-none rounded-lg pl-3 pr-2 py-2 min-w-[150px] transition bg-gray-ui",
+  base: "flex items-center text-start gap-4 w-full cursor-pointer border border-black/10 dark:border-white/10 rounded-lg pl-3 pr-2 py-2 min-w-[150px] transition bg-gray-ui",
   variants: {
     isDisabled: {
       false:
         "hover:bg-gray-1 pressed:bg-gray-2 dark:hover:bg-graydark-1 dark:pressed:bg-graydark-2 group-invalid:border-red- forced-colors:group-invalid:border-[Mark]",
-      true: "opacity-50 forced-colors:text-[GrayText] forced-colors:border-[GrayText]",
+      true: "opacity-50 forced-colors:text-[GrayText] forced-colors:border-[GrayText] cursor-default",
     },
   },
 });
@@ -58,8 +58,8 @@ export function Select<T extends object>({
     >
       {label && <Label>{label}</Label>}
       <Button className={styles}>
-        <SelectValue className="flex-1 placeholder-shown:italic" />
-        <ChevronDown
+        <SelectValue className="flex-1 text-gray-normal placeholder-shown:text-gray-9 dark:placeholder-shown:text-graydark-9" />
+        <RiArrowDownSLine
           aria-hidden
           className="w-4 h-4 text-gray-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText]"
         />

@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { RiCheckLine } from "@remixicon/react";
 import {
   ListBox as AriaListBox,
   ListBoxItem as AriaListBoxItem,
@@ -24,7 +24,7 @@ export function ListBox<T extends object>({
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "outline-0 p-1 border border-gray-3 dark:border-gray-6 rounded-lg",
+        "outline-0 p-1 border border-gray-dim rounded-lg",
       )}
     >
       {children}
@@ -34,15 +34,14 @@ export function ListBox<T extends object>({
 
 export const itemStyles = tv({
   extend: focusRing,
-  base: "group relative flex items-center gap-8 cursor-default select-none py-1.5 px-2.5 rounded-md will-change-transform text-sm forced-color-adjust-none",
+  base: "group relative flex items-center gap-8 cursor-pointer select-none py-1.5 px-2.5 rounded-md will-change-transform forced-color-adjust-none",
   variants: {
     isSelected: {
-      false:
-        "text-gray-10 dark:text-gray-3 hover:bg-gray-2 dark:hover:bg-gray-8 -outline-offset-2",
-      true: "bg-blue-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white dark:outline-white forced-colors:outline-[HighlightText]",
+      false: "text-gray-normal -outline-offset-2",
+      true: "bg-purple-9 dark:bg-purpledark-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white dark:outline-white forced-colors:outline-[HighlightText]",
     },
     isDisabled: {
-      true: "text-gray-7 dark:text-graydark-7 forced-colors:text-[GrayText]",
+      true: "text-gray-dim opacity-50 cursor-default forced-colors:text-[GrayText]",
     },
   },
 });
@@ -64,11 +63,11 @@ export function ListBoxItem(props: ListBoxItemProps) {
 }
 
 export const dropdownItemStyles = tv({
-  base: "group flex items-center gap-4 cursor-default select-none py-2 px-3 rounded-lg outline outline-0 text-sm forced-color-adjust-none",
+  base: "group flex items-center gap-4 cursor-pointer select-none py-2 px-3 rounded-lg outline outline-0 text-sm forced-color-adjust-none",
   variants: {
     isDisabled: {
       false: "text-gray-normal",
-      true: "text-gray-dim forced-colors:text-[GrayText]",
+      true: "text-gray-dim opacity-50 forced-colors:text-[GrayText] cursor-default",
     },
     isFocused: {
       true: "bg-purple-9 dark:bg-purpledark-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
@@ -99,7 +98,7 @@ export function DropdownItem(props: ListBoxItemProps) {
             {children}
           </span>
           <span className="flex items-center w-5">
-            {isSelected && <Check className="w-4 h-4" />}
+            {isSelected && <RiCheckLine className="w-4 h-4" />}
           </span>
         </>
       ))}

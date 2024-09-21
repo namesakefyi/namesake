@@ -1,10 +1,12 @@
 import {
   Dialog as AriaDialog,
+  type DialogProps as AriaDialogProps,
   DialogTrigger as AriaDialogTrigger,
-  type DialogProps,
   type DialogTriggerProps,
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
+
+export interface DialogProps extends AriaDialogProps {}
 
 export function Dialog(props: DialogProps) {
   return (

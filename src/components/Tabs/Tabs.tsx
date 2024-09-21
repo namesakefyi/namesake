@@ -56,14 +56,14 @@ export function TabList<T extends object>(props: TabListProps<T>) {
 
 const tabProps = tv({
   extend: focusRing,
-  base: "flex items-center cursor-pointer rounded-full px-4 py-1.5 text-sm font-medium transition forced-color-adjust-none",
+  base: "flex items-center cursor-pointer rounded-full px-4 py-1.5 text-sm transition forced-color-adjust-none",
   variants: {
     isSelected: {
       false: "bg-gray-ghost text-gray-dim hover:text-gray-normal",
       true: "bg-gray-12 text-gray-1 dark:bg-graydark-12 dark:text-graydark-1 forced-colors:text-[HighlightText] forced-colors:bg-[Highlight]",
     },
     isDisabled: {
-      true: "text-gray-2 dark:text-gray-6 cursor-default forced-colors:text-[GrayText] selected:text-gray-3 dark:selected:text-gray-5 forced-colors:selected:text-[HighlightText] selected:bg-gray-2 dark:selected:bg-gray-6 forced-colors:selected:bg-[GrayText]",
+      true: "opacity-50 cursor-default forced-colors:text-[GrayText] selected:text-gray-3 dark:selected:text-gray-5 forced-colors:selected:text-[HighlightText] selected:bg-gray-2 dark:selected:bg-gray-6 forced-colors:selected:bg-[GrayText]",
     },
   },
 });

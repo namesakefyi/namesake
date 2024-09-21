@@ -1,4 +1,4 @@
-import { Check, ChevronRight } from "lucide-react";
+import { RiArrowRightSLine, RiCheckLine } from "@remixicon/react";
 import {
   Menu as AriaMenu,
   MenuItem as AriaMenuItem,
@@ -47,14 +47,17 @@ export function MenuItem(props: MenuItemProps) {
           <>
             {selectionMode !== "none" && (
               <span className="flex items-center w-4">
-                {isSelected && <Check aria-hidden className="w-4 h-4" />}
+                {isSelected && <RiCheckLine aria-hidden className="w-4 h-4" />}
               </span>
             )}
             <span className="flex items-center cursor-pointer flex-1 gap-2 font-normal truncate group-selected:font-semibold">
               {children}
             </span>
             {hasSubmenu && (
-              <ChevronRight aria-hidden className="absolute w-4 h-4 right-2" />
+              <RiArrowRightSLine
+                aria-hidden
+                className="absolute w-4 h-4 right-2"
+              />
             )}
           </>
         ),

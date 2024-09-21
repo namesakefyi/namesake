@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { RiArrowDownSLine } from "@remixicon/react";
 import type React from "react";
 import {
   ComboBox as AriaComboBox,
@@ -50,8 +50,8 @@ export function ComboBox<T extends object>({
       <Label>{label}</Label>
       <FieldGroup>
         <Input />
-        <Button variant="icon" className="w-6 mr-1 rounded outline-offset-0 ">
-          <ChevronDown aria-hidden className="w-4 h-4" />
+        <Button variant="icon" className="w-7 h-7 p-0 mr-1 outline-offset-0 ">
+          <RiArrowDownSLine aria-hidden className="w-4 h-4" />
         </Button>
       </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
