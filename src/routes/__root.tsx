@@ -26,13 +26,6 @@ interface RouterContext {
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  // beforeLoad: ({ context }) => {
-  //   if (!context.auth.isAuthenticated) {
-  //     throw redirect({
-  //       to: "/login",
-  //     });
-  //   }
-  // },
   component: RootRoute,
 });
 
