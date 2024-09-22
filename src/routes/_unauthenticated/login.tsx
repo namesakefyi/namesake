@@ -36,7 +36,7 @@ const SignInWithMagicLink = ({
           .then(handleLinkSent)
           .catch((error) => {
             console.error(error);
-            setError("Couldn't send sign-in link. Please try again.");
+            setError("Couldn't send sign-in link. Try again.");
             setIsSubmitting(false);
           });
       }}
