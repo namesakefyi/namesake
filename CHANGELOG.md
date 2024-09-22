@@ -1,5 +1,13 @@
 # namesake
 
+## 0.3.3
+
+### Patch Changes
+
+- 82b2055: Add banner component, display banners for login error and success messages
+- 4f1b0b9: Improve auth redirect logic
+- 82b2055: Fix login screen sizing and padding
+
 ## 0.3.2
 
 ### Patch Changes
