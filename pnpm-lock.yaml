@@ -16,8 +16,8 @@ importers:
         specifier: ^0.34.2
         version: 0.34.2
       '@convex-dev/auth':
-        specifier: ^0.0.67
-        version: 0.0.67(convex@1.16.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        specifier: ^0.0.69
+        version: 0.0.69(convex@1.16.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@faker-js/faker':
         specifier: ^9.0.1
         version: 9.0.1
@@ -639,8 +639,8 @@ packages:
       react: ^16.8.0 || ^17 || ^18
       react-dom: ^16.8.0 || ^17 || ^18
 
-  '@convex-dev/auth@0.0.67':
-    resolution: {integrity: sha512-XUNTe3X7qxzAkpgP/qekuQ7Fc3qE1i2BrbBjyKO5jyFJ0qrvoNr0PRSKofnLYnjTrjG12wkm9KJx56og4pyJUw==}
+  '@convex-dev/auth@0.0.69':
+    resolution: {integrity: sha512-qM7Q1ntNTuOCtUILBzZhSANY/zDpntjtg31ME1bV43+RnM/JfiWpduvs/qTQXWUiil60DawuZ0tdpGse8uNxvg==}
     hasBin: true
     peerDependencies:
       convex: ^1.14.4
@@ -7648,7 +7648,7 @@ snapshots:
     transitivePeerDependencies:
       - '@lezer/common'
 
-  '@convex-dev/auth@0.0.67(convex@1.16.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
+  '@convex-dev/auth@0.0.69(convex@1.16.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@auth/core': 0.31.0
       arctic: 1.9.2

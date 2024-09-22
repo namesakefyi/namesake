@@ -15,7 +15,8 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@convex/*": ["convex/*"]
     }
   },
   "include": ["vite.config.ts"]

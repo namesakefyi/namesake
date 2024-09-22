@@ -8,6 +8,8 @@ import {
   GridListItem,
   Modal,
 } from "@/components";
+import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
 import { RiAddLine, RiSignpostLine } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import {
@@ -18,10 +20,8 @@ import {
 } from "convex/react";
 import { useState } from "react";
 import type { Selection } from "react-aria-components";
-import { api } from "../../../convex/_generated/api";
-import type { Id } from "../../../convex/_generated/dataModel";
 
-export const Route = createFileRoute("/quests")({
+export const Route = createFileRoute("/_authenticated/quests")({
   component: IndexRoute,
 });
 
