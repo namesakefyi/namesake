@@ -1,4 +1,12 @@
-import { Button, Card, Form, Link, Logo, TextField } from "@/components";
+import {
+  Banner,
+  Button,
+  Card,
+  Form,
+  Link,
+  Logo,
+  TextField,
+} from "@/components";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
@@ -28,13 +36,12 @@ const SignInWithMagicLink = ({
           .then(handleLinkSent)
           .catch((error) => {
             console.error(error);
-            setError("Could not send sign-in link. Please try again.");
+            setError("Couldn't send sign-in link. Try again.");
             setIsSubmitting(false);
           });
       }}
     >
-      {/* TODO: Make a banner component */}
-      {error && <p>{error}</p>}
+      {error && <Banner variant="danger">{error}</Banner>}
       <TextField label="Email" name="email" type="email" autoComplete="email" />
       <Button type="submit" isDisabled={isSubmitting} variant="primary">
         Send sign-in link
@@ -51,10 +58,12 @@ const SignIn = () => {
       {step === "signIn" ? (
         <SignInWithMagicLink handleLinkSent={() => setStep("linkSent")} />
       ) : (
-        <div>
-          <p>Check your email.</p>
-          <p>A sign-in link has been sent to your email address.</p>
-          <Button onPress={() => setStep("signIn")}>Cancel</Button>
+        <div className="flex flex-col gap-4">
+          <Banner variant="success">
+            Check your email. A sign-in link has been sent to your email
+            address.
+          </Banner>
+          <Button onPress={() => setStep("signIn")}>Go back</Button>
         </div>
       )}
     </Card>
@@ -75,7 +84,7 @@ function LoginRoute() {
   const isClosed = process.env.NODE_ENV === "production";
 
   return (
-    <div className="flex flex-col w-96 max-w-full mx-auto h-screen place-content-center gap-8">
+    <div className="flex flex-col w-96 max-w-full mx-auto h-dvh place-content-center gap-8 px-4">
       <Logo className="mb-4" />
       {isClosed ? <ClosedSignups /> : <SignIn />}
       <div className="flex gap-4 justify-center">

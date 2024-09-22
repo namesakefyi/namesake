@@ -7,7 +7,7 @@ export interface LogoProps {
 export const Logo = ({ className }: LogoProps) => (
   <svg
     aria-label="namesake"
-    className={twMerge("w-auto", className)}
+    className={twMerge("w-auto text-gray-normal", className)}
     fill="currentColor"
     height="30"
     role="img"
