@@ -84,7 +84,7 @@ function LoginRoute() {
   const isClosed = process.env.NODE_ENV === "production";
 
   return (
-    <div className="flex flex-col w-96 max-w-full mx-auto h-screen place-content-center gap-8">
+    <div className="flex flex-col w-96 max-w-full mx-auto h-dvh place-content-center gap-8 px-4">
       <Logo className="mb-4" />
       {isClosed ? <ClosedSignups /> : <SignIn />}
       <div className="flex gap-4 justify-center">
