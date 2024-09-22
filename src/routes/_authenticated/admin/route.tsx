@@ -7,7 +7,7 @@ import {
 } from "@remixicon/react";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: ({ context }) => {
     const isAdmin = context.role === "admin";
 

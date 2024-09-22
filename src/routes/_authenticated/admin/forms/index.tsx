@@ -19,15 +19,15 @@ import {
   TableRow,
   TextField,
 } from "@/components";
+import { api } from "@convex/_generated/api";
+import type { DataModel } from "@convex/_generated/dataModel";
+import { JURISDICTIONS } from "@convex/constants";
 import { RiAddLine, RiFileTextLine, RiMoreFill } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
-import { api } from "../../../../convex/_generated/api";
-import type { DataModel } from "../../../../convex/_generated/dataModel";
-import { JURISDICTIONS } from "../../../../convex/constants";
 
-export const Route = createFileRoute("/admin/forms/")({
+export const Route = createFileRoute("/_authenticated/admin/forms/")({
   component: FormsRoute,
 });
 

@@ -10,16 +10,16 @@ import {
   TextField,
 } from "@/components";
 import { useAuthActions } from "@convex-dev/auth/react";
+import { api } from "@convex/_generated/api";
+import type { Theme } from "@convex/types";
 import { RiCheckLine, RiLoader4Line } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { api } from "../../../convex/_generated/api";
-import type { Theme } from "../../../convex/types";
 
-export const Route = createFileRoute("/settings/")({
+export const Route = createFileRoute("/_authenticated/settings/")({
   component: SettingsRoute,
 });
 

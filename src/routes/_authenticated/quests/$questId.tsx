@@ -6,14 +6,14 @@ import {
   MenuTrigger,
   PageHeader,
 } from "@/components";
+import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
 import { RiMoreLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import Markdown from "react-markdown";
-import { api } from "../../../convex/_generated/api";
-import type { Id } from "../../../convex/_generated/dataModel";
 
-export const Route = createFileRoute("/quests/$questId")({
+export const Route = createFileRoute("/_authenticated/quests/$questId")({
   component: QuestDetailRoute,
 });
 

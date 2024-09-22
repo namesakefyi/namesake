@@ -7,14 +7,14 @@ import {
   RichTextEditor,
   TextField,
 } from "@/components";
+import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 import Markdown from "react-markdown";
-import { api } from "../../../../convex/_generated/api";
-import type { Id } from "../../../../convex/_generated/dataModel";
 
-export const Route = createFileRoute("/admin/quests/$questId")({
+export const Route = createFileRoute("/_authenticated/admin/quests/$questId")({
   component: AdminQuestDetailRoute,
 });
 

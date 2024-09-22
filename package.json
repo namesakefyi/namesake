@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.34.2",
-    "@convex-dev/auth": "^0.0.67",
+    "@convex-dev/auth": "^0.0.69",
     "@faker-js/faker": "^9.0.1",
     "@mdxeditor/editor": "^3.11.4",
     "@pdfme/common": "^4.5.2",
