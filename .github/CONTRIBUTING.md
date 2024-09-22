@@ -1,17 +1,42 @@
 # Contributor Manual
 
+Welcome! Thank you for your interest in contributing to the Namesake app. We're glad you are here!
+
+Our aim is for contributing to Namesake to be easy and understandable. If you run into trouble at any step of the process, reach out on [Discord](https://namesake.fyi/chat).
+
+## How contributions work
+
+There are a few steps in the contribution process.
+
+First time only:
+
+1. **Fork the repository.**
+2. **Clone the forked repository to your machine.**
+3. **Install pnpm.**
+
+Every time:
+
+1. **Make your changes.** This is the fun part!
+2. **Push changes to GitHub.**
+3. **Open a pull request against this repository.**
+4. **Wait for review, merge, and release!**
+
 ## Getting Started
+
+### Install pnpm
 
 Namesake uses pnpm for package management. You may need to [install pnpm](https://pnpm.io/installation) globally if you don't have it installed.
 
-### Set up your local repo
+### Clone the repository
+
+In your terminal, run the following:
 
 ```shell
 git clone https://github.com/namesakefyi/namesake.git
 cd namesake
 ```
 
-Within the `namesake` directory, install packages:
+### Install packages
 
 ```shell
 pnpm install
