@@ -4,7 +4,7 @@ Welcome! Thank you for your interest in contributing to the Namesake app. We're 
 
 Our aim is for contributions to be easy and understandable. If you run into trouble at any step of the process, reach out on [Discord](https://namesake.fyi/chat).
 
-## Getting Started
+## Getting started
 
 There are many different ways to contribute to Namesake. You can share feedback in the [Discord](https://namesake.fyi), [report a bug or a feature request](https://github.com/namesakefyi/namesake/issues), or [submit your own code to the codebase](https://github.com/namesakefyi/namesake/pulls).
 
@@ -38,6 +38,8 @@ Select "choose an existing project" > "namesake" > "configure project namesake".
 
 Convex will generate an `.env.local` file which points to a dev database for you to use.
 
+## Making changes
+
 ### Start the dev server
 
 To start developing locally, run:
@@ -53,7 +55,7 @@ The app should now be available at http://localhost:5173. You're all set up!
 
 Now that the development app is running, let's get familiar with what's inside.
 
-## Project Structure
+## Project structure
 
 ```shell
 📂 convex          # Backend queries, mutations, and schema definitions
@@ -95,10 +97,8 @@ In addition, each time you `git commit` changes to the codebase, a pre-commit ho
 
 ## Creating pull requests
 
-A few notes on pull requests:
-
 1. **Keep changes small when possible.** If you're tackling multiple issues, split them up into multiple pull requests. Smaller chunks of code are easier to review and test!
-2. **Explain what you did, why, and how.** Each pull request has a pre-filled template. Use it! "The better we present our code for review, the more likely the reviewer will be engaged with a critical eye." — [Writing a Great Pull Request Description](https://www.pullrequest.com/blog/writing-a-great-pull-request-description/)
+2. **Explain what you did, why, and how.** Each pull request has a [pre-filled template](https://github.com/namesakefyi/namesake/blob/main/.github/pull_request_template.md?plain=1). Use it! "The better we present our code for review, the more likely the reviewer will be engaged with a critical eye." — [Writing a Great Pull Request Description](https://www.pullrequest.com/blog/writing-a-great-pull-request-description/)
 3. **Add a changeset.** Namesake uses [changesets](https://github.com/changesets/changesets) to version releases. You can add a changeset by running `pnpm changeset` and selecting the appropriate options. `patch` is for bug fixes and tiny edits. `minor` is for small new features or designs. `major` is for large new features. If your PR changes multiple things (e.g. patches two bugs and adds one small feature), you can add multiple changesets. **Changesets should be written from a user perspective**—PRs which only affect developers (refactoring some tests, for example) do not need a changeset.
 4. **Use [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/) style titles.** This means prefixing your PR title with a word like `feat:`, `fix:`, `build:`, `chore:`, `ci:`, `docs:`, `style:`, `refactor:`, `perf:`, or `test:`. The title itself should start with a verb, like "add" or "update".
 5. **Add or update tests.** The goal for Namesake is to have solid test coverage. When you open a PR, you'll see an automated comment that displays how test coverage has increased or decreased with your changes. _While Namesake is pre-version 1.0, our test coverage may be spotty and isn't the first priority. If you want to ignore this for now, it won't prevent you from merging._
