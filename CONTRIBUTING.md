@@ -4,30 +4,24 @@ Welcome! Thank you for your interest in contributing to the Namesake app. We're 
 
 Our aim is for contributions to be easy and understandable. If you run into trouble at any step of the process, reach out on [Discord](https://namesake.fyi/chat).
 
-## How contributions work
+## Getting Started
 
 There are many different ways to contribute to Namesake. You can share feedback in the [Discord](https://namesake.fyi), [report a bug or a feature request](https://github.com/namesakefyi/namesake/issues), or [submit your own code to the codebase](https://github.com/namesakefyi/namesake/pulls).
 
-If you plan to contribute code to Namesake, follow these steps:
+### Install pnpm (first time only)
 
-First time only:
+Namesake uses pnpm for package management. You may need to [install pnpm](https://pnpm.io/installation) globally if you don't have it already.
 
-1. **Fork your own copy of the repository.** Unless you're a member of the [namesakefyi](https://github.com/namesakefyi) org, you won't be able to open a branch directly on the repo. To make changes, you have to fork a copy.
-2. **Clone the forked repository to your computer.** Once you've forked the repository, clone it to your computer by running `git clone https://github.com/<your-username>/namesake.git`.
-3. **Install pnpm.** Namesake uses pnpm for package management. You may need to [install pnpm](https://pnpm.io/installation) globally if you don't have it already.
+### Fork the repository (first time only)
 
-Then, every time:
+Unless you're a member of the [namesakefyi](https://github.com/namesakefyi) org, you won't be able to open a branch directly on the repo. To make changes, you have to fork a copy. Click the "Fork" button on the top right of the [main repository page](https://github.com/namesakefyi/namesake/).
 
-1. **Open a new branch and make your changes.** This is the fun part! Once you have your codebase set up, you can make modifications. If you're working on an existing [issue](https://github.com/namesakefyi/namesake/issues), post a note letting people know.
-2. **Open a pull request against this repository.** Once you're finished with your changes and you've tested that everything works well, open a pull request and explain what you've done.
-3. **Wait for review, merge, and release.** Our team will review your code changes, and if any edits are required, we'll let you know. If your code is merged, it'll be released to everyone within a few days!
+### Clone the repository (first time only)
 
-## Getting Started
-
-### Clone the repository
+Once you've forked the repository, clone it to your computer. Replace `<your-username>` below with your GitHub username.
 
 ```shell
-git clone https://github.com/namesakefyi/namesake.git
+git clone https://github.com/<your-username>/namesake.git
 cd namesake
 pnpm install
 ```
@@ -52,10 +46,12 @@ To start developing locally, run:
 pnpm dev
 ```
 
-The app will be available at http://localhost:5173.
-
 > [!NOTE]
 > The `dev` command will spin up the convex backend and the app's frontend in parallel. To run them individually, run `pnpm dev:frontend` or `pnpm dev:backend`.
+
+The app should now be available at http://localhost:5173. You're all set up!
+
+Now that the development app is running, let's get familiar with what's inside.
 
 ## Project Structure
 
@@ -72,7 +68,7 @@ The app will be available at http://localhost:5173.
 
 ## Dependencies
 
-It's worth getting familiar with the Namesake app's core dependencies. The links below each lead to the docs for that dependency.
+Below are Namesake's core dependencies. The links below each lead to docs.
 
 | Tech                                                                                | What For                                           |
 | ----------------------------------------------------------------------------------- | -------------------------------------------------- |
