@@ -1,4 +1,4 @@
-import type { Role } from "@convex/types";
+import type { Role } from "@convex/constants";
 import {
   type NavigateOptions,
   Outlet,

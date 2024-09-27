@@ -1,7 +1,7 @@
 import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { icon, jurisdiction, role, theme } from "./types";
+import { field, icon, jurisdiction, role, theme } from "./validators";
 
 /**
  * Represents a PDF form that can be filled out by users.
@@ -38,12 +38,6 @@ const quests = defineTable({
   steps: v.optional(v.array(v.id("questSteps"))),
 });
 
-const sharedFieldProps = {
-  label: v.string(),
-  helpText: v.optional(v.string()),
-  isRequired: v.boolean(),
-};
-
 /**
  * Represents a single step in a quest.
  * @param title - The title of the step. (e.g. "Fill out form")
@@ -55,45 +49,7 @@ const questSteps = defineTable({
   creationUser: v.id("users"),
   title: v.string(),
   description: v.optional(v.string()),
-  fields: v.optional(
-    v.array(
-      v.union(
-        v.object({
-          ...sharedFieldProps,
-          type: v.literal("text"),
-        }),
-        v.object({
-          ...sharedFieldProps,
-          type: v.literal("textarea"),
-        }),
-        v.object({
-          ...sharedFieldProps,
-          type: v.literal("date"),
-        }),
-        v.object({
-          ...sharedFieldProps,
-          type: v.literal("select"),
-          options: v.array(v.string()),
-        }),
-        v.object({
-          ...sharedFieldProps,
-          type: v.literal("checkbox"),
-        }),
-        v.object({
-          ...sharedFieldProps,
-          type: v.literal("number"),
-        }),
-        v.object({
-          ...sharedFieldProps,
-          type: v.literal("email"),
-        }),
-        v.object({
-          ...sharedFieldProps,
-          type: v.literal("phone"),
-        }),
-      ),
-    ),
-  ),
+  fields: v.optional(v.array(field)),
 }).index("questId", ["questId"]);
 
 /**
@@ -124,7 +80,7 @@ const users = defineTable({
  * @param questId
  * @param completionTime - Time in ms since epoch when the user marked the quest as complete.
  */
-const usersQuests = defineTable({
+const userQuests = defineTable({
   userId: v.id("users"),
   questId: v.id("quests"),
   completionTime: v.optional(v.number()),
@@ -138,5 +94,5 @@ export default defineSchema({
   quests,
   questSteps,
   users,
-  usersQuests,
+  userQuests,
 });

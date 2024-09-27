@@ -28,11 +28,11 @@ function QuestDetailRoute() {
   const questSteps = useQuery(api.questSteps.getStepsForQuest, {
     questId: questId as Id<"quests">,
   });
-  const userQuest = useQuery(api.usersQuests.getUserQuestByQuestId, {
+  const userQuest = useQuery(api.userQuests.getUserQuestByQuestId, {
     questId: questId as Id<"quests">,
   });
-  const markComplete = useMutation(api.usersQuests.markComplete);
-  const markIncomplete = useMutation(api.usersQuests.markIncomplete);
+  const markComplete = useMutation(api.userQuests.markComplete);
+  const markIncomplete = useMutation(api.userQuests.markIncomplete);
 
   const handleMarkComplete = (questId: Id<"quests">) =>
     markComplete({ questId });

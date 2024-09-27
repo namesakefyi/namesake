@@ -9,7 +9,7 @@ export const getQuestsForCurrentUser = userQuery({
   args: {},
   handler: async (ctx, _args) => {
     const userQuests = await ctx.db
-      .query("usersQuests")
+      .query("userQuests")
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .collect();
 
@@ -25,7 +25,7 @@ export const getAvailableQuestsForUser = userQuery({
   args: {},
   handler: async (ctx, _args) => {
     const userQuests = await ctx.db
-      .query("usersQuests")
+      .query("userQuests")
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .collect();
 
@@ -44,7 +44,7 @@ export const getQuestCount = query({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     const quests = await ctx.db
-      .query("usersQuests")
+      .query("userQuests")
       .withIndex("questId", (q) => q.eq("questId", args.questId))
       .collect();
 
@@ -57,14 +57,14 @@ export const create = userMutation({
   handler: async (ctx, args) => {
     // Check if quest already exists for user
     const existing = await ctx.db
-      .query("usersQuests")
+      .query("userQuests")
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .filter((q) => q.eq(q.field("questId"), args.questId))
       .collect();
 
     if (existing.length > 0) throw new Error("Quest already exists for user");
 
-    await ctx.db.insert("usersQuests", {
+    await ctx.db.insert("userQuests", {
       userId: ctx.userId,
       questId: args.questId,
     });
@@ -75,7 +75,7 @@ export const getUserQuestByQuestId = userQuery({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     const userQuest = await ctx.db
-      .query("usersQuests")
+      .query("userQuests")
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .filter((q) => q.eq(q.field("questId"), args.questId))
       .first();

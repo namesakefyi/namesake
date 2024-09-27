@@ -5,11 +5,13 @@ import {
   Form,
   PageHeader,
   RichTextEditor,
+  Select,
+  SelectItem,
   TextField,
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { ICONS } from "@convex/constants";
+import { FIELDS, type Field, ICONS } from "@convex/constants";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
@@ -31,6 +33,7 @@ function AdminQuestDetailRoute() {
   const [isNewStepFormVisible, setIsNewStepFormVisible] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [fields, setFields] = useState<Field[]>([]);
 
   // TODO: Loading and empty states
   if (quest === undefined) return;
@@ -92,17 +95,37 @@ function AdminQuestDetailRoute() {
           <Card>
             <Form onSubmit={handleSubmit}>
               <h2 className="text-lg">New step</h2>
-              <TextField
-                label="Title"
-                value={title}
-                onChange={setTitle}
-                description="Use sentence case and no punctuation"
-              />
+              <TextField label="Title" value={title} onChange={setTitle} />
               <RichTextEditor
                 markdown={description}
                 onChange={setDescription}
               />
-
+              {fields.map((field, i) => (
+                <Card key={`${field}`} className="flex flex-col gap-4">
+                  <Select label="Field type" placeholder="Select a field type">
+                    {Object.entries(FIELDS).map(([id, field]) => {
+                      const Icon = field.icon;
+                      return (
+                        <SelectItem key={id} textValue={field.label}>
+                          <Icon size={20} />
+                          {field.label}
+                        </SelectItem>
+                      );
+                    })}
+                  </Select>
+                  <TextField label="Label" />
+                  <Button
+                    onPress={() =>
+                      setFields(fields.filter((_, index) => index !== i))
+                    }
+                  >
+                    Remove
+                  </Button>
+                </Card>
+              ))}
+              <Button onPress={() => setFields([...fields, ""])}>
+                Add field
+              </Button>
               <div className="flex gap-2 justify-end">
                 <Button onPress={() => setIsNewStepFormVisible(false)}>
                   Cancel

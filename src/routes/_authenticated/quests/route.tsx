@@ -36,9 +36,9 @@ const NewQuestModal = ({
   onSubmit: () => void;
 }) => {
   const [selectedQuests, setSelectedQuests] = useState<Selection>(new Set());
-  const availableQuests = useQuery(api.usersQuests.getAvailableQuestsForUser);
+  const availableQuests = useQuery(api.userQuests.getAvailableQuestsForUser);
   const hasAvailableQuests = availableQuests && availableQuests.length > 0;
-  const addQuest = useMutation(api.usersQuests.create);
+  const addQuest = useMutation(api.userQuests.create);
 
   const clearForm = () => {
     setSelectedQuests(new Set());
@@ -112,7 +112,7 @@ function IndexRoute() {
   const [isNewQuestModalOpen, setIsNewQuestModalOpen] = useState(false);
 
   const MyQuests = () => {
-    const myQuests = useQuery(api.usersQuests.getQuestsForCurrentUser);
+    const myQuests = useQuery(api.userQuests.getQuestsForCurrentUser);
 
     if (myQuests === undefined) return;
 
