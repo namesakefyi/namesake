@@ -4,24 +4,6 @@ import { v } from "convex/values";
 import { field, icon, jurisdiction, role, theme } from "./validators";
 
 /**
- * Represents a PDF form that can be filled out by users.
- * @param title - The title of the form. (e.g. "Petition to Change Name of Adult")
- * @param formCode - The legal code for the form. (e.g. "CJP 27")
- * @param creationUser - The user who created the form.
- * @param file - The storageId for the PDF file.
- * @param state - The US State the form applies to. (e.g. "MA")
- * @param deletionTime - Time in ms since epoch when the form was deleted.
- */
-const forms = defineTable({
-  title: v.string(),
-  formCode: v.optional(v.string()),
-  creationUser: v.id("users"),
-  file: v.optional(v.id("_storage")),
-  jurisdiction: jurisdiction,
-  deletionTime: v.optional(v.number()),
-});
-
-/**
  * Represents a collection of steps and forms for a user to complete.
  * @param title - The title of the quest. (e.g. "Court Order")
  * @param creationUser - The user who created the quest.
@@ -49,8 +31,47 @@ const questSteps = defineTable({
   creationUser: v.id("users"),
   title: v.string(),
   description: v.optional(v.string()),
-  fields: v.optional(v.array(field)),
+  fields: v.optional(
+    v.array(
+      v.object({
+        fieldId: v.id("questFields"),
+      }),
+    ),
+  ),
 }).index("questId", ["questId"]);
+
+/**
+ * Represents a single input field which may be shared across multiple quests
+ * or steps. Data entered into these fields are end-to-end encrypted and used
+ * to pre-fill fields that point to the same data in future quests.
+ * @param type - The type of field. (e.g. "text", "select")
+ * @param label - The label for the field. (e.g. "First Name")
+ * @param helpText - Additional help text for the field.
+ */
+const questFields = defineTable({
+  type: field,
+  label: v.string(),
+  slug: v.string(),
+  helpText: v.optional(v.string()),
+});
+
+/**
+ * Represents a PDF form that can be filled out by users.
+ * @param title - The title of the form. (e.g. "Petition to Change Name of Adult")
+ * @param formCode - The legal code for the form. (e.g. "CJP 27")
+ * @param creationUser - The user who created the form.
+ * @param file - The storageId for the PDF file.
+ * @param state - The US State the form applies to. (e.g. "MA")
+ * @param deletionTime - Time in ms since epoch when the form was deleted.
+ */
+const forms = defineTable({
+  title: v.string(),
+  formCode: v.optional(v.string()),
+  creationUser: v.id("users"),
+  file: v.optional(v.id("_storage")),
+  jurisdiction: jurisdiction,
+  deletionTime: v.optional(v.number()),
+});
 
 /**
  * Represents a user of Namesake.
@@ -69,7 +90,7 @@ const users = defineTable({
   image: v.optional(v.string()),
   email: v.optional(v.string()),
   emailVerified: v.boolean(),
-  isAnonymous: v.optional(v.boolean()),
+  jurisdiction: v.optional(jurisdiction),
   isMinor: v.optional(v.boolean()),
   theme: theme,
 }).index("email", ["email"]);
@@ -88,11 +109,23 @@ const userQuests = defineTable({
   .index("userId", ["userId"])
   .index("questId", ["questId"]);
 
+/**
+ * Pre-fillable user data entered throughout quests.
+ * All data in this table is end-to-end encrypted.
+ */
+const userData = defineTable({
+  userId: v.id("users"),
+  fieldId: v.id("fields"),
+  value: v.string(),
+}).index("userId", ["userId"]);
+
 export default defineSchema({
   ...authTables,
   forms,
   quests,
   questSteps,
+  questFields,
   users,
   userQuests,
+  userData,
 });
