@@ -67,7 +67,7 @@ const NewQuestModal = ({
             onSelectionChange={setSelectedQuests}
           >
             {availableQuests.map((quest) => {
-              const Icon = ICONS[quest.icon || "signpost"];
+              const Icon = ICONS[quest.icon];
               return (
                 <GridListItem
                   key={quest._id}
