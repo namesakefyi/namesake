@@ -4,13 +4,15 @@ import {
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { type ButtonProps, buttonStyles } from "../Button";
 import { focusRing } from "../utils";
 
 interface LinkProps extends AriaLinkProps {
   variant?: "primary" | "secondary";
+  button?: ButtonProps;
 }
 
-const styles = tv({
+const linkStyles = tv({
   extend: focusRing,
   base: "underline disabled:no-underline disabled:cursor-default forced-colors:disabled:text-[GrayText] transition rounded",
   variants: {
@@ -24,12 +26,20 @@ const styles = tv({
   },
 });
 
-export function Link(props: LinkProps) {
+export function Link({ button, ...props }: LinkProps) {
   return (
     <AriaLink
       {...props}
-      className={composeRenderProps(props.className, (className, renderProps) =>
-        styles({ ...renderProps, className, variant: props.variant }),
+      className={composeRenderProps(
+        props.className,
+        (className, renderProps) =>
+          button
+            ? buttonStyles({
+                ...renderProps,
+                className,
+                variant: props.variant,
+              })
+            : linkStyles({ ...renderProps, className, variant: props.variant }),
       )}
     />
   );

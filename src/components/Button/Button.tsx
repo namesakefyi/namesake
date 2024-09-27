@@ -10,7 +10,7 @@ export interface ButtonProps extends AriaButtonProps {
   variant?: "primary" | "secondary" | "destructive" | "icon";
 }
 
-const button = tv({
+export const buttonStyles = tv({
   extend: focusRing,
   base: "px-3 py-2 h-10 text-sm font-medium transition rounded-lg flex gap-1 items-center justify-center border border-black/10 dark:border-white/10 cursor-pointer",
   variants: {
@@ -34,7 +34,7 @@ export function Button(props: ButtonProps) {
     <AriaButton
       {...props}
       className={composeRenderProps(props.className, (className, renderProps) =>
-        button({ ...renderProps, variant: props.variant, className }),
+        buttonStyles({ ...renderProps, variant: props.variant, className }),
       )}
     />
   );

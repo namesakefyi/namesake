@@ -13,9 +13,6 @@ function AdminFormDetailRoute() {
   const form = useQuery(api.forms.getForm, {
     formId: formId as Id<"forms">,
   });
-  const formFields = useQuery(api.formFields.getAllFieldsForForm, {
-    formId: formId as Id<"forms">,
-  });
   const fileUrl = useQuery(api.forms.getFormPDFUrl, {
     formId: formId as Id<"forms">,
   });
@@ -30,9 +27,6 @@ function AdminFormDetailRoute() {
         badge={<Badge size="lg">{form.jurisdiction}</Badge>}
         subtitle={form.formCode}
       />
-      {formFields?.map((field) => (
-        <div key={field._id}>{field.label}</div>
-      ))}
       {fileUrl && (
         <object
           className="w-full aspect-square max-h-full rounded-lg"

@@ -1,5 +1,5 @@
 import { type Infer, v } from "convex/values";
-import { JURISDICTIONS } from "./constants";
+import { ICONS, JURISDICTIONS } from "./constants";
 
 export type Jurisdiction = Infer<typeof jurisdiction>;
 export const jurisdiction = v.union(
@@ -18,4 +18,9 @@ export const role = v.union(
   v.literal("user"),
   v.literal("editor"),
   v.literal("admin"),
+);
+
+export type Icon = Infer<typeof icon>;
+export const icon = v.union(
+  ...Object.keys(ICONS).map((icon) => v.literal(icon)),
 );

@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
 import { userMutation } from "./helpers";
-import { jurisdiction } from "./types";
+import { icon, jurisdiction } from "./types";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -31,29 +31,17 @@ export const getQuest = query({
 });
 
 export const createQuest = userMutation({
-  args: { title: v.string(), jurisdiction: v.optional(jurisdiction) },
+  args: {
+    title: v.string(),
+    jurisdiction: v.optional(jurisdiction),
+    icon: icon,
+  },
   handler: async (ctx, args) => {
     return await ctx.db.insert("quests", {
       title: args.title,
+      icon: args.icon,
       jurisdiction: args.jurisdiction,
       creationUser: ctx.userId,
-    });
-  },
-});
-
-export const addQuestStep = userMutation({
-  args: { questId: v.id("quests"), title: v.string(), body: v.string() },
-  handler: async (ctx, args) => {
-    const existingSteps = (await ctx.db.get(args.questId))?.steps ?? [];
-
-    await ctx.db.patch(args.questId, {
-      steps: [
-        ...existingSteps,
-        {
-          title: args.title,
-          body: args.body,
-        },
-      ],
     });
   },
 });
