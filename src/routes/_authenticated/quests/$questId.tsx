@@ -1,6 +1,7 @@
 import {
   Badge,
   Button,
+  Card,
   Menu,
   MenuItem,
   MenuTrigger,
@@ -8,6 +9,7 @@ import {
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
+import { ICONS } from "@convex/constants";
 import { RiMoreLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
@@ -19,8 +21,11 @@ export const Route = createFileRoute("/_authenticated/quests/$questId")({
 
 function QuestDetailRoute() {
   const { questId } = Route.useParams();
-  // TODO: Opportunity to combine the `quest` and `userQuest` queries
+  // TODO: Opportunity to combine these queries?
   const quest = useQuery(api.quests.getQuest, {
+    questId: questId as Id<"quests">,
+  });
+  const questSteps = useQuery(api.questSteps.getStepsForQuest, {
     questId: questId as Id<"quests">,
   });
   const userQuest = useQuery(api.usersQuests.getUserQuestByQuestId, {
@@ -38,8 +43,9 @@ function QuestDetailRoute() {
   if (quest === null || userQuest === null) return "Quest not found";
 
   return (
-    <main>
+    <main className="col-span-2">
       <PageHeader
+        icon={ICONS[quest.icon]}
         title={quest.title}
         badge={
           <div className="flex gap-1">
@@ -70,14 +76,19 @@ function QuestDetailRoute() {
           </Menu>
         </MenuTrigger>
       </PageHeader>
-      {quest.steps ? (
-        <ol className="flex flex-col gap-4">
-          {quest.steps.map((step, i) => (
-            <li key={`${quest.title}-step-${i}`}>
-              <h2>{step.title}</h2>
-              <Markdown>{step.body}</Markdown>
-            </li>
-          ))}
+      {questSteps ? (
+        <ol className="flex flex-col gap-6">
+          {questSteps.map(
+            (step, i) =>
+              step && (
+                <li key={`${quest.title}-step-${i}`}>
+                  <Card>
+                    <h2 className="text-xl font-medium mb-2">{step.title}</h2>
+                    <Markdown>{step.description}</Markdown>
+                  </Card>
+                </li>
+              ),
+          )}
         </ol>
       ) : (
         <p>This quest has no steps yet.</p>

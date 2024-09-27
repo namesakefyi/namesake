@@ -10,6 +10,7 @@ import {
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
+import { ICONS } from "@convex/constants";
 import { RiAddLine, RiSignpostLine } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import {
@@ -65,19 +66,23 @@ const NewQuestModal = ({
             selectedKeys={selectedQuests}
             onSelectionChange={setSelectedQuests}
           >
-            {availableQuests.map((quest) => (
-              <GridListItem
-                key={quest._id}
-                id={quest._id}
-                textValue={quest.title}
-              >
-                {quest.title}
-                {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
-                {quest.steps &&
-                  quest.steps.length > 0 &&
-                  `${quest.steps?.length} steps`}
-              </GridListItem>
-            ))}
+            {availableQuests.map((quest) => {
+              const Icon = ICONS[quest.icon];
+              return (
+                <GridListItem
+                  key={quest._id}
+                  id={quest._id}
+                  textValue={quest.title}
+                >
+                  <Icon />
+                  {quest.title}
+                  {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
+                  {quest.steps &&
+                    quest.steps.length > 0 &&
+                    `${quest.steps?.length} steps`}
+                </GridListItem>
+              );
+            })}
           </GridList>
         ) : (
           <Empty title="No more quests" icon={RiSignpostLine} />
@@ -129,13 +134,16 @@ function IndexRoute() {
         {myQuests.map((quest) => {
           if (quest === null) return null;
 
+          const Icon = ICONS[quest.icon];
+
           return (
             <GridListItem
               textValue={quest.title}
               key={quest._id}
               href={{ to: "/quests/$questId", params: { questId: quest._id } }}
             >
-              <div className="flex items-baseline gap-2">
+              <div className="flex items-center gap-2">
+                <Icon className="text-gray-dim" />
                 <p className="font-bold text-lg">{quest.title}</p>
                 {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
               </div>
@@ -155,7 +163,7 @@ function IndexRoute() {
   return (
     <Container>
       <Authenticated>
-        <div className="grid grid-cols-2 items-start gap-4">
+        <div className="grid grid-cols-3 items-start gap-6">
           <MyQuests />
           <Outlet />
         </div>

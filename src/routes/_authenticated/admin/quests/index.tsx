@@ -20,7 +20,7 @@ import {
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { DataModel } from "@convex/_generated/dataModel";
-import { JURISDICTIONS } from "@convex/constants";
+import { ICONS, JURISDICTIONS } from "@convex/constants";
 import { RiAddLine, RiMoreFill, RiSignpostLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
@@ -40,17 +40,19 @@ const NewQuestModal = ({
   onSubmit: () => void;
 }) => {
   const createQuest = useMutation(api.quests.createQuest);
+  const [icon, setIcon] = useState("");
   const [title, setTitle] = useState("");
   const [jurisdiction, setJurisdiction] = useState<JURISDICTIONS | null>(null);
 
   const clearForm = () => {
+    setIcon("");
     setTitle("");
     setJurisdiction(null);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createQuest({ title, jurisdiction: jurisdiction ?? undefined });
+    createQuest({ title, icon, jurisdiction: jurisdiction ?? undefined });
 
     clearForm();
     onSubmit();
@@ -60,6 +62,23 @@ const NewQuestModal = ({
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <h2 className="text-xl">Create new quest</h2>
       <Form className="w-full" onSubmit={handleSubmit}>
+        <Select
+          label="Icon"
+          name="icon"
+          selectedKey={icon}
+          onSelectionChange={(value) => setIcon(value as string)}
+          placeholder="Select an icon"
+          isRequired
+        >
+          {Object.keys(ICONS).map((key) => {
+            const Icon = ICONS[key];
+            return (
+              <SelectItem key={key} id={key} textValue={key}>
+                <Icon size={20} /> {key}
+              </SelectItem>
+            );
+          })}
+        </Select>
         <TextField
           label="Title"
           name="title"
@@ -105,6 +124,8 @@ const QuestTableRow = ({
   const undeleteQuest = useMutation(api.quests.undeleteQuest);
   const permanentlyDeleteQuest = useMutation(api.quests.permanentlyDeleteQuest);
 
+  const Icon = ICONS[quest.icon];
+
   return (
     <TableRow
       key={quest._id}
@@ -112,12 +133,15 @@ const QuestTableRow = ({
       href={{ to: "/admin/quests/$questId", params: { questId: quest._id } }}
     >
       <TableCell>
-        <div>{quest.title}</div>
-        {quest.deletionTime && (
-          <span className="text-red-9 dark:text-reddark-9" slot="description">
-            {`deleted ${new Date(quest.deletionTime).toLocaleString()}`}
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          <Icon className="text-gray-dim" />
+          <div>{quest.title}</div>
+          {quest.deletionTime && (
+            <span className="text-red-9 dark:text-reddark-9" slot="description">
+              {`deleted ${new Date(quest.deletionTime).toLocaleString()}`}
+            </span>
+          )}
+        </div>
       </TableCell>
       <TableCell>
         {quest.jurisdiction ? (

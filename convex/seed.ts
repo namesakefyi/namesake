@@ -44,7 +44,20 @@ const seed = internalMutation(async (ctx) => {
       const questJurisdiction = faker.helpers.arrayElement(
         Object.keys(JURISDICTIONS),
       );
+      const iconForQuestTitle = (title: string) => {
+        switch (title) {
+          case "Court Order":
+            return "gavel";
+          case "State ID":
+            return "id";
+          case "Birth Certificate":
+            return "certificate";
+          default:
+            return "signpost";
+        }
+      };
       await ctx.db.insert("quests", {
+        icon: iconForQuestTitle(questTitle),
         title: questTitle,
         jurisdiction: questJurisdiction,
         creationUser: userId,
