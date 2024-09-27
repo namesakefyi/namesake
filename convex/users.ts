@@ -1,8 +1,9 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { query } from "./_generated/server";
+import type { Role } from "./constants";
 import { userMutation, userQuery } from "./helpers";
-import { theme } from "./types";
+import { theme } from "./validators";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -28,7 +29,7 @@ export const getCurrentUserRole = query({
     if (!userId) return undefined;
     const user = await ctx.db.get(userId);
     if (!user) return undefined;
-    return user.role;
+    return user.role as Role;
   },
 });
 
@@ -71,7 +72,7 @@ export const deleteCurrentUser = userMutation({
   handler: async (ctx) => {
     // Delete userQuests
     const userQuests = await ctx.db
-      .query("usersQuests")
+      .query("userQuests")
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .collect();
     for (const userQuest of userQuests) await ctx.db.delete(userQuest._id);

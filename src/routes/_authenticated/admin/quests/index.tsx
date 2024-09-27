@@ -20,7 +20,7 @@ import {
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { DataModel } from "@convex/_generated/dataModel";
-import { ICONS, JURISDICTIONS } from "@convex/constants";
+import { ICONS, JURISDICTIONS, type Jurisdiction } from "@convex/constants";
 import { RiAddLine, RiMoreFill, RiSignpostLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
@@ -42,7 +42,7 @@ const NewQuestModal = ({
   const createQuest = useMutation(api.quests.createQuest);
   const [icon, setIcon] = useState("");
   const [title, setTitle] = useState("");
-  const [jurisdiction, setJurisdiction] = useState<JURISDICTIONS | null>(null);
+  const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
 
   const clearForm = () => {
     setIcon("");
@@ -90,7 +90,7 @@ const NewQuestModal = ({
           label="Jurisdiction"
           name="jurisdiction"
           selectedKey={jurisdiction}
-          onSelectionChange={(key) => setJurisdiction(key as JURISDICTIONS)}
+          onSelectionChange={(key) => setJurisdiction(key as Jurisdiction)}
           placeholder="Select a jurisdiction"
         >
           {Object.entries(JURISDICTIONS).map(([value, label]) => (
@@ -117,7 +117,7 @@ const QuestTableRow = ({
 }: {
   quest: DataModel["quests"]["document"];
 }) => {
-  const questCount = useQuery(api.usersQuests.getQuestCount, {
+  const questCount = useQuery(api.userQuests.getQuestCount, {
     questId: quest._id,
   });
   const deleteQuest = useMutation(api.quests.deleteQuest);

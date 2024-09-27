@@ -21,7 +21,7 @@ import {
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { DataModel } from "@convex/_generated/dataModel";
-import { JURISDICTIONS } from "@convex/constants";
+import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
 import { RiAddLine, RiFileTextLine, RiMoreFill } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
@@ -47,7 +47,7 @@ const NewFormModal = ({
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [formCode, setFormCode] = useState("");
-  const [jurisdiction, setJurisdiction] = useState<JURISDICTIONS | null>(null);
+  const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
 
   const clearForm = () => {
     setFile(null);
@@ -115,7 +115,7 @@ const NewFormModal = ({
           label="Jurisdiction"
           name="jurisdiction"
           selectedKey={jurisdiction}
-          onSelectionChange={(key) => setJurisdiction(key as JURISDICTIONS)}
+          onSelectionChange={(key) => setJurisdiction(key as Jurisdiction)}
           placeholder="Select a jurisdiction"
           isRequired
         >

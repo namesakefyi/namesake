@@ -11,7 +11,7 @@ import {
 } from "@/components";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
-import type { Theme } from "@convex/types";
+import type { Theme } from "@convex/constants";
 import { RiCheckLine, RiLoader4Line } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";

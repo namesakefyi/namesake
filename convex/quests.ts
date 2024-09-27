@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
 import { userMutation } from "./helpers";
-import { icon, jurisdiction } from "./types";
+import { icon, jurisdiction } from "./validators";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -65,7 +65,7 @@ export const permanentlyDeleteQuest = userMutation({
   handler: async (ctx, args) => {
     // Delete userQuests
     const userQuests = await ctx.db
-      .query("usersQuests")
+      .query("userQuests")
       .withIndex("questId", (q) => q.eq("questId", args.questId))
       .collect();
     for (const userQuest of userQuests) await ctx.db.delete(userQuest._id);

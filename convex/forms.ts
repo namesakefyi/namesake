@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { userMutation } from "./helpers";
-import { jurisdiction } from "./types";
+import { jurisdiction } from "./validators";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
