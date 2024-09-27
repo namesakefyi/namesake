@@ -6,10 +6,7 @@ import { focusRing } from "../utils";
 
 interface NavProps {
   routes: {
-    icon: {
-      default: RemixiconComponentType;
-      active: RemixiconComponentType;
-    };
+    icon: RemixiconComponentType;
     href: LinkProps;
     label: string;
   }[];
@@ -17,7 +14,7 @@ interface NavProps {
 
 const styles = tv({
   extend: focusRing,
-  base: "rounded-lg no-underline flex items-center gap-2 text-gray-dim hover:text-gray-normal py-1 aria-current:font-semibold aria-current:text-gray-normal",
+  base: "rounded-lg no-underline flex items-center gap-2 text-gray-dim hover:text-gray-normal py-1.5 aria-current:font-semibold aria-current:text-gray-normal",
 });
 
 export const Nav = ({ routes }: NavProps) => {
@@ -27,7 +24,7 @@ export const Nav = ({ routes }: NavProps) => {
     <nav className="flex flex-col w-[160px] shrink-0 pt-5 pl-6">
       {routes.map(({ href, label, icon }) => {
         const current = matchRoute({ ...href, fuzzy: true });
-        const { default: DefaultIcon, active: ActiveIcon } = icon;
+        const Icon = icon;
 
         return (
           <Link
@@ -36,7 +33,7 @@ export const Nav = ({ routes }: NavProps) => {
             className={styles()}
             aria-current={current ? "true" : null}
           >
-            {current ? <ActiveIcon /> : <DefaultIcon />}
+            <Icon />
             {label}
           </Link>
         );

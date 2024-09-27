@@ -1,10 +1,5 @@
 import { Container, Nav } from "@/components";
-import {
-  RiFileTextFill,
-  RiFileTextLine,
-  RiSignpostFill,
-  RiSignpostLine,
-} from "@remixicon/react";
+import { RiFileTextLine, RiInputField, RiSignpostLine } from "@remixicon/react";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -28,20 +23,19 @@ function AdminRoute() {
       <Nav
         routes={[
           {
-            icon: {
-              default: RiSignpostLine,
-              active: RiSignpostFill,
-            },
+            icon: RiSignpostLine,
             href: { to: "/admin/quests" },
             label: "Quests",
           },
           {
-            icon: {
-              default: RiFileTextLine,
-              active: RiFileTextFill,
-            },
+            icon: RiFileTextLine,
             href: { to: "/admin/forms" },
             label: "Forms",
+          },
+          {
+            icon: RiInputField,
+            href: { to: "/admin/fields" },
+            label: "Fields",
           },
         ]}
       />
