@@ -10,6 +10,19 @@ export const getAllFields = query({
   },
 });
 
+export const getFields = query({
+  args: { fieldIds: v.array(v.id("questFields")) },
+  handler: async (ctx, args) => {
+    const fields = await Promise.all(
+      args.fieldIds.map(async (fieldId) => {
+        const field = await ctx.db.get(fieldId);
+        if (field) return field;
+      }),
+    ).then((fields) => fields.filter((field) => field !== undefined));
+    return fields;
+  },
+});
+
 export const createField = userMutation({
   args: {
     type: field,

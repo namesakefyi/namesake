@@ -58,7 +58,7 @@ const boxStyles = tv({
       true: "bg-purple-9 dark:bg-purpledark-9 border-transparent",
     },
     isInvalid: {
-      true: "text-red-9 dark:text-reddark-9 forced-colors:![--color:Mark] group-pressed:[--color:theme(colors.red.800)] dark:group-pressed:[--color:theme(colors.red.700)]",
+      true: "text-red-9 dark:text-reddark-9 forced-colors:![--color:Mark]",
     },
     isDisabled: {
       true: "text-gray-7 dark:text-graydark-7 forced-colors:![--color:GrayText]",

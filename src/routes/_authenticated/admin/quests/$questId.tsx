@@ -11,6 +11,7 @@ import {
   SelectItem,
   TextField,
 } from "@/components";
+import { QuestStep } from "@/components/QuestStep/QuestStep";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { FIELDS, ICONS } from "@convex/constants";
@@ -18,7 +19,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 import { MenuTrigger } from "react-aria-components";
-import Markdown from "react-markdown";
 
 export const Route = createFileRoute("/_authenticated/admin/quests/$questId")({
   component: AdminQuestDetailRoute,
@@ -75,16 +75,11 @@ function AdminQuestDetailRoute() {
               (step, i) =>
                 step && (
                   <li key={`${quest.title}-step-${i}`}>
-                    <Card className="flex flex-col gap-2">
-                      <h2 className="text-xl font-semibold">{step.title}</h2>
-                      {step.description && (
-                        <div>
-                          <Markdown className="prose dark:prose-invert">
-                            {step.description}
-                          </Markdown>
-                        </div>
-                      )}
-                    </Card>
+                    <QuestStep
+                      title={step.title}
+                      description={step.description}
+                      fields={step.fields}
+                    />
                   </li>
                 ),
             )}

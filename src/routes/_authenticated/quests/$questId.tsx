@@ -1,19 +1,18 @@
 import {
   Badge,
   Button,
-  Card,
   Menu,
   MenuItem,
   MenuTrigger,
   PageHeader,
 } from "@/components";
+import { QuestStep } from "@/components/QuestStep/QuestStep";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { ICONS } from "@convex/constants";
 import { RiMoreLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
-import Markdown from "react-markdown";
 
 export const Route = createFileRoute("/_authenticated/quests/$questId")({
   component: QuestDetailRoute,
@@ -82,10 +81,11 @@ function QuestDetailRoute() {
             (step, i) =>
               step && (
                 <li key={`${quest.title}-step-${i}`}>
-                  <Card>
-                    <h2 className="text-xl font-medium mb-2">{step.title}</h2>
-                    <Markdown>{step.description}</Markdown>
-                  </Card>
+                  <QuestStep
+                    title={step.title}
+                    description={step.description}
+                    fields={step.fields}
+                  />
                 </li>
               ),
           )}
