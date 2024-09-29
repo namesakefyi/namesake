@@ -65,6 +65,7 @@ export function QuestFields(props: { questFields: Doc<"questFields">[] }) {
     }
   };
 
+  // TODO: Add skeleton loaders
   return <>{props.questFields.map((field) => markupForField(field))}</>;
 }
 
