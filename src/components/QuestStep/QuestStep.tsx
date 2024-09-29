@@ -3,7 +3,7 @@ import type { Doc, Id } from "@convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import Markdown from "react-markdown";
 import { Card } from "../Card";
-import { CheckboxGroup } from "../Checkbox";
+import { Checkbox } from "../Checkbox";
 import { DateField } from "../DateField";
 import { NumberField } from "../NumberField";
 import { Select, SelectItem } from "../Select";
@@ -55,9 +55,7 @@ export function QuestFields(props: { questFields: Doc<"questFields">[] }) {
           </Select>
         );
       case "checkbox":
-        return (
-          <CheckboxGroup label={field.label} description={field.helpText} />
-        );
+        return <Checkbox label={field.label} description={field.helpText} />;
       case "date":
         return <DateField label={field.label} description={field.helpText} />;
       default:
@@ -66,7 +64,9 @@ export function QuestFields(props: { questFields: Doc<"questFields">[] }) {
   };
 
   // TODO: Add skeleton loaders
-  return <>{props.questFields.map((field) => markupForField(field))}</>;
+  return props.questFields.map((field) => (
+    <div key={field._id}>{markupForField(field)}</div>
+  ));
 }
 
 export function QuestStep({ title, description, fields }: QuestStepProps) {

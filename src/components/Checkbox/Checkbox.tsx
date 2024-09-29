@@ -4,7 +4,7 @@ import {
   Checkbox as AriaCheckbox,
   CheckboxGroup as AriaCheckboxGroup,
   type CheckboxGroupProps as AriaCheckboxGroupProps,
-  type CheckboxProps,
+  type CheckboxProps as AriaCheckboxProps,
   type ValidationResult,
   composeRenderProps,
 } from "react-aria-components";
@@ -40,7 +40,7 @@ export function CheckboxGroup(props: CheckboxGroupProps) {
 }
 
 const checkboxStyles = tv({
-  base: "flex gap-2 items-center group text-sm transition",
+  base: "flex gap-2 items-center group transition w-max",
   variants: {
     isDisabled: {
       false: "text-gray-normal cursor-pointer",
@@ -69,31 +69,46 @@ const boxStyles = tv({
 const iconStyles =
   "w-5 h-5 text-white group-disabled:text-gray-4 dark:group-disabled:text-gray-9 forced-colors:text-[HighlightText]";
 
+export interface CheckboxProps extends AriaCheckboxProps {
+  label?: string;
+  description?: string;
+}
+
 export function Checkbox(props: CheckboxProps) {
   return (
-    <AriaCheckbox
-      {...props}
-      className={composeRenderProps(props.className, (className, renderProps) =>
-        checkboxStyles({ ...renderProps, className }),
+    <div>
+      <AriaCheckbox
+        {...props}
+        className={composeRenderProps(
+          props.className,
+          (className, renderProps) =>
+            checkboxStyles({ ...renderProps, className }),
+        )}
+      >
+        {({ isSelected, isIndeterminate, ...renderProps }) => (
+          <>
+            <div
+              className={boxStyles({
+                isSelected: isSelected || isIndeterminate,
+                ...renderProps,
+              })}
+            >
+              {isIndeterminate ? (
+                <RiSubtractLine aria-hidden className={iconStyles} />
+              ) : isSelected ? (
+                <RiCheckLine aria-hidden className={iconStyles} />
+              ) : null}
+            </div>
+            {props.label}
+            {props.children}
+          </>
+        )}
+      </AriaCheckbox>
+      {props.description && (
+        <FieldDescription className="ml-8">
+          {props.description}
+        </FieldDescription>
       )}
-    >
-      {({ isSelected, isIndeterminate, ...renderProps }) => (
-        <>
-          <div
-            className={boxStyles({
-              isSelected: isSelected || isIndeterminate,
-              ...renderProps,
-            })}
-          >
-            {isIndeterminate ? (
-              <RiSubtractLine aria-hidden className={iconStyles} />
-            ) : isSelected ? (
-              <RiCheckLine aria-hidden className={iconStyles} />
-            ) : null}
-          </div>
-          {props.children}
-        </>
-      )}
-    </AriaCheckbox>
+    </div>
   );
 }
