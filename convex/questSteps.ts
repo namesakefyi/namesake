@@ -10,6 +10,7 @@ export const create = userMutation({
     questId: v.id("quests"),
     title: v.string(),
     description: v.optional(v.string()),
+    fields: v.optional(v.array(v.id("questFields"))),
   },
   handler: async (ctx, args) => {
     const questStepId = await ctx.db.insert("questSteps", {
@@ -17,6 +18,7 @@ export const create = userMutation({
       title: args.title,
       description: args.description,
       creationUser: ctx.userId,
+      fields: args.fields,
     });
 
     const quest = await ctx.db.get(args.questId);

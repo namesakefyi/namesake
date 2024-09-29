@@ -3,6 +3,8 @@ import {
   Button,
   Card,
   Form,
+  Menu,
+  MenuItem,
   PageHeader,
   RichTextEditor,
   Select,
@@ -11,10 +13,11 @@ import {
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { FIELDS, type Field, ICONS } from "@convex/constants";
+import { FIELDS, ICONS } from "@convex/constants";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
+import { MenuTrigger } from "react-aria-components";
 import Markdown from "react-markdown";
 
 export const Route = createFileRoute("/_authenticated/admin/quests/$questId")({
@@ -29,11 +32,12 @@ function AdminQuestDetailRoute() {
   const steps = useQuery(api.questSteps.getStepsForQuest, {
     questId: questId as Id<"quests">,
   });
+  const allFields = useQuery(api.questFields.getAllFields);
   const addQuestStep = useMutation(api.questSteps.create);
   const [isNewStepFormVisible, setIsNewStepFormVisible] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [fields, setFields] = useState<Field[]>([]);
+  const [fields, setFields] = useState<Id<"questFields">[]>([]);
 
   // TODO: Loading and empty states
   if (quest === undefined) return;
@@ -42,6 +46,7 @@ function AdminQuestDetailRoute() {
   const clearForm = () => {
     setTitle("");
     setDescription("");
+    setFields([]);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -50,6 +55,7 @@ function AdminQuestDetailRoute() {
       questId: questId as Id<"quests">,
       title,
       description,
+      fields,
     });
     clearForm();
     setIsNewStepFormVisible(false);
@@ -95,37 +101,74 @@ function AdminQuestDetailRoute() {
           <Card>
             <Form onSubmit={handleSubmit}>
               <h2 className="text-lg">New step</h2>
-              <TextField label="Title" value={title} onChange={setTitle} />
+              <TextField
+                label="Title"
+                value={title}
+                onChange={setTitle}
+                isRequired
+              />
               <RichTextEditor
                 markdown={description}
                 onChange={setDescription}
               />
-              {fields.map((field, i) => (
-                <Card key={`${field}`} className="flex flex-col gap-4">
-                  <Select label="Field type" placeholder="Select a field type">
-                    {Object.entries(FIELDS).map(([id, field]) => {
-                      const Icon = field.icon;
+              {allFields &&
+                fields.map((field, i) => (
+                  <Card key={field} className="flex flex-col gap-4">
+                    <Select
+                      label="Field"
+                      placeholder="Select a field"
+                      selectedKey={field}
+                      onSelectionChange={(key) => {
+                        setFields(
+                          fields.map((f, index) =>
+                            index === i ? (key as Id<"questFields">) : f,
+                          ),
+                        );
+                      }}
+                    >
+                      {allFields.map((field) => {
+                        const Icon = FIELDS[field.type].icon;
+                        return (
+                          <SelectItem
+                            key={field._id}
+                            id={field._id}
+                            textValue={field.label}
+                          >
+                            <Icon size={20} />
+                            {field.label}
+                          </SelectItem>
+                        );
+                      })}
+                    </Select>
+                    <Button
+                      onPress={() =>
+                        setFields(fields.filter((_, index) => index !== i))
+                      }
+                    >
+                      Remove
+                    </Button>
+                  </Card>
+                ))}
+              {allFields && (
+                <MenuTrigger>
+                  <Button variant="secondary">Add field</Button>
+                  <Menu>
+                    {allFields.map((field) => {
+                      const Icon = FIELDS[field.type].icon;
                       return (
-                        <SelectItem key={id} textValue={field.label}>
+                        <MenuItem
+                          key={field._id}
+                          textValue={field.label}
+                          onAction={() => setFields([...fields, field._id])}
+                        >
                           <Icon size={20} />
                           {field.label}
-                        </SelectItem>
+                        </MenuItem>
                       );
                     })}
-                  </Select>
-                  <TextField label="Label" />
-                  <Button
-                    onPress={() =>
-                      setFields(fields.filter((_, index) => index !== i))
-                    }
-                  >
-                    Remove
-                  </Button>
-                </Card>
-              ))}
-              <Button onPress={() => setFields([...fields, ""])}>
-                Add field
-              </Button>
+                  </Menu>
+                </MenuTrigger>
+              )}
               <div className="flex gap-2 justify-end">
                 <Button onPress={() => setIsNewStepFormVisible(false)}>
                   Cancel

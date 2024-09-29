@@ -31,13 +31,7 @@ const questSteps = defineTable({
   creationUser: v.id("users"),
   title: v.string(),
   description: v.optional(v.string()),
-  fields: v.optional(
-    v.array(
-      v.object({
-        fieldId: v.id("questFields"),
-      }),
-    ),
-  ),
+  fields: v.optional(v.array(v.id("questFields"))),
 }).index("questId", ["questId"]);
 
 /**
@@ -115,7 +109,7 @@ const userQuests = defineTable({
  */
 const userData = defineTable({
   userId: v.id("users"),
-  fieldId: v.id("fields"),
+  fieldId: v.id("questFields"),
   value: v.string(),
 }).index("userId", ["userId"]);
 
