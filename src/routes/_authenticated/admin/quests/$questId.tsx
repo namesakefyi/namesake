@@ -5,6 +5,7 @@ import {
   Form,
   Menu,
   MenuItem,
+  MenuSeparator,
   PageHeader,
   RichTextEditor,
   Select,
@@ -15,10 +16,12 @@ import { QuestStep } from "@/components/QuestStep/QuestStep";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { FIELDS, ICONS } from "@convex/constants";
+import { RiAddLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 import { MenuTrigger } from "react-aria-components";
+import { NewFieldModal } from "../fields";
 
 export const Route = createFileRoute("/_authenticated/admin/quests/$questId")({
   component: AdminQuestDetailRoute,
@@ -35,6 +38,7 @@ function AdminQuestDetailRoute() {
   const allFields = useQuery(api.questFields.getAllFields);
   const addQuestStep = useMutation(api.questSteps.create);
   const [isNewStepFormVisible, setIsNewStepFormVisible] = useState(false);
+  const [isNewFieldModalOpen, setIsNewFieldModalOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [fields, setFields] = useState<Id<"questFields">[]>([]);
@@ -59,6 +63,10 @@ function AdminQuestDetailRoute() {
     });
     clearForm();
     setIsNewStepFormVisible(false);
+  };
+
+  const handleFieldCreated = (newFieldId: Id<"questFields">) => {
+    setFields([...fields, newFieldId]);
   };
 
   return (
@@ -144,28 +152,45 @@ function AdminQuestDetailRoute() {
                     </Button>
                   </Card>
                 ))}
-              {allFields && (
-                <MenuTrigger>
-                  <Button variant="secondary">Add field</Button>
-                  <Menu>
-                    {allFields.map((field) => {
-                      const Icon = FIELDS[field.type].icon;
-                      return (
-                        <MenuItem
-                          key={field._id}
-                          textValue={field.label}
-                          onAction={() => setFields([...fields, field._id])}
-                        >
-                          <Icon size={20} />
-                          {field.label}
-                        </MenuItem>
-                      );
-                    })}
-                  </Menu>
-                </MenuTrigger>
-              )}
+
+              <MenuTrigger>
+                <Button variant="secondary">Add field</Button>
+                <Menu>
+                  {allFields && (
+                    <>
+                      {allFields.map((field) => {
+                        const Icon = FIELDS[field.type].icon;
+                        return (
+                          <MenuItem
+                            key={field._id}
+                            textValue={field.label}
+                            onAction={() => setFields([...fields, field._id])}
+                          >
+                            <Icon size={20} />
+                            {field.label}
+                          </MenuItem>
+                        );
+                      })}
+                      <MenuSeparator />
+                    </>
+                  )}
+                  <MenuItem
+                    key="new-field"
+                    textValue="New field"
+                    onAction={() => setIsNewFieldModalOpen(true)}
+                  >
+                    <RiAddLine size={20} />
+                    New field
+                  </MenuItem>
+                </Menu>
+              </MenuTrigger>
               <div className="flex gap-2 justify-end">
-                <Button onPress={() => setIsNewStepFormVisible(false)}>
+                <Button
+                  onPress={() => {
+                    setIsNewFieldModalOpen(false);
+                    setIsNewStepFormVisible(false);
+                  }}
+                >
                   Cancel
                 </Button>
                 <Button type="submit" variant="primary">
@@ -176,6 +201,12 @@ function AdminQuestDetailRoute() {
           </Card>
         )}
       </div>
+      <NewFieldModal
+        isOpen={isNewFieldModalOpen}
+        onOpenChange={setIsNewFieldModalOpen}
+        onSubmit={() => setIsNewFieldModalOpen(false)}
+        onFieldCreated={handleFieldCreated}
+      />
     </div>
   );
 }

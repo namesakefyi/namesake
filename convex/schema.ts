@@ -22,6 +22,8 @@ const quests = defineTable({
 
 /**
  * Represents a single step in a quest.
+ * @param questId - The quest this step belongs to.
+ * @param creationUser - The user who created the step.
  * @param title - The title of the step. (e.g. "Fill out form")
  * @param description - A description of the step.
  * @param fields - An array of form fields to complete the step.
@@ -40,13 +42,16 @@ const questSteps = defineTable({
  * to pre-fill fields that point to the same data in future quests.
  * @param type - The type of field. (e.g. "text", "select")
  * @param label - The label for the field. (e.g. "First Name")
+ * @param slug - A unique identifier for the field, camel cased. (e.g. "firstName")
  * @param helpText - Additional help text for the field.
+ * @param deletionTime - Time in ms since epoch when the field was deleted.
  */
 const questFields = defineTable({
   type: field,
   label: v.string(),
   slug: v.string(),
   helpText: v.optional(v.string()),
+  deletionTime: v.optional(v.number()),
 });
 
 /**
