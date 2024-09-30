@@ -1,5 +1,18 @@
 # namesake
 
+## 0.4.0
+
+### Minor Changes
+
+- e93f7cc: Display icons for quests and improve quest step appearance
+- 20f5f39: Support deleting fields, allow adding fields directly from quest steps, constrain width of app
+- dc09f49: Support defining quest fields and displaying user data
+- 64475c3: Display form fields within quest steps
+
+### Patch Changes
+
+- b57e265: Make header sticky, add backend support for defining fields within a quest
+
 ## 0.3.3
 
 ### Patch Changes
