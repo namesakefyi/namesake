@@ -31,7 +31,7 @@
     "jackspeak": "2.1.1"
   },
   "dependencies": {
-    "@auth/core": "^0.35.3",
+    "@auth/core": "0.31.0",
     "@convex-dev/auth": "^0.0.71",
     "@faker-js/faker": "^9.0.3",
     "@mdxeditor/editor": "^3.11.5",
