@@ -22,7 +22,7 @@ export function Label(props: LabelProps) {
     <AriaLabel
       {...props}
       className={twMerge(
-        "text-sm text-gray-dim cursor-default w-fit",
+        "text-sm text-gray-normal cursor-default w-fit",
         props.className,
       )}
     />

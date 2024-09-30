@@ -71,18 +71,18 @@ function AdminQuestDetailRoute() {
       <div className="flex flex-col gap-6">
         {steps ? (
           <ol className="flex flex-col gap-4">
-            {steps.map(
-              (step, i) =>
-                step && (
-                  <li key={`${quest.title}-step-${i}`}>
-                    <QuestStep
-                      title={step.title}
-                      description={step.description}
-                      fields={step.fields}
-                    />
-                  </li>
-                ),
-            )}
+            {steps.map((step, i) => {
+              if (!step) return;
+              return (
+                <li key={`${quest.title}-step-${i}`}>
+                  <QuestStep
+                    title={step.title}
+                    description={step.description}
+                    fields={step.fields}
+                  />
+                </li>
+              );
+            })}
           </ol>
         ) : (
           "No steps"

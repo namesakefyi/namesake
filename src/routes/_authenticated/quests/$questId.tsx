@@ -77,18 +77,18 @@ function QuestDetailRoute() {
       </PageHeader>
       {questSteps ? (
         <ol className="flex flex-col gap-6">
-          {questSteps.map(
-            (step, i) =>
-              step && (
-                <li key={`${quest.title}-step-${i}`}>
-                  <QuestStep
-                    title={step.title}
-                    description={step.description}
-                    fields={step.fields}
-                  />
-                </li>
-              ),
-          )}
+          {questSteps.map((step, i) => {
+            if (!step) return;
+            return (
+              <li key={`${quest.title}-step-${i}`}>
+                <QuestStep
+                  title={step.title}
+                  description={step.description}
+                  fields={step.fields}
+                />
+              </li>
+            );
+          })}
         </ol>
       ) : (
         <p>This quest has no steps yet.</p>
