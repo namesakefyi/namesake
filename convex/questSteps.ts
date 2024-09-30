@@ -40,7 +40,17 @@ export const getStepsForQuest = query({
 
     const steps = await Promise.all(
       quest.steps.map(async (stepId) => {
-        return await ctx.db.get(stepId);
+        const step = await ctx.db.get(stepId);
+        if (!step) return;
+
+        const fields = step.fields
+          ? await Promise.all(step.fields.map((fieldId) => ctx.db.get(fieldId)))
+          : [];
+
+        return {
+          ...step,
+          fields: fields.filter((field) => field !== null),
+        };
       }),
     );
     return steps;

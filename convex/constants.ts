@@ -187,7 +187,6 @@ export const JURISDICTIONS = {
   CT: "Connecticut",
   DC: "District of Columbia",
   DE: "Delaware",
-  FED: "Federal",
   FL: "Florida",
   GA: "Georgia",
   HI: "Hawaii",

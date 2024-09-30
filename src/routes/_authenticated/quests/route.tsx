@@ -161,9 +161,9 @@ function IndexRoute() {
   };
 
   return (
-    <Container>
+    <Container className="max-w-screen-lg">
       <Authenticated>
-        <div className="grid grid-cols-3 items-start gap-6">
+        <div className="flex gap-6">
           <MyQuests />
           <Outlet />
         </div>

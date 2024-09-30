@@ -1,8 +1,10 @@
 import {
   Badge,
   Button,
+  Empty,
   Menu,
   MenuItem,
+  MenuSeparator,
   MenuTrigger,
   PageHeader,
 } from "@/components";
@@ -10,8 +12,8 @@ import { QuestStep } from "@/components/QuestStep/QuestStep";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { ICONS } from "@convex/constants";
-import { RiMoreLine } from "@remixicon/react";
-import { createFileRoute } from "@tanstack/react-router";
+import { RiMoreLine, RiSignpostLine } from "@remixicon/react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 
 export const Route = createFileRoute("/_authenticated/quests/$questId")({
@@ -20,6 +22,7 @@ export const Route = createFileRoute("/_authenticated/quests/$questId")({
 
 function QuestDetailRoute() {
   const { questId } = Route.useParams();
+  const navigate = useNavigate();
   // TODO: Opportunity to combine these queries?
   const quest = useQuery(api.quests.getQuest, {
     questId: questId as Id<"quests">,
@@ -32,17 +35,24 @@ function QuestDetailRoute() {
   });
   const markComplete = useMutation(api.userQuests.markComplete);
   const markIncomplete = useMutation(api.userQuests.markIncomplete);
+  const removeQuest = useMutation(api.userQuests.removeQuest);
 
   const handleMarkComplete = (questId: Id<"quests">) =>
     markComplete({ questId });
   const handleMarkIncomplete = (questId: Id<"quests">) =>
     markIncomplete({ questId });
+  const handleRemoveQuest = (questId: Id<"quests">) => {
+    // TODO: Add confirmation toast
+    removeQuest({ questId });
+    // Redirect to quests
+    navigate({ to: "/quests" });
+  };
 
   if (quest === undefined || userQuest === undefined) return;
   if (quest === null || userQuest === null) return "Quest not found";
 
   return (
-    <main className="col-span-2">
+    <main className="flex-1">
       <PageHeader
         icon={ICONS[quest.icon]}
         title={quest.title}
@@ -72,26 +82,30 @@ function QuestDetailRoute() {
                 Mark as in progress
               </MenuItem>
             )}
+            <MenuSeparator />
+            <MenuItem onAction={() => handleRemoveQuest(quest._id)}>
+              Remove quest
+            </MenuItem>
           </Menu>
         </MenuTrigger>
       </PageHeader>
-      {questSteps ? (
+      {questSteps && questSteps.length > 0 ? (
         <ol className="flex flex-col gap-6">
-          {questSteps.map(
-            (step, i) =>
-              step && (
-                <li key={`${quest.title}-step-${i}`}>
-                  <QuestStep
-                    title={step.title}
-                    description={step.description}
-                    fields={step.fields}
-                  />
-                </li>
-              ),
-          )}
+          {questSteps.map((step, i) => {
+            if (!step) return;
+            return (
+              <li key={`${quest.title}-step-${i}`}>
+                <QuestStep
+                  title={step.title}
+                  description={step.description}
+                  fields={step.fields}
+                />
+              </li>
+            );
+          })}
         </ol>
       ) : (
-        <p>This quest has no steps yet.</p>
+        <Empty title="This quest has no steps" icon={RiSignpostLine} />
       )}
     </main>
   );

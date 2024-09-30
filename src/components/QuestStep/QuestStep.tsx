@@ -1,6 +1,4 @@
-import { api } from "@convex/_generated/api";
-import type { Doc, Id } from "@convex/_generated/dataModel";
-import { useQuery } from "convex/react";
+import type { Doc } from "@convex/_generated/dataModel";
 import Markdown from "react-markdown";
 import { Card } from "../Card";
 import { Checkbox } from "../Checkbox";
@@ -13,7 +11,7 @@ import { TextField } from "../TextField";
 export interface QuestStepProps {
   title: string;
   description?: string;
-  fields?: Id<"questFields">[];
+  fields?: Doc<"questFields">[];
 }
 
 export function QuestFields(props: { questFields: Doc<"questFields">[] }) {
@@ -70,10 +68,6 @@ export function QuestFields(props: { questFields: Doc<"questFields">[] }) {
 }
 
 export function QuestStep({ title, description, fields }: QuestStepProps) {
-  const questFields = useQuery(api.questFields.getFields, {
-    fieldIds: fields ?? [],
-  });
-
   return (
     <Card className="flex flex-col gap-2">
       <h2 className="text-xl font-semibold">{title}</h2>
@@ -82,7 +76,7 @@ export function QuestStep({ title, description, fields }: QuestStepProps) {
           <Markdown className="prose dark:prose-invert">{description}</Markdown>
         </div>
       )}
-      {questFields && <QuestFields questFields={questFields} />}
+      {fields && <QuestFields questFields={fields} />}
     </Card>
   );
 }

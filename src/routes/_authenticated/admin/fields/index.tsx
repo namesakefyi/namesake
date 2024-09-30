@@ -2,6 +2,9 @@ import {
   Button,
   Empty,
   Form,
+  Menu,
+  MenuItem,
+  MenuTrigger,
   Modal,
   PageHeader,
   Select,
@@ -15,9 +18,9 @@ import {
   TextField,
 } from "@/components";
 import { api } from "@convex/_generated/api";
-import type { DataModel } from "@convex/_generated/dataModel";
+import type { DataModel, Id } from "@convex/_generated/dataModel";
 import { FIELDS, type Field } from "@convex/constants";
-import { RiAddLine, RiInputField } from "@remixicon/react";
+import { RiAddLine, RiInputField, RiMoreFill } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useEffect, useState } from "react";
@@ -26,14 +29,16 @@ export const Route = createFileRoute("/_authenticated/admin/fields/")({
   component: FieldsRoute,
 });
 
-const NewFieldModal = ({
+export const NewFieldModal = ({
   isOpen,
   onOpenChange,
   onSubmit,
+  onFieldCreated,
 }: {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onSubmit: () => void;
+  onFieldCreated?: (fieldId: Id<"questFields">) => void;
 }) => {
   const createField = useMutation(api.questFields.createField);
   const [label, setLabel] = useState("");
@@ -57,12 +62,15 @@ const NewFieldModal = ({
     setType("text");
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createField({ label, slug, helpText, type });
+    const newField = await createField({ label, slug, helpText, type });
 
     clearForm();
     onSubmit();
+    if (onFieldCreated && newField) {
+      onFieldCreated(newField);
+    }
   };
 
   return (
@@ -118,6 +126,15 @@ const FieldsTableRow = ({
 }: {
   field: DataModel["questFields"]["document"];
 }) => {
+  const undeleteField = useMutation(api.questFields.undeleteField);
+  const deleteField = useMutation(api.questFields.deleteField);
+  const permanentlyDeleteField = useMutation(
+    api.questFields.permanentlyDeleteField,
+  );
+  const fieldCount = useQuery(api.questFields.getFieldUsageCount, {
+    fieldId: field._id,
+  });
+
   const Icon = FIELDS[field.type].icon;
 
   return (
@@ -126,7 +143,44 @@ const FieldsTableRow = ({
         <div className="flex items-center gap-2">
           <Icon className="text-gray-dim" />
           <div>{field.label}</div>
+          {field.deletionTime && (
+            <span className="text-red-5" slot="description">
+              {`deleted ${new Date(field.deletionTime).toLocaleString()}`}
+            </span>
+          )}
         </div>
+      </TableCell>
+      <TableCell>{field.slug}</TableCell>
+      <TableCell>{fieldCount}</TableCell>
+      <TableCell>
+        <MenuTrigger>
+          <Button variant="icon" aria-label="Actions">
+            <RiMoreFill size={16} />
+          </Button>
+          <Menu>
+            {field.deletionTime ? (
+              <>
+                <MenuItem
+                  onAction={() => undeleteField({ fieldId: field._id })}
+                >
+                  Undelete
+                </MenuItem>
+                {/* TODO: Add modal */}
+                <MenuItem
+                  onAction={() =>
+                    permanentlyDeleteField({ fieldId: field._id })
+                  }
+                >
+                  Permanently Delete
+                </MenuItem>
+              </>
+            ) : (
+              <MenuItem onAction={() => deleteField({ fieldId: field._id })}>
+                Delete
+              </MenuItem>
+            )}
+          </Menu>
+        </MenuTrigger>
       </TableCell>
     </TableRow>
   );
@@ -147,6 +201,9 @@ function FieldsRoute() {
       <Table aria-label="Fields">
         <TableHeader>
           <TableColumn isRowHeader>Field</TableColumn>
+          <TableColumn>Slug</TableColumn>
+          <TableColumn>Used in # quests</TableColumn>
+          <TableColumn />
         </TableHeader>
         <TableBody
           items={fields}
