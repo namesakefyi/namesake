@@ -80,6 +80,6 @@ jobs:
 
       - name: Report coverage
         if: always()
-        uses: davelosert/vitest-coverage-report-action@v2.5.1
+        uses: davelosert/vitest-coverage-report-action@v2.6.0
         with:
           json-summary-compare-path: coverage-main/coverage-summary.json
