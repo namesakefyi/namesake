@@ -49,6 +49,9 @@ export function Tooltip({ children, ...props }: TooltipProps) {
   );
 }
 
-export function TooltipTrigger(props: TooltipTriggerComponentProps) {
-  return <AriaTooltipTrigger {...props} />;
+export function TooltipTrigger({
+  delay,
+  ...props
+}: TooltipTriggerComponentProps) {
+  return <AriaTooltipTrigger delay={delay ?? 400} {...props} />;
 }

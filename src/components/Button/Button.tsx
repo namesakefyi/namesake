@@ -1,3 +1,4 @@
+import type { RemixiconComponentType } from "@remixicon/react";
 import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,
@@ -7,12 +8,15 @@ import { tv } from "tailwind-variants";
 import { focusRing } from "../utils";
 
 export interface ButtonProps extends AriaButtonProps {
+  children?: React.ReactNode;
+  icon?: RemixiconComponentType;
   variant?: "primary" | "secondary" | "destructive" | "icon";
+  size?: "small" | "medium";
 }
 
 export const buttonStyles = tv({
   extend: focusRing,
-  base: "px-3 py-2 h-10 text-sm font-medium transition rounded-lg flex gap-1 items-center justify-center border border-black/10 dark:border-white/10 cursor-pointer",
+  base: "py-2 text-sm font-medium transition rounded-lg flex gap-1 items-center justify-center border border-black/10 dark:border-white/10 cursor-pointer",
   variants: {
     variant: {
       primary: "bg-purple-solid",
@@ -20,22 +24,42 @@ export const buttonStyles = tv({
       destructive: "bg-red-solid",
       icon: "bg-gray-ghost text-gray-dim hover:text-gray-normal border-0 p-2 flex items-center justify-center rounded-full",
     },
+    size: {
+      small: "h-8 px-2",
+      medium: "h-10 px-3",
+    },
     isDisabled: {
       true: "cursor-default text-gray-dim opacity-50 forced-colors:text-[GrayText]",
     },
   },
   defaultVariants: {
     variant: "secondary",
+    size: "medium",
   },
 });
 
-export function Button(props: ButtonProps) {
+export function Button({
+  variant,
+  size,
+  icon: Icon,
+  className,
+  children,
+  ...props
+}: ButtonProps) {
   return (
     <AriaButton
       {...props}
-      className={composeRenderProps(props.className, (className, renderProps) =>
-        buttonStyles({ ...renderProps, variant: props.variant, className }),
+      className={composeRenderProps(className, (className, renderProps) =>
+        buttonStyles({
+          ...renderProps,
+          variant,
+          size,
+          className,
+        }),
       )}
-    />
+    >
+      {Icon && <Icon size={size === "small" ? 16 : 20} />}
+      {children}
+    </AriaButton>
   );
 }

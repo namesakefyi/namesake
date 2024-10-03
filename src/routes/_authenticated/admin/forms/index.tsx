@@ -165,9 +165,12 @@ const FormTableRow = ({ form }: { form: DataModel["forms"]["document"] }) => {
       <TableCell>{new Date(form._creationTime).toLocaleString()}</TableCell>
       <TableCell>
         <MenuTrigger>
-          <Button variant="icon" aria-label="Actions">
-            <RiMoreFill size={16} />
-          </Button>
+          <Button
+            variant="icon"
+            aria-label="Actions"
+            size="small"
+            icon={RiMoreFill}
+          />
           <Menu>
             {formUrl && (
               <MenuItem href={formUrl} target="_blank" rel="noreferrer">

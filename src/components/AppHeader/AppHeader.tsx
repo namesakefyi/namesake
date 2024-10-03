@@ -15,7 +15,7 @@ export const AppHeader = () => {
 
   const handleSignOut = () => {
     signOut();
-    redirect({ to: "/", throw: true });
+    throw redirect({ to: "/login" });
   };
 
   return (
@@ -27,9 +27,11 @@ export const AppHeader = () => {
         {isAdmin && <Link href={{ to: "/admin" }}>Admin</Link>}
         <div className="ml-auto">
           <MenuTrigger>
-            <Button aria-label="User settings" variant="icon">
-              <RiAccountCircleFill />
-            </Button>
+            <Button
+              aria-label="User settings"
+              variant="icon"
+              icon={RiAccountCircleFill}
+            />
             <Menu>
               <MenuItem href={{ to: "/settings" }}>Settings</MenuItem>
               <MenuSeparator />

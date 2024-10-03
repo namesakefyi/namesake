@@ -5,7 +5,7 @@ import {
 import { tv } from "tailwind-variants";
 
 const styles = tv({
-  base: "bg-gray-3 dark:bg-gray-6 forced-colors:bg-[ButtonBorder]",
+  base: "border-gray-dim forced-colors:bg-[ButtonBorder]",
   variants: {
     orientation: {
       horizontal: "h-px w-full",

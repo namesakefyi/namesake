@@ -1,15 +1,11 @@
-import Resend from "@auth/core/providers/resend";
+import { Password } from "@convex-dev/auth/providers/Password";
 import { convexAuth } from "@convex-dev/auth/server";
 import type { MutationCtx } from "./_generated/server";
+import { ResendOTPPasswordReset } from "./passwordReset";
 import { getUserByEmail } from "./users";
 
 export const { auth, signIn, signOut, store } = convexAuth({
-  providers: [
-    Resend({
-      apiKey: process.env.AUTH_RESEND_KEY,
-      from: process.env.AUTH_EMAIL ?? "Namesake <no-reply@namesake.fyi>",
-    }),
-  ],
+  providers: [Password({ reset: ResendOTPPasswordReset })],
 
   callbacks: {
     async createOrUpdateUser(ctx: MutationCtx, args) {
@@ -33,6 +29,10 @@ export const { auth, signIn, signOut, store } = convexAuth({
         role: "user",
         theme: "system",
       });
+    },
+
+    async redirect({ redirectTo }) {
+      return redirectTo;
     },
   },
 });

@@ -12,7 +12,7 @@ import { QuestStep } from "@/components/QuestStep/QuestStep";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { ICONS } from "@convex/constants";
-import { RiMoreLine, RiSignpostLine } from "@remixicon/react";
+import { RiMoreFill, RiSignpostLine } from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 
@@ -68,9 +68,12 @@ function QuestDetailRoute() {
         }
       >
         <MenuTrigger>
-          <Button aria-label="Quest settings" variant="icon">
-            <RiMoreLine />
-          </Button>
+          <Button
+            aria-label="Quest settings"
+            variant="icon"
+            size="small"
+            icon={RiMoreFill}
+          />
           <Menu>
             {!userQuest.completionTime && (
               <MenuItem onAction={() => handleMarkComplete(quest._id)}>

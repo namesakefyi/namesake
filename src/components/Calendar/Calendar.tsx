@@ -63,21 +63,17 @@ export function CalendarHeader() {
 
   return (
     <header className="flex items-center gap-1 pb-4 px-1 w-full">
-      <Button variant="icon" slot="previous">
-        {direction === "rtl" ? (
-          <RiArrowRightSLine aria-hidden />
-        ) : (
-          <RiArrowLeftSLine aria-hidden />
-        )}
-      </Button>
+      <Button
+        variant="icon"
+        slot="previous"
+        icon={direction === "rtl" ? RiArrowRightSLine : RiArrowLeftSLine}
+      />
       <Heading className="flex-1 font-medium text-xl text-center mx-2 text-gray-normal" />
-      <Button variant="icon" slot="next">
-        {direction === "rtl" ? (
-          <RiArrowLeftSLine aria-hidden />
-        ) : (
-          <RiArrowRightSLine aria-hidden />
-        )}
-      </Button>
+      <Button
+        variant="icon"
+        slot="next"
+        icon={direction === "rtl" ? RiArrowLeftSLine : RiArrowRightSLine}
+      />
     </header>
   );
 }
