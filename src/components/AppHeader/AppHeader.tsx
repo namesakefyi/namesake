@@ -1,7 +1,6 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import { RiAccountCircleFill } from "@remixicon/react";
-import { redirect } from "@tanstack/react-router";
 import { Authenticated, useQuery } from "convex/react";
 import { Button } from "../Button";
 import { Link } from "../Link";
@@ -15,7 +14,6 @@ export const AppHeader = () => {
 
   const handleSignOut = () => {
     signOut();
-    throw redirect({ to: "/login" });
   };
 
   return (
