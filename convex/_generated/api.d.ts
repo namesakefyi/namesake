@@ -20,6 +20,7 @@ import type * as constants from "../constants.js";
 import type * as forms from "../forms.js";
 import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
+import type * as passwordReset from "../passwordReset.js";
 import type * as questFields from "../questFields.js";
 import type * as questSteps from "../questSteps.js";
 import type * as quests from "../quests.js";
@@ -43,6 +44,7 @@ declare const fullApi: ApiFromModules<{
   forms: typeof forms;
   helpers: typeof helpers;
   http: typeof http;
+  passwordReset: typeof passwordReset;
   questFields: typeof questFields;
   questSteps: typeof questSteps;
   quests: typeof quests;

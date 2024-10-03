@@ -154,9 +154,12 @@ const FieldsTableRow = ({
       <TableCell>{fieldCount}</TableCell>
       <TableCell>
         <MenuTrigger>
-          <Button variant="icon" aria-label="Actions">
-            <RiMoreFill size={16} />
-          </Button>
+          <Button
+            variant="icon"
+            aria-label="Actions"
+            size="small"
+            icon={RiMoreFill}
+          />
           <Menu>
             {field.deletionTime ? (
               <>

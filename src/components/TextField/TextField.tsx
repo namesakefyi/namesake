@@ -1,9 +1,12 @@
+import { RiEyeCloseLine, RiEyeLine } from "@remixicon/react";
+import { useState } from "react";
 import {
   TextField as AriaTextField,
   type TextFieldProps as AriaTextFieldProps,
   type ValidationResult,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { Button } from "../Button";
 import {
   FieldDescription,
   FieldError,
@@ -12,6 +15,7 @@ import {
   Label,
   fieldBorderStyles,
 } from "../Field";
+import { Tooltip, TooltipTrigger } from "../Tooltip";
 import { composeTailwindRenderProps, focusRing } from "../utils";
 
 const inputStyles = tv({
@@ -25,7 +29,7 @@ const inputStyles = tv({
 
 export interface TextFieldProps extends AriaTextFieldProps {
   label?: string;
-  description?: string;
+  description?: string | React.ReactNode;
   icon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   errorMessage?: string | ((validation: ValidationResult) => string);
@@ -39,6 +43,8 @@ export function TextField({
   errorMessage,
   ...props
 }: TextFieldProps) {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
   return (
     <AriaTextField
       {...props}
@@ -46,12 +52,30 @@ export function TextField({
         props.className,
         "flex flex-col gap-2",
       )}
+      type={
+        props.type === "password" && isPasswordVisible ? "text" : props.type
+      }
     >
       {label && <Label>{label}</Label>}
       <FieldGroup className={inputStyles}>
         {icon}
         <Input />
         {rightIcon}
+        {props.type === "password" && (
+          <TooltipTrigger>
+            <Button
+              variant="icon"
+              aria-label={isPasswordVisible ? "Hide password" : "Show password"}
+              onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+              size="small"
+              icon={isPasswordVisible ? RiEyeLine : RiEyeCloseLine}
+              className="mr-1"
+            />
+            <Tooltip>
+              {isPasswordVisible ? "Hide password" : "Show password"}
+            </Tooltip>
+          </TooltipTrigger>
+        )}
       </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>

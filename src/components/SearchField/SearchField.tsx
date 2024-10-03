@@ -44,9 +44,9 @@ export function SearchField({
         <Button
           variant="icon"
           className="mr-1 w-7 h-7 p-0 group-empty:invisible"
-        >
-          <RiCloseLine aria-hidden className="w-4 h-4" />
-        </Button>
+          size="small"
+          icon={RiCloseLine}
+        />
       </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>
