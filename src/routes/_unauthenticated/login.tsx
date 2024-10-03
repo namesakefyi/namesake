@@ -106,6 +106,8 @@ const ForgotPassword = ({ onBack }: { onBack: () => void }) => {
           event.preventDefault();
           setIsSubmitting(true);
           const formData = new FormData(event.currentTarget);
+          formData.append("flow", "reset");
+
           signIn("password", formData)
             .then(() => {
               setStep({ email: formData.get("email") as string });
@@ -129,7 +131,6 @@ const ForgotPassword = ({ onBack }: { onBack: () => void }) => {
           value={email}
           onChange={setEmail}
         />
-        <input name="flow" type="hidden" value="reset" />
         <Button type="submit" variant="primary" isDisabled={isSubmitting}>
           Send code
         </Button>
@@ -143,12 +144,12 @@ const ForgotPassword = ({ onBack }: { onBack: () => void }) => {
           event.preventDefault();
           setIsSubmitting(true);
           const formData = new FormData(event.currentTarget);
+          formData.append("flow", "reset-verification");
+          formData.append("redirectTo", "/quests");
+          formData.append("email", step.email);
 
           try {
-            const result = await signIn("password", {
-              redirectTo: "/quests",
-              ...formData,
-            });
+            const result = await signIn("password", formData);
             if (result.redirect) {
               throw redirect({ to: result.redirect.toString() });
             }
@@ -181,8 +182,6 @@ const ForgotPassword = ({ onBack }: { onBack: () => void }) => {
           value={newPassword}
           onChange={setNewPassword}
         />
-        <input name="email" value={step.email} type="hidden" />
-        <input name="flow" value="reset-verification" type="hidden" />
         <Button type="submit" variant="primary" isDisabled={isSubmitting}>
           Reset password
         </Button>

@@ -58,7 +58,7 @@ function QuestDetailRoute() {
         title={quest.title}
         badge={
           <div className="flex gap-1">
-            <Badge>{quest.jurisdiction}</Badge>
+            {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
             {userQuest?.completionTime ? (
               <Badge variant="success">Complete</Badge>
             ) : (

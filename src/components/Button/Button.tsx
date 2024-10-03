@@ -22,7 +22,7 @@ export const buttonStyles = tv({
       primary: "bg-purple-solid",
       secondary: "bg-gray-ghost text-gray-normal",
       destructive: "bg-red-solid",
-      icon: "bg-gray-ghost text-gray-dim hover:text-gray-normal border-0 p-2 flex items-center justify-center rounded-full",
+      icon: "bg-gray-ghost text-gray-dim hover:text-gray-normal border-0 flex items-center justify-center rounded-full",
     },
     size: {
       small: "h-8 px-2",
@@ -32,6 +32,18 @@ export const buttonStyles = tv({
       true: "cursor-default text-gray-dim opacity-50 forced-colors:text-[GrayText]",
     },
   },
+  compoundVariants: [
+    {
+      variant: "icon",
+      size: "small",
+      className: "w-8 h-8",
+    },
+    {
+      variant: "icon",
+      size: "medium",
+      className: "w-10 h-10 p-2",
+    },
+  ],
   defaultVariants: {
     variant: "secondary",
     size: "medium",
