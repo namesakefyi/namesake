@@ -1,5 +1,11 @@
 # namesake
 
+## 0.5.0
+
+### Minor Changes
+
+- 39e80bc: Replace magic link signin with password form
+
 ## 0.4.0
 
 ### Minor Changes
