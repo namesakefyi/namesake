@@ -37,7 +37,7 @@
     "@mdxeditor/editor": "^3.11.5",
     "@pdfme/common": "^4.5.2",
     "@pdfme/generator": "^4.5.2",
-    "@pdfme/schemas": "^4.5.2",
+    "@pdfme/schemas": "^5.1.0",
     "@pdfme/ui": "^4.5.2",
     "@remixicon/react": "^4.2.0",
     "@tanstack/react-router": "^1.58.15",
