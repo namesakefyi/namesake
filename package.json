@@ -36,7 +36,7 @@
     "@faker-js/faker": "^9.0.3",
     "@mdxeditor/editor": "^3.11.5",
     "@pdfme/common": "^4.5.2",
-    "@pdfme/generator": "^4.5.2",
+    "@pdfme/generator": "^5.1.0",
     "@pdfme/schemas": "^4.5.2",
     "@pdfme/ui": "^4.5.2",
     "@remixicon/react": "^4.2.0",
