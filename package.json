@@ -38,7 +38,7 @@
     "@pdfme/common": "^4.5.2",
     "@pdfme/generator": "^4.5.2",
     "@pdfme/schemas": "^4.5.2",
-    "@pdfme/ui": "^4.5.2",
+    "@pdfme/ui": "^5.1.0",
     "@remixicon/react": "^4.2.0",
     "@tanstack/react-router": "^1.58.15",
     "convex": "^1.16.3",
