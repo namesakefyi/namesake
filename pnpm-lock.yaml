@@ -25,17 +25,17 @@ importers:
         specifier: ^3.14.0
         version: 3.14.0(@codemirror/language@6.10.3)(@lezer/common@1.2.2)(@lezer/highlight@1.2.1)(@types/react-dom@18.3.1)(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.18)
       '@pdfme/common':
-        specifier: ^4.5.2
-        version: 4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        specifier: ^5.1.5
+        version: 5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@pdfme/generator':
         specifier: ^5.1.5
-        version: 5.1.5(@pdfme/common@4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@pdfme/schemas@5.1.5(@pdfme/common@4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))))
+        version: 5.1.5(@pdfme/common@5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@pdfme/schemas@5.1.5(@pdfme/common@5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))))
       '@pdfme/schemas':
         specifier: ^5.1.5
-        version: 5.1.5(@pdfme/common@4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))
+        version: 5.1.5(@pdfme/common@5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))
       '@pdfme/ui':
         specifier: ^4.5.2
-        version: 4.5.2(@pdfme/common@4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@pdfme/schemas@5.1.5(@pdfme/common@4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))))(@types/react@18.3.11)(date-fns@4.1.0)
+        version: 4.5.2(@pdfme/common@5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@pdfme/schemas@5.1.5(@pdfme/common@5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))))(@types/react@18.3.11)(date-fns@4.1.0)
       '@remixicon/react':
         specifier: ^4.3.0
         version: 4.3.0(react@18.3.1)
@@ -1572,8 +1572,8 @@ packages:
   '@pdf-lib/upng@1.0.1':
     resolution: {integrity: sha512-dQK2FUMQtowVP00mtIksrlZhdFXQZPC+taih1q4CvPZ5vqdxR/LKBaFg0oAfzd1GlHZXXSPdQfzQnt+ViGvEIQ==}
 
-  '@pdfme/common@4.5.2':
-    resolution: {integrity: sha512-dgY4BzDDHGIGO7pOHwI3/lD4BToji68D7F+V5wQ+FQ1Z98zJzue8cy7PC2gF0usAOz7DzBp+c6G+1KnFjMCXew==}
+  '@pdfme/common@5.1.5':
+    resolution: {integrity: sha512-UW5mis14twkd8H+HgaS2K/Q3HQBSGNYXV7XGuOdrjfsJjH6vFUA+UrzKX3bKX7QirI2Ql6nEFI4mGW7lcAlgwA==}
     peerDependencies:
       antd: ^5.11.2
       form-render: ^2.2.20
@@ -8838,7 +8838,7 @@ snapshots:
     dependencies:
       pako: 1.0.11
 
-  '@pdfme/common@4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))':
+  '@pdfme/common@5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))':
     dependencies:
       '@pdfme/pdf-lib': 1.18.3
       antd: 5.20.6(date-fns@4.1.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)
@@ -8846,11 +8846,11 @@ snapshots:
       form-render: 2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       zod: 3.23.8
 
-  '@pdfme/generator@5.1.5(@pdfme/common@4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@pdfme/schemas@5.1.5(@pdfme/common@4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))))':
+  '@pdfme/generator@5.1.5(@pdfme/common@5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@pdfme/schemas@5.1.5(@pdfme/common@5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))))':
     dependencies:
-      '@pdfme/common': 4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+      '@pdfme/common': 5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@pdfme/pdf-lib': 1.18.3
-      '@pdfme/schemas': 5.1.5(@pdfme/common@4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))
+      '@pdfme/schemas': 5.1.5(@pdfme/common@5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))
       atob: 2.1.2
       fontkit: 2.0.4
 
@@ -8862,9 +8862,9 @@ snapshots:
       node-html-better-parser: 1.4.7
       pako: 1.0.11
 
-  '@pdfme/schemas@5.1.5(@pdfme/common@4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))':
+  '@pdfme/schemas@5.1.5(@pdfme/common@5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))':
     dependencies:
-      '@pdfme/common': 4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+      '@pdfme/common': 5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@pdfme/pdf-lib': 1.18.3
       air-datepicker: 3.5.3
       bwip-js: 4.5.1
@@ -8872,13 +8872,13 @@ snapshots:
       fast-xml-parser: 4.5.0
       fontkit: 2.0.4
 
-  '@pdfme/ui@4.5.2(@pdfme/common@4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@pdfme/schemas@5.1.5(@pdfme/common@4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))))(@types/react@18.3.11)(date-fns@4.1.0)':
+  '@pdfme/ui@4.5.2(@pdfme/common@5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))(@pdfme/schemas@5.1.5(@pdfme/common@5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))))(@types/react@18.3.11)(date-fns@4.1.0)':
     dependencies:
       '@ant-design/icons': 5.4.0(react-dom@16.14.0(react@16.14.0))(react@16.14.0)
       '@dnd-kit/core': 6.1.0(react-dom@16.14.0(react@16.14.0))(react@16.14.0)
       '@dnd-kit/sortable': 7.0.2(@dnd-kit/core@6.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@16.14.0)
-      '@pdfme/common': 4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
-      '@pdfme/schemas': 5.1.5(@pdfme/common@4.5.2(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))
+      '@pdfme/common': 5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+      '@pdfme/schemas': 5.1.5(@pdfme/common@5.1.5(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(form-render@2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)))
       '@scena/react-guides': 0.16.0
       antd: 5.20.6(date-fns@4.1.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)
       form-render: 2.4.9(@types/react@18.3.11)(antd@5.20.6(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)

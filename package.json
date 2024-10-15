@@ -35,7 +35,7 @@
     "@convex-dev/auth": "^0.0.72",
     "@faker-js/faker": "^9.0.3",
     "@mdxeditor/editor": "^3.14.0",
-    "@pdfme/common": "^4.5.2",
+    "@pdfme/common": "^5.1.5",
     "@pdfme/generator": "^5.1.5",
     "@pdfme/schemas": "^5.1.5",
     "@pdfme/ui": "^4.5.2",
