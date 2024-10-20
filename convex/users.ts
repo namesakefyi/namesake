@@ -3,7 +3,7 @@ import { v } from "convex/values";
 import { query } from "./_generated/server";
 import type { Role } from "./constants";
 import { userMutation, userQuery } from "./helpers";
-import { theme } from "./validators";
+import { sortQuestsBy, theme } from "./validators";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -61,6 +61,13 @@ export const setUserTheme = userMutation({
   args: { theme: theme },
   handler: async (ctx, args) => {
     await ctx.db.patch(ctx.userId, { theme: args.theme });
+  },
+});
+
+export const setSortQuestsBy = userMutation({
+  args: { sortQuestsBy: sortQuestsBy },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(ctx.userId, { sortQuestsBy: args.sortQuestsBy });
   },
 });
 

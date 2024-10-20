@@ -6,13 +6,22 @@ import {
   Form,
   GridList,
   GridListItem,
+  Menu,
+  MenuItem,
+  MenuSection,
+  MenuTrigger,
   Modal,
   ProgressBar,
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { ICONS } from "@convex/constants";
-import { RiAddLine, RiSignpostLine } from "@remixicon/react";
+import { ICONS, type SortQuestsBy } from "@convex/constants";
+import {
+  RiAddLine,
+  RiCheckLine,
+  RiFilter3Line,
+  RiSignpostLine,
+} from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import {
   Authenticated,
@@ -22,6 +31,7 @@ import {
 } from "convex/react";
 import { useState } from "react";
 import type { Selection } from "react-aria-components";
+import { twMerge } from "tailwind-merge";
 
 export const Route = createFileRoute("/_authenticated/quests")({
   component: IndexRoute,
@@ -110,7 +120,14 @@ const NewQuestModal = ({
 };
 
 function IndexRoute() {
+  const currentUser = useQuery(api.users.getCurrentUser);
+  const setSortQuestsBy = useMutation(api.users.setSortQuestsBy);
+
   const [isNewQuestModalOpen, setIsNewQuestModalOpen] = useState(false);
+
+  const handleSortByChange = (sortBy: SortQuestsBy) => {
+    setSortQuestsBy({ sortQuestsBy: sortBy });
+  };
 
   const MyQuests = () => {
     const myQuests = useQuery(api.userQuests.getQuestsForCurrentUser);
@@ -133,16 +150,52 @@ function IndexRoute() {
 
     const totalQuests = myQuests.length;
 
+    const sortedQuests = myQuests.sort((a, b) => {
+      if (currentUser?.sortQuestsBy === "oldest") {
+        // Sort all quests by old to new _creationTime
+        return a._creationTime - b._creationTime;
+      }
+      if (currentUser?.sortQuestsBy === "newest") {
+        // Sort all quests by new to old _creationTime
+        return b._creationTime - a._creationTime;
+      }
+      return 0;
+    });
+
     return (
       <div className="flex flex-col gap-4">
-        <ProgressBar
-          label="Quests complete"
-          value={completedQuests}
-          maxValue={totalQuests}
-          valueLabel={`${completedQuests} of ${totalQuests}`}
-        />
+        <div className="flex items-center gap-4">
+          <ProgressBar
+            label="Quests complete"
+            value={completedQuests}
+            maxValue={totalQuests}
+            valueLabel={`${completedQuests} of ${totalQuests}`}
+          />
+          <MenuTrigger>
+            <Button
+              variant="icon"
+              icon={RiFilter3Line}
+              aria-label="Filter quests"
+            />
+            <Menu
+              selectionMode="single"
+              placement="bottom end"
+              selectedKeys={new Set([currentUser?.sortQuestsBy ?? "newest"])}
+              onSelectionChange={(keys: Selection) => {
+                if (keys === "all") return;
+                if (keys.has("newest")) handleSortByChange("newest");
+                if (keys.has("oldest")) handleSortByChange("oldest");
+              }}
+            >
+              <MenuSection title="Sort by">
+                <MenuItem id="newest">Newest</MenuItem>
+                <MenuItem id="oldest">Oldest</MenuItem>
+              </MenuSection>
+            </Menu>
+          </MenuTrigger>
+        </div>
         <GridList aria-label="My quests">
-          {myQuests.map((quest) => {
+          {sortedQuests.map((quest) => {
             if (quest === null) return null;
 
             const Icon = ICONS[quest.icon];
@@ -156,10 +209,23 @@ function IndexRoute() {
                   params: { questId: quest._id },
                 }}
               >
-                <div className="flex items-center gap-2">
-                  <Icon className="text-gray-dim" />
-                  <p className="font-bold text-lg">{quest.title}</p>
-                  {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
+                <div className="flex items-center justify-between gap-2 w-full">
+                  <div
+                    className={twMerge(
+                      "flex items-center gap-2",
+                      quest.completionTime && "opacity-40",
+                    )}
+                  >
+                    <Icon size={20} />
+                    <p>{quest.title}</p>
+                    {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
+                  </div>
+                  {quest.completionTime ? (
+                    <RiCheckLine
+                      className="text-green-9 dark:text-green-dark-9 ml-auto"
+                      size={20}
+                    />
+                  ) : null}
                 </div>
               </GridListItem>
             );
@@ -168,7 +234,7 @@ function IndexRoute() {
             textValue="Add quest"
             onAction={() => setIsNewQuestModalOpen(true)}
           >
-            <RiAddLine /> Add quest
+            <RiAddLine size={20} /> Add quest
           </GridListItem>
         </GridList>
       </div>

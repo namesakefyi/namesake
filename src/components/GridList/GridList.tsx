@@ -28,11 +28,11 @@ export function GridList<T extends object>({
 
 const itemStyles = tv({
   extend: focusRing,
-  base: "relative text-gray-normal flex items-center gap-3 cursor-pointer select-none py-2 px-3 text-sm border-y border-gray-dim first:border-t-0 last:border-b-0 first:rounded-t-md last:rounded-b-md -mb-px last:mb-0 -outline-offset-2",
+  base: "relative text-gray-normal flex items-center gap-3 cursor-pointer select-none py-2 px-3 text-sm first:rounded-t-md last:rounded-b-md -mb-px last:mb-0 -outline-offset-2",
   variants: {
     isSelected: {
       false: "",
-      true: "bg-purple-subtle border-y border-purple-dim z-20",
+      true: "bg-purple-3 dark:bg-purple-dark-3 z-20",
     },
     isDisabled: {
       true: "opacity-50 cursor-default forced-colors:text-[GrayText] z-10",

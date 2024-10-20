@@ -13,11 +13,16 @@ export const getQuestsForCurrentUser = userQuery({
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .collect();
 
-    const quests = Promise.all(
-      userQuests.map((quest) => ctx.db.get(quest.questId)),
+    const quests = await Promise.all(
+      userQuests.map(async (userQuest) => {
+        const quest = await ctx.db.get(userQuest.questId);
+        return quest && quest.deletionTime === undefined
+          ? { ...quest, completionTime: userQuest.completionTime }
+          : null;
+      }),
     );
 
-    return (await quests).filter((quest) => quest?.deletionTime === undefined);
+    return quests.filter((quest) => quest !== null);
   },
 });
 

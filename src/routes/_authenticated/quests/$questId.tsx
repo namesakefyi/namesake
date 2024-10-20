@@ -74,7 +74,7 @@ function QuestDetailRoute() {
             size="small"
             icon={RiMoreFill}
           />
-          <Menu>
+          <Menu placement="bottom end">
             {!userQuest.completionTime && (
               <MenuItem onAction={() => handleMarkComplete(quest._id)}>
                 Mark complete
