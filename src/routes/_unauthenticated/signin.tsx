@@ -69,11 +69,10 @@ const SignIn = () => {
       console.error(error);
       if (error instanceof ConvexError) {
         setError(error.message);
-        setIsSubmitting(false);
       } else {
         setError("Something went wrong. Try again.");
-        setIsSubmitting(false);
       }
+      setIsSubmitting(false);
     }
   };
 
@@ -186,7 +185,11 @@ const ForgotPassword = ({ onBack }: { onBack: () => void }) => {
             })
             .catch((error) => {
               console.error(error);
-              setError(`Couldn't send code. Try again.`);
+              if (error instanceof ConvexError) {
+                setError(error.message);
+              } else {
+                setError("Couldn't send code. Is this email correct?");
+              }
               setIsSubmitting(false);
             })
             .finally(() => setIsSubmitting(false));
