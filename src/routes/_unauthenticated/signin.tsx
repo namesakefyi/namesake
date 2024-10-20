@@ -10,6 +10,8 @@ import {
   TabPanel,
   Tabs,
   TextField,
+  Tooltip,
+  TooltipTrigger,
 } from "@/components";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { RiArrowLeftSLine } from "@remixicon/react";
@@ -100,14 +102,17 @@ const SignIn = () => {
               name="password"
               type="password"
               isRequired
-              rightIcon={
-                <Button
-                  variant="ghost"
-                  size="small"
-                  onPress={() => setFlow("reset")}
-                >
-                  Forgot?
-                </Button>
+              suffix={
+                <TooltipTrigger>
+                  <Button
+                    variant="ghost"
+                    size="small"
+                    onPress={() => setFlow("reset")}
+                  >
+                    Forgot?
+                  </Button>
+                  <Tooltip>Reset password</Tooltip>
+                </TooltipTrigger>
               }
               value={password}
               onChange={setPassword}
