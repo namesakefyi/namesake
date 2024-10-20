@@ -30,16 +30,16 @@ const inputStyles = tv({
 export interface TextFieldProps extends AriaTextFieldProps {
   label?: string;
   description?: string | React.ReactNode;
-  icon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+  prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
   errorMessage?: string | ((validation: ValidationResult) => string);
 }
 
 export function TextField({
   label,
   description,
-  icon,
-  rightIcon,
+  prefix,
+  suffix,
   errorMessage,
   ...props
 }: TextFieldProps) {
@@ -58,9 +58,9 @@ export function TextField({
     >
       {label && <Label>{label}</Label>}
       <FieldGroup className={inputStyles}>
-        {icon}
+        {prefix}
         <Input />
-        {rightIcon}
+        {suffix}
         {props.type === "password" && (
           <TooltipTrigger>
             <Button

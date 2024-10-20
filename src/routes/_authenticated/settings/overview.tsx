@@ -107,7 +107,7 @@ function SettingsOverviewRoute() {
             value={name}
             onChange={handleUpdateName}
             description="How do you want to be addressed?"
-            rightIcon={textFieldIcon}
+            suffix={textFieldIcon}
           />
           <Switch
             name="isMinor"
