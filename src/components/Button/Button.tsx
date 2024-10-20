@@ -10,7 +10,7 @@ import { focusRing } from "../utils";
 export interface ButtonProps extends AriaButtonProps {
   children?: React.ReactNode;
   icon?: RemixiconComponentType;
-  variant?: "primary" | "secondary" | "destructive" | "icon";
+  variant?: "primary" | "secondary" | "destructive" | "icon" | "ghost";
   size?: "small" | "medium";
 }
 
@@ -19,10 +19,11 @@ export const buttonStyles = tv({
   base: "py-2 text-sm font-medium transition rounded-lg flex gap-1 items-center justify-center border border-black/10 dark:border-white/10 cursor-pointer",
   variants: {
     variant: {
-      primary: "bg-purple-solid",
+      primary: "bg-purple-solid text-white",
       secondary: "bg-gray-ghost text-gray-normal",
       destructive: "bg-red-solid",
       icon: "bg-gray-ghost text-gray-dim hover:text-gray-normal border-0 flex items-center justify-center rounded-full",
+      ghost: "bg-gray-ghost text-gray-dim hover:text-gray-normal border-0",
     },
     size: {
       small: "h-8 px-2",

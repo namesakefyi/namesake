@@ -111,7 +111,7 @@ function SettingsOverviewRoute() {
           />
           <Switch
             name="isMinor"
-            isSelected={user.isMinor}
+            isSelected={user.isMinor ?? false}
             onChange={() => updateIsMinor({ isMinor: !user.isMinor })}
           >
             Is minor
