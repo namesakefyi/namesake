@@ -117,7 +117,7 @@ const QuestTableRow = ({
 }: {
   quest: DataModel["quests"]["document"];
 }) => {
-  const questCount = useQuery(api.userQuests.getQuestCount, {
+  const questCount = useQuery(api.userQuests.getGlobalQuestCount, {
     questId: quest._id,
   });
   const deleteQuest = useMutation(api.quests.deleteQuest);

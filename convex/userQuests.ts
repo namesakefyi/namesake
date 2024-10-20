@@ -40,7 +40,7 @@ export const getAvailableQuestsForUser = userQuery({
   },
 });
 
-export const getQuestCount = query({
+export const getGlobalQuestCount = query({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     const quests = await ctx.db
@@ -49,6 +49,21 @@ export const getQuestCount = query({
       .collect();
 
     return quests.length;
+  },
+});
+
+export const getCompletedQuestCount = userQuery({
+  handler: async (ctx) => {
+    const userQuests = await ctx.db
+      .query("userQuests")
+      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
+      .collect();
+
+    const completedQuests = userQuests.filter(
+      (quest) => quest.completionTime !== undefined,
+    );
+
+    return completedQuests.length;
   },
 });
 
