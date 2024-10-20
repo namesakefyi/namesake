@@ -12,6 +12,7 @@ import {
   TextField,
 } from "@/components";
 import { useAuthActions } from "@convex-dev/auth/react";
+import { RiArrowLeftSLine } from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useConvexAuth } from "convex/react";
 import { ConvexError } from "convex/values";
@@ -31,13 +32,14 @@ const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate({ from: "/signin" });
-
-  if (flow === "reset")
-    return <ForgotPassword onBack={() => setFlow("signIn")} />;
+  const isClosed = process.env.NODE_ENV === "production";
 
   useEffect(() => {
     if (isAuthenticated) navigate({ to: "/quests" });
   }, [isAuthenticated, navigate]);
+
+  if (flow === "reset")
+    return <ForgotPassword onBack={() => setFlow("signIn")} />;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -67,11 +69,10 @@ const SignIn = () => {
       console.error(error);
       if (error instanceof ConvexError) {
         setError(error.message);
-        setIsSubmitting(false);
       } else {
         setError("Something went wrong. Try again.");
-        setIsSubmitting(false);
       }
+      setIsSubmitting(false);
     }
   };
 
@@ -117,43 +118,43 @@ const SignIn = () => {
           </Form>
         </TabPanel>
         <TabPanel id="signUp">
-          <Form onSubmit={handleSubmit}>
-            <TextField
-              label="Email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              isRequired
-              value={email}
-              onChange={setEmail}
-            />
-            <TextField
-              label="Password"
-              name="password"
-              type="password"
-              isRequired
-              value={password}
-              onChange={setPassword}
-            />
-            <Button type="submit" isDisabled={isSubmitting} variant="primary">
-              {isSubmitting ? "Registering..." : "Register"}
-            </Button>
-          </Form>
+          {isClosed ? (
+            <Banner variant="info">
+              <p>
+                Namesake is in active development and currently closed to
+                signups. For name change support, join us on{" "}
+                <Link href="https://namesake.fyi/chat">Discord</Link>.
+              </p>
+            </Banner>
+          ) : (
+            <Form onSubmit={handleSubmit}>
+              <TextField
+                label="Email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                isRequired
+                value={email}
+                onChange={setEmail}
+              />
+              <TextField
+                label="Password"
+                name="password"
+                type="password"
+                isRequired
+                value={password}
+                onChange={setPassword}
+              />
+              <Button type="submit" isDisabled={isSubmitting} variant="primary">
+                {isSubmitting ? "Registering..." : "Register"}
+              </Button>
+            </Form>
+          )}
         </TabPanel>
       </Tabs>
     </Card>
   );
 };
-
-const ClosedSignups = () => (
-  <Card>
-    <p>
-      Namesake is in active development and currently closed to signups. For
-      name change support, join us on{" "}
-      <Link href="https://namesake.fyi/chat">Discord</Link>.
-    </p>
-  </Card>
-);
 
 const ForgotPassword = ({ onBack }: { onBack: () => void }) => {
   const navigate = useNavigate({ from: "/signin" });
@@ -184,13 +185,26 @@ const ForgotPassword = ({ onBack }: { onBack: () => void }) => {
             })
             .catch((error) => {
               console.error(error);
-              setError(`Couldn't send code. Try again.`);
+              if (error instanceof ConvexError) {
+                setError(error.message);
+              } else {
+                setError("Couldn't send code. Is this email correct?");
+              }
               setIsSubmitting(false);
             })
             .finally(() => setIsSubmitting(false));
         }}
       >
-        <h2 className="text-lg font-medium">Reset password</h2>
+        <header className="flex items-center gap-3">
+          <Button
+            onPress={onBack}
+            icon={RiArrowLeftSLine}
+            variant="icon"
+            aria-label="Back to sign-in"
+            className="-m-2"
+          />
+          <h2 className="text-lg font-medium">Reset password</h2>
+        </header>
         {error && <Banner variant="danger">{error}</Banner>}
         <TextField
           name="email"
@@ -202,7 +216,6 @@ const ForgotPassword = ({ onBack }: { onBack: () => void }) => {
         <Button type="submit" variant="primary" isDisabled={isSubmitting}>
           Send code
         </Button>
-        <Button onPress={onBack}>Back to sign in</Button>
       </Form>
     </Card>
   ) : (
@@ -262,12 +275,10 @@ const ForgotPassword = ({ onBack }: { onBack: () => void }) => {
 };
 
 function LoginRoute() {
-  const isClosed = process.env.NODE_ENV === "production";
-
   return (
     <div className="flex flex-col w-96 max-w-full mx-auto min-h-dvh place-content-center gap-8 px-4 py-12">
       <Logo className="mb-4" />
-      {isClosed ? <ClosedSignups /> : <SignIn />}
+      <SignIn />
       <div className="flex gap-4 justify-center">
         <Link href="https://namesake.fyi">{`Namesake v${APP_VERSION}`}</Link>
         <Link href="https://namesake.fyi/chat">Support</Link>
