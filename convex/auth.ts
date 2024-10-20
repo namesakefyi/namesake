@@ -28,6 +28,7 @@ export const { auth, signIn, signOut, store } = convexAuth({
         emailVerified: args.profile.emailVerified ?? false,
         role: "user",
         theme: "system",
+        sortQuestsBy: "newest",
       });
     },
 

@@ -1,7 +1,14 @@
 import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { field, icon, jurisdiction, role, theme } from "./validators";
+import {
+  field,
+  icon,
+  jurisdiction,
+  role,
+  sortQuestsBy,
+  theme,
+} from "./validators";
 
 /**
  * Represents a collection of steps and forms for a user to complete.
@@ -92,6 +99,7 @@ const users = defineTable({
   jurisdiction: v.optional(jurisdiction),
   isMinor: v.optional(v.boolean()),
   theme: theme,
+  sortQuestsBy: v.optional(sortQuestsBy),
 }).index("email", ["email"]);
 
 /**

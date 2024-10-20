@@ -114,8 +114,8 @@ export function DropdownSection<T extends object>(
   props: DropdownSectionProps<T>,
 ) {
   return (
-    <Section className="first:-mt-[5px] after:content-[''] after:block after:h-[5px]">
-      <Header className="text-sm font-semibold text-gray-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-gray-subtle border-y border-gray-dim [&+*]:mt-1">
+    <Section>
+      <Header className="text-sm font-semibold text-gray-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-gray-subtle border-b border-gray-dim [&+*]:mt-1">
         {props.title}
       </Header>
       <Collection items={props.items}>{props.children}</Collection>
