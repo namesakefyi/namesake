@@ -31,6 +31,7 @@ const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate({ from: "/signin" });
+  const isClosed = process.env.NODE_ENV === "production";
 
   if (flow === "reset")
     return <ForgotPassword onBack={() => setFlow("signIn")} />;
@@ -117,28 +118,32 @@ const SignIn = () => {
           </Form>
         </TabPanel>
         <TabPanel id="signUp">
-          <Form onSubmit={handleSubmit}>
-            <TextField
-              label="Email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              isRequired
-              value={email}
-              onChange={setEmail}
-            />
-            <TextField
-              label="Password"
-              name="password"
-              type="password"
-              isRequired
-              value={password}
-              onChange={setPassword}
-            />
-            <Button type="submit" isDisabled={isSubmitting} variant="primary">
-              {isSubmitting ? "Registering..." : "Register"}
-            </Button>
-          </Form>
+          {isClosed ? (
+            <ClosedSignups />
+          ) : (
+            <Form onSubmit={handleSubmit}>
+              <TextField
+                label="Email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                isRequired
+                value={email}
+                onChange={setEmail}
+              />
+              <TextField
+                label="Password"
+                name="password"
+                type="password"
+                isRequired
+                value={password}
+                onChange={setPassword}
+              />
+              <Button type="submit" isDisabled={isSubmitting} variant="primary">
+                {isSubmitting ? "Registering..." : "Register"}
+              </Button>
+            </Form>
+          )}
         </TabPanel>
       </Tabs>
     </Card>
@@ -262,12 +267,10 @@ const ForgotPassword = ({ onBack }: { onBack: () => void }) => {
 };
 
 function LoginRoute() {
-  const isClosed = process.env.NODE_ENV === "production";
-
   return (
     <div className="flex flex-col w-96 max-w-full mx-auto min-h-dvh place-content-center gap-8 px-4 py-12">
       <Logo className="mb-4" />
-      {isClosed ? <ClosedSignups /> : <SignIn />}
+      <SignIn />
       <div className="flex gap-4 justify-center">
         <Link href="https://namesake.fyi">{`Namesake v${APP_VERSION}`}</Link>
         <Link href="https://namesake.fyi/chat">Support</Link>
