@@ -1,5 +1,15 @@
 # namesake
 
+## 0.6.0
+
+### Minor Changes
+
+- 28d720f: Add quest completion meter
+
+### Patch Changes
+
+- f35921f: Update signin page design
+
 ## 0.5.0
 
 ### Minor Changes
