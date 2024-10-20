@@ -12,6 +12,7 @@ import {
   TextField,
 } from "@/components";
 import { useAuthActions } from "@convex-dev/auth/react";
+import { RiArrowLeftSLine } from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useConvexAuth } from "convex/react";
 import { ConvexError } from "convex/values";
@@ -191,7 +192,16 @@ const ForgotPassword = ({ onBack }: { onBack: () => void }) => {
             .finally(() => setIsSubmitting(false));
         }}
       >
-        <h2 className="text-lg font-medium">Reset password</h2>
+        <header className="flex items-center gap-3">
+          <Button
+            onPress={onBack}
+            icon={RiArrowLeftSLine}
+            variant="icon"
+            aria-label="Back to sign-in"
+            className="-m-2"
+          />
+          <h2 className="text-lg font-medium">Reset password</h2>
+        </header>
         {error && <Banner variant="danger">{error}</Banner>}
         <TextField
           name="email"
@@ -203,7 +213,6 @@ const ForgotPassword = ({ onBack }: { onBack: () => void }) => {
         <Button type="submit" variant="primary" isDisabled={isSubmitting}>
           Send code
         </Button>
-        <Button onPress={onBack}>Back to sign in</Button>
       </Form>
     </Card>
   ) : (
