@@ -7,6 +7,7 @@ import {
   GridList,
   GridListItem,
   Modal,
+  ProgressBar,
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
@@ -113,6 +114,7 @@ function IndexRoute() {
 
   const MyQuests = () => {
     const myQuests = useQuery(api.userQuests.getQuestsForCurrentUser);
+    const completedQuests = useQuery(api.userQuests.getCompletedQuestCount);
 
     if (myQuests === undefined) return;
 
@@ -129,34 +131,47 @@ function IndexRoute() {
         />
       );
 
+    const totalQuests = myQuests.length;
+
     return (
-      <GridList aria-label="My quests">
-        {myQuests.map((quest) => {
-          if (quest === null) return null;
+      <div className="flex flex-col gap-4">
+        <ProgressBar
+          label="Quests complete"
+          value={completedQuests}
+          maxValue={totalQuests}
+          valueLabel={`${completedQuests} of ${totalQuests}`}
+        />
+        <GridList aria-label="My quests">
+          {myQuests.map((quest) => {
+            if (quest === null) return null;
 
-          const Icon = ICONS[quest.icon];
+            const Icon = ICONS[quest.icon];
 
-          return (
-            <GridListItem
-              textValue={quest.title}
-              key={quest._id}
-              href={{ to: "/quests/$questId", params: { questId: quest._id } }}
-            >
-              <div className="flex items-center gap-2">
-                <Icon className="text-gray-dim" />
-                <p className="font-bold text-lg">{quest.title}</p>
-                {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
-              </div>
-            </GridListItem>
-          );
-        })}
-        <GridListItem
-          textValue="Add quest"
-          onAction={() => setIsNewQuestModalOpen(true)}
-        >
-          <RiAddLine /> Add quest
-        </GridListItem>
-      </GridList>
+            return (
+              <GridListItem
+                textValue={quest.title}
+                key={quest._id}
+                href={{
+                  to: "/quests/$questId",
+                  params: { questId: quest._id },
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <Icon className="text-gray-dim" />
+                  <p className="font-bold text-lg">{quest.title}</p>
+                  {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
+                </div>
+              </GridListItem>
+            );
+          })}
+          <GridListItem
+            textValue="Add quest"
+            onAction={() => setIsNewQuestModalOpen(true)}
+          >
+            <RiAddLine /> Add quest
+          </GridListItem>
+        </GridList>
+      </div>
     );
   };
 
