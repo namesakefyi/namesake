@@ -14,7 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as UnauthenticatedImport } from './routes/_unauthenticated'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexImport } from './routes/_authenticated/index'
-import { Route as UnauthenticatedLoginImport } from './routes/_unauthenticated/login'
+import { Route as UnauthenticatedSigninImport } from './routes/_unauthenticated/signin'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedQuestsRouteImport } from './routes/_authenticated/quests/route'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin/route'
@@ -47,8 +47,8 @@ const AuthenticatedIndexRoute = AuthenticatedIndexImport.update({
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
-const UnauthenticatedLoginRoute = UnauthenticatedLoginImport.update({
-  path: '/login',
+const UnauthenticatedSigninRoute = UnauthenticatedSigninImport.update({
+  path: '/signin',
   getParentRoute: () => UnauthenticatedRoute,
 } as any)
 
@@ -173,11 +173,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedImport
     }
-    '/_unauthenticated/login': {
-      id: '/_unauthenticated/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof UnauthenticatedLoginImport
+    '/_unauthenticated/signin': {
+      id: '/_unauthenticated/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof UnauthenticatedSigninImport
       parentRoute: typeof UnauthenticatedImport
     }
     '/_authenticated/': {
@@ -346,11 +346,11 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface UnauthenticatedRouteChildren {
-  UnauthenticatedLoginRoute: typeof UnauthenticatedLoginRoute
+  UnauthenticatedSigninRoute: typeof UnauthenticatedSigninRoute
 }
 
 const UnauthenticatedRouteChildren: UnauthenticatedRouteChildren = {
-  UnauthenticatedLoginRoute: UnauthenticatedLoginRoute,
+  UnauthenticatedSigninRoute: UnauthenticatedSigninRoute,
 }
 
 const UnauthenticatedRouteWithChildren = UnauthenticatedRoute._addFileChildren(
@@ -362,7 +362,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/quests': typeof AuthenticatedQuestsRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/login': typeof UnauthenticatedLoginRoute
+  '/signin': typeof UnauthenticatedSigninRoute
   '/': typeof AuthenticatedIndexRoute
   '/quests/$questId': typeof AuthenticatedQuestsQuestIdRoute
   '/settings/data': typeof AuthenticatedSettingsDataRoute
@@ -379,7 +379,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '': typeof UnauthenticatedRouteWithChildren
-  '/login': typeof UnauthenticatedLoginRoute
+  '/signin': typeof UnauthenticatedSigninRoute
   '/': typeof AuthenticatedIndexRoute
   '/quests/$questId': typeof AuthenticatedQuestsQuestIdRoute
   '/settings/data': typeof AuthenticatedSettingsDataRoute
@@ -401,7 +401,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/quests': typeof AuthenticatedQuestsRouteRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/_unauthenticated/login': typeof UnauthenticatedLoginRoute
+  '/_unauthenticated/signin': typeof UnauthenticatedSigninRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/quests/$questId': typeof AuthenticatedQuestsQuestIdRoute
   '/_authenticated/settings/data': typeof AuthenticatedSettingsDataRoute
@@ -423,7 +423,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/quests'
     | '/settings'
-    | '/login'
+    | '/signin'
     | '/'
     | '/quests/$questId'
     | '/settings/data'
@@ -439,7 +439,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
-    | '/login'
+    | '/signin'
     | '/'
     | '/quests/$questId'
     | '/settings/data'
@@ -459,7 +459,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/quests'
     | '/_authenticated/settings'
-    | '/_unauthenticated/login'
+    | '/_unauthenticated/signin'
     | '/_authenticated/'
     | '/_authenticated/quests/$questId'
     | '/_authenticated/settings/data'
@@ -513,7 +513,7 @@ export const routeTree = rootRoute
     "/_unauthenticated": {
       "filePath": "_unauthenticated.tsx",
       "children": [
-        "/_unauthenticated/login"
+        "/_unauthenticated/signin"
       ]
     },
     "/_authenticated/admin": {
@@ -545,8 +545,8 @@ export const routeTree = rootRoute
         "/_authenticated/settings/"
       ]
     },
-    "/_unauthenticated/login": {
-      "filePath": "_unauthenticated/login.tsx",
+    "/_unauthenticated/signin": {
+      "filePath": "_unauthenticated/signin.tsx",
       "parent": "/_unauthenticated"
     },
     "/_authenticated/": {
