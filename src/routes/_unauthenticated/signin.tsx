@@ -33,12 +33,12 @@ const SignIn = () => {
   const navigate = useNavigate({ from: "/signin" });
   const isClosed = process.env.NODE_ENV === "production";
 
-  if (flow === "reset")
-    return <ForgotPassword onBack={() => setFlow("signIn")} />;
-
   useEffect(() => {
     if (isAuthenticated) navigate({ to: "/quests" });
   }, [isAuthenticated, navigate]);
+
+  if (flow === "reset")
+    return <ForgotPassword onBack={() => setFlow("signIn")} />;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
