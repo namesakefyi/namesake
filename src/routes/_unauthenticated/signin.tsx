@@ -78,7 +78,7 @@ const SignIn = () => {
   return (
     <Card>
       <Tabs selectedKey={flow} onSelectionChange={setFlow}>
-        <TabList className="grid grid-cols-2">
+        <TabList>
           <Tab id="signIn">Sign in</Tab>
           <Tab id="signUp">Register</Tab>
         </TabList>

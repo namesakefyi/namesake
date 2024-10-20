@@ -34,11 +34,11 @@ export function Tabs(props: TabsProps) {
 }
 
 const tabListStyles = tv({
-  base: "flex gap-1 bg-gray-3 dark:bg-gray-app rounded-lg p-1",
+  base: "grid bg-gray-3 dark:bg-gray-app rounded-lg p-1",
   variants: {
     orientation: {
-      horizontal: "flex-row",
-      vertical: "flex-col items-start",
+      horizontal: "grid-flow-col auto-cols-fr",
+      vertical: "grid-flow-row auto-rows-fr",
     },
   },
 });
