@@ -119,7 +119,13 @@ const SignIn = () => {
         </TabPanel>
         <TabPanel id="signUp">
           {isClosed ? (
-            <ClosedSignups />
+            <Banner variant="info">
+              <p>
+                Namesake is in active development and currently closed to
+                signups. For name change support, join us on{" "}
+                <Link href="https://namesake.fyi/chat">Discord</Link>.
+              </p>
+            </Banner>
           ) : (
             <Form onSubmit={handleSubmit}>
               <TextField
@@ -149,16 +155,6 @@ const SignIn = () => {
     </Card>
   );
 };
-
-const ClosedSignups = () => (
-  <Card>
-    <p>
-      Namesake is in active development and currently closed to signups. For
-      name change support, join us on{" "}
-      <Link href="https://namesake.fyi/chat">Discord</Link>.
-    </p>
-  </Card>
-);
 
 const ForgotPassword = ({ onBack }: { onBack: () => void }) => {
   const navigate = useNavigate({ from: "/signin" });
