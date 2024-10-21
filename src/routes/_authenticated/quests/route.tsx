@@ -6,12 +6,10 @@ import {
   Form,
   GridList,
   GridListItem,
-  Menu,
-  MenuItem,
-  MenuSection,
-  MenuTrigger,
   Modal,
   ProgressBar,
+  Tooltip,
+  TooltipTrigger,
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
@@ -19,8 +17,11 @@ import { ICONS, type SortQuestsBy } from "@convex/constants";
 import {
   RiAddLine,
   RiCheckLine,
-  RiFilter3Line,
+  RiCheckboxMultipleBlankLine,
+  RiCheckboxMultipleFill,
   RiSignpostLine,
+  RiSortNumberAsc,
+  RiSortNumberDesc,
 } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import {
@@ -29,7 +30,7 @@ import {
   useMutation,
   useQuery,
 } from "convex/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Selection } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 
@@ -120,14 +121,30 @@ const NewQuestModal = ({
 };
 
 function IndexRoute() {
-  const currentUser = useQuery(api.users.getCurrentUser);
-  const setSortQuestsBy = useMutation(api.users.setSortQuestsBy);
-
+  const [showCompleted, setShowCompleted] = useState(
+    localStorage.getItem("showCompleted") === "true",
+  );
+  const [sortBy, setSortBy] = useState<SortQuestsBy>(
+    (localStorage.getItem("sortQuestsBy") as SortQuestsBy) ?? "newest",
+  );
   const [isNewQuestModalOpen, setIsNewQuestModalOpen] = useState(false);
 
-  const handleSortByChange = (sortBy: SortQuestsBy) => {
-    setSortQuestsBy({ sortQuestsBy: sortBy });
+  const toggleSortByMenu = () => {
+    if (sortBy === "newest") setSortBy("oldest");
+    else setSortBy("newest");
   };
+
+  const toggleShowCompleted = () => {
+    setShowCompleted(!showCompleted);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("showCompleted", showCompleted.toString());
+  }, [showCompleted]);
+
+  useEffect(() => {
+    localStorage.setItem("sortQuestsBy", sortBy);
+  }, [sortBy]);
 
   const MyQuests = () => {
     const myQuests = useQuery(api.userQuests.getQuestsForCurrentUser);
@@ -151,51 +168,69 @@ function IndexRoute() {
     const totalQuests = myQuests.length;
 
     const sortedQuests = myQuests.sort((a, b) => {
-      if (currentUser?.sortQuestsBy === "oldest") {
-        // Sort all quests by old to new _creationTime
-        return a._creationTime - b._creationTime;
+      switch (sortBy) {
+        case "oldest":
+          return a._creationTime - b._creationTime;
+        case "newest":
+          return b._creationTime - a._creationTime;
+        default:
+          return 0;
       }
-      if (currentUser?.sortQuestsBy === "newest") {
-        // Sort all quests by new to old _creationTime
-        return b._creationTime - a._creationTime;
-      }
-      return 0;
+    });
+
+    const filteredQuests = sortedQuests.filter((quest) => {
+      if (showCompleted) return true;
+      return !quest.completionTime;
     });
 
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center">
           <ProgressBar
             label="Quests complete"
             value={completedQuests}
             maxValue={totalQuests}
             valueLabel={`${completedQuests} of ${totalQuests}`}
+            className="mr-4"
           />
-          <MenuTrigger>
+          {completedQuests && completedQuests > 0 && (
+            <TooltipTrigger>
+              <Button
+                aria-label="Show completed quests"
+                onPress={toggleShowCompleted}
+                icon={
+                  showCompleted
+                    ? RiCheckboxMultipleFill
+                    : RiCheckboxMultipleBlankLine
+                }
+                variant="icon"
+              />
+              <Tooltip>
+                {`${showCompleted ? "Hide" : "Show"} completed quests`}
+              </Tooltip>
+            </TooltipTrigger>
+          )}
+          <TooltipTrigger>
             <Button
+              aria-label="Sort by"
+              onPress={() => toggleSortByMenu()}
+              icon={sortBy === "newest" ? RiSortNumberAsc : RiSortNumberDesc}
               variant="icon"
-              icon={RiFilter3Line}
-              aria-label="Filter quests"
             />
-            <Menu
-              selectionMode="single"
-              placement="bottom end"
-              selectedKeys={new Set([currentUser?.sortQuestsBy ?? "newest"])}
-              onSelectionChange={(keys: Selection) => {
-                if (keys === "all") return;
-                if (keys.has("newest")) handleSortByChange("newest");
-                if (keys.has("oldest")) handleSortByChange("oldest");
-              }}
-            >
-              <MenuSection title="Sort by">
-                <MenuItem id="newest">Newest</MenuItem>
-                <MenuItem id="oldest">Oldest</MenuItem>
-              </MenuSection>
-            </Menu>
-          </MenuTrigger>
+            <Tooltip>{`Sort by ${sortBy === "newest" ? "oldest" : "newest"}`}</Tooltip>
+          </TooltipTrigger>
+          <TooltipTrigger>
+            <Button
+              aria-label="Add quest"
+              onPress={() => setIsNewQuestModalOpen(true)}
+              icon={RiAddLine}
+              variant="icon"
+            />
+            <Tooltip>Add quest</Tooltip>
+          </TooltipTrigger>
         </div>
         <GridList aria-label="My quests">
-          {sortedQuests.map((quest) => {
+          {filteredQuests.map((quest) => {
             if (quest === null) return null;
 
             const Icon = ICONS[quest.icon];
@@ -216,7 +251,7 @@ function IndexRoute() {
                       quest.completionTime && "opacity-40",
                     )}
                   >
-                    <Icon size={20} />
+                    <Icon size={20} className="text-gray-dim" />
                     <p>{quest.title}</p>
                     {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
                   </div>
@@ -230,12 +265,17 @@ function IndexRoute() {
               </GridListItem>
             );
           })}
-          <GridListItem
-            textValue="Add quest"
-            onAction={() => setIsNewQuestModalOpen(true)}
-          >
-            <RiAddLine size={20} /> Add quest
-          </GridListItem>
+          {!showCompleted && completedQuests && completedQuests > 0 && (
+            <GridListItem
+              textValue="Show completed"
+              onAction={() => setShowCompleted(true)}
+            >
+              <div className="flex items-center justify-start gap-2 w-full text-gray-dim">
+                <RiCheckLine size={20} />
+                {`${completedQuests} completed quests hidden`}
+              </div>
+            </GridListItem>
+          )}
         </GridList>
       </div>
     );
