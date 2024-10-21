@@ -272,7 +272,7 @@ function IndexRoute() {
             >
               <div className="flex items-center justify-start gap-2 w-full text-gray-dim">
                 <RiCheckLine size={20} />
-                {`${completedQuests} completed quests hidden`}
+                {`${completedQuests} completed ${completedQuests > 1 ? "quests" : "quest"} hidden`}
               </div>
             </GridListItem>
           )}
