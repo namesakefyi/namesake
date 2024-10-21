@@ -50,7 +50,7 @@ export function MenuItem(props: MenuItemProps) {
                 {isSelected && <RiCheckLine aria-hidden className="w-4 h-4" />}
               </span>
             )}
-            <span className="flex items-center cursor-pointer flex-1 gap-2 font-normal truncate group-selected:font-semibold">
+            <span className="flex items-center flex-1 gap-2 font-normal truncate group-selected:font-semibold">
               {children}
             </span>
             {hasSubmenu && (

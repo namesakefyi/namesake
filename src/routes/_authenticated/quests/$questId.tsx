@@ -1,6 +1,7 @@
 import {
   Badge,
   Button,
+  Container,
   Empty,
   Menu,
   MenuItem,
@@ -48,11 +49,13 @@ function QuestDetailRoute() {
     navigate({ to: "/quests" });
   };
 
+  // TODO: Improve loading state to prevent flash of empty
   if (quest === undefined || userQuest === undefined) return;
-  if (quest === null || userQuest === null) return "Quest not found";
+  if (quest === null || userQuest === null)
+    return <Empty title="Quest not found" icon={RiSignpostLine} />;
 
   return (
-    <main className="flex-1">
+    <div className="flex flex-col flex-1">
       <PageHeader
         icon={ICONS[quest.icon]}
         title={quest.title}
@@ -66,13 +69,14 @@ function QuestDetailRoute() {
             )}
           </div>
         }
+        className="px-6 border-b border-gray-dim h-16"
       >
         <MenuTrigger>
           <Button
             aria-label="Quest settings"
             variant="icon"
-            size="small"
             icon={RiMoreFill}
+            className="-mr-2"
           />
           <Menu placement="bottom end">
             {!userQuest.completionTime && (
@@ -92,24 +96,26 @@ function QuestDetailRoute() {
           </Menu>
         </MenuTrigger>
       </PageHeader>
-      {questSteps && questSteps.length > 0 ? (
-        <ol className="flex flex-col gap-6">
-          {questSteps.map((step, i) => {
-            if (!step) return;
-            return (
-              <li key={`${quest.title}-step-${i}`}>
-                <QuestStep
-                  title={step.title}
-                  description={step.description}
-                  fields={step.fields}
-                />
-              </li>
-            );
-          })}
-        </ol>
-      ) : (
-        <Empty title="This quest has no steps" icon={RiSignpostLine} />
-      )}
-    </main>
+      <Container className="overflow-y-auto">
+        {questSteps && questSteps.length > 0 ? (
+          <ol className="flex flex-col gap-6">
+            {questSteps.map((step, i) => {
+              if (!step) return;
+              return (
+                <li key={`${quest.title}-step-${i}`}>
+                  <QuestStep
+                    title={step.title}
+                    description={step.description}
+                    fields={step.fields}
+                  />
+                </li>
+              );
+            })}
+          </ol>
+        ) : (
+          <Empty title="This quest has no steps" icon={RiSignpostLine} />
+        )}
+      </Container>
+    </div>
   );
 }

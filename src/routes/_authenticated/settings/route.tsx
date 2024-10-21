@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_authenticated/settings")({
 function SettingsRoute() {
   return (
     <>
-      <div className="flex flex-1 max-w-screen">
+      <div className="flex flex-1 max-w-screen min-h-0">
         <Nav
           routes={[
             {
@@ -24,8 +24,7 @@ function SettingsRoute() {
             },
           ]}
         />
-
-        <Container className="max-w-xl">
+        <Container className="overflow-y-auto">
           <Outlet />
         </Container>
       </div>

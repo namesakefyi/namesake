@@ -17,7 +17,7 @@ export const getQuestsForCurrentUser = userQuery({
       userQuests.map(async (userQuest) => {
         const quest = await ctx.db.get(userQuest.questId);
         return quest && quest.deletionTime === undefined
-          ? { ...quest, completionTime: userQuest.completionTime }
+          ? { ...quest, ...userQuest }
           : null;
       }),
     );

@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AuthenticatedRoute() {
   return (
-    <main className="flex flex-col flex-1 min-h-screen text-gray-normal">
+    <main className="flex flex-col h-screen text-gray-normal">
       <AppHeader />
       <Outlet />
     </main>
