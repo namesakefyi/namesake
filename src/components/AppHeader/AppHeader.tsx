@@ -19,7 +19,7 @@ export const AppHeader = () => {
   };
 
   return (
-    <div className="flex gap-4 bg-gray-app items-center w-screen h-14 px-4 border-b border-gray-dim sticky top-0 z-20">
+    <div className="flex shrink-0 gap-4 bg-gray-app items-center w-screen h-14 px-4 border-b border-gray-dim sticky top-0 z-20">
       <Link href={{ to: "/" }}>
         <Logo className="h-[1.25rem]" />
       </Link>

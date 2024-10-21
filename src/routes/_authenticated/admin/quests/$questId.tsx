@@ -70,7 +70,7 @@ function AdminQuestDetailRoute() {
   };
 
   return (
-    <div>
+    <>
       <PageHeader
         icon={quest.icon ? ICONS[quest.icon] : undefined}
         title={quest.title}
@@ -207,6 +207,6 @@ function AdminQuestDetailRoute() {
         onSubmit={() => setIsNewFieldModalOpen(false)}
         onFieldCreated={handleFieldCreated}
       />
-    </div>
+    </>
   );
 }

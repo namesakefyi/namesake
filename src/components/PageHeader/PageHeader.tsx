@@ -1,4 +1,5 @@
 import type { RemixiconComponentType } from "@remixicon/react";
+import { twMerge } from "tailwind-merge";
 
 export interface PageHeaderProps {
   title: string;
@@ -6,6 +7,7 @@ export interface PageHeaderProps {
   badge?: React.ReactNode;
   subtitle?: string;
   children?: React.ReactNode;
+  className?: string;
 }
 
 export const PageHeader = ({
@@ -14,13 +16,19 @@ export const PageHeader = ({
   badge,
   subtitle,
   children,
+  className,
 }: PageHeaderProps) => {
   return (
-    <header className="flex items-center justify-between pb-6 gap-6 text-gray-normal">
+    <header
+      className={twMerge(
+        "h-12 flex items-center justify-between gap-6 text-gray-normal",
+        className,
+      )}
+    >
       <div className="flex flex-col gap-1">
         <div className="flex gap-2 items-center">
           {Icon && <Icon className="text-gray-dim" />}
-          <h1 className="text-2xl font-semibold">{title}</h1>
+          <h1 className="text-xl font-medium">{title}</h1>
           {badge}
         </div>
         {subtitle && <p className="text-gray-dim">{subtitle}</p>}

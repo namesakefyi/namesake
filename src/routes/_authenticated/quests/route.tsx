@@ -1,11 +1,14 @@
 import {
   Badge,
   Button,
-  Container,
   Empty,
   Form,
   GridList,
   GridListItem,
+  Menu,
+  MenuItem,
+  MenuSeparator,
+  MenuTrigger,
   Modal,
   ProgressBar,
   Tooltip,
@@ -17,11 +20,8 @@ import { ICONS, type SortQuestsBy } from "@convex/constants";
 import {
   RiAddLine,
   RiCheckLine,
-  RiCheckboxMultipleBlankLine,
-  RiCheckboxMultipleFill,
+  RiMoreFill,
   RiSignpostLine,
-  RiSortNumberAsc,
-  RiSortNumberDesc,
 } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import {
@@ -129,11 +129,6 @@ function IndexRoute() {
   );
   const [isNewQuestModalOpen, setIsNewQuestModalOpen] = useState(false);
 
-  const toggleSortByMenu = () => {
-    if (sortBy === "newest") setSortBy("oldest");
-    else setSortBy("newest");
-  };
-
   const toggleShowCompleted = () => {
     setShowCompleted(!showCompleted);
   };
@@ -184,8 +179,8 @@ function IndexRoute() {
     });
 
     return (
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center">
+      <div className="flex flex-col w-80 border-r border-gray-dim overflow-y-auto">
+        <div className="flex items-center py-3 px-4 h-16 border-b border-gray-dim">
           <ProgressBar
             label="Quests complete"
             value={completedQuests}
@@ -193,43 +188,46 @@ function IndexRoute() {
             valueLabel={`${completedQuests} of ${totalQuests}`}
             className="mr-4"
           />
-          {Boolean(completedQuests && completedQuests > 0) && (
-            <TooltipTrigger>
-              <Button
-                aria-label="Show completed quests"
-                onPress={toggleShowCompleted}
-                icon={
-                  showCompleted
-                    ? RiCheckboxMultipleFill
-                    : RiCheckboxMultipleBlankLine
-                }
-                variant="icon"
-              />
-              <Tooltip>
-                {`${showCompleted ? "Hide" : "Show"} completed quests`}
-              </Tooltip>
-            </TooltipTrigger>
-          )}
-          <TooltipTrigger>
-            <Button
-              aria-label="Sort by"
-              onPress={() => toggleSortByMenu()}
-              icon={sortBy === "newest" ? RiSortNumberAsc : RiSortNumberDesc}
-              variant="icon"
-            />
-            <Tooltip>{`Sort by ${sortBy === "newest" ? "oldest" : "newest"}`}</Tooltip>
-          </TooltipTrigger>
+          <MenuTrigger>
+            <Button icon={RiMoreFill} variant="icon" />
+            <Menu>
+              <MenuItem
+                onAction={() => setSortBy("newest")}
+                isDisabled={sortBy === "newest"}
+              >
+                Sort by newest
+              </MenuItem>
+              <MenuItem
+                onAction={() => setSortBy("oldest")}
+                isDisabled={sortBy === "oldest"}
+              >
+                Sort by oldest
+              </MenuItem>
+
+              {typeof completedQuests === "number" && completedQuests > 0 && (
+                <>
+                  <MenuSeparator />
+                  <MenuItem onAction={toggleShowCompleted}>
+                    {showCompleted
+                      ? `Hide ${completedQuests} completed ${completedQuests > 1 ? "quests" : "quest"}`
+                      : `Show ${completedQuests} completed ${completedQuests > 1 ? "quests" : "quest"}`}
+                  </MenuItem>
+                </>
+              )}
+            </Menu>
+          </MenuTrigger>
           <TooltipTrigger>
             <Button
               aria-label="Add quest"
               onPress={() => setIsNewQuestModalOpen(true)}
               icon={RiAddLine}
               variant="icon"
+              className="-mr-1"
             />
             <Tooltip>Add quest</Tooltip>
           </TooltipTrigger>
         </div>
-        <GridList aria-label="My quests">
+        <GridList aria-label="My quests" className="border-none px-1 py-2">
           {filteredQuests.map((quest) => {
             if (quest === null) return null;
 
@@ -282,9 +280,9 @@ function IndexRoute() {
   };
 
   return (
-    <Container className="max-w-screen-lg">
+    <>
       <Authenticated>
-        <div className="flex gap-6">
+        <div className="flex flex-1 min-h-0">
           <MyQuests />
           <Outlet />
         </div>
@@ -297,6 +295,6 @@ function IndexRoute() {
       <Unauthenticated>
         <h1>Please log in</h1>
       </Unauthenticated>
-    </Container>
+    </>
   );
 }
