@@ -193,7 +193,7 @@ function IndexRoute() {
             valueLabel={`${completedQuests} of ${totalQuests}`}
             className="mr-4"
           />
-          {completedQuests && completedQuests > 0 && (
+          {Boolean(completedQuests && completedQuests > 0) && (
             <TooltipTrigger>
               <Button
                 aria-label="Show completed quests"

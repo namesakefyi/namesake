@@ -22,7 +22,9 @@ export function ProgressBar({ label, ...props }: ProgressBarProps) {
         <>
           <div className="flex justify-between gap-2">
             <Label className="text-gray-normal">{label}</Label>
-            <span className="text-sm text-gray-dim">{valueText}</span>
+            <span className="text-sm text-gray-dim tabular-nums">
+              {valueText}
+            </span>
           </div>
           <div className="w-64 h-2 rounded-full bg-gray-4 dark:bg-graydark-4 outline outline-1 -outline-offset-1 outline-transparent relative overflow-hidden">
             <div
