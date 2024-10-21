@@ -239,7 +239,7 @@ function IndexRoute() {
                 key={quest._id}
                 href={{
                   to: "/quests/$questId",
-                  params: { questId: quest._id },
+                  params: { questId: quest.questId },
                 }}
               >
                 <div className="flex items-center justify-between gap-2 w-full">
