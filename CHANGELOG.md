@@ -1,5 +1,16 @@
 # namesake
 
+## 0.7.0
+
+### Minor Changes
+
+- b8f60bc: Update sidebar nav and add quest sorting
+- d2eac45: Support hiding and showing completed quests
+
+### Patch Changes
+
+- 103e0d9: Display tooltip on reset password button
+
 ## 0.6.0
 
 ### Minor Changes
