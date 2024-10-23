@@ -43,6 +43,7 @@
     "@tanstack/react-router": "^1.74.4",
     "convex": "^1.16.6",
     "convex-helpers": "^0.1.61",
+    "framer-motion": "^11.11.9",
     "next-themes": "^0.3.0",
     "oslo": "^1.2.1",
     "postcss": "^8.4.47",

@@ -15,4 +15,11 @@ export default {
     tailwindcssRadixColors,
     tailwindcssTypography,
   ],
+  theme: {
+    extend: {
+      transitionProperty: {
+        height: "height",
+      },
+    },
+  },
 } satisfies Config;
