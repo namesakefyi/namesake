@@ -43,62 +43,73 @@ const AuthenticatedRoute = AuthenticatedImport.update({
 } as any)
 
 const AuthenticatedIndexRoute = AuthenticatedIndexImport.update({
+  id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
 const UnauthenticatedSigninRoute = UnauthenticatedSigninImport.update({
+  id: '/signin',
   path: '/signin',
   getParentRoute: () => UnauthenticatedRoute,
 } as any)
 
 const AuthenticatedSettingsRouteRoute = AuthenticatedSettingsRouteImport.update(
   {
+    id: '/settings',
     path: '/settings',
     getParentRoute: () => AuthenticatedRoute,
   } as any,
 )
 
 const AuthenticatedQuestsRouteRoute = AuthenticatedQuestsRouteImport.update({
+  id: '/quests',
   path: '/quests',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
 const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
   path: '/admin',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
 const AuthenticatedSettingsIndexRoute = AuthenticatedSettingsIndexImport.update(
   {
+    id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any,
 )
 
 const AuthenticatedQuestsIndexRoute = AuthenticatedQuestsIndexImport.update({
+  id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedQuestsRouteRoute,
 } as any)
 
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexImport.update({
+  id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
 
 const AuthenticatedSettingsOverviewRoute =
   AuthenticatedSettingsOverviewImport.update({
+    id: '/overview',
     path: '/overview',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 
 const AuthenticatedSettingsDataRoute = AuthenticatedSettingsDataImport.update({
+  id: '/data',
   path: '/data',
   getParentRoute: () => AuthenticatedSettingsRouteRoute,
 } as any)
 
 const AuthenticatedQuestsQuestIdRoute = AuthenticatedQuestsQuestIdImport.update(
   {
+    id: '/$questId',
     path: '/$questId',
     getParentRoute: () => AuthenticatedQuestsRouteRoute,
   } as any,
@@ -106,30 +117,35 @@ const AuthenticatedQuestsQuestIdRoute = AuthenticatedQuestsQuestIdImport.update(
 
 const AuthenticatedAdminQuestsIndexRoute =
   AuthenticatedAdminQuestsIndexImport.update({
+    id: '/quests/',
     path: '/quests/',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 
 const AuthenticatedAdminFormsIndexRoute =
   AuthenticatedAdminFormsIndexImport.update({
+    id: '/forms/',
     path: '/forms/',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 
 const AuthenticatedAdminFieldsIndexRoute =
   AuthenticatedAdminFieldsIndexImport.update({
+    id: '/fields/',
     path: '/fields/',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 
 const AuthenticatedAdminQuestsQuestIdRoute =
   AuthenticatedAdminQuestsQuestIdImport.update({
+    id: '/quests/$questId',
     path: '/quests/$questId',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 
 const AuthenticatedAdminFormsFormIdRoute =
   AuthenticatedAdminFormsFormIdImport.update({
+    id: '/forms/$formId',
     path: '/forms/$formId',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)

@@ -5,7 +5,6 @@ import {
   type TextFieldProps as AriaTextFieldProps,
   type ValidationResult,
 } from "react-aria-components";
-import { tv } from "tailwind-variants";
 import { Button } from "../Button";
 import {
   FieldDescription,
@@ -13,19 +12,9 @@ import {
   FieldGroup,
   Input,
   Label,
-  fieldBorderStyles,
 } from "../Field";
 import { Tooltip, TooltipTrigger } from "../Tooltip";
-import { composeTailwindRenderProps, focusRing } from "../utils";
-
-const inputStyles = tv({
-  extend: focusRing,
-  base: "border rounded-lg flex",
-  variants: {
-    isFocused: fieldBorderStyles.variants.isFocusWithin,
-    ...fieldBorderStyles.variants,
-  },
-});
+import { composeTailwindRenderProps } from "../utils";
 
 export interface TextFieldProps extends AriaTextFieldProps {
   label?: string;
@@ -57,7 +46,7 @@ export function TextField({
       }
     >
       {label && <Label>{label}</Label>}
-      <FieldGroup className={inputStyles}>
+      <FieldGroup>
         {prefix}
         <Input />
         {suffix}
