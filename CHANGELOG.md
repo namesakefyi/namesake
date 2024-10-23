@@ -1,5 +1,11 @@
 # namesake
 
+## 0.7.1
+
+### Patch Changes
+
+- e77c33b: Improve login screen tab switching
+
 ## 0.7.0
 
 ### Minor Changes
