@@ -32,6 +32,7 @@ import {
 } from "convex/react";
 import { useEffect, useState } from "react";
 import type { Selection } from "react-aria-components";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
 export const Route = createFileRoute("/_authenticated/quests")({
@@ -59,12 +60,15 @@ const NewQuestModal = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    for (const questId of selectedQuests) {
-      addQuest({ questId: questId as Id<"quests"> });
-    }
+    const promises = Array.from(selectedQuests).map((questId) =>
+      addQuest({ questId: questId as Id<"quests"> }),
+    );
 
-    clearForm();
-    onSubmit();
+    Promise.all(promises).then(() => {
+      toast(`Added ${promises.length} quest${promises.length > 1 ? "s" : ""}`);
+      clearForm();
+      onSubmit();
+    });
   };
 
   return (
@@ -130,6 +134,9 @@ function IndexRoute() {
   const [isNewQuestModalOpen, setIsNewQuestModalOpen] = useState(false);
 
   const toggleShowCompleted = () => {
+    toast(
+      showCompleted ? "Hiding completed quests" : "Showing completed quests",
+    );
     setShowCompleted(!showCompleted);
   };
 

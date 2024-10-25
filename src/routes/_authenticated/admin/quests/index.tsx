@@ -22,9 +22,10 @@ import { api } from "@convex/_generated/api";
 import type { DataModel } from "@convex/_generated/dataModel";
 import { ICONS, JURISDICTIONS, type Jurisdiction } from "@convex/constants";
 import { RiAddLine, RiMoreFill, RiSignpostLine } from "@remixicon/react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/quests/")({
   component: QuestsRoute,
@@ -43,6 +44,7 @@ const NewQuestModal = ({
   const [icon, setIcon] = useState("");
   const [title, setTitle] = useState("");
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
+  const navigate = useNavigate();
 
   const clearForm = () => {
     setIcon("");
@@ -50,12 +52,23 @@ const NewQuestModal = ({
     setJurisdiction(null);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createQuest({ title, icon, jurisdiction: jurisdiction ?? undefined });
+    const questId = await createQuest({
+      title,
+      icon,
+      jurisdiction: jurisdiction ?? undefined,
+    });
 
-    clearForm();
-    onSubmit();
+    if (questId) {
+      toast(`Created quest: ${title}`);
+      clearForm();
+      onSubmit();
+      navigate({
+        to: "/admin/quests/$questId",
+        params: { questId },
+      });
+    }
   };
 
   return (

@@ -16,6 +16,7 @@ import { ICONS } from "@convex/constants";
 import { RiMoreFill, RiSignpostLine } from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/quests/$questId")({
   component: QuestDetailRoute,
@@ -38,15 +39,21 @@ function QuestDetailRoute() {
   const markIncomplete = useMutation(api.userQuests.markIncomplete);
   const removeQuest = useMutation(api.userQuests.removeQuest);
 
-  const handleMarkComplete = (questId: Id<"quests">) =>
-    markComplete({ questId });
-  const handleMarkIncomplete = (questId: Id<"quests">) =>
-    markIncomplete({ questId });
-  const handleRemoveQuest = (questId: Id<"quests">) => {
-    // TODO: Add confirmation toast
-    removeQuest({ questId });
-    // Redirect to quests
-    navigate({ to: "/quests" });
+  const handleMarkComplete = (questId: Id<"quests">, title: string) => {
+    markComplete({ questId }).then(() => {
+      toast(`Marked ${title} complete`);
+    });
+  };
+  const handleMarkIncomplete = (questId: Id<"quests">, title: string) => {
+    markIncomplete({ questId }).then(() => {
+      toast(`Marked ${title} as in progress`);
+    });
+  };
+  const handleRemoveQuest = (questId: Id<"quests">, title: string) => {
+    removeQuest({ questId }).then(() => {
+      toast(`Removed ${title} quest`);
+      navigate({ to: "/quests" });
+    });
   };
 
   // TODO: Improve loading state to prevent flash of empty
@@ -80,17 +87,23 @@ function QuestDetailRoute() {
           />
           <Menu placement="bottom end">
             {!userQuest.completionTime && (
-              <MenuItem onAction={() => handleMarkComplete(quest._id)}>
+              <MenuItem
+                onAction={() => handleMarkComplete(quest._id, quest.title)}
+              >
                 Mark complete
               </MenuItem>
             )}
             {userQuest.completionTime && (
-              <MenuItem onAction={() => handleMarkIncomplete(quest._id)}>
+              <MenuItem
+                onAction={() => handleMarkIncomplete(quest._id, quest.title)}
+              >
                 Mark as in progress
               </MenuItem>
             )}
             <MenuSeparator />
-            <MenuItem onAction={() => handleRemoveQuest(quest._id)}>
+            <MenuItem
+              onAction={() => handleRemoveQuest(quest._id, quest.title)}
+            >
               Remove quest
             </MenuItem>
           </Menu>
