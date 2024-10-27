@@ -20,11 +20,11 @@ export const AppHeader = () => {
 
   return (
     <div className="flex shrink-0 gap-4 bg-gray-app items-center w-screen h-14 px-4 border-b border-gray-dim sticky top-0 z-20">
-      <Link href={{ to: "/" }}>
+      <Link href={{ to: "/quests" }}>
         <Logo className="h-[1.25rem]" />
       </Link>
       <Authenticated>
-        {isAdmin && <Link href={{ to: "/admin" }}>Admin</Link>}
+        {isAdmin && <Link href={{ to: "/admin/quests" }}>Admin</Link>}
         <div className="ml-auto">
           <MenuTrigger>
             <Button
@@ -33,7 +33,7 @@ export const AppHeader = () => {
               icon={RiAccountCircleFill}
             />
             <Menu>
-              <MenuItem href={{ to: "/settings" }}>Settings</MenuItem>
+              <MenuItem href={{ to: "/settings/overview" }}>Settings</MenuItem>
               <MenuItem
                 href="https://namesake.fyi/chat"
                 target="_blank"

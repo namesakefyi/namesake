@@ -195,34 +195,37 @@ function IndexRoute() {
             valueLabel={`${completedQuests} of ${totalQuests}`}
             className="mr-4"
           />
-          <MenuTrigger>
-            <Button icon={RiMoreFill} variant="icon" />
-            <Menu>
-              <MenuItem
-                onAction={() => setSortBy("newest")}
-                isDisabled={sortBy === "newest"}
-              >
-                Sort by newest
-              </MenuItem>
-              <MenuItem
-                onAction={() => setSortBy("oldest")}
-                isDisabled={sortBy === "oldest"}
-              >
-                Sort by oldest
-              </MenuItem>
+          <TooltipTrigger>
+            <MenuTrigger>
+              <Button icon={RiMoreFill} variant="icon" />
+              <Menu>
+                <MenuItem
+                  onAction={() => setSortBy("newest")}
+                  isDisabled={sortBy === "newest"}
+                >
+                  Sort by newest
+                </MenuItem>
+                <MenuItem
+                  onAction={() => setSortBy("oldest")}
+                  isDisabled={sortBy === "oldest"}
+                >
+                  Sort by oldest
+                </MenuItem>
 
-              {typeof completedQuests === "number" && completedQuests > 0 && (
-                <>
-                  <MenuSeparator />
-                  <MenuItem onAction={toggleShowCompleted}>
-                    {showCompleted
-                      ? `Hide ${completedQuests} completed ${completedQuests > 1 ? "quests" : "quest"}`
-                      : `Show ${completedQuests} completed ${completedQuests > 1 ? "quests" : "quest"}`}
-                  </MenuItem>
-                </>
-              )}
-            </Menu>
-          </MenuTrigger>
+                {typeof completedQuests === "number" && completedQuests > 0 && (
+                  <>
+                    <MenuSeparator />
+                    <MenuItem onAction={toggleShowCompleted}>
+                      {showCompleted
+                        ? `Hide ${completedQuests} completed ${completedQuests > 1 ? "quests" : "quest"}`
+                        : `Show ${completedQuests} completed ${completedQuests > 1 ? "quests" : "quest"}`}
+                    </MenuItem>
+                  </>
+                )}
+              </Menu>
+            </MenuTrigger>
+            <Tooltip>Sort and filter</Tooltip>
+          </TooltipTrigger>
           <TooltipTrigger>
             <Button
               aria-label="Add quest"
