@@ -2,20 +2,18 @@ import {
   Badge,
   Button,
   Empty,
-  Form,
   GridList,
   GridListItem,
+  Link,
   Menu,
   MenuItem,
   MenuSeparator,
   MenuTrigger,
-  Modal,
   ProgressBar,
   Tooltip,
   TooltipTrigger,
 } from "@/components";
 import { api } from "@convex/_generated/api";
-import type { Id } from "@convex/_generated/dataModel";
 import { ICONS, type SortQuestsBy } from "@convex/constants";
 import {
   RiAddLine,
@@ -24,105 +22,14 @@ import {
   RiSignpostLine,
 } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
-import {
-  Authenticated,
-  Unauthenticated,
-  useMutation,
-  useQuery,
-} from "convex/react";
+import { Authenticated, Unauthenticated, useQuery } from "convex/react";
 import { useEffect, useState } from "react";
-import type { Selection } from "react-aria-components";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
-export const Route = createFileRoute("/_authenticated/quests")({
+export const Route = createFileRoute("/_authenticated/_home")({
   component: IndexRoute,
 });
-
-const NewQuestModal = ({
-  isOpen,
-  onOpenChange,
-  onSubmit,
-}: {
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-  onSubmit: () => void;
-}) => {
-  const [selectedQuests, setSelectedQuests] = useState<Selection>(new Set());
-  const availableQuests = useQuery(api.userQuests.getAvailableQuestsForUser);
-  const hasAvailableQuests = availableQuests && availableQuests.length > 0;
-  const addQuest = useMutation(api.userQuests.create);
-
-  const clearForm = () => {
-    setSelectedQuests(new Set());
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const promises = Array.from(selectedQuests).map((questId) =>
-      addQuest({ questId: questId as Id<"quests"> }),
-    );
-
-    Promise.all(promises).then(() => {
-      toast(`Added ${promises.length} quest${promises.length > 1 ? "s" : ""}`);
-      clearForm();
-      onSubmit();
-    });
-  };
-
-  return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <Form className="w-full" onSubmit={handleSubmit}>
-        {hasAvailableQuests ? (
-          <GridList
-            aria-label="Available quests"
-            items={availableQuests}
-            selectionMode="multiple"
-            selectedKeys={selectedQuests}
-            onSelectionChange={setSelectedQuests}
-          >
-            {availableQuests.map((quest) => {
-              const Icon = ICONS[quest.icon];
-              return (
-                <GridListItem
-                  key={quest._id}
-                  id={quest._id}
-                  textValue={quest.title}
-                >
-                  <Icon />
-                  {quest.title}
-                  {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
-                  {quest.steps &&
-                    quest.steps.length > 0 &&
-                    `${quest.steps?.length} steps`}
-                </GridListItem>
-              );
-            })}
-          </GridList>
-        ) : (
-          <Empty title="No more quests" icon={RiSignpostLine} />
-        )}
-        <div className="flex gap-2 justify-end">
-          <Button type="button" onPress={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="primary"
-            isDisabled={!hasAvailableQuests}
-          >
-            {selectedQuests === "all"
-              ? "Add all quests"
-              : selectedQuests.size > 1
-                ? `Add ${selectedQuests.size} quests`
-                : "Add quest"}
-          </Button>
-        </div>
-      </Form>
-    </Modal>
-  );
-};
 
 function IndexRoute() {
   const [showCompleted, setShowCompleted] = useState(
@@ -131,7 +38,6 @@ function IndexRoute() {
   const [sortBy, setSortBy] = useState<SortQuestsBy>(
     (localStorage.getItem("sortQuestsBy") as SortQuestsBy) ?? "newest",
   );
-  const [isNewQuestModalOpen, setIsNewQuestModalOpen] = useState(false);
 
   const toggleShowCompleted = () => {
     toast(
@@ -151,6 +57,9 @@ function IndexRoute() {
   const MyQuests = () => {
     const myQuests = useQuery(api.userQuests.getQuestsForCurrentUser);
     const completedQuests = useQuery(api.userQuests.getCompletedQuestCount);
+    const setLastSelectedQuestId = (questId: string) => {
+      localStorage.setItem("lastSelectedQuestId", questId);
+    };
 
     if (myQuests === undefined) return;
 
@@ -159,10 +68,12 @@ function IndexRoute() {
         <Empty
           title="No quests"
           icon={RiSignpostLine}
-          button={{
+          link={{
             children: "Add quest",
-            variant: "primary",
-            onPress: () => setIsNewQuestModalOpen(true),
+            button: {
+              variant: "primary",
+            },
+            href: { to: "/browse" },
           }}
         />
       );
@@ -227,14 +138,14 @@ function IndexRoute() {
             <Tooltip>Sort and filter</Tooltip>
           </TooltipTrigger>
           <TooltipTrigger>
-            <Button
+            <Link
               aria-label="Add quest"
-              onPress={() => setIsNewQuestModalOpen(true)}
-              icon={RiAddLine}
-              variant="icon"
-              className="-mr-1"
-            />
-            <Tooltip>Add quest</Tooltip>
+              href={{ to: "/browse" }}
+              button={{ variant: "icon", className: "-mr-1" }}
+            >
+              <RiAddLine size={20} />
+            </Link>
+            <Tooltip>Add quests</Tooltip>
           </TooltipTrigger>
         </div>
         <GridList aria-label="My quests" className="border-none px-1 py-2">
@@ -251,6 +162,7 @@ function IndexRoute() {
                   to: "/quests/$questId",
                   params: { questId: quest.questId },
                 }}
+                onAction={() => setLastSelectedQuestId(quest.questId)}
               >
                 <div className="flex items-center justify-between gap-2 w-full">
                   <div
@@ -296,11 +208,6 @@ function IndexRoute() {
           <MyQuests />
           <Outlet />
         </div>
-        <NewQuestModal
-          isOpen={isNewQuestModalOpen}
-          onOpenChange={setIsNewQuestModalOpen}
-          onSubmit={() => setIsNewQuestModalOpen(false)}
-        />
       </Authenticated>
       <Unauthenticated>
         <h1>Please log in</h1>

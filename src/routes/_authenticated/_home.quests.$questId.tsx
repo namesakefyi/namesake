@@ -18,7 +18,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/quests/$questId")({
+export const Route = createFileRoute("/_authenticated/_home/quests/$questId")({
   component: QuestDetailRoute,
 });
 
@@ -52,7 +52,7 @@ function QuestDetailRoute() {
   const handleRemoveQuest = (questId: Id<"quests">, title: string) => {
     removeQuest({ questId }).then(() => {
       toast(`Removed ${title} quest`);
-      navigate({ to: "/quests" });
+      navigate({ to: "/" });
     });
   };
 

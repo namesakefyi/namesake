@@ -2,6 +2,7 @@ import type { RemixiconComponentType } from "@remixicon/react";
 import type { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 import { Button, type ButtonProps } from "../Button";
+import { Link, type LinkProps } from "../Link";
 
 interface EmptyProps {
   icon: RemixiconComponentType;
@@ -10,6 +11,7 @@ interface EmptyProps {
   className?: string;
   children?: ReactNode;
   button?: ButtonProps;
+  link?: LinkProps;
 }
 
 export function Empty({
@@ -18,6 +20,7 @@ export function Empty({
   subtitle,
   className,
   button,
+  link,
 }: EmptyProps) {
   return (
     <div
@@ -30,6 +33,7 @@ export function Empty({
       <h2 className="font-semibold text-xl">{title}</h2>
       {subtitle && <p className="text-gray-dim -mt-3">{subtitle}</p>}
       {button && <Button {...button} />}
+      {link && <Link {...link} />}
     </div>
   );
 }
