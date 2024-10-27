@@ -92,12 +92,38 @@ const QuestCard = ({
 };
 
 const QuestCardGrid = ({ quests }: { quests: Doc<"quests">[] }) => {
-  const userQuests = useQuery(api.userQuests.getUserQuestsByQuestIds, {
-    questIds: quests.map((q) => q._id),
-  });
-  const questCounts = useQuery(api.userQuests.getQuestCounts, {
-    questIds: quests.map((q) => q._id),
-  });
+  const userQuests = useQuery(
+    api.userQuests.getUserQuestsByQuestIds,
+    quests.length > 0 ? { questIds: quests.map((q) => q._id) } : "skip",
+  );
+  const questCounts = useQuery(
+    api.userQuests.getQuestCounts,
+    quests.length > 0 ? { questIds: quests.map((q) => q._id) } : "skip",
+  );
+
+  const GridLayout = ({ children }: { children: React.ReactNode }) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {children}
+    </div>
+  );
+
+  if (
+    quests.length > 0 &&
+    (userQuests === undefined || questCounts === undefined)
+  ) {
+    return (
+      <GridLayout>
+        {quests.map((quest) => (
+          <QuestCard
+            key={quest._id}
+            quest={quest}
+            userQuest={undefined}
+            questCount={undefined}
+          />
+        ))}
+      </GridLayout>
+    );
+  }
 
   const userQuestsMap = new Map(
     userQuests?.map((uq) => [uq.questId, uq]) ?? [],
@@ -107,16 +133,16 @@ const QuestCardGrid = ({ quests }: { quests: Doc<"quests">[] }) => {
   );
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <GridLayout>
       {quests.map((quest) => (
         <QuestCard
           key={quest._id}
           quest={quest}
-          userQuest={userQuestsMap.get(quest._id)}
+          userQuest={userQuestsMap.get(quest._id) ?? null}
           questCount={questCountsMap.get(quest._id)}
         />
       ))}
-    </div>
+    </GridLayout>
   );
 };
 
