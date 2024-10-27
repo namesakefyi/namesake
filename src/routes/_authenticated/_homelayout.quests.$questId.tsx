@@ -8,58 +8,60 @@ import {
   MenuSeparator,
   MenuTrigger,
   PageHeader,
-} from "@/components";
-import { QuestStep } from "@/components/QuestStep/QuestStep";
-import { api } from "@convex/_generated/api";
-import type { Id } from "@convex/_generated/dataModel";
-import { ICONS } from "@convex/constants";
-import { RiMoreFill, RiSignpostLine } from "@remixicon/react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMutation, useQuery } from "convex/react";
-import { toast } from "sonner";
+} from '@/components'
+import { QuestStep } from '@/components/QuestStep/QuestStep'
+import { api } from '@convex/_generated/api'
+import type { Id } from '@convex/_generated/dataModel'
+import { ICONS } from '@convex/constants'
+import { RiMoreFill, RiSignpostLine } from '@remixicon/react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useMutation, useQuery } from 'convex/react'
+import { toast } from 'sonner'
 
-export const Route = createFileRoute("/_authenticated/quests/$questId")({
+export const Route = createFileRoute(
+  '/_authenticated/_homelayout/quests/$questId',
+)({
   component: QuestDetailRoute,
-});
+})
 
 function QuestDetailRoute() {
-  const { questId } = Route.useParams();
-  const navigate = useNavigate();
+  const { questId } = Route.useParams()
+  const navigate = useNavigate()
   // TODO: Opportunity to combine these queries?
   const quest = useQuery(api.quests.getQuest, {
-    questId: questId as Id<"quests">,
-  });
+    questId: questId as Id<'quests'>,
+  })
   const questSteps = useQuery(api.questSteps.getStepsForQuest, {
-    questId: questId as Id<"quests">,
-  });
+    questId: questId as Id<'quests'>,
+  })
   const userQuest = useQuery(api.userQuests.getUserQuestByQuestId, {
-    questId: questId as Id<"quests">,
-  });
-  const markComplete = useMutation(api.userQuests.markComplete);
-  const markIncomplete = useMutation(api.userQuests.markIncomplete);
-  const removeQuest = useMutation(api.userQuests.removeQuest);
+    questId: questId as Id<'quests'>,
+  })
+  const markComplete = useMutation(api.userQuests.markComplete)
+  const markIncomplete = useMutation(api.userQuests.markIncomplete)
+  const removeQuest = useMutation(api.userQuests.removeQuest)
 
-  const handleMarkComplete = (questId: Id<"quests">, title: string) => {
+  const handleMarkComplete = (questId: Id<'quests'>, title: string) => {
     markComplete({ questId }).then(() => {
-      toast(`Marked ${title} complete`);
-    });
-  };
-  const handleMarkIncomplete = (questId: Id<"quests">, title: string) => {
+      toast(`Marked ${title} complete`)
+    })
+  }
+  const handleMarkIncomplete = (questId: Id<'quests'>, title: string) => {
     markIncomplete({ questId }).then(() => {
-      toast(`Marked ${title} as in progress`);
-    });
-  };
-  const handleRemoveQuest = (questId: Id<"quests">, title: string) => {
+      toast(`Marked ${title} as in progress`)
+    })
+  }
+  const handleRemoveQuest = (questId: Id<'quests'>, title: string) => {
     removeQuest({ questId }).then(() => {
-      toast(`Removed ${title} quest`);
-      navigate({ to: "/quests" });
-    });
-  };
+      toast(`Removed ${title} quest`)
+      navigate({ to: '/' })
+    })
+  }
 
   // TODO: Improve loading state to prevent flash of empty
-  if (quest === undefined || userQuest === undefined) return;
+  if (quest === undefined || userQuest === undefined) return
   if (quest === null || userQuest === null)
-    return <Empty title="Quest not found" icon={RiSignpostLine} />;
+    return <Empty title="Quest not found" icon={RiSignpostLine} />
 
   return (
     <div className="flex flex-col flex-1">
@@ -113,7 +115,7 @@ function QuestDetailRoute() {
         {questSteps && questSteps.length > 0 ? (
           <ol className="flex flex-col gap-6">
             {questSteps.map((step, i) => {
-              if (!step) return;
+              if (!step) return
               return (
                 <li key={`${quest.title}-step-${i}`}>
                   <QuestStep
@@ -122,7 +124,7 @@ function QuestDetailRoute() {
                     fields={step.fields}
                   />
                 </li>
-              );
+              )
             })}
           </ol>
         ) : (
@@ -130,5 +132,5 @@ function QuestDetailRoute() {
         )}
       </Container>
     </div>
-  );
+  )
 }

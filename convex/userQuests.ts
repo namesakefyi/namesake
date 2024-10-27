@@ -47,6 +47,7 @@ export const getAvailableQuestsForUser = userQuery({
 
 export const getGlobalQuestCount = query({
   args: { questId: v.id("quests") },
+  returns: v.number(),
   handler: async (ctx, args) => {
     const quests = await ctx.db
       .query("userQuests")
@@ -58,6 +59,8 @@ export const getGlobalQuestCount = query({
 });
 
 export const getCompletedQuestCount = userQuery({
+  args: {},
+  returns: v.number(),
   handler: async (ctx) => {
     const userQuests = await ctx.db
       .query("userQuests")
@@ -74,6 +77,7 @@ export const getCompletedQuestCount = userQuery({
 
 export const create = userMutation({
   args: { questId: v.id("quests") },
+  returns: v.null(),
   handler: async (ctx, args) => {
     // Check if quest already exists for user
     const existing = await ctx.db
@@ -106,6 +110,7 @@ export const getUserQuestByQuestId = userQuery({
 
 export const markComplete = userMutation({
   args: { questId: v.id("quests") },
+  returns: v.null(),
   handler: async (ctx, args) => {
     const userQuest = await getUserQuestByQuestId(ctx, {
       questId: args.questId,
@@ -117,6 +122,7 @@ export const markComplete = userMutation({
 
 export const markIncomplete = userMutation({
   args: { questId: v.id("quests") },
+  returns: v.null(),
   handler: async (ctx, args) => {
     const userQuest = await getUserQuestByQuestId(ctx, {
       questId: args.questId,
@@ -128,11 +134,41 @@ export const markIncomplete = userMutation({
 
 export const removeQuest = userMutation({
   args: { questId: v.id("quests") },
+  returns: v.null(),
   handler: async (ctx, args) => {
     const userQuest = await getUserQuestByQuestId(ctx, {
       questId: args.questId,
     });
     if (userQuest === null) throw new Error("Quest not found");
     await ctx.db.delete(userQuest._id);
+  },
+});
+
+export const getUserQuestsByQuestIds = userQuery({
+  args: { questIds: v.array(v.id("quests")) },
+  handler: async (ctx, args) => {
+    const userQuests = await ctx.db
+      .query("userQuests")
+      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
+      .collect();
+    
+    return userQuests.filter(uq => args.questIds.includes(uq.questId));
+  },
+});
+
+export const getQuestCounts = query({
+  args: { questIds: v.array(v.id("quests")) },
+  returns: v.array(v.object({ questId: v.id("quests"), count: v.number() })),
+  handler: async (ctx, args) => {
+    const counts = await Promise.all(
+      args.questIds.map(async (questId) => {
+        const count = await ctx.db
+          .query("userQuests")
+          .withIndex("questId", q => q.eq("questId", questId))
+          .collect();
+        return { questId, count: count.length };
+      })
+    );
+    return counts;
   },
 });

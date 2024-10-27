@@ -21,7 +21,7 @@ export const PageHeader = ({
   return (
     <header
       className={twMerge(
-        "h-12 flex items-center justify-between gap-6 text-gray-normal",
+        "h-12 flex shrink-0 items-center justify-between gap-6 text-gray-normal",
         className,
       )}
     >
