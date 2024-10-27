@@ -1,66 +1,64 @@
 import {
   Badge,
   Button,
-  Empty, GridList,
+  Empty,
+  GridList,
   GridListItem,
   Link,
   Menu,
   MenuItem,
   MenuSeparator,
-  MenuTrigger, ProgressBar,
+  MenuTrigger,
+  ProgressBar,
   Tooltip,
-  TooltipTrigger
-} from '@/components'
-import { api } from '@convex/_generated/api'
-import { ICONS, type SortQuestsBy } from '@convex/constants'
+  TooltipTrigger,
+} from "@/components";
+import { api } from "@convex/_generated/api";
+import { ICONS, type SortQuestsBy } from "@convex/constants";
 import {
   RiAddLine,
   RiCheckLine,
   RiMoreFill,
   RiSignpostLine,
-} from '@remixicon/react'
-import { Outlet, createFileRoute } from '@tanstack/react-router'
-import {
-  Authenticated,
-  Unauthenticated,
-  useQuery,
-} from 'convex/react'
-import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
-import { twMerge } from 'tailwind-merge'
+} from "@remixicon/react";
+import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Authenticated, Unauthenticated, useQuery } from "convex/react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { twMerge } from "tailwind-merge";
 
-export const Route = createFileRoute('/_authenticated/_homelayout')({
+export const Route = createFileRoute("/_authenticated/_homelayout")({
   component: IndexRoute,
-})
+});
 
 function IndexRoute() {
   const [showCompleted, setShowCompleted] = useState(
-    localStorage.getItem('showCompleted') === 'true',
-  )
+    localStorage.getItem("showCompleted") === "true",
+  );
   const [sortBy, setSortBy] = useState<SortQuestsBy>(
-    (localStorage.getItem('sortQuestsBy') as SortQuestsBy) ?? 'newest',
-  )
+    (localStorage.getItem("sortQuestsBy") as SortQuestsBy) ?? "newest",
+  );
 
   const toggleShowCompleted = () => {
     toast(
-      showCompleted ? 'Hiding completed quests' : 'Showing completed quests',
-    )
-    setShowCompleted(!showCompleted)
-  }
+      showCompleted ? "Hiding completed quests" : "Showing completed quests",
+    );
+    setShowCompleted(!showCompleted);
+  };
 
   useEffect(() => {
-    localStorage.setItem('showCompleted', showCompleted.toString())
-  }, [showCompleted])
+    localStorage.setItem("showCompleted", showCompleted.toString());
+  }, [showCompleted]);
 
   useEffect(() => {
-    localStorage.setItem('sortQuestsBy', sortBy)
-  }, [sortBy])
+    localStorage.setItem("sortQuestsBy", sortBy);
+  }, [sortBy]);
 
   const MyQuests = () => {
-    const myQuests = useQuery(api.userQuests.getQuestsForCurrentUser)
-    const completedQuests = useQuery(api.userQuests.getCompletedQuestCount)
+    const myQuests = useQuery(api.userQuests.getQuestsForCurrentUser);
+    const completedQuests = useQuery(api.userQuests.getCompletedQuestCount);
 
-    if (myQuests === undefined) return
+    if (myQuests === undefined) return;
 
     if (myQuests === null || myQuests.length === 0)
       return (
@@ -68,32 +66,32 @@ function IndexRoute() {
           title="No quests"
           icon={RiSignpostLine}
           link={{
-            children: 'Add quest',
+            children: "Add quest",
             button: {
-              variant: 'primary',
+              variant: "primary",
             },
-            href: { to: '/browse' },
+            href: { to: "/browse" },
           }}
         />
-      )
+      );
 
-    const totalQuests = myQuests.length
+    const totalQuests = myQuests.length;
 
     const sortedQuests = myQuests.sort((a, b) => {
       switch (sortBy) {
-        case 'oldest':
-          return a._creationTime - b._creationTime
-        case 'newest':
-          return b._creationTime - a._creationTime
+        case "oldest":
+          return a._creationTime - b._creationTime;
+        case "newest":
+          return b._creationTime - a._creationTime;
         default:
-          return 0
+          return 0;
       }
-    })
+    });
 
     const filteredQuests = sortedQuests.filter((quest) => {
-      if (showCompleted) return true
-      return !quest.completionTime
-    })
+      if (showCompleted) return true;
+      return !quest.completionTime;
+    });
 
     return (
       <div className="flex flex-col w-80 border-r border-gray-dim overflow-y-auto">
@@ -110,25 +108,25 @@ function IndexRoute() {
               <Button icon={RiMoreFill} variant="icon" />
               <Menu>
                 <MenuItem
-                  onAction={() => setSortBy('newest')}
-                  isDisabled={sortBy === 'newest'}
+                  onAction={() => setSortBy("newest")}
+                  isDisabled={sortBy === "newest"}
                 >
                   Sort by newest
                 </MenuItem>
                 <MenuItem
-                  onAction={() => setSortBy('oldest')}
-                  isDisabled={sortBy === 'oldest'}
+                  onAction={() => setSortBy("oldest")}
+                  isDisabled={sortBy === "oldest"}
                 >
                   Sort by oldest
                 </MenuItem>
 
-                {typeof completedQuests === 'number' && completedQuests > 0 && (
+                {typeof completedQuests === "number" && completedQuests > 0 && (
                   <>
                     <MenuSeparator />
                     <MenuItem onAction={toggleShowCompleted}>
                       {showCompleted
-                        ? `Hide ${completedQuests} completed ${completedQuests > 1 ? 'quests' : 'quest'}`
-                        : `Show ${completedQuests} completed ${completedQuests > 1 ? 'quests' : 'quest'}`}
+                        ? `Hide ${completedQuests} completed ${completedQuests > 1 ? "quests" : "quest"}`
+                        : `Show ${completedQuests} completed ${completedQuests > 1 ? "quests" : "quest"}`}
                     </MenuItem>
                   </>
                 )}
@@ -139,8 +137,8 @@ function IndexRoute() {
           <TooltipTrigger>
             <Link
               aria-label="Add quest"
-              href={{ to: '/browse' }}
-              button={{ variant: 'icon', className: '-mr-1' }}
+              href={{ to: "/browse" }}
+              button={{ variant: "icon", className: "-mr-1" }}
             >
               <RiAddLine size={20} />
             </Link>
@@ -149,24 +147,24 @@ function IndexRoute() {
         </div>
         <GridList aria-label="My quests" className="border-none px-1 py-2">
           {filteredQuests.map((quest) => {
-            if (quest === null) return null
+            if (quest === null) return null;
 
-            const Icon = ICONS[quest.icon]
+            const Icon = ICONS[quest.icon];
 
             return (
               <GridListItem
                 textValue={quest.title}
                 key={quest._id}
                 href={{
-                  to: '/quests/$questId',
+                  to: "/quests/$questId",
                   params: { questId: quest.questId },
                 }}
               >
                 <div className="flex items-center justify-between gap-2 w-full">
                   <div
                     className={twMerge(
-                      'flex items-center gap-2',
-                      quest.completionTime && 'opacity-40',
+                      "flex items-center gap-2",
+                      quest.completionTime && "opacity-40",
                     )}
                   >
                     <Icon size={20} className="text-gray-dim" />
@@ -181,7 +179,7 @@ function IndexRoute() {
                   ) : null}
                 </div>
               </GridListItem>
-            )
+            );
           })}
           {!showCompleted && completedQuests && completedQuests > 0 && (
             <GridListItem
@@ -190,14 +188,14 @@ function IndexRoute() {
             >
               <div className="flex items-center justify-start gap-2 w-full text-gray-dim">
                 <RiCheckLine size={20} />
-                {`${completedQuests} completed ${completedQuests > 1 ? 'quests' : 'quest'} hidden`}
+                {`${completedQuests} completed ${completedQuests > 1 ? "quests" : "quest"} hidden`}
               </div>
             </GridListItem>
           )}
         </GridList>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <>
@@ -211,5 +209,5 @@ function IndexRoute() {
         <h1>Please log in</h1>
       </Unauthenticated>
     </>
-  )
+  );
 }

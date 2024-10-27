@@ -1,12 +1,11 @@
-import { Empty } from '@/components'
-import { RiSignpostLine } from '@remixicon/react'
-import { createFileRoute } from '@tanstack/react-router'
+import { Empty } from "@/components";
+import { RiSignpostLine } from "@remixicon/react";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/_authenticated/_homelayout/')({
+export const Route = createFileRoute("/_authenticated/_homelayout/")({
   component: IndexRoute,
-})
+});
 
 function IndexRoute() {
-  return <Empty title="No quest selected" icon={RiSignpostLine} />
+  return <Empty title="No quest selected" icon={RiSignpostLine} />;
 }
-  

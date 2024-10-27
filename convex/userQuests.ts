@@ -151,8 +151,8 @@ export const getUserQuestsByQuestIds = userQuery({
       .query("userQuests")
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .collect();
-    
-    return userQuests.filter(uq => args.questIds.includes(uq.questId));
+
+    return userQuests.filter((uq) => args.questIds.includes(uq.questId));
   },
 });
 
@@ -164,10 +164,10 @@ export const getQuestCounts = query({
       args.questIds.map(async (questId) => {
         const count = await ctx.db
           .query("userQuests")
-          .withIndex("questId", q => q.eq("questId", questId))
+          .withIndex("questId", (q) => q.eq("questId", questId))
           .collect();
         return { questId, count: count.length };
-      })
+      }),
     );
     return counts;
   },
