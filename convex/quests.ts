@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
 import { userMutation } from "./helpers";
-import { icon, jurisdiction } from "./validators";
+import { category, jurisdiction } from "./validators";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -10,6 +10,16 @@ export const getAllQuests = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db.query("quests").collect();
+  },
+});
+
+export const getAllQuestsInCategory = query({
+  args: { category: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("quests")
+      .withIndex("category", (q) => q.eq("category", args.category))
+      .collect();
   },
 });
 
@@ -34,12 +44,12 @@ export const createQuest = userMutation({
   args: {
     title: v.string(),
     jurisdiction: v.optional(jurisdiction),
-    icon: icon,
+    category: v.optional(category),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("quests", {
       title: args.title,
-      icon: args.icon,
+      category: args.category,
       jurisdiction: args.jurisdiction,
       creationUser: ctx.userId,
     });

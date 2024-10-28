@@ -14,7 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components";
 import { api } from "@convex/_generated/api";
-import { ICONS, type SortQuestsBy } from "@convex/constants";
+import type { SortQuestsBy } from "@convex/constants";
 import {
   RiAddLine,
   RiCheckLine,
@@ -152,8 +152,6 @@ function IndexRoute() {
           {filteredQuests.map((quest) => {
             if (quest === null) return null;
 
-            const Icon = ICONS[quest.icon];
-
             return (
               <GridListItem
                 textValue={quest.title}
@@ -171,7 +169,6 @@ function IndexRoute() {
                       quest.completionTime && "opacity-40",
                     )}
                   >
-                    <Icon size={20} className="text-gray-dim" />
                     <p>{quest.title}</p>
                     {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
                   </div>

@@ -12,7 +12,6 @@ import {
 import { QuestStep } from "@/components/QuestStep/QuestStep";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { ICONS } from "@convex/constants";
 import { RiMoreFill, RiSignpostLine } from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
@@ -64,7 +63,6 @@ function QuestDetailRoute() {
   return (
     <div className="flex flex-col flex-1">
       <PageHeader
-        icon={ICONS[quest.icon]}
         title={quest.title}
         badge={
           <div className="flex gap-1">
