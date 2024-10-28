@@ -1,5 +1,18 @@
 # namesake
 
+## 0.8.0
+
+### Minor Changes
+
+- 20b2fc6: Add /browse route for browsing quests
+
+### Patch Changes
+
+- 106b38d: Display confirmation toasts on success actions throughout the app
+- a50b65d: Add quest categories
+- 8ff044b: Skip top-level redirects in main nav
+- e77c33b: Improve login screen tab switching
+
 ## 0.7.0
 
 ### Minor Changes
