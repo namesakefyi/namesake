@@ -2,8 +2,8 @@ import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
+  category,
   field,
-  icon,
   jurisdiction,
   role,
   sortQuestsBy,
@@ -13,19 +13,21 @@ import {
 /**
  * Represents a collection of steps and forms for a user to complete.
  * @param title - The title of the quest. (e.g. "Court Order")
+ * @param category - The category of the quest. (e.g. "Social")
  * @param creationUser - The user who created the quest.
- * @param state - The US State the quest applies to. (e.g. "MA")
+ * @param jurisdiction - The US State the quest applies to. (e.g. "MA")
  * @param deletionTime - Time in ms since epoch when the quest was deleted.
  * @param steps - An ordered list of steps to complete the quest.
  */
 const quests = defineTable({
-  icon: icon,
   title: v.string(),
+  icon: v.optional(v.string()), // TODO: Delete
+  category: v.optional(category),
   creationUser: v.id("users"),
   jurisdiction: v.optional(jurisdiction),
   deletionTime: v.optional(v.number()),
   steps: v.optional(v.array(v.id("questSteps"))),
-});
+}).index("category", ["category"]);
 
 /**
  * Represents a single step in a quest.

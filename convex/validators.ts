@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import {
+  CATEGORIES,
   FIELDS,
-  ICONS,
   JURISDICTIONS,
   ROLES,
   SORT_QUESTS_BY,
@@ -20,14 +20,14 @@ export const role = v.union(
   ...Object.keys(ROLES).map((role) => v.literal(role)),
 );
 
-export const icon = v.union(
-  ...Object.keys(ICONS).map((icon) => v.literal(icon)),
-);
-
 export const field = v.union(
   ...Object.keys(FIELDS).map((field) => v.literal(field)),
 );
 
 export const sortQuestsBy = v.union(
   ...Object.keys(SORT_QUESTS_BY).map((sortQuestsBy) => v.literal(sortQuestsBy)),
+);
+
+export const category = v.union(
+  ...Object.keys(CATEGORIES).map((category) => v.literal(category)),
 );

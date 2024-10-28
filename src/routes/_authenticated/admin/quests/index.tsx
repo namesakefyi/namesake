@@ -20,7 +20,12 @@ import {
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { DataModel } from "@convex/_generated/dataModel";
-import { ICONS, JURISDICTIONS, type Jurisdiction } from "@convex/constants";
+import {
+  CATEGORIES,
+  type Category,
+  JURISDICTIONS,
+  type Jurisdiction,
+} from "@convex/constants";
 import { RiAddLine, RiMoreFill, RiSignpostLine } from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
@@ -41,14 +46,14 @@ const NewQuestModal = ({
   onSubmit: () => void;
 }) => {
   const createQuest = useMutation(api.quests.createQuest);
-  const [icon, setIcon] = useState("");
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState<Category | null>(null);
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
   const navigate = useNavigate();
 
   const clearForm = () => {
-    setIcon("");
     setTitle("");
+    setCategory(null);
     setJurisdiction(null);
   };
 
@@ -56,7 +61,7 @@ const NewQuestModal = ({
     e.preventDefault();
     const questId = await createQuest({
       title,
-      icon,
+      category: category ?? undefined,
       jurisdiction: jurisdiction ?? undefined,
     });
 
@@ -76,18 +81,18 @@ const NewQuestModal = ({
       <h2 className="text-xl">Create new quest</h2>
       <Form className="w-full" onSubmit={handleSubmit}>
         <Select
-          label="Icon"
-          name="icon"
-          selectedKey={icon}
-          onSelectionChange={(value) => setIcon(value as string)}
-          placeholder="Select an icon"
+          label="Category"
+          name="category"
+          selectedKey={category}
+          onSelectionChange={(value) => setCategory(value as string)}
+          placeholder="Select a category"
           isRequired
         >
-          {Object.keys(ICONS).map((key) => {
-            const Icon = ICONS[key];
+          {Object.entries(CATEGORIES).map(([key, { label, icon }]) => {
+            const Icon = icon;
             return (
               <SelectItem key={key} id={key} textValue={key}>
-                <Icon size={20} /> {key}
+                <Icon size={20} /> {label}
               </SelectItem>
             );
           })}
@@ -137,8 +142,6 @@ const QuestTableRow = ({
   const undeleteQuest = useMutation(api.quests.undeleteQuest);
   const permanentlyDeleteQuest = useMutation(api.quests.permanentlyDeleteQuest);
 
-  const Icon = ICONS[quest.icon];
-
   return (
     <TableRow
       key={quest._id}
@@ -147,7 +150,6 @@ const QuestTableRow = ({
     >
       <TableCell>
         <div className="flex items-center gap-2">
-          <Icon className="text-gray-dim" />
           <div>{quest.title}</div>
           {quest.deletionTime && (
             <span className="text-red-9 dark:text-reddark-9" slot="description">
@@ -163,6 +165,7 @@ const QuestTableRow = ({
           <span className="text-gray-dim opacity-50">—</span>
         )}
       </TableCell>
+      <TableCell>{quest.category}</TableCell>
       <TableCell>{questCount}</TableCell>
       <TableCell>{new Date(quest._creationTime).toLocaleString()}</TableCell>
       <TableCell>
@@ -217,6 +220,7 @@ function QuestsRoute() {
         <TableHeader>
           <TableColumn isRowHeader>Quest</TableColumn>
           <TableColumn>Jurisdiction</TableColumn>
+          <TableColumn>Category</TableColumn>
           <TableColumn>Used By</TableColumn>
           <TableColumn>Created</TableColumn>
           <TableColumn />

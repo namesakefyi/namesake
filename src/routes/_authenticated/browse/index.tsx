@@ -11,7 +11,7 @@ import {
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
-import { ICONS } from "@convex/constants";
+import { CATEGORIES, type Category } from "@convex/constants";
 import { RiArrowDropDownLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
@@ -31,7 +31,6 @@ const QuestCard = ({
   userQuest: Doc<"userQuests"> | null | undefined;
   questCount: number | undefined;
 }) => {
-  const Icon = ICONS[quest.icon];
   const addQuest = useMutation(api.userQuests.create);
   const removeQuest = useMutation(api.userQuests.removeQuest);
 
@@ -80,7 +79,6 @@ const QuestCard = ({
     <Card className="flex items-center justify-between h-24">
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
-          <Icon />
           {quest.title}
           {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
         </div>
@@ -91,58 +89,58 @@ const QuestCard = ({
   );
 };
 
-const QuestCardGrid = ({ quests }: { quests: Doc<"quests">[] }) => {
-  const userQuests = useQuery(
-    api.userQuests.getUserQuestsByQuestIds,
-    quests.length > 0 ? { questIds: quests.map((q) => q._id) } : "skip",
-  );
-  const questCounts = useQuery(
-    api.userQuests.getQuestCounts,
-    quests.length > 0 ? { questIds: quests.map((q) => q._id) } : "skip",
-  );
+const QuestCategoryRow = ({ category }: { category: Category }) => {
+  const quests = useQuery(api.quests.getAllQuestsInCategory, {
+    category: category,
+  });
 
-  const GridLayout = ({ children }: { children: React.ReactNode }) => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {children}
-    </div>
-  );
-
-  if (
-    quests.length > 0 &&
-    (userQuests === undefined || questCounts === undefined)
-  ) {
-    return (
-      <GridLayout>
-        {quests.map((quest) => (
-          <QuestCard
-            key={quest._id}
-            quest={quest}
-            userQuest={undefined}
-            questCount={undefined}
-          />
-        ))}
-      </GridLayout>
-    );
-  }
-
-  const userQuestsMap = new Map(
-    userQuests?.map((uq) => [uq.questId, uq]) ?? [],
-  );
-  const questCountsMap = new Map(
-    questCounts?.map((qc) => [qc.questId, qc.count]) ?? [],
-  );
+  const { label, icon } = CATEGORIES[category];
+  const Icon = icon;
 
   return (
-    <GridLayout>
+    <div className="flex flex-col gap-2">
+      <h3 className="text-gray-dim font-semibold flex items-center">
+        <Icon />
+        {label}
+      </h3>
+      {quests?.map((quest) => (
+        <QuestCard
+          key={quest._id}
+          quest={quest}
+          userQuest={undefined}
+          questCount={undefined}
+        />
+      ))}
+    </div>
+  );
+};
+
+const QuestCategoryGrid = () => {
+  const categories = Object.keys(CATEGORIES);
+
+  return (
+    <div className="flex flex-col gap-4">
+      {categories.map((category) => (
+        <QuestCategoryRow key={category} category={category} />
+      ))}
+    </div>
+  );
+};
+
+const SearchResultsGrid = ({ quests }: { quests: Doc<"quests">[] }) => {
+  if (!quests) return;
+
+  return (
+    <div className="grid">
       {quests.map((quest) => (
         <QuestCard
           key={quest._id}
           quest={quest}
-          userQuest={userQuestsMap.get(quest._id) ?? null}
-          questCount={questCountsMap.get(quest._id)}
+          userQuest={undefined}
+          questCount={undefined}
         />
       ))}
-    </GridLayout>
+    </div>
   );
 };
 
@@ -159,7 +157,11 @@ function IndexRoute() {
       <PageHeader title="Browse quests">
         <SearchField value={search} onChange={setSearch} />
       </PageHeader>
-      {filteredQuests && <QuestCardGrid quests={filteredQuests} />}
+      {filteredQuests ? (
+        <SearchResultsGrid quests={filteredQuests} />
+      ) : (
+        <QuestCategoryGrid />
+      )}
     </Container>
   );
 }
