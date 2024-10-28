@@ -40,44 +40,9 @@ export const createField = userMutation({
   },
 });
 
-export const getFieldUsageCount = query({
-  args: { fieldId: v.id("questFields") },
-  handler: async (ctx, args) => {
-    const quests = await ctx.db
-      .query("questSteps")
-      .filter((q) => q.field("fields") !== null)
-      .collect();
-
-    return quests.filter((quest) => quest.fields?.includes(args.fieldId))
-      .length;
-  },
-});
-
-export const deleteField = userMutation({
-  args: { fieldId: v.id("questFields") },
-  handler: async (ctx, args) => {
-    const usageCount = await getFieldUsageCount(ctx, args);
-    if (usageCount > 0) {
-      throw new Error("Field is in use and cannot be deleted.");
-    }
-    await ctx.db.patch(args.fieldId, { deletionTime: Date.now() });
-  },
-});
-
 export const undeleteField = userMutation({
   args: { fieldId: v.id("questFields") },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.fieldId, { deletionTime: undefined });
-  },
-});
-
-export const permanentlyDeleteField = userMutation({
-  args: { fieldId: v.id("questFields") },
-  handler: async (ctx, args) => {
-    const usageCount = await getFieldUsageCount(ctx, args);
-    if (usageCount > 0) {
-      throw new Error("Field is in use and cannot be deleted.");
-    }
-    await ctx.db.delete(args.fieldId);
   },
 });

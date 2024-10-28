@@ -56,6 +56,28 @@ export const createQuest = userMutation({
   },
 });
 
+export const updateQuest = userMutation({
+  args: {
+    // TODO: Dedupe these types from schema
+    questId: v.id("quests"),
+    title: v.string(),
+    jurisdiction: v.optional(jurisdiction),
+    category: v.optional(category),
+    urls: v.optional(v.array(v.string())),
+    content: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.questId, {
+      // TODO: Dedupe
+      title: args.title,
+      jurisdiction: args.jurisdiction,
+      category: args.category,
+      urls: args.urls,
+      content: args.content,
+    });
+  },
+});
+
 export const deleteQuest = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
