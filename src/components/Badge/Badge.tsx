@@ -1,13 +1,15 @@
+import type { RemixiconComponentType } from "@remixicon/react";
 import { tv } from "tailwind-variants";
 
 export interface BadgeProps {
   children: React.ReactNode;
   size?: "sm" | "lg";
   variant?: "info" | "success" | "danger" | "warning";
+  icon?: RemixiconComponentType;
 }
 
 const badge = tv({
-  base: "px-1.5 py-0.5 font-medium text-center bg-gray-3 dark:bg-graydark-3 text-gray-dim",
+  base: "px-1.5 py-0.5 font-medium text-center inline-flex gap-1 items-center shrink-0 bg-gray-3 dark:bg-graydark-3 text-gray-dim",
   variants: {
     size: {
       sm: "text-xs rounded",
@@ -26,12 +28,13 @@ const badge = tv({
   },
 });
 
-export function Badge(props: BadgeProps) {
+export function Badge({ icon: Icon, ...props }: BadgeProps) {
   return (
     <span
       {...props}
       className={badge({ variant: props.variant, size: props.size })}
     >
+      {Icon && <Icon size={16} />}
       {props.children}
     </span>
   );

@@ -2,17 +2,14 @@ import {
   Badge,
   Button,
   Card,
-  Container,
-  Menu,
-  MenuItem,
-  MenuTrigger,
+  Link,
   PageHeader,
   SearchField,
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { CATEGORIES, type Category } from "@convex/constants";
-import { RiArrowDropDownLine } from "@remixicon/react";
+import { RiLoader4Line } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
@@ -31,60 +28,56 @@ const QuestCard = ({
   userQuest: Doc<"userQuests"> | null | undefined;
   questCount: number | undefined;
 }) => {
+  const [isAdding, setIsAdding] = useState(false);
   const addQuest = useMutation(api.userQuests.create);
-  const removeQuest = useMutation(api.userQuests.removeQuest);
 
   const handleAddQuest = () => {
-    addQuest({ questId: quest._id }).then(() => {
-      toast.success(`Added ${quest.title} quest`);
-    });
+    setIsAdding(true);
+    addQuest({ questId: quest._id })
+      .then(() => {
+        toast.success(`Added ${quest.title} quest`);
+      })
+      .then(() => setIsAdding(false));
   };
 
-  const handleRemoveQuest = () => {
-    removeQuest({ questId: quest._id }).then(() => {
-      toast.success(`Removed ${quest.title} quest`);
-    });
-  };
-
-  const CallToAction = () => {
-    if (userQuest === undefined) return null;
-
-    if (userQuest === null) {
+  const CallToAction = ({
+    userQuest,
+  }: {
+    userQuest: Doc<"userQuests"> | null | undefined;
+  }) => {
+    if (!userQuest) {
       return (
-        <Button variant="primary" onPress={handleAddQuest}>
-          Add quest
+        <Button
+          variant="primary"
+          onPress={handleAddQuest}
+          isDisabled={isAdding}
+          aria-label={isAdding ? "Adding" : "Add quest"}
+        >
+          {isAdding ? <RiLoader4Line className="animate-spin" /> : "Add quest"}
         </Button>
       );
     }
 
     return (
-      <MenuTrigger>
-        <Button>
-          Added
-          <RiArrowDropDownLine size={20} className="-mr-1 text-gray-dim" />
-        </Button>
-        <Menu placement="bottom end">
-          <MenuItem
-            href={{ to: "/quests/$questId", params: { questId: quest._id } }}
-          >
-            Go to quest
-          </MenuItem>
-          <MenuItem onAction={handleRemoveQuest}>Remove quest</MenuItem>
-        </Menu>
-      </MenuTrigger>
+      <Link
+        href={{ to: "/quests/$questId", params: { questId: quest._id } }}
+        button={{ variant: "secondary" }}
+      >
+        Go to quest
+      </Link>
     );
   };
 
   return (
-    <Card className="flex items-center justify-between h-24">
-      <div className="flex flex-col gap-1">
+    <Card className="flex flex-col gap-4 justify-between w-64 shrink-0">
+      <div className="flex flex-col">
         <div className="flex items-center gap-2">
           {quest.title}
           {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
         </div>
         <p className="text-gray-dim">{`${questCount ?? 0} user${questCount === 1 ? "" : "s"}`}</p>
       </div>
-      <CallToAction />
+      <CallToAction userQuest={userQuest} />
     </Card>
   );
 };
@@ -94,23 +87,42 @@ const QuestCategoryRow = ({ category }: { category: Category }) => {
     category: category,
   });
 
+  const userQuests = useQuery(api.userQuests.getUserQuestsByQuestIds, {
+    questIds: quests?.map((q) => q._id) ?? [],
+  });
+
+  const questCounts = useQuery(api.userQuests.getQuestCounts, {
+    questIds: quests?.map((q) => q._id) ?? [],
+  });
+
+  if (!quests || quests.length === 0) return;
+
   const { label, icon } = CATEGORIES[category];
   const Icon = icon;
 
   return (
     <div className="flex flex-col gap-2">
-      <h3 className="text-gray-dim font-semibold flex items-center">
+      <h3 className="text-gray-dim font-semibold flex gap-2 items-center px-8 py-2 bg-gray-app sticky top-0">
         <Icon />
         {label}
       </h3>
-      {quests?.map((quest) => (
-        <QuestCard
-          key={quest._id}
-          quest={quest}
-          userQuest={undefined}
-          questCount={undefined}
-        />
-      ))}
+      <div className="w-full overflow-x-auto flex gap-4 px-8 pb-4">
+        {quests?.map((quest) => {
+          const userQuest = userQuests?.find((uq) => uq.questId === quest._id);
+          const questCount = questCounts?.find(
+            (qc) => qc.questId === quest._id,
+          )?.count;
+
+          return (
+            <QuestCard
+              key={quest._id}
+              quest={quest}
+              userQuest={userQuest}
+              questCount={questCount}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -127,11 +139,13 @@ const QuestCategoryGrid = () => {
   );
 };
 
-const SearchResultsGrid = ({ quests }: { quests: Doc<"quests">[] }) => {
+const SearchResultsGrid = ({
+  quests,
+}: { quests: Doc<"quests">[] | undefined }) => {
   if (!quests) return;
 
   return (
-    <div className="grid">
+    <div className="flex flex-wrap items-center gap-4 px-8">
       {quests.map((quest) => (
         <QuestCard
           key={quest._id}
@@ -153,15 +167,15 @@ function IndexRoute() {
   );
 
   return (
-    <Container className="flex flex-col gap-6 flex-1 overflow-y-auto">
-      <PageHeader title="Browse quests">
+    <div className="flex flex-col gap-6 flex-1 overflow-y-auto">
+      <PageHeader title="Browse quests" className="px-8 pt-4">
         <SearchField value={search} onChange={setSearch} />
       </PageHeader>
-      {filteredQuests ? (
+      {filteredQuests && search !== "" ? (
         <SearchResultsGrid quests={filteredQuests} />
       ) : (
         <QuestCategoryGrid />
       )}
-    </Container>
+    </div>
   );
 }

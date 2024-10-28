@@ -142,6 +142,14 @@ const QuestTableRow = ({
   const undeleteQuest = useMutation(api.quests.undeleteQuest);
   const permanentlyDeleteQuest = useMutation(api.quests.permanentlyDeleteQuest);
 
+  const Category = () => {
+    if (!quest.category) return;
+
+    const { icon, label } = CATEGORIES[quest.category];
+
+    return <Badge icon={icon}>{label}</Badge>;
+  };
+
   return (
     <TableRow
       key={quest._id}
@@ -165,7 +173,9 @@ const QuestTableRow = ({
           <span className="text-gray-dim opacity-50">—</span>
         )}
       </TableCell>
-      <TableCell>{quest.category}</TableCell>
+      <TableCell>
+        <Category />
+      </TableCell>
       <TableCell>{questCount}</TableCell>
       <TableCell>{new Date(quest._creationTime).toLocaleString()}</TableCell>
       <TableCell>

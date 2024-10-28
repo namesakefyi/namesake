@@ -15,7 +15,7 @@ import {
 import { QuestStep } from "@/components/QuestStep/QuestStep";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { Category, FIELDS } from "@convex/constants";
+import { FIELDS } from "@convex/constants";
 import { RiAddLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
@@ -55,6 +55,7 @@ function AdminQuestDetailRoute() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     addQuestStep({
       questId: questId as Id<"quests">,
       title,
