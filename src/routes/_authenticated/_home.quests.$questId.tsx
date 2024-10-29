@@ -12,7 +12,7 @@ import {
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { RiMoreFill, RiSignpostLine } from "@remixicon/react";
+import { RiLink, RiMoreFill, RiSignpostLine } from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import Markdown from "react-markdown";
@@ -106,11 +106,20 @@ function QuestDetailRoute() {
         </MenuTrigger>
       </PageHeader>
       <Container className="overflow-y-auto">
-        {quest.urls?.map((url) => (
-          <Link key={url} href={url}>
-            {url}
-          </Link>
-        ))}
+        {quest.urls && (
+          <div className="flex flex-col items-start gap-1 mb-4">
+            {quest.urls.map((url) => (
+              <Link
+                key={url}
+                href={url}
+                className="inline-flex gap-1 items-center"
+              >
+                <RiLink size={20} />
+                {url}
+              </Link>
+            ))}
+          </div>
+        )}
         {quest.content ? (
           <Markdown className="prose dark:prose-invert">
             {quest.content}

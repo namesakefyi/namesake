@@ -1,7 +1,6 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import { RiAccountCircleFill } from "@remixicon/react";
-import { useNavigate } from "@tanstack/react-router";
 import { Authenticated, useQuery } from "convex/react";
 import { Button } from "../Button";
 import { Link } from "../Link";
@@ -9,13 +8,12 @@ import { Logo } from "../Logo";
 import { Menu, MenuItem, MenuTrigger } from "../Menu";
 
 export const AppHeader = () => {
-  const navigate = useNavigate();
   const { signOut } = useAuthActions();
   const role = useQuery(api.users.getCurrentUserRole);
   const isAdmin = role === "admin";
 
   const handleSignOut = async () => {
-    await signOut().then(() => navigate({ to: "/signin" }));
+    await signOut();
   };
 
   return (

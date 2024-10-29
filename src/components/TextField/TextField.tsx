@@ -48,7 +48,7 @@ export function TextField({
       {label && <Label>{label}</Label>}
       <FieldGroup>
         {prefix}
-        <Input />
+        <Input className={props.type === "password" ? "font-mono" : ""} />
         {suffix}
         {props.type === "password" && (
           <TooltipTrigger>

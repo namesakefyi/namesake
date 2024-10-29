@@ -17,9 +17,8 @@ import {
 import { useAuthActions } from "@convex-dev/auth/react";
 import { RiArrowLeftSLine } from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useConvexAuth } from "convex/react";
 import { ConvexError } from "convex/values";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Key } from "react-aria";
 
 export const Route = createFileRoute("/_unauthenticated/signin")({
@@ -27,7 +26,6 @@ export const Route = createFileRoute("/_unauthenticated/signin")({
 });
 
 const SignIn = () => {
-  const { isAuthenticated } = useConvexAuth();
   const { signIn } = useAuthActions();
   const [flow, setFlow] = useState<Key>("signIn");
   const [email, setEmail] = useState<string>("");
@@ -37,43 +35,24 @@ const SignIn = () => {
   const navigate = useNavigate({ from: "/signin" });
   const isClosed = process.env.NODE_ENV === "production";
 
-  useEffect(() => {
-    if (isAuthenticated) navigate({ to: "/quests" });
-  }, [isAuthenticated, navigate]);
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
-    try {
-      const result = await signIn("password", {
-        flow,
-        email,
-        password,
-        redirectTo: "/quests",
-      });
-
-      if (!result) {
-        setError(
-          `Couldn't ${flow === "signIn" ? "sign in" : "register"}. Try again.`,
-        );
-        return;
-      }
-
-      if (result.redirect) {
-        navigate({ to: result.redirect.toString() });
-        return;
-      }
-    } catch (error) {
-      console.error(error);
-      if (error instanceof ConvexError) {
-        setError(error.message);
-      } else {
-        setError("Something went wrong. Try again.");
-      }
-      setIsSubmitting(false);
-    }
+    await signIn("password", {
+      flow,
+      email,
+      password,
+      redirectTo: "/quests",
+    })
+      .catch((error) =>
+        error instanceof ConvexError
+          ? setError(error.message)
+          : setError(error),
+      )
+      .then(() => navigate({ to: "/" }))
+      .finally(() => setIsSubmitting(false));
   };
 
   if (flow === "reset")
@@ -98,6 +77,7 @@ const SignIn = () => {
             isRequired
             value={email}
             onChange={setEmail}
+            isDisabled={isSubmitting}
           />
           <TextField
             label="Password"
@@ -118,6 +98,7 @@ const SignIn = () => {
             }
             value={password}
             onChange={setPassword}
+            isDisabled={isSubmitting}
           />
           <Button type="submit" isDisabled={isSubmitting} variant="primary">
             {isSubmitting ? "Signing in..." : "Sign in"}
@@ -281,17 +262,19 @@ const ForgotPassword = ({
 
 function LoginRoute() {
   return (
-    <div className="flex flex-col w-96 max-w-full mx-auto min-h-dvh place-content-center gap-8 px-4 py-12">
-      <Logo className="mb-4" />
-      <AnimateChangeInHeight>
+    <div className="flex flex-col w-96 max-w-full mx-auto min-h-dvh items-center justify-center gap-8 px-4 py-12">
+      <Link href="https://namesake.fyi" className="mb-4">
+        <Logo />
+      </Link>
+      <AnimateChangeInHeight className="w-full">
         <Card>
           <SignIn />
         </Card>
       </AnimateChangeInHeight>
-      <div className="flex gap-4 justify-center">
-        <Link href="https://namesake.fyi">{`Namesake v${APP_VERSION}`}</Link>
+      <div className="flex gap-4 justify-center text-sm">
+        <Link href="https://github.com/namesakefyi/namesake/releases">{`v${APP_VERSION}`}</Link>
         <Link href="https://namesake.fyi/chat">Support</Link>
-        <Link href="https://status.namesake.fyi">System Status</Link>
+        <Link href="https://status.namesake.fyi">Status</Link>
       </div>
     </div>
   );
