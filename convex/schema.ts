@@ -16,8 +16,6 @@ import {
  * @param category - The category of the quest. (e.g. "Social")
  * @param creationUser - The user who created the quest.
  * @param jurisdiction - The US State the quest applies to. (e.g. "MA")
- * @param cost - The cost (in USD) of completing the quest. (e.g. $120–140)
- * @param timeToComplete - The average amount of time required for the quest.
  * @param urls - Links to official documentation about changing names for this quest.
  * @param deletionTime - Time in ms since epoch when the quest was deleted.
  * @param content - Text written in markdown comprising the contents of the quest.
@@ -27,15 +25,6 @@ const quests = defineTable({
   category: v.optional(category),
   creationUser: v.id("users"),
   jurisdiction: v.optional(jurisdiction),
-  // TODO: Implement
-  // cost: v.optional(
-  //   v.object({
-  //     min: v.number(),
-  //     max: v.optional(v.number()),
-  //     details: v.optional(v.string()),
-  //   }),
-  // ),
-  // timeToComplete: v.optional(v.string()),
   urls: v.optional(v.array(v.string())),
   deletionTime: v.optional(v.number()),
   content: v.optional(v.string()),

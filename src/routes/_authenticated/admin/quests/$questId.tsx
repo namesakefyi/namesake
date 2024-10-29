@@ -65,7 +65,6 @@ function AdminQuestDetailRoute() {
     }
   }, [quest]);
 
-  // Move the early returns after all hook calls
   if (quest === undefined) return null;
   if (quest === null) return <div>Form not found</div>;
 
@@ -125,7 +124,7 @@ function AdminQuestDetailRoute() {
       <div className="flex flex-col gap-2">
         {urls.map((url, index) => (
           <URLInput
-            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+            // biome-ignore lint/suspicious/noArrayIndexKey:
             key={index}
             value={url}
             onChange={(value) => {
