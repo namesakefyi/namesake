@@ -2,9 +2,6 @@ import {
   Button,
   Empty,
   Form,
-  Menu,
-  MenuItem,
-  MenuTrigger,
   Modal,
   PageHeader,
   Select,
@@ -20,7 +17,7 @@ import {
 import { api } from "@convex/_generated/api";
 import type { DataModel, Id } from "@convex/_generated/dataModel";
 import { FIELDS, type Field } from "@convex/constants";
-import { RiAddLine, RiInputField, RiMoreFill } from "@remixicon/react";
+import { RiAddLine, RiInputField } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useEffect, useState } from "react";
@@ -126,15 +123,6 @@ const FieldsTableRow = ({
 }: {
   field: DataModel["questFields"]["document"];
 }) => {
-  const undeleteField = useMutation(api.questFields.undeleteField);
-  const deleteField = useMutation(api.questFields.deleteField);
-  const permanentlyDeleteField = useMutation(
-    api.questFields.permanentlyDeleteField,
-  );
-  const fieldCount = useQuery(api.questFields.getFieldUsageCount, {
-    fieldId: field._id,
-  });
-
   const Icon = FIELDS[field.type].icon;
 
   return (
@@ -151,40 +139,6 @@ const FieldsTableRow = ({
         </div>
       </TableCell>
       <TableCell>{field.slug}</TableCell>
-      <TableCell>{fieldCount}</TableCell>
-      <TableCell>
-        <MenuTrigger>
-          <Button
-            variant="icon"
-            aria-label="Actions"
-            size="small"
-            icon={RiMoreFill}
-          />
-          <Menu>
-            {field.deletionTime ? (
-              <>
-                <MenuItem
-                  onAction={() => undeleteField({ fieldId: field._id })}
-                >
-                  Undelete
-                </MenuItem>
-                {/* TODO: Add modal */}
-                <MenuItem
-                  onAction={() =>
-                    permanentlyDeleteField({ fieldId: field._id })
-                  }
-                >
-                  Permanently Delete
-                </MenuItem>
-              </>
-            ) : (
-              <MenuItem onAction={() => deleteField({ fieldId: field._id })}>
-                Delete
-              </MenuItem>
-            )}
-          </Menu>
-        </MenuTrigger>
-      </TableCell>
     </TableRow>
   );
 };
@@ -205,8 +159,6 @@ function FieldsRoute() {
         <TableHeader>
           <TableColumn isRowHeader>Field</TableColumn>
           <TableColumn>Slug</TableColumn>
-          <TableColumn>Used in # quests</TableColumn>
-          <TableColumn />
         </TableHeader>
         <TableBody
           items={fields}

@@ -16,34 +16,19 @@ import {
  * @param category - The category of the quest. (e.g. "Social")
  * @param creationUser - The user who created the quest.
  * @param jurisdiction - The US State the quest applies to. (e.g. "MA")
+ * @param urls - Links to official documentation about changing names for this quest.
  * @param deletionTime - Time in ms since epoch when the quest was deleted.
- * @param steps - An ordered list of steps to complete the quest.
+ * @param content - Text written in markdown comprising the contents of the quest.
  */
 const quests = defineTable({
   title: v.string(),
-  icon: v.optional(v.string()), // TODO: Delete
   category: v.optional(category),
   creationUser: v.id("users"),
   jurisdiction: v.optional(jurisdiction),
+  urls: v.optional(v.array(v.string())),
   deletionTime: v.optional(v.number()),
-  steps: v.optional(v.array(v.id("questSteps"))),
+  content: v.optional(v.string()),
 }).index("category", ["category"]);
-
-/**
- * Represents a single step in a quest.
- * @param questId - The quest this step belongs to.
- * @param creationUser - The user who created the step.
- * @param title - The title of the step. (e.g. "Fill out form")
- * @param description - A description of the step.
- * @param fields - An array of form fields to complete the step.
- */
-const questSteps = defineTable({
-  questId: v.id("quests"),
-  creationUser: v.id("users"),
-  title: v.string(),
-  description: v.optional(v.string()),
-  fields: v.optional(v.array(v.id("questFields"))),
-}).index("questId", ["questId"]);
 
 /**
  * Represents a single input field which may be shared across multiple quests
@@ -132,7 +117,6 @@ export default defineSchema({
   ...authTables,
   forms,
   quests,
-  questSteps,
   questFields,
   users,
   userQuests,

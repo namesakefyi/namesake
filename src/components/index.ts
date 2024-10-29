@@ -30,7 +30,6 @@ export * from "./NumberField";
 export * from "./PageHeader";
 export * from "./Popover";
 export * from "./ProgressBar";
-export * from "./QuestStep";
 export * from "./RadioGroup";
 export * from "./RangeCalendar";
 export * from "./RichTextEditor";

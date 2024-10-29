@@ -3,18 +3,19 @@ import {
   Button,
   Container,
   Empty,
+  Link,
   Menu,
   MenuItem,
   MenuSeparator,
   MenuTrigger,
   PageHeader,
 } from "@/components";
-import { QuestStep } from "@/components/QuestStep/QuestStep";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { RiMoreFill, RiSignpostLine } from "@remixicon/react";
+import { RiLink, RiMoreFill, RiSignpostLine } from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
+import Markdown from "react-markdown";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/_home/quests/$questId")({
@@ -26,9 +27,6 @@ function QuestDetailRoute() {
   const navigate = useNavigate();
   // TODO: Opportunity to combine these queries?
   const quest = useQuery(api.quests.getQuest, {
-    questId: questId as Id<"quests">,
-  });
-  const questSteps = useQuery(api.questSteps.getStepsForQuest, {
     questId: questId as Id<"quests">,
   });
   const userQuest = useQuery(api.userQuests.getUserQuestByQuestId, {
@@ -108,23 +106,26 @@ function QuestDetailRoute() {
         </MenuTrigger>
       </PageHeader>
       <Container className="overflow-y-auto">
-        {questSteps && questSteps.length > 0 ? (
-          <ol className="flex flex-col gap-6">
-            {questSteps.map((step, i) => {
-              if (!step) return;
-              return (
-                <li key={`${quest.title}-step-${i}`}>
-                  <QuestStep
-                    title={step.title}
-                    description={step.description}
-                    fields={step.fields}
-                  />
-                </li>
-              );
-            })}
-          </ol>
+        {quest.urls && (
+          <div className="flex flex-col items-start gap-1 mb-4">
+            {quest.urls.map((url) => (
+              <Link
+                key={url}
+                href={url}
+                className="inline-flex gap-1 items-center"
+              >
+                <RiLink size={20} />
+                {url}
+              </Link>
+            ))}
+          </div>
+        )}
+        {quest.content ? (
+          <Markdown className="prose dark:prose-invert">
+            {quest.content}
+          </Markdown>
         ) : (
-          <Empty title="This quest has no steps" icon={RiSignpostLine} />
+          "No content"
         )}
       </Container>
     </div>
