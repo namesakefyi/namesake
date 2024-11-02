@@ -1,5 +1,15 @@
 # namesake
 
+## 0.9.0
+
+### Minor Changes
+
+- 7c317df: Support adding URLs to quests, combine questSteps into single markdown field
+
+### Patch Changes
+
+- 7c317df: Fix redirecting after sign in and sign out
+
 ## 0.8.0
 
 ### Minor Changes
