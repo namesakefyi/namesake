@@ -33,7 +33,7 @@ const seed = internalMutation(async (ctx) => {
         role: "admin",
         emailVerified: faker.datatype.boolean(),
         theme: faker.helpers.arrayElement(["system", "light", "dark"]),
-        sortQuestsBy: "newest",
+        groupQuestsBy: "dateAdded",
       });
       console.log(`Created user ${firstName} ${lastName}`);
 

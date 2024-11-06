@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
+import type { Category } from "./constants";
 import { userMutation, userQuery } from "./helpers";
 
 // TODO: Add `returns` value validation
@@ -23,6 +24,18 @@ export const getQuestsForCurrentUser = userQuery({
     );
 
     return quests.filter((quest) => quest !== null);
+  },
+});
+
+export const getUserQuestCount = userQuery({
+  args: {},
+  returns: v.number(),
+  handler: async (ctx) => {
+    const userQuests = await ctx.db
+      .query("userQuests")
+      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
+      .collect();
+    return userQuests.length;
   },
 });
 
@@ -170,5 +183,117 @@ export const getQuestCounts = query({
       }),
     );
     return counts;
+  },
+});
+
+export const getUserQuestsByCategory = userQuery({
+  args: {},
+  handler: async (ctx) => {
+    const userQuests = await ctx.db
+      .query("userQuests")
+      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
+      .collect();
+
+    const questsWithDetails = await Promise.all(
+      userQuests.map(async (userQuest) => {
+        const quest = await ctx.db.get(userQuest.questId);
+        return quest && quest.deletionTime === undefined
+          ? { ...quest, ...userQuest }
+          : null;
+      }),
+    );
+
+    const validQuests = questsWithDetails.filter(
+      (q): q is NonNullable<typeof q> => q !== null,
+    );
+
+    return validQuests.reduce(
+      (acc, quest) => {
+        const category = (quest.category ?? "other") as Category;
+        if (!acc[category]) acc[category] = [];
+        acc[category].push(quest);
+        return acc;
+      },
+      {} as Record<string, typeof validQuests>,
+    );
+  },
+});
+
+export const getUserQuestsByDate = userQuery({
+  args: {},
+  handler: async (ctx) => {
+    const userQuests = await ctx.db
+      .query("userQuests")
+      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
+      .collect();
+
+    const questsWithDetails = await Promise.all(
+      userQuests.map(async (userQuest) => {
+        const quest = await ctx.db.get(userQuest.questId);
+        return quest && quest.deletionTime === undefined
+          ? { ...quest, ...userQuest }
+          : null;
+      }),
+    );
+
+    const validQuests = questsWithDetails.filter(
+      (q): q is NonNullable<typeof q> => q !== null,
+    );
+
+    const now = Date.now();
+    const oneWeekAgo = now - 7 * 24 * 60 * 60 * 1000;
+    const oneMonthAgo = now - 30 * 24 * 60 * 60 * 1000;
+
+    return validQuests.reduce(
+      (acc, quest) => {
+        if (quest._creationTime > oneWeekAgo) {
+          acc.lastWeek.push(quest);
+        } else if (quest._creationTime > oneMonthAgo) {
+          acc.lastMonth.push(quest);
+        } else {
+          acc.earlier.push(quest);
+        }
+        return acc;
+      },
+      { lastWeek: [], lastMonth: [], earlier: [] } as Record<
+        string,
+        typeof validQuests
+      >,
+    );
+  },
+});
+
+export const getUserQuestsByStatus = userQuery({
+  args: {},
+  handler: async (ctx) => {
+    const userQuests = await ctx.db
+      .query("userQuests")
+      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
+      .collect();
+
+    const questsWithDetails = await Promise.all(
+      userQuests.map(async (userQuest) => {
+        const quest = await ctx.db.get(userQuest.questId);
+        return quest && quest.deletionTime === undefined
+          ? { ...quest, ...userQuest }
+          : null;
+      }),
+    );
+
+    const validQuests = questsWithDetails.filter(
+      (q): q is NonNullable<typeof q> => q !== null,
+    );
+
+    return validQuests.reduce(
+      (acc, quest) => {
+        if (quest.completionTime) {
+          acc.complete.push(quest);
+        } else {
+          acc.incomplete.push(quest);
+        }
+        return acc;
+      },
+      { incomplete: [], complete: [] } as Record<string, typeof validQuests>,
+    );
   },
 });

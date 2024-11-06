@@ -4,9 +4,9 @@ import { v } from "convex/values";
 import {
   category,
   field,
+  groupQuestsBy,
   jurisdiction,
   role,
-  sortQuestsBy,
   theme,
 } from "./validators";
 
@@ -86,7 +86,7 @@ const users = defineTable({
   jurisdiction: v.optional(jurisdiction),
   isMinor: v.optional(v.boolean()),
   theme: theme,
-  sortQuestsBy: v.optional(sortQuestsBy),
+  groupQuestsBy: v.optional(groupQuestsBy),
 }).index("email", ["email"]);
 
 /**

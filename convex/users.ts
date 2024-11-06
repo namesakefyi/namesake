@@ -3,7 +3,7 @@ import { v } from "convex/values";
 import { query } from "./_generated/server";
 import type { Role } from "./constants";
 import { userMutation, userQuery } from "./helpers";
-import { sortQuestsBy, theme } from "./validators";
+import { groupQuestsBy, theme } from "./validators";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -64,10 +64,10 @@ export const setUserTheme = userMutation({
   },
 });
 
-export const setSortQuestsBy = userMutation({
-  args: { sortQuestsBy: sortQuestsBy },
+export const setGroupQuestsBy = userMutation({
+  args: { groupQuestsBy: groupQuestsBy },
   handler: async (ctx, args) => {
-    await ctx.db.patch(ctx.userId, { sortQuestsBy: args.sortQuestsBy });
+    await ctx.db.patch(ctx.userId, { groupQuestsBy: args.groupQuestsBy });
   },
 });
 

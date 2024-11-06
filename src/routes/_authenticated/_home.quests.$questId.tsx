@@ -12,7 +12,13 @@ import {
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { RiLink, RiMoreFill, RiSignpostLine } from "@remixicon/react";
+import {
+  RiCheckLine,
+  RiLink,
+  RiMoreFill,
+  RiProgress4Line,
+  RiSignpostLine,
+} from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import Markdown from "react-markdown";
@@ -66,9 +72,13 @@ function QuestDetailRoute() {
           <div className="flex gap-1">
             {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
             {userQuest?.completionTime ? (
-              <Badge variant="success">Complete</Badge>
+              <Badge variant="success" icon={RiCheckLine}>
+                Complete
+              </Badge>
             ) : (
-              <Badge variant="info">In progress</Badge>
+              <Badge variant="warning" icon={RiProgress4Line}>
+                In progress
+              </Badge>
             )}
           </div>
         }

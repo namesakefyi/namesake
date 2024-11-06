@@ -2,9 +2,9 @@ import { v } from "convex/values";
 import {
   CATEGORIES,
   FIELDS,
+  GROUP_QUESTS_BY,
   JURISDICTIONS,
   ROLES,
-  SORT_QUESTS_BY,
   THEMES,
 } from "./constants";
 
@@ -24,8 +24,10 @@ export const field = v.union(
   ...Object.keys(FIELDS).map((field) => v.literal(field)),
 );
 
-export const sortQuestsBy = v.union(
-  ...Object.keys(SORT_QUESTS_BY).map((sortQuestsBy) => v.literal(sortQuestsBy)),
+export const groupQuestsBy = v.union(
+  ...Object.keys(GROUP_QUESTS_BY).map((groupQuestsBy) =>
+    v.literal(groupQuestsBy),
+  ),
 );
 
 export const category = v.union(
