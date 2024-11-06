@@ -23,7 +23,12 @@ import {
   STATUS,
   STATUS_ORDER,
 } from "@convex/constants";
-import { RiAddLine, RiMoreFill, RiSignpostLine } from "@remixicon/react";
+import {
+  RiAddLine,
+  RiListCheck2,
+  RiMoreFill,
+  RiSignpostLine,
+} from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
 import { useEffect, useState } from "react";
@@ -91,7 +96,7 @@ function IndexRoute() {
           />
           <TooltipTrigger>
             <MenuTrigger>
-              <Button icon={RiMoreFill} variant="icon" />
+              <Button icon={RiListCheck2} variant="icon" />
               <Menu
                 selectionMode="single"
                 selectedKeys={groupBy}
@@ -104,7 +109,7 @@ function IndexRoute() {
                 </MenuSection>
               </Menu>
             </MenuTrigger>
-            <Tooltip>Sort and filter</Tooltip>
+            <Tooltip>Group by</Tooltip>
           </TooltipTrigger>
           <TooltipTrigger>
             <Link
