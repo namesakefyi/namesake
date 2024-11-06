@@ -26,7 +26,12 @@ import {
   JURISDICTIONS,
   type Jurisdiction,
 } from "@convex/constants";
-import { RiAddLine, RiMoreFill, RiSignpostLine } from "@remixicon/react";
+import {
+  RiAddLine,
+  RiMoreFill,
+  RiQuestionLine,
+  RiSignpostLine,
+} from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
@@ -89,7 +94,7 @@ const NewQuestModal = ({
           isRequired
         >
           {Object.entries(CATEGORIES).map(([key, { label, icon }]) => {
-            const Icon = icon;
+            const Icon = icon ?? RiQuestionLine;
             return (
               <SelectItem key={key} id={key} textValue={key}>
                 <Icon size={20} /> {label}
@@ -147,7 +152,7 @@ const QuestTableRow = ({
 
     const { icon, label } = CATEGORIES[quest.category];
 
-    return <Badge icon={icon}>{label}</Badge>;
+    return <Badge icon={icon ?? RiQuestionLine}>{label}</Badge>;
   };
 
   return (

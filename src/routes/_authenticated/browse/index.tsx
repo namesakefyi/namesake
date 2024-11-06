@@ -9,7 +9,7 @@ import {
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { CATEGORIES, type Category } from "@convex/constants";
-import { RiLoader4Line } from "@remixicon/react";
+import { RiLoader4Line, RiQuestionLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
@@ -98,12 +98,12 @@ const QuestCategoryRow = ({ category }: { category: Category }) => {
   if (!quests || quests.length === 0) return;
 
   const { label, icon } = CATEGORIES[category];
-  const Icon = icon;
+  const Icon = icon ?? RiQuestionLine;
 
   return (
     <div className="flex flex-col gap-2">
       <h3 className="text-gray-dim font-semibold flex gap-2 items-center px-8 py-2 bg-gray-app sticky top-0">
-        <Icon />
+        <Icon size={16} />
         {label}
       </h3>
       <div className="w-full overflow-x-auto flex gap-4 px-8 pb-4">

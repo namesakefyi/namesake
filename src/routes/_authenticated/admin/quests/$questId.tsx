@@ -14,6 +14,7 @@ import {
   JURISDICTIONS,
   type Jurisdiction,
 } from "@convex/constants";
+import { RiQuestionLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { memo, useEffect, useState } from "react";
@@ -93,7 +94,7 @@ function AdminQuestDetailRoute() {
         isRequired
       >
         {Object.entries(CATEGORIES).map(([key, { label, icon }]) => {
-          const Icon = icon;
+          const Icon = icon ?? RiQuestionLine;
           return (
             <SelectItem key={key} id={key} textValue={key}>
               <Icon size={20} /> {label}

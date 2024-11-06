@@ -23,15 +23,10 @@ import {
   STATUS,
   STATUS_ORDER,
 } from "@convex/constants";
-import {
-  RiAddLine,
-  RiCheckLine,
-  RiMoreFill,
-  RiSignpostLine,
-} from "@remixicon/react";
+import { RiAddLine, RiMoreFill, RiSignpostLine } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { Selection } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 
@@ -50,7 +45,6 @@ function IndexRoute() {
   }, [groupBy]);
 
   const MyQuests = () => {
-    const [lastSelectedQuestId, setLastSelectedQuestId] = useState<string>("");
     const userQuestCount = useQuery(api.userQuests.getUserQuestCount);
     const completedQuests = useQuery(api.userQuests.getCompletedQuestCount);
 
@@ -163,7 +157,6 @@ function IndexRoute() {
                         to: "/quests/$questId",
                         params: { questId: quest.questId },
                       }}
-                      onAction={() => setLastSelectedQuestId(quest.questId)}
                     >
                       <div className="flex items-center justify-between gap-2 w-full">
                         <div
