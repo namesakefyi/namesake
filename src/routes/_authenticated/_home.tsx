@@ -23,12 +23,7 @@ import {
   STATUS,
   STATUS_ORDER,
 } from "@convex/constants";
-import {
-  RiAddLine,
-  RiListCheck2,
-  RiMoreFill,
-  RiSignpostLine,
-} from "@remixicon/react";
+import { RiAddLine, RiListCheck2, RiSignpostLine } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
 import { useEffect, useState } from "react";
