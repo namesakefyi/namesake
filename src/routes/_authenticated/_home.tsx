@@ -7,14 +7,22 @@ import {
   Link,
   Menu,
   MenuItem,
-  MenuSeparator,
+  MenuSection,
   MenuTrigger,
   ProgressBar,
   Tooltip,
   TooltipTrigger,
 } from "@/components";
 import { api } from "@convex/_generated/api";
-import type { SortQuestsBy } from "@convex/constants";
+import {
+  CATEGORIES,
+  CATEGORY_ORDER,
+  DATE_ADDED,
+  DATE_ADDED_ORDER,
+  type GroupQuestsBy,
+  STATUS,
+  STATUS_ORDER,
+} from "@convex/constants";
 import {
   RiAddLine,
   RiCheckLine,
@@ -23,8 +31,8 @@ import {
 } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { Fragment, useEffect, useState } from "react";
+import type { Selection } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 
 export const Route = createFileRoute("/_authenticated/_home")({
@@ -32,38 +40,37 @@ export const Route = createFileRoute("/_authenticated/_home")({
 });
 
 function IndexRoute() {
-  const [showCompleted, setShowCompleted] = useState(
-    localStorage.getItem("showCompleted") === "true",
-  );
-  const [sortBy, setSortBy] = useState<SortQuestsBy>(
-    (localStorage.getItem("sortQuestsBy") as SortQuestsBy) ?? "newest",
+  const [groupBy, setGroupBy] = useState<Selection>(
+    new Set([localStorage.getItem("groupQuestsBy") ?? "dateAdded"]),
   );
 
-  const toggleShowCompleted = () => {
-    toast(
-      showCompleted ? "Hiding completed quests" : "Showing completed quests",
-    );
-    setShowCompleted(!showCompleted);
-  };
-
   useEffect(() => {
-    localStorage.setItem("showCompleted", showCompleted.toString());
-  }, [showCompleted]);
-
-  useEffect(() => {
-    localStorage.setItem("sortQuestsBy", sortBy);
-  }, [sortBy]);
+    const selected = [...groupBy][0] as GroupQuestsBy;
+    localStorage.setItem("groupQuestsBy", selected);
+  }, [groupBy]);
 
   const MyQuests = () => {
-    const myQuests = useQuery(api.userQuests.getQuestsForCurrentUser);
+    const [lastSelectedQuestId, setLastSelectedQuestId] = useState<string>("");
+    const userQuestCount = useQuery(api.userQuests.getUserQuestCount);
     const completedQuests = useQuery(api.userQuests.getCompletedQuestCount);
-    const setLastSelectedQuestId = (questId: string) => {
-      localStorage.setItem("lastSelectedQuestId", questId);
-    };
 
-    if (myQuests === undefined) return;
+    // Get the selected grouping method
+    const groupByValue = [...groupBy][0] as GroupQuestsBy;
 
-    if (myQuests === null || myQuests.length === 0)
+    // Use the appropriate query based on grouping selection
+    const questsByCategory = useQuery(api.userQuests.getUserQuestsByCategory);
+    const questsByDate = useQuery(api.userQuests.getUserQuestsByDate);
+    const questsByStatus = useQuery(api.userQuests.getUserQuestsByStatus);
+
+    const groupedQuests = {
+      category: questsByCategory,
+      dateAdded: questsByDate,
+      status: questsByStatus,
+    }[groupByValue];
+
+    if (groupedQuests === undefined) return;
+
+    if (groupedQuests === null || Object.keys(groupedQuests).length === 0)
       return (
         <Empty
           title="No quests"
@@ -78,61 +85,29 @@ function IndexRoute() {
         />
       );
 
-    const totalQuests = myQuests.length;
-
-    const sortedQuests = myQuests.sort((a, b) => {
-      switch (sortBy) {
-        case "oldest":
-          return a._creationTime - b._creationTime;
-        case "newest":
-          return b._creationTime - a._creationTime;
-        default:
-          return 0;
-      }
-    });
-
-    const filteredQuests = sortedQuests.filter((quest) => {
-      if (showCompleted) return true;
-      return !quest.completionTime;
-    });
-
     return (
       <div className="flex flex-col w-80 border-r border-gray-dim overflow-y-auto">
         <div className="flex items-center py-3 px-4 h-16 border-b border-gray-dim">
           <ProgressBar
             label="Quests complete"
             value={completedQuests}
-            maxValue={totalQuests}
-            valueLabel={`${completedQuests} of ${totalQuests}`}
+            maxValue={userQuestCount}
+            valueLabel={`${completedQuests} of ${userQuestCount}`}
             className="mr-4"
           />
           <TooltipTrigger>
             <MenuTrigger>
               <Button icon={RiMoreFill} variant="icon" />
-              <Menu>
-                <MenuItem
-                  onAction={() => setSortBy("newest")}
-                  isDisabled={sortBy === "newest"}
-                >
-                  Sort by newest
-                </MenuItem>
-                <MenuItem
-                  onAction={() => setSortBy("oldest")}
-                  isDisabled={sortBy === "oldest"}
-                >
-                  Sort by oldest
-                </MenuItem>
-
-                {typeof completedQuests === "number" && completedQuests > 0 && (
-                  <>
-                    <MenuSeparator />
-                    <MenuItem onAction={toggleShowCompleted}>
-                      {showCompleted
-                        ? `Hide ${completedQuests} completed ${completedQuests > 1 ? "quests" : "quest"}`
-                        : `Show ${completedQuests} completed ${completedQuests > 1 ? "quests" : "quest"}`}
-                    </MenuItem>
-                  </>
-                )}
+              <Menu
+                selectionMode="single"
+                selectedKeys={groupBy}
+                onSelectionChange={setGroupBy}
+              >
+                <MenuSection title="Group by">
+                  <MenuItem id="dateAdded">Date added</MenuItem>
+                  <MenuItem id="category">Category</MenuItem>
+                  <MenuItem id="status">Status</MenuItem>
+                </MenuSection>
               </Menu>
             </MenuTrigger>
             <Tooltip>Sort and filter</Tooltip>
@@ -148,52 +123,70 @@ function IndexRoute() {
             <Tooltip>Add quests</Tooltip>
           </TooltipTrigger>
         </div>
-        <GridList aria-label="My quests" className="border-none px-1 py-2">
-          {filteredQuests.map((quest) => {
-            if (quest === null) return null;
+        {Object.entries(groupedQuests)
+          .sort(([groupA], [groupB]) => {
+            const orderArray =
+              groupByValue === "category"
+                ? CATEGORY_ORDER
+                : groupByValue === "status"
+                  ? STATUS_ORDER
+                  : DATE_ADDED_ORDER;
 
             return (
-              <GridListItem
-                textValue={quest.title}
-                key={quest._id}
-                href={{
-                  to: "/quests/$questId",
-                  params: { questId: quest.questId },
-                }}
-                onAction={() => setLastSelectedQuestId(quest.questId)}
-              >
-                <div className="flex items-center justify-between gap-2 w-full">
-                  <div
-                    className={twMerge(
-                      "flex items-center gap-2",
-                      quest.completionTime && "opacity-40",
-                    )}
-                  >
-                    <p>{quest.title}</p>
-                    {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
-                  </div>
-                  {quest.completionTime ? (
-                    <RiCheckLine
-                      className="text-green-9 dark:text-green-dark-9 ml-auto"
-                      size={20}
-                    />
-                  ) : null}
+              orderArray.indexOf(groupA as any) -
+              orderArray.indexOf(groupB as any)
+            );
+          })
+          .map(([group, quests]) => {
+            if (quests.length === 0) return null;
+            const { label, icon: Icon } =
+              groupByValue === "category"
+                ? CATEGORIES[group as keyof typeof CATEGORIES]
+                : groupByValue === "status"
+                  ? STATUS[group as keyof typeof STATUS]
+                  : DATE_ADDED[group as keyof typeof DATE_ADDED];
+
+            return (
+              <div key={label} className="mt-2">
+                <div className="px-4 py-1 text-xs font-semibold text-gray-9 dark:text-graydark-9 flex gap-1.5 items-center">
+                  {label}
                 </div>
-              </GridListItem>
+                <GridList
+                  aria-label={`${group} quests`}
+                  className="border-none"
+                >
+                  {quests.map((quest) => (
+                    <GridListItem
+                      textValue={quest.title}
+                      key={quest._id}
+                      href={{
+                        to: "/quests/$questId",
+                        params: { questId: quest.questId },
+                      }}
+                      onAction={() => setLastSelectedQuestId(quest.questId)}
+                    >
+                      <div className="flex items-center justify-between gap-2 w-full">
+                        <div
+                          className={twMerge(
+                            "flex items-center gap-2",
+                            quest.completionTime && "opacity-40",
+                          )}
+                        >
+                          {Icon ? (
+                            <Icon size={20} className="text-gray-dim" />
+                          ) : null}
+                          <p>{quest.title}</p>
+                          {quest.jurisdiction && (
+                            <Badge>{quest.jurisdiction}</Badge>
+                          )}
+                        </div>
+                      </div>
+                    </GridListItem>
+                  ))}
+                </GridList>
+              </div>
             );
           })}
-          {!showCompleted && completedQuests && completedQuests > 0 && (
-            <GridListItem
-              textValue="Show completed"
-              onAction={() => setShowCompleted(true)}
-            >
-              <div className="flex items-center justify-start gap-2 w-full text-gray-dim">
-                <RiCheckLine size={20} />
-                {`${completedQuests} completed ${completedQuests > 1 ? "quests" : "quest"} hidden`}
-              </div>
-            </GridListItem>
-          )}
-        </GridList>
       </div>
     );
   };

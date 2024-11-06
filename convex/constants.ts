@@ -5,6 +5,7 @@ import {
   RiBankLine,
   RiCalendarLine,
   RiChat3Line,
+  RiCheckLine,
   RiCheckboxLine,
   RiComputerLine,
   RiDropdownList,
@@ -19,6 +20,7 @@ import {
   RiMovie2Line,
   RiParagraph,
   RiPhoneLine,
+  RiProgress4Line,
   RiQuestionLine,
   RiScales3Line,
   RiShoppingBag4Line,
@@ -135,17 +137,19 @@ export const ROLES = {
 } as const;
 export type Role = keyof typeof ROLES;
 
-export const SORT_QUESTS_BY = {
-  newest: "Newest",
-  oldest: "Oldest",
+export const GROUP_QUESTS_BY = {
+  dateAdded: "Date added",
+  category: "Category",
+  status: "Status",
 } as const;
-export type SortQuestsBy = keyof typeof SORT_QUESTS_BY;
+export type GroupQuestsBy = keyof typeof GROUP_QUESTS_BY;
 
-interface CategoryDetails {
+interface GroupDetails {
   label: string;
-  icon: RemixiconComponentType;
+  icon: RemixiconComponentType | null;
 }
-export const CATEGORIES: Record<string, CategoryDetails> = {
+
+export const CATEGORIES: Record<string, GroupDetails> = {
   core: {
     label: "Core",
     icon: RiSignpostLine,
@@ -207,4 +211,37 @@ export const CATEGORIES: Record<string, CategoryDetails> = {
     icon: RiQuestionLine,
   },
 };
+export const CATEGORY_ORDER: Category[] = Object.keys(CATEGORIES) as Category[];
 export type Category = keyof typeof CATEGORIES;
+
+export const DATE_ADDED: Record<string, GroupDetails> = {
+  lastWeek: {
+    label: "Last 7 days",
+    icon: null,
+  },
+  lastMonth: {
+    label: "Last 30 days",
+    icon: null,
+  },
+  earlier: {
+    label: "Earlier",
+    icon: null,
+  },
+};
+export const DATE_ADDED_ORDER: DateAdded[] = Object.keys(
+  DATE_ADDED,
+) as DateAdded[];
+export type DateAdded = keyof typeof DATE_ADDED;
+
+export const STATUS: Record<string, GroupDetails> = {
+  incomplete: {
+    label: "In Progress",
+    icon: RiProgress4Line,
+  },
+  complete: {
+    label: "Completed",
+    icon: RiCheckLine,
+  },
+} as const;
+export const STATUS_ORDER: Status[] = Object.keys(STATUS) as Status[];
+export type Status = keyof typeof STATUS;

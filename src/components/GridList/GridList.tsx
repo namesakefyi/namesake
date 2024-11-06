@@ -28,7 +28,7 @@ export function GridList<T extends object>({
 
 const itemStyles = tv({
   extend: focusRing,
-  base: "relative text-gray-normal flex items-center gap-3 cursor-pointer select-none py-2 px-3 text-sm first:rounded-t-md last:rounded-b-md -mb-px last:mb-0 -outline-offset-2",
+  base: "relative text-gray-normal flex items-center gap-3 cursor-pointer select-none py-2 px-4 text-sm first:rounded-t-md last:rounded-b-md -mb-px last:mb-0 -outline-offset-2",
   variants: {
     isSelected: {
       false: "",
