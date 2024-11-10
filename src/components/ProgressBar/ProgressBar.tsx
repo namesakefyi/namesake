@@ -15,12 +15,12 @@ export function ProgressBar({ label, ...props }: ProgressBarProps) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "flex flex-col flex-1 gap-1",
+        "flex flex-col flex-1 gap-1.5",
       )}
     >
       {({ percentage, valueText, isIndeterminate }) => (
         <>
-          <div className="flex justify-between gap-2">
+          <div className="flex justify-between gap-2 -mt-0.5">
             <Label className="text-gray-normal">{label}</Label>
             <span className="text-sm text-gray-dim tabular-nums">
               {valueText}

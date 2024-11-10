@@ -36,11 +36,11 @@ export const Route = createFileRoute("/_authenticated/_home")({
 
 function IndexRoute() {
   const [groupBy, setGroupBy] = useState<Selection>(
-    new Set([localStorage.getItem("groupQuestsBy") ?? "dateAdded"]),
+    new Set([localStorage.getItem("groupQuestsBy") ?? "category"]),
   );
 
   useEffect(() => {
-    const selected = [...groupBy][0] as GroupQuestsBy;
+    const selected = ([...groupBy][0] as GroupQuestsBy) ?? "category";
     localStorage.setItem("groupQuestsBy", selected);
   }, [groupBy]);
 
@@ -49,7 +49,7 @@ function IndexRoute() {
     const completedQuests = useQuery(api.userQuests.getCompletedQuestCount);
 
     // Get the selected grouping method
-    const groupByValue = [...groupBy][0] as GroupQuestsBy;
+    const groupByValue = ([...groupBy][0] as GroupQuestsBy) ?? "category";
 
     // Use the appropriate query based on grouping selection
     const questsByCategory = useQuery(api.userQuests.getUserQuestsByCategory);
@@ -80,7 +80,7 @@ function IndexRoute() {
       );
 
     return (
-      <div className="flex flex-col w-80 border-r border-gray-dim overflow-y-auto">
+      <div className="flex flex-col w-80 border-r border-gray-dim">
         <div className="flex items-center py-3 px-4 h-16 border-b border-gray-dim">
           <ProgressBar
             label="Quests complete"
@@ -96,10 +96,11 @@ function IndexRoute() {
                 selectionMode="single"
                 selectedKeys={groupBy}
                 onSelectionChange={setGroupBy}
+                disallowEmptySelection
               >
                 <MenuSection title="Group by">
-                  <MenuItem id="dateAdded">Date added</MenuItem>
                   <MenuItem id="category">Category</MenuItem>
+                  <MenuItem id="dateAdded">Date added</MenuItem>
                   <MenuItem id="status">Status</MenuItem>
                 </MenuSection>
               </Menu>
@@ -117,69 +118,71 @@ function IndexRoute() {
             <Tooltip>Add quests</Tooltip>
           </TooltipTrigger>
         </div>
-        {Object.entries(groupedQuests)
-          .sort(([groupA], [groupB]) => {
-            const orderArray =
-              groupByValue === "category"
-                ? CATEGORY_ORDER
-                : groupByValue === "status"
-                  ? STATUS_ORDER
-                  : DATE_ADDED_ORDER;
+        <div className="flex-1 overflow-y-auto">
+          {Object.entries(groupedQuests)
+            .sort(([groupA], [groupB]) => {
+              const orderArray =
+                groupByValue === "category"
+                  ? CATEGORY_ORDER
+                  : groupByValue === "status"
+                    ? STATUS_ORDER
+                    : DATE_ADDED_ORDER;
 
-            return (
-              orderArray.indexOf(groupA as any) -
-              orderArray.indexOf(groupB as any)
-            );
-          })
-          .map(([group, quests]) => {
-            if (quests.length === 0) return null;
-            const { label, icon: Icon } =
-              groupByValue === "category"
-                ? CATEGORIES[group as keyof typeof CATEGORIES]
-                : groupByValue === "status"
-                  ? STATUS[group as keyof typeof STATUS]
-                  : DATE_ADDED[group as keyof typeof DATE_ADDED];
+              return (
+                orderArray.indexOf(groupA as any) -
+                orderArray.indexOf(groupB as any)
+              );
+            })
+            .map(([group, quests]) => {
+              if (quests.length === 0) return null;
+              const { label, icon: Icon } =
+                groupByValue === "category"
+                  ? CATEGORIES[group as keyof typeof CATEGORIES]
+                  : groupByValue === "status"
+                    ? STATUS[group as keyof typeof STATUS]
+                    : DATE_ADDED[group as keyof typeof DATE_ADDED];
 
-            return (
-              <div key={label} className="mt-2">
-                <div className="px-4 py-1 text-xs font-semibold text-gray-9 dark:text-graydark-9 flex gap-1.5 items-center">
-                  {label}
-                </div>
-                <GridList
-                  aria-label={`${group} quests`}
-                  className="border-none"
-                >
-                  {quests.map((quest) => (
-                    <GridListItem
-                      textValue={quest.title}
-                      key={quest._id}
-                      href={{
-                        to: "/quests/$questId",
-                        params: { questId: quest.questId },
-                      }}
-                    >
-                      <div className="flex items-center justify-between gap-2 w-full">
-                        <div
-                          className={twMerge(
-                            "flex items-center gap-2",
-                            quest.completionTime && "opacity-40",
-                          )}
-                        >
-                          {Icon ? (
-                            <Icon size={20} className="text-gray-dim" />
-                          ) : null}
-                          <p>{quest.title}</p>
-                          {quest.jurisdiction && (
-                            <Badge>{quest.jurisdiction}</Badge>
-                          )}
+              return (
+                <div key={label} className="mt-2">
+                  <div className="px-4 py-1 text-xs font-semibold text-gray-9 dark:text-graydark-9 flex gap-1.5 items-center">
+                    {label}
+                  </div>
+                  <GridList
+                    aria-label={`${group} quests`}
+                    className="border-none"
+                  >
+                    {quests.map((quest) => (
+                      <GridListItem
+                        textValue={quest.title}
+                        key={quest._id}
+                        href={{
+                          to: "/quests/$questId",
+                          params: { questId: quest.questId },
+                        }}
+                      >
+                        <div className="flex items-center justify-between gap-2 w-full">
+                          <div
+                            className={twMerge(
+                              "flex items-center gap-2",
+                              quest.completionTime && "opacity-40",
+                            )}
+                          >
+                            {Icon ? (
+                              <Icon size={20} className="text-gray-dim" />
+                            ) : null}
+                            <p>{quest.title}</p>
+                            {quest.jurisdiction && (
+                              <Badge>{quest.jurisdiction}</Badge>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </GridListItem>
-                  ))}
-                </GridList>
-              </div>
-            );
-          })}
+                      </GridListItem>
+                    ))}
+                  </GridList>
+                </div>
+              );
+            })}
+        </div>
       </div>
     );
   };
