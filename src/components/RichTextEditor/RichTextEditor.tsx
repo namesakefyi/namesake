@@ -14,17 +14,26 @@ import {
 import "@mdxeditor/editor/style.css";
 import { useRef } from "react";
 import { twMerge } from "tailwind-merge";
+import { useDebounce } from "use-debounce";
+import { ReadingScore } from "../ReadingScore";
 
-export interface RichTextEditorProps extends MDXEditorProps {}
+export interface RichTextEditorProps extends MDXEditorProps {
+  showReadingScore?: boolean;
+}
 
-export function RichTextEditor({ className, ...props }: RichTextEditorProps) {
+export function RichTextEditor({
+  className,
+  showReadingScore = false,
+  ...props
+}: RichTextEditorProps) {
   const ref = useRef<MDXEditorMethods>(null);
+  const [debouncedMarkdown] = useDebounce(props.markdown, 500);
 
   return (
     <MDXEditor
       className={twMerge(
         className,
-        "dark-theme dark-editor border border-gray-dim text-gray-normal rounded-lg flex flex-col",
+        "dark-theme dark-editor border border-gray-dim text-gray-normal rounded-lg flex flex-col w-full",
       )}
       contentEditableClassName="prose dark:prose-invert"
       suppressHtmlProcessing
@@ -42,6 +51,11 @@ export function RichTextEditor({ className, ...props }: RichTextEditorProps) {
               <Separator />
               <ListsToggle options={["bullet", "number"]} />
               <CreateLink />
+              {showReadingScore && (
+                <div className="ml-auto">
+                  <ReadingScore text={debouncedMarkdown} />
+                </div>
+              )}
             </>
           ),
         }),

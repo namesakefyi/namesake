@@ -32,6 +32,7 @@ export * from "./Popover";
 export * from "./ProgressBar";
 export * from "./RadioGroup";
 export * from "./RangeCalendar";
+export * from "./ReadingScore";
 export * from "./RichTextEditor";
 export * from "./SearchField";
 export * from "./Select";
