@@ -164,9 +164,7 @@ function IndexRoute() {
                     id={label}
                     title={
                       <div className="flex items-center gap-2">
-                        {Icon ? (
-                          <Icon size={16} className="text-gray-dim" />
-                        ) : null}
+                        <Icon size={16} className="text-gray-dim" />
                         {label}
                         <Badge className="ml-auto">{quests.length}</Badge>
                       </div>

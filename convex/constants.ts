@@ -148,7 +148,7 @@ export type GroupQuestsBy = keyof typeof GROUP_QUESTS_BY;
 
 interface GroupDetails {
   label: string;
-  icon: RemixiconComponentType | null;
+  icon: RemixiconComponentType;
 }
 
 export const CATEGORIES: Record<string, GroupDetails> = {
