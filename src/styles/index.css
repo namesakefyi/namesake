@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* biome-ignore lint/correctness/noUnknownProperty: interpolate-size is valid */
-  interpolate-size: allow-keywords;
-}
-
 /* Scale up hit targets on high resolution mobile devices. */
 @media (min-resolution: 200dpi) {
   html {
