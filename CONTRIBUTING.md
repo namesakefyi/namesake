@@ -34,9 +34,7 @@ The first time you set up the app, you'll need to connect to our backend service
 npx convex dev
 ```
 
-Convex will prompt you to create an account or a new project as necessary.
-
-Convex will generate an `.env.local` file which points to a dev database for you to use.
+Convex will prompt you to create an account or a new project as necessary. Once created, a `.env.local` file will be generated. This points to a dev database for you to use.
 
 > [!NOTE]
 > If this is your first time using Convex, [follow the tour](https://docs.convex.dev/get-started) to understand how the system works and read [The Zen of Convex](https://docs.convex.dev/zen) to understand best practices.
