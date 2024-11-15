@@ -1,4 +1,4 @@
-import { RiArrowDownSLine, RiArrowRightSLine } from "@remixicon/react";
+import { RiArrowRightSLine } from "@remixicon/react";
 import {
   UNSTABLE_Disclosure as AriaDisclosure,
   UNSTABLE_DisclosureGroup as AriaDisclosureGroup,
@@ -9,6 +9,7 @@ import {
   composeRenderProps,
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
+import { AnimateChangeInHeight } from "../AnimateChangeInHeight";
 import { Button } from "../Button";
 
 export interface DisclosureProps extends AriaDisclosureProps {
@@ -26,23 +27,23 @@ export function Disclosure({
       {composeRenderProps(children, (children, { isExpanded }) => (
         <>
           <Button
-            icon={isExpanded ? RiArrowDownSLine : RiArrowRightSLine}
             variant="ghost"
-            className="w-full justify-start"
+            className="w-full justify-between"
             slot="trigger"
             size="small"
           >
             {title}
+            <RiArrowRightSLine
+              size={16}
+              className={twMerge(
+                "transition-transform opacity-70",
+                isExpanded && "rotate-90",
+              )}
+            />
           </Button>
-          <DisclosurePanel
-            className={twMerge(
-              "transition-all pl-7 pb-2",
-              isExpanded && "h-auto",
-              !isExpanded && "h-0",
-            )}
-          >
-            {children}
-          </DisclosurePanel>
+          <AnimateChangeInHeight className="w-full">
+            <DisclosurePanel className="pb-2">{children}</DisclosurePanel>
+          </AnimateChangeInHeight>
         </>
       ))}
     </AriaDisclosure>

@@ -16,14 +16,15 @@ export interface ButtonProps extends AriaButtonProps {
 
 export const buttonStyles = tv({
   extend: focusRing,
-  base: "py-2 text-sm font-medium whitespace-nowrap transition rounded-lg flex gap-1 items-center justify-center border border-black/10 dark:border-white/10 cursor-pointer",
+  base: "py-2 text-sm font-medium whitespace-nowrap rounded-lg flex gap-1 items-center justify-center border border-black/10 dark:border-white/10 cursor-pointer",
   variants: {
     variant: {
       primary: "bg-purple-solid text-white",
       secondary: "bg-gray-ghost text-gray-normal",
       destructive: "bg-red-solid",
-      icon: "bg-gray-ghost text-gray-dim hover:text-gray-normal border-0 flex items-center justify-center rounded-full",
-      ghost: "bg-gray-ghost text-gray-dim hover:text-gray-normal border-0",
+      icon: "bg-transparent hover:bg-gray-3 dark:hover:bg-graydark-3 text-gray-dim hover:text-gray-normal border-0 flex items-center justify-center rounded-full",
+      ghost:
+        "bg-transparent hover:bg-gray-3 dark:hover:bg-graydark-3 text-gray-dim hover:text-gray-normal border-0",
     },
     size: {
       small: "h-8 px-2",

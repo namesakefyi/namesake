@@ -40,10 +40,18 @@ const itemStyles = tv({
   },
 });
 
-export function GridListItem({ children, ...props }: GridListItemProps) {
+export function GridListItem({
+  children,
+  className,
+  ...props
+}: GridListItemProps) {
   const textValue = typeof children === "string" ? children : undefined;
   return (
-    <AriaGridListItem textValue={textValue} {...props} className={itemStyles}>
+    <AriaGridListItem
+      textValue={textValue}
+      {...props}
+      className={composeTailwindRenderProps(className, itemStyles())}
+    >
       {({ selectionMode, selectionBehavior, allowsDragging }) => (
         <>
           {/* Add elements for drag and drop and selection. */}
