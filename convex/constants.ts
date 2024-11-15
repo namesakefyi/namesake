@@ -223,7 +223,7 @@ export const DATE_ADDED: Record<string, GroupDetails> = {
   },
   lastMonth: {
     label: "Last 30 days",
-    icon: RiTimeLine,
+    icon: RiCalendarLine,
   },
   earlier: {
     label: "Earlier",
