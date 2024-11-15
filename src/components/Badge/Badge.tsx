@@ -1,7 +1,7 @@
 import type { RemixiconComponentType } from "@remixicon/react";
 import { tv } from "tailwind-variants";
 
-export interface BadgeProps {
+export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   size?: "sm" | "lg";
   variant?: "info" | "success" | "danger" | "warning";
@@ -16,10 +16,10 @@ const badge = tv({
       lg: "text-sm rounded-md",
     },
     variant: {
-      info: "bg-blue-3 dark:bg-bluedark-3 text-blue-dim",
-      success: "bg-green-3 dark:bg-greendark-3 text-green-dim",
-      danger: "bg-red-3 dark:bg-reddark-3 text-red-dim",
-      warning: "bg-amber-3 dark:bg-amberdark-3 text-amber-dim",
+      info: "bg-blue-3 dark:bg-bluedark-3 text-blue-normal",
+      success: "bg-green-3 dark:bg-greendark-3 text-green-normal",
+      danger: "bg-red-3 dark:bg-reddark-3 text-red-normal",
+      warning: "bg-amber-3 dark:bg-amberdark-3 text-amber-normal",
     },
   },
   defaultVariants: {
@@ -28,14 +28,26 @@ const badge = tv({
   },
 });
 
+const icon = tv({
+  base: "w-4 h-4",
+  variants: {
+    variant: {
+      info: "text-blue-dim",
+      success: "text-green-dim",
+      danger: "text-red-dim",
+      warning: "text-amber-dim",
+    },
+  },
+});
+
 export function Badge({ icon: Icon, ...props }: BadgeProps) {
   return (
-    <span
+    <div
       {...props}
       className={badge({ variant: props.variant, size: props.size })}
     >
-      {Icon && <Icon size={16} />}
+      {Icon && <Icon className={icon({ variant: props.variant })} />}
       {props.children}
-    </span>
+    </div>
   );
 }

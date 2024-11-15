@@ -60,6 +60,7 @@
     "tailwind-variants": "^0.2.1",
     "tailwindcss": "^3.4.14",
     "tailwindcss-animate": "^1.0.7",
+    "text-readability": "^1.1.0",
     "use-debounce": "^10.0.4"
   },
   "devDependencies": {

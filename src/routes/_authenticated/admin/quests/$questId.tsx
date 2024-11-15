@@ -84,7 +84,7 @@ function AdminQuestDetailRoute() {
   };
 
   return (
-    <Form className="w-full" onSubmit={handleSubmit}>
+    <Form className="w-full items-start" onSubmit={handleSubmit}>
       <Select
         label="Category"
         name="category"
@@ -146,7 +146,11 @@ function AdminQuestDetailRoute() {
           Add URL
         </Button>
       </div>
-      <RichTextEditor markdown={content} onChange={setContent} />
+      <RichTextEditor
+        markdown={content}
+        onChange={setContent}
+        showReadingScore
+      />
       <div className="flex gap-2 justify-end">
         <Button type="submit" variant="primary">
           Save
