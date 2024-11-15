@@ -162,7 +162,7 @@ importers:
         version: 3.7.1(@swc/helpers@0.5.13)(vite@5.4.10(@types/node@22.9.0))
       '@vitest/coverage-v8':
         specifier: ^2.1.4
-        version: 2.1.4(vitest@2.1.4(@edge-runtime/vm@4.0.4)(@types/node@22.9.0)(@vitest/ui@2.1.4)(jsdom@25.0.0(canvas@2.11.2)))
+        version: 2.1.4(vitest@2.1.4)
       '@vitest/ui':
         specifier: ^2.1.4
         version: 2.1.4(vitest@2.1.4)
@@ -10638,7 +10638,7 @@ snapshots:
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  '@vitest/coverage-v8@2.1.4(vitest@2.1.4(@edge-runtime/vm@4.0.4)(@types/node@22.9.0)(@vitest/ui@2.1.4)(jsdom@25.0.0(canvas@2.11.2)))':
+  '@vitest/coverage-v8@2.1.4(vitest@2.1.4)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3

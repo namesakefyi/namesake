@@ -13,6 +13,7 @@ import {
   RiGraduationCapLine,
   RiHashtag,
   RiHeartPulseLine,
+  RiHistoryLine,
   RiHome4Line,
   RiInputField,
   RiMailLine,
@@ -25,6 +26,7 @@ import {
   RiScales3Line,
   RiShoppingBag4Line,
   RiSignpostLine,
+  RiTimeLine,
 } from "@remixicon/react";
 
 export const JURISDICTIONS = {
@@ -146,7 +148,7 @@ export type GroupQuestsBy = keyof typeof GROUP_QUESTS_BY;
 
 interface GroupDetails {
   label: string;
-  icon: RemixiconComponentType | null;
+  icon: RemixiconComponentType;
 }
 
 export const CATEGORIES: Record<string, GroupDetails> = {
@@ -217,15 +219,15 @@ export type Category = keyof typeof CATEGORIES;
 export const DATE_ADDED: Record<string, GroupDetails> = {
   lastWeek: {
     label: "Last 7 days",
-    icon: null,
+    icon: RiTimeLine,
   },
   lastMonth: {
     label: "Last 30 days",
-    icon: null,
+    icon: RiCalendarLine,
   },
   earlier: {
     label: "Earlier",
-    icon: null,
+    icon: RiHistoryLine,
   },
 };
 export const DATE_ADDED_ORDER: DateAdded[] = Object.keys(

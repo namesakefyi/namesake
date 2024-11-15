@@ -5,7 +5,6 @@ import { Form } from "../Form";
 
 const meta: Meta<typeof DateRangePicker> = {
   component: DateRangePicker,
-
   args: {
     label: "Trip dates",
   },

@@ -13,6 +13,11 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components";
+import {
+  Disclosure,
+  DisclosureGroup,
+  DisclosurePanel,
+} from "@/components/Disclosure";
 import { api } from "@convex/_generated/api";
 import {
   CATEGORIES,
@@ -79,6 +84,12 @@ function IndexRoute() {
         />
       );
 
+    const allCategoryKeys = [
+      ...Object.values(CATEGORIES).map((category) => category.label),
+      ...Object.values(DATE_ADDED).map((date) => date.label),
+      ...Object.values(STATUS).map((status) => status.label),
+    ];
+
     return (
       <div className="flex flex-col w-80 border-r border-gray-dim">
         <div className="flex items-center py-3 px-4 h-16 border-b border-gray-dim">
@@ -118,70 +129,79 @@ function IndexRoute() {
             <Tooltip>Add quests</Tooltip>
           </TooltipTrigger>
         </div>
-        <div className="flex-1 overflow-y-auto">
-          {Object.entries(groupedQuests)
-            .sort(([groupA], [groupB]) => {
-              const orderArray =
-                groupByValue === "category"
-                  ? CATEGORY_ORDER
-                  : groupByValue === "status"
-                    ? STATUS_ORDER
-                    : DATE_ADDED_ORDER;
+        <div className="flex-1 p-2 overflow-y-auto">
+          <DisclosureGroup
+            allowsMultipleExpanded
+            defaultExpandedKeys={[...allCategoryKeys]}
+          >
+            {Object.entries(groupedQuests)
+              .sort(([groupA], [groupB]) => {
+                const orderArray =
+                  groupByValue === "category"
+                    ? CATEGORY_ORDER
+                    : groupByValue === "status"
+                      ? STATUS_ORDER
+                      : DATE_ADDED_ORDER;
 
-              return (
-                orderArray.indexOf(groupA as any) -
-                orderArray.indexOf(groupB as any)
-              );
-            })
-            .map(([group, quests]) => {
-              if (quests.length === 0) return null;
-              const { label, icon: Icon } =
-                groupByValue === "category"
-                  ? CATEGORIES[group as keyof typeof CATEGORIES]
-                  : groupByValue === "status"
-                    ? STATUS[group as keyof typeof STATUS]
-                    : DATE_ADDED[group as keyof typeof DATE_ADDED];
+                return (
+                  orderArray.indexOf(groupA as any) -
+                  orderArray.indexOf(groupB as any)
+                );
+              })
+              .map(([group, quests]) => {
+                if (quests.length === 0) return null;
+                const { label, icon: Icon } =
+                  groupByValue === "category"
+                    ? CATEGORIES[group as keyof typeof CATEGORIES]
+                    : groupByValue === "status"
+                      ? STATUS[group as keyof typeof STATUS]
+                      : DATE_ADDED[group as keyof typeof DATE_ADDED];
 
-              return (
-                <div key={label} className="mt-2">
-                  <div className="px-4 py-1 text-xs font-semibold text-gray-9 dark:text-graydark-9 flex gap-1.5 items-center">
-                    {label}
-                  </div>
-                  <GridList
-                    aria-label={`${group} quests`}
-                    className="border-none"
+                return (
+                  <Disclosure
+                    defaultExpanded
+                    key={label}
+                    id={label}
+                    title={
+                      <div className="flex items-center gap-2">
+                        <Icon size={16} className="text-gray-dim" />
+                        {label}
+                        <Badge className="ml-auto">{quests.length}</Badge>
+                      </div>
+                    }
                   >
-                    {quests.map((quest) => (
-                      <GridListItem
-                        textValue={quest.title}
-                        key={quest._id}
-                        href={{
-                          to: "/quests/$questId",
-                          params: { questId: quest.questId },
-                        }}
+                    <DisclosurePanel>
+                      <GridList
+                        aria-label={`${group} quests`}
+                        className="border-none"
                       >
-                        <div className="flex items-center justify-between gap-2 w-full">
-                          <div
-                            className={twMerge(
-                              "flex items-center gap-2",
-                              quest.completionTime && "opacity-40",
-                            )}
+                        {quests.map((quest) => (
+                          <GridListItem
+                            textValue={quest.title}
+                            key={quest._id}
+                            href={{
+                              to: "/quests/$questId",
+                              params: { questId: quest.questId },
+                            }}
+                            className="hover:bg-gray-3 dark:hover:bg-graydark-3 rounded-md pl-8 h-8"
                           >
-                            {Icon ? (
-                              <Icon size={20} className="text-gray-dim" />
-                            ) : null}
-                            <p>{quest.title}</p>
-                            {quest.jurisdiction && (
-                              <Badge>{quest.jurisdiction}</Badge>
-                            )}
-                          </div>
-                        </div>
-                      </GridListItem>
-                    ))}
-                  </GridList>
-                </div>
-              );
-            })}
+                            <div className="flex items-center justify-between gap-2 w-full">
+                              <div
+                                className={twMerge(
+                                  quest.completionTime && "opacity-40",
+                                )}
+                              >
+                                {quest.title}
+                              </div>
+                            </div>
+                          </GridListItem>
+                        ))}
+                      </GridList>
+                    </DisclosurePanel>
+                  </Disclosure>
+                );
+              })}
+          </DisclosureGroup>
         </div>
       </div>
     );
