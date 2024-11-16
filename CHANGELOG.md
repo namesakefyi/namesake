@@ -1,5 +1,18 @@
 # namesake
 
+## 0.10.0
+
+### Minor Changes
+
+- ba1c5a9: Add additional statuses for tracking core quests and improve status selection for quests
+- 061a174: Update sidebar with disclosure sections and section counts
+- 9a7282a: Support grouping quests by category, status, and date added
+- 8cfffcf: Display readability score alongside quest content editor
+
+### Patch Changes
+
+- 301c273: Fix bug that would prevent the quests sidebar from rendering if the same group by method was selected and the localStorage result set to undefined
+
 ## 0.9.0
 
 ### Minor Changes
