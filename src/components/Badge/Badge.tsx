@@ -4,7 +4,7 @@ import { tv } from "tailwind-variants";
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   size?: "sm" | "lg";
-  variant?: "info" | "success" | "danger" | "warning";
+  variant?: "info" | "success" | "danger" | "warning" | "waiting";
   icon?: RemixiconComponentType;
 }
 
@@ -13,13 +13,14 @@ const badge = tv({
   variants: {
     size: {
       sm: "text-xs rounded",
-      lg: "text-sm rounded-md",
+      lg: "text-sm rounded-md px-2 gap-1.5",
     },
     variant: {
-      info: "bg-blue-3 dark:bg-bluedark-3 text-blue-normal",
-      success: "bg-green-3 dark:bg-greendark-3 text-green-normal",
-      danger: "bg-red-3 dark:bg-reddark-3 text-red-normal",
-      warning: "bg-amber-3 dark:bg-amberdark-3 text-amber-normal",
+      info: "bg-bluea-3 dark:bg-bluedarka-3 text-blue-normal",
+      success: "bg-greena-3 dark:bg-greendarka-3 text-green-normal",
+      danger: "bg-reda-3 dark:bg-reddarka-3 text-red-normal",
+      warning: "bg-ambera-3 dark:bg-amberdarka-3 text-amber-normal",
+      waiting: "bg-purplea-3 dark:bg-purpledarka-3 text-purple-normal",
     },
   },
   defaultVariants: {
@@ -36,6 +37,7 @@ const icon = tv({
       success: "text-green-dim",
       danger: "text-red-dim",
       warning: "text-amber-dim",
+      waiting: "text-purple-dim",
     },
   },
 });

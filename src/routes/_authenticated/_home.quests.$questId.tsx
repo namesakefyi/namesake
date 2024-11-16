@@ -6,19 +6,14 @@ import {
   Link,
   Menu,
   MenuItem,
-  MenuSeparator,
   MenuTrigger,
   PageHeader,
+  StatusSelect,
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import {
-  RiCheckLine,
-  RiLink,
-  RiMoreFill,
-  RiProgress4Line,
-  RiSignpostLine,
-} from "@remixicon/react";
+import type { Status } from "@convex/constants";
+import { RiLink, RiMoreFill, RiSignpostLine } from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import Markdown from "react-markdown";
@@ -38,20 +33,14 @@ function QuestDetailRoute() {
   const userQuest = useQuery(api.userQuests.getUserQuestByQuestId, {
     questId: questId as Id<"quests">,
   });
-  const markComplete = useMutation(api.userQuests.markComplete);
-  const markIncomplete = useMutation(api.userQuests.markIncomplete);
+
+  const changeStatus = useMutation(api.userQuests.updateQuestStatus);
   const removeQuest = useMutation(api.userQuests.removeQuest);
 
-  const handleMarkComplete = (questId: Id<"quests">, title: string) => {
-    markComplete({ questId }).then(() => {
-      toast(`Marked ${title} complete`);
-    });
+  const handleStatusChange = (status: Status) => {
+    changeStatus({ questId: questId as Id<"quests">, status: status });
   };
-  const handleMarkIncomplete = (questId: Id<"quests">, title: string) => {
-    markIncomplete({ questId }).then(() => {
-      toast(`Marked ${title} as in progress`);
-    });
-  };
+
   const handleRemoveQuest = (questId: Id<"quests">, title: string) => {
     removeQuest({ questId }).then(() => {
       toast(`Removed ${title} quest`);
@@ -68,22 +57,14 @@ function QuestDetailRoute() {
     <div className="flex flex-col flex-1">
       <PageHeader
         title={quest.title}
-        badge={
-          <div className="flex gap-1">
-            {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
-            {userQuest?.completionTime ? (
-              <Badge variant="success" icon={RiCheckLine}>
-                Complete
-              </Badge>
-            ) : (
-              <Badge variant="warning" icon={RiProgress4Line}>
-                In progress
-              </Badge>
-            )}
-          </div>
-        }
+        badge={quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
         className="px-6 border-b border-gray-dim h-16"
       >
+        <StatusSelect
+          status={userQuest.status as Status}
+          onChange={handleStatusChange}
+          isCore={quest.category === "core"}
+        />
         <MenuTrigger>
           <Button
             aria-label="Quest settings"
@@ -92,21 +73,6 @@ function QuestDetailRoute() {
             className="-mr-2"
           />
           <Menu placement="bottom end">
-            {!userQuest.completionTime && (
-              <MenuItem
-                onAction={() => handleMarkComplete(quest._id, quest.title)}
-              >
-                Mark complete
-              </MenuItem>
-            )}
-            {userQuest.completionTime && (
-              <MenuItem
-                onAction={() => handleMarkIncomplete(quest._id, quest.title)}
-              >
-                Mark as in progress
-              </MenuItem>
-            )}
-            <MenuSeparator />
             <MenuItem
               onAction={() => handleRemoveQuest(quest._id, quest.title)}
             >

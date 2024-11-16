@@ -97,7 +97,7 @@ const QuestCategoryRow = ({ category }: { category: Category }) => {
 
   if (!quests || quests.length === 0) return;
 
-  const { label, icon } = CATEGORIES[category];
+  const { label, icon } = CATEGORIES[category as Category];
   const Icon = icon ?? RiQuestionLine;
 
   return (
@@ -128,12 +128,12 @@ const QuestCategoryRow = ({ category }: { category: Category }) => {
 };
 
 const QuestCategoryGrid = () => {
-  const categories = Object.keys(CATEGORIES);
+  const categories = Object.keys(CATEGORIES) as Category[];
 
   return (
     <div className="flex flex-col gap-4">
       {categories.map((category) => (
-        <QuestCategoryRow key={category} category={category} />
+        <QuestCategoryRow key={category} category={category as Category} />
       ))}
     </div>
   );

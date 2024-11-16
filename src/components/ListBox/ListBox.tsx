@@ -38,7 +38,7 @@ export const itemStyles = tv({
   variants: {
     isSelected: {
       false: "text-gray-normal -outline-offset-2",
-      true: "bg-purple-9 dark:bg-purpledark-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white dark:outline-white forced-colors:outline-[HighlightText]",
+      true: "bg-gray-3 dark:bg-graydark-3 text-gray-normalforced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white dark:outline-white forced-colors:outline-[HighlightText]",
     },
     isDisabled: {
       true: "text-gray-dim opacity-50 cursor-default forced-colors:text-[GrayText]",
@@ -63,14 +63,14 @@ export function ListBoxItem(props: ListBoxItemProps) {
 }
 
 export const dropdownItemStyles = tv({
-  base: "group flex items-center gap-4 cursor-pointer select-none py-2 px-3 rounded-lg outline outline-0 text-sm forced-color-adjust-none",
+  base: "group flex items-center gap-1.5 cursor-pointer select-none py-2 px-2.5 rounded-lg outline outline-0 text-sm forced-color-adjust-none",
   variants: {
     isDisabled: {
       false: "text-gray-normal",
       true: "text-gray-dim opacity-50 forced-colors:text-[GrayText] cursor-default",
     },
     isFocused: {
-      true: "bg-purple-9 dark:bg-purpledark-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
+      true: "bg-gray-3 dark:bg-graydark-3 text-gray-normal forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
     },
   },
   compoundVariants: [

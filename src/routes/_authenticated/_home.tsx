@@ -1,6 +1,9 @@
 import {
   Badge,
   Button,
+  Disclosure,
+  DisclosureGroup,
+  DisclosurePanel,
   Empty,
   GridList,
   GridListItem,
@@ -13,20 +16,18 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components";
-import {
-  Disclosure,
-  DisclosureGroup,
-  DisclosurePanel,
-} from "@/components/Disclosure";
 import { api } from "@convex/_generated/api";
 import {
   CATEGORIES,
   CATEGORY_ORDER,
+  type Category,
   DATE_ADDED,
   DATE_ADDED_ORDER,
+  type DateAdded,
   type GroupQuestsBy,
   STATUS,
   STATUS_ORDER,
+  type Status,
 } from "@convex/constants";
 import { RiAddLine, RiListCheck2, RiSignpostLine } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
@@ -38,6 +39,30 @@ import { twMerge } from "tailwind-merge";
 export const Route = createFileRoute("/_authenticated/_home")({
   component: IndexRoute,
 });
+
+function sortGroupedQuests(
+  groupA: string,
+  groupB: string,
+  groupByValue: GroupQuestsBy,
+): number {
+  switch (groupByValue) {
+    case "category": {
+      const indexA = CATEGORY_ORDER.indexOf(groupA as Category);
+      const indexB = CATEGORY_ORDER.indexOf(groupB as Category);
+      return indexA - indexB;
+    }
+    case "status": {
+      const indexA = STATUS_ORDER.indexOf(groupA as Status);
+      const indexB = STATUS_ORDER.indexOf(groupB as Status);
+      return indexA - indexB;
+    }
+    case "dateAdded": {
+      const indexA = DATE_ADDED_ORDER.indexOf(groupA as DateAdded);
+      const indexB = DATE_ADDED_ORDER.indexOf(groupB as DateAdded);
+      return indexA - indexB;
+    }
+  }
+}
 
 function IndexRoute() {
   const [groupBy, setGroupBy] = useState<Selection>(
@@ -135,19 +160,9 @@ function IndexRoute() {
             defaultExpandedKeys={[...allCategoryKeys]}
           >
             {Object.entries(groupedQuests)
-              .sort(([groupA], [groupB]) => {
-                const orderArray =
-                  groupByValue === "category"
-                    ? CATEGORY_ORDER
-                    : groupByValue === "status"
-                      ? STATUS_ORDER
-                      : DATE_ADDED_ORDER;
-
-                return (
-                  orderArray.indexOf(groupA as any) -
-                  orderArray.indexOf(groupB as any)
-                );
-              })
+              .sort(([groupA], [groupB]) =>
+                sortGroupedQuests(groupA, groupB, groupByValue),
+              )
               .map(([group, quests]) => {
                 if (quests.length === 0) return null;
                 const { label, icon: Icon } =

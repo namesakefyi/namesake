@@ -89,7 +89,7 @@ const NewQuestModal = ({
           label="Category"
           name="category"
           selectedKey={category}
-          onSelectionChange={(value) => setCategory(value as string)}
+          onSelectionChange={(value) => setCategory(value as Category)}
           placeholder="Select a category"
           isRequired
         >
@@ -150,7 +150,7 @@ const QuestTableRow = ({
   const Category = () => {
     if (!quest.category) return;
 
-    const { icon, label } = CATEGORIES[quest.category];
+    const { icon, label } = CATEGORIES[quest.category as Category];
 
     return <Badge icon={icon ?? RiQuestionLine}>{label}</Badge>;
   };

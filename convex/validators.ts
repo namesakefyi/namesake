@@ -5,11 +5,16 @@ import {
   GROUP_QUESTS_BY,
   JURISDICTIONS,
   ROLES,
+  STATUS,
   THEMES,
 } from "./constants";
 
 export const jurisdiction = v.union(
   ...Object.keys(JURISDICTIONS).map((jurisdiction) => v.literal(jurisdiction)),
+);
+
+export const status = v.union(
+  ...Object.keys(STATUS).map((status) => v.literal(status)),
 );
 
 export const theme = v.union(

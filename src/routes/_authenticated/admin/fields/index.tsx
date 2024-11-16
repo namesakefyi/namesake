@@ -123,7 +123,7 @@ const FieldsTableRow = ({
 }: {
   field: DataModel["questFields"]["document"];
 }) => {
-  const Icon = FIELDS[field.type].icon;
+  const Icon = FIELDS[field.type as Field].icon;
 
   return (
     <TableRow key={field._id} className="flex gap-2 items-center">

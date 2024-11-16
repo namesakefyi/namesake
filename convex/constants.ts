@@ -5,10 +5,13 @@ import {
   RiBankLine,
   RiCalendarLine,
   RiChat3Line,
-  RiCheckLine,
+  RiCheckboxBlankCircleLine,
+  RiCheckboxCircleFill,
   RiCheckboxLine,
   RiComputerLine,
   RiDropdownList,
+  RiFolderCheckLine,
+  RiFolderLine,
   RiGamepadLine,
   RiGraduationCapLine,
   RiHashtag,
@@ -85,10 +88,24 @@ export const JURISDICTIONS = {
 } as const;
 export type Jurisdiction = keyof typeof JURISDICTIONS;
 
+/**
+ * Fields for input forms.
+ */
 interface FieldDetails {
   label: string;
   icon: RemixiconComponentType;
 }
+
+export type Field =
+  | "text"
+  | "textarea"
+  | "date"
+  | "select"
+  | "checkbox"
+  | "number"
+  | "email"
+  | "phone";
+
 export const FIELDS: Record<string, FieldDetails> = {
   text: {
     label: "Text",
@@ -123,7 +140,6 @@ export const FIELDS: Record<string, FieldDetails> = {
     icon: RiPhoneLine,
   },
 } as const;
-export type Field = keyof typeof FIELDS;
 
 export const THEMES = {
   system: "System",
@@ -146,12 +162,37 @@ export const GROUP_QUESTS_BY = {
 } as const;
 export type GroupQuestsBy = keyof typeof GROUP_QUESTS_BY;
 
+/**
+ * Generic group details.
+ * Used for UI display of filter groups.
+ */
 interface GroupDetails {
   label: string;
   icon: RemixiconComponentType;
 }
 
-export const CATEGORIES: Record<string, GroupDetails> = {
+/**
+ * Categories.
+ * Used to filter quests in the quests list.
+ */
+export type Category =
+  | "core"
+  | "entertainment"
+  | "devices"
+  | "education"
+  | "finance"
+  | "gaming"
+  | "government"
+  | "health"
+  | "housing"
+  | "personal"
+  | "shopping"
+  | "social"
+  | "subscriptions"
+  | "travel"
+  | "other";
+
+export const CATEGORIES: Record<Category, GroupDetails> = {
   core: {
     label: "Core",
     icon: RiSignpostLine,
@@ -213,10 +254,16 @@ export const CATEGORIES: Record<string, GroupDetails> = {
     icon: RiQuestionLine,
   },
 };
-export const CATEGORY_ORDER: Category[] = Object.keys(CATEGORIES) as Category[];
-export type Category = keyof typeof CATEGORIES;
 
-export const DATE_ADDED: Record<string, GroupDetails> = {
+export const CATEGORY_ORDER: Category[] = Object.keys(CATEGORIES) as Category[];
+
+/**
+ * Date added filters.
+ * Used to filter quests in the quests list.
+ */
+export type DateAdded = "lastWeek" | "lastMonth" | "earlier";
+
+export const DATE_ADDED: Record<DateAdded, GroupDetails> = {
   lastWeek: {
     label: "Last 7 days",
     icon: RiTimeLine,
@@ -230,20 +277,55 @@ export const DATE_ADDED: Record<string, GroupDetails> = {
     icon: RiHistoryLine,
   },
 };
+
 export const DATE_ADDED_ORDER: DateAdded[] = Object.keys(
   DATE_ADDED,
 ) as DateAdded[];
-export type DateAdded = keyof typeof DATE_ADDED;
 
-export const STATUS: Record<string, GroupDetails> = {
-  incomplete: {
-    label: "In Progress",
+/**
+ * User quest statuses.
+ * "readyToFile" and "filed" are only available for core quests.
+ * "notStarted", "inProgress", and "complete" are available for all quests.
+ */
+export type Status =
+  | "notStarted"
+  | "inProgress"
+  | "readyToFile"
+  | "filed"
+  | "complete";
+
+interface StatusDetails extends GroupDetails {
+  variant?: "info" | "success" | "danger" | "warning" | "waiting";
+  isCoreOnly?: boolean;
+}
+
+export const STATUS: Record<Status, StatusDetails> = {
+  notStarted: {
+    label: "Not started",
+    icon: RiCheckboxBlankCircleLine,
+  },
+  inProgress: {
+    label: "In progress",
     icon: RiProgress4Line,
+    variant: "warning",
+  },
+  readyToFile: {
+    label: "Ready to file",
+    icon: RiFolderLine,
+    isCoreOnly: true,
+    variant: "info",
+  },
+  filed: {
+    label: "Filed",
+    icon: RiFolderCheckLine,
+    isCoreOnly: true,
+    variant: "waiting",
   },
   complete: {
     label: "Completed",
-    icon: RiCheckLine,
+    icon: RiCheckboxCircleFill,
+    variant: "success",
   },
 } as const;
+
 export const STATUS_ORDER: Status[] = Object.keys(STATUS) as Status[];
-export type Status = keyof typeof STATUS;
