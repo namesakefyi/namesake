@@ -8,7 +8,6 @@ import {
   Button,
   Menu,
   MenuItem,
-  MenuSection,
   MenuTrigger,
 } from "../";
 
@@ -51,22 +50,20 @@ export function StatusSelect({ status, isCore, onChange }: StatusSelectProps) {
         <RiArrowDropDownFill size={16} className="right-0" />
       </Button>
       <Menu
-        placement="bottom"
+        placement="bottom start"
         selectionMode="single"
         selectedKeys={selectedStatus}
         disallowEmptySelection
         onSelectionChange={handleSelectionChange}
       >
-        <MenuSection title="Status">
-          {Object.entries(STATUS).map(([status, details]) => {
-            if (!isCore && details.isCoreOnly) return null;
-            return (
-              <MenuItem key={status} id={status} aria-label={details.label}>
-                <StatusBadge status={status as Status} />
-              </MenuItem>
-            );
-          })}
-        </MenuSection>
+        {Object.entries(STATUS).map(([status, details]) => {
+          if (!isCore && details.isCoreOnly) return null;
+          return (
+            <MenuItem key={status} id={status} aria-label={details.label}>
+              <StatusBadge status={status as Status} />
+            </MenuItem>
+          );
+        })}
       </Menu>
     </MenuTrigger>
   );
