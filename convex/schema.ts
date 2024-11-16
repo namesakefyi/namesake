@@ -7,6 +7,7 @@ import {
   groupQuestsBy,
   jurisdiction,
   role,
+  status,
   theme,
 } from "./validators";
 
@@ -93,11 +94,13 @@ const users = defineTable({
  * Represents a user's unique progress in completing a quest.
  * @param userId
  * @param questId
+ * @param status - The status of the quest.
  * @param completionTime - Time in ms since epoch when the user marked the quest as complete.
  */
 const userQuests = defineTable({
   userId: v.id("users"),
   questId: v.id("quests"),
+  status: status,
   completionTime: v.optional(v.number()),
 })
   .index("userId", ["userId"])

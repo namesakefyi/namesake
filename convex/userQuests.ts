@@ -1,7 +1,8 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
-import type { Category } from "./constants";
+import { type Category, STATUS, type Status } from "./constants";
 import { userMutation, userQuery } from "./helpers";
+import { status } from "./validators";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -104,6 +105,7 @@ export const create = userMutation({
     await ctx.db.insert("userQuests", {
       userId: ctx.userId,
       questId: args.questId,
+      status: "notStarted",
     });
   },
 });
@@ -121,27 +123,59 @@ export const getUserQuestByQuestId = userQuery({
   },
 });
 
-export const markComplete = userMutation({
+export const getUserQuestStatus = userQuery({
   args: { questId: v.id("quests") },
-  returns: v.null(),
+  returns: v.string(),
   handler: async (ctx, args) => {
     const userQuest = await getUserQuestByQuestId(ctx, {
       questId: args.questId,
     });
     if (userQuest === null) throw new Error("Quest not found");
-    await ctx.db.patch(userQuest._id, { completionTime: Date.now() });
+    return userQuest.status;
   },
 });
 
-export const markIncomplete = userMutation({
-  args: { questId: v.id("quests") },
+export const updateQuestStatus = userMutation({
+  args: { questId: v.id("quests"), status: status },
   returns: v.null(),
   handler: async (ctx, args) => {
+    console.log("updateQuestStatus", args);
+    const quest = await ctx.db.get(args.questId);
+    if (quest === null) throw new Error("Quest not found");
+
     const userQuest = await getUserQuestByQuestId(ctx, {
       questId: args.questId,
     });
-    if (userQuest === null) throw new Error("Quest not found");
-    await ctx.db.patch(userQuest._id, { completionTime: undefined });
+    if (userQuest === null) throw new Error("User quest not found");
+
+    // Prevent setting "ready to file" and "filed" on non-core quests
+    if (
+      STATUS[args.status as Status].isCoreOnly === true &&
+      quest.category !== "core"
+    )
+      throw new Error("This status is reserved for core quests only.");
+
+    // Prevent setting the existing status
+    if (userQuest.status === args.status) return;
+
+    // If the status is changing to complete, set the completion time
+    if (args.status === "complete") {
+      await ctx.db.patch(userQuest._id, {
+        status: args.status,
+        completionTime: Date.now(),
+      });
+    }
+
+    // If the status was already complete, unset completion time
+    if (userQuest.status === "complete") {
+      await ctx.db.patch(userQuest._id, {
+        status: args.status,
+        completionTime: undefined,
+      });
+    }
+
+    // Otherwise, just update the status
+    await ctx.db.patch(userQuest._id, { status: args.status });
   },
 });
 
@@ -284,16 +318,19 @@ export const getUserQuestsByStatus = userQuery({
       (q): q is NonNullable<typeof q> => q !== null,
     );
 
-    return validQuests.reduce(
-      (acc, quest) => {
-        if (quest.completionTime) {
-          acc.complete.push(quest);
-        } else {
-          acc.incomplete.push(quest);
-        }
-        return acc;
-      },
-      { incomplete: [], complete: [] } as Record<string, typeof validQuests>,
-    );
+    // Initialize an object with all possible status keys
+    const initial: Record<string, typeof validQuests> = {
+      notStarted: [],
+      inProgress: [],
+      readyToFile: [],
+      filed: [],
+      complete: [],
+    };
+
+    // Group quests by their status
+    return validQuests.reduce((acc, quest) => {
+      acc[quest.status].push(quest);
+      return acc;
+    }, initial);
   },
 });

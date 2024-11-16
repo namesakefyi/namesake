@@ -89,7 +89,7 @@ function AdminQuestDetailRoute() {
         label="Category"
         name="category"
         selectedKey={category}
-        onSelectionChange={(value) => setCategory(value as string)}
+        onSelectionChange={(value) => setCategory(value as Category)}
         placeholder="Select a category"
         isRequired
       >

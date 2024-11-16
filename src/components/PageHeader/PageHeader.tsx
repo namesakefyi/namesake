@@ -33,7 +33,7 @@ export const PageHeader = ({
         </div>
         {subtitle && <p className="text-gray-dim">{subtitle}</p>}
       </div>
-      {children}
+      <div className="flex items-center gap-2">{children}</div>
     </header>
   );
 };
