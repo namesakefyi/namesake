@@ -63,6 +63,14 @@ export const updateQuest = userMutation({
     title: v.string(),
     jurisdiction: v.optional(jurisdiction),
     category: v.optional(category),
+    costs: v.optional(
+      v.array(
+        v.object({
+          cost: v.number(),
+          description: v.string(),
+        }),
+      ),
+    ),
     urls: v.optional(v.array(v.string())),
     content: v.optional(v.string()),
   },
@@ -72,6 +80,7 @@ export const updateQuest = userMutation({
       title: args.title,
       jurisdiction: args.jurisdiction,
       category: args.category,
+      costs: args.costs,
       urls: args.urls,
       content: args.content,
     });

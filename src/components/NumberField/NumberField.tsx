@@ -18,6 +18,7 @@ import { composeTailwindRenderProps } from "../utils";
 
 export interface NumberFieldProps extends AriaNumberFieldProps {
   label?: string;
+  prefix?: React.ReactNode;
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);
 }
@@ -25,6 +26,7 @@ export interface NumberFieldProps extends AriaNumberFieldProps {
 export function NumberField({
   label,
   description,
+  prefix,
   errorMessage,
   ...props
 }: NumberFieldProps) {
@@ -40,6 +42,11 @@ export function NumberField({
       <FieldGroup>
         {(renderProps) => (
           <>
+            {prefix && (
+              <span className="text-gray-9 dark:text-graydark-9 ml-2 -mr-2">
+                {prefix}
+              </span>
+            )}
             <Input />
             <div
               className={fieldBorderStyles({

@@ -20,16 +20,16 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSettingsIndexImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedBrowseIndexImport } from './routes/_authenticated/browse/index'
 import { Route as AuthenticatedAdminIndexImport } from './routes/_authenticated/admin/index'
-import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/_home.index'
+import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/_home/index'
 import { Route as AuthenticatedSettingsOverviewImport } from './routes/_authenticated/settings/overview'
 import { Route as AuthenticatedSettingsDataImport } from './routes/_authenticated/settings/data'
 import { Route as AuthenticatedAdminQuestsIndexImport } from './routes/_authenticated/admin/quests/index'
 import { Route as AuthenticatedAdminFormsIndexImport } from './routes/_authenticated/admin/forms/index'
 import { Route as AuthenticatedAdminFieldsIndexImport } from './routes/_authenticated/admin/fields/index'
-import { Route as AuthenticatedHomeQuestsIndexImport } from './routes/_authenticated/_home.quests.index'
+import { Route as AuthenticatedHomeQuestsIndexImport } from './routes/_authenticated/_home/quests.index'
 import { Route as AuthenticatedAdminQuestsQuestIdImport } from './routes/_authenticated/admin/quests/$questId'
 import { Route as AuthenticatedAdminFormsFormIdImport } from './routes/_authenticated/admin/forms/$formId'
-import { Route as AuthenticatedHomeQuestsQuestIdImport } from './routes/_authenticated/_home.quests.$questId'
+import { Route as AuthenticatedHomeQuestsQuestIdImport } from './routes/_authenticated/_home/quests.$questId'
 
 // Create/Update Routes
 
@@ -589,7 +589,7 @@ export const routeTree = rootRoute
       "parent": "/_authenticated/settings"
     },
     "/_authenticated/_home/": {
-      "filePath": "_authenticated/_home.index.tsx",
+      "filePath": "_authenticated/_home/index.tsx",
       "parent": "/_authenticated/_home"
     },
     "/_authenticated/admin/": {
@@ -605,7 +605,7 @@ export const routeTree = rootRoute
       "parent": "/_authenticated/settings"
     },
     "/_authenticated/_home/quests/$questId": {
-      "filePath": "_authenticated/_home.quests.$questId.tsx",
+      "filePath": "_authenticated/_home/quests.$questId.tsx",
       "parent": "/_authenticated/_home"
     },
     "/_authenticated/admin/forms/$formId": {
@@ -617,7 +617,7 @@ export const routeTree = rootRoute
       "parent": "/_authenticated/admin"
     },
     "/_authenticated/_home/quests/": {
-      "filePath": "_authenticated/_home.quests.index.tsx",
+      "filePath": "_authenticated/_home/quests.index.tsx",
       "parent": "/_authenticated/_home"
     },
     "/_authenticated/admin/fields/": {
