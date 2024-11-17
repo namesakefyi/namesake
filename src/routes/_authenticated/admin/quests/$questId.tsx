@@ -29,17 +29,20 @@ const URLInput = memo(function URLInput({
   value,
   onChange,
   onRemove,
+  hideLabel = false,
 }: {
   value: string;
   onChange: (value: string) => void;
   onRemove: () => void;
+  hideLabel?: boolean;
 }) {
   return (
     <div className="flex gap-2 items-end">
       <TextField
         value={value}
         onChange={onChange}
-        label="URL"
+        label={hideLabel ? undefined : "URL"}
+        aria-label={hideLabel ? "URL" : undefined}
         className="flex-1 w-96"
       />
       <Button type="button" variant="secondary" onPress={onRemove}>
@@ -209,6 +212,7 @@ function AdminQuestDetailRoute() {
             onRemove={() => {
               setUrls(urls.filter((_, i) => i !== index));
             }}
+            hideLabel={index > 0}
           />
         ))}
         <Button
