@@ -1,13 +1,13 @@
 import { v } from "convex/values";
 import {
   CATEGORIES,
-  ESTIMATED_TIME_UNITS,
   FIELDS,
   GROUP_QUESTS_BY,
   JURISDICTIONS,
   ROLES,
   STATUS,
   THEMES,
+  TIME_UNITS,
 } from "./constants";
 
 export const jurisdiction = v.union(
@@ -41,5 +41,5 @@ export const category = v.union(
 );
 
 export const timeRequiredUnit = v.union(
-  ...Object.keys(ESTIMATED_TIME_UNITS).map((unit) => v.literal(unit)),
+  ...Object.keys(TIME_UNITS).map((unit) => v.literal(unit)),
 );

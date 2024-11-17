@@ -335,13 +335,11 @@ export type Cost = {
   description: string;
 };
 
-export const FREE = "free";
-
 /**
  * Estimated time units.
  * Used to display estimated time in quest details.
  */
-export const ESTIMATED_TIME_UNITS = {
+export const TIME_UNITS = {
   minutes: "Minutes",
   hours: "Hours",
   days: "Days",
@@ -349,7 +347,7 @@ export const ESTIMATED_TIME_UNITS = {
   months: "Months",
 } as const;
 
-export type TimeRequiredUnit = keyof typeof ESTIMATED_TIME_UNITS;
+export type TimeRequiredUnit = keyof typeof TIME_UNITS;
 
 export type TimeRequired = {
   min: number;

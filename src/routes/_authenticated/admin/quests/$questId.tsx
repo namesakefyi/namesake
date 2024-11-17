@@ -16,9 +16,9 @@ import {
   type Category,
   type Cost,
   DEFAULT_TIME_REQUIRED,
-  ESTIMATED_TIME_UNITS,
   JURISDICTIONS,
   type Jurisdiction,
+  TIME_UNITS,
   type TimeRequired,
   type TimeRequiredUnit,
 } from "@convex/constants";
@@ -191,7 +191,7 @@ const TimeRequiredInput = memo(function TimeRequiredInput({
           })
         }
       >
-        {Object.entries(ESTIMATED_TIME_UNITS).map(([key, label]) => (
+        {Object.entries(TIME_UNITS).map(([key, label]) => (
           <SelectItem key={key} id={key}>
             {label}
           </SelectItem>
