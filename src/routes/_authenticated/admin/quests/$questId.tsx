@@ -20,7 +20,7 @@ import {
   type Jurisdiction,
   TIME_UNITS,
   type TimeRequired,
-  type TimeRequiredUnit,
+  type TimeUnit,
 } from "@convex/constants";
 import { RiQuestionLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
@@ -187,13 +187,13 @@ const TimeRequiredInput = memo(function TimeRequiredInput({
         onSelectionChange={(key) =>
           onChange({
             ...timeRequired,
-            unit: key as TimeRequiredUnit,
+            unit: key as TimeUnit,
           })
         }
       >
-        {Object.entries(TIME_UNITS).map(([key, label]) => (
+        {Object.entries(TIME_UNITS).map(([key, unit]) => (
           <SelectItem key={key} id={key}>
-            {label}
+            {unit.label}
           </SelectItem>
         ))}
       </Select>

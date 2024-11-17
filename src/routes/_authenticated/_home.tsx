@@ -24,10 +24,14 @@ import {
   DATE_ADDED,
   DATE_ADDED_ORDER,
   type DateAdded,
+  type GroupDetails,
   type GroupQuestsBy,
   STATUS,
   STATUS_ORDER,
   type Status,
+  TIME_UNITS,
+  TIME_UNITS_ORDER,
+  type TimeUnit,
 } from "@convex/constants";
 import { RiAddLine, RiListCheck2, RiSignpostLine } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
@@ -61,6 +65,11 @@ function sortGroupedQuests(
       const indexB = DATE_ADDED_ORDER.indexOf(groupB as DateAdded);
       return indexA - indexB;
     }
+    case "timeRequired": {
+      const indexA = TIME_UNITS_ORDER.indexOf(groupA as TimeUnit);
+      const indexB = TIME_UNITS_ORDER.indexOf(groupB as TimeUnit);
+      return indexA - indexB;
+    }
   }
 }
 
@@ -85,11 +94,15 @@ function IndexRoute() {
     const questsByCategory = useQuery(api.userQuests.getUserQuestsByCategory);
     const questsByDate = useQuery(api.userQuests.getUserQuestsByDate);
     const questsByStatus = useQuery(api.userQuests.getUserQuestsByStatus);
+    const questsByTimeRequired = useQuery(
+      api.userQuests.getUserQuestsByTimeRequired,
+    );
 
     const groupedQuests = {
       category: questsByCategory,
       dateAdded: questsByDate,
       status: questsByStatus,
+      timeRequired: questsByTimeRequired,
     }[groupByValue];
 
     if (groupedQuests === undefined) return;
@@ -111,8 +124,9 @@ function IndexRoute() {
 
     const allCategoryKeys = [
       ...Object.values(CATEGORIES).map((category) => category.label),
-      ...Object.values(DATE_ADDED).map((date) => date.label),
       ...Object.values(STATUS).map((status) => status.label),
+      ...Object.values(DATE_ADDED).map((date) => date.label),
+      ...Object.values(TIME_UNITS).map((timeUnit) => timeUnit.label),
     ];
 
     return (
@@ -136,8 +150,9 @@ function IndexRoute() {
               >
                 <MenuSection title="Group by">
                   <MenuItem id="category">Category</MenuItem>
-                  <MenuItem id="dateAdded">Date added</MenuItem>
                   <MenuItem id="status">Status</MenuItem>
+                  <MenuItem id="dateAdded">Date added</MenuItem>
+                  <MenuItem id="timeRequired">Time required</MenuItem>
                 </MenuSection>
               </Menu>
             </MenuTrigger>
@@ -165,12 +180,22 @@ function IndexRoute() {
               )
               .map(([group, quests]) => {
                 if (quests.length === 0) return null;
-                const { label, icon: Icon } =
-                  groupByValue === "category"
-                    ? CATEGORIES[group as keyof typeof CATEGORIES]
-                    : groupByValue === "status"
-                      ? STATUS[group as keyof typeof STATUS]
-                      : DATE_ADDED[group as keyof typeof DATE_ADDED];
+                let groupDetails: GroupDetails;
+                switch (groupByValue) {
+                  case "category":
+                    groupDetails = CATEGORIES[group as keyof typeof CATEGORIES];
+                    break;
+                  case "status":
+                    groupDetails = STATUS[group as keyof typeof STATUS];
+                    break;
+                  case "timeRequired":
+                    groupDetails = TIME_UNITS[group as keyof typeof TIME_UNITS];
+                    break;
+                  case "dateAdded":
+                    groupDetails = DATE_ADDED[group as keyof typeof DATE_ADDED];
+                    break;
+                }
+                const { label, icon: Icon } = groupDetails;
 
                 return (
                   <Disclosure
