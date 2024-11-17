@@ -3,13 +3,16 @@ import {
   RiAccountCircleLine,
   RiAtLine,
   RiBankLine,
+  RiCalendar2Line,
   RiCalendarLine,
+  RiCalendarScheduleLine,
   RiChat3Line,
   RiCheckboxBlankCircleLine,
   RiCheckboxCircleFill,
   RiCheckboxLine,
   RiComputerLine,
   RiDropdownList,
+  RiFlashlightLine,
   RiFolderCheckLine,
   RiFolderLine,
   RiGamepadLine,
@@ -159,6 +162,7 @@ export const GROUP_QUESTS_BY = {
   dateAdded: "Date added",
   category: "Category",
   status: "Status",
+  timeRequired: "Time required",
 } as const;
 export type GroupQuestsBy = keyof typeof GROUP_QUESTS_BY;
 
@@ -166,10 +170,10 @@ export type GroupQuestsBy = keyof typeof GROUP_QUESTS_BY;
  * Generic group details.
  * Used for UI display of filter groups.
  */
-interface GroupDetails {
+export type GroupDetails = {
   label: string;
   icon: RemixiconComponentType;
-}
+};
 
 /**
  * Categories.
@@ -329,3 +333,53 @@ export const STATUS: Record<Status, StatusDetails> = {
 } as const;
 
 export const STATUS_ORDER: Status[] = Object.keys(STATUS) as Status[];
+
+export type Cost = {
+  cost: number;
+  description: string;
+};
+
+/**
+ * Time units.
+ * Used to display time required in quest details.
+ */
+export type TimeUnit = "minutes" | "hours" | "days" | "weeks" | "months";
+
+export const TIME_UNITS: Record<TimeUnit, GroupDetails> = {
+  minutes: {
+    label: "Minutes",
+    icon: RiFlashlightLine,
+  },
+  hours: {
+    label: "Hours",
+    icon: RiTimeLine,
+  },
+  days: {
+    label: "Days",
+    icon: RiCalendarLine,
+  },
+  weeks: {
+    label: "Weeks",
+    icon: RiCalendar2Line,
+  },
+  months: {
+    label: "Months",
+    icon: RiCalendarScheduleLine,
+  },
+};
+
+export const TIME_UNITS_ORDER: TimeUnit[] = Object.keys(
+  TIME_UNITS,
+) as TimeUnit[];
+
+export type TimeRequired = {
+  min: number;
+  max: number;
+  unit: TimeUnit;
+};
+
+export const DEFAULT_TIME_REQUIRED: TimeRequired = {
+  min: 5,
+  max: 10,
+  unit: "minutes",
+};

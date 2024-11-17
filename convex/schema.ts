@@ -9,6 +9,7 @@ import {
   role,
   status,
   theme,
+  timeRequiredUnit,
 } from "./validators";
 
 /**
@@ -18,6 +19,7 @@ import {
  * @param creationUser - The user who created the quest.
  * @param jurisdiction - The US State the quest applies to. (e.g. "MA")
  * @param costs - The costs of the quest in USD.
+ * @param timeRequired - The estimated time required to complete the quest.
  * @param urls - Links to official documentation about changing names for this quest.
  * @param deletionTime - Time in ms since epoch when the quest was deleted.
  * @param content - Text written in markdown comprising the contents of the quest.
@@ -35,6 +37,11 @@ const quests = defineTable({
       }),
     ),
   ),
+  timeRequired: v.object({
+    min: v.number(),
+    max: v.number(),
+    unit: timeRequiredUnit,
+  }),
   urls: v.optional(v.array(v.string())),
   deletionTime: v.optional(v.number()),
   content: v.optional(v.string()),

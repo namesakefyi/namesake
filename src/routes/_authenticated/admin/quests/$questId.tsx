@@ -1,5 +1,7 @@
 import {
+  AnimateChangeInHeight,
   Button,
+  Checkbox,
   Form,
   NumberField,
   RichTextEditor,
@@ -12,8 +14,13 @@ import type { Id } from "@convex/_generated/dataModel";
 import {
   CATEGORIES,
   type Category,
+  type Cost,
+  DEFAULT_TIME_REQUIRED,
   JURISDICTIONS,
   type Jurisdiction,
+  TIME_UNITS,
+  type TimeRequired,
+  type TimeUnit,
 } from "@convex/constants";
 import { RiQuestionLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
@@ -29,17 +36,20 @@ const URLInput = memo(function URLInput({
   value,
   onChange,
   onRemove,
+  hideLabel = false,
 }: {
   value: string;
   onChange: (value: string) => void;
   onRemove: () => void;
+  hideLabel?: boolean;
 }) {
   return (
     <div className="flex gap-2 items-end">
       <TextField
         value={value}
         onChange={onChange}
-        label="URL"
+        label={hideLabel ? undefined : "URL"}
+        aria-label={hideLabel ? "URL" : undefined}
         className="flex-1 w-96"
       />
       <Button type="button" variant="secondary" onPress={onRemove}>
@@ -55,9 +65,9 @@ const CostInput = memo(function CostInput({
   onRemove,
   hideLabel = false,
 }: {
-  cost: { cost: number; description: string };
-  onChange: (cost: { cost: number; description: string }) => void;
-  onRemove: (cost: { cost: number; description: string }) => void;
+  cost: Cost;
+  onChange: (cost: Cost) => void;
+  onRemove: (cost: Cost) => void;
   hideLabel?: boolean;
 }) {
   return (
@@ -86,6 +96,111 @@ const CostInput = memo(function CostInput({
   );
 });
 
+const CostsInput = memo(function CostsInput({
+  costs,
+  onChange,
+}: {
+  costs: Cost[] | null;
+  onChange: (costs: Cost[] | null) => void;
+}) {
+  return (
+    <AnimateChangeInHeight>
+      <Checkbox
+        label="Free"
+        isSelected={!costs}
+        onChange={(isSelected) =>
+          onChange(isSelected ? null : [{ cost: 0, description: "" }])
+        }
+      />
+      {costs && (
+        <div className="flex flex-col gap-2 mt-4">
+          {costs.map((cost, index) => (
+            <CostInput
+              // biome-ignore lint/suspicious/noArrayIndexKey:
+              key={index}
+              cost={cost}
+              onChange={(value) => {
+                const newCosts = [...costs];
+                newCosts[index] = value;
+                onChange(newCosts);
+              }}
+              onRemove={() => {
+                onChange(costs.filter((_, i) => i !== index));
+              }}
+              hideLabel={index > 0}
+            />
+          ))}
+          <Button
+            type="button"
+            variant="secondary"
+            onPress={() =>
+              onChange([...(costs ?? []), { cost: 0, description: "" }])
+            }
+          >
+            Add cost
+          </Button>
+        </div>
+      )}
+    </AnimateChangeInHeight>
+  );
+});
+
+const TimeRequiredInput = memo(function TimeRequiredInput({
+  timeRequired,
+  onChange,
+}: {
+  timeRequired: TimeRequired;
+  onChange: (timeRequired: TimeRequired) => void;
+}) {
+  if (!timeRequired) return null;
+
+  return (
+    <div className="flex items-end gap-2">
+      <NumberField
+        label="Min. Req. Time"
+        className="w-28"
+        value={timeRequired?.min}
+        maxValue={Math.max(timeRequired.max, 60)}
+        onChange={(value) =>
+          onChange({
+            ...timeRequired,
+            min: value,
+          })
+        }
+      />
+      <NumberField
+        label="Max Req. Time"
+        className="w-28"
+        value={timeRequired.max}
+        minValue={Math.min(timeRequired.min, 1)}
+        onChange={(value) =>
+          onChange({
+            ...timeRequired,
+            max: value,
+          })
+        }
+      />
+      <Select
+        label="Unit"
+        className="w-40"
+        selectedKey={timeRequired.unit}
+        onSelectionChange={(key) =>
+          onChange({
+            ...timeRequired,
+            unit: key as TimeUnit,
+          })
+        }
+      >
+        {Object.entries(TIME_UNITS).map(([key, unit]) => (
+          <SelectItem key={key} id={key}>
+            {unit.label}
+          </SelectItem>
+        ))}
+      </Select>
+    </div>
+  );
+});
+
 function AdminQuestDetailRoute() {
   const { questId } = Route.useParams();
   const quest = useQuery(api.quests.getQuest, {
@@ -96,8 +211,9 @@ function AdminQuestDetailRoute() {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<Category | null>(null);
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
-  const [costs, setCosts] = useState<{ cost: number; description: string }[]>(
-    [],
+  const [costs, setCosts] = useState<Cost[] | null>(null);
+  const [timeRequired, setTimeRequired] = useState<TimeRequired>(
+    DEFAULT_TIME_REQUIRED,
   );
   const [urls, setUrls] = useState<string[]>([]);
   const [content, setContent] = useState("");
@@ -107,7 +223,8 @@ function AdminQuestDetailRoute() {
       setTitle(quest.title ?? "");
       setCategory(quest.category as Category);
       setJurisdiction(quest.jurisdiction as Jurisdiction);
-      setCosts(quest.costs ?? []);
+      setCosts(quest.costs as Cost[]);
+      setTimeRequired(quest.timeRequired as TimeRequired);
       setUrls(quest.urls ?? []);
       setContent(quest.content ?? "");
     }
@@ -124,6 +241,7 @@ function AdminQuestDetailRoute() {
       category: category ?? undefined,
       jurisdiction: jurisdiction ?? undefined,
       costs: costs ?? undefined,
+      timeRequired: timeRequired ?? undefined,
       urls: urls ?? undefined,
       content,
     }).then(() => {
@@ -170,31 +288,11 @@ function AdminQuestDetailRoute() {
           </SelectItem>
         ))}
       </Select>
-      <div className="flex flex-col gap-2">
-        {costs.map((cost, index) => (
-          <CostInput
-            // biome-ignore lint/suspicious/noArrayIndexKey:
-            key={index}
-            cost={cost}
-            onChange={(value) => {
-              const newCosts = [...costs];
-              newCosts[index] = value;
-              setCosts(newCosts);
-            }}
-            onRemove={() => {
-              setCosts(costs.filter((_, i) => i !== index));
-            }}
-            hideLabel={index > 0}
-          />
-        ))}
-        <Button
-          type="button"
-          variant="secondary"
-          onPress={() => setCosts([...costs, { cost: 0, description: "" }])}
-        >
-          Add cost
-        </Button>
-      </div>
+      <CostsInput costs={costs} onChange={setCosts} />
+      <TimeRequiredInput
+        timeRequired={timeRequired}
+        onChange={setTimeRequired}
+      />
       <div className="flex flex-col gap-2">
         {urls.map((url, index) => (
           <URLInput
@@ -209,6 +307,7 @@ function AdminQuestDetailRoute() {
             onRemove={() => {
               setUrls(urls.filter((_, i) => i !== index));
             }}
+            hideLabel={index > 0}
           />
         ))}
         <Button

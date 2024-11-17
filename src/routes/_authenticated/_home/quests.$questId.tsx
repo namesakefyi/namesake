@@ -16,7 +16,7 @@ import {
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import type { Status } from "@convex/constants";
+import type { Cost, Status, TimeRequired } from "@convex/constants";
 import {
   RiLink,
   RiMoreFill,
@@ -33,66 +33,85 @@ export const Route = createFileRoute("/_authenticated/_home/quests/$questId")({
   component: QuestDetailRoute,
 });
 
-const getTotalCosts = (costs?: { cost: number; description: string }[]) => {
-  if (!costs) return "Free";
+const StatGroup = ({
+  label,
+  value,
+  children,
+}: { label: string; value: string; children?: React.ReactNode }) => (
+  <div className="flex flex-col">
+    <div className="text-gray-dim">{label}</div>
+    <div className="text-2xl flex gap-0.5 items-center">
+      {value}
+      {children}
+    </div>
+  </div>
+);
 
-  const total = costs.reduce((acc, cost) => acc + cost.cost, 0);
-  return total > 0
-    ? total.toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
-        maximumFractionDigits: 0,
-      })
-    : "Free";
-};
+const QuestCosts = ({ costs }: { costs?: Cost[] }) => {
+  const getTotalCosts = (costs?: Cost[]) => {
+    if (!costs) return "Free";
 
-const QuestCosts = ({
-  costs,
-}: { costs?: { cost: number; description: string }[] }) => {
-  const totalCosts = getTotalCosts(costs);
+    const total = costs.reduce((acc, cost) => acc + cost.cost, 0);
+    return total > 0
+      ? total.toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD",
+          maximumFractionDigits: 0,
+        })
+      : "Free";
+  };
 
   return (
-    <div className="flex flex-col mb-4">
-      <div className="flex flex-col">
-        <div className="text-gray-dim">Cost</div>
-        <div className="text-2xl flex gap-0.5 items-center">
-          {totalCosts}
-          {costs?.length && (
-            <DialogTrigger>
-              <TooltipTrigger>
-                <Button variant="icon" size="small">
-                  <RiQuestionLine />
-                </Button>
-                <Tooltip>See cost breakdown</Tooltip>
-              </TooltipTrigger>
-              <Popover className="p-4">
-                <dl className="grid grid-cols-[1fr_auto]">
-                  {costs.map(({ cost, description }) => (
-                    <Fragment key={description}>
-                      <dt className="text-gray-dim pr-4">{description}</dt>
-                      <dd className="text-right">
-                        {cost.toLocaleString("en-US", {
-                          style: "currency",
-                          currency: "USD",
-                          maximumFractionDigits: 0,
-                        })}
-                      </dd>
-                    </Fragment>
-                  ))}
-                  <dt className="text-gray-dim pr-4 border-t border-gray-dim pt-2 mt-2">
-                    Total
-                  </dt>
-                  <dd className="text-right border-t border-gray-dim pt-2 mt-2">
-                    {totalCosts}
+    <StatGroup label="Cost" value={getTotalCosts(costs)}>
+      {costs?.length && (
+        <DialogTrigger>
+          <TooltipTrigger>
+            <Button variant="icon" size="small">
+              <RiQuestionLine />
+            </Button>
+            <Tooltip>See cost breakdown</Tooltip>
+          </TooltipTrigger>
+          <Popover className="p-4">
+            <dl className="grid grid-cols-[1fr_auto]">
+              {costs.map(({ cost, description }) => (
+                <Fragment key={description}>
+                  <dt className="text-gray-dim pr-4">{description}</dt>
+                  <dd className="text-right">
+                    {cost.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      maximumFractionDigits: 0,
+                    })}
                   </dd>
-                </dl>
-              </Popover>
-            </DialogTrigger>
-          )}
-        </div>
-      </div>
-    </div>
+                </Fragment>
+              ))}
+              <dt className="text-gray-dim pr-4 border-t border-gray-dim pt-2 mt-2">
+                Total
+              </dt>
+              <dd className="text-right border-t border-gray-dim pt-2 mt-2">
+                {getTotalCosts(costs)}
+              </dd>
+            </dl>
+          </Popover>
+        </DialogTrigger>
+      )}
+    </StatGroup>
   );
+};
+
+const QuestTimeRequired = ({
+  timeRequired,
+}: {
+  timeRequired: TimeRequired;
+}) => {
+  const getFormattedTime = (timeRequired: TimeRequired) => {
+    return timeRequired
+      ? `${timeRequired.min}–${timeRequired.max} ${timeRequired.unit}`
+      : "Unknown";
+  };
+
+  const formattedTime = getFormattedTime(timeRequired);
+  return <StatGroup label="Time" value={formattedTime} />;
 };
 
 function QuestDetailRoute() {
@@ -154,7 +173,12 @@ function QuestDetailRoute() {
         </MenuTrigger>
       </PageHeader>
       <Container className="overflow-y-auto">
-        <QuestCosts costs={quest.costs} />
+        <div className="flex gap-4 mb-4">
+          <QuestCosts costs={quest.costs} />
+          <QuestTimeRequired
+            timeRequired={quest.timeRequired as TimeRequired}
+          />
+        </div>
         {quest.urls && (
           <div className="flex flex-col items-start gap-1 mb-4">
             {quest.urls.map((url) => (
