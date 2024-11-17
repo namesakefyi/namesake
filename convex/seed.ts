@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { internalMutation } from "./_generated/server";
-import { JURISDICTIONS } from "./constants";
+import { DEFAULT_TIME_REQUIRED, JURISDICTIONS } from "./constants";
 
 const seed = internalMutation(async (ctx) => {
   if (process.env.NODE_ENV === "production") {
@@ -49,6 +49,7 @@ const seed = internalMutation(async (ctx) => {
         title: questTitle,
         category: "core",
         jurisdiction: questJurisdiction,
+        timeRequired: DEFAULT_TIME_REQUIRED,
         creationUser: userId,
       });
       console.log(`Created quest ${questTitle} (${questJurisdiction})`);

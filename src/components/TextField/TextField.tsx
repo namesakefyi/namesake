@@ -39,7 +39,7 @@ export function TextField({
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "flex flex-col gap-2",
+        "flex flex-col gap-1.5",
       )}
       type={
         props.type === "password" && isPasswordVisible ? "text" : props.type

@@ -1,7 +1,8 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
+import { DEFAULT_TIME_REQUIRED } from "./constants";
 import { userMutation } from "./helpers";
-import { category, jurisdiction } from "./validators";
+import { category, jurisdiction, timeRequiredUnit } from "./validators";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -51,6 +52,7 @@ export const createQuest = userMutation({
       title: args.title,
       category: args.category,
       jurisdiction: args.jurisdiction,
+      timeRequired: DEFAULT_TIME_REQUIRED,
       creationUser: ctx.userId,
     });
   },
@@ -71,6 +73,13 @@ export const updateQuest = userMutation({
         }),
       ),
     ),
+    timeRequired: v.optional(
+      v.object({
+        min: v.number(),
+        max: v.number(),
+        unit: timeRequiredUnit,
+      }),
+    ),
     urls: v.optional(v.array(v.string())),
     content: v.optional(v.string()),
   },
@@ -81,6 +90,7 @@ export const updateQuest = userMutation({
       jurisdiction: args.jurisdiction,
       category: args.category,
       costs: args.costs,
+      timeRequired: args.timeRequired,
       urls: args.urls,
       content: args.content,
     });

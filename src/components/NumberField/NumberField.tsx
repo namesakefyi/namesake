@@ -35,7 +35,7 @@ export function NumberField({
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "group flex flex-col gap-1",
+        "group flex flex-col gap-1.5",
       )}
     >
       <Label>{label}</Label>

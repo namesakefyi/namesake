@@ -53,7 +53,7 @@ export function Select<T extends object>({
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "group flex flex-col gap-2",
+        "group flex flex-col gap-1.5",
       )}
     >
       {label && <Label>{label}</Label>}

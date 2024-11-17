@@ -329,3 +329,36 @@ export const STATUS: Record<Status, StatusDetails> = {
 } as const;
 
 export const STATUS_ORDER: Status[] = Object.keys(STATUS) as Status[];
+
+export type Cost = {
+  cost: number;
+  description: string;
+};
+
+export const FREE = "free";
+
+/**
+ * Estimated time units.
+ * Used to display estimated time in quest details.
+ */
+export const ESTIMATED_TIME_UNITS = {
+  minutes: "Minutes",
+  hours: "Hours",
+  days: "Days",
+  weeks: "Weeks",
+  months: "Months",
+} as const;
+
+export type TimeRequiredUnit = keyof typeof ESTIMATED_TIME_UNITS;
+
+export type TimeRequired = {
+  min: number;
+  max: number;
+  unit: TimeRequiredUnit;
+};
+
+export const DEFAULT_TIME_REQUIRED: TimeRequired = {
+  min: 5,
+  max: 10,
+  unit: "minutes",
+};
