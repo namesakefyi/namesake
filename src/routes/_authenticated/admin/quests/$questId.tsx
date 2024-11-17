@@ -1,6 +1,7 @@
 import {
   Button,
   Form,
+  NumberField,
   RichTextEditor,
   Select,
   SelectItem,
@@ -34,9 +35,47 @@ const URLInput = memo(function URLInput({
   onRemove: () => void;
 }) {
   return (
-    <div className="flex gap-2">
-      <TextField value={value} onChange={onChange} className="flex-1" />
+    <div className="flex gap-2 items-end">
+      <TextField
+        value={value}
+        onChange={onChange}
+        label="URL"
+        className="flex-1 w-96"
+      />
       <Button type="button" variant="secondary" onPress={onRemove}>
+        Remove
+      </Button>
+    </div>
+  );
+});
+
+const CostInput = memo(function CostInput({
+  cost,
+  onChange,
+  onRemove,
+}: {
+  cost: { cost: number; description: string };
+  onChange: (cost: { cost: number; description: string }) => void;
+  onRemove: (cost: { cost: number; description: string }) => void;
+}) {
+  return (
+    <div className="flex items-end gap-2">
+      <NumberField
+        label="Cost"
+        className="w-28"
+        prefix="$"
+        value={cost.cost}
+        onChange={(value) =>
+          onChange({ cost: value, description: cost.description })
+        }
+      />
+      <TextField
+        label="For"
+        className="w-80"
+        value={cost.description}
+        onChange={(value) => onChange({ cost: cost.cost, description: value })}
+      />
+      <Button type="button" variant="secondary" onPress={() => onRemove(cost)}>
         Remove
       </Button>
     </div>
@@ -53,6 +92,9 @@ function AdminQuestDetailRoute() {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<Category | null>(null);
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
+  const [costs, setCosts] = useState<{ cost: number; description: string }[]>(
+    [],
+  );
   const [urls, setUrls] = useState<string[]>([]);
   const [content, setContent] = useState("");
 
@@ -61,6 +103,7 @@ function AdminQuestDetailRoute() {
       setTitle(quest.title ?? "");
       setCategory(quest.category as Category);
       setJurisdiction(quest.jurisdiction as Jurisdiction);
+      setCosts(quest.costs ?? []);
       setUrls(quest.urls ?? []);
       setContent(quest.content ?? "");
     }
@@ -76,6 +119,7 @@ function AdminQuestDetailRoute() {
       title,
       category: category ?? undefined,
       jurisdiction: jurisdiction ?? undefined,
+      costs: costs ?? undefined,
       urls: urls ?? undefined,
       content,
     }).then(() => {
@@ -122,6 +166,30 @@ function AdminQuestDetailRoute() {
           </SelectItem>
         ))}
       </Select>
+      <div className="flex flex-col gap-2">
+        {costs.map((cost, index) => (
+          <CostInput
+            // biome-ignore lint/suspicious/noArrayIndexKey:
+            key={index}
+            cost={cost}
+            onChange={(value) => {
+              const newCosts = [...costs];
+              newCosts[index] = value;
+              setCosts(newCosts);
+            }}
+            onRemove={() => {
+              setCosts(costs.filter((_, i) => i !== index));
+            }}
+          />
+        ))}
+        <Button
+          type="button"
+          variant="secondary"
+          onPress={() => setCosts([...costs, { cost: 0, description: "" }])}
+        >
+          Add cost
+        </Button>
+      </div>
       <div className="flex flex-col gap-2">
         {urls.map((url, index) => (
           <URLInput
