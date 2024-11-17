@@ -53,15 +53,18 @@ const CostInput = memo(function CostInput({
   cost,
   onChange,
   onRemove,
+  hideLabel = false,
 }: {
   cost: { cost: number; description: string };
   onChange: (cost: { cost: number; description: string }) => void;
   onRemove: (cost: { cost: number; description: string }) => void;
+  hideLabel?: boolean;
 }) {
   return (
     <div className="flex items-end gap-2">
       <NumberField
-        label="Cost"
+        label={hideLabel ? undefined : "Cost"}
+        aria-label={hideLabel ? "Cost" : undefined}
         className="w-28"
         prefix="$"
         value={cost.cost}
@@ -70,7 +73,8 @@ const CostInput = memo(function CostInput({
         }
       />
       <TextField
-        label="For"
+        label={hideLabel ? undefined : "For"}
+        aria-label={hideLabel ? "For" : undefined}
         className="w-80"
         value={cost.description}
         onChange={(value) => onChange({ cost: cost.cost, description: value })}
@@ -180,6 +184,7 @@ function AdminQuestDetailRoute() {
             onRemove={() => {
               setCosts(costs.filter((_, i) => i !== index));
             }}
+            hideLabel={index > 0}
           />
         ))}
         <Button
