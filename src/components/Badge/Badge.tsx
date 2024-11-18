@@ -42,11 +42,11 @@ const icon = tv({
   },
 });
 
-export function Badge({ icon: Icon, ...props }: BadgeProps) {
+export function Badge({ icon: Icon, className, ...props }: BadgeProps) {
   return (
     <div
       {...props}
-      className={badge({ variant: props.variant, size: props.size })}
+      className={badge({ variant: props.variant, size: props.size, className })}
     >
       {Icon && <Icon className={icon({ variant: props.variant })} />}
       {props.children}

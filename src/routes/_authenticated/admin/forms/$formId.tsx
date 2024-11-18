@@ -24,8 +24,12 @@ function AdminFormDetailRoute() {
     <div>
       <PageHeader
         title={form.title}
-        badge={<Badge size="lg">{form.jurisdiction}</Badge>}
-        subtitle={form.formCode}
+        badge={
+          <>
+            <Badge size="lg">{form.jurisdiction}</Badge>
+            <Badge size="lg">{form.formCode}</Badge>
+          </>
+        }
       />
       {fileUrl && (
         <object

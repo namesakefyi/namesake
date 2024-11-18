@@ -1,4 +1,4 @@
-import { Container, Nav } from "@/components";
+import { AppSidebar, Container, Nav } from "@/components";
 import { RiFileTextLine, RiInputField, RiSignpostLine } from "@remixicon/react";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
@@ -19,29 +19,31 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 function AdminRoute() {
   return (
-    <div className="flex flex-1 max-w-screen min-h-0">
-      <Nav
-        routes={[
-          {
-            icon: RiSignpostLine,
-            href: { to: "/admin/quests" },
-            label: "Quests",
-          },
-          {
-            icon: RiFileTextLine,
-            href: { to: "/admin/forms" },
-            label: "Forms",
-          },
-          {
-            icon: RiInputField,
-            href: { to: "/admin/fields" },
-            label: "Fields",
-          },
-        ]}
-      />
-      <Container className="overflow-y-auto">
+    <Container className="flex gap-6">
+      <AppSidebar>
+        <Nav
+          routes={[
+            {
+              icon: RiSignpostLine,
+              href: { to: "/admin/quests" },
+              label: "Quests",
+            },
+            {
+              icon: RiFileTextLine,
+              href: { to: "/admin/forms" },
+              label: "Forms",
+            },
+            {
+              icon: RiInputField,
+              href: { to: "/admin/fields" },
+              label: "Fields",
+            },
+          ]}
+        />
+      </AppSidebar>
+      <div className="w-full">
         <Outlet />
-      </Container>
-    </div>
+      </div>
+    </Container>
   );
 }

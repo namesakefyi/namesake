@@ -1,7 +1,6 @@
 import {
   Badge,
   Button,
-  Container,
   DialogTrigger,
   Empty,
   Link,
@@ -38,9 +37,9 @@ const StatGroup = ({
   value,
   children,
 }: { label: string; value: string; children?: React.ReactNode }) => (
-  <div className="flex flex-col">
-    <div className="text-gray-dim">{label}</div>
-    <div className="text-2xl flex gap-0.5 items-center">
+  <div className="flex flex-col flex-1 bg-gray-2 dark:bg-graydark-2 py-3 px-4 rounded-lg">
+    <div className="text-gray-dim text-sm">{label}</div>
+    <div className="text-xl flex gap-0.5 items-center">
       {value}
       {children}
     </div>
@@ -114,6 +113,21 @@ const QuestTimeRequired = ({
   return <StatGroup label="Time" value={formattedTime} />;
 };
 
+const QuestUrls = ({ urls }: { urls?: string[] }) => {
+  if (!urls || urls.length === 0) return null;
+
+  return (
+    <div className="flex flex-col items-start gap-1 mb-4">
+      {urls.map((url) => (
+        <Link key={url} href={url} className="inline-flex gap-1 items-center">
+          <RiLink size={20} />
+          {url}
+        </Link>
+      ))}
+    </div>
+  );
+};
+
 function QuestDetailRoute() {
   const { questId } = Route.useParams();
   const navigate = useNavigate();
@@ -145,11 +159,10 @@ function QuestDetailRoute() {
     return <Empty title="Quest not found" icon={RiSignpostLine} />;
 
   return (
-    <div className="flex flex-col flex-1">
+    <div className="w-full">
       <PageHeader
         title={quest.title}
         badge={quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
-        className="px-6 border-b border-gray-dim h-16"
       >
         <StatusSelect
           status={userQuest.status as Status}
@@ -172,35 +185,18 @@ function QuestDetailRoute() {
           </Menu>
         </MenuTrigger>
       </PageHeader>
-      <Container className="overflow-y-auto">
-        <div className="flex gap-4 mb-4">
-          <QuestCosts costs={quest.costs} />
-          <QuestTimeRequired
-            timeRequired={quest.timeRequired as TimeRequired}
-          />
-        </div>
-        {quest.urls && (
-          <div className="flex flex-col items-start gap-1 mb-4">
-            {quest.urls.map((url) => (
-              <Link
-                key={url}
-                href={url}
-                className="inline-flex gap-1 items-center"
-              >
-                <RiLink size={20} />
-                {url}
-              </Link>
-            ))}
-          </div>
-        )}
-        {quest.content ? (
-          <Markdown className="prose dark:prose-invert">
-            {quest.content}
-          </Markdown>
-        ) : (
-          "No content"
-        )}
-      </Container>
+      <div className="flex gap-4 mb-4">
+        <QuestCosts costs={quest.costs} />
+        <QuestTimeRequired timeRequired={quest.timeRequired as TimeRequired} />
+      </div>
+      <QuestUrls urls={quest.urls} />
+      {quest.content ? (
+        <Markdown className="prose dark:prose-invert max-w-full">
+          {quest.content}
+        </Markdown>
+      ) : (
+        "No content"
+      )}
     </div>
   );
 }

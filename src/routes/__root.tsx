@@ -71,6 +71,7 @@ function RootRoute() {
         theme={theme as "light" | "dark" | "system"}
         offset={16}
         gap={8}
+        position="bottom-left"
         toastOptions={{
           unstyled: true,
           classNames: {

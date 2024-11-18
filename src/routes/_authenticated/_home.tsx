@@ -1,13 +1,13 @@
 import {
   Badge,
   Button,
+  Container,
   Disclosure,
   DisclosureGroup,
   DisclosurePanel,
   Empty,
   GridList,
   GridListItem,
-  Link,
   Menu,
   MenuItem,
   MenuSection,
@@ -16,6 +16,7 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components";
+import { AppSidebar } from "@/components/AppSidebar/AppSidebar";
 import { api } from "@convex/_generated/api";
 import {
   CATEGORIES,
@@ -33,7 +34,7 @@ import {
   TIME_UNITS_ORDER,
   type TimeUnit,
 } from "@convex/constants";
-import { RiAddLine, RiListCheck2, RiSignpostLine } from "@remixicon/react";
+import { RiListCheck2, RiSignpostLine } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
 import { useEffect, useState } from "react";
@@ -130,8 +131,8 @@ function IndexRoute() {
     ];
 
     return (
-      <div className="flex flex-col w-80 border-r border-gray-dim">
-        <div className="flex items-center py-3 px-4 h-16 border-b border-gray-dim">
+      <AppSidebar>
+        <div className="flex items-center mb-4 bg-gray-app z-10">
           <ProgressBar
             label="Quests complete"
             value={completedQuests}
@@ -156,104 +157,93 @@ function IndexRoute() {
                 </MenuSection>
               </Menu>
             </MenuTrigger>
-            <Tooltip>Group by</Tooltip>
-          </TooltipTrigger>
-          <TooltipTrigger>
-            <Link
-              aria-label="Add quest"
-              href={{ to: "/browse" }}
-              button={{ variant: "icon", className: "-mr-1" }}
-            >
-              <RiAddLine size={20} />
-            </Link>
-            <Tooltip>Add quests</Tooltip>
+            <Tooltip placement="right">Group by</Tooltip>
           </TooltipTrigger>
         </div>
-        <div className="flex-1 p-2 overflow-y-auto">
-          <DisclosureGroup
-            allowsMultipleExpanded
-            defaultExpandedKeys={[...allCategoryKeys]}
-          >
-            {Object.entries(groupedQuests)
-              .sort(([groupA], [groupB]) =>
-                sortGroupedQuests(groupA, groupB, groupByValue),
-              )
-              .map(([group, quests]) => {
-                if (quests.length === 0) return null;
-                let groupDetails: GroupDetails;
-                switch (groupByValue) {
-                  case "category":
-                    groupDetails = CATEGORIES[group as keyof typeof CATEGORIES];
-                    break;
-                  case "status":
-                    groupDetails = STATUS[group as keyof typeof STATUS];
-                    break;
-                  case "timeRequired":
-                    groupDetails = TIME_UNITS[group as keyof typeof TIME_UNITS];
-                    break;
-                  case "dateAdded":
-                    groupDetails = DATE_ADDED[group as keyof typeof DATE_ADDED];
-                    break;
-                }
-                const { label, icon: Icon } = groupDetails;
+        <DisclosureGroup
+          allowsMultipleExpanded
+          defaultExpandedKeys={[...allCategoryKeys]}
+          className="-ml-2"
+        >
+          {Object.entries(groupedQuests)
+            .sort(([groupA], [groupB]) =>
+              sortGroupedQuests(groupA, groupB, groupByValue),
+            )
+            .map(([group, quests]) => {
+              if (quests.length === 0) return null;
+              let groupDetails: GroupDetails;
+              switch (groupByValue) {
+                case "category":
+                  groupDetails = CATEGORIES[group as keyof typeof CATEGORIES];
+                  break;
+                case "status":
+                  groupDetails = STATUS[group as keyof typeof STATUS];
+                  break;
+                case "timeRequired":
+                  groupDetails = TIME_UNITS[group as keyof typeof TIME_UNITS];
+                  break;
+                case "dateAdded":
+                  groupDetails = DATE_ADDED[group as keyof typeof DATE_ADDED];
+                  break;
+              }
+              const { label, icon: Icon } = groupDetails;
 
-                return (
-                  <Disclosure
-                    defaultExpanded
-                    key={label}
-                    id={label}
-                    title={
-                      <div className="flex items-center gap-2">
-                        <Icon size={16} className="text-gray-dim" />
-                        {label}
-                        <Badge className="ml-auto">{quests.length}</Badge>
-                      </div>
-                    }
-                  >
-                    <DisclosurePanel>
-                      <GridList
-                        aria-label={`${group} quests`}
-                        className="border-none"
-                      >
-                        {quests.map((quest) => (
-                          <GridListItem
-                            textValue={quest.title}
-                            key={quest._id}
-                            href={{
-                              to: "/quests/$questId",
-                              params: { questId: quest.questId },
-                            }}
-                            className="hover:bg-gray-3 dark:hover:bg-graydark-3 rounded-md pl-8 h-8"
-                          >
-                            <div className="flex items-center justify-between gap-2 w-full">
-                              <div
-                                className={twMerge(
-                                  quest.completionTime && "opacity-40",
-                                )}
-                              >
-                                {quest.title}
-                              </div>
+              return (
+                <Disclosure
+                  defaultExpanded
+                  key={label}
+                  id={label}
+                  title={
+                    <div className="flex items-center gap-2">
+                      <Icon size={16} className="text-gray-dim" />
+                      {label}
+                      <Badge className="ml-auto">{quests.length}</Badge>
+                    </div>
+                  }
+                >
+                  <DisclosurePanel>
+                    <GridList
+                      aria-label={`${group} quests`}
+                      className="border-none"
+                    >
+                      {quests.map((quest) => (
+                        <GridListItem
+                          textValue={quest.title}
+                          key={quest._id}
+                          href={{
+                            to: "/quests/$questId",
+                            params: { questId: quest.questId },
+                          }}
+                          className="hover:bg-gray-3 dark:hover:bg-graydark-3 rounded-md pl-8 h-8"
+                        >
+                          <div className="flex items-center justify-between gap-2 w-full">
+                            <div
+                              className={twMerge(
+                                quest.completionTime && "opacity-40",
+                              )}
+                            >
+                              {quest.title}
                             </div>
-                          </GridListItem>
-                        ))}
-                      </GridList>
-                    </DisclosurePanel>
-                  </Disclosure>
-                );
-              })}
-          </DisclosureGroup>
-        </div>
-      </div>
+                          </div>
+                        </GridListItem>
+                      ))}
+                    </GridList>
+                  </DisclosurePanel>
+                </Disclosure>
+              );
+            })}
+        </DisclosureGroup>
+      </AppSidebar>
     );
   };
 
   return (
     <>
       <Authenticated>
-        <div className="flex flex-1 min-h-0">
+        <Container className="flex gap-6">
           <MyQuests />
           <Outlet />
-        </div>
+        </Container>
       </Authenticated>
       <Unauthenticated>
         <h1>Please log in</h1>

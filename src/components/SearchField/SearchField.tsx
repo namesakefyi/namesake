@@ -18,12 +18,14 @@ export interface SearchFieldProps extends AriaSearchFieldProps {
   label?: string;
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);
+  placeholder?: string;
 }
 
 export function SearchField({
   label,
   description,
   errorMessage,
+  placeholder,
   ...props
 }: SearchFieldProps) {
   return (
@@ -40,7 +42,10 @@ export function SearchField({
           aria-hidden
           className="w-4 h-4 ml-3 text-gray-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText]"
         />
-        <Input className="[&::-webkit-search-cancel-button]:hidden" />
+        <Input
+          placeholder={placeholder}
+          className="[&::-webkit-search-cancel-button]:hidden"
+        />
         <Button
           variant="icon"
           className="mr-1 w-7 h-7 p-0 group-empty:invisible"

@@ -21,7 +21,7 @@ export const Nav = ({ routes }: NavProps) => {
   const matchRoute = useMatchRoute();
 
   return (
-    <nav className="flex flex-col w-[160px] shrink-0 pt-5 pl-6">
+    <div>
       {routes.map(({ href, label, icon }) => {
         const current = matchRoute({ ...href, fuzzy: true });
         const Icon = icon;
@@ -38,6 +38,6 @@ export const Nav = ({ routes }: NavProps) => {
           </Link>
         );
       })}
-    </nav>
+    </div>
   );
 };
