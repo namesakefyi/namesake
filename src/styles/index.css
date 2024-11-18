@@ -23,6 +23,10 @@ body {
   margin: 0;
 }
 
+.mdxeditor-popup-container:empty {
+  display: none;
+}
+
 .prose {
   line-height: 1.5;
 
