@@ -5,7 +5,6 @@ export interface PageHeaderProps {
   title: string;
   icon?: RemixiconComponentType;
   badge?: React.ReactNode;
-  subtitle?: string;
   children?: React.ReactNode;
   className?: string;
 }
@@ -14,14 +13,13 @@ export const PageHeader = ({
   title,
   icon: Icon,
   badge,
-  subtitle,
   children,
   className,
 }: PageHeaderProps) => {
   return (
     <header
       className={twMerge(
-        "h-12 flex shrink-0 items-center justify-between gap-6 text-gray-normal",
+        "h-16 flex bg-gray-app shrink-0 items-center justify-between gap-6 text-gray-normal sticky top-0 z-20",
         className,
       )}
     >
@@ -31,7 +29,6 @@ export const PageHeader = ({
           <h1 className="text-xl font-medium">{title}</h1>
           {badge}
         </div>
-        {subtitle && <p className="text-gray-dim">{subtitle}</p>}
       </div>
       <div className="flex items-center gap-2">{children}</div>
     </header>

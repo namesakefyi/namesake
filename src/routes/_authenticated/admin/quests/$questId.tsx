@@ -4,6 +4,7 @@ import {
   Checkbox,
   Form,
   NumberField,
+  PageHeader,
   RichTextEditor,
   Select,
   SelectItem,
@@ -250,84 +251,87 @@ function AdminQuestDetailRoute() {
   };
 
   return (
-    <Form className="w-full items-start" onSubmit={handleSubmit}>
-      <Select
-        label="Category"
-        name="category"
-        selectedKey={category}
-        onSelectionChange={(value) => setCategory(value as Category)}
-        placeholder="Select a category"
-        isRequired
-      >
-        {Object.entries(CATEGORIES).map(([key, { label, icon }]) => {
-          const Icon = icon ?? RiQuestionLine;
-          return (
-            <SelectItem key={key} id={key} textValue={key}>
-              <Icon size={20} /> {label}
-            </SelectItem>
-          );
-        })}
-      </Select>
-      <TextField
-        label="Title"
-        name="title"
-        isRequired
-        value={title}
-        onChange={(value) => setTitle(value)}
-      />
-      <Select
-        label="Jurisdiction"
-        name="jurisdiction"
-        selectedKey={jurisdiction}
-        onSelectionChange={(key) => setJurisdiction(key as Jurisdiction)}
-        placeholder="Select a jurisdiction"
-      >
-        {Object.entries(JURISDICTIONS).map(([value, label]) => (
-          <SelectItem key={value} id={value}>
-            {label}
-          </SelectItem>
-        ))}
-      </Select>
-      <CostsInput costs={costs} onChange={setCosts} />
-      <TimeRequiredInput
-        timeRequired={timeRequired}
-        onChange={setTimeRequired}
-      />
-      <div className="flex flex-col gap-2">
-        {urls.map((url, index) => (
-          <URLInput
-            // biome-ignore lint/suspicious/noArrayIndexKey:
-            key={index}
-            value={url}
-            onChange={(value) => {
-              const newUrls = [...urls];
-              newUrls[index] = value;
-              setUrls(newUrls);
-            }}
-            onRemove={() => {
-              setUrls(urls.filter((_, i) => i !== index));
-            }}
-            hideLabel={index > 0}
-          />
-        ))}
-        <Button
-          type="button"
-          variant="secondary"
-          onPress={() => setUrls([...urls, ""])}
+    <>
+      <PageHeader title={title} />
+      <Form className="w-full items-start" onSubmit={handleSubmit}>
+        <Select
+          label="Category"
+          name="category"
+          selectedKey={category}
+          onSelectionChange={(value) => setCategory(value as Category)}
+          placeholder="Select a category"
+          isRequired
         >
-          Add URL
-        </Button>
-      </div>
-      <RichTextEditor
-        markdown={content}
-        onChange={setContent}
-        showReadingScore
-      />
-      <div className="flex gap-2 justify-end">
-        <Button type="submit" variant="primary">
-          Save
-        </Button>
-      </div>
-    </Form>
+          {Object.entries(CATEGORIES).map(([key, { label, icon }]) => {
+            const Icon = icon ?? RiQuestionLine;
+            return (
+              <SelectItem key={key} id={key} textValue={key}>
+                <Icon size={20} /> {label}
+              </SelectItem>
+            );
+          })}
+        </Select>
+        <TextField
+          label="Title"
+          name="title"
+          isRequired
+          value={title}
+          onChange={(value) => setTitle(value)}
+        />
+        <Select
+          label="Jurisdiction"
+          name="jurisdiction"
+          selectedKey={jurisdiction}
+          onSelectionChange={(key) => setJurisdiction(key as Jurisdiction)}
+          placeholder="Select a jurisdiction"
+        >
+          {Object.entries(JURISDICTIONS).map(([value, label]) => (
+            <SelectItem key={value} id={value}>
+              {label}
+            </SelectItem>
+          ))}
+        </Select>
+        <CostsInput costs={costs} onChange={setCosts} />
+        <TimeRequiredInput
+          timeRequired={timeRequired}
+          onChange={setTimeRequired}
+        />
+        <div className="flex flex-col gap-2">
+          {urls.map((url, index) => (
+            <URLInput
+              // biome-ignore lint/suspicious/noArrayIndexKey:
+              key={index}
+              value={url}
+              onChange={(value) => {
+                const newUrls = [...urls];
+                newUrls[index] = value;
+                setUrls(newUrls);
+              }}
+              onRemove={() => {
+                setUrls(urls.filter((_, i) => i !== index));
+              }}
+              hideLabel={index > 0}
+            />
+          ))}
+          <Button
+            type="button"
+            variant="secondary"
+            onPress={() => setUrls([...urls, ""])}
+          >
+            Add URL
+          </Button>
+        </div>
+        <RichTextEditor
+          markdown={content}
+          onChange={setContent}
+          showReadingScore
+        />
+        <div className="flex gap-2 justify-end">
+          <Button type="submit" variant="primary">
+            Save
+          </Button>
+        </div>
+      </Form>
+    </>
   );
 }

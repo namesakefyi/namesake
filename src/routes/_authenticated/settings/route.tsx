@@ -1,4 +1,4 @@
-import { Container, Nav } from "@/components";
+import { AppSidebar, Container, Nav } from "@/components";
 import { RiLock2Line, RiSettings3Line } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
@@ -8,8 +8,8 @@ export const Route = createFileRoute("/_authenticated/settings")({
 
 function SettingsRoute() {
   return (
-    <>
-      <div className="flex flex-1 max-w-screen min-h-0">
+    <Container className="flex gap-6">
+      <AppSidebar>
         <Nav
           routes={[
             {
@@ -24,10 +24,10 @@ function SettingsRoute() {
             },
           ]}
         />
-        <Container className="overflow-y-auto">
-          <Outlet />
-        </Container>
+      </AppSidebar>
+      <div className="w-full">
+        <Outlet />
       </div>
-    </>
+    </Container>
   );
 }

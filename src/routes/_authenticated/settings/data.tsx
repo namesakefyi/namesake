@@ -8,14 +8,11 @@ export const Route = createFileRoute("/_authenticated/settings/data")({
 
 function DataRoute() {
   return (
-    <div>
-      <PageHeader
-        title="Data"
-        subtitle="Manage, modify, or delete your data."
-      />
+    <>
+      <PageHeader title="Data" />
       <Banner variant="success" icon={RiLock2Line}>
         Data shown here is end-to-end encrypted. Only you can access it.
       </Banner>
-    </div>
+    </>
   );
 }

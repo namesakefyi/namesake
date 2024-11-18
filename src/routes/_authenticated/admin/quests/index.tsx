@@ -224,7 +224,7 @@ function QuestsRoute() {
   const quests = useQuery(api.quests.getAllQuests);
 
   return (
-    <div>
+    <>
       <PageHeader title="Quests">
         <Button onPress={() => setIsNewQuestModalOpen(true)} variant="primary">
           <RiAddLine />
@@ -263,6 +263,6 @@ function QuestsRoute() {
         onOpenChange={setIsNewQuestModalOpen}
         onSubmit={() => setIsNewQuestModalOpen(false)}
       />
-    </div>
+    </>
   );
 }

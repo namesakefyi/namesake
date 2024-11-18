@@ -50,7 +50,7 @@ export function StatusSelect({ status, isCore, onChange }: StatusSelectProps) {
         <RiArrowDropDownFill size={16} className="right-0" />
       </Button>
       <Menu
-        placement="bottom start"
+        placement="bottom end"
         selectionMode="single"
         selectedKeys={selectedStatus}
         disallowEmptySelection

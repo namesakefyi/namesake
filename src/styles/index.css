@@ -17,12 +17,14 @@
 body {
   @apply bg-gray-app;
   color-scheme: dark light;
-  height: 100dvh;
-  overflow: hidden;
 }
 
 .mdxeditor-root-contenteditable li {
   margin: 0;
+}
+
+.mdxeditor-popup-container:empty {
+  display: none;
 }
 
 .prose {

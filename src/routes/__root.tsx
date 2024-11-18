@@ -15,7 +15,6 @@ import {
 } from "@tanstack/react-router";
 import type { ConvexAuthState } from "convex/react";
 import { useTheme } from "next-themes";
-import React, { Suspense } from "react";
 import { RouterProvider } from "react-aria-components";
 import { Toaster } from "sonner";
 
@@ -40,16 +39,6 @@ function RootRoute() {
   const router = useRouter();
   const { theme } = useTheme();
 
-  const TanStackRouterDevtools =
-    process.env.NODE_ENV === "production"
-      ? () => null // Render nothing in production
-      : React.lazy(() =>
-          // Lazy load in development
-          import("@tanstack/router-devtools").then((res) => ({
-            default: res.TanStackRouterDevtools,
-          })),
-        );
-
   return (
     // TODO: Improve this API
     // https://github.com/adobe/react-spectrum/issues/6587
@@ -64,13 +53,11 @@ function RootRoute() {
       }
     >
       <Outlet />
-      <Suspense>
-        <TanStackRouterDevtools />
-      </Suspense>
       <Toaster
         theme={theme as "light" | "dark" | "system"}
         offset={16}
         gap={8}
+        position="bottom-left"
         toastOptions={{
           unstyled: true,
           classNames: {

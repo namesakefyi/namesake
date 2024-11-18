@@ -1,7 +1,9 @@
 import {
+  AppSidebar,
   Badge,
   Button,
   Card,
+  Container,
   Link,
   PageHeader,
   SearchField,
@@ -102,11 +104,11 @@ const QuestCategoryRow = ({ category }: { category: Category }) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <h3 className="text-gray-dim font-semibold flex gap-2 items-center px-8 py-2 bg-gray-app sticky top-0">
+      <h3 className="text-gray-dim font-semibold flex gap-2 items-center py-2">
         <Icon size={16} />
         {label}
       </h3>
-      <div className="w-full overflow-x-auto flex gap-4 px-8 pb-4">
+      <div className="w-full flex flex-wrap gap-4 pb-4 overflow-x-auto">
         {quests?.map((quest) => {
           const userQuest = userQuests?.find((uq) => uq.questId === quest._id);
           const questCount = questCounts?.find(
@@ -145,7 +147,7 @@ const SearchResultsGrid = ({
   if (!quests) return;
 
   return (
-    <div className="flex flex-wrap items-center gap-4 px-8">
+    <div className="flex flex-wrap items-center gap-4">
       {quests.map((quest) => (
         <QuestCard
           key={quest._id}
@@ -167,15 +169,22 @@ function IndexRoute() {
   );
 
   return (
-    <div className="flex flex-col gap-6 flex-1 overflow-y-auto">
-      <PageHeader title="Browse quests" className="px-8 pt-4">
-        <SearchField value={search} onChange={setSearch} />
-      </PageHeader>
-      {filteredQuests && search !== "" ? (
-        <SearchResultsGrid quests={filteredQuests} />
-      ) : (
-        <QuestCategoryGrid />
-      )}
-    </div>
+    <Container className="flex gap-6">
+      <AppSidebar>
+        <SearchField
+          value={search}
+          onChange={setSearch}
+          placeholder="Search quests"
+        />
+      </AppSidebar>
+      <div className="w-full">
+        <PageHeader title="Browse quests" />
+        {filteredQuests && search !== "" ? (
+          <SearchResultsGrid quests={filteredQuests} />
+        ) : (
+          <QuestCategoryGrid />
+        )}
+      </div>
+    </Container>
   );
 }
