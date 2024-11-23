@@ -26,11 +26,13 @@ import {
   MapPin,
   MessageCircle,
   Milestone,
+  Moon,
   Phone,
   RectangleEllipsis,
   Scale,
   ShoppingBag,
   SquareCheck,
+  Sun,
   Zap,
 } from "lucide-react";
 
@@ -143,12 +145,21 @@ export const FIELDS: Record<string, FieldDetails> = {
   },
 } as const;
 
-export const THEMES = {
-  system: "System",
-  light: "Light",
-  dark: "Dark",
+export type Theme = "system" | "light" | "dark";
+export const THEMES: Record<Theme, FieldDetails> = {
+  system: {
+    label: "System",
+    icon: Computer,
+  },
+  light: {
+    label: "Light",
+    icon: Sun,
+  },
+  dark: {
+    label: "Dark",
+    icon: Moon,
+  },
 } as const;
-export type Theme = keyof typeof THEMES;
 
 export const ROLES = {
   user: "User",

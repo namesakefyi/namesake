@@ -1,12 +1,30 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
-import { useQuery } from "convex/react";
-import { CircleUser, Cog, GlobeLock, Plus } from "lucide-react";
+import { THEMES, type Theme } from "@convex/constants";
+import { useMutation, useQuery } from "convex/react";
+import {
+  CircleUser,
+  Cog,
+  GlobeLock,
+  LogOut,
+  MessageCircleQuestion,
+  Plus,
+  Snail,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import { useState } from "react";
+import type { Selection } from "react-aria-components";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
 import { Link } from "../Link";
 import { Logo } from "../Logo";
-import { Menu, MenuItem, MenuTrigger, SubmenuTrigger } from "../Menu";
+import {
+  Menu,
+  MenuItem,
+  MenuSeparator,
+  MenuTrigger,
+  SubmenuTrigger,
+} from "../Menu";
 import { Popover } from "../Popover";
 import { Tooltip } from "../Tooltip";
 import { TooltipTrigger } from "../Tooltip";
@@ -17,8 +35,25 @@ type AppSidebarProps = {
 
 export const AppSidebar = ({ children }: AppSidebarProps) => {
   const { signOut } = useAuthActions();
+  const { theme, setTheme } = useTheme();
+  const [selectedTheme, setSelectedTheme] = useState<Selection>(
+    new Set([theme ?? "system"]),
+  );
   const user = useQuery(api.users.getCurrentUser);
   const isAdmin = user?.role === "admin";
+
+  // Theme change
+  const updateTheme = useMutation(api.users.setUserTheme);
+
+  const handleUpdateTheme = (theme: Selection) => {
+    const newTheme = [...theme][0] as Theme;
+    // Update the theme in the database
+    updateTheme({ theme: newTheme });
+    // Update the theme in next-themes
+    setTheme(newTheme);
+    // Update the selected theme in the menu
+    setSelectedTheme(new Set([newTheme]));
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -55,50 +90,54 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
             {user?.name}
           </Button>
           <Menu placement="top start">
+            <MenuItem
+              icon={Snail}
+              href="https://namesake.fyi"
+              target="_blank"
+              rel="noreferrer"
+            >
+              About Namesake
+            </MenuItem>
+            <MenuSeparator />
+            <MenuItem href={{ to: "/settings/account" }} icon={Cog}>
+              Settings
+            </MenuItem>
             <SubmenuTrigger>
-              <MenuItem>Theme</MenuItem>
+              <MenuItem icon={THEMES[theme as Theme].icon}>Theme</MenuItem>
               <Popover>
-                <Menu>
-                  <MenuItem>System</MenuItem>
-                  <MenuItem>Light</MenuItem>
-                  <MenuItem>Dark</MenuItem>
+                <Menu
+                  disallowEmptySelection
+                  selectionMode="single"
+                  selectedKeys={selectedTheme}
+                  onSelectionChange={handleUpdateTheme}
+                >
+                  {Object.entries(THEMES).map(([theme, details]) => (
+                    <MenuItem key={theme} id={theme} icon={details.icon}>
+                      {details.label}
+                    </MenuItem>
+                  ))}
                 </Menu>
               </Popover>
             </SubmenuTrigger>
+            {isAdmin && (
+              <MenuItem icon={GlobeLock} href={{ to: "/admin" }}>
+                Admin
+              </MenuItem>
+            )}
+            <MenuSeparator />
             <MenuItem
               href="https://namesake.fyi/chat"
               target="_blank"
               rel="noreferrer"
+              icon={MessageCircleQuestion}
             >
               Support&hellip;
             </MenuItem>
-            <MenuItem onAction={handleSignOut}>Sign out</MenuItem>
+            <MenuItem icon={LogOut} onAction={handleSignOut}>
+              Sign out
+            </MenuItem>
           </Menu>
         </MenuTrigger>
-        <div className="flex ml-auto">
-          {isAdmin && (
-            <TooltipTrigger>
-              <Link
-                aria-label="Admin"
-                href={{ to: "/admin" }}
-                button={{ variant: "icon" }}
-              >
-                <GlobeLock size={20} />
-              </Link>
-              <Tooltip placement="top">Admin</Tooltip>
-            </TooltipTrigger>
-          )}
-          <TooltipTrigger>
-            <Link
-              aria-label="Settings"
-              href={{ to: "/settings/account" }}
-              button={{ variant: "icon" }}
-            >
-              <Cog size={20} />
-            </Link>
-            <Tooltip placement="top">Settings</Tooltip>
-          </TooltipTrigger>
-        </div>
       </div>
     </div>
   );

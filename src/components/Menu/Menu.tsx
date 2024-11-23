@@ -1,11 +1,11 @@
-import { Check, ChevronRight } from "lucide-react";
+import { Check, ChevronRight, type LucideIcon } from "lucide-react";
 import {
   Menu as AriaMenu,
   MenuItem as AriaMenuItem,
+  type MenuItemProps as AriaMenuItemProps,
   type MenuProps as AriaMenuProps,
   MenuTrigger as AriaMenuTrigger,
   SubmenuTrigger as AriaSubmenuTrigger,
-  type MenuItemProps,
   type MenuTriggerProps,
   Separator,
   type SeparatorProps,
@@ -38,7 +38,11 @@ export function Menu<T extends object>(props: MenuProps<T>) {
   );
 }
 
-export function MenuItem({ className, ...props }: MenuItemProps) {
+interface MenuItemProps extends AriaMenuItemProps {
+  icon?: LucideIcon;
+}
+
+export function MenuItem({ className, icon: Icon, ...props }: MenuItemProps) {
   return (
     <AriaMenuItem
       {...props}
@@ -55,11 +59,15 @@ export function MenuItem({ className, ...props }: MenuItemProps) {
                 {isSelected && <Check aria-hidden className="w-4 h-4" />}
               </span>
             )}
+            {Icon && <Icon aria-hidden className="w-4 h-4" />}
             <span className="flex items-center flex-1 gap-2 font-normal truncate group-selected:font-semibold">
               {children}
             </span>
             {hasSubmenu && (
-              <ChevronRight aria-hidden className="absolute w-4 h-4 right-2" />
+              <ChevronRight
+                aria-hidden
+                className="absolute w-4 h-4 right-2.5"
+              />
             )}
           </>
         ),
