@@ -1,5 +1,19 @@
 # namesake
 
+## 0.11.0
+
+### Minor Changes
+
+- f2a5bc2: Display statuses in main navigation, improve nav display
+- fa35737: Display estimated costs for each quest
+- 824da1c: Redesign app layout for optimal line length and taller scroll area
+- 03cc1ec: Display time required to complete a quest
+
+### Patch Changes
+
+- ccc1aee: Adjust responsive padding and margins
+- e0d7266: Use Lucide icons
+
 ## 0.10.0
 
 ### Minor Changes
