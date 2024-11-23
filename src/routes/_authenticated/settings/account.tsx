@@ -3,18 +3,14 @@ import {
   Link,
   Modal,
   PageHeader,
-  Radio,
-  RadioGroup,
   Switch,
   TextField,
 } from "@/components";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
-import type { Theme } from "@convex/constants";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { Check, LoaderCircle } from "lucide-react";
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -24,7 +20,6 @@ export const Route = createFileRoute("/_authenticated/settings/account")({
 
 function SettingsAccountRoute() {
   const { signOut } = useAuthActions();
-  const { setTheme } = useTheme();
   const user = useQuery(api.users.getCurrentUser);
 
   // Name change field
@@ -74,14 +69,6 @@ function SettingsAccountRoute() {
   // Is minor switch
   const updateIsMinor = useMutation(api.users.setCurrentUserIsMinor);
 
-  // Theme change
-  const updateTheme = useMutation(api.users.setUserTheme);
-
-  const handleUpdateTheme = (value: string) => {
-    updateTheme({ theme: value as Theme });
-    setTheme(value);
-  };
-
   // Account deletion
   const clearLocalStorage = () => {
     localStorage.removeItem("theme");
@@ -113,15 +100,6 @@ function SettingsAccountRoute() {
           >
             Is minor
           </Switch>
-          <RadioGroup
-            label="Theme"
-            value={user.theme}
-            onChange={handleUpdateTheme}
-          >
-            <Radio value="system">System</Radio>
-            <Radio value="light">Light</Radio>
-            <Radio value="dark">Dark</Radio>
-          </RadioGroup>
           <Button onPress={signOut}>Sign out</Button>
           <Button onPress={() => setIsDeleteModalOpen(true)}>
             Delete account
