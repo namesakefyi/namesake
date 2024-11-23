@@ -1,4 +1,4 @@
-import { AppSidebar, Container, Nav } from "@/components";
+import { AppSidebar, Container, Nav, NavItem } from "@/components";
 import { RiFileTextLine, RiInputField, RiSignpostLine } from "@remixicon/react";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
@@ -21,25 +21,17 @@ function AdminRoute() {
   return (
     <Container className="flex gap-6">
       <AppSidebar>
-        <Nav
-          routes={[
-            {
-              icon: RiSignpostLine,
-              href: { to: "/admin/quests" },
-              label: "Quests",
-            },
-            {
-              icon: RiFileTextLine,
-              href: { to: "/admin/forms" },
-              label: "Forms",
-            },
-            {
-              icon: RiInputField,
-              href: { to: "/admin/fields" },
-              label: "Fields",
-            },
-          ]}
-        />
+        <Nav>
+          <NavItem icon={RiSignpostLine} href={{ to: "/admin/quests" }}>
+            Quests
+          </NavItem>
+          <NavItem icon={RiFileTextLine} href={{ to: "/admin/forms" }}>
+            Forms
+          </NavItem>
+          <NavItem icon={RiInputField} href={{ to: "/admin/fields" }}>
+            Fields
+          </NavItem>
+        </Nav>
       </AppSidebar>
       <div className="w-full">
         <Outlet />

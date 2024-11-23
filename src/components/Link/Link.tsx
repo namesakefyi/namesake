@@ -39,7 +39,7 @@ export function Link({ button, ...props }: LinkProps) {
                 ...button,
                 className,
               })
-            : linkStyles({ ...renderProps, className, variant: props.variant }),
+            : linkStyles({ ...renderProps, variant: props.variant, className }),
       )}
     />
   );

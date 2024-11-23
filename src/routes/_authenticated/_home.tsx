@@ -1,18 +1,16 @@
 import {
-  Badge,
   Button,
   Container,
-  Disclosure,
-  DisclosureGroup,
-  DisclosurePanel,
   Empty,
-  GridList,
-  GridListItem,
   Menu,
   MenuItem,
   MenuSection,
   MenuTrigger,
+  Nav,
+  NavGroup,
+  NavItem,
   ProgressBar,
+  StatusBadge,
   Tooltip,
   TooltipTrigger,
 } from "@/components";
@@ -39,7 +37,6 @@ import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
 import { useEffect, useState } from "react";
 import type { Selection } from "react-aria-components";
-import { twMerge } from "tailwind-merge";
 
 export const Route = createFileRoute("/_authenticated/_home")({
   component: IndexRoute,
@@ -123,13 +120,6 @@ function IndexRoute() {
         />
       );
 
-    const allCategoryKeys = [
-      ...Object.values(CATEGORIES).map((category) => category.label),
-      ...Object.values(STATUS).map((status) => status.label),
-      ...Object.values(DATE_ADDED).map((date) => date.label),
-      ...Object.values(TIME_UNITS).map((timeUnit) => timeUnit.label),
-    ];
-
     return (
       <AppSidebar>
         <div className="flex items-center mb-4 bg-gray-app z-10">
@@ -160,11 +150,7 @@ function IndexRoute() {
             <Tooltip placement="right">Group by</Tooltip>
           </TooltipTrigger>
         </div>
-        <DisclosureGroup
-          allowsMultipleExpanded
-          defaultExpandedKeys={[...allCategoryKeys]}
-          className="-ml-2"
-        >
+        <Nav>
           {Object.entries(groupedQuests)
             .sort(([groupA], [groupB]) =>
               sortGroupedQuests(groupA, groupB, groupByValue),
@@ -186,53 +172,26 @@ function IndexRoute() {
                   groupDetails = DATE_ADDED[group as keyof typeof DATE_ADDED];
                   break;
               }
-              const { label, icon: Icon } = groupDetails;
+              const { label } = groupDetails;
 
               return (
-                <Disclosure
-                  defaultExpanded
-                  key={label}
-                  id={label}
-                  title={
-                    <div className="flex items-center gap-2">
-                      <Icon size={16} className="text-gray-dim" />
-                      {label}
-                      <Badge className="ml-auto">{quests.length}</Badge>
-                    </div>
-                  }
-                >
-                  <DisclosurePanel>
-                    <GridList
-                      aria-label={`${group} quests`}
-                      className="border-none"
+                <NavGroup key={label} label={label} count={quests.length}>
+                  {quests.map((quest) => (
+                    <NavItem
+                      key={quest._id}
+                      href={{
+                        to: "/quests/$questId",
+                        params: { questId: quest.questId },
+                      }}
                     >
-                      {quests.map((quest) => (
-                        <GridListItem
-                          textValue={quest.title}
-                          key={quest._id}
-                          href={{
-                            to: "/quests/$questId",
-                            params: { questId: quest.questId },
-                          }}
-                          className="hover:bg-gray-3 dark:hover:bg-graydark-3 rounded-md pl-8 h-8"
-                        >
-                          <div className="flex items-center justify-between gap-2 w-full">
-                            <div
-                              className={twMerge(
-                                quest.completionTime && "opacity-40",
-                              )}
-                            >
-                              {quest.title}
-                            </div>
-                          </div>
-                        </GridListItem>
-                      ))}
-                    </GridList>
-                  </DisclosurePanel>
-                </Disclosure>
+                      <StatusBadge status={quest.status as Status} condensed />
+                      {quest.title}
+                    </NavItem>
+                  ))}
+                </NavGroup>
               );
             })}
-        </DisclosureGroup>
+        </Nav>
       </AppSidebar>
     );
   };

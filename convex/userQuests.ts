@@ -139,7 +139,6 @@ export const updateQuestStatus = userMutation({
   args: { questId: v.id("quests"), status: status },
   returns: v.null(),
   handler: async (ctx, args) => {
-    console.log("updateQuestStatus", args);
     const quest = await ctx.db.get(args.questId);
     if (quest === null) throw new Error("Quest not found");
 
@@ -371,7 +370,6 @@ export const getUserQuestsByTimeRequired = userQuery({
       return acc;
     }, initial);
 
-    console.log("group", group);
     return group;
   },
 });

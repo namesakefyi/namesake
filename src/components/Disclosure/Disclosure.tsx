@@ -1,59 +1,51 @@
 import { RiArrowRightSLine } from "@remixicon/react";
 import {
-  UNSTABLE_Disclosure as AriaDisclosure,
-  UNSTABLE_DisclosureGroup as AriaDisclosureGroup,
+  Disclosure as AriaDisclosure,
+  DisclosureGroup as AriaDisclosureGroup,
   type DisclosureGroupProps as AriaDisclosureGroupProps,
-  UNSTABLE_DisclosurePanel as AriaDisclosurePanel,
-  type DisclosurePanelProps as AriaDisclosurePanelProps,
+  DisclosurePanel as AriaDisclosurePanel,
   type DisclosureProps as AriaDisclosureProps,
-  composeRenderProps,
+  Header,
+  type Key,
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 import { AnimateChangeInHeight } from "../AnimateChangeInHeight";
 import { Button } from "../Button";
 
-export interface DisclosureProps extends AriaDisclosureProps {
+export interface DisclosureProps
+  extends Omit<AriaDisclosureProps, "children" | "id"> {
+  id: Key;
   title: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-export function Disclosure({
-  title,
-  children,
-  className,
-  ...props
-}: DisclosureProps) {
+export function Disclosure({ title, children, ...props }: DisclosureProps) {
   return (
-    <AriaDisclosure {...props}>
-      {composeRenderProps(children, (children, { isExpanded }) => (
-        <>
-          <Button
-            variant="ghost"
-            className="w-full justify-between"
-            slot="trigger"
-            size="small"
-          >
-            {title}
-            <RiArrowRightSLine
-              size={16}
-              className={twMerge(
-                "transition-transform opacity-70",
-                isExpanded && "rotate-90",
-              )}
-            />
-          </Button>
-          <AnimateChangeInHeight className="w-full">
-            <DisclosurePanel className="pb-2">{children}</DisclosurePanel>
-          </AnimateChangeInHeight>
-        </>
-      ))}
+    <AriaDisclosure className={twMerge("group")} {...props}>
+      <Header>
+        <Button
+          variant="ghost"
+          className="w-full justify-start"
+          slot="trigger"
+          size="small"
+        >
+          <RiArrowRightSLine
+            size={16}
+            className={twMerge(
+              "transition-transform opacity-60",
+              "group-data-[expanded]:rotate-90",
+            )}
+          />
+          {title}
+        </Button>
+      </Header>
+      <AnimateChangeInHeight className="w-full">
+        <AriaDisclosurePanel className="group-data-[expanded]:pb-2">
+          {children}
+        </AriaDisclosurePanel>
+      </AnimateChangeInHeight>
     </AriaDisclosure>
   );
-}
-
-interface DisclosurePanelProps extends AriaDisclosurePanelProps {}
-
-export function DisclosurePanel({ children, ...props }: DisclosurePanelProps) {
-  return <AriaDisclosurePanel {...props}>{children}</AriaDisclosurePanel>;
 }
 
 interface DisclosureGroupProps extends AriaDisclosureGroupProps {}

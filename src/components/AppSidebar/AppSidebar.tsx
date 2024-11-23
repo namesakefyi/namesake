@@ -29,7 +29,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
   };
 
   return (
-    <nav className="w-80 flex flex-col shrink-0 sticky top-0 h-screen -ml-4 overflow-y-auto border-r border-gray-dim">
+    <div className="w-72 flex flex-col shrink-0 sticky top-0 h-screen -ml-4 overflow-y-auto border-r border-gray-dim">
       <div className="flex gap-2 items-center h-16 shrink-0 px-4 sticky top-0 bg-gray-app z-20">
         <Link href={{ to: "/" }} className="p-1 -m-1">
           <Logo className="h-[1.25rem]" />
@@ -98,6 +98,6 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
           </TooltipTrigger>
         </div>
       </div>
-    </nav>
+    </div>
   );
 };
