@@ -6,7 +6,8 @@ import { Badge } from "../Badge";
 import { Button } from "../Button";
 import { Link } from "../Link";
 import { Logo } from "../Logo";
-import { Menu, MenuItem, MenuTrigger } from "../Menu";
+import { Menu, MenuItem, MenuTrigger, SubmenuTrigger } from "../Menu";
+import { Popover } from "../Popover";
 import { Tooltip } from "../Tooltip";
 import { TooltipTrigger } from "../Tooltip";
 
@@ -54,6 +55,16 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
             {user?.name}
           </Button>
           <Menu placement="top start">
+            <SubmenuTrigger>
+              <MenuItem>Theme</MenuItem>
+              <Popover>
+                <Menu>
+                  <MenuItem>System</MenuItem>
+                  <MenuItem>Light</MenuItem>
+                  <MenuItem>Dark</MenuItem>
+                </Menu>
+              </Popover>
+            </SubmenuTrigger>
             <MenuItem
               href="https://namesake.fyi/chat"
               target="_blank"
