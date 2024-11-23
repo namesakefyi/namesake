@@ -1,6 +1,6 @@
 import { AppSidebar, Container, Nav, NavItem } from "@/components";
-import { RiFileTextLine, RiInputField, RiSignpostLine } from "@remixicon/react";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
+import { FileText, Milestone, RectangleEllipsis } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: ({ context }) => {
@@ -22,13 +22,13 @@ function AdminRoute() {
     <Container className="flex gap-6">
       <AppSidebar>
         <Nav>
-          <NavItem icon={RiSignpostLine} href={{ to: "/admin/quests" }}>
+          <NavItem icon={Milestone} href={{ to: "/admin/quests" }}>
             Quests
           </NavItem>
-          <NavItem icon={RiFileTextLine} href={{ to: "/admin/forms" }}>
+          <NavItem icon={FileText} href={{ to: "/admin/forms" }}>
             Forms
           </NavItem>
-          <NavItem icon={RiInputField} href={{ to: "/admin/fields" }}>
+          <NavItem icon={RectangleEllipsis} href={{ to: "/admin/fields" }}>
             Fields
           </NavItem>
         </Nav>

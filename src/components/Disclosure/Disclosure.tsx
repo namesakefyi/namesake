@@ -1,4 +1,4 @@
-import { RiArrowRightSLine } from "@remixicon/react";
+import { ChevronRight } from "lucide-react";
 import {
   Disclosure as AriaDisclosure,
   DisclosureGroup as AriaDisclosureGroup,
@@ -29,7 +29,7 @@ export function Disclosure({ title, children, ...props }: DisclosureProps) {
           slot="trigger"
           size="small"
         >
-          <RiArrowRightSLine
+          <ChevronRight
             size={16}
             className={twMerge(
               "transition-transform opacity-60",

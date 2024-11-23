@@ -1,5 +1,5 @@
 import { STATUS, type Status } from "@convex/constants";
-import { RiArrowDropDownFill } from "@remixicon/react";
+import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import type { Selection } from "react-aria-components";
 import { tv } from "tailwind-variants";
@@ -10,6 +10,8 @@ import {
   Menu,
   MenuItem,
   MenuTrigger,
+  Tooltip,
+  TooltipTrigger,
 } from "../";
 
 interface StatusBadgeProps extends Omit<BadgeProps, "children"> {
@@ -18,10 +20,11 @@ interface StatusBadgeProps extends Omit<BadgeProps, "children"> {
 }
 
 const badgeStyles = tv({
-  base: "flex items-center transition-colors",
+  base: "flex items-center transition-colors rounded-full",
   variants: {
     condensed: {
       true: "w-5 h-5 p-0",
+      false: "pr-2",
     },
   },
 });
@@ -31,7 +34,7 @@ export function StatusBadge({ status, condensed, ...props }: StatusBadgeProps) {
 
   const { label, icon, variant } = STATUS[status];
 
-  return (
+  const InnerBadge = (
     <Badge
       icon={icon}
       variant={variant}
@@ -40,6 +43,15 @@ export function StatusBadge({ status, condensed, ...props }: StatusBadgeProps) {
     >
       {!condensed && label}
     </Badge>
+  );
+
+  if (!condensed) return InnerBadge;
+
+  return (
+    <TooltipTrigger>
+      {InnerBadge}
+      <Tooltip>{label}</Tooltip>
+    </TooltipTrigger>
   );
 }
 
@@ -61,9 +73,9 @@ export function StatusSelect({ status, isCore, onChange }: StatusSelectProps) {
 
   return (
     <MenuTrigger>
-      <Button size="small" variant="ghost" className="px-1 gap-0.5">
+      <Button variant="ghost" className="px-2 gap-1">
         <StatusBadge status={status} size="lg" />
-        <RiArrowDropDownFill size={16} className="right-0" />
+        <ChevronDown size={16} className="right-0" />
       </Button>
       <Menu
         placement="bottom end"
@@ -75,8 +87,13 @@ export function StatusSelect({ status, isCore, onChange }: StatusSelectProps) {
         {Object.entries(STATUS).map(([status, details]) => {
           if (!isCore && details.isCoreOnly) return null;
           return (
-            <MenuItem key={status} id={status} aria-label={details.label}>
-              <StatusBadge status={status as Status} />
+            <MenuItem
+              key={status}
+              id={status}
+              aria-label={details.label}
+              className="h-9"
+            >
+              <StatusBadge status={status as Status} size="lg" />
             </MenuItem>
           );
         })}

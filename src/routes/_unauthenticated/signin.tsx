@@ -15,9 +15,9 @@ import {
   TooltipTrigger,
 } from "@/components";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { RiArrowLeftSLine } from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ConvexError } from "convex/values";
+import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import type { Key } from "react-aria";
 
@@ -187,7 +187,7 @@ const ForgotPassword = ({
       <header className="flex items-center gap-3">
         <Button
           onPress={onBack}
-          icon={RiArrowLeftSLine}
+          icon={ChevronLeft}
           variant="icon"
           aria-label="Back to sign-in"
           className="-m-2"

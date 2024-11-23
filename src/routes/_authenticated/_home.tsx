@@ -28,13 +28,10 @@ import {
   STATUS,
   STATUS_ORDER,
   type Status,
-  TIME_UNITS,
-  TIME_UNITS_ORDER,
-  type TimeUnit,
 } from "@convex/constants";
-import { RiListCheck2, RiSignpostLine } from "@remixicon/react";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
+import { LayoutList, Milestone } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { Selection } from "react-aria-components";
 
@@ -63,11 +60,6 @@ function sortGroupedQuests(
       const indexB = DATE_ADDED_ORDER.indexOf(groupB as DateAdded);
       return indexA - indexB;
     }
-    case "timeRequired": {
-      const indexA = TIME_UNITS_ORDER.indexOf(groupA as TimeUnit);
-      const indexB = TIME_UNITS_ORDER.indexOf(groupB as TimeUnit);
-      return indexA - indexB;
-    }
   }
 }
 
@@ -92,15 +84,11 @@ function IndexRoute() {
     const questsByCategory = useQuery(api.userQuests.getUserQuestsByCategory);
     const questsByDate = useQuery(api.userQuests.getUserQuestsByDate);
     const questsByStatus = useQuery(api.userQuests.getUserQuestsByStatus);
-    const questsByTimeRequired = useQuery(
-      api.userQuests.getUserQuestsByTimeRequired,
-    );
 
     const groupedQuests = {
       category: questsByCategory,
       dateAdded: questsByDate,
       status: questsByStatus,
-      timeRequired: questsByTimeRequired,
     }[groupByValue];
 
     if (groupedQuests === undefined) return;
@@ -109,7 +97,7 @@ function IndexRoute() {
       return (
         <Empty
           title="No quests"
-          icon={RiSignpostLine}
+          icon={Milestone}
           link={{
             children: "Add quest",
             button: {
@@ -132,7 +120,7 @@ function IndexRoute() {
           />
           <TooltipTrigger>
             <MenuTrigger>
-              <Button icon={RiListCheck2} variant="icon" />
+              <Button icon={LayoutList} variant="icon" />
               <Menu
                 selectionMode="single"
                 selectedKeys={groupBy}
@@ -143,7 +131,6 @@ function IndexRoute() {
                   <MenuItem id="category">Category</MenuItem>
                   <MenuItem id="status">Status</MenuItem>
                   <MenuItem id="dateAdded">Date added</MenuItem>
-                  <MenuItem id="timeRequired">Time required</MenuItem>
                 </MenuSection>
               </Menu>
             </MenuTrigger>
@@ -164,9 +151,6 @@ function IndexRoute() {
                   break;
                 case "status":
                   groupDetails = STATUS[group as keyof typeof STATUS];
-                  break;
-                case "timeRequired":
-                  groupDetails = TIME_UNITS[group as keyof typeof TIME_UNITS];
                   break;
                 case "dateAdded":
                   groupDetails = DATE_ADDED[group as keyof typeof DATE_ADDED];

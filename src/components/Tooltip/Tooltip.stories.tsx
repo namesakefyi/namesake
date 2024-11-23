@@ -1,5 +1,5 @@
-import { RiPrinterLine, RiSaveLine } from "@remixicon/react";
 import type { Meta } from "@storybook/react";
+import { Printer, Save } from "lucide-react";
 import { Tooltip, TooltipTrigger } from ".";
 import { Button } from "../Button";
 
@@ -13,13 +13,13 @@ export const Example = (args: any) => (
   <div className="flex gap-2">
     <TooltipTrigger>
       <Button variant="secondary" className="px-2">
-        <RiSaveLine />
+        <Save />
       </Button>
       <Tooltip {...args}>Save</Tooltip>
     </TooltipTrigger>
     <TooltipTrigger>
       <Button variant="secondary" className="px-2">
-        <RiPrinterLine />
+        <Printer />
       </Button>
       <Tooltip {...args}>Print</Tooltip>
     </TooltipTrigger>

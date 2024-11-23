@@ -26,14 +26,9 @@ import {
   JURISDICTIONS,
   type Jurisdiction,
 } from "@convex/constants";
-import {
-  RiAddLine,
-  RiMoreFill,
-  RiQuestionLine,
-  RiSignpostLine,
-} from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
+import { CircleHelp, Ellipsis, Milestone, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -94,7 +89,7 @@ const NewQuestModal = ({
           isRequired
         >
           {Object.entries(CATEGORIES).map(([key, { label, icon }]) => {
-            const Icon = icon ?? RiQuestionLine;
+            const Icon = icon ?? CircleHelp;
             return (
               <SelectItem key={key} id={key} textValue={key}>
                 <Icon size={20} /> {label}
@@ -152,7 +147,7 @@ const QuestTableRow = ({
 
     const { icon, label } = CATEGORIES[quest.category as Category];
 
-    return <Badge icon={icon ?? RiQuestionLine}>{label}</Badge>;
+    return <Badge icon={icon ?? CircleHelp}>{label}</Badge>;
   };
 
   return (
@@ -189,7 +184,7 @@ const QuestTableRow = ({
             variant="icon"
             aria-label="Actions"
             size="small"
-            icon={RiMoreFill}
+            icon={Ellipsis}
           />
           <Menu>
             {quest.deletionTime ? (
@@ -226,8 +221,11 @@ function QuestsRoute() {
   return (
     <>
       <PageHeader title="Quests">
-        <Button onPress={() => setIsNewQuestModalOpen(true)} variant="primary">
-          <RiAddLine />
+        <Button
+          onPress={() => setIsNewQuestModalOpen(true)}
+          icon={Plus}
+          variant="primary"
+        >
           New Quest
         </Button>
       </PageHeader>
@@ -245,7 +243,7 @@ function QuestsRoute() {
           renderEmptyState={() => (
             <Empty
               title="No quests"
-              icon={RiSignpostLine}
+              icon={Milestone}
               button={{
                 children: "New Quest",
                 onPress: () => setIsNewQuestModalOpen(true),

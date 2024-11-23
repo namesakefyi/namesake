@@ -17,9 +17,9 @@ import {
 import { api } from "@convex/_generated/api";
 import type { DataModel, Id } from "@convex/_generated/dataModel";
 import { FIELDS, type Field } from "@convex/constants";
-import { RiAddLine, RiInputField } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
+import { Plus, RectangleEllipsis } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/admin/fields/")({
@@ -151,7 +151,7 @@ function FieldsRoute() {
     <div>
       <PageHeader title="Fields">
         <Button onPress={() => setIsNewFieldModalOpen(true)} variant="primary">
-          <RiAddLine />
+          <Plus />
           New Field
         </Button>
       </PageHeader>
@@ -165,7 +165,7 @@ function FieldsRoute() {
           renderEmptyState={() => (
             <Empty
               title="No fields"
-              icon={RiInputField}
+              icon={RectangleEllipsis}
               button={{
                 children: "New Field",
                 onPress: () => setIsNewFieldModalOpen(true),

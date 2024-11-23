@@ -1,4 +1,4 @@
-import type { RemixiconComponentType } from "@remixicon/react";
+import type { LucideIcon } from "lucide-react";
 import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,
@@ -9,7 +9,7 @@ import { focusRing } from "../utils";
 
 export interface ButtonProps extends AriaButtonProps {
   children?: React.ReactNode;
-  icon?: RemixiconComponentType;
+  icon?: LucideIcon;
   variant?: "primary" | "secondary" | "destructive" | "icon" | "ghost";
   size?: "small" | "medium";
 }

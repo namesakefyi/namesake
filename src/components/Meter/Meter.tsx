@@ -1,4 +1,4 @@
-import { RiAlertLine } from "@remixicon/react";
+import { AlertTriangle } from "lucide-react";
 import {
   Meter as AriaMeter,
   type MeterProps as AriaMeterProps,
@@ -27,7 +27,7 @@ export function Meter({ label, ...props }: MeterProps) {
               className={`text-sm ${percentage >= 80 ? "text-red-dim" : "text-gray-dim"}`}
             >
               {percentage >= 80 && (
-                <RiAlertLine
+                <AlertTriangle
                   aria-label="Alert"
                   className="inline-block w-4 h-4 align-text-bottom"
                 />

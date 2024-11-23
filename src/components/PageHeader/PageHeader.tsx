@@ -1,9 +1,9 @@
-import type { RemixiconComponentType } from "@remixicon/react";
+import type { LucideIcon } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 
 export interface PageHeaderProps {
   title: string;
-  icon?: RemixiconComponentType;
+  icon?: LucideIcon;
   badge?: React.ReactNode;
   children?: React.ReactNode;
   className?: string;

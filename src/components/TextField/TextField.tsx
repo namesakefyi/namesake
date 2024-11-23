@@ -1,4 +1,4 @@
-import { RiEyeCloseLine, RiEyeLine } from "@remixicon/react";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import {
   TextField as AriaTextField,
@@ -57,7 +57,7 @@ export function TextField({
               aria-label={isPasswordVisible ? "Hide password" : "Show password"}
               onPress={() => setIsPasswordVisible(!isPasswordVisible)}
               size="small"
-              icon={isPasswordVisible ? RiEyeLine : RiEyeCloseLine}
+              icon={isPasswordVisible ? Eye : EyeOff}
               className="mr-1"
             />
             <Tooltip>

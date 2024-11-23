@@ -16,14 +16,14 @@ import {
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import type { Cost, Status, TimeRequired } from "@convex/constants";
-import {
-  RiLink,
-  RiMoreFill,
-  RiQuestionLine,
-  RiSignpostLine,
-} from "@remixicon/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
+import {
+  CircleHelp,
+  Ellipsis,
+  Link as LinkIcon,
+  Milestone,
+} from "lucide-react";
 import Markdown from "react-markdown";
 import { Fragment } from "react/jsx-runtime";
 import { toast } from "sonner";
@@ -66,7 +66,7 @@ const QuestCosts = ({ costs }: { costs?: Cost[] }) => {
         <DialogTrigger>
           <TooltipTrigger>
             <Button variant="icon" size="small">
-              <RiQuestionLine />
+              <CircleHelp />
             </Button>
             <Tooltip>See cost breakdown</Tooltip>
           </TooltipTrigger>
@@ -120,7 +120,7 @@ const QuestUrls = ({ urls }: { urls?: string[] }) => {
     <div className="flex flex-col items-start gap-1 mb-4">
       {urls.map((url) => (
         <Link key={url} href={url} className="inline-flex gap-1 items-center">
-          <RiLink size={20} />
+          <LinkIcon size={20} />
           {url}
         </Link>
       ))}
@@ -156,7 +156,7 @@ function QuestDetailRoute() {
   // TODO: Improve loading state to prevent flash of empty
   if (quest === undefined || userQuest === undefined) return;
   if (quest === null || userQuest === null)
-    return <Empty title="Quest not found" icon={RiSignpostLine} />;
+    return <Empty title="Quest not found" icon={Milestone} />;
 
   return (
     <div className="w-full">
@@ -173,7 +173,7 @@ function QuestDetailRoute() {
           <Button
             aria-label="Quest settings"
             variant="icon"
-            icon={RiMoreFill}
+            icon={Ellipsis}
             className="-mr-2"
           />
           <Menu placement="bottom end">

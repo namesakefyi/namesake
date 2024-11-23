@@ -11,9 +11,9 @@ import {
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { CATEGORIES, type Category } from "@convex/constants";
-import { RiLoader4Line, RiQuestionLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
+import { CircleHelp, LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -55,7 +55,7 @@ const QuestCard = ({
           isDisabled={isAdding}
           aria-label={isAdding ? "Adding" : "Add quest"}
         >
-          {isAdding ? <RiLoader4Line className="animate-spin" /> : "Add quest"}
+          {isAdding ? <LoaderCircle className="animate-spin" /> : "Add quest"}
         </Button>
       );
     }
@@ -100,7 +100,7 @@ const QuestCategoryRow = ({ category }: { category: Category }) => {
   if (!quests || quests.length === 0) return;
 
   const { label, icon } = CATEGORIES[category as Category];
-  const Icon = icon ?? RiQuestionLine;
+  const Icon = icon ?? CircleHelp;
 
   return (
     <div className="flex flex-col gap-2">
@@ -175,6 +175,7 @@ function IndexRoute() {
           value={search}
           onChange={setSearch}
           placeholder="Search quests"
+          aria-label="Search quests"
         />
       </AppSidebar>
       <div className="w-full">

@@ -1,4 +1,4 @@
-import { RiArrowUpSLine } from "@remixicon/react";
+import { ChevronUp } from "lucide-react";
 import {
   Cell as AriaCell,
   Column as AriaColumn,
@@ -64,7 +64,7 @@ export function TableColumn(props: ColumnProps) {
                   }`}
                 >
                   {sortDirection && (
-                    <RiArrowUpSLine
+                    <ChevronUp
                       aria-hidden
                       className="w-4 h-4 text-gray-dim forced-colors:text-[ButtonText]"
                     />

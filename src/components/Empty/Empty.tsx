@@ -1,11 +1,11 @@
-import type { RemixiconComponentType } from "@remixicon/react";
+import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 import { Button, type ButtonProps } from "../Button";
 import { Link, type LinkProps } from "../Link";
 
 interface EmptyProps {
-  icon: RemixiconComponentType;
+  icon: LucideIcon;
   title: string;
   subtitle?: string;
   className?: string;

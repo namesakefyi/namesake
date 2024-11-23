@@ -1,8 +1,4 @@
-import {
-  RiEmotionHappyFill,
-  RiEmotionNormalFill,
-  RiEmotionUnhappyFill,
-} from "@remixicon/react";
+import { Frown, Meh, Smile } from "lucide-react";
 import rs from "text-readability";
 import { Badge } from "../Badge";
 
@@ -29,12 +25,7 @@ export const ReadingScore = ({ text, minLength = 280 }: ReadingScoreProps) => {
   if (!score) return null;
 
   const variant = score >= 8 ? "danger" : score >= 6 ? "warning" : "success";
-  const icon =
-    score >= 8
-      ? RiEmotionUnhappyFill
-      : score >= 6
-        ? RiEmotionNormalFill
-        : RiEmotionHappyFill;
+  const icon = score >= 8 ? Frown : score >= 6 ? Meh : Smile;
 
   const readingLevel = (score: number) => {
     if (score >= 9) return "College";

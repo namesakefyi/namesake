@@ -1,12 +1,7 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
-import {
-  RiAccountCircleFill,
-  RiAddLine,
-  RiAdminLine,
-  RiSettings3Line,
-} from "@remixicon/react";
 import { useQuery } from "convex/react";
+import { CircleUser, Cog, GlobeLock, Plus } from "lucide-react";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
 import { Link } from "../Link";
@@ -46,7 +41,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
                 className: "-mr-1",
               }}
             >
-              <RiAddLine size={20} />
+              <Plus size={20} />
             </Link>
             <Tooltip placement="right">Browse and add quests</Tooltip>
           </TooltipTrigger>
@@ -55,11 +50,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
       <div className="px-4 flex-1">{children}</div>
       <div className="px-4 h-16 shrink-0 flex items-center sticky bottom-0 bg-gray-app">
         <MenuTrigger>
-          <Button
-            aria-label="User settings"
-            variant="ghost"
-            icon={RiAccountCircleFill}
-          >
+          <Button aria-label="User settings" variant="ghost" icon={CircleUser}>
             {user?.name}
           </Button>
           <Menu placement="top start">
@@ -81,7 +72,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
                 href={{ to: "/admin" }}
                 button={{ variant: "icon" }}
               >
-                <RiAdminLine size={20} />
+                <GlobeLock size={20} />
               </Link>
               <Tooltip placement="top">Admin</Tooltip>
             </TooltipTrigger>
@@ -92,7 +83,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
               href={{ to: "/settings/overview" }}
               button={{ variant: "icon" }}
             >
-              <RiSettings3Line size={20} />
+              <Cog size={20} />
             </Link>
             <Tooltip placement="top">Settings</Tooltip>
           </TooltipTrigger>
