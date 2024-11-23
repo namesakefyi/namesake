@@ -81,7 +81,7 @@ Below are Namesake's core dependencies. The links below each lead to docs.
 | [React](https://react.dev/reference/react)                                          | Front-end web framework                            |
 | [React Aria](https://react-spectrum.adobe.com/react-aria)                           | Accessible components and design system            |
 | [Tailwind](https://tailwindcss.com/docs)                                            | Utility-first styling                              |
-| [Remix Icon](https://remixicon.com/)                                                | SVG icons                                          |
+| [Lucide Icons](https://lucide.dev/icons/)                                                | SVG icons                                          |
 | [Radix Colors](https://www.radix-ui.com/colors)                                     | Accessible color palette                           |
 | [Resend](https://resend.com/docs)                                                   | Email sending                                      |
 | [Vitest](https://vitest.dev/guide/)                                                 | Unit testing                                       |
