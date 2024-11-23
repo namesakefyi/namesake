@@ -18,11 +18,11 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
-export const Route = createFileRoute("/_authenticated/settings/overview")({
-  component: SettingsOverviewRoute,
+export const Route = createFileRoute("/_authenticated/settings/account")({
+  component: SettingsAccountRoute,
 });
 
-function SettingsOverviewRoute() {
+function SettingsAccountRoute() {
   const { signOut } = useAuthActions();
   const { setTheme } = useTheme();
   const user = useQuery(api.users.getCurrentUser);
@@ -91,7 +91,7 @@ function SettingsOverviewRoute() {
 
   return (
     <>
-      <PageHeader title="Settings" />
+      <PageHeader title="Account" />
       {user === undefined ? (
         "Loading..."
       ) : user === null ? (

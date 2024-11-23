@@ -1,4 +1,5 @@
 import {
+  Badge,
   Button,
   Container,
   Empty,
@@ -112,10 +113,21 @@ function IndexRoute() {
       <AppSidebar>
         <div className="flex items-center mb-4 bg-gray-app z-10">
           <ProgressBar
-            label="Quests complete"
+            label="Quest progress"
             value={completedQuests}
             maxValue={userQuestCount}
-            valueLabel={`${completedQuests} of ${userQuestCount}`}
+            valueLabel={
+              <span className="text-gray-normal">
+                <span className="text-gray-normal text-base font-medium mr-0.5 leading-none">
+                  {completedQuests}
+                </span>{" "}
+                <span className="text-gray-8 dark:text-graydark-8">/</span>{" "}
+                <span className="text-gray-dim">
+                  {userQuestCount} quests complete
+                </span>
+              </span>
+            }
+            labelHidden
             className="mr-4"
           />
           <TooltipTrigger>
@@ -170,6 +182,9 @@ function IndexRoute() {
                     >
                       <StatusBadge status={quest.status as Status} condensed />
                       {quest.title}
+                      {quest.jurisdiction && (
+                        <Badge size="xs">{quest.jurisdiction}</Badge>
+                      )}
                     </NavItem>
                   ))}
                 </NavGroup>
@@ -183,7 +198,7 @@ function IndexRoute() {
   return (
     <>
       <Authenticated>
-        <Container className="flex gap-6">
+        <Container className="flex">
           <MyQuests />
           <Outlet />
         </Container>

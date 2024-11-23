@@ -6,7 +6,7 @@ export interface ContainerProps {
 }
 
 const containerStyles = tv({
-  base: "max-w-full w-[1200px] px-4 lg:px-6 xl:px-8 mx-auto",
+  base: "max-w-full w-[1200px] mx-auto",
 });
 
 export function Container({ className, children }: ContainerProps) {

@@ -1,4 +1,5 @@
 import {
+  AppContent,
   Badge,
   Button,
   DialogTrigger,
@@ -159,7 +160,7 @@ function QuestDetailRoute() {
     return <Empty title="Quest not found" icon={Milestone} />;
 
   return (
-    <div className="w-full">
+    <AppContent>
       <PageHeader
         title={quest.title}
         badge={quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
@@ -185,18 +186,18 @@ function QuestDetailRoute() {
           </Menu>
         </MenuTrigger>
       </PageHeader>
-      <div className="flex gap-4 mb-4">
+      <div className="flex gap-4 mb-4 lg:mb-6 xl:mb-8">
         <QuestCosts costs={quest.costs} />
         <QuestTimeRequired timeRequired={quest.timeRequired as TimeRequired} />
       </div>
       <QuestUrls urls={quest.urls} />
       {quest.content ? (
-        <Markdown className="prose dark:prose-invert max-w-full">
+        <Markdown className="prose lg:prose-lg dark:prose-invert max-w-full">
           {quest.content}
         </Markdown>
       ) : (
         "No content"
       )}
-    </div>
+    </AppContent>
   );
 }

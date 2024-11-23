@@ -24,10 +24,10 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
   };
 
   return (
-    <div className="w-72 flex flex-col shrink-0 sticky top-0 h-screen -ml-4 overflow-y-auto border-r border-gray-dim">
-      <div className="flex gap-2 items-center h-16 shrink-0 px-4 sticky top-0 bg-gray-app z-20">
+    <div className="w-72 lg:w-80 xl:w-[22rem] flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto border-r border-gray-dim">
+      <div className="app-padding h-header flex gap-2 items-center shrink-0 sticky top-0 bg-gray-app z-20">
         <Link href={{ to: "/" }} className="p-1 -m-1">
-          <Logo className="h-[1.25rem]" />
+          <Logo className="h-5 lg:h-[1.35rem]" />
         </Link>
         <Badge className="-mb-1" variant="waiting">
           Beta
@@ -47,8 +47,8 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
           </TooltipTrigger>
         </div>
       </div>
-      <div className="px-4 flex-1">{children}</div>
-      <div className="px-4 h-16 shrink-0 flex items-center sticky bottom-0 bg-gray-app">
+      <div className="app-padding flex-1">{children}</div>
+      <div className="app-padding h-header -ml-3 shrink-0 flex items-center sticky bottom-0 bg-gray-app">
         <MenuTrigger>
           <Button aria-label="User settings" variant="ghost" icon={CircleUser}>
             {user?.name}
@@ -80,7 +80,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
           <TooltipTrigger>
             <Link
               aria-label="Settings"
-              href={{ to: "/settings/overview" }}
+              href={{ to: "/settings/account" }}
               button={{ variant: "icon" }}
             >
               <Cog size={20} />

@@ -15,10 +15,10 @@ interface NavItemProps {
 
 const navItemStyles = tv({
   extend: focusRing,
-  base: "rounded-md no-underline flex items-center text-sm gap-1.5 hover:bg-gray-3 dark:hover:bg-graydark-3 h-8 px-2 -mx-2 aria-current:font-semibold aria-current:text-gray-normal",
+  base: "rounded-md no-underline flex items-center text-sm lg:text-base gap-1.5 hover:bg-gray-3/50 dark:hover:bg-graydark-3/50 h-8 lg:h-9 px-2 -mx-2 aria-current:font-semibold aria-current:text-gray-normal",
   variants: {
     isActive: {
-      true: "bg-gray-3 dark:bg-graydark-3",
+      true: "bg-gray-3 hover:bg-gray-3 dark:bg-graydark-3 dark:hover:bg-graydark-3",
     },
   },
 });
@@ -70,9 +70,13 @@ interface NavGroupProps {
 export const NavGroup = ({ label, children, count }: NavGroupProps) => {
   return (
     <div className="flex flex-col gap-0.5 [&:not(:first-child)]:mt-4">
-      <Header className="text-sm h-8 font-semibold text-gray-dim border-b border-gray-4 dark:border-graydark-4 flex justify-start items-center gap-1.5">
+      <Header className="text-sm h-8 font-medium text-gray-dim border-b border-gray-4 dark:border-graydark-4 flex justify-start items-center gap-1.5">
         {label}
-        {count && <Badge size="xs">{count}</Badge>}
+        {count && (
+          <Badge size="xs" className="rounded-full">
+            {count}
+          </Badge>
+        )}
       </Header>
       {children}
     </div>

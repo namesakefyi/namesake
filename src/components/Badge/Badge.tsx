@@ -9,7 +9,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const badge = tv({
-  base: "px-1 font-medium text-center inline-flex justify-center gap-1 items-center shrink-0 bg-graya-3 dark:bg-graydarka-3 text-gray-dim",
+  base: "px-1 font-medium tabular-nums text-center inline-flex justify-center gap-1 items-center shrink-0 bg-graya-3 dark:bg-graydarka-3 text-gray-dim",
   variants: {
     size: {
       xs: "text-[10px] rounded h-4 px-1 min-w-4 leading-none",
