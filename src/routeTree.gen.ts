@@ -21,8 +21,8 @@ import { Route as AuthenticatedSettingsIndexImport } from './routes/_authenticat
 import { Route as AuthenticatedBrowseIndexImport } from './routes/_authenticated/browse/index'
 import { Route as AuthenticatedAdminIndexImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/_home/index'
-import { Route as AuthenticatedSettingsOverviewImport } from './routes/_authenticated/settings/overview'
 import { Route as AuthenticatedSettingsDataImport } from './routes/_authenticated/settings/data'
+import { Route as AuthenticatedSettingsAccountImport } from './routes/_authenticated/settings/account'
 import { Route as AuthenticatedAdminQuestsIndexImport } from './routes/_authenticated/admin/quests/index'
 import { Route as AuthenticatedAdminFormsIndexImport } from './routes/_authenticated/admin/forms/index'
 import { Route as AuthenticatedAdminFieldsIndexImport } from './routes/_authenticated/admin/fields/index'
@@ -94,18 +94,18 @@ const AuthenticatedHomeIndexRoute = AuthenticatedHomeIndexImport.update({
   getParentRoute: () => AuthenticatedHomeRoute,
 } as any)
 
-const AuthenticatedSettingsOverviewRoute =
-  AuthenticatedSettingsOverviewImport.update({
-    id: '/overview',
-    path: '/overview',
-    getParentRoute: () => AuthenticatedSettingsRouteRoute,
-  } as any)
-
 const AuthenticatedSettingsDataRoute = AuthenticatedSettingsDataImport.update({
   id: '/data',
   path: '/data',
   getParentRoute: () => AuthenticatedSettingsRouteRoute,
 } as any)
+
+const AuthenticatedSettingsAccountRoute =
+  AuthenticatedSettingsAccountImport.update({
+    id: '/account',
+    path: '/account',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
+  } as any)
 
 const AuthenticatedAdminQuestsIndexRoute =
   AuthenticatedAdminQuestsIndexImport.update({
@@ -202,18 +202,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnauthenticatedSigninImport
       parentRoute: typeof UnauthenticatedImport
     }
+    '/_authenticated/settings/account': {
+      id: '/_authenticated/settings/account'
+      path: '/account'
+      fullPath: '/settings/account'
+      preLoaderRoute: typeof AuthenticatedSettingsAccountImport
+      parentRoute: typeof AuthenticatedSettingsRouteImport
+    }
     '/_authenticated/settings/data': {
       id: '/_authenticated/settings/data'
       path: '/data'
       fullPath: '/settings/data'
       preLoaderRoute: typeof AuthenticatedSettingsDataImport
-      parentRoute: typeof AuthenticatedSettingsRouteImport
-    }
-    '/_authenticated/settings/overview': {
-      id: '/_authenticated/settings/overview'
-      path: '/overview'
-      fullPath: '/settings/overview'
-      preLoaderRoute: typeof AuthenticatedSettingsOverviewImport
       parentRoute: typeof AuthenticatedSettingsRouteImport
     }
     '/_authenticated/_home/': {
@@ -323,15 +323,15 @@ const AuthenticatedAdminRouteRouteWithChildren =
   )
 
 interface AuthenticatedSettingsRouteRouteChildren {
+  AuthenticatedSettingsAccountRoute: typeof AuthenticatedSettingsAccountRoute
   AuthenticatedSettingsDataRoute: typeof AuthenticatedSettingsDataRoute
-  AuthenticatedSettingsOverviewRoute: typeof AuthenticatedSettingsOverviewRoute
   AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
 }
 
 const AuthenticatedSettingsRouteRouteChildren: AuthenticatedSettingsRouteRouteChildren =
   {
+    AuthenticatedSettingsAccountRoute: AuthenticatedSettingsAccountRoute,
     AuthenticatedSettingsDataRoute: AuthenticatedSettingsDataRoute,
-    AuthenticatedSettingsOverviewRoute: AuthenticatedSettingsOverviewRoute,
     AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
   }
 
@@ -390,8 +390,8 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/signin': typeof UnauthenticatedSigninRoute
+  '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/data': typeof AuthenticatedSettingsDataRoute
-  '/settings/overview': typeof AuthenticatedSettingsOverviewRoute
   '/': typeof AuthenticatedHomeIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/browse': typeof AuthenticatedBrowseIndexRoute
@@ -408,8 +408,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '': typeof UnauthenticatedRouteWithChildren
   '/signin': typeof UnauthenticatedSigninRoute
+  '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/data': typeof AuthenticatedSettingsDataRoute
-  '/settings/overview': typeof AuthenticatedSettingsOverviewRoute
   '/': typeof AuthenticatedHomeIndexRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/browse': typeof AuthenticatedBrowseIndexRoute
@@ -431,8 +431,8 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/_authenticated/_home': typeof AuthenticatedHomeRouteWithChildren
   '/_unauthenticated/signin': typeof UnauthenticatedSigninRoute
+  '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/data': typeof AuthenticatedSettingsDataRoute
-  '/_authenticated/settings/overview': typeof AuthenticatedSettingsOverviewRoute
   '/_authenticated/_home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/browse/': typeof AuthenticatedBrowseIndexRoute
@@ -453,8 +453,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/settings'
     | '/signin'
+    | '/settings/account'
     | '/settings/data'
-    | '/settings/overview'
     | '/'
     | '/admin/'
     | '/browse'
@@ -470,8 +470,8 @@ export interface FileRouteTypes {
   to:
     | ''
     | '/signin'
+    | '/settings/account'
     | '/settings/data'
-    | '/settings/overview'
     | '/'
     | '/admin'
     | '/browse'
@@ -491,8 +491,8 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/_home'
     | '/_unauthenticated/signin'
+    | '/_authenticated/settings/account'
     | '/_authenticated/settings/data'
-    | '/_authenticated/settings/overview'
     | '/_authenticated/_home/'
     | '/_authenticated/admin/'
     | '/_authenticated/browse/'
@@ -562,8 +562,8 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/settings/route.tsx",
       "parent": "/_authenticated",
       "children": [
+        "/_authenticated/settings/account",
         "/_authenticated/settings/data",
-        "/_authenticated/settings/overview",
         "/_authenticated/settings/"
       ]
     },
@@ -580,12 +580,12 @@ export const routeTree = rootRoute
       "filePath": "_unauthenticated/signin.tsx",
       "parent": "/_unauthenticated"
     },
-    "/_authenticated/settings/data": {
-      "filePath": "_authenticated/settings/data.tsx",
+    "/_authenticated/settings/account": {
+      "filePath": "_authenticated/settings/account.tsx",
       "parent": "/_authenticated/settings"
     },
-    "/_authenticated/settings/overview": {
-      "filePath": "_authenticated/settings/overview.tsx",
+    "/_authenticated/settings/data": {
+      "filePath": "_authenticated/settings/data.tsx",
       "parent": "/_authenticated/settings"
     },
     "/_authenticated/_home/": {

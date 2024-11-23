@@ -1,4 +1,11 @@
-import { AppSidebar, Container, Nav, NavItem } from "@/components";
+import {
+  AppContent,
+  AppSidebar,
+  Container,
+  Nav,
+  NavGroup,
+  NavItem,
+} from "@/components";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import { FileText, Milestone, RectangleEllipsis } from "lucide-react";
 
@@ -19,23 +26,25 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 function AdminRoute() {
   return (
-    <Container className="flex gap-6">
+    <Container className="flex">
       <AppSidebar>
         <Nav>
-          <NavItem icon={Milestone} href={{ to: "/admin/quests" }}>
-            Quests
-          </NavItem>
-          <NavItem icon={FileText} href={{ to: "/admin/forms" }}>
-            Forms
-          </NavItem>
-          <NavItem icon={RectangleEllipsis} href={{ to: "/admin/fields" }}>
-            Fields
-          </NavItem>
+          <NavGroup label="Content">
+            <NavItem icon={Milestone} href={{ to: "/admin/quests" }}>
+              Quests
+            </NavItem>
+            <NavItem icon={FileText} href={{ to: "/admin/forms" }}>
+              Forms
+            </NavItem>
+            <NavItem icon={RectangleEllipsis} href={{ to: "/admin/fields" }}>
+              Fields
+            </NavItem>
+          </NavGroup>
         </Nav>
       </AppSidebar>
-      <div className="w-full">
+      <AppContent>
         <Outlet />
-      </div>
+      </AppContent>
     </Container>
   );
 }

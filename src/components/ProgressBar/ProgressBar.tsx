@@ -2,14 +2,20 @@ import {
   ProgressBar as AriaProgressBar,
   type ProgressBarProps as AriaProgressBarProps,
 } from "react-aria-components";
+import { twMerge } from "tailwind-merge";
 import { Label } from "../Field";
 import { composeTailwindRenderProps } from "../utils";
 
 export interface ProgressBarProps extends AriaProgressBarProps {
-  label?: string;
+  label: string;
+  labelHidden?: boolean;
 }
 
-export function ProgressBar({ label, ...props }: ProgressBarProps) {
+export function ProgressBar({
+  label,
+  labelHidden = false,
+  ...props
+}: ProgressBarProps) {
   return (
     <AriaProgressBar
       {...props}
@@ -20,9 +26,13 @@ export function ProgressBar({ label, ...props }: ProgressBarProps) {
     >
       {({ percentage, valueText, isIndeterminate }) => (
         <>
-          <div className="flex justify-between gap-2 -mt-0.5">
-            <Label className="text-gray-normal">{label}</Label>
-            <span className="text-sm text-gray-dim tabular-nums">
+          <div className="flex items-baseline justify-between gap-2 -mt-0.5">
+            <Label
+              className={twMerge("text-gray-dim", labelHidden && "sr-only")}
+            >
+              {label}
+            </Label>
+            <span className="text-xs text-gray-dim tabular-nums">
               {valueText}
             </span>
           </div>

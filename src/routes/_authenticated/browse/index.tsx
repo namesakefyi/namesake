@@ -1,4 +1,5 @@
 import {
+  AppContent,
   AppSidebar,
   Badge,
   Button,
@@ -169,7 +170,7 @@ function IndexRoute() {
   );
 
   return (
-    <Container className="flex gap-6">
+    <Container className="flex">
       <AppSidebar>
         <SearchField
           value={search}
@@ -178,14 +179,14 @@ function IndexRoute() {
           aria-label="Search quests"
         />
       </AppSidebar>
-      <div className="w-full">
+      <AppContent>
         <PageHeader title="Browse quests" />
         {filteredQuests && search !== "" ? (
           <SearchResultsGrid quests={filteredQuests} />
         ) : (
           <QuestCategoryGrid />
         )}
-      </div>
+      </AppContent>
     </Container>
   );
 }

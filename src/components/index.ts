@@ -1,5 +1,6 @@
 export * from "./AlertDialog";
 export * from "./AnimateChangeInHeight";
+export * from "./AppContent";
 export * from "./AppSidebar";
 export * from "./Badge";
 export * from "./Banner";

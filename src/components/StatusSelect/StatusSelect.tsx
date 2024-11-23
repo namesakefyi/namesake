@@ -9,6 +9,7 @@ import {
   Button,
   Menu,
   MenuItem,
+  MenuSection,
   MenuTrigger,
   Tooltip,
   TooltipTrigger,
@@ -23,7 +24,7 @@ const badgeStyles = tv({
   base: "flex items-center transition-colors rounded-full",
   variants: {
     condensed: {
-      true: "w-5 h-5 p-0",
+      true: "size-5 p-0 lg:size-6",
       false: "pr-2",
     },
   },
@@ -84,19 +85,21 @@ export function StatusSelect({ status, isCore, onChange }: StatusSelectProps) {
         disallowEmptySelection
         onSelectionChange={handleSelectionChange}
       >
-        {Object.entries(STATUS).map(([status, details]) => {
-          if (!isCore && details.isCoreOnly) return null;
-          return (
-            <MenuItem
-              key={status}
-              id={status}
-              aria-label={details.label}
-              className="h-9"
-            >
-              <StatusBadge status={status as Status} size="lg" />
-            </MenuItem>
-          );
-        })}
+        <MenuSection title="Status">
+          {Object.entries(STATUS).map(([status, details]) => {
+            if (!isCore && details.isCoreOnly) return null;
+            return (
+              <MenuItem
+                key={status}
+                id={status}
+                aria-label={details.label}
+                className="h-9"
+              >
+                <StatusBadge status={status as Status} size="lg" />
+              </MenuItem>
+            );
+          })}
+        </MenuSection>
       </Menu>
     </MenuTrigger>
   );
