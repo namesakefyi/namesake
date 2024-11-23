@@ -37,7 +37,7 @@ const StatGroup = ({
   value,
   children,
 }: { label: string; value: string; children?: React.ReactNode }) => (
-  <div className="flex flex-col flex-1 bg-gray-2 dark:bg-graydark-2 py-3 px-4 rounded-lg">
+  <div className="flex flex-col flex-1 border border-gray-dim py-3 px-4 rounded-lg">
     <div className="text-gray-dim text-sm">{label}</div>
     <div className="text-xl flex gap-0.5 items-center">
       {value}

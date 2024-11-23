@@ -3,17 +3,18 @@ import { tv } from "tailwind-variants";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  size?: "sm" | "lg";
+  size?: "xs" | "sm" | "lg";
   variant?: "info" | "success" | "danger" | "warning" | "waiting";
   icon?: RemixiconComponentType;
 }
 
 const badge = tv({
-  base: "px-1.5 py-0.5 font-medium text-center inline-flex gap-1 items-center shrink-0 bg-graya-3 dark:bg-graydarka-3 text-gray-dim",
+  base: "px-1.5 font-medium text-center inline-flex justify-center gap-1 items-center shrink-0 bg-graya-3 dark:bg-graydarka-3 text-gray-dim",
   variants: {
     size: {
-      sm: "text-xs rounded",
-      lg: "text-sm rounded-md px-2 gap-1.5",
+      xs: "text-[10px] rounded h-4 px-1 min-w-4 leading-none",
+      sm: "text-xs rounded h-5 min-w-5",
+      lg: "text-sm rounded-md px-1.5 h-6 min-w-6 gap-1.5",
     },
     variant: {
       info: "bg-bluea-3 dark:bg-bluedarka-3 text-blue-normal",
@@ -30,7 +31,7 @@ const badge = tv({
 });
 
 const icon = tv({
-  base: "w-4 h-4",
+  base: "w-4 h-4 shrink-0",
   variants: {
     variant: {
       info: "text-blue-dim",
