@@ -6,8 +6,8 @@ import {
   Collection,
   Header,
   type ListBoxItemProps,
-  Section,
-  type SectionProps,
+  MenuSection,
+  type MenuSectionProps,
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
@@ -63,7 +63,7 @@ export function ListBoxItem(props: ListBoxItemProps) {
 }
 
 export const dropdownItemStyles = tv({
-  base: "group flex items-center gap-1.5 cursor-pointer select-none py-2 px-2.5 rounded-lg outline outline-0 text-sm forced-color-adjust-none",
+  base: "group flex items-center gap-1.5 cursor-pointer select-none py-2 px-2.5 pr-3 rounded-lg outline outline-0 text-sm forced-color-adjust-none",
   variants: {
     isDisabled: {
       false: "text-gray-normal",
@@ -106,7 +106,7 @@ export function DropdownItem(props: ListBoxItemProps) {
   );
 }
 
-export interface DropdownSectionProps<T> extends SectionProps<T> {
+export interface DropdownSectionProps<T> extends MenuSectionProps<T> {
   title?: string;
 }
 
@@ -114,11 +114,11 @@ export function DropdownSection<T extends object>(
   props: DropdownSectionProps<T>,
 ) {
   return (
-    <Section>
+    <MenuSection>
       <Header className="text-sm font-semibold text-gray-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-gray-subtle border-b border-gray-dim [&+*]:mt-1">
         {props.title}
       </Header>
       <Collection items={props.items}>{props.children}</Collection>
-    </Section>
+    </MenuSection>
   );
 }
