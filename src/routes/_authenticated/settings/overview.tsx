@@ -11,9 +11,9 @@ import {
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import type { Theme } from "@convex/constants";
-import { RiCheckLine, RiLoader4Line } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
+import { Check, LoaderCircle } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
@@ -66,12 +66,9 @@ function SettingsOverviewRoute() {
   };
 
   const textFieldIcon = isUpdatingName ? (
-    <RiLoader4Line size={20} className="animate animate-spin mr-2" />
+    <LoaderCircle size={20} className="animate animate-spin mr-2" />
   ) : didUpdateName ? (
-    <RiCheckLine
-      size={20}
-      className="text-green-9 dark:text-greendark-9 mr-2"
-    />
+    <Check size={20} className="text-green-9 dark:text-greendark-9 mr-2" />
   ) : undefined;
 
   // Is minor switch

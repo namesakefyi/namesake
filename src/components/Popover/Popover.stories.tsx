@@ -1,5 +1,5 @@
-import { RiQuestionLine } from "@remixicon/react";
 import type { Meta } from "@storybook/react";
+import { CircleHelp } from "lucide-react";
 import { Heading } from "react-aria-components";
 import { Popover } from ".";
 import { Button } from "../Button";
@@ -15,7 +15,7 @@ export default meta;
 export const Example = (args: any) => (
   <DialogTrigger>
     <Button variant="icon" aria-label="Help">
-      <RiQuestionLine />
+      <CircleHelp />
     </Button>
     <Popover {...args} className="max-w-[250px]">
       <Dialog>

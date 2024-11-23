@@ -1,15 +1,15 @@
 import {
-  type RemixiconComponentType,
-  RiAlertLine,
-  RiCheckLine,
-  RiErrorWarningLine,
-  RiInformationLine,
-} from "@remixicon/react";
+  Check,
+  Info,
+  type LucideIcon,
+  OctagonAlert,
+  TriangleAlert,
+} from "lucide-react";
 import { tv } from "tailwind-variants";
 
 export interface BannerProps {
   children: React.ReactNode;
-  icon?: RemixiconComponentType;
+  icon?: LucideIcon;
   variant?: "info" | "success" | "danger" | "warning";
 }
 
@@ -50,13 +50,13 @@ export function Banner({ children, icon: Icon, variant }: BannerProps) {
   const DefaultIcon = () => {
     switch (variant) {
       case "success":
-        return RiCheckLine;
+        return Check;
       case "danger":
-        return RiErrorWarningLine;
+        return OctagonAlert;
       case "warning":
-        return RiAlertLine;
+        return TriangleAlert;
       default:
-        return RiInformationLine;
+        return Info;
     }
   };
 

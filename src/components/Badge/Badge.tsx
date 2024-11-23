@@ -1,15 +1,15 @@
-import type { RemixiconComponentType } from "@remixicon/react";
+import type { LucideIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   size?: "xs" | "sm" | "lg";
-  variant?: "info" | "success" | "danger" | "warning" | "waiting";
-  icon?: RemixiconComponentType;
+  variant?: "info" | "warning" | "danger" | "waiting" | "success";
+  icon?: LucideIcon;
 }
 
 const badge = tv({
-  base: "px-1.5 font-medium text-center inline-flex justify-center gap-1 items-center shrink-0 bg-graya-3 dark:bg-graydarka-3 text-gray-dim",
+  base: "px-1 font-medium text-center inline-flex justify-center gap-1 items-center shrink-0 bg-graya-3 dark:bg-graydarka-3 text-gray-dim",
   variants: {
     size: {
       xs: "text-[10px] rounded h-4 px-1 min-w-4 leading-none",
@@ -18,10 +18,10 @@ const badge = tv({
     },
     variant: {
       info: "bg-bluea-3 dark:bg-bluedarka-3 text-blue-normal",
-      success: "bg-greena-3 dark:bg-greendarka-3 text-green-normal",
-      danger: "bg-reda-3 dark:bg-reddarka-3 text-red-normal",
       warning: "bg-ambera-3 dark:bg-amberdarka-3 text-amber-normal",
+      danger: "bg-reda-3 dark:bg-reddarka-3 text-red-normal",
       waiting: "bg-purplea-3 dark:bg-purpledarka-3 text-purple-normal",
+      success: "bg-greena-3 dark:bg-greendarka-3 text-green-normal",
     },
   },
   defaultVariants: {
@@ -35,10 +35,10 @@ const icon = tv({
   variants: {
     variant: {
       info: "text-blue-dim",
-      success: "text-green-dim",
-      danger: "text-red-dim",
       warning: "text-amber-dim",
+      danger: "text-red-dim",
       waiting: "text-purple-dim",
+      success: "text-green-dim",
     },
   },
 });

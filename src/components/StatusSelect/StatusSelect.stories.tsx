@@ -18,7 +18,7 @@ Example.args = {
 export const WithCoreStatuses = (args: any) => <StatusSelect {...args} />;
 
 WithCoreStatuses.args = {
-  status: "readyToFile",
+  status: "filed",
   onChange: (status: Status) => console.log("Status changed to:", status),
   isCore: true,
 };

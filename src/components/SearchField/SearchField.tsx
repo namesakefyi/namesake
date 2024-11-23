@@ -1,4 +1,4 @@
-import { RiCloseLine, RiSearchLine } from "@remixicon/react";
+import { CircleX, Search } from "lucide-react";
 import {
   SearchField as AriaSearchField,
   type SearchFieldProps as AriaSearchFieldProps,
@@ -38,7 +38,7 @@ export function SearchField({
     >
       {label && <Label>{label}</Label>}
       <FieldGroup>
-        <RiSearchLine
+        <Search
           aria-hidden
           className="w-4 h-4 ml-3 text-gray-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText]"
         />
@@ -50,7 +50,7 @@ export function SearchField({
           variant="icon"
           className="mr-1 w-7 h-7 p-0 group-empty:invisible"
           size="small"
-          icon={RiCloseLine}
+          icon={CircleX}
         />
       </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}

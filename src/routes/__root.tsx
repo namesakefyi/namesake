@@ -1,12 +1,5 @@
 import type { Role } from "@convex/constants";
 import {
-  RiAlertLine,
-  RiCheckLine,
-  RiInformationLine,
-  RiLoader4Line,
-  RiSpam2Line,
-} from "@remixicon/react";
-import {
   type NavigateOptions,
   Outlet,
   type ToOptions,
@@ -14,6 +7,13 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 import type { ConvexAuthState } from "convex/react";
+import {
+  AlertTriangle,
+  Check,
+  Info,
+  LoaderCircle,
+  OctagonAlert,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import { RouterProvider } from "react-aria-components";
 import { Toaster } from "sonner";
@@ -69,11 +69,11 @@ function RootRoute() {
           },
         }}
         icons={{
-          success: <RiCheckLine />,
-          info: <RiInformationLine />,
-          warning: <RiAlertLine />,
-          error: <RiSpam2Line />,
-          loading: <RiLoader4Line />,
+          success: <Check />,
+          info: <Info />,
+          warning: <AlertTriangle />,
+          error: <OctagonAlert />,
+          loading: <LoaderCircle />,
         }}
       />
     </RouterProvider>

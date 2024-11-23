@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
-import { type Category, STATUS, type Status, type TimeUnit } from "./constants";
+import { type Category, STATUS, type Status } from "./constants";
 import { userMutation, userQuery } from "./helpers";
 import { status } from "./validators";
 
@@ -321,7 +321,6 @@ export const getUserQuestsByStatus = userQuery({
     const initial: Record<Status, typeof validQuests> = {
       notStarted: [],
       inProgress: [],
-      readyToFile: [],
       filed: [],
       complete: [],
     };
@@ -331,45 +330,5 @@ export const getUserQuestsByStatus = userQuery({
       acc[quest.status as Status].push(quest);
       return acc;
     }, initial);
-  },
-});
-
-export const getUserQuestsByTimeRequired = userQuery({
-  args: {},
-  handler: async (ctx) => {
-    const userQuests = await ctx.db
-      .query("userQuests")
-      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-      .collect();
-
-    const questsWithDetails = await Promise.all(
-      userQuests.map(async (userQuest) => {
-        const quest = await ctx.db.get(userQuest.questId);
-        return quest && quest.deletionTime === undefined
-          ? { ...quest, ...userQuest }
-          : null;
-      }),
-    );
-
-    const validQuests = questsWithDetails.filter(
-      (q): q is NonNullable<typeof q> => q !== null,
-    );
-
-    // Initialize an object with all possible time required keys
-    const initial: Record<TimeUnit, typeof validQuests> = {
-      minutes: [],
-      hours: [],
-      days: [],
-      weeks: [],
-      months: [],
-    };
-
-    // Group quests by their time required unit
-    const group = validQuests.reduce((acc, quest) => {
-      acc[quest.timeRequired.unit as TimeUnit].push(quest);
-      return acc;
-    }, initial);
-
-    return group;
   },
 });

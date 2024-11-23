@@ -22,9 +22,9 @@ import {
 import { api } from "@convex/_generated/api";
 import type { DataModel } from "@convex/_generated/dataModel";
 import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
-import { RiAddLine, RiFileTextLine, RiMoreFill } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
+import { Ellipsis, FileText, Plus } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/admin/forms/")({
@@ -169,7 +169,7 @@ const FormTableRow = ({ form }: { form: DataModel["forms"]["document"] }) => {
             variant="icon"
             aria-label="Actions"
             size="small"
-            icon={RiMoreFill}
+            icon={Ellipsis}
           />
           <Menu>
             {formUrl && (
@@ -208,8 +208,11 @@ function FormsRoute() {
   return (
     <div>
       <PageHeader title="Forms">
-        <Button onPress={() => setIsNewFormModalOpen(true)} variant="primary">
-          <RiAddLine />
+        <Button
+          onPress={() => setIsNewFormModalOpen(true)}
+          icon={Plus}
+          variant="primary"
+        >
           Upload New Form
         </Button>
       </PageHeader>
@@ -225,7 +228,7 @@ function FormsRoute() {
           renderEmptyState={() => (
             <Empty
               title="No forms"
-              icon={RiFileTextLine}
+              icon={FileText}
               button={{
                 children: "New Form",
                 onPress: () => setIsNewFormModalOpen(true),

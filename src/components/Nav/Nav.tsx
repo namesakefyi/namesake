@@ -1,5 +1,5 @@
-import type { RemixiconComponentType } from "@remixicon/react";
 import { type LinkProps, useMatchRoute } from "@tanstack/react-router";
+import type { LucideIcon } from "lucide-react";
 import { Header } from "react-aria-components";
 import { tv } from "tailwind-variants";
 import { Badge } from "../Badge";
@@ -8,7 +8,7 @@ import { focusRing } from "../utils";
 
 interface NavItemProps {
   href: LinkProps;
-  icon?: RemixiconComponentType;
+  icon?: LucideIcon;
   className?: string;
   children?: React.ReactNode;
 }

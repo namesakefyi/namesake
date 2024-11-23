@@ -23,9 +23,9 @@ import {
   type TimeRequired,
   type TimeUnit,
 } from "@convex/constants";
-import { RiQuestionLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
+import { CircleHelp } from "lucide-react";
 import { memo, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -263,7 +263,7 @@ function AdminQuestDetailRoute() {
           isRequired
         >
           {Object.entries(CATEGORIES).map(([key, { label, icon }]) => {
-            const Icon = icon ?? RiQuestionLine;
+            const Icon = icon ?? CircleHelp;
             return (
               <SelectItem key={key} id={key} textValue={key}>
                 <Icon size={20} /> {label}

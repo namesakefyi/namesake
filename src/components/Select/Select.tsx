@@ -1,4 +1,4 @@
-import { RiArrowDownSLine } from "@remixicon/react";
+import { ChevronDown } from "lucide-react";
 import type React from "react";
 import {
   Select as AriaSelect,
@@ -59,7 +59,7 @@ export function Select<T extends object>({
       {label && <Label>{label}</Label>}
       <Button className={styles}>
         <SelectValue className="flex-1 text-gray-normal placeholder-shown:text-gray-9 dark:placeholder-shown:text-graydark-9" />
-        <RiArrowDownSLine
+        <ChevronDown
           aria-hidden
           className="w-4 h-4 text-gray-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText]"
         />

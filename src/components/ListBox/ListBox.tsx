@@ -1,4 +1,4 @@
-import { RiCheckLine } from "@remixicon/react";
+import { Check } from "lucide-react";
 import {
   ListBox as AriaListBox,
   ListBoxItem as AriaListBoxItem,
@@ -98,7 +98,7 @@ export function DropdownItem(props: ListBoxItemProps) {
             {children}
           </span>
           <span className="flex items-center w-5">
-            {isSelected && <RiCheckLine className="w-4 h-4" />}
+            {isSelected && <Check className="w-4 h-4" />}
           </span>
         </>
       ))}

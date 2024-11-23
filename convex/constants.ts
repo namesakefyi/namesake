@@ -1,39 +1,38 @@
 import {
-  type RemixiconComponentType,
-  RiAccountCircleLine,
-  RiAtLine,
-  RiBankLine,
-  RiCalendar2Line,
-  RiCalendarLine,
-  RiCalendarScheduleLine,
-  RiChat3Line,
-  RiCheckboxBlankCircleLine,
-  RiCheckboxCircleFill,
-  RiCheckboxLine,
-  RiComputerLine,
-  RiDropdownList,
-  RiFlashlightLine,
-  RiFolderCheckLine,
-  RiFolderLine,
-  RiGamepadLine,
-  RiGraduationCapLine,
-  RiHashtag,
-  RiHeartPulseLine,
-  RiHistoryLine,
-  RiHome4Line,
-  RiInputField,
-  RiMailLine,
-  RiMapPinLine,
-  RiMovie2Line,
-  RiParagraph,
-  RiPhoneLine,
-  RiProgress4Line,
-  RiQuestionLine,
-  RiScales3Line,
-  RiShoppingBag4Line,
-  RiSignpostLine,
-  RiTimeLine,
-} from "@remixicon/react";
+  AtSign,
+  Calendar,
+  CalendarClock,
+  CalendarDays,
+  CircleArrowRight,
+  CircleCheckBig,
+  CircleDashed,
+  CircleHelp,
+  CircleUser,
+  Clapperboard,
+  Clock,
+  Computer,
+  Gamepad2,
+  GraduationCap,
+  Hash,
+  HeartPulse,
+  History,
+  House,
+  Landmark,
+  LetterText,
+  ListChecks,
+  LoaderCircle,
+  type LucideIcon,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Milestone,
+  Phone,
+  RectangleEllipsis,
+  Scale,
+  ShoppingBag,
+  SquareCheck,
+  Zap,
+} from "lucide-react";
 
 export const JURISDICTIONS = {
   AK: "Alaska",
@@ -96,7 +95,7 @@ export type Jurisdiction = keyof typeof JURISDICTIONS;
  */
 interface FieldDetails {
   label: string;
-  icon: RemixiconComponentType;
+  icon: LucideIcon;
 }
 
 export type Field =
@@ -112,35 +111,35 @@ export type Field =
 export const FIELDS: Record<string, FieldDetails> = {
   text: {
     label: "Text",
-    icon: RiInputField,
+    icon: RectangleEllipsis,
   },
   textarea: {
     label: "Textarea",
-    icon: RiParagraph,
+    icon: LetterText,
   },
   date: {
     label: "Date",
-    icon: RiCalendarLine,
+    icon: Calendar,
   },
   select: {
     label: "Select",
-    icon: RiDropdownList,
+    icon: ListChecks,
   },
   checkbox: {
     label: "Checkbox",
-    icon: RiCheckboxLine,
+    icon: SquareCheck,
   },
   number: {
     label: "Number",
-    icon: RiHashtag,
+    icon: Hash,
   },
   email: {
     label: "Email",
-    icon: RiAtLine,
+    icon: AtSign,
   },
   phone: {
     label: "Phone",
-    icon: RiPhoneLine,
+    icon: Phone,
   },
 } as const;
 
@@ -162,7 +161,6 @@ export const GROUP_QUESTS_BY = {
   dateAdded: "Date added",
   category: "Category",
   status: "Status",
-  timeRequired: "Time required",
 } as const;
 export type GroupQuestsBy = keyof typeof GROUP_QUESTS_BY;
 
@@ -172,7 +170,7 @@ export type GroupQuestsBy = keyof typeof GROUP_QUESTS_BY;
  */
 export type GroupDetails = {
   label: string;
-  icon: RemixiconComponentType;
+  icon: LucideIcon;
 };
 
 /**
@@ -199,63 +197,63 @@ export type Category =
 export const CATEGORIES: Record<Category, GroupDetails> = {
   core: {
     label: "Core",
-    icon: RiSignpostLine,
+    icon: Milestone,
   },
   entertainment: {
     label: "Arts and Entertainment",
-    icon: RiMovie2Line,
+    icon: Clapperboard,
   },
   devices: {
     label: "Devices",
-    icon: RiComputerLine,
+    icon: Computer,
   },
   education: {
     label: "Education",
-    icon: RiGraduationCapLine,
+    icon: GraduationCap,
   },
   finance: {
     label: "Finance",
-    icon: RiBankLine,
+    icon: Landmark,
   },
   gaming: {
     label: "Gaming",
-    icon: RiGamepadLine,
+    icon: Gamepad2,
   },
   government: {
     label: "Government",
-    icon: RiScales3Line,
+    icon: Scale,
   },
   health: {
     label: "Health",
-    icon: RiHeartPulseLine,
+    icon: HeartPulse,
   },
   housing: {
     label: "Housing and Utilities",
-    icon: RiHome4Line,
+    icon: House,
   },
   personal: {
     label: "Personal",
-    icon: RiAccountCircleLine,
+    icon: CircleUser,
   },
   shopping: {
     label: "Shopping",
-    icon: RiShoppingBag4Line,
+    icon: ShoppingBag,
   },
   social: {
     label: "Social",
-    icon: RiChat3Line,
+    icon: MessageCircle,
   },
   subscriptions: {
     label: "Subscriptions",
-    icon: RiMailLine,
+    icon: Mail,
   },
   travel: {
     label: "Travel",
-    icon: RiMapPinLine,
+    icon: MapPin,
   },
   other: {
     label: "Other",
-    icon: RiQuestionLine,
+    icon: CircleHelp,
   },
 };
 
@@ -270,15 +268,15 @@ export type DateAdded = "lastWeek" | "lastMonth" | "earlier";
 export const DATE_ADDED: Record<DateAdded, GroupDetails> = {
   lastWeek: {
     label: "Last 7 days",
-    icon: RiTimeLine,
+    icon: Calendar,
   },
   lastMonth: {
     label: "Last 30 days",
-    icon: RiCalendarLine,
+    icon: CalendarDays,
   },
   earlier: {
     label: "Earlier",
-    icon: RiHistoryLine,
+    icon: History,
   },
 };
 
@@ -288,46 +286,35 @@ export const DATE_ADDED_ORDER: DateAdded[] = Object.keys(
 
 /**
  * User quest statuses.
- * "readyToFile" and "filed" are only available for core quests.
+ * "filed" is only available for core quests.
  * "notStarted", "inProgress", and "complete" are available for all quests.
  */
-export type Status =
-  | "notStarted"
-  | "inProgress"
-  | "readyToFile"
-  | "filed"
-  | "complete";
+export type Status = "notStarted" | "inProgress" | "filed" | "complete";
 
 interface StatusDetails extends GroupDetails {
-  variant?: "info" | "success" | "danger" | "warning" | "waiting";
+  variant?: "info" | "warning" | "danger" | "waiting" | "success";
   isCoreOnly?: boolean;
 }
 
 export const STATUS: Record<Status, StatusDetails> = {
   notStarted: {
     label: "Not started",
-    icon: RiCheckboxBlankCircleLine,
+    icon: CircleDashed,
   },
   inProgress: {
     label: "In progress",
-    icon: RiProgress4Line,
+    icon: LoaderCircle,
     variant: "warning",
-  },
-  readyToFile: {
-    label: "Ready to file",
-    icon: RiFolderLine,
-    isCoreOnly: true,
-    variant: "info",
   },
   filed: {
     label: "Filed",
-    icon: RiFolderCheckLine,
+    icon: CircleArrowRight,
     isCoreOnly: true,
     variant: "waiting",
   },
   complete: {
-    label: "Completed",
-    icon: RiCheckboxCircleFill,
+    label: "Done",
+    icon: CircleCheckBig,
     variant: "success",
   },
 } as const;
@@ -348,23 +335,23 @@ export type TimeUnit = "minutes" | "hours" | "days" | "weeks" | "months";
 export const TIME_UNITS: Record<TimeUnit, GroupDetails> = {
   minutes: {
     label: "Minutes",
-    icon: RiFlashlightLine,
+    icon: Zap,
   },
   hours: {
     label: "Hours",
-    icon: RiTimeLine,
+    icon: Clock,
   },
   days: {
     label: "Days",
-    icon: RiCalendarLine,
+    icon: Calendar,
   },
   weeks: {
     label: "Weeks",
-    icon: RiCalendar2Line,
+    icon: CalendarDays,
   },
   months: {
     label: "Months",
-    icon: RiCalendarScheduleLine,
+    icon: CalendarClock,
   },
 };
 

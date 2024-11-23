@@ -1,4 +1,4 @@
-import { RiArrowLeftSLine, RiArrowRightSLine } from "@remixicon/react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
   Calendar as AriaCalendar,
   CalendarGridHeader as AriaCalendarGridHeader,
@@ -66,13 +66,13 @@ export function CalendarHeader() {
       <Button
         variant="icon"
         slot="previous"
-        icon={direction === "rtl" ? RiArrowRightSLine : RiArrowLeftSLine}
+        icon={direction === "rtl" ? ArrowRight : ArrowLeft}
       />
       <Heading className="flex-1 font-medium text-xl text-center mx-2 text-gray-normal" />
       <Button
         variant="icon"
         slot="next"
-        icon={direction === "rtl" ? RiArrowLeftSLine : RiArrowRightSLine}
+        icon={direction === "rtl" ? ArrowLeft : ArrowRight}
       />
     </header>
   );

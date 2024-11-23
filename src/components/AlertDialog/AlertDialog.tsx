@@ -1,4 +1,4 @@
-import { RiAlertLine, RiInformationLine } from "@remixicon/react";
+import { Info, TriangleAlert } from "lucide-react";
 import type { ReactNode } from "react";
 import { chain } from "react-aria";
 import { Heading } from "react-aria-components";
@@ -37,9 +37,9 @@ export function AlertDialog({
             className={`w-6 h-6 absolute right-6 top-6 stroke-2 ${variant === "destructive" ? "text-red-9 dark:text-reddark-9" : "text-blue-9 dark:text-bluedark-9"}`}
           >
             {variant === "destructive" ? (
-              <RiAlertLine aria-hidden />
+              <TriangleAlert aria-hidden />
             ) : (
-              <RiInformationLine aria-hidden />
+              <Info aria-hidden />
             )}
           </div>
           <p className="mt-3 text-gray-dim">{children}</p>
