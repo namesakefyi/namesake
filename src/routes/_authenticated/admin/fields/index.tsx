@@ -150,8 +150,11 @@ function FieldsRoute() {
   return (
     <div>
       <PageHeader title="Fields">
-        <Button onPress={() => setIsNewFieldModalOpen(true)} variant="primary">
-          <Plus />
+        <Button
+          onPress={() => setIsNewFieldModalOpen(true)}
+          variant="primary"
+          icon={Plus}
+        >
           New Field
         </Button>
       </PageHeader>

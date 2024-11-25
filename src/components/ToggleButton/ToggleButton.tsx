@@ -9,7 +9,7 @@ import { focusRing } from "../utils";
 
 const styles = tv({
   extend: focusRing,
-  base: "h-10 px-3.5 [&:has(svg:only-child)]:px-2 text-sm text-center transition rounded-lg border border-black/10 dark:border-white/10 forced-colors:border-[ButtonBorder] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] dark:shadow-none forced-color-adjust-none",
+  base: "h-10 px-3.5 [&:has(svg:only-child)]:px-2 text-sm text-center transition rounded-lg border border-black/10 dark:border-white/10",
   variants: {
     isSelected: {
       false: buttonStyles.variants.variant.secondary,
