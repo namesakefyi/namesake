@@ -134,7 +134,6 @@ function SettingsAccountRoute() {
   const [isDeleteAccountDialogOpen, setIsDeleteAccountDialogOpen] =
     useState(false);
 
-  // Is minor switch
   const updateIsMinor = useMutation(api.users.setCurrentUserIsMinor);
 
   return (
@@ -162,7 +161,7 @@ function SettingsAccountRoute() {
               />
             </SettingsItem>
             <SettingsItem
-              label="Applying as a minor"
+              label="Under 18"
               description="Are you under 18 years old or applying on behalf of someone who is?"
             >
               <Switch
