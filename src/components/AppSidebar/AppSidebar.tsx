@@ -1,19 +1,20 @@
+import { useTheme } from "@/utils/useTheme";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import { THEMES, type Theme } from "@convex/constants";
-import { useMutation, useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import {
+  Bug,
   CircleUser,
   Cog,
+  DatabaseZap,
+  FileClock,
   GlobeLock,
   LogOut,
   MessageCircleQuestion,
   Plus,
   Snail,
 } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useState } from "react";
-import type { Selection } from "react-aria-components";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
 import { Link } from "../Link";
@@ -35,25 +36,10 @@ type AppSidebarProps = {
 
 export const AppSidebar = ({ children }: AppSidebarProps) => {
   const { signOut } = useAuthActions();
-  const { theme, setTheme } = useTheme();
-  const [selectedTheme, setSelectedTheme] = useState<Selection>(
-    new Set([theme ?? "system"]),
-  );
+  const { theme, themeSelection, setTheme } = useTheme();
+
   const user = useQuery(api.users.getCurrentUser);
   const isAdmin = user?.role === "admin";
-
-  // Theme change
-  const updateTheme = useMutation(api.users.setUserTheme);
-
-  const handleUpdateTheme = (theme: Selection) => {
-    const newTheme = [...theme][0] as Theme;
-    // Update the theme in the database
-    updateTheme({ theme: newTheme });
-    // Update the theme in next-themes
-    setTheme(newTheme);
-    // Update the selected theme in the menu
-    setSelectedTheme(new Set([newTheme]));
-  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -98,6 +84,23 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
             >
               About Namesake
             </MenuItem>
+            <MenuItem
+              icon={FileClock}
+              href="https://github.com/namesakefyi/namesake/releases"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Changelog{" "}
+              <span className="text-gray-dim ml-auto">v{APP_VERSION}</span>
+            </MenuItem>
+            <MenuItem
+              icon={DatabaseZap}
+              href="https://status.namesake.fyi"
+              target="_blank"
+              rel="noreferrer"
+            >
+              System Status
+            </MenuItem>
             <MenuSeparator />
             <MenuItem href={{ to: "/settings/account" }} icon={Cog}>
               Settings
@@ -108,8 +111,8 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
                 <Menu
                   disallowEmptySelection
                   selectionMode="single"
-                  selectedKeys={selectedTheme}
-                  onSelectionChange={handleUpdateTheme}
+                  selectedKeys={themeSelection}
+                  onSelectionChange={setTheme}
                 >
                   {Object.entries(THEMES).map(([theme, details]) => (
                     <MenuItem key={theme} id={theme} icon={details.icon}>
@@ -126,6 +129,14 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
             )}
             <MenuSeparator />
             <MenuItem
+              href="https://github.com/namesakefyi/namesake/issues/new/choose"
+              target="_blank"
+              rel="noreferrer"
+              icon={Bug}
+            >
+              Report an issue
+            </MenuItem>
+            <MenuItem
               href="https://namesake.fyi/chat"
               target="_blank"
               rel="noreferrer"
@@ -133,6 +144,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
             >
               Support&hellip;
             </MenuItem>
+            <MenuSeparator />
             <MenuItem icon={LogOut} onAction={handleSignOut}>
               Sign out
             </MenuItem>
