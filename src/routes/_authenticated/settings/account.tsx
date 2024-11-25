@@ -30,9 +30,9 @@ const SettingsSection = ({
   title: string;
   children: React.ReactNode;
 }) => (
-  <section className="flex flex-col lg:flex-row gap-4 mb-8 last-of-type:mb-0">
-    <h2 className="lg:w-1/3 text-lg font-medium">{title}</h2>
-    <Card className="lg:w-2/3 flex flex-col p-0 divide-y divide-gray-dim">
+  <section className="flex flex-col gap-4 mb-8 last-of-type:mb-0">
+    <h2 className="text-lg font-medium">{title}</h2>
+    <Card className="flex flex-col p-0 divide-y divide-gray-dim">
       {children}
     </Card>
   </section>
@@ -181,10 +181,7 @@ function SettingsAccountRoute() {
             </SettingsItem>
           </SettingsSection>
           <SettingsSection title="Appearance">
-            <SettingsItem
-              label="Theme"
-              description="Adjust your display preferences."
-            >
+            <SettingsItem label="Theme" description="Adjust your display.">
               <ToggleButtonGroup
                 selectionMode="single"
                 disallowEmptySelection
@@ -202,7 +199,7 @@ function SettingsAccountRoute() {
           <SettingsSection title="Danger Zone">
             <SettingsItem
               label="Delete account"
-              description="Permanently delete your Namesake account and all data."
+              description="Permanently delete your Namesake account and data."
             >
               <Button
                 onPress={() => setIsDeleteAccountDialogOpen(true)}
