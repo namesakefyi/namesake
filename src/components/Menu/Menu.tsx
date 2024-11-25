@@ -64,10 +64,7 @@ export function MenuItem({ className, icon: Icon, ...props }: MenuItemProps) {
               {children}
             </span>
             {hasSubmenu && (
-              <ChevronRight
-                aria-hidden
-                className="absolute w-4 h-4 right-2.5"
-              />
+              <ChevronRight aria-hidden className="w-4 h-4 ml-auto -mr-1" />
             )}
           </>
         ),
