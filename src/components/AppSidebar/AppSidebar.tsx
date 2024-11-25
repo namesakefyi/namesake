@@ -1,7 +1,7 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import { THEMES, type Theme } from "@convex/constants";
-import { useMutation, useQuery } from "convex/react";
+import { Authenticated, useMutation, useQuery } from "convex/react";
 import {
   CircleUser,
   Cog,
@@ -85,59 +85,71 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
       </div>
       <div className="app-padding flex-1">{children}</div>
       <div className="app-padding h-header -ml-3 shrink-0 flex items-center sticky bottom-0 bg-gray-app">
-        <MenuTrigger>
-          <Button aria-label="User settings" variant="ghost" icon={CircleUser}>
-            {user?.name}
-          </Button>
-          <Menu placement="top start">
-            <MenuItem
-              icon={Snail}
-              href="https://namesake.fyi"
-              target="_blank"
-              rel="noreferrer"
+        <Authenticated>
+          <MenuTrigger>
+            <Button
+              aria-label="User settings"
+              variant="ghost"
+              icon={CircleUser}
             >
-              About Namesake
-            </MenuItem>
-            <MenuSeparator />
-            <MenuItem href={{ to: "/settings/account" }} icon={Cog}>
-              Settings
-            </MenuItem>
-            <SubmenuTrigger>
-              <MenuItem icon={THEMES[theme as Theme].icon}>Theme</MenuItem>
-              <Popover>
-                <Menu
-                  disallowEmptySelection
-                  selectionMode="single"
-                  selectedKeys={selectedTheme}
-                  onSelectionChange={handleUpdateTheme}
-                >
-                  {Object.entries(THEMES).map(([theme, details]) => (
-                    <MenuItem key={theme} id={theme} icon={details.icon}>
-                      {details.label}
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Popover>
-            </SubmenuTrigger>
-            {isAdmin && (
-              <MenuItem icon={GlobeLock} href={{ to: "/admin" }}>
-                Admin
+              {user?.name}
+            </Button>
+            <Menu placement="top start">
+              <MenuItem
+                icon={Snail}
+                href="https://namesake.fyi"
+                target="_blank"
+                rel="noreferrer"
+              >
+                About Namesake
               </MenuItem>
-            )}
-            <MenuSeparator />
-            <MenuItem
-              href="https://namesake.fyi/chat"
-              target="_blank"
-              rel="noreferrer"
-              icon={MessageCircleQuestion}
-            >
-              Support&hellip;
-            </MenuItem>
-            <MenuItem icon={LogOut} onAction={handleSignOut}>
-              Sign out
-            </MenuItem>
-          </Menu>
-        </MenuTrigger>
+              <MenuSeparator />
+              {isAdmin && (
+                <MenuItem icon={GlobeLock} href={{ to: "/admin" }}>
+                  Admin
+                </MenuItem>
+              )}
+              <MenuItem href={{ to: "/settings/account" }} icon={Cog}>
+                Settings
+              </MenuItem>
+              <SubmenuTrigger>
+                <MenuItem icon={THEMES[theme as Theme].icon} textValue="Theme">
+                  <span>Theme</span>
+                  <span slot="shortcut" className="ml-auto text-gray-dim">
+                    {THEMES[theme as Theme].label}
+                  </span>
+                </MenuItem>
+                <Popover>
+                  <Menu
+                    disallowEmptySelection
+                    selectionMode="single"
+                    selectedKeys={selectedTheme}
+                    onSelectionChange={handleUpdateTheme}
+                  >
+                    {Object.entries(THEMES).map(([theme, details]) => (
+                      <MenuItem key={theme} id={theme} icon={details.icon}>
+                        {details.label}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Popover>
+              </SubmenuTrigger>
+              <MenuSeparator />
+              <MenuItem
+                href="https://namesake.fyi/chat"
+                target="_blank"
+                rel="noreferrer"
+                icon={MessageCircleQuestion}
+              >
+                Discord Community
+              </MenuItem>
+              <MenuSeparator />
+              <MenuItem icon={LogOut} onAction={handleSignOut}>
+                Sign out
+              </MenuItem>
+            </Menu>
+          </MenuTrigger>
+        </Authenticated>
       </div>
     </div>
   );

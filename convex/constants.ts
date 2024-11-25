@@ -18,6 +18,7 @@ import {
   History,
   House,
   Landmark,
+  LaptopMinimal,
   LetterText,
   ListChecks,
   LoaderCircle,
@@ -149,7 +150,7 @@ export type Theme = "system" | "light" | "dark";
 export const THEMES: Record<Theme, FieldDetails> = {
   system: {
     label: "System",
-    icon: Computer,
+    icon: LaptopMinimal,
   },
   light: {
     label: "Light",
