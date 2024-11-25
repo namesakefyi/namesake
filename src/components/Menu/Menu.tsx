@@ -1,4 +1,9 @@
-import { Check, ChevronRight, type LucideIcon } from "lucide-react";
+import {
+  Check,
+  ChevronRight,
+  ExternalLink,
+  type LucideIcon,
+} from "lucide-react";
 import {
   Menu as AriaMenu,
   MenuItem as AriaMenuItem,
@@ -63,8 +68,14 @@ export function MenuItem({ className, icon: Icon, ...props }: MenuItemProps) {
             <span className="flex items-center flex-1 gap-2 font-normal truncate group-selected:font-semibold">
               {children}
             </span>
+            {props.target === "_blank" && (
+              <ExternalLink
+                aria-hidden
+                className="size-4 ml-1 text-gray-8 dark:text-graydark-8"
+              />
+            )}
             {hasSubmenu && (
-              <ChevronRight aria-hidden className="w-4 h-4 ml-auto -mr-1" />
+              <ChevronRight aria-hidden className="size-4 ml-auto -mr-1" />
             )}
           </>
         ),

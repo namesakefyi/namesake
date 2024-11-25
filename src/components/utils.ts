@@ -7,7 +7,7 @@ export const focusRing = tv({
   variants: {
     isFocusVisible: {
       false: "outline-0",
-      true: "outline-2 z-99",
+      true: "outline-2 z-9999",
     },
   },
 });

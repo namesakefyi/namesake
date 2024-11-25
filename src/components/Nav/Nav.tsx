@@ -1,13 +1,12 @@
-import { type LinkProps, useMatchRoute } from "@tanstack/react-router";
-import type { LucideIcon } from "lucide-react";
+import { useMatchRoute } from "@tanstack/react-router";
+import { ExternalLink, type LucideIcon } from "lucide-react";
 import { Header } from "react-aria-components";
 import { tv } from "tailwind-variants";
 import { Badge } from "../Badge";
-import { Link } from "../Link";
+import { Link, type LinkProps } from "../Link";
 import { focusRing } from "../utils";
 
-interface NavItemProps {
-  href: LinkProps;
+interface NavItemProps extends LinkProps {
   icon?: LucideIcon;
   className?: string;
   children?: React.ReactNode;
@@ -34,16 +33,23 @@ const iconStyles = tv({
 
 export const NavItem = ({
   icon: Icon,
-  href,
   className,
   children,
+  ...props
 }: NavItemProps) => {
   const matchRoute = useMatchRoute();
-  const current = matchRoute({ ...href, fuzzy: true });
+  let current: boolean | undefined;
+
+  if (typeof props.href === "string") {
+    // Link is external, so we can't match it
+    current = false;
+  } else {
+    current = Boolean(matchRoute({ ...props.href, fuzzy: true }));
+  }
 
   return (
     <Link
-      href={{ ...href }}
+      {...props}
       className={({ isFocusVisible }) =>
         navItemStyles({
           isFocusVisible,
@@ -57,6 +63,12 @@ export const NavItem = ({
         <Icon size={20} className={iconStyles({ isActive: !!current })} />
       )}
       {children}
+      {props.target === "_blank" && (
+        <ExternalLink
+          aria-hidden
+          className="size-4 ml-auto text-gray-8 dark:text-graydark-8"
+        />
+      )}
     </Link>
   );
 };

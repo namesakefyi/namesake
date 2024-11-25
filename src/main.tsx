@@ -72,7 +72,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <HelmetProvider>
         <ConvexAuthProvider client={convex}>
-          <ThemeProvider attribute="class">
+          <ThemeProvider attribute="class" disableTransitionOnChange>
             <InnerApp />
           </ThemeProvider>
         </ConvexAuthProvider>

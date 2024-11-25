@@ -1,19 +1,9 @@
+import { useTheme } from "@/utils/useTheme";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import { THEMES, type Theme } from "@convex/constants";
-import { Authenticated, useMutation, useQuery } from "convex/react";
-import {
-  CircleUser,
-  Cog,
-  GlobeLock,
-  LogOut,
-  MessageCircleQuestion,
-  Plus,
-  Snail,
-} from "lucide-react";
-import { useTheme } from "next-themes";
-import { useState } from "react";
-import type { Selection } from "react-aria-components";
+import { Authenticated, useQuery } from "convex/react";
+import { CircleUser, Cog, GlobeLock, LogOut, Plus } from "lucide-react";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
 import { Link } from "../Link";
@@ -35,25 +25,10 @@ type AppSidebarProps = {
 
 export const AppSidebar = ({ children }: AppSidebarProps) => {
   const { signOut } = useAuthActions();
-  const { theme, setTheme } = useTheme();
-  const [selectedTheme, setSelectedTheme] = useState<Selection>(
-    new Set([theme ?? "system"]),
-  );
+  const { theme, themeSelection, setTheme } = useTheme();
+
   const user = useQuery(api.users.getCurrentUser);
   const isAdmin = user?.role === "admin";
-
-  // Theme change
-  const updateTheme = useMutation(api.users.setUserTheme);
-
-  const handleUpdateTheme = (theme: Selection) => {
-    const newTheme = [...theme][0] as Theme;
-    // Update the theme in the database
-    updateTheme({ theme: newTheme });
-    // Update the theme in next-themes
-    setTheme(newTheme);
-    // Update the selected theme in the menu
-    setSelectedTheme(new Set([newTheme]));
-  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -95,22 +70,13 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
               {user?.name}
             </Button>
             <Menu placement="top start">
-              <MenuItem
-                icon={Snail}
-                href="https://namesake.fyi"
-                target="_blank"
-                rel="noreferrer"
-              >
-                About Namesake
-              </MenuItem>
-              <MenuSeparator />
               {isAdmin && (
                 <MenuItem icon={GlobeLock} href={{ to: "/admin" }}>
                   Admin
                 </MenuItem>
               )}
               <MenuItem href={{ to: "/settings/account" }} icon={Cog}>
-                Settings
+                Settings and Help
               </MenuItem>
               <SubmenuTrigger>
                 <MenuItem icon={THEMES[theme as Theme].icon} textValue="Theme">
@@ -123,8 +89,8 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
                   <Menu
                     disallowEmptySelection
                     selectionMode="single"
-                    selectedKeys={selectedTheme}
-                    onSelectionChange={handleUpdateTheme}
+                    selectedKeys={themeSelection}
+                    onSelectionChange={setTheme}
                   >
                     {Object.entries(THEMES).map(([theme, details]) => (
                       <MenuItem key={theme} id={theme} icon={details.icon}>
@@ -134,15 +100,6 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
                   </Menu>
                 </Popover>
               </SubmenuTrigger>
-              <MenuSeparator />
-              <MenuItem
-                href="https://namesake.fyi/chat"
-                target="_blank"
-                rel="noreferrer"
-                icon={MessageCircleQuestion}
-              >
-                Discord Community
-              </MenuItem>
               <MenuSeparator />
               <MenuItem icon={LogOut} onAction={handleSignOut}>
                 Sign out
