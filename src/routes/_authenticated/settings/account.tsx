@@ -1,80 +1,141 @@
 import {
   Button,
-  Link,
+  Card,
+  Form,
   Modal,
   PageHeader,
   Switch,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@/components";
+import { useTheme } from "@/utils/useTheme";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
+import { THEMES } from "@convex/constants";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
-import { Check, LoaderCircle } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useDebouncedCallback } from "use-debounce";
+import { Pencil, Trash } from "lucide-react";
+import { useState } from "react";
+import { Header } from "react-aria-components";
 
 export const Route = createFileRoute("/_authenticated/settings/account")({
   component: SettingsAccountRoute,
 });
 
-function SettingsAccountRoute() {
-  const { signOut } = useAuthActions();
-  const user = useQuery(api.users.getCurrentUser);
+const SettingsSection = ({
+  title,
+  children,
+}: { title: string; children: React.ReactNode }) => (
+  <section className="flex flex-col lg:flex-row gap-4 mb-8 last-of-type:mb-0">
+    <h2 className="lg:w-1/3 text-lg font-medium">{title}</h2>
+    <Card className="lg:w-2/3 flex flex-col p-0 divide-y divide-gray-dim">
+      {children}
+    </Card>
+  </section>
+);
 
-  // Name change field
-  // TODO: Extract all this debounce logic + field as a component for reuse
+const SettingsItem = ({
+  label,
+  description,
+  children,
+}: { label: string; description?: string; children: React.ReactNode }) => (
+  <div className="flex justify-between items-center gap-8 p-4">
+    <div className="self-start">
+      <h3 className="text-base -mt-px">{label}</h3>
+      {description && (
+        <p className="text-xs text-gray-dim text-balance mt-0.5">
+          {description}
+        </p>
+      )}
+    </div>
+    <div>{children}</div>
+  </div>
+);
+
+const EditNameDialog = ({
+  defaultName,
+  isOpen,
+  onOpenChange,
+  onSubmit,
+}: {
+  defaultName: string;
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+  onSubmit: () => void;
+}) => {
   const updateName = useMutation(api.users.setCurrentUserName);
-  const [name, setName] = useState<string>(user?.name ?? "");
-  const [isUpdatingName, setIsUpdatingName] = useState(false);
-  const [didUpdateName, setDidUpdateName] = useState(false);
+  const [name, setName] = useState(defaultName);
 
-  useEffect(() => {
-    if (!user?.name) return;
-    setName(user.name);
-  }, [user]);
-
-  let timeout: NodeJS.Timeout | null = null;
-
-  useEffect(() => {
-    if (timeout) clearTimeout(timeout);
-    if (didUpdateName)
-      timeout = setTimeout(() => setDidUpdateName(false), 2000);
-  }, [didUpdateName, timeout]);
-
-  const debouncedNameSave = useDebouncedCallback((name) => {
-    updateName({ name })
-      .then(() => {
-        setIsUpdatingName(false);
-        setDidUpdateName(true);
-      })
-      .catch((error) => {
-        console.error(error);
-        setIsUpdatingName(false);
-      });
-  }, 1000);
-
-  const handleUpdateName = (value: string) => {
-    setIsUpdatingName(true);
-    setName(value);
-    debouncedNameSave(value);
+  const handleSubmit = () => {
+    updateName({ name });
+    onSubmit();
   };
 
-  const textFieldIcon = isUpdatingName ? (
-    <LoaderCircle size={20} className="animate animate-spin mr-2" />
-  ) : didUpdateName ? (
-    <Check size={20} className="text-green-9 dark:text-greendark-9 mr-2" />
-  ) : undefined;
+  return (
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Form onSubmit={handleSubmit} className="w-full">
+        Edit name
+        <TextField name="name" label="Name" value={name} onChange={setName} />
+        <div className="flex justify-end gap-2">
+          <Button variant="secondary" onPress={() => onOpenChange(false)}>
+            Cancel
+          </Button>
+          <Button type="submit" variant="primary">
+            Save
+          </Button>
+        </div>
+      </Form>
+    </Modal>
+  );
+};
 
-  // Is minor switch
-  const updateIsMinor = useMutation(api.users.setCurrentUserIsMinor);
-
-  // Account deletion
+const DeleteAccountDialog = ({
+  isOpen,
+  onOpenChange,
+  onSubmit,
+}: {
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+  onSubmit: () => void;
+}) => {
+  const { signOut } = useAuthActions();
   const clearLocalStorage = () => {
     localStorage.removeItem("theme");
   };
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const deleteAccount = useMutation(api.users.deleteCurrentUser);
+
+  const handleSubmit = () => {
+    clearLocalStorage();
+    deleteAccount();
+    signOut();
+    onSubmit();
+  };
+
+  return (
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Header>Delete account?</Header>
+      <p>This will permanently erase your account and all data.</p>
+      <div className="flex justify-end w-full gap-2">
+        <Button onPress={() => onOpenChange(false)}>Cancel</Button>
+        <Button variant="destructive" onPress={handleSubmit}>
+          Delete
+        </Button>
+      </div>
+    </Modal>
+  );
+};
+
+function SettingsAccountRoute() {
+  const user = useQuery(api.users.getCurrentUser);
+  const { themeSelection, setTheme } = useTheme();
+
+  const [isNameDialogOpen, setIsNameDialogOpen] = useState(false);
+  const [isDeleteAccountDialogOpen, setIsDeleteAccountDialogOpen] =
+    useState(false);
+
+  // Is minor switch
+  const updateIsMinor = useMutation(api.users.setCurrentUserIsMinor);
 
   return (
     <>
@@ -84,66 +145,74 @@ function SettingsAccountRoute() {
       ) : user === null ? (
         "User not found, please reload"
       ) : (
-        <div className="flex flex-col gap-4">
-          <TextField
-            label="Name"
-            name="name"
-            value={name}
-            onChange={handleUpdateName}
-            description="How do you want to be addressed?"
-            suffix={textFieldIcon}
-          />
-          <Switch
-            name="isMinor"
-            isSelected={user.isMinor ?? false}
-            onChange={() => updateIsMinor({ isMinor: !user.isMinor })}
-          >
-            Is minor
-          </Switch>
-          <Button onPress={signOut}>Sign out</Button>
-          <Button onPress={() => setIsDeleteModalOpen(true)}>
-            Delete account
-          </Button>
-          <Modal
-            isOpen={isDeleteModalOpen}
-            onOpenChange={(isOpen) => setIsDeleteModalOpen(isOpen)}
-          >
-            Delete account?
-            <div className="flex justify-between w-full gap-4">
-              <Button onPress={() => setIsDeleteModalOpen(false)}>
-                Cancel
+        <>
+          <SettingsSection title="Personal Information">
+            <SettingsItem
+              label="Name"
+              description="How should Namesake refer to you? This can be different from your legal name."
+            >
+              <Button icon={Pencil} onPress={() => setIsNameDialogOpen(true)}>
+                {user?.name}
               </Button>
-              <Button
-                variant="destructive"
-                onPress={() => {
-                  clearLocalStorage();
-                  deleteAccount();
-                  signOut();
-                }}
+              <EditNameDialog
+                isOpen={isNameDialogOpen}
+                onOpenChange={setIsNameDialogOpen}
+                defaultName={user.name ?? ""}
+                onSubmit={() => setIsNameDialogOpen(false)}
+              />
+            </SettingsItem>
+            <SettingsItem
+              label="Applying as a minor"
+              description="Are you under 18 years old or applying on behalf of someone who is?"
+            >
+              <Switch
+                name="isMinor"
+                isSelected={user.isMinor ?? false}
+                onChange={() => updateIsMinor({ isMinor: !user.isMinor })}
               >
-                Delete
+                <span className="sr-only">Is minor</span>
+              </Switch>
+            </SettingsItem>
+          </SettingsSection>
+          <SettingsSection title="Appearance">
+            <SettingsItem
+              label="Theme"
+              description="Adjust your display preferences."
+            >
+              <ToggleButtonGroup
+                selectionMode="single"
+                disallowEmptySelection
+                selectedKeys={themeSelection}
+                onSelectionChange={setTheme}
+              >
+                {Object.entries(THEMES).map(([theme, details]) => (
+                  <ToggleButton key={theme} id={theme}>
+                    {details.label}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+            </SettingsItem>
+          </SettingsSection>
+          <SettingsSection title="Danger Zone">
+            <SettingsItem
+              label="Delete account"
+              description="Permanently delete your Namesake account and all data."
+            >
+              <Button
+                onPress={() => setIsDeleteAccountDialogOpen(true)}
+                icon={Trash}
+              >
+                Delete account
               </Button>
-            </div>
-          </Modal>
-        </div>
+              <DeleteAccountDialog
+                isOpen={isDeleteAccountDialogOpen}
+                onOpenChange={setIsDeleteAccountDialogOpen}
+                onSubmit={() => setIsDeleteAccountDialogOpen(false)}
+              />
+            </SettingsItem>
+          </SettingsSection>
+        </>
       )}
-      <div className="flex gap-2 items-center mt-4">
-        <Link
-          href="https://github.com/namesakefyi/namesake/releases"
-          target="_blank"
-          rel="noreferrer"
-        >{`Namesake v${APP_VERSION}`}</Link>
-        <Link
-          href="https://status.namesake.fyi"
-          target="_blank"
-          rel="noreferrer"
-        >
-          System Status
-        </Link>
-        <Link href="https://namesake.fyi/chat" target="_blank" rel="noreferrer">
-          Support
-        </Link>
-      </div>
     </>
   );
 }

@@ -16,7 +16,7 @@ export interface ButtonProps extends AriaButtonProps {
 
 export const buttonStyles = tv({
   extend: focusRing,
-  base: "py-2 text-sm font-medium whitespace-nowrap rounded-lg flex gap-1.5 items-center justify-center border border-black/10 dark:border-white/10 cursor-pointer",
+  base: "py-2 text-sm font-medium whitespace-nowrap rounded-lg flex gap-1.5 items-center justify-center border border-black/10 dark:border-white/10",
   variants: {
     variant: {
       primary: "bg-purple-solid text-white",
@@ -31,6 +31,7 @@ export const buttonStyles = tv({
       medium: "h-10 px-3",
     },
     isDisabled: {
+      false: "cursor-pointer",
       true: "cursor-default text-gray-dim opacity-50 forced-colors:text-[GrayText]",
     },
   },
@@ -72,7 +73,7 @@ export function Button({
         }),
       )}
     >
-      {Icon && <Icon size={size === "small" ? 16 : 20} />}
+      {Icon && <Icon size={size === "small" ? 12 : 16} />}
       {children}
     </AriaButton>
   );

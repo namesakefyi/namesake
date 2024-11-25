@@ -49,5 +49,6 @@ export * from "./TextArea";
 export * from "./TextField";
 export * from "./TimeField";
 export * from "./ToggleButton";
+export * from "./ToggleButtonGroup";
 export * from "./Toolbar";
 export * from "./Tooltip";
