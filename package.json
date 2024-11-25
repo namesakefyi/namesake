@@ -54,7 +54,7 @@
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
     "react-markdown": "^9.0.1",
-    "resend": "4.0.1-alpha.0",
+    "resend": "4.0.1",
     "sonner": "^1.7.0",
     "storybook": "^8.4.4",
     "tailwind-variants": "^0.3.0",
