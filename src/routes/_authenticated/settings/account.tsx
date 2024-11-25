@@ -26,7 +26,10 @@ export const Route = createFileRoute("/_authenticated/settings/account")({
 const SettingsSection = ({
   title,
   children,
-}: { title: string; children: React.ReactNode }) => (
+}: {
+  title: string;
+  children: React.ReactNode;
+}) => (
   <section className="flex flex-col lg:flex-row gap-4 mb-8 last-of-type:mb-0">
     <h2 className="lg:w-1/3 text-lg font-medium">{title}</h2>
     <Card className="lg:w-2/3 flex flex-col p-0 divide-y divide-gray-dim">
@@ -39,7 +42,11 @@ const SettingsItem = ({
   label,
   description,
   children,
-}: { label: string; description?: string; children: React.ReactNode }) => (
+}: {
+  label: string;
+  description?: string;
+  children: React.ReactNode;
+}) => (
   <div className="flex justify-between items-center gap-8 p-4">
     <div className="self-start">
       <h3 className="text-base -mt-px">{label}</h3>
