@@ -84,15 +84,15 @@ const forms = defineTable({
 });
 
 /**
- * Represents a user of Namesake.
+ * Represents a user of Namesake's identity.
  * @param name - The user's preferred first name.
  * @param role - The user's role: "admin", "editor", or "user".
  * @param image - A URL to the user's profile picture.
  * @param email - The user's email address.
- * @param emailVerificationTime - Time in ms since epoch when the user verified their email.
- * @param isAnonymous - Denotes anonymous/unauthenticated users.
+ * @param emailVerified - Denotes whether the user has verified their email.
+ * @param residence - The US State the user lives in.
+ * @param birthplace - The US State the user was born in.
  * @param isMinor - Denotes users under 18.
- * @param preferredTheme - The user's preferred color scheme.
  */
 const users = defineTable({
   name: v.optional(v.string()),
@@ -100,11 +100,32 @@ const users = defineTable({
   image: v.optional(v.string()),
   email: v.optional(v.string()),
   emailVerified: v.boolean(),
-  jurisdiction: v.optional(jurisdiction),
+  residence: v.optional(jurisdiction),
+  birthplace: v.optional(jurisdiction),
   isMinor: v.optional(v.boolean()),
-  theme: theme,
-  groupQuestsBy: v.optional(groupQuestsBy),
 }).index("email", ["email"]);
+
+/**
+ * Pre-fillable user data entered throughout quests.
+ * All data in this table is end-to-end encrypted.
+ */
+const userEncryptedData = defineTable({
+  userId: v.id("users"),
+  fieldId: v.id("questFields"),
+  value: v.string(),
+}).index("userId", ["userId"]);
+
+/**
+ * Store user preferences.
+ * @param userId
+ * @param theme - The user's preferred color scheme.
+ * @param groupQuestsBy - The user's preferred way to group quests.
+ */
+const userSettings = defineTable({
+  userId: v.id("users"),
+  theme: v.optional(theme),
+  groupQuestsBy: v.optional(groupQuestsBy),
+}).index("userId", ["userId"]);
 
 /**
  * Represents a user's unique progress in completing a quest.
@@ -122,22 +143,13 @@ const userQuests = defineTable({
   .index("userId", ["userId"])
   .index("questId", ["questId"]);
 
-/**
- * Pre-fillable user data entered throughout quests.
- * All data in this table is end-to-end encrypted.
- */
-const userData = defineTable({
-  userId: v.id("users"),
-  fieldId: v.id("questFields"),
-  value: v.string(),
-}).index("userId", ["userId"]);
-
 export default defineSchema({
   ...authTables,
   forms,
   quests,
   questFields,
   users,
+  userEncryptedData,
+  userSettings,
   userQuests,
-  userData,
 });

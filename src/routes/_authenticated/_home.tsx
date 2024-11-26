@@ -94,21 +94,6 @@ function IndexRoute() {
 
     if (groupedQuests === undefined) return;
 
-    if (groupedQuests === null || Object.keys(groupedQuests).length === 0)
-      return (
-        <Empty
-          title="No quests"
-          icon={Milestone}
-          link={{
-            children: "Add quest",
-            button: {
-              variant: "primary",
-            },
-            href: { to: "/browse" },
-          }}
-        />
-      );
-
     return (
       <AppSidebar>
         <div className="flex items-center mb-4 bg-gray-app z-10">
@@ -150,46 +135,63 @@ function IndexRoute() {
           </TooltipTrigger>
         </div>
         <Nav>
-          {Object.entries(groupedQuests)
-            .sort(([groupA], [groupB]) =>
-              sortGroupedQuests(groupA, groupB, groupByValue),
-            )
-            .map(([group, quests]) => {
-              if (quests.length === 0) return null;
-              let groupDetails: GroupDetails;
-              switch (groupByValue) {
-                case "category":
-                  groupDetails = CATEGORIES[group as keyof typeof CATEGORIES];
-                  break;
-                case "status":
-                  groupDetails = STATUS[group as keyof typeof STATUS];
-                  break;
-                case "dateAdded":
-                  groupDetails = DATE_ADDED[group as keyof typeof DATE_ADDED];
-                  break;
-              }
-              const { label } = groupDetails;
+          {Object.keys(groupedQuests).length === 0 ? (
+            <Empty
+              title="No quests"
+              icon={Milestone}
+              link={{
+                children: "Add quest",
+                button: {
+                  variant: "primary",
+                },
+                href: { to: "/browse" },
+              }}
+            />
+          ) : (
+            Object.entries(groupedQuests)
+              .sort(([groupA], [groupB]) =>
+                sortGroupedQuests(groupA, groupB, groupByValue),
+              )
+              .map(([group, quests]) => {
+                if (quests.length === 0) return null;
+                let groupDetails: GroupDetails;
+                switch (groupByValue) {
+                  case "category":
+                    groupDetails = CATEGORIES[group as keyof typeof CATEGORIES];
+                    break;
+                  case "status":
+                    groupDetails = STATUS[group as keyof typeof STATUS];
+                    break;
+                  case "dateAdded":
+                    groupDetails = DATE_ADDED[group as keyof typeof DATE_ADDED];
+                    break;
+                }
+                const { label } = groupDetails;
 
-              return (
-                <NavGroup key={label} label={label} count={quests.length}>
-                  {quests.map((quest) => (
-                    <NavItem
-                      key={quest._id}
-                      href={{
-                        to: "/quests/$questId",
-                        params: { questId: quest.questId },
-                      }}
-                    >
-                      <StatusBadge status={quest.status as Status} condensed />
-                      {quest.title}
-                      {quest.jurisdiction && (
-                        <Badge size="xs">{quest.jurisdiction}</Badge>
-                      )}
-                    </NavItem>
-                  ))}
-                </NavGroup>
-              );
-            })}
+                return (
+                  <NavGroup key={label} label={label} count={quests.length}>
+                    {quests.map((quest) => (
+                      <NavItem
+                        key={quest._id}
+                        href={{
+                          to: "/quests/$questId",
+                          params: { questId: quest.questId },
+                        }}
+                      >
+                        <StatusBadge
+                          status={quest.status as Status}
+                          condensed
+                        />
+                        {quest.title}
+                        {quest.jurisdiction && (
+                          <Badge size="xs">{quest.jurisdiction}</Badge>
+                        )}
+                      </NavItem>
+                    ))}
+                  </NavGroup>
+                );
+              })
+          )}
         </Nav>
       </AppSidebar>
     );

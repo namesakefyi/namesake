@@ -4,6 +4,8 @@ import {
   Form,
   Modal,
   PageHeader,
+  Select,
+  SelectItem,
   Switch,
   TextField,
   ToggleButton,
@@ -12,7 +14,7 @@ import {
 import { useTheme } from "@/utils/useTheme";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
-import { THEMES } from "@convex/constants";
+import { JURISDICTIONS, type Jurisdiction, THEMES } from "@convex/constants";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { Pencil, Trash } from "lucide-react";
@@ -71,10 +73,11 @@ const EditNameDialog = ({
   onOpenChange: (isOpen: boolean) => void;
   onSubmit: () => void;
 }) => {
-  const updateName = useMutation(api.users.setCurrentUserName);
+  const updateName = useMutation(api.users.setName);
   const [name, setName] = useState(defaultName);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     updateName({ name });
     onSubmit();
   };
@@ -84,6 +87,106 @@ const EditNameDialog = ({
       <Form onSubmit={handleSubmit} className="w-full">
         Edit name
         <TextField name="name" label="Name" value={name} onChange={setName} />
+        <div className="flex justify-end gap-2">
+          <Button variant="secondary" onPress={() => onOpenChange(false)}>
+            Cancel
+          </Button>
+          <Button type="submit" variant="primary">
+            Save
+          </Button>
+        </div>
+      </Form>
+    </Modal>
+  );
+};
+
+const EditResidenceDialog = ({
+  defaultResidence,
+  isOpen,
+  onOpenChange,
+  onSubmit,
+}: {
+  defaultResidence: Jurisdiction;
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+  onSubmit: () => void;
+}) => {
+  const updateResidence = useMutation(api.users.setResidence);
+  const [residence, setResidence] = useState(defaultResidence);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    updateResidence({ residence });
+    onSubmit();
+  };
+
+  return (
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Form onSubmit={handleSubmit} className="w-full">
+        Edit residence
+        <Select
+          aria-label="Residence"
+          name="residence"
+          selectedKey={residence}
+          onSelectionChange={(key) => setResidence(key as Jurisdiction)}
+          placeholder="Select state"
+        >
+          {Object.entries(JURISDICTIONS).map(([value, label]) => (
+            <SelectItem key={value} id={value}>
+              {label}
+            </SelectItem>
+          ))}
+        </Select>
+        <div className="flex justify-end gap-2">
+          <Button variant="secondary" onPress={() => onOpenChange(false)}>
+            Cancel
+          </Button>
+          <Button type="submit" variant="primary">
+            Save
+          </Button>
+        </div>
+      </Form>
+    </Modal>
+  );
+};
+
+const EditBirthplaceDialog = ({
+  defaultBirthplace,
+  isOpen,
+  onOpenChange,
+  onSubmit,
+}: {
+  defaultBirthplace: Jurisdiction;
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+  onSubmit: () => void;
+}) => {
+  const updateBirthplace = useMutation(api.users.setBirthplace);
+  const [birthplace, setBirthplace] = useState(defaultBirthplace);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    updateBirthplace({ birthplace });
+    onSubmit();
+  };
+
+  return (
+    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Form onSubmit={handleSubmit} className="w-full">
+        Edit birthplace
+        <Select
+          aria-label="Birthplace"
+          name="birthplace"
+          selectedKey={birthplace}
+          onSelectionChange={(key) => setBirthplace(key as Jurisdiction)}
+          placeholder="Select state"
+        >
+          {Object.entries(JURISDICTIONS).map(([value, label]) => (
+            <SelectItem key={value} id={value}>
+              {label}
+            </SelectItem>
+          ))}
+        </Select>
         <div className="flex justify-end gap-2">
           <Button variant="secondary" onPress={() => onOpenChange(false)}>
             Cancel
@@ -140,7 +243,8 @@ function SettingsAccountRoute() {
   const [isNameDialogOpen, setIsNameDialogOpen] = useState(false);
   const [isDeleteAccountDialogOpen, setIsDeleteAccountDialogOpen] =
     useState(false);
-
+  const [isResidenceDialogOpen, setIsResidenceDialogOpen] = useState(false);
+  const [isBirthplaceDialogOpen, setIsBirthplaceDialogOpen] = useState(false);
   const updateIsMinor = useMutation(api.users.setCurrentUserIsMinor);
 
   return (
@@ -158,7 +262,7 @@ function SettingsAccountRoute() {
               description="How should Namesake refer to you? This can be different from your legal name."
             >
               <Button icon={Pencil} onPress={() => setIsNameDialogOpen(true)}>
-                {user?.name}
+                {user?.name ?? "Set name"}
               </Button>
               <EditNameDialog
                 isOpen={isNameDialogOpen}
@@ -178,6 +282,44 @@ function SettingsAccountRoute() {
               >
                 <span className="sr-only">Is minor</span>
               </Switch>
+            </SettingsItem>
+            <SettingsItem
+              label="Residence"
+              description="Where do you live? This location is used to select the forms for your court order and state ID."
+            >
+              <Button
+                icon={Pencil}
+                onPress={() => setIsResidenceDialogOpen(true)}
+              >
+                {user?.residence
+                  ? JURISDICTIONS[user.residence as Jurisdiction]
+                  : "Set residence"}
+              </Button>
+              <EditResidenceDialog
+                isOpen={isResidenceDialogOpen}
+                onOpenChange={setIsResidenceDialogOpen}
+                defaultResidence={user.residence as Jurisdiction}
+                onSubmit={() => setIsResidenceDialogOpen(false)}
+              />
+            </SettingsItem>
+            <SettingsItem
+              label="Birthplace"
+              description="Where were you born? This location is used to select the forms for your birth certificate."
+            >
+              <Button
+                icon={Pencil}
+                onPress={() => setIsBirthplaceDialogOpen(true)}
+              >
+                {user?.birthplace
+                  ? JURISDICTIONS[user.birthplace as Jurisdiction]
+                  : "Set birthplace"}
+              </Button>
+              <EditBirthplaceDialog
+                isOpen={isBirthplaceDialogOpen}
+                onOpenChange={setIsBirthplaceDialogOpen}
+                defaultBirthplace={user.birthplace as Jurisdiction}
+                onSubmit={() => setIsBirthplaceDialogOpen(false)}
+              />
             </SettingsItem>
           </SettingsSection>
           <SettingsSection title="Appearance">
