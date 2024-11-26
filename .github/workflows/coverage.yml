@@ -81,10 +81,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
   
-      - name: Download coverage (${{ github.head_ref }})
+      - name: Download coverage (${{ env.ARTIFACT_NAME }})
         uses: actions/download-artifact@v4
         with:
-          name: coverage-${{ github.head_ref }}
+          name: coverage-${{ env.ARTIFACT_NAME }}
           path: coverage
 
       - name: Download coverage (main)
