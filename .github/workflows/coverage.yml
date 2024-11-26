@@ -53,7 +53,7 @@ jobs:
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-${{ matrix.branch }}
+          name: coverage-${{ github.head_ref }}
           path: coverage
           overwrite: true
 
