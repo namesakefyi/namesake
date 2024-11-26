@@ -375,6 +375,7 @@ export type TimeRequired = {
   min: number;
   max: number;
   unit: TimeUnit;
+  description?: string;
 };
 
 export const DEFAULT_TIME_REQUIRED: TimeRequired = {

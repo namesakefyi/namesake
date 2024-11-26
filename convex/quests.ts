@@ -78,6 +78,7 @@ export const updateQuest = userMutation({
         min: v.number(),
         max: v.number(),
         unit: timeRequiredUnit,
+        description: v.optional(v.string()),
       }),
     ),
     urls: v.optional(v.array(v.string())),
