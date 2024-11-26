@@ -6,7 +6,7 @@ import {
 import { tv } from "tailwind-variants";
 
 const styles = tv({
-  base: "border rounded-lg grid grid-flow-col auto-cols-fr border-black/10 dark:border-white/10 *:border-0",
+  base: "rounded-lg grid grid-flow-col auto-cols-fr shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)] *:border-0",
   variants: {
     orientation: {
       horizontal: "flex-row",

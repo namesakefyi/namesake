@@ -1,17 +1,14 @@
 import {
   Badge,
-  Button,
   Container,
   Empty,
-  Menu,
-  MenuItem,
-  MenuSection,
-  MenuTrigger,
   Nav,
   NavGroup,
   NavItem,
   ProgressBar,
   StatusBadge,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip,
   TooltipTrigger,
 } from "@/components";
@@ -32,9 +29,33 @@ import {
 } from "@convex/constants";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
-import { LayoutList, Milestone } from "lucide-react";
+import {
+  History,
+  List,
+  ListTodo,
+  type LucideIcon,
+  Milestone,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import type { Selection } from "react-aria-components";
+
+const GROUP_OPTIONS: Record<
+  GroupQuestsBy,
+  { icon: LucideIcon; tooltip: string }
+> = {
+  category: {
+    icon: List,
+    tooltip: "Group by category",
+  },
+  status: {
+    icon: ListTodo,
+    tooltip: "Group by status",
+  },
+  dateAdded: {
+    icon: History,
+    tooltip: "Group by date added",
+  },
+} as const;
 
 export const Route = createFileRoute("/_authenticated/_home")({
   component: IndexRoute,
@@ -115,24 +136,24 @@ function IndexRoute() {
             labelHidden
             className="mr-4"
           />
-          <TooltipTrigger>
-            <MenuTrigger>
-              <Button icon={LayoutList} variant="icon" />
-              <Menu
-                selectionMode="single"
-                selectedKeys={groupBy}
-                onSelectionChange={setGroupBy}
-                disallowEmptySelection
-              >
-                <MenuSection title="Group by">
-                  <MenuItem id="category">Category</MenuItem>
-                  <MenuItem id="status">Status</MenuItem>
-                  <MenuItem id="dateAdded">Date added</MenuItem>
-                </MenuSection>
-              </Menu>
-            </MenuTrigger>
-            <Tooltip placement="right">Group by</Tooltip>
-          </TooltipTrigger>
+          <ToggleButtonGroup
+            selectionMode="single"
+            selectedKeys={groupBy}
+            onSelectionChange={setGroupBy}
+            disallowEmptySelection
+          >
+            {Object.keys(GROUP_OPTIONS).map((option) => {
+              const Icon = GROUP_OPTIONS[option as GroupQuestsBy].icon;
+              return (
+                <TooltipTrigger key={option}>
+                  <ToggleButton id={option} size="small" icon={Icon} />
+                  <Tooltip>
+                    {GROUP_OPTIONS[option as GroupQuestsBy].tooltip}
+                  </Tooltip>
+                </TooltipTrigger>
+              );
+            })}
+          </ToggleButtonGroup>
         </div>
         <Nav>
           {Object.keys(groupedQuests).length === 0 ? (
