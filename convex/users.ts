@@ -3,7 +3,7 @@ import { v } from "convex/values";
 import { query } from "./_generated/server";
 import type { Role } from "./constants";
 import { userMutation, userQuery } from "./helpers";
-import { groupQuestsBy, theme } from "./validators";
+import { jurisdiction } from "./validators";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -43,10 +43,24 @@ export const getUserByEmail = query({
   },
 });
 
-export const setCurrentUserName = userMutation({
+export const setName = userMutation({
   args: { name: v.optional(v.string()) },
   handler: async (ctx, args) => {
     await ctx.db.patch(ctx.userId, { name: args.name });
+  },
+});
+
+export const setResidence = userMutation({
+  args: { residence: jurisdiction },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(ctx.userId, { residence: args.residence });
+  },
+});
+
+export const setBirthplace = userMutation({
+  args: { birthplace: jurisdiction },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(ctx.userId, { birthplace: args.birthplace });
   },
 });
 
@@ -54,20 +68,6 @@ export const setCurrentUserIsMinor = userMutation({
   args: { isMinor: v.boolean() },
   handler: async (ctx, args) => {
     await ctx.db.patch(ctx.userId, { isMinor: args.isMinor });
-  },
-});
-
-export const setUserTheme = userMutation({
-  args: { theme: theme },
-  handler: async (ctx, args) => {
-    await ctx.db.patch(ctx.userId, { theme: args.theme });
-  },
-});
-
-export const setGroupQuestsBy = userMutation({
-  args: { groupQuestsBy: groupQuestsBy },
-  handler: async (ctx, args) => {
-    await ctx.db.patch(ctx.userId, { groupQuestsBy: args.groupQuestsBy });
   },
 });
 
@@ -83,6 +83,13 @@ export const deleteCurrentUser = userMutation({
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .collect();
     for (const userQuest of userQuests) await ctx.db.delete(userQuest._id);
+
+    // Delete userSettings
+    const userSettings = await ctx.db
+      .query("userSettings")
+      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
+      .first();
+    if (userSettings) await ctx.db.delete(userSettings._id);
 
     // Delete authAccounts
     const authAccounts = await ctx.db

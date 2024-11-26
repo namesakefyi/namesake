@@ -7,7 +7,7 @@ import type { Selection } from "react-aria-components";
 export function useTheme() {
   const { theme: nextTheme, setTheme: setNextTheme } = useNextTheme();
 
-  const updateTheme = useMutation(api.users.setUserTheme);
+  const updateTheme = useMutation(api.userSettings.setTheme);
 
   const theme = (nextTheme ?? "system") as Theme;
   const themeSelection = new Set([theme]);

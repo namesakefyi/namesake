@@ -22,8 +22,9 @@ import type * as passwordReset from "../passwordReset.js";
 import type * as questFields from "../questFields.js";
 import type * as quests from "../quests.js";
 import type * as seed from "../seed.js";
-import type * as userData from "../userData.js";
+import type * as userEncryptedData from "../userEncryptedData.js";
 import type * as userQuests from "../userQuests.js";
+import type * as userSettings from "../userSettings.js";
 import type * as users from "../users.js";
 import type * as validators from "../validators.js";
 
@@ -45,8 +46,9 @@ declare const fullApi: ApiFromModules<{
   questFields: typeof questFields;
   quests: typeof quests;
   seed: typeof seed;
-  userData: typeof userData;
+  userEncryptedData: typeof userEncryptedData;
   userQuests: typeof userQuests;
+  userSettings: typeof userSettings;
   users: typeof users;
   validators: typeof validators;
 }>;
