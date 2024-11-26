@@ -33,12 +33,18 @@ const styles = tv({
   },
 });
 
-export function ToggleButton({ size, icon: Icon, className, children, ...props }: ToggleButtonProps) {
+export function ToggleButton({
+  size,
+  icon: Icon,
+  className,
+  children,
+  ...props
+}: ToggleButtonProps) {
   return (
     <AriaToggleButton
       {...props}
       className={composeRenderProps(className, (className, renderProps) =>
-        styles({ ...renderProps, size, className })
+        styles({ ...renderProps, size, className }),
       )}
     >
       {Icon && <Icon size={size === "small" ? 16 : 20} />}
