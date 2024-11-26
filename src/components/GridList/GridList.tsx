@@ -52,14 +52,19 @@ export function GridListItem({
       {...props}
       className={composeTailwindRenderProps(className, itemStyles())}
     >
-      {({ selectionMode, selectionBehavior, allowsDragging }) => (
+      {({
+        selectionMode,
+        selectionBehavior,
+        allowsDragging,
+        defaultChildren,
+      }) => (
         <>
           {/* Add elements for drag and drop and selection. */}
           {allowsDragging && <Button slot="drag">≡</Button>}
           {selectionMode === "multiple" && selectionBehavior === "toggle" && (
             <Checkbox slot="selection" />
           )}
-          {children}
+          {defaultChildren}
         </>
       )}
     </AriaGridListItem>

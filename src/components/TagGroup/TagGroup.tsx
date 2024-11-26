@@ -91,9 +91,9 @@ export function Tag({ children, ...props }: TagProps) {
         tagStyles({ ...renderProps, className }),
       )}
     >
-      {({ allowsRemoving }) => (
+      {({ defaultChildren, allowsRemoving }) => (
         <>
-          {children}
+          {defaultChildren}
           {allowsRemoving && (
             <Button slot="remove" className={removeButtonStyles}>
               <X aria-hidden className="w-3 h-3" />
