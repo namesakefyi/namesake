@@ -41,6 +41,7 @@ const quests = defineTable({
     min: v.number(),
     max: v.number(),
     unit: timeRequiredUnit,
+    description: v.optional(v.string()),
   }),
   urls: v.optional(v.array(v.string())),
   deletionTime: v.optional(v.number()),

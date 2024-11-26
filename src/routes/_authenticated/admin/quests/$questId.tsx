@@ -156,48 +156,62 @@ const TimeRequiredInput = memo(function TimeRequiredInput({
   if (!timeRequired) return null;
 
   return (
-    <div className="flex items-end gap-2">
-      <NumberField
-        label="Min. Req. Time"
-        className="w-28"
-        value={timeRequired?.min}
-        maxValue={Math.max(timeRequired.max, 60)}
+    <div className="flex flex-col gap-4">
+      <div className="flex items-end gap-2">
+        <NumberField
+          label="Min. Req. Time"
+          className="w-28"
+          value={timeRequired?.min}
+          maxValue={Math.max(timeRequired.max, 60)}
+          onChange={(value) =>
+            onChange({
+              ...timeRequired,
+              min: value,
+            })
+          }
+        />
+        <NumberField
+          label="Max Req. Time"
+          className="w-28"
+          value={timeRequired.max}
+          minValue={Math.min(timeRequired.min, 1)}
+          onChange={(value) =>
+            onChange({
+              ...timeRequired,
+              max: value,
+            })
+          }
+        />
+        <Select
+          label="Unit"
+          className="w-40"
+          selectedKey={timeRequired.unit}
+          onSelectionChange={(key) =>
+            onChange({
+              ...timeRequired,
+              unit: key as TimeUnit,
+            })
+          }
+        >
+          {Object.entries(TIME_UNITS).map(([key, unit]) => (
+            <SelectItem key={key} id={key}>
+              {unit.label}
+            </SelectItem>
+          ))}
+        </Select>
+      </div>
+      <TextField
+        label="Description"
+        description="Add optional context about the time required."
+        className="w-full"
+        value={timeRequired.description ?? ""}
         onChange={(value) =>
           onChange({
             ...timeRequired,
-            min: value,
+            description: value || undefined,
           })
         }
       />
-      <NumberField
-        label="Max Req. Time"
-        className="w-28"
-        value={timeRequired.max}
-        minValue={Math.min(timeRequired.min, 1)}
-        onChange={(value) =>
-          onChange({
-            ...timeRequired,
-            max: value,
-          })
-        }
-      />
-      <Select
-        label="Unit"
-        className="w-40"
-        selectedKey={timeRequired.unit}
-        onSelectionChange={(key) =>
-          onChange({
-            ...timeRequired,
-            unit: key as TimeUnit,
-          })
-        }
-      >
-        {Object.entries(TIME_UNITS).map(([key, unit]) => (
-          <SelectItem key={key} id={key}>
-            {unit.label}
-          </SelectItem>
-        ))}
-      </Select>
     </div>
   );
 });

@@ -111,7 +111,23 @@ const QuestTimeRequired = ({
   };
 
   const formattedTime = getFormattedTime(timeRequired);
-  return <StatGroup label="Time" value={formattedTime} />;
+  return (
+    <StatGroup label="Time" value={formattedTime}>
+      {timeRequired.description && (
+        <DialogTrigger>
+          <TooltipTrigger>
+            <Button variant="icon" size="small">
+              <CircleHelp />
+            </Button>
+            <Tooltip>See details</Tooltip>
+          </TooltipTrigger>
+          <Popover className="p-4">
+            <p className="text-sm max-w-xs">{timeRequired.description}</p>
+          </Popover>
+        </DialogTrigger>
+      )}
+    </StatGroup>
+  );
 };
 
 const QuestUrls = ({ urls }: { urls?: string[] }) => {
