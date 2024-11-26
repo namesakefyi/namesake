@@ -1,5 +1,15 @@
 # namesake
 
+## 0.12.0
+
+### Minor Changes
+
+- 401f59e: Display additional context beside time required
+- ef382a1: Allow setting and modifying user state of residence and state of birth
+- 4477d33: Unify display of user settings and make it simpler to change themes
+- 8e92c3b: Display selected theme name in user menu
+- 913fbde: Simplify quest grouping UX
+
 ## 0.11.0
 
 ### Minor Changes
