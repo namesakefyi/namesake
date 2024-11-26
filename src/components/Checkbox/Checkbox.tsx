@@ -100,7 +100,7 @@ export function Checkbox(props: CheckboxProps) {
               ) : null}
             </div>
             {props.label}
-            {props.children}
+            {renderProps.defaultChildren}
           </>
         )}
       </AriaCheckbox>
