@@ -68,7 +68,7 @@ jobs:
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-$ARTIFACT_NAME
+          name: coverage-${{ env.ARTIFACT_NAME }}
           path: coverage
           overwrite: true
 
