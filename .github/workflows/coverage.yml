@@ -50,25 +50,10 @@ jobs:
       - name: Test coverage
         run: npx vitest --coverage.enabled true
 
-      - name: Prepare a unique name for Artifacts
-        id: prep_artifact_name
-        run: |
-          # Calculate a unique string which applies to the matrix entry
-          # that we can use to construct unique and valid artifact names.
-          # We achieve that by squashing runs of characters are invalid
-          # in artifact names, and also whitespace and dashes, into a
-          # single dash character.  The unique string will appear as
-          # the environment variable ARTIFACT_NAME in subsequent actions.
-          name="${{ matrix.branch }}"
-
-          # The option to enable + in sed regexps differs by OS so we avoid it
-          name=$(echo -n "$name" | sed -e 's/[ \t:\/\\"<>|*?]/-/g' -e 's/--*/-/g')
-          echo "ARTIFACT_NAME=$name" >> $GITHUB_ENV
-
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-${{ env.ARTIFACT_NAME }}
+          name: coverage-${{ matrix.branch }}
           path: coverage
           overwrite: true
 
@@ -81,10 +66,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
   
-      - name: Download coverage (${{ env.ARTIFACT_NAME }})
+      - name: Download coverage (${{ github.head_ref }})
         uses: actions/download-artifact@v4
         with:
-          name: coverage-${{ env.ARTIFACT_NAME }}
+          name: coverage-${{ github.head_ref }}
           path: coverage
 
       - name: Download coverage (main)
