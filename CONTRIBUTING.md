@@ -34,7 +34,9 @@ The first time you set up the app, you'll need to connect to our backend service
 npx convex dev
 ```
 
-Convex will prompt you to create an account or a new project as necessary. Once created, a `.env.local` file will be generated. This points to a dev database for you to use.
+Convex will prompt you to create an account or a new project as necessary. This will be a personal account you use for development, and the Convex dashboard will allow you to manage your local development database in the browser.
+
+Once your Convex account and project is created, a `.env.local` file will be generated. This points to a dev database for you to use.
 
 > [!NOTE]
 > If this is your first time using Convex, [follow the tour](https://docs.convex.dev/get-started) to understand how the system works and read [The Zen of Convex](https://docs.convex.dev/zen) to understand best practices.
@@ -81,7 +83,7 @@ Below are Namesake's core dependencies. The links below each lead to docs.
 | [React](https://react.dev/reference/react)                                          | Front-end web framework                            |
 | [React Aria](https://react-spectrum.adobe.com/react-aria)                           | Accessible components and design system            |
 | [Tailwind](https://tailwindcss.com/docs)                                            | Utility-first styling                              |
-| [Lucide Icons](https://lucide.dev/icons/)                                                | SVG icons                                          |
+| [Lucide Icons](https://lucide.dev/icons/)                                           | SVG icons                                          |
 | [Radix Colors](https://www.radix-ui.com/colors)                                     | Accessible color palette                           |
 | [Resend](https://resend.com/docs)                                                   | Email sending                                      |
 | [Vitest](https://vitest.dev/guide/)                                                 | Unit testing                                       |
