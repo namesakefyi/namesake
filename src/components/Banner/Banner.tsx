@@ -1,15 +1,15 @@
 import {
-  type RemixiconComponentType,
-  RiAlertLine,
-  RiCheckLine,
-  RiErrorWarningLine,
-  RiInformationLine,
-} from "@remixicon/react";
+  Check,
+  Info,
+  type LucideIcon,
+  OctagonAlert,
+  TriangleAlert,
+} from "lucide-react";
 import { tv } from "tailwind-variants";
 
 export interface BannerProps {
   children: React.ReactNode;
-  icon?: RemixiconComponentType;
+  icon?: LucideIcon;
   variant?: "info" | "success" | "danger" | "warning";
 }
 
@@ -17,10 +17,13 @@ const bannerStyles = tv({
   base: "flex gap-2 p-3 pr-4 items-start w-full text-sm rounded-lg bg-gray-3 dark:bg-graydark-3 text-gray-dim",
   variants: {
     variant: {
-      info: "bg-blue-3 dark:bg-bluedark-3 text-blue-normal",
-      success: "bg-green-3 dark:bg-greendark-3 text-green-normal",
-      danger: "bg-red-3 dark:bg-reddark-3 text-red-normal",
-      warning: "bg-amber-3 dark:bg-amberdark-3 text-amber-normal",
+      info: "bg-blue-3 dark:bg-bluedark-3 text-blue-normal [&_a]:text-blue-normal",
+      success:
+        "bg-green-3 dark:bg-greendark-3 text-green-normal [&_a]:text-green-normal",
+      danger:
+        "bg-red-3 dark:bg-reddark-3 text-red-normal [&_a]:text-red-normal",
+      warning:
+        "bg-amber-3 dark:bg-amberdark-3 text-amber-normal [&_a]:text-amber-normal",
     },
   },
   defaultVariants: {
@@ -47,13 +50,13 @@ export function Banner({ children, icon: Icon, variant }: BannerProps) {
   const DefaultIcon = () => {
     switch (variant) {
       case "success":
-        return RiCheckLine;
+        return Check;
       case "danger":
-        return RiErrorWarningLine;
+        return OctagonAlert;
       case "warning":
-        return RiAlertLine;
+        return TriangleAlert;
       default:
-        return RiInformationLine;
+        return Info;
     }
   };
 

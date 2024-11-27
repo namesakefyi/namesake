@@ -1,181 +1,41 @@
 import {
-  type RemixiconComponentType,
-  RiAccountCircleLine,
-  RiAppleFill,
-  RiAtLine,
-  RiAuctionLine,
-  RiAwardLine,
-  RiBankCardLine,
-  RiBankLine,
-  RiBasketballLine,
-  RiBlueskyFill,
-  RiBuildingLine,
-  RiCakeLine,
-  RiCalendarLine,
-  RiCapsuleLine,
-  RiCarLine,
-  RiChat1Line,
-  RiCheckboxLine,
-  RiChromeFill,
-  RiCodeLine,
-  RiCommunityLine,
-  RiContactsBookLine,
-  RiDiscordFill,
-  RiDropboxFill,
-  RiDropdownList,
-  RiFacebookCircleFill,
-  RiFileLine,
-  RiFlowerLine,
-  RiFolder2Line,
-  RiGithubFill,
-  RiGlobalLine,
-  RiGoogleFill,
-  RiGovernmentLine,
-  RiGraduationCapLine,
-  RiHandHeartLine,
-  RiHashtag,
-  RiHeartLine,
-  RiHomeLine,
-  RiHospitalLine,
-  RiIdCardLine,
-  RiImageLine,
-  RiInputField,
-  RiInstagramFill,
-  RiKeyLine,
-  RiLightbulbLine,
-  RiLinkedinFill,
-  RiLock2Line,
-  RiMailLine,
-  RiMediumFill,
-  RiMentalHealthLine,
-  RiMusic2Line,
-  RiNewsLine,
-  RiParagraph,
-  RiPatreonFill,
-  RiPhoneLine,
-  RiPinterestFill,
-  RiPlantLine,
-  RiPlaystationFill,
-  RiPoliceBadgeLine,
-  RiRedditFill,
-  RiRestaurantLine,
-  RiRobot2Line,
-  RiScales3Line,
-  RiSchoolLine,
-  RiSettings3Line,
-  RiShapesLine,
-  RiShieldUserLine,
-  RiSignpostLine,
-  RiSlackFill,
-  RiSmartphoneLine,
-  RiSnapchatFill,
-  RiSofaLine,
-  RiSoundcloudFill,
-  RiSparklingLine,
-  RiSpotifyFill,
-  RiStore2Line,
-  RiSwitchFill,
-  RiSwordLine,
-  RiTeamLine,
-  RiTentLine,
-  RiTiktokFill,
-  RiToothLine,
-  RiTrophyLine,
-  RiTv2Line,
-  RiTwitterXFill,
-  RiUserLine,
-  RiWalletLine,
-  RiWhatsappFill,
-  RiWindowsFill,
-  RiYoutubeFill,
-} from "@remixicon/react";
-
-export const ICONS: Record<string, RemixiconComponentType> = {
-  account: RiAccountCircleLine,
-  bank: RiBankLine,
-  basketball: RiBasketballLine,
-  building: RiBuildingLine,
-  cake: RiCakeLine,
-  car: RiCarLine,
-  certificate: RiAwardLine,
-  chat: RiChat1Line,
-  code: RiCodeLine,
-  college: RiGraduationCapLine,
-  community: RiCommunityLine,
-  contacts: RiContactsBookLine,
-  creditCard: RiBankCardLine,
-  file: RiFileLine,
-  flower: RiFlowerLine,
-  folder: RiFolder2Line,
-  food: RiRestaurantLine,
-  gavel: RiAuctionLine,
-  giving: RiHandHeartLine,
-  global: RiGlobalLine,
-  government: RiGovernmentLine,
-  heart: RiHeartLine,
-  home: RiHomeLine,
-  hospital: RiHospitalLine,
-  id: RiIdCardLine,
-  image: RiImageLine,
-  key: RiKeyLine,
-  lightbulb: RiLightbulbLine,
-  lock: RiLock2Line,
-  mail: RiMailLine,
-  mentalHealth: RiMentalHealthLine,
-  music: RiMusic2Line,
-  news: RiNewsLine,
-  phone: RiPhoneLine,
-  pill: RiCapsuleLine,
-  plant: RiPlantLine,
-  police: RiPoliceBadgeLine,
-  robot: RiRobot2Line,
-  scale: RiScales3Line,
-  school: RiSchoolLine,
-  settings: RiSettings3Line,
-  shapes: RiShapesLine,
-  signpost: RiSignpostLine,
-  smartphone: RiSmartphoneLine,
-  socialSecurity: RiShieldUserLine,
-  sofa: RiSofaLine,
-  sparkles: RiSparklingLine,
-  store: RiStore2Line,
-  sword: RiSwordLine,
-  team: RiTeamLine,
-  tent: RiTentLine,
-  tooth: RiToothLine,
-  trophy: RiTrophyLine,
-  tv: RiTv2Line,
-  user: RiUserLine,
-  wallet: RiWalletLine,
-
-  // Logos
-  apple: RiAppleFill,
-  bluesky: RiBlueskyFill,
-  chrome: RiChromeFill,
-  discord: RiDiscordFill,
-  dropbox: RiDropboxFill,
-  facebook: RiFacebookCircleFill,
-  github: RiGithubFill,
-  google: RiGoogleFill,
-  instagram: RiInstagramFill,
-  linkedin: RiLinkedinFill,
-  medium: RiMediumFill,
-  patreon: RiPatreonFill,
-  pinterest: RiPinterestFill,
-  playstation: RiPlaystationFill,
-  reddit: RiRedditFill,
-  slack: RiSlackFill,
-  snapchat: RiSnapchatFill,
-  soundcloud: RiSoundcloudFill,
-  spotify: RiSpotifyFill,
-  switch: RiSwitchFill,
-  tiktok: RiTiktokFill,
-  twitter: RiTwitterXFill,
-  whatsapp: RiWhatsappFill,
-  windows: RiWindowsFill,
-  youtube: RiYoutubeFill,
-} as const;
-export type Icon = keyof typeof ICONS;
+  AtSign,
+  Calendar,
+  CalendarClock,
+  CalendarDays,
+  CircleArrowRight,
+  CircleCheckBig,
+  CircleDashed,
+  CircleHelp,
+  CircleUser,
+  Clapperboard,
+  Clock,
+  Computer,
+  Gamepad2,
+  GraduationCap,
+  Hash,
+  HeartPulse,
+  History,
+  House,
+  Landmark,
+  LaptopMinimal,
+  LetterText,
+  ListChecks,
+  LoaderCircle,
+  type LucideIcon,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Milestone,
+  Moon,
+  Phone,
+  RectangleEllipsis,
+  Scale,
+  ShoppingBag,
+  SquareCheck,
+  Sun,
+  Zap,
+} from "lucide-react";
 
 export const JURISDICTIONS = {
   AK: "Alaska",
@@ -233,52 +93,74 @@ export const JURISDICTIONS = {
 } as const;
 export type Jurisdiction = keyof typeof JURISDICTIONS;
 
+/**
+ * Fields for input forms.
+ */
 interface FieldDetails {
   label: string;
-  icon: RemixiconComponentType;
+  icon: LucideIcon;
 }
+
+export type Field =
+  | "text"
+  | "textarea"
+  | "date"
+  | "select"
+  | "checkbox"
+  | "number"
+  | "email"
+  | "phone";
+
 export const FIELDS: Record<string, FieldDetails> = {
   text: {
     label: "Text",
-    icon: RiInputField,
+    icon: RectangleEllipsis,
   },
   textarea: {
     label: "Textarea",
-    icon: RiParagraph,
+    icon: LetterText,
   },
   date: {
     label: "Date",
-    icon: RiCalendarLine,
+    icon: Calendar,
   },
   select: {
     label: "Select",
-    icon: RiDropdownList,
+    icon: ListChecks,
   },
   checkbox: {
     label: "Checkbox",
-    icon: RiCheckboxLine,
+    icon: SquareCheck,
   },
   number: {
     label: "Number",
-    icon: RiHashtag,
+    icon: Hash,
   },
   email: {
     label: "Email",
-    icon: RiAtLine,
+    icon: AtSign,
   },
   phone: {
     label: "Phone",
-    icon: RiPhoneLine,
+    icon: Phone,
   },
 } as const;
-export type Field = keyof typeof FIELDS;
 
-export const THEMES = {
-  system: "System",
-  light: "Light",
-  dark: "Dark",
+export type Theme = "system" | "light" | "dark";
+export const THEMES: Record<Theme, FieldDetails> = {
+  system: {
+    label: "System",
+    icon: LaptopMinimal,
+  },
+  light: {
+    label: "Light",
+    icon: Sun,
+  },
+  dark: {
+    label: "Dark",
+    icon: Moon,
+  },
 } as const;
-export type Theme = keyof typeof THEMES;
 
 export const ROLES = {
   user: "User",
@@ -286,3 +168,218 @@ export const ROLES = {
   admin: "Admin",
 } as const;
 export type Role = keyof typeof ROLES;
+
+export const GROUP_QUESTS_BY = {
+  dateAdded: "Date added",
+  category: "Category",
+  status: "Status",
+} as const;
+export type GroupQuestsBy = keyof typeof GROUP_QUESTS_BY;
+
+/**
+ * Generic group details.
+ * Used for UI display of filter groups.
+ */
+export type GroupDetails = {
+  label: string;
+  icon: LucideIcon;
+};
+
+/**
+ * Categories.
+ * Used to filter quests in the quests list.
+ */
+export type Category =
+  | "core"
+  | "entertainment"
+  | "devices"
+  | "education"
+  | "finance"
+  | "gaming"
+  | "government"
+  | "health"
+  | "housing"
+  | "personal"
+  | "shopping"
+  | "social"
+  | "subscriptions"
+  | "travel"
+  | "other";
+
+export const CATEGORIES: Record<Category, GroupDetails> = {
+  core: {
+    label: "Core",
+    icon: Milestone,
+  },
+  entertainment: {
+    label: "Arts and Entertainment",
+    icon: Clapperboard,
+  },
+  devices: {
+    label: "Devices",
+    icon: Computer,
+  },
+  education: {
+    label: "Education",
+    icon: GraduationCap,
+  },
+  finance: {
+    label: "Finance",
+    icon: Landmark,
+  },
+  gaming: {
+    label: "Gaming",
+    icon: Gamepad2,
+  },
+  government: {
+    label: "Government",
+    icon: Scale,
+  },
+  health: {
+    label: "Health",
+    icon: HeartPulse,
+  },
+  housing: {
+    label: "Housing and Utilities",
+    icon: House,
+  },
+  personal: {
+    label: "Personal",
+    icon: CircleUser,
+  },
+  shopping: {
+    label: "Shopping",
+    icon: ShoppingBag,
+  },
+  social: {
+    label: "Social",
+    icon: MessageCircle,
+  },
+  subscriptions: {
+    label: "Subscriptions",
+    icon: Mail,
+  },
+  travel: {
+    label: "Travel",
+    icon: MapPin,
+  },
+  other: {
+    label: "Other",
+    icon: CircleHelp,
+  },
+};
+
+export const CATEGORY_ORDER: Category[] = Object.keys(CATEGORIES) as Category[];
+
+/**
+ * Date added filters.
+ * Used to filter quests in the quests list.
+ */
+export type DateAdded = "lastWeek" | "lastMonth" | "earlier";
+
+export const DATE_ADDED: Record<DateAdded, GroupDetails> = {
+  lastWeek: {
+    label: "Last 7 days",
+    icon: Calendar,
+  },
+  lastMonth: {
+    label: "Last 30 days",
+    icon: CalendarDays,
+  },
+  earlier: {
+    label: "Earlier",
+    icon: History,
+  },
+};
+
+export const DATE_ADDED_ORDER: DateAdded[] = Object.keys(
+  DATE_ADDED,
+) as DateAdded[];
+
+/**
+ * User quest statuses.
+ * "filed" is only available for core quests.
+ * "notStarted", "inProgress", and "complete" are available for all quests.
+ */
+export type Status = "notStarted" | "inProgress" | "filed" | "complete";
+
+interface StatusDetails extends GroupDetails {
+  variant?: "info" | "warning" | "danger" | "waiting" | "success";
+  isCoreOnly?: boolean;
+}
+
+export const STATUS: Record<Status, StatusDetails> = {
+  notStarted: {
+    label: "Not started",
+    icon: CircleDashed,
+  },
+  inProgress: {
+    label: "In progress",
+    icon: LoaderCircle,
+    variant: "warning",
+  },
+  filed: {
+    label: "Filed",
+    icon: CircleArrowRight,
+    isCoreOnly: true,
+    variant: "waiting",
+  },
+  complete: {
+    label: "Done",
+    icon: CircleCheckBig,
+    variant: "success",
+  },
+} as const;
+
+export const STATUS_ORDER: Status[] = Object.keys(STATUS) as Status[];
+
+export type Cost = {
+  cost: number;
+  description: string;
+};
+
+/**
+ * Time units.
+ * Used to display time required in quest details.
+ */
+export type TimeUnit = "minutes" | "hours" | "days" | "weeks" | "months";
+
+export const TIME_UNITS: Record<TimeUnit, GroupDetails> = {
+  minutes: {
+    label: "Minutes",
+    icon: Zap,
+  },
+  hours: {
+    label: "Hours",
+    icon: Clock,
+  },
+  days: {
+    label: "Days",
+    icon: Calendar,
+  },
+  weeks: {
+    label: "Weeks",
+    icon: CalendarDays,
+  },
+  months: {
+    label: "Months",
+    icon: CalendarClock,
+  },
+};
+
+export const TIME_UNITS_ORDER: TimeUnit[] = Object.keys(
+  TIME_UNITS,
+) as TimeUnit[];
+
+export type TimeRequired = {
+  min: number;
+  max: number;
+  unit: TimeUnit;
+  description?: string;
+};
+
+export const DEFAULT_TIME_REQUIRED: TimeRequired = {
+  min: 5,
+  max: 10,
+  unit: "minutes",
+};

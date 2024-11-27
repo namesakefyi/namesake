@@ -1,4 +1,4 @@
-import { RiCheckLine } from "@remixicon/react";
+import { Check } from "lucide-react";
 import {
   ListBox as AriaListBox,
   ListBoxItem as AriaListBoxItem,
@@ -6,8 +6,8 @@ import {
   Collection,
   Header,
   type ListBoxItemProps,
-  Section,
-  type SectionProps,
+  MenuSection,
+  type MenuSectionProps,
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
@@ -38,7 +38,7 @@ export const itemStyles = tv({
   variants: {
     isSelected: {
       false: "text-gray-normal -outline-offset-2",
-      true: "bg-purple-9 dark:bg-purpledark-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white dark:outline-white forced-colors:outline-[HighlightText]",
+      true: "bg-gray-3 dark:bg-graydark-3 text-gray-normalforced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white dark:outline-white forced-colors:outline-[HighlightText]",
     },
     isDisabled: {
       true: "text-gray-dim opacity-50 cursor-default forced-colors:text-[GrayText]",
@@ -63,14 +63,14 @@ export function ListBoxItem(props: ListBoxItemProps) {
 }
 
 export const dropdownItemStyles = tv({
-  base: "group flex items-center gap-4 cursor-pointer select-none py-2 px-3 rounded-lg outline outline-0 text-sm forced-color-adjust-none",
+  base: "group flex items-center gap-1.5 cursor-pointer select-none py-2 px-2.5 pr-3 rounded-lg outline outline-0 text-sm forced-color-adjust-none",
   variants: {
     isDisabled: {
       false: "text-gray-normal",
       true: "text-gray-dim opacity-50 forced-colors:text-[GrayText] cursor-default",
     },
     isFocused: {
-      true: "bg-purple-9 dark:bg-purpledark-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
+      true: "bg-gray-3 dark:bg-graydark-3 text-gray-normal forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
     },
   },
   compoundVariants: [
@@ -98,7 +98,7 @@ export function DropdownItem(props: ListBoxItemProps) {
             {children}
           </span>
           <span className="flex items-center w-5">
-            {isSelected && <RiCheckLine className="w-4 h-4" />}
+            {isSelected && <Check className="w-4 h-4" />}
           </span>
         </>
       ))}
@@ -106,7 +106,7 @@ export function DropdownItem(props: ListBoxItemProps) {
   );
 }
 
-export interface DropdownSectionProps<T> extends SectionProps<T> {
+export interface DropdownSectionProps<T> extends MenuSectionProps<T> {
   title?: string;
 }
 
@@ -114,11 +114,11 @@ export function DropdownSection<T extends object>(
   props: DropdownSectionProps<T>,
 ) {
   return (
-    <Section className="first:-mt-[5px] after:content-[''] after:block after:h-[5px]">
-      <Header className="text-sm font-semibold text-gray-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-gray-subtle border-y border-gray-dim [&+*]:mt-1">
+    <MenuSection>
+      <Header className="text-sm font-semibold text-gray-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-gray-subtle border-b border-gray-dim [&+*]:mt-1">
         {props.title}
       </Header>
       <Collection items={props.items}>{props.children}</Collection>
-    </Section>
+    </MenuSection>
   );
 }

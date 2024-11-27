@@ -1,11 +1,10 @@
-import { RiEyeCloseLine, RiEyeLine } from "@remixicon/react";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import {
   TextField as AriaTextField,
   type TextFieldProps as AriaTextFieldProps,
   type ValidationResult,
 } from "react-aria-components";
-import { tv } from "tailwind-variants";
 import { Button } from "../Button";
 import {
   FieldDescription,
@@ -13,33 +12,23 @@ import {
   FieldGroup,
   Input,
   Label,
-  fieldBorderStyles,
 } from "../Field";
 import { Tooltip, TooltipTrigger } from "../Tooltip";
-import { composeTailwindRenderProps, focusRing } from "../utils";
-
-const inputStyles = tv({
-  extend: focusRing,
-  base: "border rounded-lg flex",
-  variants: {
-    isFocused: fieldBorderStyles.variants.isFocusWithin,
-    ...fieldBorderStyles.variants,
-  },
-});
+import { composeTailwindRenderProps } from "../utils";
 
 export interface TextFieldProps extends AriaTextFieldProps {
   label?: string;
   description?: string | React.ReactNode;
-  icon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+  prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
   errorMessage?: string | ((validation: ValidationResult) => string);
 }
 
 export function TextField({
   label,
   description,
-  icon,
-  rightIcon,
+  prefix,
+  suffix,
   errorMessage,
   ...props
 }: TextFieldProps) {
@@ -50,17 +39,17 @@ export function TextField({
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "flex flex-col gap-2",
+        "flex flex-col gap-1.5",
       )}
       type={
         props.type === "password" && isPasswordVisible ? "text" : props.type
       }
     >
       {label && <Label>{label}</Label>}
-      <FieldGroup className={inputStyles}>
-        {icon}
-        <Input />
-        {rightIcon}
+      <FieldGroup>
+        {prefix}
+        <Input className={props.type === "password" ? "font-mono" : ""} />
+        {suffix}
         {props.type === "password" && (
           <TooltipTrigger>
             <Button
@@ -68,7 +57,7 @@ export function TextField({
               aria-label={isPasswordVisible ? "Hide password" : "Show password"}
               onPress={() => setIsPasswordVisible(!isPasswordVisible)}
               size="small"
-              icon={isPasswordVisible ? RiEyeLine : RiEyeCloseLine}
+              icon={isPasswordVisible ? Eye : EyeOff}
               className="mr-1"
             />
             <Tooltip>

@@ -1,7 +1,8 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
+import { DEFAULT_TIME_REQUIRED } from "./constants";
 import { userMutation } from "./helpers";
-import { icon, jurisdiction } from "./validators";
+import { category, jurisdiction, timeRequiredUnit } from "./validators";
 
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
@@ -10,6 +11,16 @@ export const getAllQuests = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db.query("quests").collect();
+  },
+});
+
+export const getAllQuestsInCategory = query({
+  args: { category: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("quests")
+      .withIndex("category", (q) => q.eq("category", args.category))
+      .collect();
   },
 });
 
@@ -34,14 +45,55 @@ export const createQuest = userMutation({
   args: {
     title: v.string(),
     jurisdiction: v.optional(jurisdiction),
-    icon: icon,
+    category: v.optional(category),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("quests", {
       title: args.title,
-      icon: args.icon,
+      category: args.category,
       jurisdiction: args.jurisdiction,
+      timeRequired: DEFAULT_TIME_REQUIRED,
       creationUser: ctx.userId,
+    });
+  },
+});
+
+export const updateQuest = userMutation({
+  args: {
+    // TODO: Dedupe these types from schema
+    questId: v.id("quests"),
+    title: v.string(),
+    jurisdiction: v.optional(jurisdiction),
+    category: v.optional(category),
+    costs: v.optional(
+      v.array(
+        v.object({
+          cost: v.number(),
+          description: v.string(),
+        }),
+      ),
+    ),
+    timeRequired: v.optional(
+      v.object({
+        min: v.number(),
+        max: v.number(),
+        unit: timeRequiredUnit,
+        description: v.optional(v.string()),
+      }),
+    ),
+    urls: v.optional(v.array(v.string())),
+    content: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.questId, {
+      // TODO: Dedupe
+      title: args.title,
+      jurisdiction: args.jurisdiction,
+      category: args.category,
+      costs: args.costs,
+      timeRequired: args.timeRequired,
+      urls: args.urls,
+      content: args.content,
     });
   },
 });

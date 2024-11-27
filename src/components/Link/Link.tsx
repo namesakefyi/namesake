@@ -7,7 +7,7 @@ import { tv } from "tailwind-variants";
 import { type ButtonProps, buttonStyles } from "../Button";
 import { focusRing } from "../utils";
 
-interface LinkProps extends AriaLinkProps {
+export interface LinkProps extends AriaLinkProps {
   variant?: "primary" | "secondary";
   button?: ButtonProps;
 }
@@ -36,10 +36,10 @@ export function Link({ button, ...props }: LinkProps) {
           button
             ? buttonStyles({
                 ...renderProps,
+                ...button,
                 className,
-                variant: props.variant,
               })
-            : linkStyles({ ...renderProps, className, variant: props.variant }),
+            : linkStyles({ ...renderProps, variant: props.variant, className }),
       )}
     />
   );

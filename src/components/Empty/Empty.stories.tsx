@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { RiQuestionLine } from "@remixicon/react";
+import { CircleHelp } from "lucide-react";
 import { Empty } from "./Empty";
 
 const meta = {
@@ -13,14 +13,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    icon: RiQuestionLine,
+    icon: CircleHelp,
     title: "Page not found",
   },
 };
 
 export const Subtitle: Story = {
   args: {
-    icon: RiQuestionLine,
+    icon: CircleHelp,
     title: "Page not found",
     subtitle: "We couldn't find that page.",
   },
@@ -28,7 +28,7 @@ export const Subtitle: Story = {
 
 export const Button: Story = {
   args: {
-    icon: RiQuestionLine,
+    icon: CircleHelp,
     title: "Page not found",
     subtitle: "We couldn't find that page.",
     button: {

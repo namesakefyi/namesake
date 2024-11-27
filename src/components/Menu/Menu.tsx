@@ -1,11 +1,16 @@
-import { RiArrowRightSLine, RiCheckLine } from "@remixicon/react";
+import {
+  Check,
+  ChevronRight,
+  ExternalLink,
+  type LucideIcon,
+} from "lucide-react";
 import {
   Menu as AriaMenu,
   MenuItem as AriaMenuItem,
+  type MenuItemProps as AriaMenuItemProps,
   type MenuProps as AriaMenuProps,
   MenuTrigger as AriaMenuTrigger,
   SubmenuTrigger as AriaSubmenuTrigger,
-  type MenuItemProps,
   type MenuTriggerProps,
   Separator,
   type SeparatorProps,
@@ -38,26 +43,39 @@ export function Menu<T extends object>(props: MenuProps<T>) {
   );
 }
 
-export function MenuItem(props: MenuItemProps) {
+interface MenuItemProps extends AriaMenuItemProps {
+  icon?: LucideIcon;
+}
+
+export function MenuItem({ className, icon: Icon, ...props }: MenuItemProps) {
   return (
-    <AriaMenuItem {...props} className={dropdownItemStyles}>
+    <AriaMenuItem
+      {...props}
+      className={composeRenderProps(className, (className, renderProps) =>
+        dropdownItemStyles({ ...renderProps, className }),
+      )}
+    >
       {composeRenderProps(
         props.children,
         (children, { selectionMode, isSelected, hasSubmenu }) => (
           <>
             {selectionMode !== "none" && (
               <span className="flex items-center w-4">
-                {isSelected && <RiCheckLine aria-hidden className="w-4 h-4" />}
+                {isSelected && <Check aria-hidden className="w-4 h-4" />}
               </span>
             )}
-            <span className="flex items-center cursor-pointer flex-1 gap-2 font-normal truncate group-selected:font-semibold">
+            {Icon && <Icon aria-hidden className="w-4 h-4" />}
+            <span className="flex items-center flex-1 gap-2 font-normal truncate group-selected:font-semibold">
               {children}
             </span>
-            {hasSubmenu && (
-              <RiArrowRightSLine
+            {props.target === "_blank" && (
+              <ExternalLink
                 aria-hidden
-                className="absolute w-4 h-4 right-2"
+                className="size-4 ml-1 text-gray-8 dark:text-graydark-8"
               />
+            )}
+            {hasSubmenu && (
+              <ChevronRight aria-hidden className="size-4 ml-auto -mr-1" />
             )}
           </>
         ),

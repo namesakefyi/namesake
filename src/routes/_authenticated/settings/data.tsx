@@ -1,6 +1,6 @@
 import { Banner, PageHeader } from "@/components";
-import { RiLock2Line } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
+import { Lock } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/settings/data")({
   component: DataRoute,
@@ -8,14 +8,11 @@ export const Route = createFileRoute("/_authenticated/settings/data")({
 
 function DataRoute() {
   return (
-    <div>
-      <PageHeader
-        title="Data"
-        subtitle="Manage, modify, or delete your data."
-      />
-      <Banner variant="success" icon={RiLock2Line}>
+    <>
+      <PageHeader title="Data" />
+      <Banner variant="success" icon={Lock}>
         Data shown here is end-to-end encrypted. Only you can access it.
       </Banner>
-    </div>
+    </>
   );
 }

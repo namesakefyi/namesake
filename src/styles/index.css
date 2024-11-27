@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .app-padding {
+    @apply px-6 lg:px-8;
+  }
+
+  .h-header {
+    @apply h-16 lg:h-20;
+  }
+}
+
 /* Scale up hit targets on high resolution mobile devices. */
 @media (min-resolution: 200dpi) {
   html {
@@ -21,6 +31,10 @@ body {
 
 .mdxeditor-root-contenteditable li {
   margin: 0;
+}
+
+.mdxeditor-popup-container:empty {
+  display: none;
 }
 
 .prose {

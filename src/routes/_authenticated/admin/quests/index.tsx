@@ -20,11 +20,17 @@ import {
 } from "@/components";
 import { api } from "@convex/_generated/api";
 import type { DataModel } from "@convex/_generated/dataModel";
-import { ICONS, JURISDICTIONS, type Jurisdiction } from "@convex/constants";
-import { RiAddLine, RiMoreFill, RiSignpostLine } from "@remixicon/react";
-import { createFileRoute } from "@tanstack/react-router";
+import {
+  CATEGORIES,
+  type Category,
+  JURISDICTIONS,
+  type Jurisdiction,
+} from "@convex/constants";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
+import { CircleHelp, Ellipsis, Milestone, Plus } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/quests/")({
   component: QuestsRoute,
@@ -40,22 +46,34 @@ const NewQuestModal = ({
   onSubmit: () => void;
 }) => {
   const createQuest = useMutation(api.quests.createQuest);
-  const [icon, setIcon] = useState("");
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState<Category | null>(null);
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
+  const navigate = useNavigate();
 
   const clearForm = () => {
-    setIcon("");
     setTitle("");
+    setCategory(null);
     setJurisdiction(null);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createQuest({ title, icon, jurisdiction: jurisdiction ?? undefined });
+    const questId = await createQuest({
+      title,
+      category: category ?? undefined,
+      jurisdiction: jurisdiction ?? undefined,
+    });
 
-    clearForm();
-    onSubmit();
+    if (questId) {
+      toast(`Created quest: ${title}`);
+      clearForm();
+      onSubmit();
+      navigate({
+        to: "/admin/quests/$questId",
+        params: { questId },
+      });
+    }
   };
 
   return (
@@ -63,18 +81,18 @@ const NewQuestModal = ({
       <h2 className="text-xl">Create new quest</h2>
       <Form className="w-full" onSubmit={handleSubmit}>
         <Select
-          label="Icon"
-          name="icon"
-          selectedKey={icon}
-          onSelectionChange={(value) => setIcon(value as string)}
-          placeholder="Select an icon"
+          label="Category"
+          name="category"
+          selectedKey={category}
+          onSelectionChange={(value) => setCategory(value as Category)}
+          placeholder="Select a category"
           isRequired
         >
-          {Object.keys(ICONS).map((key) => {
-            const Icon = ICONS[key];
+          {Object.entries(CATEGORIES).map(([key, { label, icon }]) => {
+            const Icon = icon ?? CircleHelp;
             return (
               <SelectItem key={key} id={key} textValue={key}>
-                <Icon size={20} /> {key}
+                <Icon size={20} /> {label}
               </SelectItem>
             );
           })}
@@ -117,14 +135,20 @@ const QuestTableRow = ({
 }: {
   quest: DataModel["quests"]["document"];
 }) => {
-  const questCount = useQuery(api.userQuests.getQuestCount, {
+  const questCount = useQuery(api.userQuests.getGlobalQuestCount, {
     questId: quest._id,
   });
   const deleteQuest = useMutation(api.quests.deleteQuest);
   const undeleteQuest = useMutation(api.quests.undeleteQuest);
   const permanentlyDeleteQuest = useMutation(api.quests.permanentlyDeleteQuest);
 
-  const Icon = ICONS[quest.icon];
+  const Category = () => {
+    if (!quest.category) return;
+
+    const { icon, label } = CATEGORIES[quest.category as Category];
+
+    return <Badge icon={icon ?? CircleHelp}>{label}</Badge>;
+  };
 
   return (
     <TableRow
@@ -134,7 +158,6 @@ const QuestTableRow = ({
     >
       <TableCell>
         <div className="flex items-center gap-2">
-          <Icon className="text-gray-dim" />
           <div>{quest.title}</div>
           {quest.deletionTime && (
             <span className="text-red-9 dark:text-reddark-9" slot="description">
@@ -150,6 +173,9 @@ const QuestTableRow = ({
           <span className="text-gray-dim opacity-50">—</span>
         )}
       </TableCell>
+      <TableCell>
+        <Category />
+      </TableCell>
       <TableCell>{questCount}</TableCell>
       <TableCell>{new Date(quest._creationTime).toLocaleString()}</TableCell>
       <TableCell>
@@ -158,7 +184,7 @@ const QuestTableRow = ({
             variant="icon"
             aria-label="Actions"
             size="small"
-            icon={RiMoreFill}
+            icon={Ellipsis}
           />
           <Menu>
             {quest.deletionTime ? (
@@ -193,10 +219,13 @@ function QuestsRoute() {
   const quests = useQuery(api.quests.getAllQuests);
 
   return (
-    <div>
+    <>
       <PageHeader title="Quests">
-        <Button onPress={() => setIsNewQuestModalOpen(true)} variant="primary">
-          <RiAddLine />
+        <Button
+          onPress={() => setIsNewQuestModalOpen(true)}
+          icon={Plus}
+          variant="primary"
+        >
           New Quest
         </Button>
       </PageHeader>
@@ -204,6 +233,7 @@ function QuestsRoute() {
         <TableHeader>
           <TableColumn isRowHeader>Quest</TableColumn>
           <TableColumn>Jurisdiction</TableColumn>
+          <TableColumn>Category</TableColumn>
           <TableColumn>Used By</TableColumn>
           <TableColumn>Created</TableColumn>
           <TableColumn />
@@ -213,7 +243,7 @@ function QuestsRoute() {
           renderEmptyState={() => (
             <Empty
               title="No quests"
-              icon={RiSignpostLine}
+              icon={Milestone}
               button={{
                 children: "New Quest",
                 onPress: () => setIsNewQuestModalOpen(true),
@@ -231,6 +261,6 @@ function QuestsRoute() {
         onOpenChange={setIsNewQuestModalOpen}
         onSubmit={() => setIsNewQuestModalOpen(false)}
       />
-    </div>
+    </>
   );
 }

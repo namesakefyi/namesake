@@ -1,7 +1,6 @@
 import "./styles/index.css";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
-import { RiErrorWarningLine } from "@remixicon/react";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import {
   type ConvexAuthState,
@@ -9,6 +8,7 @@ import {
   useConvexAuth,
   useQuery,
 } from "convex/react";
+import { TriangleAlert } from "lucide-react";
 import { ThemeProvider } from "next-themes";
 import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
@@ -30,7 +30,7 @@ const router = createRouter({
     <Empty
       title="Page not found"
       subtitle="We couldn't find that page."
-      icon={RiErrorWarningLine}
+      icon={TriangleAlert}
     />
   ),
 });
@@ -72,7 +72,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <HelmetProvider>
         <ConvexAuthProvider client={convex}>
-          <ThemeProvider attribute="class">
+          <ThemeProvider attribute="class" disableTransitionOnChange>
             <InnerApp />
           </ThemeProvider>
         </ConvexAuthProvider>

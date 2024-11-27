@@ -1,4 +1,4 @@
-import { RiCloseLine } from "@remixicon/react";
+import { X } from "lucide-react";
 import {
   Tag as AriaTag,
   TagGroup as AriaTagGroup,
@@ -91,12 +91,12 @@ export function Tag({ children, ...props }: TagProps) {
         tagStyles({ ...renderProps, className }),
       )}
     >
-      {({ allowsRemoving }) => (
+      {({ defaultChildren, allowsRemoving }) => (
         <>
-          {children}
+          {defaultChildren}
           {allowsRemoving && (
             <Button slot="remove" className={removeButtonStyles}>
-              <RiCloseLine aria-hidden className="w-3 h-3" />
+              <X aria-hidden className="w-3 h-3" />
             </Button>
           )}
         </>

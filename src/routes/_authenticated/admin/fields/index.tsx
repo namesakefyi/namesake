@@ -2,9 +2,6 @@ import {
   Button,
   Empty,
   Form,
-  Menu,
-  MenuItem,
-  MenuTrigger,
   Modal,
   PageHeader,
   Select,
@@ -20,9 +17,9 @@ import {
 import { api } from "@convex/_generated/api";
 import type { DataModel, Id } from "@convex/_generated/dataModel";
 import { FIELDS, type Field } from "@convex/constants";
-import { RiAddLine, RiInputField, RiMoreFill } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
+import { Plus, RectangleEllipsis } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/admin/fields/")({
@@ -126,16 +123,7 @@ const FieldsTableRow = ({
 }: {
   field: DataModel["questFields"]["document"];
 }) => {
-  const undeleteField = useMutation(api.questFields.undeleteField);
-  const deleteField = useMutation(api.questFields.deleteField);
-  const permanentlyDeleteField = useMutation(
-    api.questFields.permanentlyDeleteField,
-  );
-  const fieldCount = useQuery(api.questFields.getFieldUsageCount, {
-    fieldId: field._id,
-  });
-
-  const Icon = FIELDS[field.type].icon;
+  const Icon = FIELDS[field.type as Field].icon;
 
   return (
     <TableRow key={field._id} className="flex gap-2 items-center">
@@ -151,40 +139,6 @@ const FieldsTableRow = ({
         </div>
       </TableCell>
       <TableCell>{field.slug}</TableCell>
-      <TableCell>{fieldCount}</TableCell>
-      <TableCell>
-        <MenuTrigger>
-          <Button
-            variant="icon"
-            aria-label="Actions"
-            size="small"
-            icon={RiMoreFill}
-          />
-          <Menu>
-            {field.deletionTime ? (
-              <>
-                <MenuItem
-                  onAction={() => undeleteField({ fieldId: field._id })}
-                >
-                  Undelete
-                </MenuItem>
-                {/* TODO: Add modal */}
-                <MenuItem
-                  onAction={() =>
-                    permanentlyDeleteField({ fieldId: field._id })
-                  }
-                >
-                  Permanently Delete
-                </MenuItem>
-              </>
-            ) : (
-              <MenuItem onAction={() => deleteField({ fieldId: field._id })}>
-                Delete
-              </MenuItem>
-            )}
-          </Menu>
-        </MenuTrigger>
-      </TableCell>
     </TableRow>
   );
 };
@@ -196,8 +150,11 @@ function FieldsRoute() {
   return (
     <div>
       <PageHeader title="Fields">
-        <Button onPress={() => setIsNewFieldModalOpen(true)} variant="primary">
-          <RiAddLine />
+        <Button
+          onPress={() => setIsNewFieldModalOpen(true)}
+          variant="primary"
+          icon={Plus}
+        >
           New Field
         </Button>
       </PageHeader>
@@ -205,15 +162,13 @@ function FieldsRoute() {
         <TableHeader>
           <TableColumn isRowHeader>Field</TableColumn>
           <TableColumn>Slug</TableColumn>
-          <TableColumn>Used in # quests</TableColumn>
-          <TableColumn />
         </TableHeader>
         <TableBody
           items={fields}
           renderEmptyState={() => (
             <Empty
               title="No fields"
-              icon={RiInputField}
+              icon={RectangleEllipsis}
               button={{
                 children: "New Field",
                 onPress: () => setIsNewFieldModalOpen(true),

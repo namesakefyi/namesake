@@ -23,12 +23,20 @@ export const { auth, signIn, signOut, store } = convexAuth({
       }
 
       // Create a new user with defaults
-      return ctx.db.insert("users", {
-        email: args.profile.email,
-        emailVerified: args.profile.emailVerified ?? false,
-        role: "user",
-        theme: "system",
-      });
+      return ctx.db
+        .insert("users", {
+          email: args.profile.email,
+          emailVerified: args.profile.emailVerified ?? false,
+          role: "user",
+        })
+        .then((userId) => {
+          ctx.db.insert("userSettings", {
+            userId,
+            theme: "system",
+            groupQuestsBy: "dateAdded",
+          });
+          return userId;
+        });
     },
 
     async redirect({ redirectTo }) {

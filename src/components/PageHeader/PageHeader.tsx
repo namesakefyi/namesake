@@ -1,31 +1,38 @@
-import type { RemixiconComponentType } from "@remixicon/react";
+import type { LucideIcon } from "lucide-react";
+import { twMerge } from "tailwind-merge";
 
 export interface PageHeaderProps {
   title: string;
-  icon?: RemixiconComponentType;
+  icon?: LucideIcon;
   badge?: React.ReactNode;
-  subtitle?: string;
   children?: React.ReactNode;
+  className?: string;
 }
 
 export const PageHeader = ({
   title,
   icon: Icon,
   badge,
-  subtitle,
   children,
+  className,
 }: PageHeaderProps) => {
   return (
-    <header className="flex items-center justify-between pb-6 gap-6 text-gray-normal">
+    <header
+      className={twMerge(
+        "h-header flex bg-gray-app shrink-0 items-center justify-between gap-6 text-gray-normal sticky top-0 z-20",
+        className,
+      )}
+    >
       <div className="flex flex-col gap-1">
         <div className="flex gap-2 items-center">
           {Icon && <Icon className="text-gray-dim" />}
-          <h1 className="text-2xl font-semibold">{title}</h1>
+          <h1 className="text-lg lg:text-2xl font-medium whitespace-nowrap">
+            {title}
+          </h1>
           {badge}
         </div>
-        {subtitle && <p className="text-gray-dim">{subtitle}</p>}
       </div>
-      {children}
+      <div className="flex items-center gap-2">{children}</div>
     </header>
   );
 };

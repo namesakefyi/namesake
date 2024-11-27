@@ -1,6 +1,7 @@
 import {
   Badge,
   Button,
+  ComboBox,
   Empty,
   FileTrigger,
   Form,
@@ -20,11 +21,11 @@ import {
   TextField,
 } from "@/components";
 import { api } from "@convex/_generated/api";
-import type { DataModel } from "@convex/_generated/dataModel";
+import type { DataModel, Id } from "@convex/_generated/dataModel";
 import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
-import { RiAddLine, RiFileTextLine, RiMoreFill } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
+import { Ellipsis, FileText, Plus } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/admin/forms/")({
@@ -43,17 +44,20 @@ const NewFormModal = ({
   const generateUploadUrl = useMutation(api.forms.generateUploadUrl);
   const uploadPDF = useMutation(api.forms.uploadPDF);
   const createForm = useMutation(api.forms.createForm);
+  const quests = useQuery(api.quests.getAllActiveQuests);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [formCode, setFormCode] = useState("");
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
+  const [questId, setQuestId] = useState<Id<"quests"> | null>(null);
 
   const clearForm = () => {
     setFile(null);
     setTitle("");
     setFormCode("");
     setJurisdiction(null);
+    setQuestId(null);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -61,9 +65,10 @@ const NewFormModal = ({
 
     if (jurisdiction === null) throw new Error("Jurisdiction is required");
     if (file === null) throw new Error("File is required");
+    if (questId === null) throw new Error("Quest is required");
 
     setIsSubmitting(true);
-    const formId = await createForm({ title, jurisdiction, formCode });
+    const formId = await createForm({ title, jurisdiction, formCode, questId });
 
     const postUrl = await generateUploadUrl();
     const result = await fetch(postUrl, {
@@ -80,58 +85,73 @@ const NewFormModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <h2 className="text-xl">Upload new form</h2>
-      <Form className="w-full" onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-2">
-          <FileTrigger
-            acceptedFileTypes={["application/pdf"]}
-            onSelect={(e) => {
-              if (e === null) return;
-              const files = Array.from(e);
-              setFile(files[0]);
-            }}
-          >
-            <Button variant="secondary">Select a PDF</Button>
-          </FileTrigger>
-          {file && <p>{file.name}</p>}
-        </div>
+    <Modal
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      className="w-full max-w-xl"
+    >
+      <Form onSubmit={handleSubmit} className="w-full">
         <TextField
           label="Title"
-          name="title"
-          isRequired
           value={title}
-          onChange={(value) => setTitle(value)}
-          description="Use title case."
+          onChange={setTitle}
+          autoFocus
+          isRequired
         />
-        <TextField
-          label="Form Code"
-          name="formCode"
-          value={formCode}
-          onChange={(value) => setFormCode(value)}
-          description="Legal reference codes like “CJP 27”. Optional."
-        />
+        <TextField label="Form code" value={formCode} onChange={setFormCode} />
         <Select
-          label="Jurisdiction"
-          name="jurisdiction"
+          label="State"
           selectedKey={jurisdiction}
           onSelectionChange={(key) => setJurisdiction(key as Jurisdiction)}
-          placeholder="Select a jurisdiction"
           isRequired
         >
-          {Object.entries(JURISDICTIONS).map(([value, label]) => (
-            <SelectItem key={value} id={value}>
-              {label}
+          {Object.entries(JURISDICTIONS).map(([key, value]) => (
+            <SelectItem key={key} id={key}>
+              {value}
             </SelectItem>
           ))}
         </Select>
+        <ComboBox
+          label="Quest"
+          selectedKey={questId}
+          onSelectionChange={(key) => setQuestId(key as Id<"quests">)}
+          isRequired
+        >
+          {quests?.map((quest) => {
+            const textValue = `${quest.title}${
+              quest.jurisdiction ? ` (${quest.jurisdiction})` : ""
+            }`;
 
-        <div className="flex gap-2 justify-end">
-          <Button type="button" onPress={() => onOpenChange(false)}>
+            return (
+              <SelectItem key={quest._id} id={quest._id} textValue={textValue}>
+                {quest.title}{" "}
+                {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
+              </SelectItem>
+            );
+          })}
+        </ComboBox>
+        <FileTrigger
+          acceptedFileTypes={["application/pdf"]}
+          onSelect={(e) => {
+            if (e === null) return;
+            const files = Array.from(e);
+            setFile(files[0]);
+          }}
+        >
+          <Button type="button" variant="secondary">
+            {file ? file.name : "Select PDF"}
+          </Button>
+        </FileTrigger>
+        <div className="flex justify-end gap-3">
+          <Button
+            type="button"
+            variant="secondary"
+            onPress={() => onOpenChange(false)}
+          >
             Cancel
           </Button>
-          <Button type="submit" isDisabled={isSubmitting} variant="primary">
-            Upload Form
+          <Button type="submit" variant="primary" isDisabled={isSubmitting}>
+            Create
           </Button>
         </div>
       </Form>
@@ -169,7 +189,7 @@ const FormTableRow = ({ form }: { form: DataModel["forms"]["document"] }) => {
             variant="icon"
             aria-label="Actions"
             size="small"
-            icon={RiMoreFill}
+            icon={Ellipsis}
           />
           <Menu>
             {formUrl && (
@@ -208,8 +228,11 @@ function FormsRoute() {
   return (
     <div>
       <PageHeader title="Forms">
-        <Button onPress={() => setIsNewFormModalOpen(true)} variant="primary">
-          <RiAddLine />
+        <Button
+          onPress={() => setIsNewFormModalOpen(true)}
+          icon={Plus}
+          variant="primary"
+        >
           Upload New Form
         </Button>
       </PageHeader>
@@ -225,7 +248,7 @@ function FormsRoute() {
           renderEmptyState={() => (
             <Empty
               title="No forms"
-              icon={RiFileTextLine}
+              icon={FileText}
               button={{
                 children: "New Form",
                 onPress: () => setIsNewFormModalOpen(true),

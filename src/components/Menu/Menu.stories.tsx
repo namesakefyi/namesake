@@ -1,5 +1,5 @@
-import { RiMoreLine } from "@remixicon/react";
 import type { Meta } from "@storybook/react";
+import { Ellipsis } from "lucide-react";
 import {
   Menu,
   MenuItem,
@@ -20,7 +20,7 @@ export default meta;
 export const Example = (args: any) => (
   <MenuTrigger>
     <Button variant="secondary" className="px-2">
-      <RiMoreLine className="w-5 h-5" />
+      <Ellipsis className="w-5 h-5" />
     </Button>
     <Menu {...args}>
       <MenuItem id="new">New…</MenuItem>
@@ -42,7 +42,7 @@ DisabledItems.args = {
 export const Sections = (args: any) => (
   <MenuTrigger>
     <Button variant="secondary" className="px-2">
-      <RiMoreLine className="w-5 h-5" />
+      <Ellipsis className="w-5 h-5" />
     </Button>
     <Menu {...args}>
       <MenuSection title="Your Content">
@@ -64,7 +64,7 @@ export const Sections = (args: any) => (
 export const Submenu = (args: any) => (
   <MenuTrigger>
     <Button variant="secondary" className="px-2">
-      <RiMoreLine className="w-5 h-5" />
+      <Ellipsis className="w-5 h-5" />
     </Button>
     <Menu {...args}>
       <MenuItem id="new">New…</MenuItem>

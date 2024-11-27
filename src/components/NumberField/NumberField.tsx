@@ -1,4 +1,4 @@
-import { RiArrowDownSLine, RiArrowUpSLine } from "@remixicon/react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import {
   NumberField as AriaNumberField,
   type NumberFieldProps as AriaNumberFieldProps,
@@ -18,6 +18,7 @@ import { composeTailwindRenderProps } from "../utils";
 
 export interface NumberFieldProps extends AriaNumberFieldProps {
   label?: string;
+  prefix?: React.ReactNode;
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);
 }
@@ -25,6 +26,7 @@ export interface NumberFieldProps extends AriaNumberFieldProps {
 export function NumberField({
   label,
   description,
+  prefix,
   errorMessage,
   ...props
 }: NumberFieldProps) {
@@ -33,13 +35,18 @@ export function NumberField({
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "group flex flex-col gap-1",
+        "group flex flex-col gap-1.5",
       )}
     >
       <Label>{label}</Label>
       <FieldGroup>
         {(renderProps) => (
           <>
+            {prefix && (
+              <span className="text-gray-9 dark:text-graydark-9 ml-2 -mr-2">
+                {prefix}
+              </span>
+            )}
             <Input />
             <div
               className={fieldBorderStyles({
@@ -48,7 +55,7 @@ export function NumberField({
               })}
             >
               <StepperButton slot="increment">
-                <RiArrowUpSLine aria-hidden className="w-4 h-4" />
+                <ChevronUp aria-hidden className="w-4 h-4" />
               </StepperButton>
               <div
                 className={fieldBorderStyles({
@@ -57,7 +64,7 @@ export function NumberField({
                 })}
               />
               <StepperButton slot="decrement">
-                <RiArrowDownSLine aria-hidden className="w-4 h-4" />
+                <ChevronDown aria-hidden className="w-4 h-4" />
               </StepperButton>
             </div>
           </>

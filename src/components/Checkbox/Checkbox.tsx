@@ -1,4 +1,4 @@
-import { RiCheckLine, RiSubtractLine } from "@remixicon/react";
+import { Check, Minus } from "lucide-react";
 import type { ReactNode } from "react";
 import {
   Checkbox as AriaCheckbox,
@@ -58,16 +58,16 @@ const boxStyles = tv({
       true: "bg-purple-9 dark:bg-purpledark-9 border-transparent",
     },
     isInvalid: {
-      true: "text-red-9 dark:text-reddark-9 forced-colors:![--color:Mark]",
+      true: "text-red-9 dark:text-reddark-9",
     },
     isDisabled: {
-      true: "text-gray-7 dark:text-graydark-7 forced-colors:![--color:GrayText]",
+      true: "text-gray-7 dark:text-graydark-7",
     },
   },
 });
 
 const iconStyles =
-  "w-5 h-5 text-white group-disabled:text-gray-4 dark:group-disabled:text-gray-9 forced-colors:text-[HighlightText]";
+  "w-5 h-5 text-white group-disabled:text-gray-4 dark:group-disabled:text-gray-9";
 
 export interface CheckboxProps extends AriaCheckboxProps {
   label?: string;
@@ -94,13 +94,13 @@ export function Checkbox(props: CheckboxProps) {
               })}
             >
               {isIndeterminate ? (
-                <RiSubtractLine aria-hidden className={iconStyles} />
+                <Minus aria-hidden className={iconStyles} />
               ) : isSelected ? (
-                <RiCheckLine aria-hidden className={iconStyles} />
+                <Check aria-hidden className={iconStyles} />
               ) : null}
             </div>
             {props.label}
-            {props.children}
+            {renderProps.defaultChildren}
           </>
         )}
       </AriaCheckbox>

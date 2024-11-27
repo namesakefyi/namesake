@@ -1,40 +1,52 @@
 import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { field, icon, jurisdiction, role, theme } from "./validators";
+import {
+  category,
+  field,
+  groupQuestsBy,
+  jurisdiction,
+  role,
+  status,
+  theme,
+  timeRequiredUnit,
+} from "./validators";
 
 /**
  * Represents a collection of steps and forms for a user to complete.
  * @param title - The title of the quest. (e.g. "Court Order")
+ * @param category - The category of the quest. (e.g. "Social")
  * @param creationUser - The user who created the quest.
- * @param state - The US State the quest applies to. (e.g. "MA")
+ * @param jurisdiction - The US State the quest applies to. (e.g. "MA")
+ * @param costs - The costs of the quest in USD.
+ * @param timeRequired - The estimated time required to complete the quest.
+ * @param urls - Links to official documentation about changing names for this quest.
  * @param deletionTime - Time in ms since epoch when the quest was deleted.
- * @param steps - An ordered list of steps to complete the quest.
+ * @param content - Text written in markdown comprising the contents of the quest.
  */
 const quests = defineTable({
-  icon: icon,
   title: v.string(),
+  category: v.optional(category),
   creationUser: v.id("users"),
   jurisdiction: v.optional(jurisdiction),
+  costs: v.optional(
+    v.array(
+      v.object({
+        cost: v.number(),
+        description: v.string(),
+      }),
+    ),
+  ),
+  timeRequired: v.object({
+    min: v.number(),
+    max: v.number(),
+    unit: timeRequiredUnit,
+    description: v.optional(v.string()),
+  }),
+  urls: v.optional(v.array(v.string())),
   deletionTime: v.optional(v.number()),
-  steps: v.optional(v.array(v.id("questSteps"))),
-});
-
-/**
- * Represents a single step in a quest.
- * @param questId - The quest this step belongs to.
- * @param creationUser - The user who created the step.
- * @param title - The title of the step. (e.g. "Fill out form")
- * @param description - A description of the step.
- * @param fields - An array of form fields to complete the step.
- */
-const questSteps = defineTable({
-  questId: v.id("quests"),
-  creationUser: v.id("users"),
-  title: v.string(),
-  description: v.optional(v.string()),
-  fields: v.optional(v.array(v.id("questFields"))),
-}).index("questId", ["questId"]);
+  content: v.optional(v.string()),
+}).index("category", ["category"]);
 
 /**
  * Represents a single input field which may be shared across multiple quests
@@ -56,32 +68,34 @@ const questFields = defineTable({
 
 /**
  * Represents a PDF form that can be filled out by users.
+ * @param questId - The ID of the quest this form belongs to.
  * @param title - The title of the form. (e.g. "Petition to Change Name of Adult")
  * @param formCode - The legal code for the form. (e.g. "CJP 27")
  * @param creationUser - The user who created the form.
  * @param file - The storageId for the PDF file.
- * @param state - The US State the form applies to. (e.g. "MA")
+ * @param jurisdiction - The US State the form applies to. (e.g. "MA")
  * @param deletionTime - Time in ms since epoch when the form was deleted.
  */
 const forms = defineTable({
+  questId: v.id("quests"),
   title: v.string(),
   formCode: v.optional(v.string()),
   creationUser: v.id("users"),
   file: v.optional(v.id("_storage")),
   jurisdiction: jurisdiction,
   deletionTime: v.optional(v.number()),
-});
+}).index("quest", ["questId"]);
 
 /**
- * Represents a user of Namesake.
+ * Represents a user of Namesake's identity.
  * @param name - The user's preferred first name.
  * @param role - The user's role: "admin", "editor", or "user".
  * @param image - A URL to the user's profile picture.
  * @param email - The user's email address.
- * @param emailVerificationTime - Time in ms since epoch when the user verified their email.
- * @param isAnonymous - Denotes anonymous/unauthenticated users.
+ * @param emailVerified - Denotes whether the user has verified their email.
+ * @param residence - The US State the user lives in.
+ * @param birthplace - The US State the user was born in.
  * @param isMinor - Denotes users under 18.
- * @param preferredTheme - The user's preferred color scheme.
  */
 const users = defineTable({
   name: v.optional(v.string()),
@@ -89,42 +103,56 @@ const users = defineTable({
   image: v.optional(v.string()),
   email: v.optional(v.string()),
   emailVerified: v.boolean(),
-  jurisdiction: v.optional(jurisdiction),
+  residence: v.optional(jurisdiction),
+  birthplace: v.optional(jurisdiction),
   isMinor: v.optional(v.boolean()),
-  theme: theme,
 }).index("email", ["email"]);
-
-/**
- * Represents a user's unique progress in completing a quest.
- * @param userId
- * @param questId
- * @param completionTime - Time in ms since epoch when the user marked the quest as complete.
- */
-const userQuests = defineTable({
-  userId: v.id("users"),
-  questId: v.id("quests"),
-  completionTime: v.optional(v.number()),
-})
-  .index("userId", ["userId"])
-  .index("questId", ["questId"]);
 
 /**
  * Pre-fillable user data entered throughout quests.
  * All data in this table is end-to-end encrypted.
  */
-const userData = defineTable({
+const userEncryptedData = defineTable({
   userId: v.id("users"),
   fieldId: v.id("questFields"),
   value: v.string(),
 }).index("userId", ["userId"]);
 
+/**
+ * Store user preferences.
+ * @param userId
+ * @param theme - The user's preferred color scheme.
+ * @param groupQuestsBy - The user's preferred way to group quests.
+ */
+const userSettings = defineTable({
+  userId: v.id("users"),
+  theme: v.optional(theme),
+  groupQuestsBy: v.optional(groupQuestsBy),
+}).index("userId", ["userId"]);
+
+/**
+ * Represents a user's unique progress in completing a quest.
+ * @param userId
+ * @param questId
+ * @param status - The status of the quest.
+ * @param completionTime - Time in ms since epoch when the user marked the quest as complete.
+ */
+const userQuests = defineTable({
+  userId: v.id("users"),
+  questId: v.id("quests"),
+  status: status,
+  completionTime: v.optional(v.number()),
+})
+  .index("userId", ["userId"])
+  .index("questId", ["questId"]);
+
 export default defineSchema({
   ...authTables,
   forms,
   quests,
-  questSteps,
   questFields,
   users,
+  userEncryptedData,
+  userSettings,
   userQuests,
-  userData,
 });

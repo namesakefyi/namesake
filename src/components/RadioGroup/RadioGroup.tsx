@@ -67,7 +67,7 @@ export function Radio(props: RadioProps) {
       {(renderProps) => (
         <>
           <div className={styles(renderProps)} />
-          {props.children}
+          {renderProps.defaultChildren}
         </>
       )}
     </AriaRadio>

@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { internalMutation } from "./_generated/server";
-import { JURISDICTIONS } from "./constants";
+import { DEFAULT_TIME_REQUIRED, JURISDICTIONS } from "./constants";
 
 const seed = internalMutation(async (ctx) => {
   if (process.env.NODE_ENV === "production") {
@@ -32,7 +32,6 @@ const seed = internalMutation(async (ctx) => {
         image: faker.image.avatar(),
         role: "admin",
         emailVerified: faker.datatype.boolean(),
-        theme: faker.helpers.arrayElement(["system", "light", "dark"]),
       });
       console.log(`Created user ${firstName} ${lastName}`);
 
@@ -44,22 +43,11 @@ const seed = internalMutation(async (ctx) => {
       const questJurisdiction = faker.helpers.arrayElement(
         Object.keys(JURISDICTIONS),
       );
-      const iconForQuestTitle = (title: string) => {
-        switch (title) {
-          case "Court Order":
-            return "gavel";
-          case "State ID":
-            return "id";
-          case "Birth Certificate":
-            return "certificate";
-          default:
-            return "signpost";
-        }
-      };
       await ctx.db.insert("quests", {
-        icon: iconForQuestTitle(questTitle),
         title: questTitle,
+        category: "core",
         jurisdiction: questJurisdiction,
+        timeRequired: DEFAULT_TIME_REQUIRED,
         creationUser: userId,
       });
       console.log(`Created quest ${questTitle} (${questJurisdiction})`);

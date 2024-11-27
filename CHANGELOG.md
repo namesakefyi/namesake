@@ -1,5 +1,94 @@
 # namesake
 
+## 0.12.0
+
+### Minor Changes
+
+- 401f59e: Display additional context beside time required
+- ef382a1: Allow setting and modifying user state of residence and state of birth
+- 4477d33: Unify display of user settings and make it simpler to change themes
+- 8e92c3b: Display selected theme name in user menu
+- 913fbde: Simplify quest grouping UX
+
+## 0.11.0
+
+### Minor Changes
+
+- f2a5bc2: Display statuses in main navigation, improve nav display
+- fa35737: Display estimated costs for each quest
+- 824da1c: Redesign app layout for optimal line length and taller scroll area
+- 03cc1ec: Display time required to complete a quest
+
+### Patch Changes
+
+- ccc1aee: Adjust responsive padding and margins
+- e0d7266: Use Lucide icons
+
+## 0.10.0
+
+### Minor Changes
+
+- ba1c5a9: Add additional statuses for tracking core quests and improve status selection for quests
+- 061a174: Update sidebar with disclosure sections and section counts
+- 9a7282a: Support grouping quests by category, status, and date added
+- 8cfffcf: Display readability score alongside quest content editor
+
+### Patch Changes
+
+- 301c273: Fix bug that would prevent the quests sidebar from rendering if the same group by method was selected and the localStorage result set to undefined
+
+## 0.9.0
+
+### Minor Changes
+
+- 7c317df: Support adding URLs to quests, combine questSteps into single markdown field
+
+### Patch Changes
+
+- 7c317df: Fix redirecting after sign in and sign out
+
+## 0.8.0
+
+### Minor Changes
+
+- 20b2fc6: Add /browse route for browsing quests
+
+### Patch Changes
+
+- 106b38d: Display confirmation toasts on success actions throughout the app
+- a50b65d: Add quest categories
+- 8ff044b: Skip top-level redirects in main nav
+- e77c33b: Improve login screen tab switching
+
+## 0.7.0
+
+### Minor Changes
+
+- 6078c8a: Improve sidebar design
+- b8f60bc: Update sidebar nav and add quest sorting
+- d2eac45: Support hiding and showing completed quests
+
+### Patch Changes
+
+- 6078c8a: Fix user quest sorting
+- 103e0d9: Display tooltip on reset password button
+
+## 0.6.0
+
+### Minor Changes
+
+- 28d720f: Add quest completion meter
+
+### Patch Changes
+
+- f35921f: Update signin page design
+
+## 0.5.0
+
+### Minor Changes
+
+- 39e80bc: Replace magic link signin with password form
+
 ## 0.4.0
 
 ### Minor Changes

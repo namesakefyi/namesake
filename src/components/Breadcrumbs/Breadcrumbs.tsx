@@ -1,4 +1,4 @@
-import { RiArrowRightWideLine } from "@remixicon/react";
+import { ChevronRight } from "lucide-react";
 import {
   Breadcrumb as AriaBreadcrumb,
   Breadcrumbs as AriaBreadcrumbs,
@@ -32,7 +32,7 @@ export function Breadcrumb(
     >
       <Link variant="secondary" {...props} />
       {props.href && (
-        <RiArrowRightWideLine className="w-4 h-4 text-gray-8 dark:text-graydark-8" />
+        <ChevronRight className="w-4 h-4 text-gray-8 dark:text-graydark-8" />
       )}
     </AriaBreadcrumb>
   );

@@ -8,7 +8,7 @@ Our aim is for contributions to be easy and understandable. If you run into trou
 
 There are many different ways to contribute to Namesake. You can share feedback in the [Discord](https://namesake.fyi), [report a bug or a feature request](https://github.com/namesakefyi/namesake/issues), or [submit your own code to the codebase](https://github.com/namesakefyi/namesake/pulls).
 
-### Install pnpm (first time only)
+### Install pnpm (if needed, first time only)
 
 Namesake uses pnpm for package management. You may need to [install pnpm](https://pnpm.io/installation) globally if you don't have it already.
 
@@ -18,10 +18,10 @@ Unless you're a member of the [namesakefyi](https://github.com/namesakefyi) org,
 
 ### Clone the repository (first time only)
 
-Once you've forked the repository, clone it to your computer. Replace `<your-username>` below with your GitHub username.
+Once you've forked the repository, clone it to your computer. Replace `USERNAME` below with your GitHub username.
 
 ```shell
-git clone https://github.com/<your-username>/namesake.git
+git clone https://github.com/USERNAME/namesake.git
 cd namesake
 pnpm install
 ```
@@ -34,9 +34,12 @@ The first time you set up the app, you'll need to connect to our backend service
 npx convex dev
 ```
 
-Select "choose an existing project" > "namesake" > "configure project namesake".
+Convex will prompt you to create an account or a new project as necessary. This will be a personal account you use for development, and the Convex dashboard will allow you to manage your local development database in the browser.
 
-Convex will generate an `.env.local` file which points to a dev database for you to use.
+Once your Convex account and project is created, a `.env.local` file will be generated. This points to a dev database for you to use.
+
+> [!NOTE]
+> If this is your first time using Convex, [follow the tour](https://docs.convex.dev/get-started) to understand how the system works and read [The Zen of Convex](https://docs.convex.dev/zen) to understand best practices.
 
 ## Making changes
 
@@ -80,7 +83,7 @@ Below are Namesake's core dependencies. The links below each lead to docs.
 | [React](https://react.dev/reference/react)                                          | Front-end web framework                            |
 | [React Aria](https://react-spectrum.adobe.com/react-aria)                           | Accessible components and design system            |
 | [Tailwind](https://tailwindcss.com/docs)                                            | Utility-first styling                              |
-| [Remix Icon](https://remixicon.com/)                                                | SVG icons                                          |
+| [Lucide Icons](https://lucide.dev/icons/)                                           | SVG icons                                          |
 | [Radix Colors](https://www.radix-ui.com/colors)                                     | Accessible color palette                           |
 | [Resend](https://resend.com/docs)                                                   | Email sending                                      |
 | [Vitest](https://vitest.dev/guide/)                                                 | Unit testing                                       |
@@ -93,7 +96,7 @@ View all dependencies in [package.json](/package.json).
 
 Code formatting and linting is handled with [Biome](https://biomejs.dev/). If you use VS Code to make edits, Biome should automatically format your files on save, according to [.vscode/settings.json](https://github.com/namesakefyi/namesake/blob/main/.vscode/settings.json). The first time you open the Namesake repository in VS Code, it may prompt you to install the Biome extension.
 
-In addition, each time you `git commit` changes to the codebase, a pre-commit hook will run to check and format your code according to our Biome rules. This check helps prevent any poorly-formatted code from entering the codebase. If Biome throws an error when you try to commit your code, fix the error, `add` your changes, and `commit` again. You can re-use your original commit message—since the commit failed, the original message was discarded.
+In addition, each time you `git commit` changes to the codebase, a [Husky](https://typicode.github.io/husky/) pre-commit hook will run to check and format your code according to our Biome rules. This check helps prevent any poorly-formatted code from entering the codebase. If Biome throws an error when you try to commit your code, fix the error, `add` your changes, and `commit` again. You can re-use your original commit message—since the commit failed, the original message was discarded.
 
 ## Creating pull requests
 
@@ -105,4 +108,4 @@ In addition, each time you `git commit` changes to the codebase, a pre-commit ho
 
 ## Releasing
 
-Any PRs containing a changeset, once merged into `main` will generate or update an automated PR titled `ci: Release`. This PR contains updates to the changelog using the changesets from all the PRs that have merged since the last release. To release the latest version of Namesake, merge this `ci: Release` PR into `main` and a workflow will kickoff to update the release tag on the repo and deploy changes to Cloudflare.
+Any PRs containing a changeset, once merged into `main` will generate or update an automated PR titled `ci: Release`. This PR contains updates to the changelog using the changesets from all the PRs that have merged since the last release. To release the latest version of Namesake, merge this `ci: Release` PR into `main` and a workflow will kickoff to update the release tag on the repo and deploy changes to production.

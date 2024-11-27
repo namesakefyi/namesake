@@ -7,8 +7,16 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 import type { ConvexAuthState } from "convex/react";
-import React, { Suspense } from "react";
+import {
+  AlertTriangle,
+  Check,
+  Info,
+  LoaderCircle,
+  OctagonAlert,
+} from "lucide-react";
+import { useTheme } from "next-themes";
 import { RouterProvider } from "react-aria-components";
+import { Toaster } from "sonner";
 
 declare module "react-aria-components" {
   interface RouterConfig {
@@ -29,16 +37,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
 function RootRoute() {
   const router = useRouter();
-
-  const TanStackRouterDevtools =
-    process.env.NODE_ENV === "production"
-      ? () => null // Render nothing in production
-      : React.lazy(() =>
-          // Lazy load in development
-          import("@tanstack/router-devtools").then((res) => ({
-            default: res.TanStackRouterDevtools,
-          })),
-        );
+  const { theme } = useTheme();
 
   return (
     // TODO: Improve this API
@@ -54,9 +53,29 @@ function RootRoute() {
       }
     >
       <Outlet />
-      <Suspense>
-        <TanStackRouterDevtools />
-      </Suspense>
+      <Toaster
+        theme={theme as "light" | "dark" | "system"}
+        offset={16}
+        gap={8}
+        position="bottom-left"
+        toastOptions={{
+          unstyled: true,
+          classNames: {
+            toast:
+              "bg-gray-12 dark:bg-graydark-12 rounded-lg p-4 w-full font-sans text-sm shadow-md flex items-center gap-2 text-gray-1 dark:text-graydark-1",
+            title: "text-gray-1 dark:text-graydark-1",
+            description: "text-gray-3 dark:text-graydark-3",
+            icon: "text-gray-5 dark:text-graydark-5",
+          },
+        }}
+        icons={{
+          success: <Check />,
+          info: <Info />,
+          warning: <AlertTriangle />,
+          error: <OctagonAlert />,
+          loading: <LoaderCircle />,
+        }}
+      />
     </RouterProvider>
   );
 }

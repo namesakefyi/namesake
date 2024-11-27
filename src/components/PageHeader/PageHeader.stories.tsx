@@ -28,19 +28,10 @@ export const Badged: Story = {
   },
 };
 
-export const Subtitle: Story = {
-  args: {
-    title: "Court Order",
-    badge: <Badge>MA</Badge>,
-    subtitle: "Case #123456",
-  },
-};
-
 export const Actions: Story = {
   args: {
     title: "Court Order",
     badge: <Badge>MA</Badge>,
-    subtitle: "Case #123456",
     children: <Button>Mark complete</Button>,
   },
 };
