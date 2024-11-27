@@ -11,6 +11,7 @@ import {
   MenuTrigger,
   PageHeader,
   Popover,
+  RichText,
   StatusSelect,
   Tooltip,
   TooltipTrigger,
@@ -26,7 +27,6 @@ import {
   Link as LinkIcon,
   Milestone,
 } from "lucide-react";
-import Markdown from "react-markdown";
 import { Fragment } from "react/jsx-runtime";
 import { toast } from "sonner";
 
@@ -239,9 +239,7 @@ function QuestDetailRoute() {
       <QuestUrls urls={quest.urls} />
       <QuestForms questId={quest._id} />
       {quest.content ? (
-        <Markdown className="prose lg:prose-lg dark:prose-invert max-w-full">
-          {quest.content}
-        </Markdown>
+        <RichText initialContent={quest.content} editable={false} />
       ) : (
         "No content"
       )}
