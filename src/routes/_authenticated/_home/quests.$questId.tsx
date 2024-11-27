@@ -157,7 +157,7 @@ const QuestForms = ({ questId }: { questId: Id<"quests"> }) => {
     <div className="p-4 rounded-lg border border-gray-dim mb-8">
       <header className="flex gap-1 items-center pb-4">
         <h3 className="text-gray-dim text-sm">Forms</h3>
-        <Badge size="xs" rounded>
+        <Badge size="xs" className="rounded-full">
           {forms.length}
         </Badge>
       </header>
