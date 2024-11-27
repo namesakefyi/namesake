@@ -85,7 +85,7 @@ export const NavGroup = ({ label, children, count }: NavGroupProps) => {
       <Header className="text-sm h-8 font-medium text-gray-dim border-b border-gray-4 dark:border-graydark-4 flex justify-start items-center gap-1.5">
         {label}
         {count && (
-          <Badge size="xs" className="rounded-full">
+          <Badge size="xs" rounded>
             {count}
           </Badge>
         )}

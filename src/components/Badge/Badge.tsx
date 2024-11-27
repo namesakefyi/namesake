@@ -6,6 +6,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: "xs" | "sm" | "lg";
   variant?: "info" | "warning" | "danger" | "waiting" | "success";
   icon?: LucideIcon;
+  rounded?: boolean;
 }
 
 const badge = tv({
@@ -23,10 +24,15 @@ const badge = tv({
       waiting: "bg-purplea-3 dark:bg-purpledarka-3 text-purple-normal",
       success: "bg-greena-3 dark:bg-greendarka-3 text-green-normal",
     },
+    rounded: {
+      false: undefined,
+      true: "rounded-full",
+    },
   },
   defaultVariants: {
     variant: undefined,
     size: "sm",
+    rounded: false,
   },
 });
 
@@ -47,7 +53,12 @@ export function Badge({ icon: Icon, className, ...props }: BadgeProps) {
   return (
     <div
       {...props}
-      className={badge({ variant: props.variant, size: props.size, className })}
+      className={badge({
+        variant: props.variant,
+        size: props.size,
+        rounded: props.rounded,
+        className,
+      })}
     >
       {Icon && <Icon className={icon({ variant: props.variant })} />}
       {props.children}

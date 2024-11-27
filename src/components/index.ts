@@ -16,6 +16,7 @@ export * from "./DatePicker";
 export * from "./DateRangePicker";
 export * from "./Dialog";
 export * from "./Disclosure";
+export * from "./DocumentCard";
 export * from "./Empty";
 export * from "./Field";
 export * from "./FileTrigger";
