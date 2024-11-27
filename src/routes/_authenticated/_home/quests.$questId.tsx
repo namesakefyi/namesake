@@ -3,6 +3,7 @@ import {
   Badge,
   Button,
   DialogTrigger,
+  DocumentCard,
   Empty,
   Link,
   Menu,
@@ -145,6 +146,35 @@ const QuestUrls = ({ urls }: { urls?: string[] }) => {
   );
 };
 
+const QuestForms = ({ questId }: { questId: Id<"quests"> }) => {
+  const forms = useQuery(api.forms.getFormsForQuest, {
+    questId,
+  });
+
+  if (!forms || forms.length === 0) return null;
+
+  return (
+    <div className="p-4 rounded-lg border border-gray-dim mb-8">
+      <header className="flex gap-1 items-center pb-4">
+        <h3 className="text-gray-dim text-sm">Forms</h3>
+        <Badge size="xs" className="rounded-full">
+          {forms.length}
+        </Badge>
+      </header>
+      <div className="flex gap-4 overflow-x-auto p-4 -m-4">
+        {forms.map((form) => (
+          <DocumentCard
+            key={form._id}
+            title={form.title}
+            formCode={form.formCode}
+            downloadUrl={form.url ?? undefined}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
 function QuestDetailRoute() {
   const { questId } = Route.useParams();
   const navigate = useNavigate();
@@ -207,6 +237,7 @@ function QuestDetailRoute() {
         <QuestTimeRequired timeRequired={quest.timeRequired as TimeRequired} />
       </div>
       <QuestUrls urls={quest.urls} />
+      <QuestForms questId={quest._id} />
       {quest.content ? (
         <Markdown className="prose lg:prose-lg dark:prose-invert max-w-full">
           {quest.content}

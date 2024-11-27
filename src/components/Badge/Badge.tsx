@@ -47,7 +47,11 @@ export function Badge({ icon: Icon, className, ...props }: BadgeProps) {
   return (
     <div
       {...props}
-      className={badge({ variant: props.variant, size: props.size, className })}
+      className={badge({
+        variant: props.variant,
+        size: props.size,
+        className,
+      })}
     >
       {Icon && <Icon className={icon({ variant: props.variant })} />}
       {props.children}

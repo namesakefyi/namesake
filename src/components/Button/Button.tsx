@@ -22,9 +22,9 @@ export const buttonStyles = tv({
       primary: "bg-purple-solid text-white",
       secondary: "bg-gray-ghost text-gray-normal",
       destructive: "bg-red-solid",
-      icon: "bg-transparent hover:bg-gray-3 dark:hover:bg-graydark-3 text-gray-dim hover:text-gray-normal border-0 flex items-center justify-center rounded-full",
+      icon: "bg-transparent hover:bg-graya-3 dark:hover:bg-graydarka-3 text-gray-dim hover:text-gray-normal border-0 flex items-center justify-center rounded-full",
       ghost:
-        "bg-transparent hover:bg-gray-3 dark:hover:bg-graydark-3 text-gray-dim hover:text-gray-normal border-0",
+        "bg-transparent hover:bg-graya-3 dark:hover:bg-graydarka-3 text-gray-dim hover:text-gray-normal border-0",
     },
     size: {
       small: "h-8 px-2",

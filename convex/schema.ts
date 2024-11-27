@@ -68,21 +68,23 @@ const questFields = defineTable({
 
 /**
  * Represents a PDF form that can be filled out by users.
+ * @param questId - The ID of the quest this form belongs to.
  * @param title - The title of the form. (e.g. "Petition to Change Name of Adult")
  * @param formCode - The legal code for the form. (e.g. "CJP 27")
  * @param creationUser - The user who created the form.
  * @param file - The storageId for the PDF file.
- * @param state - The US State the form applies to. (e.g. "MA")
+ * @param jurisdiction - The US State the form applies to. (e.g. "MA")
  * @param deletionTime - Time in ms since epoch when the form was deleted.
  */
 const forms = defineTable({
+  questId: v.id("quests"),
   title: v.string(),
   formCode: v.optional(v.string()),
   creationUser: v.id("users"),
   file: v.optional(v.id("_storage")),
   jurisdiction: jurisdiction,
   deletionTime: v.optional(v.number()),
-});
+}).index("quest", ["questId"]);
 
 /**
  * Represents a user of Namesake's identity.

@@ -60,17 +60,39 @@ export const uploadPDF = userMutation({
   },
 });
 
+export const getFormsForQuest = query({
+  args: { questId: v.id("quests") },
+  handler: async (ctx, args) => {
+    const forms = await ctx.db
+      .query("forms")
+      .withIndex("quest", (q) => q.eq("questId", args.questId))
+      .filter((q) => q.eq(q.field("deletionTime"), undefined))
+      .collect();
+
+    return await Promise.all(
+      forms.map(async (form) => ({
+        ...form,
+        url: form.file ? await ctx.storage.getUrl(form.file) : null,
+      })),
+    );
+  },
+});
+
 export const createForm = userMutation({
   args: {
     title: v.string(),
-    jurisdiction: jurisdiction,
     formCode: v.optional(v.string()),
+    jurisdiction: jurisdiction,
+    file: v.optional(v.id("_storage")),
+    questId: v.id("quests"),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("forms", {
       title: args.title,
-      jurisdiction: args.jurisdiction,
       formCode: args.formCode,
+      jurisdiction: args.jurisdiction,
+      file: args.file,
+      questId: args.questId,
       creationUser: ctx.userId,
     });
   },
