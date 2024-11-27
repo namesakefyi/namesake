@@ -36,7 +36,7 @@ export * from "./ProgressBar";
 export * from "./RadioGroup";
 export * from "./RangeCalendar";
 export * from "./ReadingScore";
-export * from "./RichTextEditor";
+export * from "./RichText";
 export * from "./SearchField";
 export * from "./Select";
 export * from "./Separator";

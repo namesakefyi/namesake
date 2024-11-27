@@ -5,7 +5,7 @@ import {
   Form,
   NumberField,
   PageHeader,
-  RichTextEditor,
+  RichText,
   Select,
   SelectItem,
   TextField,
@@ -335,11 +335,7 @@ function AdminQuestDetailRoute() {
             Add URL
           </Button>
         </div>
-        <RichTextEditor
-          markdown={content}
-          onChange={setContent}
-          showReadingScore
-        />
+        <RichText initialContent={content} onChange={setContent} />
         <div className="flex gap-2 justify-end">
           <Button type="submit" variant="primary">
             Save
