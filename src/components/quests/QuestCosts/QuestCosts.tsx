@@ -1,6 +1,6 @@
+import { StatGroup, StatPopover } from "@/components/quests";
 import type { Cost } from "@convex/constants";
 import { Fragment } from "react/jsx-runtime";
-import { StatGroup, StatPopover } from "../StatGroup/StatGroup";
 
 type QuestCostsProps = {
   costs?: Cost[];

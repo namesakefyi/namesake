@@ -1,5 +1,5 @@
+import { StatGroup, StatPopover } from "@/components/quests";
 import type { TimeRequired } from "@convex/constants";
-import { StatGroup, StatPopover } from "../StatGroup/StatGroup";
 
 type QuestTimeRequiredProps = {
   timeRequired: TimeRequired;
