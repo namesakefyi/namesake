@@ -1,4 +1,6 @@
 export * from "./DocumentCard";
+export * from "./EditQuestCostsModal";
+export * from "./EditQuestTimeRequiredModal";
 export * from "./QuestCosts";
 export * from "./QuestForms";
 export * from "./QuestTimeRequired";

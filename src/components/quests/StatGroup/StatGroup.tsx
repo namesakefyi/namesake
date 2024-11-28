@@ -15,7 +15,7 @@ export type StatPopoverProps = {
 export const StatPopover = ({ tooltip, children }: StatPopoverProps) => (
   <DialogTrigger>
     <TooltipTrigger>
-      <Button variant="icon" size="small">
+      <Button variant="icon" size="small" aria-label={tooltip}>
         <CircleHelp />
       </Button>
       <Tooltip>{tooltip}</Tooltip>
@@ -33,7 +33,7 @@ export type StatGroupProps = {
 export const StatGroup = ({ label, value, children }: StatGroupProps) => (
   <div className="flex flex-col flex-1 border border-gray-dim py-3 px-4 rounded-lg">
     <div className="text-gray-dim text-sm">{label}</div>
-    <div className="text-xl flex gap-0.5 items-center">
+    <div className="text-xl flex gap-1 items-center h-8">
       {value}
       {children}
     </div>

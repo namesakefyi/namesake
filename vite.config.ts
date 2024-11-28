@@ -6,11 +6,12 @@ import autoprefixer from "autoprefixer";
 import cssnano from "cssnano";
 import tailwindcss from "tailwindcss";
 import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 import { configDefaults, coverageConfigDefaults } from "vitest/config";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [TanStackRouterVite(), react()],
+  plugins: [TanStackRouterVite(), tsconfigPaths(), react()],
   define: {
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
   },
@@ -18,12 +19,6 @@ export default defineConfig({
     postcss: {
       plugins: [autoprefixer(), tailwindcss(), cssnano()],
     },
-  },
-  resolve: {
-    alias: [
-      { find: "@", replacement: "/src" },
-      { find: "@convex", replacement: "/convex" },
-    ],
   },
   test: {
     environment: "edge-runtime",

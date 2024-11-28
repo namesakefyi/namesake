@@ -7,6 +7,7 @@ import {
   useSlottedContext,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { Dialog } from "../Dialog";
 
 export interface PopoverProps extends Omit<AriaPopoverProps, "children"> {
   children: React.ReactNode;
@@ -37,7 +38,7 @@ export function Popover({ children, className, ...props }: PopoverProps) {
         styles({ ...renderProps, className }),
       )}
     >
-      {children}
+      <Dialog>{children}</Dialog>
     </AriaPopover>
   );
 }
