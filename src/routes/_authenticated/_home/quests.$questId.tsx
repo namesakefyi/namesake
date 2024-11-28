@@ -90,11 +90,7 @@ function QuestDetailRoute() {
       </div>
       <QuestUrls urls={quest.urls} />
       <QuestForms questId={quest._id} />
-      {quest.content ? (
-        <RichText initialContent={quest.content} editable={false} />
-      ) : (
-        "No content"
-      )}
+      <RichText initialContent={quest.content} editable={false} />
     </AppContent>
   );
 }
