@@ -16,7 +16,7 @@ export const QuestTimeRequired = ({ timeRequired }: QuestTimeRequiredProps) => {
 
   return (
     <StatGroup label="Time" value={formattedTime}>
-      {timeRequired && (
+      {timeRequired.description && (
         <StatPopover tooltip="See details">
           <p className="text-sm max-w-xs">{timeRequired.description}</p>
         </StatPopover>
