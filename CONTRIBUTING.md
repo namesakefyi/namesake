@@ -71,7 +71,7 @@ Now that the development app is running, let's get familiar with what's inside.
     └── 📂 quests  # Feature-specific quest components
 ├── 📂 routes      # File-based routing using TanStack Router
 ├── 📂 styles      # Global CSS (not much here; most of it's in Tailwind!)
-└── main.tsx       # Base of the project including common Providers
+└── 📄 main.tsx    # Base of the project including common Providers
 ```
 
 ## Dependencies
