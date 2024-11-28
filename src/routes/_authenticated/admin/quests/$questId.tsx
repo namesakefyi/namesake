@@ -1,15 +1,15 @@
+import { PageHeader } from "@/components/app";
 import {
   AnimateChangeInHeight,
   Button,
   Checkbox,
   Form,
   NumberField,
-  PageHeader,
   RichText,
   Select,
   SelectItem,
   TextField,
-} from "@/components";
+} from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import {

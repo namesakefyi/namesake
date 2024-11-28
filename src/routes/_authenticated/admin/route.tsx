@@ -1,11 +1,5 @@
-import {
-  AppContent,
-  AppSidebar,
-  Container,
-  Nav,
-  NavGroup,
-  NavItem,
-} from "@/components";
+import { AppContent, AppSidebar } from "@/components/app";
+import { Container, Nav, NavGroup, NavItem } from "@/components/common";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import { FileText, Milestone, RectangleEllipsis } from "lucide-react";
 

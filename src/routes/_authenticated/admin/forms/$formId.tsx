@@ -1,4 +1,5 @@
-import { Badge, Link, PageHeader } from "@/components";
+import { PageHeader } from "@/components/app";
+import { Badge, Link } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute } from "@tanstack/react-router";

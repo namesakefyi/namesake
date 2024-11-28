@@ -1,14 +1,12 @@
+import { AppContent, AppSidebar, PageHeader } from "@/components/app";
 import {
-  AppContent,
-  AppSidebar,
   Badge,
   Button,
   Card,
   Container,
   Link,
-  PageHeader,
   SearchField,
-} from "@/components";
+} from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { CATEGORIES, type Category } from "@convex/constants";
