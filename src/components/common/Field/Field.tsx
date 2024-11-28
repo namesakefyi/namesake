@@ -54,8 +54,8 @@ export function FieldError(props: FieldErrorProps) {
 export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false: "border-gray-dim forced-colors:border-[ButtonBorder]",
-      true: "border-gray-normal forced-colors:border-[Highlight]",
+      false: "border-black/10 dark:border-white/10",
+      true: "border-black/15 dark:border-white/15",
     },
     isInvalid: {
       true: "border-red-normal bg-red-subtle forced-colors:border-[Mark]",
@@ -68,7 +68,7 @@ export const fieldBorderStyles = tv({
 
 export const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "group flex items-center bg-gray-subtle forced-colors:bg-[Field] border rounded-lg overflow-hidden",
+  base: "group h-10 flex items-center bg-gray-subtle forced-colors:bg-[Field] border rounded-lg overflow-hidden",
   variants: fieldBorderStyles.variants,
 });
 
@@ -84,7 +84,7 @@ export function FieldGroup(props: GroupProps) {
 }
 
 export const inputStyles =
-  "px-3 py-2 flex-1 min-w-0 outline outline-0 bg-transparent text-gray-normal disabled:text-gray-dim";
+  "px-3 h-10 flex-1 min-w-0 outline outline-0 bg-transparent text-gray-normal disabled:text-gray-dim";
 
 export function Input(props: InputProps) {
   return (

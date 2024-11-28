@@ -38,7 +38,7 @@ export function NumberField({
         "group flex flex-col gap-1.5",
       )}
     >
-      <Label>{label}</Label>
+      {label && <Label>{label}</Label>}
       <FieldGroup>
         {(renderProps) => (
           <>

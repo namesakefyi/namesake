@@ -24,6 +24,12 @@
   }
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   @apply bg-gray-app;
   color-scheme: dark light;

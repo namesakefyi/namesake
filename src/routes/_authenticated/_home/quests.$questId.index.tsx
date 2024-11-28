@@ -3,6 +3,7 @@ import {
   Badge,
   Button,
   Empty,
+  Link,
   Menu,
   MenuItem,
   MenuTrigger,
@@ -17,19 +18,22 @@ import {
 } from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import type { Status, TimeRequired } from "@convex/constants";
+import type { Status } from "@convex/constants";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
-import { Ellipsis, Milestone } from "lucide-react";
+import { Ellipsis, Milestone, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/_home/quests/$questId")({
+export const Route = createFileRoute("/_authenticated/_home/quests/$questId/")({
   component: QuestDetailRoute,
 });
 
 function QuestDetailRoute() {
   const { questId } = Route.useParams();
   const navigate = useNavigate();
+  const user = useQuery(api.users.getCurrentUser);
+  const canEdit = user?.role === "admin";
+
   // TODO: Opportunity to combine these queries?
   const quest = useQuery(api.quests.getQuest, {
     questId: questId as Id<"quests">,
@@ -68,6 +72,17 @@ function QuestDetailRoute() {
           onChange={handleStatusChange}
           isCore={quest.category === "core"}
         />
+        {canEdit && (
+          <Link
+            href={{ to: "/quests/$questId/edit", params: { questId } }}
+            button={{
+              variant: "ghost",
+            }}
+          >
+            <Pencil size={16} />
+            Edit
+          </Link>
+        )}
         <MenuTrigger>
           <Button
             aria-label="Quest settings"
@@ -85,8 +100,8 @@ function QuestDetailRoute() {
         </MenuTrigger>
       </PageHeader>
       <div className="flex gap-4 mb-4 lg:mb-6 xl:mb-8">
-        <QuestCosts costs={quest.costs} />
-        <QuestTimeRequired timeRequired={quest.timeRequired as TimeRequired} />
+        <QuestCosts quest={quest} />
+        <QuestTimeRequired quest={quest} />
       </div>
       <QuestUrls urls={quest.urls} />
       <QuestForms questId={quest._id} />

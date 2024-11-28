@@ -98,6 +98,42 @@ export const updateQuest = userMutation({
   },
 });
 
+export const updateQuestCosts = userMutation({
+  args: {
+    questId: v.id("quests"),
+    costs: v.optional(
+      v.array(
+        v.object({
+          cost: v.number(),
+          description: v.string(),
+        }),
+      ),
+    ),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.questId, { costs: args.costs });
+  },
+});
+
+export const updateQuestTimeRequired = userMutation({
+  args: {
+    questId: v.id("quests"),
+    timeRequired: v.optional(
+      v.object({
+        min: v.number(),
+        max: v.number(),
+        unit: timeRequiredUnit,
+        description: v.optional(v.string()),
+      }),
+    ),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.questId, {
+      timeRequired: args.timeRequired,
+    });
+  },
+});
+
 export const deleteQuest = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
