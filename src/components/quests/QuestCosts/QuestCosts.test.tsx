@@ -1,13 +1,8 @@
 import type { Doc, Id } from "@convex/_generated/dataModel";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { QuestCosts } from "./QuestCosts";
-
-// Mock the convex mutation hook
-vi.mock("convex/react", () => ({
-  useMutation: vi.fn(),
-}));
 
 describe("QuestCosts", () => {
   const mockQuest = {
@@ -22,6 +17,14 @@ describe("QuestCosts", () => {
     _id: "quest456" as Id<"quests">,
     costs: [],
   } as Partial<Doc<"quests">>;
+
+  const mockQuestZeroCost = {
+    _id: "quest789" as Id<"quests">,
+    costs: [
+      { cost: 0, description: "Free application" },
+      { cost: 0, description: "No filing fee" },
+    ],
+  } as Doc<"quests">;
 
   it("displays costs in a description list with total", async () => {
     render(<QuestCosts quest={mockQuest} />);
@@ -57,6 +60,11 @@ describe("QuestCosts", () => {
 
   it("displays 'Free' when there are no costs", () => {
     render(<QuestCosts quest={mockQuestFree as Doc<"quests">} />);
+    expect(screen.getByText("Free")).toBeInTheDocument();
+  });
+
+  it("displays 'Free' when total cost is 0 but costs array is not empty", () => {
+    render(<QuestCosts quest={mockQuestZeroCost} />);
     expect(screen.getByText("Free")).toBeInTheDocument();
   });
 

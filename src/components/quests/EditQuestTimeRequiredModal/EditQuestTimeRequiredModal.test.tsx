@@ -6,19 +6,6 @@ import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { EditQuestTimeRequiredModal } from "./EditQuestTimeRequiredModal";
 
-// Mock the convex mutation hook
-vi.mock("convex/react", () => ({
-  useMutation: vi.fn(),
-}));
-
-// Mock toast notifications
-vi.mock("sonner", () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-}));
-
 describe("EditQuestTimeRequiredModal", () => {
   const mockQuest = {
     _id: "quest123" as Id<"quests">,
@@ -70,6 +57,124 @@ describe("EditQuestTimeRequiredModal", () => {
       "Description",
     ) as HTMLInputElement;
     expect(descriptionInput.value).toBe("Depends on court processing time");
+  });
+
+  it("updates max time value", async () => {
+    const user = userEvent.setup();
+    mockUpdateTimeRequired.mockResolvedValueOnce(undefined);
+
+    render(
+      <EditQuestTimeRequiredModal
+        quest={mockQuest}
+        open={true}
+        onOpenChange={mockOnOpenChange}
+      />,
+    );
+
+    const maxInput = screen
+      .getAllByLabelText("Est. max time")[0]
+      .closest("input") as HTMLInputElement;
+
+    await user.clear(maxInput);
+    await user.type(maxInput, "6");
+
+    await user.click(screen.getByText("Save"));
+
+    expect(mockUpdateTimeRequired).toHaveBeenCalledWith({
+      timeRequired: {
+        min: 2,
+        max: 6,
+        unit: "weeks",
+        description: "Depends on court processing time",
+      },
+      questId: "quest123",
+    });
+  });
+
+  it("updates time unit", async () => {
+    const user = userEvent.setup();
+    mockUpdateTimeRequired.mockResolvedValueOnce(undefined);
+
+    render(
+      <EditQuestTimeRequiredModal
+        quest={mockQuest}
+        open={true}
+        onOpenChange={mockOnOpenChange}
+      />,
+    );
+
+    const unitSelect = screen.getByLabelText("Unit");
+    await user.click(unitSelect);
+    await user.click(screen.getByRole("option", { name: "Days" }));
+
+    await user.click(screen.getByText("Save"));
+
+    expect(mockUpdateTimeRequired).toHaveBeenCalledWith({
+      timeRequired: {
+        min: 2,
+        max: 4,
+        unit: "days",
+        description: "Depends on court processing time",
+      },
+      questId: "quest123",
+    });
+  });
+
+  it("updates description", async () => {
+    const user = userEvent.setup();
+    mockUpdateTimeRequired.mockResolvedValueOnce(undefined);
+
+    render(
+      <EditQuestTimeRequiredModal
+        quest={mockQuest}
+        open={true}
+        onOpenChange={mockOnOpenChange}
+      />,
+    );
+
+    const descriptionInput = screen.getByLabelText("Description");
+    await user.clear(descriptionInput);
+    await user.type(descriptionInput, "New description");
+
+    await user.click(screen.getByText("Save"));
+
+    expect(mockUpdateTimeRequired).toHaveBeenCalledWith({
+      timeRequired: {
+        min: 2,
+        max: 4,
+        unit: "weeks",
+        description: "New description",
+      },
+      questId: "quest123",
+    });
+  });
+
+  it("sets description to undefined when empty", async () => {
+    const user = userEvent.setup();
+    mockUpdateTimeRequired.mockResolvedValueOnce(undefined);
+
+    render(
+      <EditQuestTimeRequiredModal
+        quest={mockQuest}
+        open={true}
+        onOpenChange={mockOnOpenChange}
+      />,
+    );
+
+    const descriptionInput = screen.getByLabelText("Description");
+    await user.clear(descriptionInput);
+
+    await user.click(screen.getByText("Save"));
+
+    expect(mockUpdateTimeRequired).toHaveBeenCalledWith({
+      timeRequired: {
+        min: 2,
+        max: 4,
+        unit: "weeks",
+        description: undefined,
+      },
+      questId: "quest123",
+    });
   });
 
   it("handles successful save", async () => {

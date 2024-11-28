@@ -6,19 +6,6 @@ import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { EditQuestCostsModal } from "./EditQuestCostsModal";
 
-// Mock the convex mutation hook
-vi.mock("convex/react", () => ({
-  useMutation: vi.fn(),
-}));
-
-// Mock toast notifications
-vi.mock("sonner", () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-}));
-
 describe("EditQuestCostsModal", () => {
   const mockQuest = {
     _id: "quest123" as Id<"quests">,
