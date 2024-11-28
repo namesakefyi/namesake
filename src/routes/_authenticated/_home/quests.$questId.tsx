@@ -1,21 +1,19 @@
+import { AppContent, PageHeader } from "@/components/app";
 import {
-  AppContent,
   Badge,
   Button,
   DialogTrigger,
-  DocumentCard,
   Empty,
   Link,
   Menu,
   MenuItem,
   MenuTrigger,
-  PageHeader,
   Popover,
   RichText,
-  StatusSelect,
   Tooltip,
   TooltipTrigger,
-} from "@/components";
+} from "@/components/common";
+import { DocumentCard, StatusSelect } from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import type { Cost, Status, TimeRequired } from "@convex/constants";

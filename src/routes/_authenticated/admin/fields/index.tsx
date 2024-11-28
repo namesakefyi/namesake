@@ -1,9 +1,9 @@
+import { PageHeader } from "@/components/app";
 import {
   Button,
   Empty,
   Form,
   Modal,
-  PageHeader,
   Select,
   SelectItem,
   Table,
@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
   TextField,
-} from "@/components";
+} from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { DataModel, Id } from "@convex/_generated/dataModel";
 import { FIELDS, type Field } from "@convex/constants";

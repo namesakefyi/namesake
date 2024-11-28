@@ -1,3 +1,4 @@
+import { AppSidebar } from "@/components/app";
 import {
   Badge,
   Container,
@@ -6,13 +7,12 @@ import {
   NavGroup,
   NavItem,
   ProgressBar,
-  StatusBadge,
   ToggleButton,
   ToggleButtonGroup,
   Tooltip,
   TooltipTrigger,
-} from "@/components";
-import { AppSidebar } from "@/components/AppSidebar/AppSidebar";
+} from "@/components/common";
+import { StatusBadge } from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import {
   CATEGORIES,

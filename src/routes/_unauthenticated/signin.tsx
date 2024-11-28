@@ -1,3 +1,4 @@
+import { Logo } from "@/components/app";
 import {
   AnimateChangeInHeight,
   Banner,
@@ -5,7 +6,6 @@ import {
   Card,
   Form,
   Link,
-  Logo,
   Tab,
   TabList,
   TabPanel,
@@ -13,7 +13,7 @@ import {
   TextField,
   Tooltip,
   TooltipTrigger,
-} from "@/components";
+} from "@/components/common";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ConvexError } from "convex/values";

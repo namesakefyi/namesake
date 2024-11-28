@@ -1,4 +1,5 @@
 import "./styles/index.css";
+import { Empty } from "@/components/common";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
@@ -13,7 +14,6 @@ import { ThemeProvider } from "next-themes";
 import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
-import { Empty } from "./components";
 import { routeTree } from "./routeTree.gen";
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);

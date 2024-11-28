@@ -1,4 +1,5 @@
-import { Banner, PageHeader } from "@/components";
+import { PageHeader } from "@/components/app";
+import { Banner } from "@/components/common";
 import { createFileRoute } from "@tanstack/react-router";
 import { Lock } from "lucide-react";
 
