@@ -1,6 +1,6 @@
 import type { Cost } from "@convex/constants";
 import { Fragment } from "react/jsx-runtime";
-import { StatGroup, type StatGroupProps } from "../StatGroup/StatGroup";
+import { StatGroup, StatPopover } from "../StatGroup/StatGroup";
 
 type QuestCostsProps = {
   costs?: Cost[];
@@ -20,10 +20,10 @@ export const QuestCosts = ({ costs }: QuestCostsProps) => {
       : "Free";
   };
 
-  const costPopover: StatGroupProps["popover"] = costs?.length
-    ? {
-        tooltip: "See cost breakdown",
-        content: (
+  return (
+    <StatGroup label="Cost" value={getTotalCosts(costs)}>
+      {costs?.length && (
+        <StatPopover tooltip="See cost breakdown">
           <dl className="grid grid-cols-[1fr_auto]">
             {costs.map(({ cost, description }) => (
               <Fragment key={description}>
@@ -44,15 +44,8 @@ export const QuestCosts = ({ costs }: QuestCostsProps) => {
               {getTotalCosts(costs)}
             </dd>
           </dl>
-        ),
-      }
-    : undefined;
-
-  return (
-    <StatGroup
-      label="Cost"
-      value={getTotalCosts(costs)}
-      popover={costPopover}
-    />
+        </StatPopover>
+      )}
+    </StatGroup>
   );
 };
