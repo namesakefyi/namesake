@@ -1,20 +1,24 @@
 import { Button, Modal, ModalHeader } from "@/components/common";
+import { SettingsItem } from "@/components/settings";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import { useMutation } from "convex/react";
+import { Trash } from "lucide-react";
+import { useState } from "react";
 
-type DeleteAccountDialogProps = {
+type DeleteAccountModalProps = {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onSubmit: () => void;
 };
 
-export const DeleteAccountDialog = ({
+const DeleteAccountModal = ({
   isOpen,
   onOpenChange,
   onSubmit,
-}: DeleteAccountDialogProps) => {
+}: DeleteAccountModalProps) => {
   const { signOut } = useAuthActions();
+
   const clearLocalStorage = () => {
     localStorage.removeItem("theme");
   };
@@ -38,5 +42,26 @@ export const DeleteAccountDialog = ({
         </Button>
       </div>
     </Modal>
+  );
+};
+
+export const DeleteAccountSetting = () => {
+  const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
+    useState(false);
+
+  return (
+    <SettingsItem
+      label="Delete account"
+      description="Permanently delete your Namesake account and data."
+    >
+      <Button onPress={() => setIsDeleteAccountModalOpen(true)} icon={Trash}>
+        Delete account
+      </Button>
+      <DeleteAccountModal
+        isOpen={isDeleteAccountModalOpen}
+        onOpenChange={setIsDeleteAccountModalOpen}
+        onSubmit={() => setIsDeleteAccountModalOpen(false)}
+      />
+    </SettingsItem>
   );
 };

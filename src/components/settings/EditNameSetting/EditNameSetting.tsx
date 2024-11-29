@@ -1,21 +1,24 @@
 import { Button, Form, Modal, TextField } from "@/components/common";
 import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
+import { Pencil } from "lucide-react";
 import { useState } from "react";
+import { SettingsItem } from "../SettingsItem";
 
-type EditNameDialogProps = {
+type EditNameModalProps = {
   defaultName: string;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onSubmit: () => void;
 };
 
-export const EditNameDialog = ({
+const EditNameModal = ({
   defaultName,
   isOpen,
   onOpenChange,
   onSubmit,
-}: EditNameDialogProps) => {
+}: EditNameModalProps) => {
   const updateName = useMutation(api.users.setName);
   const [name, setName] = useState(defaultName);
 
@@ -40,5 +43,30 @@ export const EditNameDialog = ({
         </div>
       </Form>
     </Modal>
+  );
+};
+
+type EditNameSettingProps = {
+  user: Doc<"users">;
+};
+
+export const EditNameSetting = ({ user }: EditNameSettingProps) => {
+  const [isNameModalOpen, setIsNameModalOpen] = useState(false);
+
+  return (
+    <SettingsItem
+      label="Name"
+      description="How should Namesake refer to you? This can be different from your legal name."
+    >
+      <Button icon={Pencil} onPress={() => setIsNameModalOpen(true)}>
+        {user?.name ?? "Set name"}
+      </Button>
+      <EditNameModal
+        isOpen={isNameModalOpen}
+        onOpenChange={setIsNameModalOpen}
+        defaultName={user.name ?? ""}
+        onSubmit={() => setIsNameModalOpen(false)}
+      />
+    </SettingsItem>
   );
 };

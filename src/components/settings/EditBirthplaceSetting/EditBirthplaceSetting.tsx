@@ -1,22 +1,25 @@
 import { Button, Form, Modal, Select, SelectItem } from "@/components/common";
 import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
 import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
 import { useMutation } from "convex/react";
+import { Pencil } from "lucide-react";
 import { useState } from "react";
+import { SettingsItem } from "../SettingsItem";
 
-type EditBirthplaceDialogProps = {
+type EditBirthplaceModalProps = {
   defaultBirthplace: Jurisdiction;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onSubmit: () => void;
 };
 
-export const EditBirthplaceDialog = ({
+const EditBirthplaceModal = ({
   defaultBirthplace,
   isOpen,
   onOpenChange,
   onSubmit,
-}: EditBirthplaceDialogProps) => {
+}: EditBirthplaceModalProps) => {
   const updateBirthplace = useMutation(api.users.setBirthplace);
   const [birthplace, setBirthplace] = useState(defaultBirthplace);
 
@@ -53,5 +56,32 @@ export const EditBirthplaceDialog = ({
         </div>
       </Form>
     </Modal>
+  );
+};
+
+type EditBirthplaceSettingProps = {
+  user: Doc<"users">;
+};
+
+export const EditBirthplaceSetting = ({ user }: EditBirthplaceSettingProps) => {
+  const [isBirthplaceModalOpen, setIsBirthplaceModalOpen] = useState(false);
+
+  return (
+    <SettingsItem
+      label="Birthplace"
+      description="Where were you born? This location is used to select the forms for your birth certificate."
+    >
+      <Button icon={Pencil} onPress={() => setIsBirthplaceModalOpen(true)}>
+        {user?.birthplace
+          ? JURISDICTIONS[user.birthplace as Jurisdiction]
+          : "Set birthplace"}
+      </Button>
+      <EditBirthplaceModal
+        isOpen={isBirthplaceModalOpen}
+        onOpenChange={setIsBirthplaceModalOpen}
+        defaultBirthplace={user.birthplace as Jurisdiction}
+        onSubmit={() => setIsBirthplaceModalOpen(false)}
+      />
+    </SettingsItem>
   );
 };
