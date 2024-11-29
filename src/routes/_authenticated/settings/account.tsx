@@ -1,240 +1,29 @@
 import { PageHeader } from "@/components/app";
 import {
   Button,
-  Card,
-  Form,
-  Modal,
-  Select,
-  SelectItem,
   Switch,
-  TextField,
   ToggleButton,
   ToggleButtonGroup,
 } from "@/components/common";
+import {
+  DeleteAccountDialog,
+  EditBirthplaceDialog,
+  EditNameDialog,
+  EditResidenceDialog,
+  SettingsGroup,
+  SettingsItem,
+} from "@/components/settings";
 import { useTheme } from "@/utils/useTheme";
-import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import { JURISDICTIONS, type Jurisdiction, THEMES } from "@convex/constants";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { Pencil, Trash } from "lucide-react";
 import { useState } from "react";
-import { Header } from "react-aria-components";
 
 export const Route = createFileRoute("/_authenticated/settings/account")({
   component: SettingsAccountRoute,
 });
-
-const SettingsSection = ({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) => (
-  <section className="flex flex-col gap-4 mb-8 last-of-type:mb-0">
-    <h2 className="text-lg font-medium">{title}</h2>
-    <Card className="flex flex-col p-0 divide-y divide-gray-dim">
-      {children}
-    </Card>
-  </section>
-);
-
-const SettingsItem = ({
-  label,
-  description,
-  children,
-}: {
-  label: string;
-  description?: string;
-  children: React.ReactNode;
-}) => (
-  <div className="flex justify-between items-center gap-8 p-4">
-    <div className="self-start">
-      <h3 className="text-base -mt-px">{label}</h3>
-      {description && (
-        <p className="text-xs text-gray-dim text-balance mt-0.5">
-          {description}
-        </p>
-      )}
-    </div>
-    <div>{children}</div>
-  </div>
-);
-
-const EditNameDialog = ({
-  defaultName,
-  isOpen,
-  onOpenChange,
-  onSubmit,
-}: {
-  defaultName: string;
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-  onSubmit: () => void;
-}) => {
-  const updateName = useMutation(api.users.setName);
-  const [name, setName] = useState(defaultName);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    updateName({ name });
-    onSubmit();
-  };
-
-  return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <Form onSubmit={handleSubmit} className="w-full">
-        Edit name
-        <TextField name="name" label="Name" value={name} onChange={setName} />
-        <div className="flex justify-end gap-2">
-          <Button variant="secondary" onPress={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button type="submit" variant="primary">
-            Save
-          </Button>
-        </div>
-      </Form>
-    </Modal>
-  );
-};
-
-const EditResidenceDialog = ({
-  defaultResidence,
-  isOpen,
-  onOpenChange,
-  onSubmit,
-}: {
-  defaultResidence: Jurisdiction;
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-  onSubmit: () => void;
-}) => {
-  const updateResidence = useMutation(api.users.setResidence);
-  const [residence, setResidence] = useState(defaultResidence);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    updateResidence({ residence });
-    onSubmit();
-  };
-
-  return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <Form onSubmit={handleSubmit} className="w-full">
-        Edit residence
-        <Select
-          aria-label="Residence"
-          name="residence"
-          selectedKey={residence}
-          onSelectionChange={(key) => setResidence(key as Jurisdiction)}
-          placeholder="Select state"
-        >
-          {Object.entries(JURISDICTIONS).map(([value, label]) => (
-            <SelectItem key={value} id={value}>
-              {label}
-            </SelectItem>
-          ))}
-        </Select>
-        <div className="flex justify-end gap-2">
-          <Button variant="secondary" onPress={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button type="submit" variant="primary">
-            Save
-          </Button>
-        </div>
-      </Form>
-    </Modal>
-  );
-};
-
-const EditBirthplaceDialog = ({
-  defaultBirthplace,
-  isOpen,
-  onOpenChange,
-  onSubmit,
-}: {
-  defaultBirthplace: Jurisdiction;
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-  onSubmit: () => void;
-}) => {
-  const updateBirthplace = useMutation(api.users.setBirthplace);
-  const [birthplace, setBirthplace] = useState(defaultBirthplace);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    updateBirthplace({ birthplace });
-    onSubmit();
-  };
-
-  return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <Form onSubmit={handleSubmit} className="w-full">
-        Edit birthplace
-        <Select
-          aria-label="Birthplace"
-          name="birthplace"
-          selectedKey={birthplace}
-          onSelectionChange={(key) => setBirthplace(key as Jurisdiction)}
-          placeholder="Select state"
-        >
-          {Object.entries(JURISDICTIONS).map(([value, label]) => (
-            <SelectItem key={value} id={value}>
-              {label}
-            </SelectItem>
-          ))}
-        </Select>
-        <div className="flex justify-end gap-2">
-          <Button variant="secondary" onPress={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button type="submit" variant="primary">
-            Save
-          </Button>
-        </div>
-      </Form>
-    </Modal>
-  );
-};
-
-const DeleteAccountDialog = ({
-  isOpen,
-  onOpenChange,
-  onSubmit,
-}: {
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-  onSubmit: () => void;
-}) => {
-  const { signOut } = useAuthActions();
-  const clearLocalStorage = () => {
-    localStorage.removeItem("theme");
-  };
-  const deleteAccount = useMutation(api.users.deleteCurrentUser);
-
-  const handleSubmit = () => {
-    clearLocalStorage();
-    deleteAccount();
-    signOut();
-    onSubmit();
-  };
-
-  return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <Header>Delete account?</Header>
-      <p>This will permanently erase your account and all data.</p>
-      <div className="flex justify-end w-full gap-2">
-        <Button onPress={() => onOpenChange(false)}>Cancel</Button>
-        <Button variant="destructive" onPress={handleSubmit}>
-          Delete
-        </Button>
-      </div>
-    </Modal>
-  );
-};
 
 function SettingsAccountRoute() {
   const user = useQuery(api.users.getCurrentUser);
@@ -256,7 +45,7 @@ function SettingsAccountRoute() {
         "User not found, please reload"
       ) : (
         <>
-          <SettingsSection title="Personal Information">
+          <SettingsGroup title="Personal Information">
             <SettingsItem
               label="Name"
               description="How should Namesake refer to you? This can be different from your legal name."
@@ -321,8 +110,8 @@ function SettingsAccountRoute() {
                 onSubmit={() => setIsBirthplaceDialogOpen(false)}
               />
             </SettingsItem>
-          </SettingsSection>
-          <SettingsSection title="Appearance">
+          </SettingsGroup>
+          <SettingsGroup title="Appearance">
             <SettingsItem label="Theme" description="Adjust your display.">
               <ToggleButtonGroup
                 selectionMode="single"
@@ -337,8 +126,8 @@ function SettingsAccountRoute() {
                 ))}
               </ToggleButtonGroup>
             </SettingsItem>
-          </SettingsSection>
-          <SettingsSection title="Danger Zone">
+          </SettingsGroup>
+          <SettingsGroup title="Danger Zone">
             <SettingsItem
               label="Delete account"
               description="Permanently delete your Namesake account and data."
@@ -355,7 +144,7 @@ function SettingsAccountRoute() {
                 onSubmit={() => setIsDeleteAccountDialogOpen(false)}
               />
             </SettingsItem>
-          </SettingsSection>
+          </SettingsGroup>
         </>
       )}
     </>
