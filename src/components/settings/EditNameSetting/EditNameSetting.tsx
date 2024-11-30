@@ -49,7 +49,10 @@ const EditNameModal = ({
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <ModalHeader title="Edit name" />
+      <ModalHeader
+        title="Edit name"
+        description="How should Namesake refer to you? This can be different from your legal name."
+      />
       <Form onSubmit={handleSubmit} className="w-full">
         {error && <Banner variant="danger">{error}</Banner>}
         <TextField
@@ -62,7 +65,6 @@ const EditNameModal = ({
           }}
           className="w-full"
           isRequired
-          description="What name should Namesake use to refer to you? This can be different from your legal name."
         />
         <ModalFooter>
           <Button variant="secondary" onPress={() => onOpenChange(false)}>
@@ -85,10 +87,7 @@ export const EditNameSetting = ({ user }: EditNameSettingProps) => {
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
 
   return (
-    <SettingsItem
-      label="Name"
-      description="How should Namesake refer to you? This can be different from your legal name."
-    >
+    <SettingsItem label="Name" description="How should Namesake refer to you?">
       <Button icon={Pencil} onPress={() => setIsNameModalOpen(true)}>
         {user?.name ?? "Set name"}
       </Button>

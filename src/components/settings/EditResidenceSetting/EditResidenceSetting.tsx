@@ -39,10 +39,13 @@ const EditResidenceModal = ({
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <ModalHeader title="Edit residence" />
+      <ModalHeader
+        title="Edit residence"
+        description="Where do you live? This location is used to select the forms for your court order and state ID."
+      />
       <Form onSubmit={handleSubmit} className="w-full">
         <Select
-          aria-label="Residence"
+          label="State"
           name="residence"
           selectedKey={residence}
           onSelectionChange={(key) => setResidence(key as Jurisdiction)}

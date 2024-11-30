@@ -68,7 +68,7 @@ const SignIn = () => {
       </TabList>
       {error && <Banner variant="danger">{error}</Banner>}
       <TabPanel id="signIn">
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} className="items-stretch">
           <TextField
             label="Email"
             name="email"
@@ -115,7 +115,7 @@ const SignIn = () => {
             </p>
           </Banner>
         ) : (
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} className="items-stretch">
             <TextField
               label="Email"
               name="email"
@@ -183,6 +183,7 @@ const ForgotPassword = ({
           })
           .finally(() => setIsSubmitting(false));
       }}
+      className="items-stretch"
     >
       <header className="flex items-center gap-3">
         <Button
@@ -208,6 +209,7 @@ const ForgotPassword = ({
     </Form>
   ) : (
     <Form
+      className="items-stretch"
       onSubmit={async (event) => {
         event.preventDefault();
         setIsSubmitting(true);

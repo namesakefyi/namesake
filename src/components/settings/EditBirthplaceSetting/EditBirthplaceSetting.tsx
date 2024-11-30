@@ -39,10 +39,13 @@ const EditBirthplaceModal = ({
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <ModalHeader title="Edit birthplace" />
+      <ModalHeader
+        title="Edit birthplace"
+        description="Where were you born? This location is used to select the forms for your birth certificate."
+      />
       <Form onSubmit={handleSubmit} className="w-full">
         <Select
-          aria-label="Birthplace"
+          label="State"
           name="birthplace"
           selectedKey={birthplace}
           onSelectionChange={(key) => setBirthplace(key as Jurisdiction)}

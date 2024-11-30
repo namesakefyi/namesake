@@ -45,15 +45,25 @@ export function Modal(props: ModalOverlayProps) {
 
 type ModalHeaderProps = {
   title: string;
+  description?: string;
   children?: React.ReactNode;
 };
 
-export function ModalHeader({ title, children }: ModalHeaderProps) {
+export function ModalHeader({
+  title,
+  description,
+  children,
+}: ModalHeaderProps) {
   return (
     <header className="flex items-center justify-between w-full">
-      <Heading className="text-xl font-medium text-gray-normal" slot="title">
-        {title}
-      </Heading>
+      <div className="flex flex-col gap-1">
+        <Heading className="text-xl font-medium text-gray-normal" slot="title">
+          {title}
+        </Heading>
+        {description && (
+          <p className="text-gray-dim text-sm text-pretty">{description}</p>
+        )}
+      </div>
       {children}
     </header>
   );
