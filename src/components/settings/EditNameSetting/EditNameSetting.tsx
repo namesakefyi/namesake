@@ -62,7 +62,7 @@ const EditNameModal = ({
           }}
           className="w-full"
           isRequired
-          description="Enter your preferred name (max 100 characters)"
+          description="What name should Namesake use to refer to you? This can be different from your legal name."
         />
         <ModalFooter>
           <Button variant="secondary" onPress={() => onOpenChange(false)}>
