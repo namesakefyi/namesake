@@ -1,4 +1,5 @@
 import {
+  Banner,
   Button,
   Form,
   Modal,
@@ -14,6 +15,7 @@ import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
 import { useMutation } from "convex/react";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type EditResidenceModalProps = {
   defaultResidence: Jurisdiction;
@@ -28,13 +30,31 @@ const EditResidenceModal = ({
   onOpenChange,
   onSubmit,
 }: EditResidenceModalProps) => {
-  const updateResidence = useMutation(api.users.setResidence);
-  const [residence, setResidence] = useState(defaultResidence);
+  const [residence, setResidence] = useState<Jurisdiction>(defaultResidence);
+  const [error, setError] = useState<string>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const updateResidence = useMutation(api.users.setResidence);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updateResidence({ residence });
-    onSubmit();
+    setError(undefined);
+
+    if (!residence) {
+      setError("Please select a state.");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      await updateResidence({ residence });
+      onSubmit();
+      toast.success("Residence updated.");
+    } catch (err) {
+      setError("Failed to update residence. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -44,13 +64,18 @@ const EditResidenceModal = ({
         description="Where do you live? This location is used to select the forms for your court order and state ID."
       />
       <Form onSubmit={handleSubmit} className="w-full">
+        {error && <Banner variant="danger">{error}</Banner>}
         <Select
           label="State"
           name="residence"
           selectedKey={residence}
-          onSelectionChange={(key) => setResidence(key as Jurisdiction)}
-          placeholder="Select state"
+          onSelectionChange={(key) => {
+            setResidence(key as Jurisdiction);
+            setError(undefined);
+          }}
+          isRequired
           className="w-full"
+          placeholder="Select state"
         >
           {Object.entries(JURISDICTIONS).map(([value, label]) => (
             <SelectItem key={value} id={value}>
@@ -59,10 +84,14 @@ const EditResidenceModal = ({
           ))}
         </Select>
         <ModalFooter>
-          <Button variant="secondary" onPress={() => onOpenChange(false)}>
+          <Button
+            variant="secondary"
+            onPress={() => onOpenChange(false)}
+            isDisabled={isSubmitting}
+          >
             Cancel
           </Button>
-          <Button type="submit" variant="primary">
+          <Button type="submit" variant="primary" isDisabled={isSubmitting}>
             Save
           </Button>
         </ModalFooter>

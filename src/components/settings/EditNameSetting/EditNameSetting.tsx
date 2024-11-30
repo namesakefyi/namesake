@@ -12,6 +12,7 @@ import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { SettingsItem } from "../SettingsItem";
 
 type EditNameModalProps = {
@@ -30,9 +31,11 @@ const EditNameModal = ({
   const updateName = useMutation(api.users.setName);
   const [name, setName] = useState(defaultName);
   const [error, setError] = useState<string>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(undefined);
 
     if (name.length > 100) {
       setError("Name must be less than 100 characters");
@@ -40,10 +43,14 @@ const EditNameModal = ({
     }
 
     try {
+      setIsSubmitting(true);
       await updateName({ name: name.trim() });
       onSubmit();
+      toast.success("Name updated.");
     } catch (err) {
       setError("Failed to update name. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -67,10 +74,14 @@ const EditNameModal = ({
           isRequired
         />
         <ModalFooter>
-          <Button variant="secondary" onPress={() => onOpenChange(false)}>
+          <Button
+            variant="secondary"
+            isDisabled={isSubmitting}
+            onPress={() => onOpenChange(false)}
+          >
             Cancel
           </Button>
-          <Button type="submit" variant="primary">
+          <Button type="submit" variant="primary" isDisabled={isSubmitting}>
             Save
           </Button>
         </ModalFooter>

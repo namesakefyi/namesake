@@ -51,9 +51,10 @@ const DeleteAccountModal = ({
       clearLocalStorage();
       signOut();
       onSubmit();
-      toast("Account deleted.");
+      toast.success("Account deleted.");
     } catch (err) {
       setError("Failed to delete account. Please try again.");
+    } finally {
       setIsDeleting(false);
     }
   };
