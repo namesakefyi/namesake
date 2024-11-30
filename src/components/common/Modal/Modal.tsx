@@ -20,7 +20,7 @@ const overlayStyles = tv({
 });
 
 const modalStyles = tv({
-  base: "p-5 w-full max-w-md max-h-full rounded-2xl bg-gray-subtle forced-colors:bg-[Canvas] flex flex-col items-start gap-4 shadow-2xl bg-clip-padding border border-gray-dim",
+  base: "p-5 w-[400px] max-w-full max-h-full rounded-2xl bg-gray-subtle forced-colors:bg-[Canvas] flex flex-col items-start gap-4 shadow-2xl bg-clip-padding border border-gray-dim",
   variants: {
     isEntering: {
       true: "animate-in zoom-in-105 ease-out duration-2",
@@ -56,5 +56,13 @@ export function ModalHeader({ title, children }: ModalHeaderProps) {
       </Heading>
       {children}
     </header>
+  );
+}
+
+export function ModalFooter({ children }: { children: React.ReactNode }) {
+  return (
+    <footer className="flex w-full justify-end items-center gap-2">
+      {children}
+    </footer>
   );
 }

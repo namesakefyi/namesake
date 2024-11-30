@@ -30,7 +30,7 @@ const CostInput = memo(function CostInput({
     <div className="flex items-start gap-2">
       <NumberField
         aria-label="Cost"
-        className="w-28"
+        className="w-24"
         prefix="$"
         value={cost.cost}
         onChange={(value) =>
