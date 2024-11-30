@@ -1,4 +1,5 @@
 import {
+  Banner,
   Button,
   Form,
   Modal,
@@ -11,6 +12,7 @@ import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { SettingsItem } from "../SettingsItem";
 
 type EditNameModalProps = {
@@ -28,29 +30,58 @@ const EditNameModal = ({
 }: EditNameModalProps) => {
   const updateName = useMutation(api.users.setName);
   const [name, setName] = useState(defaultName);
+  const [error, setError] = useState<string>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updateName({ name });
-    onSubmit();
+    setError(undefined);
+
+    if (name.length > 100) {
+      setError("Name must be less than 100 characters");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      await updateName({ name: name.trim() });
+      onSubmit();
+      toast.success("Name updated.");
+    } catch (err) {
+      setError("Failed to update name. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <ModalHeader title="Edit name" />
+      <ModalHeader
+        title="Edit name"
+        description="How should Namesake refer to you? This can be different from your legal name."
+      />
       <Form onSubmit={handleSubmit} className="w-full">
+        {error && <Banner variant="danger">{error}</Banner>}
         <TextField
           name="name"
           label="Name"
           value={name}
-          onChange={setName}
+          onChange={(value) => {
+            setName(value);
+            setError(undefined);
+          }}
           className="w-full"
+          isRequired
         />
         <ModalFooter>
-          <Button variant="secondary" onPress={() => onOpenChange(false)}>
+          <Button
+            variant="secondary"
+            isDisabled={isSubmitting}
+            onPress={() => onOpenChange(false)}
+          >
             Cancel
           </Button>
-          <Button type="submit" variant="primary">
+          <Button type="submit" variant="primary" isDisabled={isSubmitting}>
             Save
           </Button>
         </ModalFooter>
@@ -67,10 +98,7 @@ export const EditNameSetting = ({ user }: EditNameSettingProps) => {
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
 
   return (
-    <SettingsItem
-      label="Name"
-      description="How should Namesake refer to you? This can be different from your legal name."
-    >
+    <SettingsItem label="Name" description="How should Namesake refer to you?">
       <Button icon={Pencil} onPress={() => setIsNameModalOpen(true)}>
         {user?.name ?? "Set name"}
       </Button>
