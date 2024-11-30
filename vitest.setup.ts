@@ -3,7 +3,7 @@ import { vi } from "vitest";
 
 // Mock the convex mutation hook
 vi.mock("convex/react", () => ({
-  useMutation: vi.fn(() => vi.fn().mockResolvedValue(undefined)),
+  useMutation: vi.fn(),
 }));
 
 // Mock toast notifications
