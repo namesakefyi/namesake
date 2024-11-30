@@ -1,4 +1,4 @@
-import { Button, Modal, ModalHeader } from "@/components/common";
+import { Button, Modal, ModalFooter, ModalHeader } from "@/components/common";
 import { SettingsItem } from "@/components/settings";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
@@ -35,12 +35,12 @@ const DeleteAccountModal = ({
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalHeader title="Delete account?" />
       <p>This will permanently erase your account and all data.</p>
-      <div className="flex justify-end w-full gap-2">
+      <ModalFooter>
         <Button onPress={() => onOpenChange(false)}>Cancel</Button>
         <Button variant="destructive" onPress={handleSubmit}>
           Delete
         </Button>
-      </div>
+      </ModalFooter>
     </Modal>
   );
 };

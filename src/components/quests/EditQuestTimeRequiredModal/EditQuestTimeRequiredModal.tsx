@@ -39,7 +39,7 @@ const TimeRequiredInput = memo(function TimeRequiredInput({
       <div className="flex items-end gap-2">
         <NumberField
           label="Est. min time"
-          className="w-28"
+          className="w-24"
           value={timeRequired?.min}
           maxValue={Math.max(timeRequired.max, 60)}
           onChange={(value) =>
@@ -51,7 +51,7 @@ const TimeRequiredInput = memo(function TimeRequiredInput({
         />
         <NumberField
           label="Est. max time"
-          className="w-28"
+          className="w-24"
           value={timeRequired.max}
           minValue={Math.min(timeRequired.min, 1)}
           onChange={(value) =>
@@ -63,7 +63,7 @@ const TimeRequiredInput = memo(function TimeRequiredInput({
         />
         <Select
           label="Unit"
-          className="w-40"
+          className="flex-1"
           selectedKey={timeRequired.unit}
           onSelectionChange={(key) =>
             onChange({

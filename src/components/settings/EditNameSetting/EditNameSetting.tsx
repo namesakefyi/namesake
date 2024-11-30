@@ -1,4 +1,11 @@
-import { Button, Form, Modal, TextField } from "@/components/common";
+import {
+  Button,
+  Form,
+  Modal,
+  ModalFooter,
+  ModalHeader,
+  TextField,
+} from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
@@ -30,17 +37,23 @@ const EditNameModal = ({
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <ModalHeader title="Edit name" />
       <Form onSubmit={handleSubmit} className="w-full">
-        Edit name
-        <TextField name="name" label="Name" value={name} onChange={setName} />
-        <div className="flex justify-end gap-2">
+        <TextField
+          name="name"
+          label="Name"
+          value={name}
+          onChange={setName}
+          className="w-full"
+        />
+        <ModalFooter>
           <Button variant="secondary" onPress={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Button type="submit" variant="primary">
             Save
           </Button>
-        </div>
+        </ModalFooter>
       </Form>
     </Modal>
   );

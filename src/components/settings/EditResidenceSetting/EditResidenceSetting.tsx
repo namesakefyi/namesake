@@ -2,6 +2,7 @@ import {
   Button,
   Form,
   Modal,
+  ModalFooter,
   ModalHeader,
   Select,
   SelectItem,
@@ -46,6 +47,7 @@ const EditResidenceModal = ({
           selectedKey={residence}
           onSelectionChange={(key) => setResidence(key as Jurisdiction)}
           placeholder="Select state"
+          className="w-full"
         >
           {Object.entries(JURISDICTIONS).map(([value, label]) => (
             <SelectItem key={value} id={value}>
@@ -53,14 +55,14 @@ const EditResidenceModal = ({
             </SelectItem>
           ))}
         </Select>
-        <div className="flex justify-end gap-2">
+        <ModalFooter>
           <Button variant="secondary" onPress={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Button type="submit" variant="primary">
             Save
           </Button>
-        </div>
+        </ModalFooter>
       </Form>
     </Modal>
   );

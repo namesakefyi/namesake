@@ -1,4 +1,12 @@
-import { Button, Form, Modal, Select, SelectItem } from "@/components/common";
+import {
+  Button,
+  Form,
+  Modal,
+  ModalFooter,
+  ModalHeader,
+  Select,
+  SelectItem,
+} from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
@@ -31,14 +39,15 @@ const EditBirthplaceModal = ({
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <ModalHeader title="Edit birthplace" />
       <Form onSubmit={handleSubmit} className="w-full">
-        Edit birthplace
         <Select
           aria-label="Birthplace"
           name="birthplace"
           selectedKey={birthplace}
           onSelectionChange={(key) => setBirthplace(key as Jurisdiction)}
           placeholder="Select state"
+          className="w-full"
         >
           {Object.entries(JURISDICTIONS).map(([value, label]) => (
             <SelectItem key={value} id={value}>
@@ -46,14 +55,14 @@ const EditBirthplaceModal = ({
             </SelectItem>
           ))}
         </Select>
-        <div className="flex justify-end gap-2">
+        <ModalFooter>
           <Button variant="secondary" onPress={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Button type="submit" variant="primary">
             Save
           </Button>
-        </div>
+        </ModalFooter>
       </Form>
     </Modal>
   );
