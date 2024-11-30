@@ -1,4 +1,5 @@
 import {
+  Banner,
   Button,
   Form,
   Modal,
@@ -28,23 +29,40 @@ const EditNameModal = ({
 }: EditNameModalProps) => {
   const updateName = useMutation(api.users.setName);
   const [name, setName] = useState(defaultName);
+  const [error, setError] = useState<string>();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updateName({ name });
-    onSubmit();
+
+    if (name.length > 100) {
+      setError("Name must be less than 100 characters");
+      return;
+    }
+
+    try {
+      await updateName({ name: name.trim() });
+      onSubmit();
+    } catch (err) {
+      setError("Failed to update name. Please try again.");
+    }
   };
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalHeader title="Edit name" />
       <Form onSubmit={handleSubmit} className="w-full">
+        {error && <Banner variant="danger">{error}</Banner>}
         <TextField
           name="name"
           label="Name"
           value={name}
-          onChange={setName}
+          onChange={(value) => {
+            setName(value);
+            setError(undefined);
+          }}
           className="w-full"
+          isRequired
+          description="Enter your preferred name (max 100 characters)"
         />
         <ModalFooter>
           <Button variant="secondary" onPress={() => onOpenChange(false)}>
