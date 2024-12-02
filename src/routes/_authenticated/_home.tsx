@@ -96,16 +96,16 @@ function IndexRoute() {
   }, [groupBy]);
 
   const MyQuests = () => {
-    const userQuestCount = useQuery(api.userQuests.getUserQuestCount);
-    const completedQuests = useQuery(api.userQuests.getCompletedQuestCount);
+    const userQuestCount = useQuery(api.userQuests.count);
+    const completedQuests = useQuery(api.userQuests.countCompleted);
 
     // Get the selected grouping method
     const groupByValue = ([...groupBy][0] as GroupQuestsBy) ?? "category";
 
     // Use the appropriate query based on grouping selection
-    const questsByCategory = useQuery(api.userQuests.getUserQuestsByCategory);
-    const questsByDate = useQuery(api.userQuests.getUserQuestsByDate);
-    const questsByStatus = useQuery(api.userQuests.getUserQuestsByStatus);
+    const questsByCategory = useQuery(api.userQuests.getByCategory);
+    const questsByDate = useQuery(api.userQuests.getByDate);
+    const questsByStatus = useQuery(api.userQuests.getByStatus);
 
     const groupedQuests = {
       category: questsByCategory,

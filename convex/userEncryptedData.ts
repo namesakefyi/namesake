@@ -1,6 +1,6 @@
 import { userQuery } from "./helpers";
 
-export const getUserData = userQuery({
+export const get = userQuery({
   args: {},
   handler: async (ctx, _args) => {
     const userData = await ctx.db

@@ -8,21 +8,21 @@ import { jurisdiction } from "./validators";
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
 
-export const getAllUsers = query({
+export const getAll = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db.query("users").collect();
   },
 });
 
-export const getCurrentUser = userQuery({
+export const getCurrent = userQuery({
   args: {},
   handler: async (ctx) => {
     return await ctx.db.get(ctx.userId);
   },
 });
 
-export const getCurrentUserRole = query({
+export const getCurrentRole = query({
   args: {},
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
@@ -33,7 +33,7 @@ export const getCurrentUserRole = query({
   },
 });
 
-export const getUserByEmail = query({
+export const getByEmail = query({
   args: { email: v.string() },
   handler: async (ctx, args) => {
     return await ctx.db

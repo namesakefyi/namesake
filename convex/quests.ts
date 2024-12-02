@@ -7,14 +7,14 @@ import { category, jurisdiction, timeRequiredUnit } from "./validators";
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
 
-export const getAllQuests = query({
+export const getAll = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db.query("quests").collect();
   },
 });
 
-export const getAllQuestsInCategory = query({
+export const getAllInCategory = query({
   args: { category: v.string() },
   handler: async (ctx, args) => {
     return await ctx.db
@@ -24,7 +24,7 @@ export const getAllQuestsInCategory = query({
   },
 });
 
-export const getAllActiveQuests = query({
+export const getAllActive = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db
@@ -34,14 +34,14 @@ export const getAllActiveQuests = query({
   },
 });
 
-export const getQuest = query({
+export const getById = query({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     return await ctx.db.get(args.questId);
   },
 });
 
-export const createQuest = userMutation({
+export const create = userMutation({
   args: {
     title: v.string(),
     jurisdiction: v.optional(jurisdiction),
@@ -58,7 +58,7 @@ export const createQuest = userMutation({
   },
 });
 
-export const updateQuest = userMutation({
+export const setAll = userMutation({
   args: {
     // TODO: Dedupe these types from schema
     questId: v.id("quests"),
@@ -98,7 +98,7 @@ export const updateQuest = userMutation({
   },
 });
 
-export const updateQuestCosts = userMutation({
+export const setCosts = userMutation({
   args: {
     questId: v.id("quests"),
     costs: v.optional(
@@ -115,7 +115,7 @@ export const updateQuestCosts = userMutation({
   },
 });
 
-export const updateQuestTimeRequired = userMutation({
+export const setTimeRequired = userMutation({
   args: {
     questId: v.id("quests"),
     timeRequired: v.optional(
@@ -134,21 +134,21 @@ export const updateQuestTimeRequired = userMutation({
   },
 });
 
-export const deleteQuest = userMutation({
+export const softDelete = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.questId, { deletionTime: Date.now() });
   },
 });
 
-export const undeleteQuest = userMutation({
+export const undoSoftDelete = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.questId, { deletionTime: undefined });
   },
 });
 
-export const permanentlyDeleteQuest = userMutation({
+export const deleteForever = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     // Delete userQuests

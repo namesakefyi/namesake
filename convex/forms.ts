@@ -6,21 +6,21 @@ import { jurisdiction } from "./validators";
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
 
-export const getAllForms = query({
+export const getAll = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db.query("forms").collect();
   },
 });
 
-export const getForm = query({
+export const getById = query({
   args: { formId: v.id("forms") },
   handler: async (ctx, args) => {
     return await ctx.db.get(args.formId);
   },
 });
 
-export const getAllActiveForms = query({
+export const getAllActive = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db
@@ -30,7 +30,7 @@ export const getAllActiveForms = query({
   },
 });
 
-export const getFormPDFUrl = query({
+export const getURL = query({
   args: { formId: v.id("forms") },
   handler: async (ctx, args) => {
     const form = await ctx.db.get(args.formId);
@@ -39,7 +39,7 @@ export const getFormPDFUrl = query({
   },
 });
 
-export const getFormPDFMetadata = query({
+export const getMetadata = query({
   args: { storageId: v.optional(v.id("_storage")) },
   handler: async (ctx, args) => {
     if (!args.storageId) return null;
@@ -51,7 +51,7 @@ export const generateUploadUrl = mutation(async (ctx) => {
   return await ctx.storage.generateUploadUrl();
 });
 
-export const uploadPDF = userMutation({
+export const upload = userMutation({
   args: { formId: v.id("forms"), storageId: v.id("_storage") },
   handler: async (ctx, args) => {
     return await ctx.db.patch(args.formId, {
@@ -60,7 +60,7 @@ export const uploadPDF = userMutation({
   },
 });
 
-export const getFormsForQuest = query({
+export const getByQuestId = query({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     const forms = await ctx.db
@@ -78,7 +78,7 @@ export const getFormsForQuest = query({
   },
 });
 
-export const createForm = userMutation({
+export const create = userMutation({
   args: {
     title: v.string(),
     formCode: v.optional(v.string()),
@@ -98,21 +98,21 @@ export const createForm = userMutation({
   },
 });
 
-export const deleteForm = userMutation({
+export const softDelete = userMutation({
   args: { formId: v.id("forms") },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.formId, { deletionTime: Date.now() });
   },
 });
 
-export const undeleteForm = userMutation({
+export const undoSoftDelete = userMutation({
   args: { formId: v.id("forms") },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.formId, { deletionTime: undefined });
   },
 });
 
-export const permanentlyDeleteForm = userMutation({
+export const deleteForever = userMutation({
   args: { formId: v.id("forms") },
   handler: async (ctx, args) => {
     // TODO: Delete form references in other tables

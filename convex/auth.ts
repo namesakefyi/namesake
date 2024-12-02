@@ -2,7 +2,7 @@ import { Password } from "@convex-dev/auth/providers/Password";
 import { convexAuth } from "@convex-dev/auth/server";
 import type { MutationCtx } from "./_generated/server";
 import { ResendOTPPasswordReset } from "./passwordReset";
-import { getUserByEmail } from "./users";
+import { getByEmail } from "./users";
 
 export const { auth, signIn, signOut, store } = convexAuth({
   providers: [Password({ reset: ResendOTPPasswordReset })],
@@ -16,7 +16,7 @@ export const { auth, signIn, signOut, store } = convexAuth({
 
       // Handle account linking
       if (args.profile.email) {
-        const existingUser = await getUserByEmail(ctx, {
+        const existingUser = await getByEmail(ctx, {
           email: args.profile.email,
         });
         if (existingUser) return existingUser._id;

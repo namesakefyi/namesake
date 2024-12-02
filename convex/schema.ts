@@ -13,11 +13,11 @@ import {
 } from "./validators";
 
 // ----------------------------------------------
-// FAQs
+// Questions
 // ----------------------------------------------
 
 /**
- * A shared topic used to tag and organize faqs.
+ * A shared topic used to tag and organize questions.
  */
 const topics = defineTable({
   /** The name of the topic. Should be short and unique. */
@@ -27,7 +27,7 @@ const topics = defineTable({
 /**
  * A frequently asked question and its answer.
  */
-const faqs = defineTable({
+const questions = defineTable({
   /** A frequently asked question. */
   question: v.string(),
   /** The rich text answer to the question, stored as HTML. */
@@ -186,7 +186,7 @@ const userQuests = defineTable({
 
 export default defineSchema({
   ...authTables,
-  faqs,
+  questions,
   topics,
   forms,
   quests,

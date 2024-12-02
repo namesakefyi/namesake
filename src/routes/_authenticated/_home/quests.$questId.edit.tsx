@@ -33,8 +33,7 @@ export const Route = createFileRoute(
 function QuestEditRoute() {
   const { questId } = Route.useParams();
 
-  // TODO: Opportunity to combine these queries?
-  const quest = useQuery(api.quests.getQuest, {
+  const quest = useQuery(api.quests.getById, {
     questId: questId as Id<"quests">,
   });
 

@@ -42,9 +42,9 @@ const NewFormModal = ({
   onSubmit: () => void;
 }) => {
   const generateUploadUrl = useMutation(api.forms.generateUploadUrl);
-  const uploadPDF = useMutation(api.forms.uploadPDF);
-  const createForm = useMutation(api.forms.createForm);
-  const quests = useQuery(api.quests.getAllActiveQuests);
+  const uploadPDF = useMutation(api.forms.upload);
+  const createForm = useMutation(api.forms.create);
+  const quests = useQuery(api.quests.getAllActive);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
@@ -160,10 +160,10 @@ const NewFormModal = ({
 };
 
 const FormTableRow = ({ form }: { form: DataModel["forms"]["document"] }) => {
-  const formUrl = useQuery(api.forms.getFormPDFUrl, { formId: form._id });
-  const deleteForm = useMutation(api.forms.deleteForm);
-  const undeleteForm = useMutation(api.forms.undeleteForm);
-  const permanentlyDeleteForm = useMutation(api.forms.permanentlyDeleteForm);
+  const formUrl = useQuery(api.forms.getURL, { formId: form._id });
+  const deleteForm = useMutation(api.forms.softDelete);
+  const undeleteForm = useMutation(api.forms.undoSoftDelete);
+  const deleteForeverForm = useMutation(api.forms.deleteForever);
 
   return (
     <TableRow
@@ -204,7 +204,7 @@ const FormTableRow = ({ form }: { form: DataModel["forms"]["document"] }) => {
                 </MenuItem>
                 {/* TODO: Add modal */}
                 <MenuItem
-                  onAction={() => permanentlyDeleteForm({ formId: form._id })}
+                  onAction={() => deleteForeverForm({ formId: form._id })}
                 >
                   Permanently Delete
                 </MenuItem>
@@ -223,7 +223,7 @@ const FormTableRow = ({ form }: { form: DataModel["forms"]["document"] }) => {
 
 function FormsRoute() {
   const [isNewFormModalOpen, setIsNewFormModalOpen] = useState(false);
-  const forms = useQuery(api.forms.getAllForms);
+  const forms = useQuery(api.forms.getAll);
 
   return (
     <div>

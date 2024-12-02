@@ -7,7 +7,7 @@ import { modules } from "./test.setup";
 describe("quests", () => {
   it("gets all quests", async () => {
     const t = convexTest(schema, modules);
-    const quests = await t.query(api.quests.getAllQuests);
+    const quests = await t.query(api.quests.getAll);
     expect(quests).toMatchObject([]);
   });
 });

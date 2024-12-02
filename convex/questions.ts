@@ -1,14 +1,14 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
-export const getAllFAQs = query({
+export const getAll = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("faqs").collect();
+    return await ctx.db.query("questions").collect();
   },
 });
 
-export const createFAQ = mutation({
+export const create = mutation({
   args: {
     question: v.string(),
     answer: v.string(),
@@ -16,7 +16,7 @@ export const createFAQ = mutation({
     relatedQuests: v.optional(v.array(v.id("quests"))),
   },
   handler: async (ctx, { question, answer, topics, relatedQuests }) => {
-    return await ctx.db.insert("faqs", {
+    return await ctx.db.insert("questions", {
       question,
       answer,
       topics,
@@ -25,33 +25,33 @@ export const createFAQ = mutation({
   },
 });
 
-export const updateFAQ = mutation({
+export const update = mutation({
   args: {
-    faqId: v.id("faqs"),
-    faq: v.object({
+    questionId: v.id("questions"),
+    question: v.object({
       question: v.string(),
       answer: v.string(),
       topics: v.array(v.id("topics")),
       relatedQuests: v.optional(v.array(v.id("quests"))),
     }),
   },
-  handler: async (ctx, { faqId, faq }) => {
-    return await ctx.db.patch(faqId, {
-      ...faq,
+  handler: async (ctx, { questionId, question }) => {
+    return await ctx.db.patch(questionId, {
+      ...question,
     });
   },
 });
 
-export const deleteFAQ = mutation({
-  args: { faqId: v.id("faqs") },
-  handler: async (ctx, { faqId }) => {
-    const faq = await ctx.db.get(faqId);
-    if (faq === null) throw new Error("Question not found");
-    if (faq.relatedQuests && faq.relatedQuests.length > 0) {
+export const deleteForever = mutation({
+  args: { questionId: v.id("questions") },
+  handler: async (ctx, { questionId }) => {
+    const question = await ctx.db.get(questionId);
+    if (question === null) throw new Error("Question not found");
+    if (question.relatedQuests && question.relatedQuests.length > 0) {
       throw new Error(
         "There are related quests for this question. Please delete them first.",
       );
     }
-    return await ctx.db.delete(faqId);
+    return await ctx.db.delete(questionId);
   },
 });
