@@ -4,7 +4,6 @@ import { Authenticated } from "convex/react";
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ context }) => {
     const { isAuthenticated, isLoading } = await context.auth;
-    console.log("isAuthenticated", isAuthenticated);
     if (!isLoading && !isAuthenticated) throw redirect({ to: "/signin" });
   },
   component: AuthenticatedRoute,
