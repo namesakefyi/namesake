@@ -82,4 +82,27 @@ describe("topics", () => {
     expect(topics[1].topic).toBe("Adoption");
     expect(topics[2].topic).toBe("Costs");
   });
+
+  it("errors if attempting to delete a topic with faqs", async () => {
+    const t = convexTest(schema, modules);
+
+    // Create a topic first
+    const topicId = await t.mutation(api.topics.createTopic, {
+      topic: "Costs",
+    });
+
+    // Create a FAQ
+    await t.mutation(api.faqs.createFAQ, {
+      question: "How much does the process cost?",
+      answer: "It varies.",
+      topics: [topicId],
+    });
+
+    // Attempt to delete the topic
+    await expect(
+      t.mutation(api.topics.deleteTopic, {
+        topicId,
+      }),
+    ).rejects.toThrowError("Cannot delete topic with faqs");
+  });
 });
