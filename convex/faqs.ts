@@ -13,12 +13,14 @@ export const createFAQ = mutation({
     question: v.string(),
     answer: v.string(),
     topics: v.array(v.id("topics")),
+    relatedQuests: v.optional(v.array(v.id("quests"))),
   },
-  handler: async (ctx, { question, answer, topics }) => {
+  handler: async (ctx, { question, answer, topics, relatedQuests }) => {
     return await ctx.db.insert("faqs", {
       question,
       answer,
       topics,
+      relatedQuests,
     });
   },
 });
