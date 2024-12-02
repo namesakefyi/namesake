@@ -67,12 +67,14 @@ const quests = defineTable({
     ),
   ),
   /** The estimated time required to complete the quest. */
-  timeRequired: v.object({
-    min: v.number(),
-    max: v.number(),
-    unit: timeRequiredUnit,
-    description: v.optional(v.string()),
-  }),
+  timeRequired: v.optional(
+    v.object({
+      min: v.number(),
+      max: v.number(),
+      unit: timeRequiredUnit,
+      description: v.optional(v.string()),
+    }),
+  ),
   /** Links to official documentation about changing names for this quest. */
   urls: v.optional(v.array(v.string())),
   /** Time in ms since epoch when the quest was deleted. */
@@ -134,7 +136,7 @@ const users = defineTable({
   /** The user's email address. */
   email: v.optional(v.string()),
   /** Whether the user's email address has been verified. */
-  emailVerified: v.boolean(),
+  emailVerified: v.optional(v.boolean()),
   /** The US State where the user resides. */
   residence: v.optional(jurisdiction),
   /** The US State where the user was born. */

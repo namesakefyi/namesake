@@ -128,4 +128,46 @@ describe("faqs", () => {
     const deletedFAQ = faqsAfter.find((f) => f._id === faqId);
     expect(deletedFAQ).toBeUndefined();
   });
+
+  it("errors if attempting to delete an faq with related quests", async () => {
+    const t = convexTest(schema, modules);
+
+    // Create a topic first
+    const topicId = await t.mutation(api.topics.createTopic, {
+      topic: "Costs",
+    });
+
+    // Create a user
+    const userId = await t.run(async (ctx) => {
+      return await ctx.db.insert("users", {
+        role: "user",
+        emailVerified: true,
+      });
+    });
+
+    // Create a quest
+    const questId = await t.run(async (ctx) => {
+      return await ctx.db.insert("quests", {
+        title: "Court Order",
+        creationUser: userId,
+      });
+    });
+
+    // Create a FAQ
+    const faqId = await t.mutation(api.faqs.createFAQ, {
+      question: "How much does the process cost?",
+      answer: "It varies.",
+      topics: [topicId],
+      relatedQuests: [questId],
+    });
+
+    // Attempt to delete the faq
+    await expect(
+      t.mutation(api.faqs.deleteFAQ, {
+        faqId,
+      }),
+    ).rejects.toThrowError(
+      "There are related quests for this question. Please delete them first.",
+    );
+  });
 });
