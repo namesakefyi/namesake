@@ -23,8 +23,8 @@ import type { Key } from "react-aria";
 
 export const Route = createFileRoute("/_unauthenticated/signin")({
   beforeLoad: async ({ context }) => {
-    const isAuthenticated = await context.auth;
-    if (isAuthenticated) throw redirect({ to: "/" });
+    const { isAuthenticated, isLoading } = await context.auth;
+    if (!isLoading && isAuthenticated) throw redirect({ to: "/" });
   },
   component: LoginRoute,
 });

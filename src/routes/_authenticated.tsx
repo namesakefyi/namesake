@@ -1,17 +1,21 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
+import { Authenticated } from "convex/react";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ context }) => {
-    const isAuthenticated = await context.auth;
-    if (!isAuthenticated) throw redirect({ to: "/signin" });
+    const { isAuthenticated, isLoading } = await context.auth;
+    console.log("isAuthenticated", isAuthenticated);
+    if (!isLoading && !isAuthenticated) throw redirect({ to: "/signin" });
   },
   component: AuthenticatedRoute,
 });
 
 function AuthenticatedRoute() {
   return (
-    <main className="text-gray-normal">
-      <Outlet />
-    </main>
+    <Authenticated>
+      <main className="text-gray-normal">
+        <Outlet />
+      </main>
+    </Authenticated>
   );
 }
