@@ -49,7 +49,7 @@ const authClient: Promise<ConvexAuthState> = new Promise((resolve) => {
 const InnerApp = () => {
   const title = "Namesake";
   const auth = useConvexAuth();
-  const role = useQuery(api.users.getCurrentUserRole) ?? undefined;
+  const role = useQuery(api.users.getCurrentRole) ?? undefined;
 
   useEffect(() => {
     if (auth.isLoading) return;

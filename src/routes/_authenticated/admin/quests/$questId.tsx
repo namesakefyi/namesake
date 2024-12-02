@@ -52,10 +52,10 @@ const URLInput = memo(function URLInput({
 
 function AdminQuestDetailRoute() {
   const { questId } = Route.useParams();
-  const quest = useQuery(api.quests.getQuest, {
+  const quest = useQuery(api.quests.getById, {
     questId: questId as Id<"quests">,
   });
-  const updateQuest = useMutation(api.quests.updateQuest);
+  const update = useMutation(api.quests.setAll);
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<Category | null>(null);
@@ -78,7 +78,7 @@ function AdminQuestDetailRoute() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updateQuest({
+    update({
       questId: questId as Id<"quests">,
       title,
       category: category ?? undefined,

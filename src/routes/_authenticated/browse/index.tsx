@@ -84,11 +84,11 @@ const QuestCard = ({
 };
 
 const QuestCategoryRow = ({ category }: { category: Category }) => {
-  const quests = useQuery(api.quests.getAllQuestsInCategory, {
+  const quests = useQuery(api.quests.getAllInCategory, {
     category: category,
   });
 
-  const userQuests = useQuery(api.userQuests.getUserQuestsByQuestIds, {
+  const userQuests = useQuery(api.userQuests.getByQuestIds, {
     questIds: quests?.map((q) => q._id) ?? [],
   });
 
@@ -161,7 +161,7 @@ const SearchResultsGrid = ({
 
 function IndexRoute() {
   const [search, setSearch] = useState("");
-  const quests = useQuery(api.quests.getAllActiveQuests);
+  const quests = useQuery(api.quests.getAllActive);
 
   const filteredQuests = quests?.filter((q) =>
     q.title.toLowerCase().includes(search.toLowerCase()),

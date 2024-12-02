@@ -27,7 +27,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
   const { signOut } = useAuthActions();
   const { theme, themeSelection, setTheme } = useTheme();
 
-  const user = useQuery(api.users.getCurrentUser);
+  const user = useQuery(api.users.getCurrent);
   const isAdmin = user?.role === "admin";
 
   const handleSignOut = async () => {

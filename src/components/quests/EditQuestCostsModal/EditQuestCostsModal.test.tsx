@@ -15,13 +15,13 @@ describe("EditQuestCostsModal", () => {
     ],
   } as Doc<"quests">;
 
-  const mockUpdateCosts = vi.fn();
+  const mockSetCosts = vi.fn();
   const mockOnOpenChange = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
     (useMutation as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockUpdateCosts,
+      mockSetCosts,
     );
   });
 
@@ -127,7 +127,7 @@ describe("EditQuestCostsModal", () => {
 
   it("saves changes successfully", async () => {
     const user = userEvent.setup();
-    mockUpdateCosts.mockResolvedValueOnce(undefined);
+    mockSetCosts.mockResolvedValueOnce(undefined);
 
     render(
       <EditQuestCostsModal
@@ -146,7 +146,7 @@ describe("EditQuestCostsModal", () => {
     await user.click(screen.getByRole("button", { name: "Save" }));
 
     // Verify mutation was called
-    expect(mockUpdateCosts).toHaveBeenCalledWith({
+    expect(mockSetCosts).toHaveBeenCalledWith({
       costs: [
         { cost: 200, description: "Application fee" },
         { cost: 50, description: "Certified copies" },
@@ -161,7 +161,7 @@ describe("EditQuestCostsModal", () => {
 
   it("handles save failure", async () => {
     const user = userEvent.setup();
-    mockUpdateCosts.mockRejectedValueOnce(new Error("Update failed"));
+    mockSetCosts.mockRejectedValueOnce(new Error("Update failed"));
 
     render(
       <EditQuestCostsModal
@@ -201,7 +201,7 @@ describe("EditQuestCostsModal", () => {
     await user.click(screen.getByRole("button", { name: "Cancel" }));
 
     // Verify mutation was not called and modal was closed
-    expect(mockUpdateCosts).not.toHaveBeenCalled();
+    expect(mockSetCosts).not.toHaveBeenCalled();
     expect(mockOnOpenChange).toHaveBeenCalledWith(false);
   });
 });

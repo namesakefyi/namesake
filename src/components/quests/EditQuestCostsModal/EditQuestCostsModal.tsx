@@ -72,7 +72,7 @@ export const EditQuestCostsModal = ({
   const [costsInput, setCostsInput] = useState(quest.costs ?? null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const updateCosts = useMutation(api.quests.updateQuestCosts);
+  const setCosts = useMutation(api.quests.setCosts);
 
   const handleCancel = () => {
     setCostsInput(quest.costs ?? null);
@@ -84,7 +84,7 @@ export const EditQuestCostsModal = ({
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    updateCosts({ costs: costsInput ?? undefined, questId: quest._id })
+    setCosts({ costs: costsInput ?? undefined, questId: quest._id })
       .then(() => {
         toast.success("Updated costs");
         onOpenChange(false);

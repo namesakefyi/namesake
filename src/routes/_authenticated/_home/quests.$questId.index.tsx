@@ -31,26 +31,26 @@ export const Route = createFileRoute("/_authenticated/_home/quests/$questId/")({
 function QuestDetailRoute() {
   const { questId } = Route.useParams();
   const navigate = useNavigate();
-  const user = useQuery(api.users.getCurrentUser);
+  const user = useQuery(api.users.getCurrent);
   const canEdit = user?.role === "admin";
 
   // TODO: Opportunity to combine these queries?
-  const quest = useQuery(api.quests.getQuest, {
+  const quest = useQuery(api.quests.getById, {
     questId: questId as Id<"quests">,
   });
-  const userQuest = useQuery(api.userQuests.getUserQuestByQuestId, {
+  const userQuest = useQuery(api.userQuests.getByQuestId, {
     questId: questId as Id<"quests">,
   });
 
-  const changeStatus = useMutation(api.userQuests.updateQuestStatus);
-  const removeQuest = useMutation(api.userQuests.removeQuest);
+  const changeStatus = useMutation(api.userQuests.setStatus);
+  const permanentlyDelete = useMutation(api.userQuests.permanentlyDelete);
 
   const handleStatusChange = (status: Status) => {
     changeStatus({ questId: questId as Id<"quests">, status: status });
   };
 
   const handleRemoveQuest = (questId: Id<"quests">, title: string) => {
-    removeQuest({ questId }).then(() => {
+    permanentlyDelete({ questId }).then(() => {
       toast(`Removed ${title} quest`);
       navigate({ to: "/" });
     });

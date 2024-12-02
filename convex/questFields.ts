@@ -3,14 +3,14 @@ import { query } from "./_generated/server";
 import { userMutation } from "./helpers";
 import { field } from "./validators";
 
-export const getAllFields = query({
+export const getAll = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db.query("questFields").collect();
   },
 });
 
-export const getFields = query({
+export const getManyById = query({
   args: { fieldIds: v.array(v.id("questFields")) },
   handler: async (ctx, args) => {
     const fields = await Promise.all(
@@ -23,7 +23,7 @@ export const getFields = query({
   },
 });
 
-export const createField = userMutation({
+export const create = userMutation({
   args: {
     type: field,
     label: v.string(),
@@ -37,12 +37,5 @@ export const createField = userMutation({
       slug: args.slug,
       helpText: args.helpText,
     });
-  },
-});
-
-export const undeleteField = userMutation({
-  args: { fieldId: v.id("questFields") },
-  handler: async (ctx, args) => {
-    await ctx.db.patch(args.fieldId, { deletionTime: undefined });
   },
 });

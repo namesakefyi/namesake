@@ -37,7 +37,7 @@ export const NewFieldModal = ({
   onSubmit: () => void;
   onFieldCreated?: (fieldId: Id<"questFields">) => void;
 }) => {
-  const createField = useMutation(api.questFields.createField);
+  const createField = useMutation(api.questFields.create);
   const [label, setLabel] = useState("");
   const [slug, setSlug] = useState("");
   const [helpText, setHelpText] = useState("");
@@ -145,7 +145,7 @@ const FieldsTableRow = ({
 
 function FieldsRoute() {
   const [isNewFieldModalOpen, setIsNewFieldModalOpen] = useState(false);
-  const fields = useQuery(api.questFields.getAllFields);
+  const fields = useQuery(api.questFields.getAll);
 
   return (
     <div>

@@ -7,7 +7,7 @@ import { status } from "./validators";
 // TODO: Add `returns` value validation
 // https://docs.convex.dev/functions/validation
 
-export const getQuestsForCurrentUser = userQuery({
+export const getAll = userQuery({
   args: {},
   handler: async (ctx, _args) => {
     const userQuests = await ctx.db
@@ -28,7 +28,7 @@ export const getQuestsForCurrentUser = userQuery({
   },
 });
 
-export const getUserQuestCount = userQuery({
+export const count = userQuery({
   args: {},
   returns: v.number(),
   handler: async (ctx) => {
@@ -40,7 +40,7 @@ export const getUserQuestCount = userQuery({
   },
 });
 
-export const getAvailableQuestsForUser = userQuery({
+export const getAvailable = userQuery({
   args: {},
   handler: async (ctx, _args) => {
     const userQuests = await ctx.db
@@ -59,7 +59,7 @@ export const getAvailableQuestsForUser = userQuery({
   },
 });
 
-export const getGlobalQuestCount = query({
+export const countGlobalUsage = query({
   args: { questId: v.id("quests") },
   returns: v.number(),
   handler: async (ctx, args) => {
@@ -72,7 +72,7 @@ export const getGlobalQuestCount = query({
   },
 });
 
-export const getCompletedQuestCount = userQuery({
+export const countCompleted = userQuery({
   args: {},
   returns: v.number(),
   handler: async (ctx) => {
@@ -110,7 +110,7 @@ export const create = userMutation({
   },
 });
 
-export const getUserQuestByQuestId = userQuery({
+export const getByQuestId = userQuery({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     const userQuest = await ctx.db
@@ -123,11 +123,11 @@ export const getUserQuestByQuestId = userQuery({
   },
 });
 
-export const getUserQuestStatus = userQuery({
+export const getStatus = userQuery({
   args: { questId: v.id("quests") },
   returns: v.string(),
   handler: async (ctx, args) => {
-    const userQuest = await getUserQuestByQuestId(ctx, {
+    const userQuest = await getByQuestId(ctx, {
       questId: args.questId,
     });
     if (userQuest === null) throw new Error("Quest not found");
@@ -135,14 +135,14 @@ export const getUserQuestStatus = userQuery({
   },
 });
 
-export const updateQuestStatus = userMutation({
+export const setStatus = userMutation({
   args: { questId: v.id("quests"), status: status },
   returns: v.null(),
   handler: async (ctx, args) => {
     const quest = await ctx.db.get(args.questId);
     if (quest === null) throw new Error("Quest not found");
 
-    const userQuest = await getUserQuestByQuestId(ctx, {
+    const userQuest = await getByQuestId(ctx, {
       questId: args.questId,
     });
     if (userQuest === null) throw new Error("User quest not found");
@@ -178,11 +178,11 @@ export const updateQuestStatus = userMutation({
   },
 });
 
-export const removeQuest = userMutation({
+export const permanentlyDelete = userMutation({
   args: { questId: v.id("quests") },
   returns: v.null(),
   handler: async (ctx, args) => {
-    const userQuest = await getUserQuestByQuestId(ctx, {
+    const userQuest = await getByQuestId(ctx, {
       questId: args.questId,
     });
     if (userQuest === null) throw new Error("Quest not found");
@@ -190,7 +190,7 @@ export const removeQuest = userMutation({
   },
 });
 
-export const getUserQuestsByQuestIds = userQuery({
+export const getByQuestIds = userQuery({
   args: { questIds: v.array(v.id("quests")) },
   handler: async (ctx, args) => {
     const userQuests = await ctx.db
@@ -219,7 +219,7 @@ export const getQuestCounts = query({
   },
 });
 
-export const getUserQuestsByCategory = userQuery({
+export const getByCategory = userQuery({
   args: {},
   handler: async (ctx) => {
     const userQuests = await ctx.db
@@ -252,7 +252,7 @@ export const getUserQuestsByCategory = userQuery({
   },
 });
 
-export const getUserQuestsByDate = userQuery({
+export const getByDate = userQuery({
   args: {},
   handler: async (ctx) => {
     const userQuests = await ctx.db
@@ -296,7 +296,7 @@ export const getUserQuestsByDate = userQuery({
   },
 });
 
-export const getUserQuestsByStatus = userQuery({
+export const getByStatus = userQuery({
   args: {},
   handler: async (ctx) => {
     const userQuests = await ctx.db

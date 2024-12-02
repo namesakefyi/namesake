@@ -17,13 +17,13 @@ describe("EditQuestTimeRequiredModal", () => {
     },
   } as Doc<"quests">;
 
-  const mockUpdateTimeRequired = vi.fn();
+  const mockSetTimeRequired = vi.fn();
   const mockOnOpenChange = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
     (useMutation as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockUpdateTimeRequired,
+      mockSetTimeRequired,
     );
   });
 
@@ -61,7 +61,7 @@ describe("EditQuestTimeRequiredModal", () => {
 
   it("updates max time value", async () => {
     const user = userEvent.setup();
-    mockUpdateTimeRequired.mockResolvedValueOnce(undefined);
+    mockSetTimeRequired.mockResolvedValueOnce(undefined);
 
     render(
       <EditQuestTimeRequiredModal
@@ -80,7 +80,7 @@ describe("EditQuestTimeRequiredModal", () => {
 
     await user.click(screen.getByText("Save"));
 
-    expect(mockUpdateTimeRequired).toHaveBeenCalledWith({
+    expect(mockSetTimeRequired).toHaveBeenCalledWith({
       timeRequired: {
         min: 2,
         max: 6,
@@ -93,7 +93,7 @@ describe("EditQuestTimeRequiredModal", () => {
 
   it("updates time unit", async () => {
     const user = userEvent.setup();
-    mockUpdateTimeRequired.mockResolvedValueOnce(undefined);
+    mockSetTimeRequired.mockResolvedValueOnce(undefined);
 
     render(
       <EditQuestTimeRequiredModal
@@ -109,7 +109,7 @@ describe("EditQuestTimeRequiredModal", () => {
 
     await user.click(screen.getByText("Save"));
 
-    expect(mockUpdateTimeRequired).toHaveBeenCalledWith({
+    expect(mockSetTimeRequired).toHaveBeenCalledWith({
       timeRequired: {
         min: 2,
         max: 4,
@@ -122,7 +122,7 @@ describe("EditQuestTimeRequiredModal", () => {
 
   it("updates description", async () => {
     const user = userEvent.setup();
-    mockUpdateTimeRequired.mockResolvedValueOnce(undefined);
+    mockSetTimeRequired.mockResolvedValueOnce(undefined);
 
     render(
       <EditQuestTimeRequiredModal
@@ -138,7 +138,7 @@ describe("EditQuestTimeRequiredModal", () => {
 
     await user.click(screen.getByText("Save"));
 
-    expect(mockUpdateTimeRequired).toHaveBeenCalledWith({
+    expect(mockSetTimeRequired).toHaveBeenCalledWith({
       timeRequired: {
         min: 2,
         max: 4,
@@ -151,7 +151,7 @@ describe("EditQuestTimeRequiredModal", () => {
 
   it("sets description to undefined when empty", async () => {
     const user = userEvent.setup();
-    mockUpdateTimeRequired.mockResolvedValueOnce(undefined);
+    mockSetTimeRequired.mockResolvedValueOnce(undefined);
 
     render(
       <EditQuestTimeRequiredModal
@@ -166,7 +166,7 @@ describe("EditQuestTimeRequiredModal", () => {
 
     await user.click(screen.getByText("Save"));
 
-    expect(mockUpdateTimeRequired).toHaveBeenCalledWith({
+    expect(mockSetTimeRequired).toHaveBeenCalledWith({
       timeRequired: {
         min: 2,
         max: 4,
@@ -179,7 +179,7 @@ describe("EditQuestTimeRequiredModal", () => {
 
   it("handles successful save", async () => {
     const user = userEvent.setup();
-    mockUpdateTimeRequired.mockResolvedValueOnce(undefined);
+    mockSetTimeRequired.mockResolvedValueOnce(undefined);
 
     render(
       <EditQuestTimeRequiredModal
@@ -198,7 +198,7 @@ describe("EditQuestTimeRequiredModal", () => {
     await user.click(screen.getByText("Save"));
 
     // Check if mutation was called with correct args
-    expect(mockUpdateTimeRequired).toHaveBeenCalledWith({
+    expect(mockSetTimeRequired).toHaveBeenCalledWith({
       timeRequired: {
         min: 3,
         max: 4,
@@ -217,7 +217,7 @@ describe("EditQuestTimeRequiredModal", () => {
 
   it("handles save failure", async () => {
     const user = userEvent.setup();
-    mockUpdateTimeRequired.mockRejectedValueOnce(new Error("Update failed"));
+    mockSetTimeRequired.mockRejectedValueOnce(new Error("Update failed"));
 
     render(
       <EditQuestTimeRequiredModal
@@ -252,7 +252,7 @@ describe("EditQuestTimeRequiredModal", () => {
     await user.click(screen.getByText("Cancel"));
 
     // Check if modal was closed without saving
-    expect(mockUpdateTimeRequired).not.toHaveBeenCalled();
+    expect(mockSetTimeRequired).not.toHaveBeenCalled();
     expect(mockOnOpenChange).toHaveBeenCalledWith(false);
   });
 });

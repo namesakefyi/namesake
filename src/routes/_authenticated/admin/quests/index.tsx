@@ -45,7 +45,7 @@ const NewQuestModal = ({
   onOpenChange: (isOpen: boolean) => void;
   onSubmit: () => void;
 }) => {
-  const createQuest = useMutation(api.quests.createQuest);
+  const create = useMutation(api.quests.create);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<Category | null>(null);
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
@@ -59,7 +59,7 @@ const NewQuestModal = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const questId = await createQuest({
+    const questId = await create({
       title,
       category: category ?? undefined,
       jurisdiction: jurisdiction ?? undefined,
@@ -135,12 +135,12 @@ const QuestTableRow = ({
 }: {
   quest: DataModel["quests"]["document"];
 }) => {
-  const questCount = useQuery(api.userQuests.getGlobalQuestCount, {
+  const questCount = useQuery(api.userQuests.countGlobalUsage, {
     questId: quest._id,
   });
-  const deleteQuest = useMutation(api.quests.deleteQuest);
-  const undeleteQuest = useMutation(api.quests.undeleteQuest);
-  const permanentlyDeleteQuest = useMutation(api.quests.permanentlyDeleteQuest);
+  const softDelete = useMutation(api.quests.softDelete);
+  const undelete = useMutation(api.quests.undoSoftDelete);
+  const permanentlyDelete = useMutation(api.quests.permanentlyDelete);
 
   const Category = () => {
     if (!quest.category) return;
@@ -189,21 +189,17 @@ const QuestTableRow = ({
           <Menu>
             {quest.deletionTime ? (
               <>
-                <MenuItem
-                  onAction={() => undeleteQuest({ questId: quest._id })}
-                >
+                <MenuItem onAction={() => undelete({ questId: quest._id })}>
                   Undelete
                 </MenuItem>
                 <MenuItem
-                  onAction={() =>
-                    permanentlyDeleteQuest({ questId: quest._id })
-                  }
+                  onAction={() => permanentlyDelete({ questId: quest._id })}
                 >
                   Permanently Delete
                 </MenuItem>
               </>
             ) : (
-              <MenuItem onAction={() => deleteQuest({ questId: quest._id })}>
+              <MenuItem onAction={() => softDelete({ questId: quest._id })}>
                 Delete
               </MenuItem>
             )}
@@ -216,7 +212,7 @@ const QuestTableRow = ({
 
 function QuestsRoute() {
   const [isNewQuestModalOpen, setIsNewQuestModalOpen] = useState(false);
-  const quests = useQuery(api.quests.getAllQuests);
+  const quests = useQuery(api.quests.getAll);
 
   return (
     <>

@@ -9,7 +9,7 @@ type QuestFormsProps = {
 };
 
 export const QuestForms = ({ questId }: QuestFormsProps) => {
-  const forms = useQuery(api.forms.getFormsForQuest, {
+  const forms = useQuery(api.forms.getByQuestId, {
     questId,
   });
 

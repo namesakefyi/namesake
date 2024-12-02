@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/settings/account")({
 });
 
 function SettingsAccountRoute() {
-  const user = useQuery(api.users.getCurrentUser);
+  const user = useQuery(api.users.getCurrent);
 
   return (
     <>

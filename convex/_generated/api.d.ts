@@ -15,12 +15,12 @@ import type {
 } from "convex/server";
 import type * as auth from "../auth.js";
 import type * as constants from "../constants.js";
-import type * as faqs from "../faqs.js";
 import type * as forms from "../forms.js";
 import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
 import type * as passwordReset from "../passwordReset.js";
 import type * as questFields from "../questFields.js";
+import type * as questions from "../questions.js";
 import type * as quests from "../quests.js";
 import type * as seed from "../seed.js";
 import type * as topics from "../topics.js";
@@ -41,12 +41,12 @@ import type * as validators from "../validators.js";
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   constants: typeof constants;
-  faqs: typeof faqs;
   forms: typeof forms;
   helpers: typeof helpers;
   http: typeof http;
   passwordReset: typeof passwordReset;
   questFields: typeof questFields;
+  questions: typeof questions;
   quests: typeof quests;
   seed: typeof seed;
   topics: typeof topics;

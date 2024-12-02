@@ -11,10 +11,10 @@ export const Route = createFileRoute("/_authenticated/admin/forms/$formId")({
 
 function AdminFormDetailRoute() {
   const { formId } = Route.useParams();
-  const form = useQuery(api.forms.getForm, {
+  const form = useQuery(api.forms.getById, {
     formId: formId as Id<"forms">,
   });
-  const fileUrl = useQuery(api.forms.getFormPDFUrl, {
+  const fileUrl = useQuery(api.forms.getURL, {
     formId: formId as Id<"forms">,
   });
 

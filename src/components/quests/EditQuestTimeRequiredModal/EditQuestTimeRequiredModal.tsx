@@ -105,7 +105,7 @@ export const EditQuestTimeRequiredModal = ({
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const updateTimeRequired = useMutation(api.quests.updateQuestTimeRequired);
+  const setTimeRequired = useMutation(api.quests.setTimeRequired);
 
   const handleCancel = () => {
     setTimeInput((quest.timeRequired as TimeRequired) ?? null);
@@ -117,7 +117,7 @@ export const EditQuestTimeRequiredModal = ({
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    updateTimeRequired({
+    setTimeRequired({
       timeRequired: timeInput ?? undefined,
       questId: quest._id,
     })
