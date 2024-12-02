@@ -14,7 +14,10 @@ export default defineConfig({
       ["convex/**", "edge-runtime"],
       ["**", "jsdom"],
     ],
-    include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    include: [
+      "src/**/*.{test,spec}.{ts,tsx}",
+      "convex/**/*.{test,spec}.{ts,tsx}",
+    ],
     exclude: [...configDefaults.exclude, "e2e/**"],
     coverage: {
       reporter: ["text", "json-summary", "json"],
