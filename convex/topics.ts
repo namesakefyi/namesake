@@ -33,7 +33,7 @@ export const set = mutation({
   },
 });
 
-export const permanentlyDelete = mutation({
+export const deleteForever = mutation({
   args: { topicId: v.id("topics") },
   handler: async (ctx, { topicId }) => {
     // If there are any questions with this topic, throw an error

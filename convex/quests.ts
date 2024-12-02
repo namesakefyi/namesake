@@ -148,7 +148,7 @@ export const undoSoftDelete = userMutation({
   },
 });
 
-export const permanentlyDelete = userMutation({
+export const deleteForever = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     // Delete userQuests

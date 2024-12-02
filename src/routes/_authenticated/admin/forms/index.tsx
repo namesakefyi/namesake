@@ -163,7 +163,7 @@ const FormTableRow = ({ form }: { form: DataModel["forms"]["document"] }) => {
   const formUrl = useQuery(api.forms.getURL, { formId: form._id });
   const deleteForm = useMutation(api.forms.softDelete);
   const undeleteForm = useMutation(api.forms.undoSoftDelete);
-  const permanentlyDeleteForm = useMutation(api.forms.permanentlyDelete);
+  const deleteForeverForm = useMutation(api.forms.deleteForever);
 
   return (
     <TableRow
@@ -204,7 +204,7 @@ const FormTableRow = ({ form }: { form: DataModel["forms"]["document"] }) => {
                 </MenuItem>
                 {/* TODO: Add modal */}
                 <MenuItem
-                  onAction={() => permanentlyDeleteForm({ formId: form._id })}
+                  onAction={() => deleteForeverForm({ formId: form._id })}
                 >
                   Permanently Delete
                 </MenuItem>

@@ -53,7 +53,7 @@ describe("topics", () => {
     expect(createdTopic?.topic).toBe("Immigration");
 
     // Delete the topic
-    await t.mutation(api.topics.permanentlyDelete, {
+    await t.mutation(api.topics.deleteForever, {
       topicId,
     });
 
@@ -100,7 +100,7 @@ describe("topics", () => {
 
     // Attempt to delete the topic
     await expect(
-      t.mutation(api.topics.permanentlyDelete, {
+      t.mutation(api.topics.deleteForever, {
         topicId,
       }),
     ).rejects.toThrowError("Cannot delete topic with questions");

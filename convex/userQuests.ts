@@ -178,7 +178,7 @@ export const setStatus = userMutation({
   },
 });
 
-export const permanentlyDelete = userMutation({
+export const deleteForever = userMutation({
   args: { questId: v.id("quests") },
   returns: v.null(),
   handler: async (ctx, args) => {

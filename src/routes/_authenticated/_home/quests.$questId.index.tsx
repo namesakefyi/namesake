@@ -43,14 +43,14 @@ function QuestDetailRoute() {
   });
 
   const changeStatus = useMutation(api.userQuests.setStatus);
-  const permanentlyDelete = useMutation(api.userQuests.permanentlyDelete);
+  const deleteForever = useMutation(api.userQuests.deleteForever);
 
   const handleStatusChange = (status: Status) => {
     changeStatus({ questId: questId as Id<"quests">, status: status });
   };
 
   const handleRemoveQuest = (questId: Id<"quests">, title: string) => {
-    permanentlyDelete({ questId }).then(() => {
+    deleteForever({ questId }).then(() => {
       toast(`Removed ${title} quest`);
       navigate({ to: "/" });
     });

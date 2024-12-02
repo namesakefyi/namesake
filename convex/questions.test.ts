@@ -119,7 +119,7 @@ describe("questions", () => {
     expect(createdQuestion?.topics).toContain(topicId);
 
     // Delete the question
-    await t.mutation(api.questions.permanentlyDelete, {
+    await t.mutation(api.questions.deleteForever, {
       questionId,
     });
 
@@ -163,7 +163,7 @@ describe("questions", () => {
 
     // Attempt to delete the question
     await expect(
-      t.mutation(api.questions.permanentlyDelete, {
+      t.mutation(api.questions.deleteForever, {
         questionId,
       }),
     ).rejects.toThrowError(

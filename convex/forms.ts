@@ -112,7 +112,7 @@ export const undoSoftDelete = userMutation({
   },
 });
 
-export const permanentlyDelete = userMutation({
+export const deleteForever = userMutation({
   args: { formId: v.id("forms") },
   handler: async (ctx, args) => {
     // TODO: Delete form references in other tables

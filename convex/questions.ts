@@ -42,7 +42,7 @@ export const update = mutation({
   },
 });
 
-export const permanentlyDelete = mutation({
+export const deleteForever = mutation({
   args: { questionId: v.id("questions") },
   handler: async (ctx, { questionId }) => {
     const question = await ctx.db.get(questionId);

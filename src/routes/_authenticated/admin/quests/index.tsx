@@ -140,7 +140,7 @@ const QuestTableRow = ({
   });
   const softDelete = useMutation(api.quests.softDelete);
   const undelete = useMutation(api.quests.undoSoftDelete);
-  const permanentlyDelete = useMutation(api.quests.permanentlyDelete);
+  const deleteForever = useMutation(api.quests.deleteForever);
 
   const Category = () => {
     if (!quest.category) return;
@@ -193,7 +193,7 @@ const QuestTableRow = ({
                   Undelete
                 </MenuItem>
                 <MenuItem
-                  onAction={() => permanentlyDelete({ questId: quest._id })}
+                  onAction={() => deleteForever({ questId: quest._id })}
                 >
                   Permanently Delete
                 </MenuItem>

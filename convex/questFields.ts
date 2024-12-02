@@ -10,7 +10,7 @@ export const getAll = query({
   },
 });
 
-export const getManyById = query({
+export const getByIds = query({
   args: { fieldIds: v.array(v.id("questFields")) },
   handler: async (ctx, args) => {
     const fields = await Promise.all(
