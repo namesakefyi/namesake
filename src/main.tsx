@@ -31,6 +31,14 @@ const router = createRouter({
       title="Page not found"
       subtitle="We couldn't find that page."
       icon={TriangleAlert}
+      button={{
+        children: "Go back to home page",
+        onPress: () => {
+          router.navigate({ to: "/" });
+        },
+        variant: "secondary",
+        size: "medium",
+      }}
     />
   ),
 });

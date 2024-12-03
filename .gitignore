@@ -40,3 +40,5 @@ node_modules
 
 # Local files
 *.local
+
+.env.local

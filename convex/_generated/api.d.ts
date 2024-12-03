@@ -26,8 +26,8 @@ import type * as seed from "../seed.js";
 import type * as topics from "../topics.js";
 import type * as userEncryptedData from "../userEncryptedData.js";
 import type * as userQuests from "../userQuests.js";
-import type * as userSettings from "../userSettings.js";
 import type * as users from "../users.js";
+import type * as userSettings from "../userSettings.js";
 import type * as validators from "../validators.js";
 
 /**
@@ -52,8 +52,8 @@ declare const fullApi: ApiFromModules<{
   topics: typeof topics;
   userEncryptedData: typeof userEncryptedData;
   userQuests: typeof userQuests;
-  userSettings: typeof userSettings;
   users: typeof users;
+  userSettings: typeof userSettings;
   validators: typeof validators;
 }>;
 export declare const api: FilterApi<
