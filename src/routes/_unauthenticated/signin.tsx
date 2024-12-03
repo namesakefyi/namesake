@@ -15,13 +15,17 @@ import {
   TooltipTrigger,
 } from "@/components/common";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { ConvexError } from "convex/values";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import type { Key } from "react-aria";
 
 export const Route = createFileRoute("/_unauthenticated/signin")({
+  beforeLoad: async ({ context }) => {
+    const { isAuthenticated, isLoading } = await context.auth;
+    if (!isLoading && isAuthenticated) throw redirect({ to: "/" });
+  },
   component: LoginRoute,
 });
 

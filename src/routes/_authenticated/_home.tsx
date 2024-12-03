@@ -28,7 +28,7 @@ import {
   type Status,
 } from "@convex/constants";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
-import { Authenticated, Unauthenticated, useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import {
   History,
   List,
@@ -219,16 +219,9 @@ function IndexRoute() {
   };
 
   return (
-    <>
-      <Authenticated>
-        <Container className="flex">
-          <MyQuests />
-          <Outlet />
-        </Container>
-      </Authenticated>
-      <Unauthenticated>
-        <h1>Please log in</h1>
-      </Unauthenticated>
-    </>
+    <Container className="flex">
+      <MyQuests />
+      <Outlet />
+    </Container>
   );
 }
