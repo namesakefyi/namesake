@@ -1,5 +1,20 @@
 # namesake
 
+## 0.13.0
+
+### Minor Changes
+
+- 6174fc5: Allow editing quest costs and time required directly from the quest page
+- 422078e: Improve rich text editing experience
+- eebd9b6: Link uploaded forms to quests
+- 957070c: Improve error handling for changes to user settings
+- d800201: Add navigation links and logo to the 404 page
+
+### Patch Changes
+
+- 9bcdce2: Fix redirect logic for authenticated and unauthenticated users
+- 1469449: Fix rich text rendering and saving
+
 ## 0.12.0
 
 ### Minor Changes
