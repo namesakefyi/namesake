@@ -37,8 +37,8 @@ node_modules
 
 # Private keys
 .env
+.env.local
 
 # Local files
 *.local
 
-.env.local
