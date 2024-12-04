@@ -20,7 +20,7 @@ import { routeTree } from "./routeTree.gen";
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
 const NotFoundComponent = () => (
-  <div className="flex flex-col items-center justify-center gap-12 lg:gap-16 w-full min-h-screen px-4">
+  <div className="flex flex-col items-center justify-center gap-12 w-full min-h-screen px-4">
     <Logo />
     <Empty
       title="Page not found"
@@ -33,12 +33,13 @@ const NotFoundComponent = () => (
         onPress: () => {
           router.history.go(-1);
         },
-        "aria-label": "Go back to the previous page",
       }}
       link={{
         children: "Go home",
-        href: "https://namesake.fyi",
-        "aria-label": "Return to the home page",
+        href: { to: "/" },
+        button: {
+          variant: "secondary",
+        },
       }}
     />
   </div>
