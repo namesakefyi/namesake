@@ -41,7 +41,6 @@
     "@tanstack/react-router": "^1.85.0",
     "@tiptap/extension-blockquote": "^2.10.3",
     "@tiptap/extension-bold": "^2.10.3",
-    "@tiptap/extension-bubble-menu": "^2.10.3",
     "@tiptap/extension-bullet-list": "^2.10.3",
     "@tiptap/extension-document": "^2.10.3",
     "@tiptap/extension-hard-break": "^2.10.3",

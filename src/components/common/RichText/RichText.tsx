@@ -30,12 +30,15 @@ import { tv } from "tailwind-variants";
 import { Separator } from "../Separator";
 import { ToggleButton } from "../ToggleButton";
 
+type FeatureSet = "basic" | "full";
+
 export interface RichTextProps {
   className?: string;
   showReadingScore?: boolean;
   initialContent?: string;
   onChange?: (content: string) => void;
   editable?: boolean;
+  features?: FeatureSet;
 }
 
 export function RichText({
@@ -44,33 +47,44 @@ export function RichText({
   initialContent,
   onChange,
   editable = true,
+  features = "basic",
 }: RichTextProps) {
+  const requiredExtensions = [
+    Document,
+    Text,
+    Paragraph,
+    HardBreak,
+    Typography,
+    History,
+    Placeholder.configure({
+      placeholder: "Write something...",
+    }),
+  ];
+
+  const basicExtensions = [
+    ...requiredExtensions,
+    Bold,
+    Italic,
+    Link.configure({
+      openOnClick: false,
+      defaultProtocol: "https",
+    }),
+  ];
+
+  const fullExtensions = [
+    ...basicExtensions,
+    Heading.configure({
+      levels: [2, 3],
+    }),
+    Blockquote,
+    BulletList,
+    ListItem,
+    ListKeymap,
+    OrderedList,
+  ];
+
   const editor = useEditor({
-    extensions: [
-      Document,
-      Text,
-      Paragraph,
-      Heading.configure({
-        levels: [2, 3],
-      }),
-      Blockquote,
-      HardBreak,
-      BulletList,
-      ListItem,
-      ListKeymap,
-      OrderedList,
-      Bold,
-      Italic,
-      Link.configure({
-        openOnClick: false,
-        defaultProtocol: "https",
-      }),
-      Placeholder.configure({
-        placeholder: "Write something...",
-      }),
-      History,
-      Typography,
-    ],
+    extensions: features === "basic" ? basicExtensions : fullExtensions,
     content: initialContent,
     editable,
     onUpdate: ({ editor }) => {
@@ -94,7 +108,7 @@ export function RichText({
     base: "w-full",
     variants: {
       editable: {
-        true: "[&_.tiptap]:p-2 [&_.tiptap]:-m-2 [&_.tiptap]:rounded-lg [&_.tiptap]:outline-none [&_.tiptap]:focus-visible:outline [&_.tiptap]:focus-visible:outline-2 [&_.tiptap]:focus-visible:outline-purplea-9 [&_.tiptap]:dark:focus-visible:outline-purpledarka-9 [&_.tiptap]:focus-visible:outline-offset-2",
+        true: "[&_.tiptap]:outline-none",
       },
     },
   });
@@ -103,7 +117,7 @@ export function RichText({
     <div className={styles({ editable })}>
       <EditorContent
         editor={editor}
-        className={twMerge("w-full prose max-w-none", className)}
+        className={twMerge("w-full prose", className)}
       />
       <BubbleMenu
         editor={editor}
@@ -125,49 +139,56 @@ export function RichText({
           aria-label="Toggle italic text"
           size="small"
         />
-        <Separator orientation="vertical" />
-        <ToggleButton
-          onPress={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          isDisabled={
-            !editor.can().chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          isSelected={editor.isActive("heading", { level: 2 })}
-          icon={Heading2}
-          aria-label="Toggle second-level heading text"
-          size="small"
-        />
-        <ToggleButton
-          onPress={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
-          isDisabled={
-            !editor.can().chain().focus().toggleHeading({ level: 3 }).run()
-          }
-          isSelected={editor.isActive("heading", { level: 3 })}
-          icon={Heading3}
-          aria-label="Toggle third-level heading text"
-          size="small"
-        />
-        <Separator orientation="vertical" />
-        {/* Lists */}
-        <ToggleButton
-          onPress={() => editor.chain().focus().toggleBulletList().run()}
-          isDisabled={!editor.can().chain().focus().toggleBulletList().run()}
-          isSelected={editor.isActive("bulletList")}
-          icon={List}
-          aria-label="Toggle bulleted list"
-          size="small"
-        />
-        <ToggleButton
-          onPress={() => editor.chain().focus().toggleOrderedList().run()}
-          isDisabled={!editor.can().chain().focus().toggleOrderedList().run()}
-          isSelected={editor.isActive("orderedList")}
-          icon={ListOrdered}
-          aria-label="Toggle numbered list"
-          size="small"
-        />
+        {features === "full" && (
+          <>
+            <Separator orientation="vertical" />
+            <ToggleButton
+              onPress={() =>
+                editor.chain().focus().toggleHeading({ level: 2 }).run()
+              }
+              isDisabled={
+                !editor.can().chain().focus().toggleHeading({ level: 2 }).run()
+              }
+              isSelected={editor.isActive("heading", { level: 2 })}
+              icon={Heading2}
+              aria-label="Toggle second-level heading text"
+              size="small"
+            />
+            <ToggleButton
+              onPress={() =>
+                editor.chain().focus().toggleHeading({ level: 3 }).run()
+              }
+              isDisabled={
+                !editor.can().chain().focus().toggleHeading({ level: 3 }).run()
+              }
+              isSelected={editor.isActive("heading", { level: 3 })}
+              icon={Heading3}
+              aria-label="Toggle third-level heading text"
+              size="small"
+            />
+            <Separator orientation="vertical" />
+            <ToggleButton
+              onPress={() => editor.chain().focus().toggleBulletList().run()}
+              isDisabled={
+                !editor.can().chain().focus().toggleBulletList().run()
+              }
+              isSelected={editor.isActive("bulletList")}
+              icon={List}
+              aria-label="Toggle bulleted list"
+              size="small"
+            />
+            <ToggleButton
+              onPress={() => editor.chain().focus().toggleOrderedList().run()}
+              isDisabled={
+                !editor.can().chain().focus().toggleOrderedList().run()
+              }
+              isSelected={editor.isActive("orderedList")}
+              icon={ListOrdered}
+              aria-label="Toggle numbered list"
+              size="small"
+            />
+          </>
+        )}
       </BubbleMenu>
       {showReadingScore && (
         <div className="border-t border-gray-dim">

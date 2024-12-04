@@ -93,7 +93,11 @@ function QuestEditRoute() {
       </div>
       <QuestUrls urls={quest.urls} />
       <QuestForms questId={quest._id} />
-      <RichText initialContent={quest.content} onChange={setContent} />
+      <RichText
+        initialContent={quest.content}
+        features="full"
+        onChange={setContent}
+      />
     </AppContent>
   );
 }
