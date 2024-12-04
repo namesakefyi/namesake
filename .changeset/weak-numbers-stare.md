@@ -2,4 +2,4 @@
 "namesake": minor
 ---
 
-Improved the 404 page by adding navigation to the home page, enhancing user experience and accessibility.
+Add navigation links and logo to the 404 page
