@@ -134,6 +134,16 @@ export const setTimeRequired = userMutation({
   },
 });
 
+export const setContent = userMutation({
+  args: {
+    questId: v.id("quests"),
+    content: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.questId, { content: args.content });
+  },
+});
+
 export const softDelete = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
