@@ -19,6 +19,7 @@ export function Empty({
   title,
   subtitle,
   className,
+  children,
   button,
   link,
 }: EmptyProps) {
@@ -32,8 +33,11 @@ export function Empty({
       <Icon size={40} className="text-gray-8 dark:text-graydark-8" />
       <h2 className="font-semibold text-xl">{title}</h2>
       {subtitle && <p className="text-gray-dim -mt-3">{subtitle}</p>}
-      {button && <Button {...button} />}
-      {link && <Link {...link} />}
+      <div className="flex gap-2">
+        {button && <Button {...button} />}
+        {link && <Link {...link} />}
+      </div>
+      {children}
     </div>
   );
 }
