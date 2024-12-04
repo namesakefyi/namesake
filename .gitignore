@@ -38,6 +38,7 @@ node_modules
 # Private keys
 .env
 .env.local
+.npmrc
 
 # Local files
 *.local

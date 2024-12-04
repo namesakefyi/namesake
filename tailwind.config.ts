@@ -1,4 +1,3 @@
-import tailwindcssTypography from "@tailwindcss/typography";
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 import tailwindcssAriaAttributes from "tailwindcss-aria-attributes";
@@ -13,6 +12,5 @@ export default {
     tailwindcssAnimate,
     tailwindcssAriaAttributes,
     tailwindcssRadixColors,
-    tailwindcssTypography,
   ],
 } satisfies Config;

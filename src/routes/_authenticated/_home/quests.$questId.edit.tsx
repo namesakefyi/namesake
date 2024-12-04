@@ -8,9 +8,11 @@ import {
 } from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { useQuery } from "convex/react";
-import { Check, Milestone } from "lucide-react";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { useMutation, useQuery } from "convex/react";
+import { Check, LoaderCircle, Milestone } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute(
   "/_authenticated/_home/quests/$questId/edit",
@@ -37,6 +39,30 @@ function QuestEditRoute() {
     questId: questId as Id<"quests">,
   });
 
+  const [content, setContent] = useState(quest?.content ?? "");
+  const [isSaving, setIsSaving] = useState(false);
+  const navigate = useNavigate();
+
+  const updateContent = useMutation(api.quests.setContent);
+
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      await updateContent({
+        questId: questId as Id<"quests">,
+        content,
+      });
+      navigate({
+        to: "/quests/$questId",
+        params: { questId: questId as Id<"quests"> },
+      });
+    } catch (err) {
+      toast.error("Failed to save changes");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   // TODO: Improve loading state to prevent flash of empty
   if (quest === undefined) return;
   if (quest === null) return <Empty title="Quest not found" icon={Milestone} />;
@@ -50,8 +76,14 @@ function QuestEditRoute() {
         <Link
           href={{ to: "/quests/$questId", params: { questId: quest._id } }}
           button={{ variant: "ghost" }}
+          onPress={handleSave}
+          isDisabled={isSaving}
         >
-          <Check size={16} />
+          {isSaving ? (
+            <LoaderCircle className="animate-spin" />
+          ) : (
+            <Check size={16} />
+          )}
           Save
         </Link>
       </PageHeader>
@@ -61,7 +93,7 @@ function QuestEditRoute() {
       </div>
       <QuestUrls urls={quest.urls} />
       <QuestForms questId={quest._id} />
-      <RichText initialContent={quest.content} />
+      <RichText initialContent={quest.content} onChange={setContent} />
     </AppContent>
   );
 }
