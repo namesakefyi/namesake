@@ -48,30 +48,3 @@ jobs:
           webpackStatsFile: ./webpack-stats.json
           key: ${{ secrets.RELATIVE_CI_KEY }}
           token: ${{ secrets.GITHUB_TOKEN }}
-
-  report-coverage:
-    needs: test-coverage
-    name: Report Coverage
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-  
-      - name: Download coverage (${{ github.head_ref }})
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-${{ github.head_ref }}
-          path: coverage
-
-      - name: Download coverage (main)
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-main
-          path: coverage-main
-
-      - name: Report coverage
-        if: always()
-        uses: davelosert/vitest-coverage-report-action@v2.8.0
-        with:
-          json-summary-compare-path: coverage-main/coverage-summary.json
