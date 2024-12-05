@@ -8,6 +8,7 @@ import webpackStatsPlugin from "rollup-plugin-webpack-stats";
 import tailwindcss from "tailwindcss";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { configDefaults, coverageConfigDefaults } from "vitest/config";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -34,6 +35,37 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [autoprefixer(), tailwindcss(), cssnano()],
+    },
+  },
+  test: {
+    globals: true,
+    environmentMatchGlobs: [
+      ["convex/**", "edge-runtime"],
+      ["**", "jsdom"],
+    ],
+    include: [
+      "src/**/*.{test,spec}.{ts,tsx}",
+      "convex/**/*.{test,spec}.{ts,tsx}",
+    ],
+    exclude: [...configDefaults.exclude, "tests/**"],
+    coverage: {
+      reporter: ["text", "json-summary", "json"],
+      reportOnFailure: true,
+      include: ["src/**", "convex/**"],
+      exclude: [
+        ...coverageConfigDefaults.exclude,
+        "**/*.config.?(c|m)[jt]s?(x)",
+        "convex/_generated/**",
+        "src/routeTree.gen.ts",
+        "**/*.stories.tsx",
+        "src/components/**/index.ts",
+      ],
+    },
+    setupFiles: ["./tests/vitest.setup.ts"],
+    server: {
+      deps: {
+        inline: ["convex-test"],
+      },
     },
   },
 });
