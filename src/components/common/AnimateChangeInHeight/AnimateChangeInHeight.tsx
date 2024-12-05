@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -32,13 +32,13 @@ export const AnimateChangeInHeight: React.FC<AnimateChangeInHeightProps> = ({
   }, []);
 
   return (
-    <motion.div
+    <m.div
       className={twMerge("overflow-hidden", className)}
       style={{ height }}
       animate={{ height }}
       transition={{ duration: 0.1 }}
     >
       <div ref={containerRef}>{children}</div>
-    </motion.div>
+    </m.div>
   );
 };
