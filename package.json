@@ -30,6 +30,9 @@
     "@types/mime": "3.0.4",
     "jackspeak": "2.1.1"
   },
+  "lint-staged": {
+    "*": "pnpm check:fix"
+  },
   "dependencies": {
     "@auth/core": "0.37.4",
     "@convex-dev/auth": "^0.0.75",

@@ -61,17 +61,17 @@ Now that the development app is running, let's get familiar with what's inside.
 ## Project structure
 
 ```shell
-📂 convex          # Backend queries, mutations, and schema definitions
-📂 e2e             # End-to-end Playwright tests
-📂 public          # Images, favicons, and other unprocessed assets
-📂 src             # Frontend application
-└── 📂 components  # Shared components
-    ├── 📂 app     # App-related global components (logos, sidebar, etc.)
-    ├── 📂 common  # Design system components from React Aria
-    └── 📂 quests  # Feature-specific quest components
-├── 📂 routes      # File-based routing using TanStack Router
-├── 📂 styles      # Global CSS (not much here; most of it's in Tailwind!)
-└── 📄 main.tsx    # Base of the project including common Providers
+▸ 📂 convex         # Backend queries, mutations, and schema definitions
+▸ 📂 public         # Images, favicons, and other unprocessed assets
+▾ 📂 src            # Frontend application
+  ▾ 📂 components   # Shared components
+    ▸ 📂 app        # App-related global components (logos, sidebar, etc.)
+    ▸ 📂 common     # Design system components from React Aria
+    ▸ 📂 quests     # Feature-specific quest components
+  ▸ 📂 routes       # File-based routing using TanStack Router
+  ▸ 📂 styles       # Global CSS (not much here; most of it's in Tailwind!)
+    📄 main.tsx     # Base of the project including common Providers
+▸ 📂 tests          # End-to-end Playwright tests
 ```
 
 ## Dependencies

@@ -9,7 +9,7 @@ Namesake is a web application which helps people in the U.S. navigate the legal 
 
 ## Contributing
 
-We welcome new contributors! You don't need to be an expert and we're here to help you. Take a look at our [contribution guidelines](/CONTRIBUTING.md) and come [chat with us](https://namesake.fyi/chat) in #code on Discord.
+We welcome new contributors! You don't need to be an expert and we're here to help you. Take a look at our [contribution guidelines](/docs/CONTRIBUTING.md) and come [chat with us](https://namesake.fyi/chat) in #code on Discord.
 
 Need somewhere to start? Check out [good first issues](https://github.com/namesakefyi/namesake/contribute).
 
