@@ -250,6 +250,9 @@ importers:
       prop-types:
         specifier: ^15.8.1
         version: 15.8.1
+      rollup-plugin-webpack-stats:
+        specifier: ^1.1.1
+        version: 1.1.1(rollup@4.27.3)
       tailwind-merge:
         specifier: ^2.5.5
         version: 2.5.5
@@ -5342,6 +5345,12 @@ packages:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
+
+  rollup-plugin-webpack-stats@1.1.1:
+    resolution: {integrity: sha512-omUl6WNXvini+SjG8gCHNNXeee5mJ9yXK9+cUi7xmFlHteAg5KQN2Os3T7aw62ET/1f50WJRjrLPe+9TOCbWNA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      rollup: ^3.0.0 || ^4.0.0
 
   rollup@4.27.3:
     resolution: {integrity: sha512-SLsCOnlmGt9VoZ9Ek8yBK8tAdmPHeppkw+Xa7yDlCEhDTvwYei03JlWo1fdc7YTfLZ4tD8riJCUyAgTbszk1fQ==}
@@ -12022,6 +12031,10 @@ snapshots:
     dependencies:
       glob: 7.2.3
     optional: true
+
+  rollup-plugin-webpack-stats@1.1.1(rollup@4.27.3):
+    dependencies:
+      rollup: 4.27.3
 
   rollup@4.27.3:
     dependencies:
