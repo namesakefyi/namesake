@@ -11,7 +11,7 @@ const seed = internalMutation(async (ctx) => {
   const users = await ctx.db.query("users").collect();
   const quests = await ctx.db.query("quests").collect();
   if (users.length > 0 || quests.length > 0) {
-    console.error("Data already exists, skipping seeding");
+    console.info("Data already exists, skipping seeding");
     return;
   }
 

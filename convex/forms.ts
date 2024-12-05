@@ -98,6 +98,13 @@ export const create = userMutation({
   },
 });
 
+export const setJSON = mutation({
+  args: { formId: v.id("forms"), json: v.string() },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.formId, { json: args.json });
+  },
+});
+
 export const softDelete = userMutation({
   args: { formId: v.id("forms") },
   handler: async (ctx, args) => {

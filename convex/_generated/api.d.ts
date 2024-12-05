@@ -18,6 +18,7 @@ import type * as constants from "../constants.js";
 import type * as forms from "../forms.js";
 import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
+import type * as parseForm from "../parseForm.js";
 import type * as passwordReset from "../passwordReset.js";
 import type * as questFields from "../questFields.js";
 import type * as questions from "../questions.js";
@@ -44,6 +45,7 @@ declare const fullApi: ApiFromModules<{
   forms: typeof forms;
   helpers: typeof helpers;
   http: typeof http;
+  parseForm: typeof parseForm;
   passwordReset: typeof passwordReset;
   questFields: typeof questFields;
   questions: typeof questions;

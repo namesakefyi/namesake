@@ -113,6 +113,8 @@ const forms = defineTable({
   creationUser: v.id("users"),
   /** The storageId for the PDF file. */
   file: v.optional(v.id("_storage")),
+  /** The parsed data from the form. */
+  json: v.optional(v.string()),
   /** The US State the form applies to. */
   jurisdiction: jurisdiction,
   /** Time in ms since epoch when the form was deleted. */

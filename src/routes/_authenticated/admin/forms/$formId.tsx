@@ -1,9 +1,9 @@
 import { PageHeader } from "@/components/app";
-import { Badge, Link } from "@/components/common";
+import { Badge, Button, Link } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "convex/react";
+import { useAction, useQuery } from "convex/react";
 
 export const Route = createFileRoute("/_authenticated/admin/forms/$formId")({
   component: AdminFormDetailRoute,
@@ -17,9 +17,14 @@ function AdminFormDetailRoute() {
   const fileUrl = useQuery(api.forms.getURL, {
     formId: formId as Id<"forms">,
   });
+  const parseForm = useAction(api.parseForm.parse);
 
   if (form === undefined) return;
   if (form === null) return "Form not found";
+
+  const handleParseForm = () => {
+    parseForm({ formId: formId as Id<"forms"> });
+  };
 
   return (
     <div>
@@ -32,6 +37,7 @@ function AdminFormDetailRoute() {
           </>
         }
       >
+        <Button onPress={handleParseForm}>Parse Form</Button>
         <Link
           href={{
             to: "/admin/quests/$questId",
