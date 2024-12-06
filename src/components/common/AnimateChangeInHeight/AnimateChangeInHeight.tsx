@@ -1,4 +1,4 @@
-import { m } from "motion/react";
+import { m } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
