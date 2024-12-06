@@ -10,8 +10,8 @@ import {
   useConvexAuth,
   useQuery,
 } from "convex/react";
+import { LazyMotion, domAnimation } from "framer-motion";
 import { ArrowLeft, TriangleAlert } from "lucide-react";
-import { LazyMotion, domAnimation } from "motion/react";
 import { ThemeProvider } from "next-themes";
 import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
