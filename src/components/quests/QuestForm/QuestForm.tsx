@@ -1,61 +1,60 @@
 import "survey-core/defaultV2.min.css";
 
-import { Button, Modal } from "@/components/common";
-import { api } from "@convex/_generated/api";
-import type { Doc } from "@convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { useTheme } from "next-themes";
-import { useState } from "react";
-import type { CompleteEvent, SurveyModel } from "survey-core";
-import {
-  LayeredDarkPanelless,
-  LayeredLightPanelless,
-} from "survey-core/themes";
-import { Model, Survey } from "survey-react-ui";
+import { Link } from "@/components/common";
+import type { Doc, Id } from "@convex/_generated/dataModel";
+import { Pencil, Plus } from "lucide-react";
+import { Heading } from "react-aria-components";
 
 export type QuestFormProps = {
   quest: Doc<"quests">;
+  editable?: boolean;
 };
 
-export const QuestForm = ({ quest }: QuestFormProps) => {
-  const { resolvedTheme } = useTheme();
-  const [isSurveyOpen, setIsSurveyOpen] = useState(false);
-  const saveData = useMutation(api.userFormData.set);
-
-  if (!quest.formSchema) return null;
-
-  const survey = new Model(quest.formSchema);
-  survey.applyTheme(
-    resolvedTheme === "dark" ? LayeredDarkPanelless : LayeredLightPanelless,
-  );
-
-  const handleSubmit = async (sender: SurveyModel, _options: CompleteEvent) => {
-    try {
-      // Validate JSON against schema and remove invalid values
-      sender.clearIncorrectValues(true);
-      for (const key in sender.data) {
-        const question = sender.getQuestionByName(key);
-        if (question) {
-          saveData({
-            field: key,
-            value: question.value,
-          });
-        }
-      }
-      setIsSurveyOpen(false);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  survey.onComplete.add(handleSubmit);
+export const EditButton = ({
+  isNew,
+  questId,
+}: { isNew: boolean; questId: Id<"quests"> }) => {
+  const { buttonText, Icon } = isNew
+    ? { buttonText: "Create form", Icon: Plus }
+    : { buttonText: "Edit form", Icon: Pencil };
 
   return (
-    <>
-      <Button onPress={() => setIsSurveyOpen(true)}>Get Started</Button>
-      <Modal isOpen={isSurveyOpen}>
-        <Survey model={survey} />
-      </Modal>
-    </>
+    <Link
+      href={{
+        to: "/admin/quests/$questId/form",
+        params: { questId },
+      }}
+      button={{ variant: "secondary" }}
+    >
+      <Icon size={16} /> {buttonText}
+    </Link>
+  );
+};
+
+export const QuestForm = ({ quest, editable }: QuestFormProps) => {
+  if (!quest.formSchema && !editable) return null;
+
+  return (
+    <div className="rounded-lg border border-gray-dim flex items-center justify-between gap-4 p-4 mb-4">
+      <div className="flex flex-col">
+        <Heading className="text-lg">Answer questions</Heading>
+        <p className="text-gray-dim">
+          We'll walk you through the steps to fill out your forms.
+        </p>
+      </div>
+      {editable ? (
+        <EditButton isNew={!quest.formSchema} questId={quest._id} />
+      ) : (
+        <Link
+          href={{
+            to: "/quests/$questId/form",
+            params: { questId: quest._id },
+          }}
+          button={{ variant: "secondary" }}
+        >
+          Get Started
+        </Link>
+      )}
+    </div>
   );
 };

@@ -1,10 +1,10 @@
 import "survey-core/defaultV2.min.css";
 import "survey-creator-core/survey-creator-core.min.css";
 
-import { Badge, Button, Link } from "@/components/common";
+import { Badge, Button } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { CircleCheck, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -19,11 +19,12 @@ export const Route = createFileRoute(
 
 function AdminQuestSurveyRoute() {
   const { questId } = Route.useParams();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isPending, setIsPending] = useState(false);
   const quest = useQuery(api.quests.getById, {
     questId: questId as Id<"quests">,
   });
+
   const setFormSchema = useMutation(api.quests.setFormSchema);
 
   const creator = new SurveyCreator({
@@ -62,7 +63,7 @@ function AdminQuestSurveyRoute() {
   const handleSaveAndExit = () => {
     try {
       creator.saveSurvey();
-      navigate({ to: "/admin/quests/$questId", params: { questId } });
+      router.history.back();
       toast.success("Saved form changes");
     } catch (err) {
       console.error(err);
@@ -79,16 +80,14 @@ function AdminQuestSurveyRoute() {
           {quest?.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
         </h1>
         <div className="flex gap-2 items-center">
-          <Link
-            href={{ to: "/admin/quests/$questId", params: { questId } }}
-            button={{
-              variant: "ghost",
-              size: "small",
-              isDisabled: isPending,
-            }}
+          <Button
+            variant="ghost"
+            onPress={() => router.history.back()}
+            size="small"
+            isDisabled={isPending}
           >
             Discard changes
-          </Link>
+          </Button>
           <Button
             variant="primary"
             onPress={handleSaveAndExit}

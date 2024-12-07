@@ -100,7 +100,7 @@ function QuestDetailRoute() {
           </Menu>
         </MenuTrigger>
       </PageHeader>
-      <div className="flex gap-4 mb-4 lg:mb-6 xl:mb-8">
+      <div className="flex gap-4 mb-4">
         <QuestCosts quest={quest} />
         <QuestTimeRequired quest={quest} />
       </div>

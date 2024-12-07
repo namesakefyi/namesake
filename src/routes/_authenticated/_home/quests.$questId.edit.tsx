@@ -1,6 +1,11 @@
 import { AppContent, PageHeader } from "@/components/app";
 import { Badge, Empty, Link, RichText } from "@/components/common";
-import { QuestCosts, QuestTimeRequired, QuestUrls } from "@/components/quests";
+import {
+  QuestCosts,
+  QuestForm,
+  QuestTimeRequired,
+  QuestUrls,
+} from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
@@ -82,10 +87,11 @@ function QuestEditRoute() {
           Save
         </Link>
       </PageHeader>
-      <div className="flex gap-4 mb-4 lg:mb-6 xl:mb-8">
+      <div className="flex gap-4 mb-4">
         <QuestCosts quest={quest} editable />
         <QuestTimeRequired quest={quest} editable />
       </div>
+      <QuestForm quest={quest} editable />
       <QuestUrls urls={quest.urls} />
       <RichText initialContent={quest.content} onChange={setContent} />
     </AppContent>
