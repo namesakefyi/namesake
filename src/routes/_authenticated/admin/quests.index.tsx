@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/app";
+import { PageHeader } from '@/components/app'
 import {
   Badge,
   Button,
@@ -19,64 +19,64 @@ import {
   TableHeader,
   TableRow,
   TextField,
-} from "@/components/common";
-import { api } from "@convex/_generated/api";
-import type { DataModel } from "@convex/_generated/dataModel";
+} from '@/components/common'
+import { api } from '@convex/_generated/api'
+import type { DataModel } from '@convex/_generated/dataModel'
 import {
   CATEGORIES,
   type Category,
   JURISDICTIONS,
   type Jurisdiction,
-} from "@convex/constants";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMutation, useQuery } from "convex/react";
-import { CircleHelp, Ellipsis, Milestone, Plus } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+} from '@convex/constants'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useMutation, useQuery } from 'convex/react'
+import { CircleHelp, Ellipsis, Milestone, Plus } from 'lucide-react'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
-export const Route = createFileRoute("/_authenticated/admin/quests/")({
+export const Route = createFileRoute('/_authenticated/admin/quests/')({
   component: QuestsRoute,
-});
+})
 
 const NewQuestModal = ({
   isOpen,
   onOpenChange,
   onSubmit,
 }: {
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-  onSubmit: () => void;
+  isOpen: boolean
+  onOpenChange: (isOpen: boolean) => void
+  onSubmit: () => void
 }) => {
-  const create = useMutation(api.quests.create);
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState<Category | null>(null);
-  const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
-  const navigate = useNavigate();
+  const create = useMutation(api.quests.create)
+  const [title, setTitle] = useState('')
+  const [category, setCategory] = useState<Category | null>(null)
+  const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null)
+  const navigate = useNavigate()
 
   const clearForm = () => {
-    setTitle("");
-    setCategory(null);
-    setJurisdiction(null);
-  };
+    setTitle('')
+    setCategory(null)
+    setJurisdiction(null)
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
     const questId = await create({
       title,
       category: category ?? undefined,
       jurisdiction: jurisdiction ?? undefined,
-    });
+    })
 
     if (questId) {
-      toast(`Created quest: ${title}`);
-      clearForm();
-      onSubmit();
+      toast(`Created quest: ${title}`)
+      clearForm()
+      onSubmit()
       navigate({
-        to: "/admin/quests/$questId",
+        to: '/admin/quests/$questId',
         params: { questId },
-      });
+      })
     }
-  };
+  }
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -99,12 +99,12 @@ const NewQuestModal = ({
           isRequired
         >
           {Object.entries(CATEGORIES).map(([key, { label, icon }]) => {
-            const Icon = icon ?? CircleHelp;
+            const Icon = icon ?? CircleHelp
             return (
               <SelectItem key={key} id={key} textValue={key}>
                 <Icon size={20} /> {label}
               </SelectItem>
-            );
+            )
           })}
         </Select>
         <Select
@@ -130,34 +130,34 @@ const NewQuestModal = ({
         </ModalFooter>
       </Form>
     </Modal>
-  );
-};
+  )
+}
 
 const QuestTableRow = ({
   quest,
 }: {
-  quest: DataModel["quests"]["document"];
+  quest: DataModel['quests']['document']
 }) => {
   const questCount = useQuery(api.userQuests.countGlobalUsage, {
     questId: quest._id,
-  });
-  const softDelete = useMutation(api.quests.softDelete);
-  const undelete = useMutation(api.quests.undoSoftDelete);
-  const deleteForever = useMutation(api.quests.deleteForever);
+  })
+  const softDelete = useMutation(api.quests.softDelete)
+  const undelete = useMutation(api.quests.undoSoftDelete)
+  const deleteForever = useMutation(api.quests.deleteForever)
 
   const Category = () => {
-    if (!quest.category) return;
+    if (!quest.category) return
 
-    const { icon, label } = CATEGORIES[quest.category as Category];
+    const { icon, label } = CATEGORIES[quest.category as Category]
 
-    return <Badge icon={icon ?? CircleHelp}>{label}</Badge>;
-  };
+    return <Badge icon={icon ?? CircleHelp}>{label}</Badge>
+  }
 
   return (
     <TableRow
       key={quest._id}
       className="flex gap-2 items-center"
-      href={{ to: "/admin/quests/$questId", params: { questId: quest._id } }}
+      href={{ to: '/admin/quests/$questId', params: { questId: quest._id } }}
     >
       <TableCell>
         <div className="flex items-center gap-2">
@@ -210,12 +210,12 @@ const QuestTableRow = ({
         </MenuTrigger>
       </TableCell>
     </TableRow>
-  );
-};
+  )
+}
 
 function QuestsRoute() {
-  const [isNewQuestModalOpen, setIsNewQuestModalOpen] = useState(false);
-  const quests = useQuery(api.quests.getAll);
+  const [isNewQuestModalOpen, setIsNewQuestModalOpen] = useState(false)
+  const quests = useQuery(api.quests.getAll)
 
   return (
     <>
@@ -244,7 +244,7 @@ function QuestsRoute() {
               title="No quests"
               icon={Milestone}
               button={{
-                children: "New Quest",
+                children: 'New Quest',
                 onPress: () => setIsNewQuestModalOpen(true),
               }}
             />
@@ -261,5 +261,5 @@ function QuestsRoute() {
         onSubmit={() => setIsNewQuestModalOpen(false)}
       />
     </>
-  );
+  )
 }

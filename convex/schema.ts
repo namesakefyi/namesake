@@ -80,6 +80,8 @@ const quests = defineTable({
   deletionTime: v.optional(v.number()),
   /** Rich text comprising the contents of the quest, stored as HTML. */
   content: v.optional(v.string()),
+  /** A JSON schema defining the form fields for this quest. */
+  formSchema: v.optional(v.string()),
 }).index("category", ["category"]);
 
 /**
@@ -130,14 +132,17 @@ const users = defineTable({
 
 /**
  * A unique piece of user data that has been enteed through filling a form.
- * End-to-end encrypted.
- * TODO: Implement
  */
-const userEncryptedData = defineTable({
+const userFormData = defineTable({
+  /** The user who owns the data. */
   userId: v.id("users"),
-  fieldId: v.string(),
-  value: v.string(),
-}).index("userId", ["userId"]);
+  /** The name of the field, e.g. "firstName". */
+  field: v.string(),
+  /** The value of the field. */
+  value: v.any(),
+})
+  .index("userId", ["userId"])
+  .index("userIdAndField", ["userId", "field"]);
 
 /**
  * A user's preferences.
@@ -174,7 +179,7 @@ export default defineSchema({
   documents,
   quests,
   users,
-  userEncryptedData,
+  userFormData,
   userSettings,
   userQuests,
 });

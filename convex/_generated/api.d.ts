@@ -23,7 +23,7 @@ import type * as questions from "../questions.js";
 import type * as quests from "../quests.js";
 import type * as seed from "../seed.js";
 import type * as topics from "../topics.js";
-import type * as userEncryptedData from "../userEncryptedData.js";
+import type * as userFormData from "../userFormData.js";
 import type * as userQuests from "../userQuests.js";
 import type * as userSettings from "../userSettings.js";
 import type * as users from "../users.js";
@@ -48,7 +48,7 @@ declare const fullApi: ApiFromModules<{
   quests: typeof quests;
   seed: typeof seed;
   topics: typeof topics;
-  userEncryptedData: typeof userEncryptedData;
+  userFormData: typeof userFormData;
   userQuests: typeof userQuests;
   userSettings: typeof userSettings;
   users: typeof users;

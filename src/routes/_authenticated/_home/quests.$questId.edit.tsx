@@ -1,11 +1,6 @@
 import { AppContent, PageHeader } from "@/components/app";
 import { Badge, Empty, Link, RichText } from "@/components/common";
-import {
-  QuestCosts,
-  QuestDocuments,
-  QuestTimeRequired,
-  QuestUrls,
-} from "@/components/quests";
+import { QuestCosts, QuestTimeRequired, QuestUrls } from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
@@ -92,7 +87,6 @@ function QuestEditRoute() {
         <QuestTimeRequired quest={quest} editable />
       </div>
       <QuestUrls urls={quest.urls} />
-      <QuestDocuments questId={quest._id} />
       <RichText initialContent={quest.content} onChange={setContent} />
     </AppContent>
   );

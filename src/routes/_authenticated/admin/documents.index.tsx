@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/app";
+import { PageHeader } from '@/components/app'
 import {
   Badge,
   Button,
@@ -21,75 +21,75 @@ import {
   TableHeader,
   TableRow,
   TextField,
-} from "@/components/common";
-import { api } from "@convex/_generated/api";
-import type { DataModel, Id } from "@convex/_generated/dataModel";
-import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
-import { createFileRoute } from "@tanstack/react-router";
-import { useMutation, useQuery } from "convex/react";
-import { Ellipsis, FileText, Plus } from "lucide-react";
-import { useState } from "react";
+} from '@/components/common'
+import { api } from '@convex/_generated/api'
+import type { DataModel, Id } from '@convex/_generated/dataModel'
+import { JURISDICTIONS, type Jurisdiction } from '@convex/constants'
+import { createFileRoute } from '@tanstack/react-router'
+import { useMutation, useQuery } from 'convex/react'
+import { Ellipsis, FileText, Plus } from 'lucide-react'
+import { useState } from 'react'
 
-export const Route = createFileRoute("/_authenticated/admin/documents/")({
+export const Route = createFileRoute('/_authenticated/admin/documents/')({
   component: DocumentsRoute,
-});
+})
 
 const NewDocumentModal = ({
   isOpen,
   onOpenChange,
   onSubmit,
 }: {
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-  onSubmit: () => void;
+  isOpen: boolean
+  onOpenChange: (isOpen: boolean) => void
+  onSubmit: () => void
 }) => {
-  const generateUploadUrl = useMutation(api.documents.generateUploadUrl);
-  const uploadPDF = useMutation(api.documents.upload);
-  const createDocument = useMutation(api.documents.create);
-  const quests = useQuery(api.quests.getAllActive);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [title, setTitle] = useState("");
-  const [code, setCode] = useState("");
-  const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
-  const [questId, setQuestId] = useState<Id<"quests"> | null>(null);
+  const generateUploadUrl = useMutation(api.documents.generateUploadUrl)
+  const uploadPDF = useMutation(api.documents.upload)
+  const createDocument = useMutation(api.documents.create)
+  const quests = useQuery(api.quests.getAllActive)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [file, setFile] = useState<File | null>(null)
+  const [title, setTitle] = useState('')
+  const [code, setCode] = useState('')
+  const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null)
+  const [questId, setQuestId] = useState<Id<'quests'> | null>(null)
 
   const clearForm = () => {
-    setFile(null);
-    setTitle("");
-    setCode("");
-    setJurisdiction(null);
-    setQuestId(null);
-  };
+    setFile(null)
+    setTitle('')
+    setCode('')
+    setJurisdiction(null)
+    setQuestId(null)
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    if (jurisdiction === null) throw new Error("Jurisdiction is required");
-    if (file === null) throw new Error("File is required");
-    if (questId === null) throw new Error("Quest is required");
+    if (jurisdiction === null) throw new Error('Jurisdiction is required')
+    if (file === null) throw new Error('File is required')
+    if (questId === null) throw new Error('Quest is required')
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
     const documentId = await createDocument({
       title,
       jurisdiction,
       code,
       questId,
-    });
+    })
 
-    const postUrl = await generateUploadUrl();
+    const postUrl = await generateUploadUrl()
     const result = await fetch(postUrl, {
-      method: "POST",
-      headers: { "Content-Type": file.type },
+      method: 'POST',
+      headers: { 'Content-Type': file.type },
       body: file,
-    });
-    const { storageId } = await result.json();
+    })
+    const { storageId } = await result.json()
 
-    await uploadPDF({ documentId, storageId });
+    await uploadPDF({ documentId, storageId })
 
-    clearForm();
-    onSubmit();
-  };
+    clearForm()
+    onSubmit()
+  }
 
   return (
     <Modal
@@ -124,33 +124,33 @@ const NewDocumentModal = ({
         <ComboBox
           label="Quest"
           selectedKey={questId}
-          onSelectionChange={(key) => setQuestId(key as Id<"quests">)}
+          onSelectionChange={(key) => setQuestId(key as Id<'quests'>)}
           isRequired
           className="w-full"
         >
           {quests?.map((quest) => {
             const textValue = `${quest.title}${
-              quest.jurisdiction ? ` (${quest.jurisdiction})` : ""
-            }`;
+              quest.jurisdiction ? ` (${quest.jurisdiction})` : ''
+            }`
 
             return (
               <SelectItem key={quest._id} id={quest._id} textValue={textValue}>
-                {quest.title}{" "}
+                {quest.title}{' '}
                 {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
               </SelectItem>
-            );
+            )
           })}
         </ComboBox>
         <FileTrigger
-          acceptedFileTypes={["application/pdf"]}
+          acceptedFileTypes={['application/pdf']}
           onSelect={(e) => {
-            if (e === null) return;
-            const files = Array.from(e);
-            setFile(files[0]);
+            if (e === null) return
+            const files = Array.from(e)
+            setFile(files[0])
           }}
         >
           <Button type="button" variant="secondary">
-            {file ? file.name : "Select PDF"}
+            {file ? file.name : 'Select PDF'}
           </Button>
         </FileTrigger>
         <ModalFooter>
@@ -167,23 +167,25 @@ const NewDocumentModal = ({
         </ModalFooter>
       </Form>
     </Modal>
-  );
-};
+  )
+}
 
 const DocumentTableRow = ({
   document,
-}: { document: DataModel["documents"]["document"] }) => {
-  const formUrl = useQuery(api.documents.getURL, { documentId: document._id });
-  const softDelete = useMutation(api.documents.softDelete);
-  const undelete = useMutation(api.documents.undoSoftDelete);
-  const deleteForever = useMutation(api.documents.deleteForever);
+}: {
+  document: DataModel['documents']['document']
+}) => {
+  const formUrl = useQuery(api.documents.getURL, { documentId: document._id })
+  const softDelete = useMutation(api.documents.softDelete)
+  const undelete = useMutation(api.documents.undoSoftDelete)
+  const deleteForever = useMutation(api.documents.deleteForever)
 
   return (
     <TableRow
       key={document._id}
       className="flex gap-2 items-center"
       href={{
-        to: "/admin/documents/$documentId",
+        to: '/admin/documents/$documentId',
         params: { documentId: document._id },
       }}
     >
@@ -238,12 +240,12 @@ const DocumentTableRow = ({
         </MenuTrigger>
       </TableCell>
     </TableRow>
-  );
-};
+  )
+}
 
 function DocumentsRoute() {
-  const [isNewFormModalOpen, setIsNewFormModalOpen] = useState(false);
-  const documents = useQuery(api.documents.getAll);
+  const [isNewFormModalOpen, setIsNewFormModalOpen] = useState(false)
+  const documents = useQuery(api.documents.getAll)
 
   return (
     <div>
@@ -270,7 +272,7 @@ function DocumentsRoute() {
               title="No documents"
               icon={FileText}
               button={{
-                children: "New Document",
+                children: 'New Document',
                 onPress: () => setIsNewFormModalOpen(true),
               }}
             />
@@ -287,5 +289,5 @@ function DocumentsRoute() {
         onSubmit={() => setIsNewFormModalOpen(false)}
       />
     </div>
-  );
+  )
 }

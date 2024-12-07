@@ -112,6 +112,14 @@ body {
   color-scheme: dark light;
 }
 
+body, #root {
+  min-height: 100dvh;
+}
+
+.svc-full-creator {
+  flex: 1;
+}
+
 .tippy-box {
   transition: 0.25s ease;
   transition-property: opacity, transform, scale;
