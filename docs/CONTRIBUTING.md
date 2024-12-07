@@ -41,16 +41,16 @@ Once your Convex account and project is created, a `.env.local` file will be gen
 > [!NOTE]
 > If this is your first time using Convex, [follow the tour](https://docs.convex.dev/get-started) to understand how the system works and read [The Zen of Convex](https://docs.convex.dev/zen) to understand best practices.
 
-### Configure authentication setup (first time only)
+### Set up authentication (first time only)
 
-To configure authentication automatically Convex ships with a CLI command that will guide you through the process. Run:
+Namesake authenticates users with [Convex Auth](https://labs.convex.dev/auth). To initialize authentication for local development, run:
 
 ```shell
 npx @convex-dev/auth
 ```
 
 > [!NOTE]
-> Refer to the [Manual Setup guide](https://labs.convex.dev/auth/setup/manual) for more information on setting up authentication manually or if you encounter any issues with the the command above.
+> If you run into issues or prefer to set up authentication manually, refer to Convex Auth's [manual setup guide](https://labs.convex.dev/auth/setup/manual).
 
 ## Making changes
 
