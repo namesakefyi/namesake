@@ -71,7 +71,7 @@ function AdminQuestSurveyRoute() {
 
   return (
     <div className="flex flex-col h-screen">
-      <header className="flex items-center justify-between gap-2 h-12 px-3 shrink-0">
+      <header className="flex items-center justify-between gap-2 h-12 px-3 shrink-0 border-b border-gray-dim">
         <h1 className="text-base flex items-center gap-1.5">
           <Pencil className="text-gray-dim" size={16} />
           <span className="text-gray-dim">Editing</span>
