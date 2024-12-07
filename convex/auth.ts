@@ -27,7 +27,7 @@ export const { auth, signIn, signOut, store } = convexAuth({
         .insert("users", {
           email: args.profile.email,
           emailVerified: args.profile.emailVerified ?? false,
-          role: "user",
+          role: process.env.NODE_ENV === "development" ? "admin" : "user",
         })
         .then((userId) => {
           ctx.db.insert("userSettings", {
