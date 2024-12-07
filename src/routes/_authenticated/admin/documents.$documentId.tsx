@@ -1,27 +1,27 @@
-import { PageHeader } from '@/components/app'
-import { Badge, Link } from '@/components/common'
-import { api } from '@convex/_generated/api'
-import type { Id } from '@convex/_generated/dataModel'
-import { createFileRoute } from '@tanstack/react-router'
-import { useQuery } from 'convex/react'
+import { PageHeader } from "@/components/app";
+import { Badge, Link } from "@/components/common";
+import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "convex/react";
 
 export const Route = createFileRoute(
-  '/_authenticated/admin/documents/$documentId',
+  "/_authenticated/admin/documents/$documentId",
 )({
   component: AdminDocumentDetailRoute,
-})
+});
 
 function AdminDocumentDetailRoute() {
-  const { documentId } = Route.useParams()
+  const { documentId } = Route.useParams();
   const document = useQuery(api.documents.getById, {
-    documentId: documentId as Id<'documents'>,
-  })
+    documentId: documentId as Id<"documents">,
+  });
   const fileUrl = useQuery(api.documents.getURL, {
-    documentId: documentId as Id<'documents'>,
-  })
+    documentId: documentId as Id<"documents">,
+  });
 
-  if (document === undefined) return
-  if (document === null) return 'Document not found'
+  if (document === undefined) return;
+  if (document === null) return "Document not found";
 
   return (
     <div>
@@ -36,10 +36,10 @@ function AdminDocumentDetailRoute() {
       >
         <Link
           href={{
-            to: '/admin/quests/$questId',
+            to: "/admin/quests/$questId",
             params: { questId: document.questId },
           }}
-          button={{ variant: 'secondary' }}
+          button={{ variant: "secondary" }}
         >
           Go to quest
         </Link>
@@ -52,5 +52,5 @@ function AdminDocumentDetailRoute() {
         />
       )}
     </div>
-  )
+  );
 }

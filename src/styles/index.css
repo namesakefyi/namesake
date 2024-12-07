@@ -112,7 +112,8 @@ body {
   color-scheme: dark light;
 }
 
-body, #root {
+body,
+#root {
   min-height: 100dvh;
 }
 
