@@ -3,6 +3,7 @@ export * from "./EditQuestCostsModal";
 export * from "./EditQuestTimeRequiredModal";
 export * from "./QuestCosts";
 export * from "./QuestForms";
+export * from "./QuestSurvey";
 export * from "./QuestTimeRequired";
 export * from "./QuestUrls";
 export * from "./ReadingScore";

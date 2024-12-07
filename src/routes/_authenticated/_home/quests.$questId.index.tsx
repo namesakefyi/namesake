@@ -11,7 +11,8 @@ import {
 } from "@/components/common";
 import {
   QuestCosts,
-  QuestForms,
+  QuestDocuments,
+  QuestSurvey,
   QuestTimeRequired,
   QuestUrls,
   StatusSelect,
@@ -104,7 +105,8 @@ function QuestDetailRoute() {
         <QuestTimeRequired quest={quest} />
       </div>
       <QuestUrls urls={quest.urls} />
-      <QuestForms questId={quest._id} />
+      <QuestSurvey />
+      <QuestDocuments questId={quest._id} />
       <RichText initialContent={quest.content} editable={false} />
     </AppContent>
   );

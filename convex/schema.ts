@@ -3,7 +3,6 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
   category,
-  field,
   groupQuestsBy,
   jurisdiction,
   role,
@@ -84,38 +83,22 @@ const quests = defineTable({
 }).index("category", ["category"]);
 
 /**
- * A single input field which may be shared across multiple quests.
+ * A PDF document that can be filled out by users.
  */
-const questFields = defineTable({
-  /** The type of field. (e.g. "text", "select") */
-  type: field,
-  /** The label for the field. (e.g. "First Name") */
-  label: v.string(),
-  /** A unique identifier for the field, camel cased. (e.g. "firstName") */
-  slug: v.string(),
-  /** Additional help text for the field. */
-  helpText: v.optional(v.string()),
-  /** Time in ms since epoch when the field was deleted. */
-  deletionTime: v.optional(v.number()),
-});
-
-/**
- * A PDF form that can be filled out by users.
- */
-const forms = defineTable({
-  /** The quest this form belongs to. */
+const documents = defineTable({
+  /** The quest this document belongs to. */
   questId: v.id("quests"),
-  /** The title of the form. (e.g. "Petition to Change Name of Adult") */
+  /** The title of the document. (e.g. "Petition to Change Name of Adult") */
   title: v.string(),
-  /** The legal code for the form. (e.g. "CJP 27") */
-  formCode: v.optional(v.string()),
-  /** The user who created the form. */
+  /** The legal code for the document. (e.g. "CJP 27") */
+  code: v.optional(v.string()),
+  /** The user who created the document. */
   creationUser: v.id("users"),
   /** The storageId for the PDF file. */
   file: v.optional(v.id("_storage")),
-  /** The US State the form applies to. */
+  /** The US State the document applies to. */
   jurisdiction: jurisdiction,
-  /** Time in ms since epoch when the form was deleted. */
+  /** Time in ms since epoch when the document was deleted. */
   deletionTime: v.optional(v.number()),
 }).index("quest", ["questId"]);
 
@@ -152,7 +135,7 @@ const users = defineTable({
  */
 const userEncryptedData = defineTable({
   userId: v.id("users"),
-  fieldId: v.id("questFields"),
+  fieldId: v.string(),
   value: v.string(),
 }).index("userId", ["userId"]);
 
@@ -188,9 +171,8 @@ export default defineSchema({
   ...authTables,
   questions,
   topics,
-  forms,
+  documents,
   quests,
-  questFields,
   users,
   userEncryptedData,
   userSettings,

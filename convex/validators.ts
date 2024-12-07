@@ -1,7 +1,6 @@
 import { v } from "convex/values";
 import {
   CATEGORIES,
-  FIELDS,
   GROUP_QUESTS_BY,
   JURISDICTIONS,
   ROLES,
@@ -24,10 +23,6 @@ export const theme = v.union(
 
 export const role = v.union(
   ...Object.keys(ROLES).map((role) => v.literal(role)),
-);
-
-export const field = v.union(
-  ...Object.keys(FIELDS).map((field) => v.literal(field)),
 );
 
 export const groupQuestsBy = v.union(
