@@ -1,5 +1,4 @@
 import {
-  AtSign,
   Calendar,
   CalendarClock,
   CalendarDays,
@@ -13,14 +12,11 @@ import {
   Computer,
   Gamepad2,
   GraduationCap,
-  Hash,
   HeartPulse,
   History,
   House,
   Landmark,
   LaptopMinimal,
-  LetterText,
-  ListChecks,
   LoaderCircle,
   type LucideIcon,
   Mail,
@@ -28,11 +24,8 @@ import {
   MessageCircle,
   Milestone,
   Moon,
-  Phone,
-  RectangleEllipsis,
   Scale,
   ShoppingBag,
-  SquareCheck,
   Sun,
   Zap,
 } from "lucide-react";
@@ -100,51 +93,6 @@ interface FieldDetails {
   label: string;
   icon: LucideIcon;
 }
-
-export type Field =
-  | "text"
-  | "textarea"
-  | "date"
-  | "select"
-  | "checkbox"
-  | "number"
-  | "email"
-  | "phone";
-
-export const FIELDS: Record<string, FieldDetails> = {
-  text: {
-    label: "Text",
-    icon: RectangleEllipsis,
-  },
-  textarea: {
-    label: "Textarea",
-    icon: LetterText,
-  },
-  date: {
-    label: "Date",
-    icon: Calendar,
-  },
-  select: {
-    label: "Select",
-    icon: ListChecks,
-  },
-  checkbox: {
-    label: "Checkbox",
-    icon: SquareCheck,
-  },
-  number: {
-    label: "Number",
-    icon: Hash,
-  },
-  email: {
-    label: "Email",
-    icon: AtSign,
-  },
-  phone: {
-    label: "Phone",
-    icon: Phone,
-  },
-} as const;
 
 export type Theme = "system" | "light" | "dark";
 export const THEMES: Record<Theme, FieldDetails> = {

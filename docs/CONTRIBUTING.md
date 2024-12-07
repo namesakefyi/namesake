@@ -144,6 +144,7 @@ Below are Namesake's core dependencies. The links below each lead to docs.
 | ----------------------------------------------------------------------------------- | -------------------------------------------------- |
 | [Convex](https://docs.convex.dev/)                                                  | Type-safe database, file storage, realtime updates |
 | [Convex Auth](https://labs.convex.dev/auth)                                         | User authentication                                |
+| [SurveyJS](https://surveyjs.io/documentation)                                       | Form building, validation, and display             |
 | [TanStack Router](https://tanstack.com/router/latest/docs/framework/react/overview) | File-based routing                                 |
 | [React](https://react.dev/reference/react)                                          | Front-end web framework                            |
 | [React Aria](https://react-spectrum.adobe.com/react-aria)                           | Accessible components and design system            |

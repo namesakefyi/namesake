@@ -5,37 +5,39 @@ import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 
-export const Route = createFileRoute("/_authenticated/admin/forms/$formId")({
-  component: AdminFormDetailRoute,
+export const Route = createFileRoute(
+  "/_authenticated/admin/documents/$documentId",
+)({
+  component: AdminDocumentDetailRoute,
 });
 
-function AdminFormDetailRoute() {
-  const { formId } = Route.useParams();
-  const form = useQuery(api.forms.getById, {
-    formId: formId as Id<"forms">,
+function AdminDocumentDetailRoute() {
+  const { documentId } = Route.useParams();
+  const document = useQuery(api.documents.getById, {
+    documentId: documentId as Id<"documents">,
   });
-  const fileUrl = useQuery(api.forms.getURL, {
-    formId: formId as Id<"forms">,
+  const fileUrl = useQuery(api.documents.getURL, {
+    documentId: documentId as Id<"documents">,
   });
 
-  if (form === undefined) return;
-  if (form === null) return "Form not found";
+  if (document === undefined) return;
+  if (document === null) return "Document not found";
 
   return (
     <div>
       <PageHeader
-        title={form.title}
+        title={document.title}
         badge={
           <>
-            <Badge size="lg">{form.jurisdiction}</Badge>
-            <Badge size="lg">{form.formCode}</Badge>
+            <Badge size="lg">{document.jurisdiction}</Badge>
+            <Badge size="lg">{document.code}</Badge>
           </>
         }
       >
         <Link
           href={{
             to: "/admin/quests/$questId",
-            params: { questId: form.questId },
+            params: { questId: document.questId },
           }}
           button={{ variant: "secondary" }}
         >
@@ -46,7 +48,7 @@ function AdminFormDetailRoute() {
         <object
           className="w-full aspect-square max-h-full rounded-lg"
           data={fileUrl}
-          title={form.title}
+          title={document.title}
         />
       )}
     </div>

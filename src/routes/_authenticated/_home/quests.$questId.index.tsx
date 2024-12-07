@@ -11,7 +11,7 @@ import {
 } from "@/components/common";
 import {
   QuestCosts,
-  QuestForms,
+  QuestForm,
   QuestTimeRequired,
   QuestUrls,
   StatusSelect,
@@ -30,6 +30,7 @@ export const Route = createFileRoute("/_authenticated/_home/quests/$questId/")({
 
 function QuestDetailRoute() {
   const { questId } = Route.useParams();
+
   const navigate = useNavigate();
   const user = useQuery(api.users.getCurrent);
   const canEdit = user?.role === "admin";
@@ -99,12 +100,12 @@ function QuestDetailRoute() {
           </Menu>
         </MenuTrigger>
       </PageHeader>
-      <div className="flex gap-4 mb-4 lg:mb-6 xl:mb-8">
+      <div className="flex gap-4 mb-4">
         <QuestCosts quest={quest} />
         <QuestTimeRequired quest={quest} />
       </div>
       <QuestUrls urls={quest.urls} />
-      <QuestForms questId={quest._id} />
+      <QuestForm quest={quest} />
       <RichText initialContent={quest.content} editable={false} />
     </AppContent>
   );

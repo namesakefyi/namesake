@@ -2,7 +2,7 @@ import { AppContent, PageHeader } from "@/components/app";
 import { Badge, Empty, Link, RichText } from "@/components/common";
 import {
   QuestCosts,
-  QuestForms,
+  QuestForm,
   QuestTimeRequired,
   QuestUrls,
 } from "@/components/quests";
@@ -87,12 +87,12 @@ function QuestEditRoute() {
           Save
         </Link>
       </PageHeader>
-      <div className="flex gap-4 mb-4 lg:mb-6 xl:mb-8">
+      <div className="flex gap-4 mb-4">
         <QuestCosts quest={quest} editable />
         <QuestTimeRequired quest={quest} editable />
       </div>
+      <QuestForm quest={quest} editable />
       <QuestUrls urls={quest.urls} />
-      <QuestForms questId={quest._id} />
       <RichText initialContent={quest.content} onChange={setContent} />
     </AppContent>
   );

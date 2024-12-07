@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/app";
 import {
   Button,
   Form,
+  Link,
   RichText,
   Select,
   SelectItem,
@@ -17,11 +18,11 @@ import {
 } from "@convex/constants";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
-import { CircleHelp, Trash } from "lucide-react";
+import { CircleHelp, Pencil, Trash } from "lucide-react";
 import { memo, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/admin/quests/$questId")({
+export const Route = createFileRoute("/_authenticated/admin/quests/$questId/")({
   component: AdminQuestDetailRoute,
 });
 
@@ -92,7 +93,15 @@ function AdminQuestDetailRoute() {
 
   return (
     <>
-      <PageHeader title={title} />
+      <PageHeader title={title}>
+        <Link
+          href={{ to: "/admin/quests/$questId/form", params: { questId } }}
+          button={{ variant: "secondary" }}
+        >
+          <Pencil size={16} />
+          Edit Form
+        </Link>
+      </PageHeader>
       <Form className="w-full items-start" onSubmit={handleSubmit}>
         <Select
           label="Category"

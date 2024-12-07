@@ -10,6 +10,8 @@ import {
   MenuItem,
   MenuTrigger,
   Modal,
+  ModalFooter,
+  ModalHeader,
   Select,
   SelectItem,
   Table,
@@ -28,11 +30,11 @@ import { useMutation, useQuery } from "convex/react";
 import { Ellipsis, FileText, Plus } from "lucide-react";
 import { useState } from "react";
 
-export const Route = createFileRoute("/_authenticated/admin/forms/")({
-  component: FormsRoute,
+export const Route = createFileRoute("/_authenticated/admin/documents/")({
+  component: DocumentsRoute,
 });
 
-const NewFormModal = ({
+const NewDocumentModal = ({
   isOpen,
   onOpenChange,
   onSubmit,
@@ -41,21 +43,21 @@ const NewFormModal = ({
   onOpenChange: (isOpen: boolean) => void;
   onSubmit: () => void;
 }) => {
-  const generateUploadUrl = useMutation(api.forms.generateUploadUrl);
-  const uploadPDF = useMutation(api.forms.upload);
-  const createForm = useMutation(api.forms.create);
+  const generateUploadUrl = useMutation(api.documents.generateUploadUrl);
+  const uploadPDF = useMutation(api.documents.upload);
+  const createDocument = useMutation(api.documents.create);
   const quests = useQuery(api.quests.getAllActive);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
-  const [formCode, setFormCode] = useState("");
+  const [code, setCode] = useState("");
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
   const [questId, setQuestId] = useState<Id<"quests"> | null>(null);
 
   const clearForm = () => {
     setFile(null);
     setTitle("");
-    setFormCode("");
+    setCode("");
     setJurisdiction(null);
     setQuestId(null);
   };
@@ -68,7 +70,12 @@ const NewFormModal = ({
     if (questId === null) throw new Error("Quest is required");
 
     setIsSubmitting(true);
-    const formId = await createForm({ title, jurisdiction, formCode, questId });
+    const documentId = await createDocument({
+      title,
+      jurisdiction,
+      code,
+      questId,
+    });
 
     const postUrl = await generateUploadUrl();
     const result = await fetch(postUrl, {
@@ -78,7 +85,7 @@ const NewFormModal = ({
     });
     const { storageId } = await result.json();
 
-    await uploadPDF({ formId, storageId });
+    await uploadPDF({ documentId, storageId });
 
     clearForm();
     onSubmit();
@@ -90,6 +97,7 @@ const NewFormModal = ({
       onOpenChange={onOpenChange}
       className="w-full max-w-xl"
     >
+      <ModalHeader title="Upload Document" />
       <Form onSubmit={handleSubmit} className="w-full">
         <TextField
           label="Title"
@@ -97,13 +105,15 @@ const NewFormModal = ({
           onChange={setTitle}
           autoFocus
           isRequired
+          className="w-full"
         />
-        <TextField label="Form code" value={formCode} onChange={setFormCode} />
+        <TextField label="Code" value={code} onChange={setCode} />
         <Select
           label="State"
           selectedKey={jurisdiction}
           onSelectionChange={(key) => setJurisdiction(key as Jurisdiction)}
           isRequired
+          className="w-full"
         >
           {Object.entries(JURISDICTIONS).map(([key, value]) => (
             <SelectItem key={key} id={key}>
@@ -116,6 +126,7 @@ const NewFormModal = ({
           selectedKey={questId}
           onSelectionChange={(key) => setQuestId(key as Id<"quests">)}
           isRequired
+          className="w-full"
         >
           {quests?.map((quest) => {
             const textValue = `${quest.title}${
@@ -142,7 +153,7 @@ const NewFormModal = ({
             {file ? file.name : "Select PDF"}
           </Button>
         </FileTrigger>
-        <div className="flex justify-end gap-3">
+        <ModalFooter>
           <Button
             type="button"
             variant="secondary"
@@ -151,38 +162,45 @@ const NewFormModal = ({
             Cancel
           </Button>
           <Button type="submit" variant="primary" isDisabled={isSubmitting}>
-            Create
+            Upload
           </Button>
-        </div>
+        </ModalFooter>
       </Form>
     </Modal>
   );
 };
 
-const FormTableRow = ({ form }: { form: DataModel["forms"]["document"] }) => {
-  const formUrl = useQuery(api.forms.getURL, { formId: form._id });
-  const deleteForm = useMutation(api.forms.softDelete);
-  const undeleteForm = useMutation(api.forms.undoSoftDelete);
-  const deleteForeverForm = useMutation(api.forms.deleteForever);
+const DocumentTableRow = ({
+  document,
+}: {
+  document: DataModel["documents"]["document"];
+}) => {
+  const formUrl = useQuery(api.documents.getURL, { documentId: document._id });
+  const softDelete = useMutation(api.documents.softDelete);
+  const undelete = useMutation(api.documents.undoSoftDelete);
+  const deleteForever = useMutation(api.documents.deleteForever);
 
   return (
     <TableRow
-      key={form._id}
+      key={document._id}
       className="flex gap-2 items-center"
-      href={{ to: "/admin/forms/$formId", params: { formId: form._id } }}
+      href={{
+        to: "/admin/documents/$documentId",
+        params: { documentId: document._id },
+      }}
     >
       <TableCell>
-        <div>{form.title}</div>
-        {form.deletionTime && (
+        <div>{document.title}</div>
+        {document.deletionTime && (
           <span className="text-red-5" slot="description">
-            {`deleted ${new Date(form.deletionTime).toLocaleString()}`}
+            {`deleted ${new Date(document.deletionTime).toLocaleString()}`}
           </span>
         )}
       </TableCell>
       <TableCell>
-        {form.jurisdiction && <Badge>{form.jurisdiction}</Badge>}
+        {document.jurisdiction && <Badge>{document.jurisdiction}</Badge>}
       </TableCell>
-      <TableCell>{new Date(form._creationTime).toLocaleString()}</TableCell>
+      <TableCell>{new Date(document._creationTime).toLocaleString()}</TableCell>
       <TableCell>
         <MenuTrigger>
           <Button
@@ -197,20 +215,24 @@ const FormTableRow = ({ form }: { form: DataModel["forms"]["document"] }) => {
                 View PDF
               </MenuItem>
             )}
-            {form.deletionTime ? (
+            {document.deletionTime ? (
               <>
-                <MenuItem onAction={() => undeleteForm({ formId: form._id })}>
+                <MenuItem
+                  onAction={() => undelete({ documentId: document._id })}
+                >
                   Undelete
                 </MenuItem>
                 {/* TODO: Add modal */}
                 <MenuItem
-                  onAction={() => deleteForeverForm({ formId: form._id })}
+                  onAction={() => deleteForever({ documentId: document._id })}
                 >
                   Permanently Delete
                 </MenuItem>
               </>
             ) : (
-              <MenuItem onAction={() => deleteForm({ formId: form._id })}>
+              <MenuItem
+                onAction={() => softDelete({ documentId: document._id })}
+              >
                 Delete
               </MenuItem>
             )}
@@ -221,22 +243,22 @@ const FormTableRow = ({ form }: { form: DataModel["forms"]["document"] }) => {
   );
 };
 
-function FormsRoute() {
+function DocumentsRoute() {
   const [isNewFormModalOpen, setIsNewFormModalOpen] = useState(false);
-  const forms = useQuery(api.forms.getAll);
+  const documents = useQuery(api.documents.getAll);
 
   return (
     <div>
-      <PageHeader title="Forms">
+      <PageHeader title="Documents">
         <Button
           onPress={() => setIsNewFormModalOpen(true)}
           icon={Plus}
           variant="primary"
         >
-          Upload New Form
+          Upload Document
         </Button>
       </PageHeader>
-      <Table aria-label="Forms">
+      <Table aria-label="Documents">
         <TableHeader>
           <TableColumn isRowHeader>Title</TableColumn>
           <TableColumn>Jurisdiction</TableColumn>
@@ -244,24 +266,24 @@ function FormsRoute() {
           <TableColumn />
         </TableHeader>
         <TableBody
-          items={forms}
+          items={documents}
           renderEmptyState={() => (
             <Empty
-              title="No forms"
+              title="No documents"
               icon={FileText}
               button={{
-                children: "New Form",
+                children: "New Document",
                 onPress: () => setIsNewFormModalOpen(true),
               }}
             />
           )}
         >
-          {forms?.map((form) => (
-            <FormTableRow key={form._id} form={form} />
+          {documents?.map((document) => (
+            <DocumentTableRow key={document._id} document={document} />
           ))}
         </TableBody>
       </Table>
-      <NewFormModal
+      <NewDocumentModal
         isOpen={isNewFormModalOpen}
         onOpenChange={setIsNewFormModalOpen}
         onSubmit={() => setIsNewFormModalOpen(false)}

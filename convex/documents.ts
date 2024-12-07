@@ -9,14 +9,14 @@ import { jurisdiction } from "./validators";
 export const getAll = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("forms").collect();
+    return await ctx.db.query("documents").collect();
   },
 });
 
 export const getById = query({
-  args: { formId: v.id("forms") },
+  args: { documentId: v.id("documents") },
   handler: async (ctx, args) => {
-    return await ctx.db.get(args.formId);
+    return await ctx.db.get(args.documentId);
   },
 });
 
@@ -24,18 +24,18 @@ export const getAllActive = query({
   args: {},
   handler: async (ctx) => {
     return await ctx.db
-      .query("forms")
+      .query("documents")
       .filter((q) => q.eq(q.field("deletionTime"), undefined))
       .collect();
   },
 });
 
 export const getURL = query({
-  args: { formId: v.id("forms") },
+  args: { documentId: v.id("documents") },
   handler: async (ctx, args) => {
-    const form = await ctx.db.get(args.formId);
-    if (!form || !form.file) return null;
-    return await ctx.storage.getUrl(form.file);
+    const document = await ctx.db.get(args.documentId);
+    if (!document || !document.file) return null;
+    return await ctx.storage.getUrl(document.file);
   },
 });
 
@@ -52,9 +52,9 @@ export const generateUploadUrl = mutation(async (ctx) => {
 });
 
 export const upload = userMutation({
-  args: { formId: v.id("forms"), storageId: v.id("_storage") },
+  args: { documentId: v.id("documents"), storageId: v.id("_storage") },
   handler: async (ctx, args) => {
-    return await ctx.db.patch(args.formId, {
+    return await ctx.db.patch(args.documentId, {
       file: args.storageId,
     });
   },
@@ -63,16 +63,16 @@ export const upload = userMutation({
 export const getByQuestId = query({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
-    const forms = await ctx.db
-      .query("forms")
+    const documents = await ctx.db
+      .query("documents")
       .withIndex("quest", (q) => q.eq("questId", args.questId))
       .filter((q) => q.eq(q.field("deletionTime"), undefined))
       .collect();
 
     return await Promise.all(
-      forms.map(async (form) => ({
-        ...form,
-        url: form.file ? await ctx.storage.getUrl(form.file) : null,
+      documents.map(async (document) => ({
+        ...document,
+        url: document.file ? await ctx.storage.getUrl(document.file) : null,
       })),
     );
   },
@@ -81,15 +81,15 @@ export const getByQuestId = query({
 export const create = userMutation({
   args: {
     title: v.string(),
-    formCode: v.optional(v.string()),
+    code: v.optional(v.string()),
     jurisdiction: jurisdiction,
     file: v.optional(v.id("_storage")),
     questId: v.id("quests"),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.insert("forms", {
+    return await ctx.db.insert("documents", {
       title: args.title,
-      formCode: args.formCode,
+      code: args.code,
       jurisdiction: args.jurisdiction,
       file: args.file,
       questId: args.questId,
@@ -99,25 +99,25 @@ export const create = userMutation({
 });
 
 export const softDelete = userMutation({
-  args: { formId: v.id("forms") },
+  args: { documentId: v.id("documents") },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.formId, { deletionTime: Date.now() });
+    await ctx.db.patch(args.documentId, { deletionTime: Date.now() });
   },
 });
 
 export const undoSoftDelete = userMutation({
-  args: { formId: v.id("forms") },
+  args: { documentId: v.id("documents") },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.formId, { deletionTime: undefined });
+    await ctx.db.patch(args.documentId, { deletionTime: undefined });
   },
 });
 
 export const deleteForever = userMutation({
-  args: { formId: v.id("forms") },
+  args: { documentId: v.id("documents") },
   handler: async (ctx, args) => {
-    // TODO: Delete form references in other tables
+    // TODO: Delete document references in other tables
 
-    // Delete the form
-    await ctx.db.delete(args.formId);
+    // Delete the document
+    await ctx.db.delete(args.documentId);
   },
 });

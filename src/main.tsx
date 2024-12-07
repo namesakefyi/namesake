@@ -10,14 +10,16 @@ import {
   useConvexAuth,
   useQuery,
 } from "convex/react";
+import { LazyMotion, domAnimation } from "framer-motion";
 import { ArrowLeft, TriangleAlert } from "lucide-react";
-import { LazyMotion, domAnimation } from "motion/react";
 import { ThemeProvider } from "next-themes";
 import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
+import { setLicenseKey } from "survey-core";
 import { routeTree } from "./routeTree.gen";
 
+setLicenseKey(import.meta.env.VITE_SURVEY_JS_KEY);
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
 const NotFoundComponent = () => (

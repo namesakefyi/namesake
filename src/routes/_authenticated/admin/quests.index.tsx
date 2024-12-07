@@ -8,6 +8,8 @@ import {
   MenuItem,
   MenuTrigger,
   Modal,
+  ModalFooter,
+  ModalHeader,
   Select,
   SelectItem,
   Table,
@@ -78,8 +80,16 @@ const NewQuestModal = ({
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <h2 className="text-xl">Create new quest</h2>
+      <ModalHeader title="New quest" />
       <Form className="w-full" onSubmit={handleSubmit}>
+        <TextField
+          label="Title"
+          name="title"
+          isRequired
+          value={title}
+          onChange={(value) => setTitle(value)}
+          className="w-full"
+        />
         <Select
           label="Category"
           name="category"
@@ -97,13 +107,6 @@ const NewQuestModal = ({
             );
           })}
         </Select>
-        <TextField
-          label="Title"
-          name="title"
-          isRequired
-          value={title}
-          onChange={(value) => setTitle(value)}
-        />
         <Select
           label="Jurisdiction"
           name="jurisdiction"
@@ -117,14 +120,14 @@ const NewQuestModal = ({
             </SelectItem>
           ))}
         </Select>
-        <div className="flex gap-2 justify-end">
+        <ModalFooter>
           <Button type="button" onPress={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Button type="submit" variant="primary">
             Create Quest
           </Button>
-        </div>
+        </ModalFooter>
       </Form>
     </Modal>
   );
