@@ -73,7 +73,7 @@ export function Button({
         }),
       )}
     >
-      {Icon && <Icon size={size === "small" ? 12 : 16} />}
+      {Icon && <Icon size={16} />}
       {children}
     </AriaButton>
   );

@@ -3,6 +3,7 @@ import {
   Heading,
   ModalOverlay,
   type ModalOverlayProps,
+  composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
 import { Dialog } from "../Dialog";
@@ -31,11 +32,16 @@ const modalStyles = tv({
   },
 });
 
-export function Modal(props: ModalOverlayProps) {
+export function Modal({ className, ...props }: ModalOverlayProps) {
   return (
     <ModalOverlay {...props} className={overlayStyles}>
       <Dialog>
-        <AriaModal {...props} className={modalStyles}>
+        <AriaModal
+          {...props}
+          className={composeRenderProps(className, (className, renderProps) =>
+            modalStyles({ ...renderProps, className }),
+          )}
+        >
           {props.children}
         </AriaModal>
       </Dialog>

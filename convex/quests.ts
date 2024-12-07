@@ -1,4 +1,5 @@
 import { v } from "convex/values";
+import { Model } from "survey-core";
 import { query } from "./_generated/server";
 import { DEFAULT_TIME_REQUIRED } from "./constants";
 import { userMutation } from "./helpers";
@@ -141,6 +142,29 @@ export const setContent = userMutation({
   },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.questId, { content: args.content });
+  },
+});
+
+export const setFormSchema = userMutation({
+  args: {
+    questId: v.id("quests"),
+    saveNo: v.number(),
+    formSchema: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    if (!args.formSchema) return;
+    try {
+      const submittedSchema = JSON.parse(args.formSchema);
+      const survey = new Model(submittedSchema);
+      const validatedSchema = survey.toJSON();
+
+      console.log("Validated schema:", JSON.stringify(validatedSchema));
+      await ctx.db.patch(args.questId, {
+        formSchema: JSON.stringify(validatedSchema),
+      });
+    } catch (e) {
+      console.error(e);
+    }
   },
 });
 
