@@ -43,14 +43,65 @@ Once your Convex account and project is created, a `.env.local` file will be gen
 
 ### Configure authentication setup (first time only)
 
-To configure authentication automatically Convex ships with a CLI command that will guide you through the process. Run:
+Refer to the [Manual Setup guide](https://labs.convex.dev/auth/setup/manual) for detailed instructions.
+
+#### 1. Configure `SITE_URL`
+
+Run the following command to set your `SITE_URL` environment variable for Convex:
 
 ```shell
-npx @convex-dev/auth
+npx convex env set SITE_URL http://localhost:5173
 ```
 
-> [!NOTE]
-> Refer to the [Manual Setup guide](https://labs.convex.dev/auth/setup/manual) for more information on setting up authentication manually or if you encounter any issues with the the command above.
+#### 2. Generate authentication keys
+
+Install the required package for generating keys:
+
+```shell
+pnpm install jose
+```
+
+Create a new file named generateKeys.mjs and add the following code:
+
+```javascript
+import { exportJWK, exportPKCS8, generateKeyPair } from "jose";
+
+const keys = await generateKeyPair("RS256");
+const privateKey = await exportPKCS8(keys.privateKey);
+const publicKey = await exportJWK(keys.publicKey);
+const jwks = JSON.stringify({ keys: [{ use: "sig", ...publicKey }] });
+
+process.stdout.write(
+  `JWT_PRIVATE_KEY="${privateKey.trimEnd().replace(/\n/g, " ")}"`
+);
+process.stdout.write("\n");
+process.stdout.write(`JWKS=${jwks}`);
+process.stdout.write("\n");
+```
+
+Run the following command to generate the keys:
+
+```shell
+node generateKeys.mjs
+```
+
+The script will output two variables: JWT_PRIVATE_KEY and JWKS.
+
+#### 3. Set environment variables in Convex
+
+Copy the entire output from the `generateKeys.mjs` script and paste it into the [Environment Variables](https://dashboard.convex.dev/deployment/settings/environment-variables) section of your Convex dashboard. You should now have the following variables set:
+
+- `JWT_PRIVATE_KEY`
+- `JWKS`
+- `SITE_URL` (from step 1)
+
+#### 4. Add authentication to `.env.local`
+
+Head to [Authentication Configuration](https://dashboard.convex.dev/deployment/settings/authentication) in your Convex dashboard, copy the `Domain` and add it to your `.env.local` file:
+
+```bash
+CONVEX_SITE_URL=<your-convex-site-url>
+```
 
 ## Making changes
 
@@ -93,6 +144,7 @@ Below are Namesake's core dependencies. The links below each lead to docs.
 | ----------------------------------------------------------------------------------- | -------------------------------------------------- |
 | [Convex](https://docs.convex.dev/)                                                  | Type-safe database, file storage, realtime updates |
 | [Convex Auth](https://labs.convex.dev/auth)                                         | User authentication                                |
+| [SurveyJS](https://surveyjs.io/documentation)                                       | Form building, validation, and display             |
 | [TanStack Router](https://tanstack.com/router/latest/docs/framework/react/overview) | File-based routing                                 |
 | [React](https://react.dev/reference/react)                                          | Front-end web framework                            |
 | [React Aria](https://react-spectrum.adobe.com/react-aria)                           | Accessible components and design system            |
