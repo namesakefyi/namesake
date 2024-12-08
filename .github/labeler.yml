@@ -1,0 +1,28 @@
+backend:
+- changed-files:
+  - any-glob-to-any-file: convex/**
+
+# Add 'bug' label to any PR where the head branch name
+# starts with `fix` or has a `fix` section in the name
+bug:
+- head-branch: ['^fix', 'fix']
+
+dependencies:
+- changed-files:
+  - any-glob-to-any-file: package.json
+
+documentation:
+- changed-files:
+  - any-glob-to-any-file: docs/**
+
+frontend:
+- changed-files:
+  - any-glob-to-any-file: src/**
+
+testing:
+- changed-files:
+  - any-glob-to-any-file: ['tests/**', '**.test.{ts,tsx}', 'playwright.config.ts']
+
+workflows:
+- changed-files:
+  - any-glob-to-any-file: ['.github/workflows/**', '.husky/**', 'biome.json']
