@@ -9,6 +9,7 @@ export const surveyCreatorConfig: ICreatorOptions = {
   showSurveyTitle: false,
   allowEditExpressionsInTextEditor: false,
   allowChangeThemeInPreview: false,
+  // https://surveyjs.io/form-library/documentation/api-reference/question#getType
   questionTypes: [
     "boolean",
     "checkbox",
@@ -25,7 +26,9 @@ export const surveyCreatorConfig: ICreatorOptions = {
 
 export const configureSurveyCreatorToolbox = (creator: SurveyCreator) => {
   const textToolboxItem = creator.toolbox.getItemByName("text");
-  for (const subitem of ["color", "month", "week", "time", "range"]) {
+  // https://surveyjs.io/survey-creator/documentation/toolbox-customization#remove-subitems
+  const textItemExclude = ["color", "month", "week", "time", "range"];
+  for (const subitem of textItemExclude) {
     textToolboxItem.removeSubitem(subitem);
   }
 };
