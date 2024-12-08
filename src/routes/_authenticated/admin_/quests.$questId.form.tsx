@@ -2,6 +2,10 @@ import "survey-core/defaultV2.min.css";
 import "survey-creator-core/survey-creator-core.min.css";
 
 import { Badge, Button } from "@/components/common";
+import {
+  configureSurveyCreatorToolbox,
+  surveyCreatorConfig,
+} from "@/utils/surveyCreatorConfig";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
@@ -27,11 +31,8 @@ function AdminQuestSurveyRoute() {
 
   const setFormSchema = useMutation(api.quests.setFormSchema);
 
-  const creator = new SurveyCreator({
-    showLogicTab: true,
-    isAutoSave: false,
-    showJSONEditorTab: false,
-  });
+  const creator = new SurveyCreator(surveyCreatorConfig);
+  configureSurveyCreatorToolbox(creator);
 
   useEffect(() => {
     if (quest?.formSchema) creator.text = quest.formSchema;
