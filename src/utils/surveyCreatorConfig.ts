@@ -4,7 +4,7 @@ import type { SurveyCreator } from "survey-creator-react";
 export const surveyCreatorConfig: ICreatorOptions = {
   showLogicTab: true,
   isAutoSave: false,
-  maxNestedPanels: 1,
+  maxNestedPanels: 0,
   showJSONEditorTab: false,
   showSurveyTitle: false,
   allowEditExpressionsInTextEditor: false,
@@ -13,14 +13,14 @@ export const surveyCreatorConfig: ICreatorOptions = {
   questionTypes: [
     "boolean",
     "checkbox",
-    "dropdown",
-    "tagbox",
-    "multipletext",
-    "panel",
-    "paneldynamic",
     "radiogroup",
+    "dropdown", // Single-select dropdown
+    "tagbox", // Multi-select dropdown
+    "text", // Single-line text
+    "comment", // Multi-line text
+    "multipletext", // Multiple text inputs for one question
+    "paneldynamic", // Repeated entries
     "signaturepad",
-    "text",
   ],
 };
 
