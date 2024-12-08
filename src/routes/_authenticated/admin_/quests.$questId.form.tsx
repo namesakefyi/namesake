@@ -2,6 +2,10 @@ import "survey-core/defaultV2.min.css";
 import "survey-creator-core/survey-creator-core.min.css";
 
 import { Badge, Button } from "@/components/common";
+import {
+  configureSurveyCreatorToolbox,
+  surveyCreatorConfig,
+} from "@/utils/surveyCreatorConfig";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
@@ -27,46 +31,8 @@ function AdminQuestSurveyRoute() {
 
   const setFormSchema = useMutation(api.quests.setFormSchema);
 
-  const creator = new SurveyCreator({
-    showLogicTab: true,
-    isAutoSave: false,
-    maxNestedPanels: 1,
-    showJSONEditorTab: false,
-    showSurveyTitle: false,
-    questionTypes: [
-      // https://surveyjs.io/form-library/documentation/api-reference/question#getType
-      "boolean",
-      "checkbox",
-      // "comment",
-      "dropdown",
-      "tagbox",
-      // "expression",
-      // "file",
-      // "html",
-      // "image",
-      // "imagepicker",
-      // "matrix",
-      // "matrixdropdown",
-      // "matrixdynamic",
-      "multipletext",
-      "panel",
-      "paneldynamic",
-      "radiogroup",
-      // "rating",
-      // "ranking",
-      "signaturepad",
-      "text",
-    ],
-    allowEditExpressionsInTextEditor: false,
-    allowChangeThemeInPreview: false,
-  });
-
-  const textToolboxItem = creator.toolbox.getItemByName("text");
-  textToolboxItem.removeSubitem("color");
-  textToolboxItem.removeSubitem("month");
-  textToolboxItem.removeSubitem("week");
-  textToolboxItem.removeSubitem("time");
-  textToolboxItem.removeSubitem("range");
+  const creator = new SurveyCreator(surveyCreatorConfig);
+  configureSurveyCreatorToolbox(creator);
 
   useEffect(() => {
     if (quest?.formSchema) creator.text = quest.formSchema;
