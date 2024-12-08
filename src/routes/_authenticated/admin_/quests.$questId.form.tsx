@@ -30,8 +30,43 @@ function AdminQuestSurveyRoute() {
   const creator = new SurveyCreator({
     showLogicTab: true,
     isAutoSave: false,
+    maxNestedPanels: 1,
     showJSONEditorTab: false,
+    showSurveyTitle: false,
+    questionTypes: [
+      // https://surveyjs.io/form-library/documentation/api-reference/question#getType
+      "boolean",
+      "checkbox",
+      // "comment",
+      "dropdown",
+      "tagbox",
+      // "expression",
+      // "file",
+      // "html",
+      // "image",
+      // "imagepicker",
+      // "matrix",
+      // "matrixdropdown",
+      // "matrixdynamic",
+      "multipletext",
+      "panel",
+      "paneldynamic",
+      "radiogroup",
+      // "rating",
+      // "ranking",
+      "signaturepad",
+      "text",
+    ],
+    allowEditExpressionsInTextEditor: false,
+    allowChangeThemeInPreview: false,
   });
+
+  const textToolboxItem = creator.toolbox.getItemByName("text");
+  textToolboxItem.removeSubitem("color");
+  textToolboxItem.removeSubitem("month");
+  textToolboxItem.removeSubitem("week");
+  textToolboxItem.removeSubitem("time");
+  textToolboxItem.removeSubitem("range");
 
   useEffect(() => {
     if (quest?.formSchema) creator.text = quest.formSchema;
