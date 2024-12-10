@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   build:
-    name: Build and report bundle stats
+    name: Report Bundle Size
     runs-on: ubuntu-latest
 
     steps:
