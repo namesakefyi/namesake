@@ -147,7 +147,10 @@ export const setStatus = userMutation({
     });
     if (userQuest === null) throw new Error("User quest not found");
 
-    // Prevent setting "ready to file" and "filed" on non-core quests
+    // Throw if status is invalid
+    if (!STATUS[args.status as Status]) throw new Error("Invalid status");
+
+    // Prevent setting "filed" on non-core quests
     if (
       STATUS[args.status as Status].isCoreOnly === true &&
       quest.category !== "core"

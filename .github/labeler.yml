@@ -21,7 +21,7 @@ frontend:
 
 testing:
 - changed-files:
-  - any-glob-to-any-file: ['tests/**', '**.test.{ts,tsx}', 'playwright.config.ts']
+  - any-glob-to-any-file: ['tests/**', '**/*.test.ts', '**/*.test.tsx', 'playwright.config.ts']
 
 workflows:
 - changed-files:
