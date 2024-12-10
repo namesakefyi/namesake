@@ -1,17 +1,15 @@
-/// <reference types="vitest" />
-
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react-swc";
 import autoprefixer from "autoprefixer";
 import cssnano from "cssnano";
 import webpackStatsPlugin from "rollup-plugin-webpack-stats";
 import tailwindcss from "tailwindcss";
-import { defineConfig } from "vite";
+import { defineConfig as defineViteConfig, mergeConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { configDefaults, coverageConfigDefaults } from "vitest/config";
+import { defineConfig as defineVitestConfig } from "vitest/config";
 
-// https://vitejs.dev/config/
-export default defineConfig({
+const viteConfig = defineViteConfig({
   build: {
     rollupOptions: {
       output: {
@@ -37,6 +35,9 @@ export default defineConfig({
       plugins: [autoprefixer(), tailwindcss(), cssnano()],
     },
   },
+});
+
+const vitestConfig = defineVitestConfig({
   test: {
     globals: true,
     environmentMatchGlobs: [
@@ -69,3 +70,5 @@ export default defineConfig({
     },
   },
 });
+
+export default mergeConfig(viteConfig, vitestConfig);
