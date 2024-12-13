@@ -34,8 +34,8 @@
     "*": "pnpm check:fix"
   },
   "dependencies": {
-    "@auth/core": "0.37.4",
-    "@convex-dev/auth": "^0.0.75",
+    "@auth/core": "~0.37.3",
+    "@convex-dev/auth": "^0.0.76",
     "@faker-js/faker": "^9.3.0",
     "@tanstack/react-router": "^1.87.1",
     "@tiptap/extension-blockquote": "^2.10.3",
