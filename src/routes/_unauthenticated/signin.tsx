@@ -142,9 +142,22 @@ const SignIn = () => {
             </Button>
             <p className="text-sm text-gray-dim text-center text-balance">
               By registering, you agree to Namesake’s{" "}
-              <Link href="https://namesake.fyi/terms">Terms of Service</Link>{" "}
+              <Link
+                href="https://namesake.fyi/terms"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Terms of Service
+              </Link>{" "}
               and{" "}
-              <Link href="https://namesake.fyi/privacy">Privacy Policy</Link>.
+              <Link
+                href="https://namesake.fyi/privacy"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Privacy Policy
+              </Link>
+              .
             </p>
           </Form>
         )}
