@@ -70,6 +70,22 @@ function SettingsRoute() {
               Discord Community
             </NavItem>
           </NavGroup>
+          <NavGroup label="Legal">
+            <NavItem
+              href="https://namesake.fyi/terms"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Terms of Service
+            </NavItem>
+            <NavItem
+              href="https://namesake.fyi/privacy"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Privacy Policy
+            </NavItem>
+          </NavGroup>
         </Nav>
       </AppSidebar>
       <AppContent>
