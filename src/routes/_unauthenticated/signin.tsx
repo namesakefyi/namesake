@@ -140,6 +140,25 @@ const SignIn = () => {
             <Button type="submit" isDisabled={isSubmitting} variant="primary">
               {isSubmitting ? "Registering..." : "Register"}
             </Button>
+            <p className="text-sm text-gray-dim text-center text-balance">
+              By registering, you agree to Namesake’s{" "}
+              <Link
+                href="https://namesake.fyi/terms"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Terms of Service
+              </Link>{" "}
+              and{" "}
+              <Link
+                href="https://namesake.fyi/privacy"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Privacy Policy
+              </Link>
+              .
+            </p>
           </Form>
         )}
       </TabPanel>
