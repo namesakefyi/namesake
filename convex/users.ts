@@ -50,6 +50,13 @@ export const setName = userMutation({
   },
 });
 
+export const setEmail = userMutation({
+  args: { email: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(ctx.userId, { email: args.email });
+  },
+});
+
 export const setResidence = userMutation({
   args: { residence: jurisdiction },
   handler: async (ctx, args) => {

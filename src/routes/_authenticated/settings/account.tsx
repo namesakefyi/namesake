@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/app";
 import {
   DeleteAccountSetting,
   EditBirthplaceSetting,
+  EditEmailSetting,
   EditMinorSetting,
   EditNameSetting,
   EditResidenceSetting,
@@ -30,6 +31,7 @@ function SettingsAccountRoute() {
         <>
           <SettingsGroup title="Personal Information">
             <EditNameSetting user={user} />
+            <EditEmailSetting user={user} />
             <EditMinorSetting user={user} />
             <EditResidenceSetting user={user} />
             <EditBirthplaceSetting user={user} />
