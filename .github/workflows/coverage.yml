@@ -3,10 +3,13 @@ name: Coverage
 on: 
   pull_request:
     branches: main
-    paths:
-      - "convex/**"
-      - "tests/**"
-      - "src/**"
+    paths-ignore:
+      - "docs/**"
+      - ".husky/**"
+      - ".storybook/**"
+      - ".vscode/**"
+      - "public/**"
+      - "CHANGELOG.md"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

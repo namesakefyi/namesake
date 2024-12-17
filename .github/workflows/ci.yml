@@ -3,10 +3,13 @@ name: CI
 on:
   pull_request:
     branches: main
-    paths:
-      - "convex/**"
-      - "tests/**"
-      - "src/**"
+    paths-ignore:
+      - "docs/**"
+      - ".husky/**"
+      - ".storybook/**"
+      - ".vscode/**"
+      - "public/**"
+      - "CHANGELOG.md"
   push:
     branches: main
 
