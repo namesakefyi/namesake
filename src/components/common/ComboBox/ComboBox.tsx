@@ -56,7 +56,7 @@ export function ComboBox<T extends object>({
       </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>
-      <Popover className="w-[--trigger-width]">
+      <Popover title="Select an option" className="w-[--trigger-width]">
         <ListBox
           items={items}
           className="outline-0 p-1 max-h-[inherit] overflow-auto [clip-path:inset(0_0_0_0_round_.75rem)]"

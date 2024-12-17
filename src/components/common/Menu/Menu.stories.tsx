@@ -70,7 +70,7 @@ export const Submenu = (args: any) => (
       <MenuItem id="new">New…</MenuItem>
       <SubmenuTrigger>
         <MenuItem id="open">Open</MenuItem>
-        <Popover>
+        <Popover title="Open in">
           <Menu>
             <MenuItem id="open-new">Open in New Window</MenuItem>
             <MenuItem id="open-current">Open in Current Window</MenuItem>
@@ -81,13 +81,13 @@ export const Submenu = (args: any) => (
       <MenuItem id="print">Print…</MenuItem>
       <SubmenuTrigger>
         <MenuItem id="share">Share</MenuItem>
-        <Popover>
+        <Popover title="Share">
           <Menu>
             <MenuItem id="sms">SMS</MenuItem>
             <MenuItem id="twitter">Twitter</MenuItem>
             <SubmenuTrigger>
               <MenuItem id="email">Email</MenuItem>
-              <Popover>
+              <Popover title="Email">
                 <Menu>
                   <MenuItem id="work">Work</MenuItem>
                   <MenuItem id="personal">Personal</MenuItem>

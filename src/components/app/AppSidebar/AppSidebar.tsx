@@ -85,7 +85,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
                     {THEMES[theme as Theme].label}
                   </span>
                 </MenuItem>
-                <Popover>
+                <Popover title="Select a theme">
                   <Menu
                     disallowEmptySelection
                     selectionMode="single"

@@ -8,7 +8,6 @@ import {
 } from "react-aria-components";
 import { Button } from "../Button";
 import { DateInput } from "../DateField";
-import { Dialog } from "../Dialog";
 import { FieldDescription, FieldError, FieldGroup, Label } from "../Field";
 import { Popover } from "../Popover";
 import { RangeCalendar } from "../RangeCalendar";
@@ -50,10 +49,8 @@ export function DateRangePicker<T extends DateValue>({
       </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>
-      <Popover>
-        <Dialog>
-          <RangeCalendar />
-        </Dialog>
+      <Popover title="Select a date range">
+        <RangeCalendar />
       </Popover>
     </AriaDateRangePicker>
   );
