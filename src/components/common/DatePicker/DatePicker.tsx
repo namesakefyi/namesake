@@ -9,7 +9,6 @@ import {
 import { Button } from "../Button";
 import { Calendar } from "../Calendar";
 import { DateInput } from "../DateField";
-import { Dialog } from "../Dialog";
 import { FieldDescription, FieldError, FieldGroup, Label } from "../Field";
 import { Popover } from "../Popover";
 
@@ -43,10 +42,8 @@ export function DatePicker<T extends DateValue>({
       </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>
-      <Popover>
-        <Dialog>
-          <Calendar />
-        </Dialog>
+      <Popover title="Select a date">
+        <Calendar />
       </Popover>
     </AriaDatePicker>
   );
