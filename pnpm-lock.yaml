@@ -84,12 +84,12 @@ importers:
       convex-helpers:
         specifier: ^0.1.67
         version: 0.1.67(convex@1.17.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(zod@3.24.1)
-      framer-motion:
-        specifier: 12.0.0-alpha.2
-        version: 12.0.0-alpha.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       lucide-react:
         specifier: ^0.468.0
         version: 0.468.0(react@19.0.0)
+      motion:
+        specifier: ^11.15.0
+        version: 11.15.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       next-themes:
         specifier: ^0.4.4
         version: 0.4.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -219,7 +219,7 @@ importers:
         version: 3.7.2(@swc/helpers@0.5.15)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.6.1))
       '@vitest/coverage-v8':
         specifier: ^2.1.8
-        version: 2.1.8(vitest@2.1.8(@edge-runtime/vm@5.0.0)(@types/node@22.10.2)(@vitest/ui@2.1.8)(jsdom@25.0.0(canvas@2.11.2)))
+        version: 2.1.8(vitest@2.1.8)
       '@vitest/ui':
         specifier: ^2.1.8
         version: 2.1.8(vitest@2.1.8)
@@ -3290,12 +3290,12 @@ packages:
   fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
 
-  framer-motion@12.0.0-alpha.2:
-    resolution: {integrity: sha512-s603YLhCoX3GKaPDZnywwoFdd1T6gDFCfevVRek+TCpbvazUkITh+YZ3a6kqTvn4Aj7qQWT3vAmzWIjl/LsCFA==}
+  framer-motion@11.15.0:
+    resolution: {integrity: sha512-MLk8IvZntxOMg7lDBLw2qgTHHv664bYoYmnFTmE0Gm/FW67aOJk0WM3ctMcG+Xhcv+vh5uyyXwxvxhSeJzSe+w==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
-      react: ^19.0.0-rc.1
-      react-dom: ^19.0.0-rc.1
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
     peerDependenciesMeta:
       '@emotion/is-prop-valid':
         optional: true
@@ -3937,6 +3937,26 @@ packages:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
     engines: {node: '>=10'}
     hasBin: true
+
+  motion-dom@11.14.3:
+    resolution: {integrity: sha512-lW+D2wBy5vxLJi6aCP0xyxTxlTfiu+b+zcpVbGVFUxotwThqhdpPRSmX8xztAgtZMPMeU0WGVn/k1w4I+TbPqA==}
+
+  motion-utils@11.14.3:
+    resolution: {integrity: sha512-Xg+8xnqIJTpr0L/cidfTTBFkvRw26ZtGGuIhA94J9PQ2p4mEa06Xx7QVYZH0BP+EpMSaDlu+q0I0mmvwADPsaQ==}
+
+  motion@11.15.0:
+    resolution: {integrity: sha512-iZ7dwADQJWGsqsSkBhNHdI2LyYWU+hA1Nhy357wCLZq1yHxGImgt3l7Yv0HT/WOskcYDq9nxdedyl4zUv7UFFw==}
+    peerDependencies:
+      '@emotion/is-prop-valid': '*'
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@emotion/is-prop-valid':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
 
   mri@1.2.0:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
@@ -7881,7 +7901,7 @@ snapshots:
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  '@vitest/coverage-v8@2.1.8(vitest@2.1.8(@edge-runtime/vm@5.0.0)(@types/node@22.10.2)(@vitest/ui@2.1.8)(jsdom@25.0.0(canvas@2.11.2)))':
+  '@vitest/coverage-v8@2.1.8(vitest@2.1.8)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -8841,8 +8861,10 @@ snapshots:
 
   fraction.js@4.3.7: {}
 
-  framer-motion@12.0.0-alpha.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  framer-motion@11.15.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
+      motion-dom: 11.14.3
+      motion-utils: 11.14.3
       tslib: 2.8.1
     optionalDependencies:
       react: 19.0.0
@@ -9522,6 +9544,18 @@ snapshots:
 
   mkdirp@1.0.4:
     optional: true
+
+  motion-dom@11.14.3: {}
+
+  motion-utils@11.14.3: {}
+
+  motion@11.15.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      framer-motion: 11.15.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      tslib: 2.8.1
+    optionalDependencies:
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
 
   mri@1.2.0: {}
 
