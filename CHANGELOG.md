@@ -1,5 +1,16 @@
 # namesake
 
+## 0.15.0
+
+### Minor Changes
+
+- cf18a88: Add links to terms of service and privacy policy
+
+### Patch Changes
+
+- 3192f7e: Ensure that accessible titles are available for all dialogs
+- 2dcace8: Ensure automatic tests run when upgrading packages
+
 ## 0.14.0
 
 ### Minor Changes
