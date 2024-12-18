@@ -7,9 +7,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DeleteAccountSetting } from "./DeleteAccountSetting";
 
 describe("DeleteAccountSetting", () => {
-  vi.mock("convex/react");
-  vi.mock("@convex-dev/auth/react");
-
   const mockSignOut = vi.fn();
   const mockDeleteAccount = vi.fn();
 
@@ -54,10 +51,10 @@ describe("DeleteAccountSetting", () => {
     await user.type(input, "WRONG_TEXT");
 
     await user.click(screen.getByRole("button", { name: "Delete account" }));
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Please type DELETE to confirm.",
+    );
 
-    expect(
-      await screen.findByText("Please type DELETE to confirm."),
-    ).toBeInTheDocument();
     expect(mockDeleteAccount).not.toHaveBeenCalled();
   });
 

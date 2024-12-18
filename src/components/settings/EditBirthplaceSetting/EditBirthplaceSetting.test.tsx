@@ -23,22 +23,27 @@ describe("EditBirthplaceSetting", () => {
     );
   });
 
-  it("renders the EditBirthplaceSetting component", () => {
+  it("renders correct jurisdiction if it exists", () => {
     render(<EditBirthplaceSetting user={mockUser} />);
-    expect(screen.getByText("Birthplace")).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        "Where were you born? This location is used to select the forms for your birth certificate.",
-      ),
-    ).toBeInTheDocument();
     expect(screen.getByText(JURISDICTIONS.CA)).toBeInTheDocument();
   });
 
-  it("opens the modal when the button is clicked", async () => {
+  it("renders 'Set birthplace' if birthplace is not set", () => {
+    render(
+      <EditBirthplaceSetting user={{ ...mockUser, birthplace: undefined }} />,
+    );
+    expect(
+      screen.getByRole("button", { name: "Set birthplace" }),
+    ).toBeInTheDocument();
+  });
+
+  it("populates correct jurisdiction when modal is opened", async () => {
     const user = userEvent.setup();
     render(<EditBirthplaceSetting user={mockUser} />);
     await user.click(screen.getByRole("button", { name: JURISDICTIONS.CA }));
-    expect(screen.getByText("Edit birthplace")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: `${JURISDICTIONS.CA} State` }),
+    ).toBeInTheDocument();
   });
 
   it("updates birthplace and submits the form", async () => {
@@ -76,8 +81,8 @@ describe("EditBirthplaceSetting", () => {
 
     await user.click(screen.getByRole("button", { name: "Save" }));
 
-    expect(
-      screen.getByText("Failed to update birthplace. Please try again."),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "Failed to update birthplace. Please try again.",
+    );
   });
 });

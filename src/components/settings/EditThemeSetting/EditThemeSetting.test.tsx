@@ -6,11 +6,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { EditThemeSetting } from "./EditThemeSetting";
 
 describe("EditThemeSetting", () => {
-  // Mock the useTheme hook
-  vi.mock("@/utils/useTheme", () => ({
-    useTheme: vi.fn(),
-  }));
-
   const mockUpdateTheme = vi.fn();
   const mockSetNextTheme = vi.fn();
   const mockThemeSelection = new Set(["light"]);
@@ -28,17 +23,13 @@ describe("EditThemeSetting", () => {
     });
   });
 
-  it("renders component correctly", () => {
+  it("renders component correctly with correct initial theme", () => {
     render(<EditThemeSetting />);
     expect(screen.getByText("Theme")).toBeInTheDocument();
     expect(screen.getByText("Adjust your display.")).toBeInTheDocument();
     for (const theme of Object.values(THEMES)) {
       expect(screen.getByText(theme.label)).toBeInTheDocument();
     }
-  });
-
-  it("renders the correct initial theme", () => {
-    render(<EditThemeSetting />);
     const lightThemeButton = screen.getByRole("radio", {
       name: THEMES.light.label,
     });

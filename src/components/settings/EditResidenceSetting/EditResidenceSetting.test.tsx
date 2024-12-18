@@ -24,22 +24,27 @@ describe("EditResidenceSetting", () => {
     );
   });
 
-  it("renders the EditResidenceSetting component", () => {
+  it("renders correct jurisdiction if it exists", () => {
     render(<EditResidenceSetting user={mockUser} />);
-    expect(screen.getByText("Residence")).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        "Where do you live? This location is used to select the forms for your court order and state ID.",
-      ),
-    ).toBeInTheDocument();
     expect(screen.getByText(JURISDICTIONS.CA)).toBeInTheDocument();
   });
 
-  it("opens the modal when the button is clicked", async () => {
+  it("renders 'Set residence' if residence is not set", () => {
+    render(
+      <EditResidenceSetting user={{ ...mockUser, residence: undefined }} />,
+    );
+    expect(
+      screen.getByRole("button", { name: "Set residence" }),
+    ).toBeInTheDocument();
+  });
+
+  it("populates correct jurisdiction when modal is opened", async () => {
     const user = userEvent.setup();
     render(<EditResidenceSetting user={mockUser} />);
     await user.click(screen.getByRole("button", { name: JURISDICTIONS.CA }));
-    expect(screen.getByText("Edit residence")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: `${JURISDICTIONS.CA} State` }),
+    ).toBeInTheDocument();
   });
 
   it("updates residence and submits the form", async () => {

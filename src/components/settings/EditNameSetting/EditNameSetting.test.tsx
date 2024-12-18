@@ -18,20 +18,23 @@ describe("EditNameSetting", () => {
     vi.clearAllMocks();
   });
 
-  it("renders the EditNameSetting component", () => {
+  it("renders correct username if exists", () => {
     render(<EditNameSetting user={mockUser} />);
-    expect(screen.getByText("Name")).toBeInTheDocument();
-    expect(
-      screen.getByText("How should Namesake refer to you?"),
-    ).toBeInTheDocument();
     expect(screen.getByText("John Doe")).toBeInTheDocument();
   });
 
-  it("opens the modal when the button is clicked", async () => {
+  it("renders 'Set name' if name is not set", () => {
+    render(<EditNameSetting user={{ ...mockUser, name: undefined }} />);
+    expect(
+      screen.getByRole("button", { name: "Set name" }),
+    ).toBeInTheDocument();
+  });
+
+  it("populates correct username when modal is opened", async () => {
     const user = userEvent.setup();
     render(<EditNameSetting user={mockUser} />);
     await user.click(screen.getByRole("button", { name: "John Doe" }));
-    expect(screen.getByText("Edit name")).toBeInTheDocument();
+    expect(screen.getByRole("textbox")).toHaveValue("John Doe");
   });
 
   it("displays an error when the name is too long", async () => {
@@ -44,7 +47,7 @@ describe("EditNameSetting", () => {
     await user.click(screen.getByRole("button", { name: "Save" }));
 
     expect(
-      await screen.findByText("Name must be less than 100 characters"),
+      await screen.findByText("Name must be less than 100 characters."),
     ).toBeInTheDocument();
   });
 
