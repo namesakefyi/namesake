@@ -13,3 +13,13 @@ vi.mock("sonner", () => ({
     error: vi.fn(),
   },
 }));
+
+// Mock the auth hook
+vi.mock("@convex-dev/auth/react", () => ({
+  useAuthActions: vi.fn(),
+}));
+
+// Mock the useTheme hook
+vi.mock("@/utils/useTheme", () => ({
+  useTheme: vi.fn(),
+}));
