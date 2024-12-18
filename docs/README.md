@@ -16,10 +16,6 @@ We 💖 our contributors! We're committed to building Namesake by—and for—th
 🐕 Explore some [good first issues](https://github.com/namesakefyi/namesake/contribute).  
 👋 Come [chat with us](https://namesake.fyi/chat) on Discord.
 
-<a href="https://github.com/namesakefyi/namesake/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=namesakefyi/namesake" />
-</a>
-
 ## Support
 
 Having trouble? Get help in the [Namesake Discord](https://namesake.fyi/chat) or [post an issue](https://github.com/namesakefyi/namesake/issues).
