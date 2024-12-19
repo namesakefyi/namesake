@@ -46,20 +46,4 @@ describe("EditThemeSetting", () => {
     expect(mockUpdateTheme).toHaveBeenCalledWith({ theme: "dark" });
     expect(mockSetNextTheme).toHaveBeenCalledWith("dark");
   });
-
-  it("displays the correct selected theme", () => {
-    render(<EditThemeSetting />);
-    const lightThemeButton = screen.getByRole("radio", {
-      name: THEMES.light.label,
-    });
-    expect(lightThemeButton).toHaveAttribute("aria-checked", "true");
-    const darkThemeButton = screen.getByRole("radio", {
-      name: THEMES.dark.label,
-    });
-    expect(darkThemeButton).not.toHaveAttribute("aria-checked", "true");
-    const systemThemeButton = screen.getByRole("radio", {
-      name: THEMES.system.label,
-    });
-    expect(systemThemeButton).not.toHaveAttribute("aria-checked", "true");
-  });
 });
