@@ -15,21 +15,21 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { SettingsItem } from "../SettingsItem";
 
-type EditNameModalProps = {
-  defaultName: string;
+type EditEmailModalProps = {
+  defaultEmail: string;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onSubmit: () => void;
 };
 
-const EditNameModal = ({
-  defaultName,
+const EditEmailModal = ({
+  defaultEmail,
   isOpen,
   onOpenChange,
   onSubmit,
-}: EditNameModalProps) => {
-  const updateName = useMutation(api.users.setName);
-  const [name, setName] = useState(defaultName);
+}: EditEmailModalProps) => {
+  const updateEmail = useMutation(api.users.setEmail);
+  const [email, setEmail] = useState(defaultEmail);
   const [error, setError] = useState<string>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -37,18 +37,13 @@ const EditNameModal = ({
     e.preventDefault();
     setError(undefined);
 
-    if (name.length > 100) {
-      setError("Name must be less than 100 characters");
-      return;
-    }
-
     try {
       setIsSubmitting(true);
-      await updateName({ name: name.trim() });
+      await updateEmail({ email: email.trim() });
       onSubmit();
-      toast.success("Name updated.");
+      toast.success("Email updated.");
     } catch (err) {
-      setError("Failed to update name. Please try again.");
+      setError("Failed to update email. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -57,18 +52,18 @@ const EditNameModal = ({
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalHeader
-        title="Edit name"
-        description="How should Namesake refer to you? This can be different from your legal name."
+        title="Email address"
+        description="This is the email we’ll use to contact you."
       />
       <Form onSubmit={handleSubmit} className="w-full">
         {error && <Banner variant="danger">{error}</Banner>}
         <TextField
-          label="Name"
-          name="name"
-          type="text"
-          value={name}
+          label="Email"
+          name="email"
+          type="email"
+          value={email}
           onChange={(value) => {
-            setName(value);
+            setEmail(value);
             setError(undefined);
           }}
           className="w-full"
@@ -91,23 +86,26 @@ const EditNameModal = ({
   );
 };
 
-type EditNameSettingProps = {
+type EditEmailSettingProps = {
   user: Doc<"users">;
 };
 
-export const EditNameSetting = ({ user }: EditNameSettingProps) => {
-  const [isNameModalOpen, setIsNameModalOpen] = useState(false);
+export const EditEmailSetting = ({ user }: EditEmailSettingProps) => {
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
   return (
-    <SettingsItem label="Name" description="How should Namesake refer to you?">
-      <Button icon={Pencil} onPress={() => setIsNameModalOpen(true)}>
-        {user?.name ?? "Set name"}
+    <SettingsItem
+      label="Email address"
+      description="This is the email we’ll use to contact you."
+    >
+      <Button icon={Pencil} onPress={() => setIsEmailModalOpen(true)}>
+        {user?.email ?? "Set email"}
       </Button>
-      <EditNameModal
-        isOpen={isNameModalOpen}
-        onOpenChange={setIsNameModalOpen}
-        defaultName={user.name ?? ""}
-        onSubmit={() => setIsNameModalOpen(false)}
+      <EditEmailModal
+        isOpen={isEmailModalOpen}
+        onOpenChange={setIsEmailModalOpen}
+        defaultEmail={user.email ?? ""}
+        onSubmit={() => setIsEmailModalOpen(false)}
       />
     </SettingsItem>
   );
