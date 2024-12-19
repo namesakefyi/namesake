@@ -63,7 +63,7 @@ export function Banner({ children, icon: Icon, variant }: BannerProps) {
   Icon = Icon ?? DefaultIcon();
 
   return (
-    <div className={bannerStyles({ variant })}>
+    <div role="alert" className={bannerStyles({ variant })}>
       <Icon size={20} className={iconStyles({ variant })} />
       {children}
     </div>
