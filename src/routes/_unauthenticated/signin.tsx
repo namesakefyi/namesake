@@ -35,14 +35,56 @@ const SignIn = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | React.ReactNode | null>(null);
   const navigate = useNavigate({ from: "/signin" });
   const isClosed = process.env.NODE_ENV === "production";
 
+  const checkUserExists = async (email: string): Promise<boolean> => {
+    const response = await fetch('/api/check-user-exists', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+  
+    if (!response.ok) {
+      return false;
+    }
+    const data = await response.json();
+    return data.exists;
+  };
+  
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitting(true);
     setError(null);
+
+    try {
+      if (flow === "signIn") {
+        const userExists = await checkUserExists(email);
+        if (!userExists) {
+          setError(
+            <>
+              There isn't an account for this email. Would you like to{" "}
+              <button
+                type="button"
+                onClick={() => setFlow("signUp")}
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  cursor: "pointer",
+                }}
+              >
+                Register a new account?
+              </button>
+            </>
+          );
+          setIsSubmitting(false);
+          return;
+        }
+      }
 
     await signIn("password", {
       flow,
@@ -50,19 +92,21 @@ const SignIn = () => {
       password,
       redirectTo: "/quests",
     })
-      .catch((error) =>
-        error instanceof ConvexError
-          ? setError(error.message)
-          : setError(error),
-      )
-      .then(() => navigate({ to: "/" }))
-      .finally(() => setIsSubmitting(false));
+      navigate({ to: "/" });
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "An unexpected error occurred."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  if (flow === "reset")
+  if (flow === "reset") {
     return (
       <ForgotPassword onBack={() => setFlow("signIn")} defaultEmail={email} />
     );
+  }
 
   return (
     <Tabs selectedKey={flow} onSelectionChange={setFlow}>
