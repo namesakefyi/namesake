@@ -9,7 +9,9 @@ import {
 } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
+import { INVALID_EMAIL } from "@convex/errors";
 import { useMutation } from "convex/react";
+import { ConvexError } from "convex/values";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -30,12 +32,12 @@ const EditEmailModal = ({
 }: EditEmailModalProps) => {
   const updateEmail = useMutation(api.users.setEmail);
   const [email, setEmail] = useState(defaultEmail);
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(undefined);
+    setError("");
 
     try {
       setIsSubmitting(true);
@@ -43,7 +45,15 @@ const EditEmailModal = ({
       onSubmit();
       toast.success("Email updated.");
     } catch (err) {
-      setError("Failed to update email. Please try again.");
+      if (err instanceof ConvexError) {
+        if (err.data === INVALID_EMAIL) {
+          setError("Please enter a valid email address.");
+        } else {
+          setError("This email is currently in use. Try another one.");
+        }
+      } else {
+        setError("Failed to update email. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -52,8 +62,8 @@ const EditEmailModal = ({
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalHeader
-        title="Email address"
-        description="This is the email we’ll use to contact you."
+        title="Edit email address"
+        description="What email would you like to use for Namesake?"
       />
       <Form onSubmit={handleSubmit} className="w-full">
         {error && <Banner variant="danger">{error}</Banner>}
@@ -62,10 +72,7 @@ const EditEmailModal = ({
           name="email"
           type="email"
           value={email}
-          onChange={(value) => {
-            setEmail(value);
-            setError(undefined);
-          }}
+          onChange={(value) => setEmail(value)}
           className="w-full"
           isRequired
         />
@@ -95,8 +102,8 @@ export const EditEmailSetting = ({ user }: EditEmailSettingProps) => {
 
   return (
     <SettingsItem
-      label="Email address"
-      description="This is the email we’ll use to contact you."
+      label="Edit email address"
+      description="What email would you like to use for Namesake?"
     >
       <Button icon={Pencil} onPress={() => setIsEmailModalOpen(true)}>
         {user?.email ?? "Set email"}

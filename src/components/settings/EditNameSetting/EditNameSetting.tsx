@@ -65,7 +65,6 @@ const EditNameModal = ({
         <TextField
           label="Name"
           name="name"
-          type="text"
           value={name}
           onChange={(value) => {
             setName(value);
