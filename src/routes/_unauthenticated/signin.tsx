@@ -30,7 +30,7 @@ export const Route = createFileRoute("/_unauthenticated/signin")({
 });
 
 const SignIn = () => {
-  const { signIn } = useAuthActions();
+  const { signIn} = useAuthActions();
   const [flow, setFlow] = useState<Key>("signIn");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -40,17 +40,17 @@ const SignIn = () => {
   const isClosed = process.env.NODE_ENV === "production";
 
   const checkUserExists = async (email: string): Promise<boolean> => {
-    const response = await fetch('/api/check-user-exists', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    });
+    try {
+      const response = await convex.query('checkUserExists', { email });
   
-    if (!response.ok) {
+      return response.exists;
+    } catch (err) {
+      if (err instanceof ConvexError && err.message === 'User does not exist') {
+        return false; 
+      }
+      console.error(err);
       return false;
     }
-    const data = await response.json();
-    return data.exists;
   };
   
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -77,8 +77,9 @@ const SignIn = () => {
                   cursor: "pointer",
                 }}
               >
-                Register a new account?
+                register a new account
               </button>
+              ?
             </>
           );
           setIsSubmitting(false);
@@ -86,19 +87,17 @@ const SignIn = () => {
         }
       }
 
-    await signIn("password", {
-      flow,
-      email,
-      password,
-      redirectTo: "/quests",
-    })
+      await signIn("password", {
+        flow,
+        email,
+        password,
+        redirectTo: "/quests",
+      });
       navigate({ to: "/" });
-    } catch (error) {
-      setError(
-        error instanceof Error ? error.message : "An unexpected error occurred."
-      );
-    } finally {
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
       setIsSubmitting(false);
+      console.error(err);
     }
   };
 
