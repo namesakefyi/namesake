@@ -38,7 +38,7 @@ const EditNameModal = ({
     setError(undefined);
 
     if (name.length > 100) {
-      setError("Name must be less than 100 characters");
+      setError("Name must be less than 100 characters.");
       return;
     }
 

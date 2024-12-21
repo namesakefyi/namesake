@@ -14,7 +14,7 @@ export interface BannerProps {
 }
 
 const bannerStyles = tv({
-  base: "flex gap-2 p-3 pr-4 items-start w-full text-sm rounded-lg bg-gray-3 dark:bg-graydark-3 text-gray-dim",
+  base: "flex gap-2 p-2.5 px-3 pr-4 items-start w-full text-sm rounded-lg bg-gray-3 dark:bg-graydark-3 text-gray-dim",
   variants: {
     variant: {
       info: "bg-blue-3 dark:bg-bluedark-3 text-blue-normal [&_a]:text-blue-normal",
@@ -63,7 +63,7 @@ export function Banner({ children, icon: Icon, variant }: BannerProps) {
   Icon = Icon ?? DefaultIcon();
 
   return (
-    <div className={bannerStyles({ variant })}>
+    <div role="alert" className={bannerStyles({ variant })}>
       <Icon size={20} className={iconStyles({ variant })} />
       {children}
     </div>
