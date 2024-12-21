@@ -30,63 +30,21 @@ export const Route = createFileRoute("/_unauthenticated/signin")({
 });
 
 const SignIn = () => {
-  const { signIn} = useAuthActions();
+  const { signIn } = useAuthActions();
   const [flow, setFlow] = useState<Key>("signIn");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | React.ReactNode | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate({ from: "/signin" });
   const isClosed = process.env.NODE_ENV === "production";
 
-  const checkUserExists = async (email: string): Promise<boolean> => {
-    try {
-      const response = await convex.query('checkUserExists', { email });
-  
-      return response.exists;
-    } catch (err) {
-      if (err instanceof ConvexError && err.message === 'User does not exist') {
-        return false; 
-      }
-      console.error(err);
-      return false;
-    }
-  };
-  
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
     try {
-      if (flow === "signIn") {
-        const userExists = await checkUserExists(email);
-        if (!userExists) {
-          setError(
-            <>
-              There isn't an account for this email. Would you like to{" "}
-              <button
-                type="button"
-                onClick={() => setFlow("signUp")}
-                style={{
-                  color: "blue",
-                  textDecoration: "underline",
-                  background: "none",
-                  border: "none",
-                  padding: 0,
-                  cursor: "pointer",
-                }}
-              >
-                register a new account
-              </button>
-              ?
-            </>
-          );
-          setIsSubmitting(false);
-          return;
-        }
-      }
-
       await signIn("password", {
         flow,
         email,
@@ -94,10 +52,11 @@ const SignIn = () => {
         redirectTo: "/quests",
       });
       navigate({ to: "/" });
-    } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
+    } catch (error) {
+      setError("Couldn't sign in. Check your information and try again.");
+      console.error(error);
+    } finally {
       setIsSubmitting(false);
-      console.error(err);
     }
   };
 
