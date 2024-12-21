@@ -16,6 +16,7 @@ import type {
 import type * as auth from "../auth.js";
 import type * as constants from "../constants.js";
 import type * as documents from "../documents.js";
+import type * as errors from "../errors.js";
 import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
 import type * as passwordReset from "../passwordReset.js";
@@ -25,8 +26,8 @@ import type * as seed from "../seed.js";
 import type * as topics from "../topics.js";
 import type * as userFormData from "../userFormData.js";
 import type * as userQuests from "../userQuests.js";
-import type * as userSettings from "../userSettings.js";
 import type * as users from "../users.js";
+import type * as userSettings from "../userSettings.js";
 import type * as validators from "../validators.js";
 
 /**
@@ -41,6 +42,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   constants: typeof constants;
   documents: typeof documents;
+  errors: typeof errors;
   helpers: typeof helpers;
   http: typeof http;
   passwordReset: typeof passwordReset;
@@ -50,8 +52,8 @@ declare const fullApi: ApiFromModules<{
   topics: typeof topics;
   userFormData: typeof userFormData;
   userQuests: typeof userQuests;
-  userSettings: typeof userSettings;
   users: typeof users;
+  userSettings: typeof userSettings;
   validators: typeof validators;
 }>;
 export declare const api: FilterApi<

@@ -1,7 +1,10 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
+import { ConvexError } from "convex/values";
+import { z } from "zod";
 import { query } from "./_generated/server";
 import type { Role } from "./constants";
+import { DUPLICATE_EMAIL, INVALID_EMAIL } from "./errors";
 import { userMutation, userQuery } from "./helpers";
 import { jurisdiction } from "./validators";
 
@@ -47,6 +50,29 @@ export const setName = userMutation({
   args: { name: v.optional(v.string()) },
   handler: async (ctx, args) => {
     await ctx.db.patch(ctx.userId, { name: args.name });
+  },
+});
+
+const ParamsSchema = z.object({
+  email: z.string().email(),
+});
+
+export const setEmail = userMutation({
+  args: { email: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    const { error } = ParamsSchema.safeParse(args);
+    if (error) {
+      throw new ConvexError(INVALID_EMAIL);
+    }
+
+    const existingUser = await getByEmail(ctx, {
+      email: args.email as string,
+    });
+    if (existingUser && existingUser._id !== ctx.userId) {
+      throw new ConvexError(DUPLICATE_EMAIL);
+    }
+
+    await ctx.db.patch(ctx.userId, { email: args.email });
   },
 });
 

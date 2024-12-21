@@ -1,6 +1,7 @@
 import { convexTest } from "convex-test";
 import { describe, expect, it } from "vitest";
 import { api } from "./_generated/api";
+import { DUPLICATE_EMAIL, INVALID_EMAIL } from "./errors";
 import schema from "./schema";
 import { modules } from "./test.setup";
 
@@ -146,6 +147,68 @@ describe("users", () => {
         return await ctx.db.get(userId);
       });
       expect(user?.name).toBeUndefined();
+    });
+  });
+
+  describe("setEmail", () => {
+    it("should update the user's email", async () => {
+      const t = convexTest(schema, modules);
+
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "old@example.com",
+          role: "user",
+        });
+      });
+
+      const asUser = t.withIdentity({ subject: userId });
+      await asUser.mutation(api.users.setEmail, {
+        email: "new@example.com",
+      });
+
+      const user = await t.run(async (ctx) => {
+        return await ctx.db.get(userId);
+      });
+      expect(user?.email).toBe("new@example.com");
+    });
+
+    it("should throw an error for an invalid email", async () => {
+      const t = convexTest(schema, modules);
+
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "valid@example.com",
+          role: "user",
+        });
+      });
+
+      const asUser = t.withIdentity({ subject: userId });
+      await expect(
+        asUser.mutation(api.users.setEmail, { email: "invalid-email" }),
+      ).rejects.toThrow(INVALID_EMAIL);
+    });
+
+    it("should throw an error for a duplicate email", async () => {
+      const t = convexTest(schema, modules);
+
+      await t.run(async (ctx) => {
+        await ctx.db.insert("users", {
+          email: "existing@example.com",
+          role: "user",
+        });
+      });
+
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "new@example.com",
+          role: "user",
+        });
+      });
+
+      const asUser = t.withIdentity({ subject: userId });
+      await expect(
+        asUser.mutation(api.users.setEmail, { email: "existing@example.com" }),
+      ).rejects.toThrow(DUPLICATE_EMAIL);
     });
   });
 

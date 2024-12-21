@@ -63,8 +63,8 @@ const EditNameModal = ({
       <Form onSubmit={handleSubmit} className="w-full">
         {error && <Banner variant="danger">{error}</Banner>}
         <TextField
-          name="name"
           label="Name"
+          name="name"
           value={name}
           onChange={(value) => {
             setName(value);
