@@ -22,7 +22,6 @@ export * from "./GridList";
 export * from "./Link";
 export * from "./ListBox";
 export * from "./Menu";
-export * from "./Meter";
 export * from "./Modal";
 export * from "./Nav";
 export * from "./NumberField";
