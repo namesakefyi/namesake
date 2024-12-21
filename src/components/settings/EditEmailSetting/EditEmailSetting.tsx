@@ -9,7 +9,7 @@ import {
 } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
-import { INVALID_EMAIL } from "@convex/errors";
+import { DUPLICATE_EMAIL, INVALID_EMAIL } from "@convex/errors";
 import { useMutation } from "convex/react";
 import { ConvexError } from "convex/values";
 import { Pencil } from "lucide-react";
@@ -48,8 +48,10 @@ const EditEmailModal = ({
       if (err instanceof ConvexError) {
         if (err.data === INVALID_EMAIL) {
           setError("Please enter a valid email address.");
-        } else {
+        } else if (err.data === DUPLICATE_EMAIL) {
           setError("This email is currently in use. Try another one.");
+        } else {
+          setError("Something went wrong. Please try again later.");
         }
       } else {
         setError("Failed to update email. Please try again.");
@@ -62,8 +64,8 @@ const EditEmailModal = ({
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalHeader
-        title="Edit email address"
-        description="What email would you like to use for Namesake?"
+        title="Email address"
+        description="Your account email is used for sign-in and communication."
       />
       <Form onSubmit={handleSubmit} className="w-full">
         {error && <Banner variant="danger">{error}</Banner>}

@@ -90,9 +90,11 @@ describe("EditEmailSetting", () => {
     ).toBeInTheDocument();
   });
 
-  it("submits the form successfully", async () => {
+  it("displays a fallback error when an unknown ConvexError is received", async () => {
     const user = userEvent.setup();
-    const updateEmail = vi.fn().mockResolvedValue({});
+    const mockError = new ConvexError("UNKNOWN_ERROR");
+
+    const updateEmail = vi.fn().mockRejectedValue(mockError);
     (useMutation as ReturnType<typeof vi.fn>).mockReturnValue(updateEmail);
 
     render(<EditEmailSetting user={mockUser} />);
@@ -105,15 +107,12 @@ describe("EditEmailSetting", () => {
     await user.type(input, "newuser@example.com");
     await user.click(screen.getByRole("button", { name: "Save" }));
 
-    await waitFor(() =>
-      expect(updateEmail).toHaveBeenCalledWith({
-        email: "newuser@example.com",
-      }),
-    );
-    expect(toast.success).toHaveBeenCalledWith("Email updated.");
+    expect(
+      await screen.findByText("Something went wrong. Please try again later."),
+    ).toBeInTheDocument();
   });
 
-  it("displays a generic error when the form submission fails", async () => {
+  it("displays a generic error when a non-ConvexError is received", async () => {
     const user = userEvent.setup();
     const updateEmail = vi
       .fn()
@@ -135,6 +134,29 @@ describe("EditEmailSetting", () => {
     expect(
       await screen.findByText("Failed to update email. Please try again."),
     ).toBeInTheDocument();
+  });
+
+  it("submits the form successfully", async () => {
+    const user = userEvent.setup();
+    const updateEmail = vi.fn().mockResolvedValue({});
+    (useMutation as ReturnType<typeof vi.fn>).mockReturnValue(updateEmail);
+
+    render(<EditEmailSetting user={mockUser} />);
+    await user.click(
+      screen.getByRole("button", { name: "testuser@example.com" }),
+    );
+
+    const input = screen.getByRole("textbox", { name: /email/i });
+    await user.clear(input);
+    await user.type(input, "newuser@example.com");
+    await user.click(screen.getByRole("button", { name: "Save" }));
+
+    await waitFor(() =>
+      expect(updateEmail).toHaveBeenCalledWith({
+        email: "newuser@example.com",
+      }),
+    );
+    expect(toast.success).toHaveBeenCalledWith("Email updated.");
   });
 
   it("closes the modal without saving when the cancel button is clicked", async () => {
