@@ -20,7 +20,9 @@ export const StatPopover = ({ tooltip, children }: StatPopoverProps) => (
       </Button>
       <Tooltip>{tooltip}</Tooltip>
     </TooltipTrigger>
-    <Popover className="p-4">{children}</Popover>
+    <Popover title={tooltip} className="p-4">
+      {children}
+    </Popover>
   </DialogTrigger>
 );
 
