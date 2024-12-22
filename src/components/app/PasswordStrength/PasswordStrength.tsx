@@ -38,14 +38,14 @@ export const strengthConfig: Record<number, StrengthConfig> = {
   2: {
     label: "Okay",
     color: {
-      text: "text-gray-normal",
+      text: "text-gray-normal dark:text-amberdark-9",
       bg: "bg-amber-9 dark:bg-amberdark-9",
     },
   },
   3: {
     label: "Good",
     color: {
-      text: "text-gray-normal",
+      text: "text-grass-9 dark:text-grassdark-9",
       bg: "bg-grass-9 dark:bg-grassdark-9",
     },
   },
