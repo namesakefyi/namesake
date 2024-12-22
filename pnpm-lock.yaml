@@ -117,6 +117,9 @@ importers:
       react-helmet-async:
         specifier: ^2.0.5
         version: 2.0.5(react@19.0.0)
+      react-random-reveal:
+        specifier: ^2.0.1
+        version: 2.0.1(react@19.0.0)
       resend:
         specifier: 4.0.1
         version: 4.0.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -225,7 +228,7 @@ importers:
         version: 3.7.2(@swc/helpers@0.5.15)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(tsx@4.19.2)(yaml@2.6.1))
       '@vitest/coverage-v8':
         specifier: ^2.1.8
-        version: 2.1.8(vitest@2.1.8)
+        version: 2.1.8(vitest@2.1.8(@edge-runtime/vm@5.0.0)(@types/node@22.10.2)(@vitest/ui@2.1.8)(jsdom@25.0.0(canvas@2.11.2)))
       '@vitest/ui':
         specifier: ^2.1.8
         version: 2.1.8(vitest@2.1.8)
@@ -4628,6 +4631,11 @@ packages:
   react-promise-suspense@0.3.4:
     resolution: {integrity: sha512-I42jl7L3Ze6kZaq+7zXWSunBa3b1on5yfvUW6Eo/3fFOj6dZ5Bqmcd264nJbTK/gn1HjjILAjSwnZbV4RpSaNQ==}
 
+  react-random-reveal@2.0.1:
+    resolution: {integrity: sha512-FDxoD75CbPbtrfn/RoYM7Iq9syLB5n/JdPHPEaXV5lj7W5hH7XyJqMQXqTpgAr3GjoWfFxotqWfB+V2IW6GcYw==}
+    peerDependencies:
+      react: '>=16.8.0'
+
   react-stately@3.34.0:
     resolution: {integrity: sha512-0N9tZ8qQ/CxpJH7ao0O6gr+8955e7VrOskg9N+TIxkFknPetwOCtgppMYhnTfteBV8WfM/vv4OC1NbkgYTqXJA==}
     peerDependencies:
@@ -5204,6 +5212,11 @@ packages:
     engines: {node: '>= 16.0.0'}
     peerDependencies:
       react: '*'
+
+  use-elapsed-time@3.0.2:
+    resolution: {integrity: sha512-2EY9lJ5DWbAvT8wWiEp6Ztnl46DjXz2j78uhWbXaz/bg3OfpbgVucCAlcN8Bih6hTJfFTdVYX9L6ySMn5py/wQ==}
+    peerDependencies:
+      react: '>=16.8.0'
 
   use-sync-external-store@1.2.2:
     resolution: {integrity: sha512-PElTlVMwpblvbNqQ82d2n6RjStvdSoNe9FG28kNfz3WiXilJm4DdNkEzRhCZuIDwY8U08WVihhGR5iRqAwfDiw==}
@@ -7919,7 +7932,7 @@ snapshots:
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  '@vitest/coverage-v8@2.1.8(vitest@2.1.8)':
+  '@vitest/coverage-v8@2.1.8(vitest@2.1.8(@edge-runtime/vm@5.0.0)(@types/node@22.10.2)(@vitest/ui@2.1.8)(jsdom@25.0.0(canvas@2.11.2)))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -10278,6 +10291,11 @@ snapshots:
     dependencies:
       fast-deep-equal: 2.0.1
 
+  react-random-reveal@2.0.1(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+      use-elapsed-time: 3.0.2(react@19.0.0)
+
   react-stately@3.34.0(react@19.0.0):
     dependencies:
       '@react-stately/calendar': 3.6.0(react@19.0.0)
@@ -10948,6 +10966,10 @@ snapshots:
     optional: true
 
   use-debounce@10.0.4(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+
+  use-elapsed-time@3.0.2(react@19.0.0):
     dependencies:
       react: 19.0.0
 

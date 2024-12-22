@@ -18,7 +18,7 @@ describe("PasswordStrength", () => {
       render(<PasswordStrength value={value} />);
 
       // Check strength label
-      const strengthLabel = screen.getByText(label);
+      const strengthLabel = screen.getByLabelText(label);
       expect(strengthLabel).toBeInTheDocument();
       expect(strengthLabel).toHaveClass(textClass);
 
