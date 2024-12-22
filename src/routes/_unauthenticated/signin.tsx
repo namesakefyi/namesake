@@ -44,25 +44,26 @@ const SignIn = () => {
     setIsSubmitting(true);
     setError(null);
 
-    await signIn("password", {
-      flow,
-      email,
-      password,
-      redirectTo: "/quests",
-    })
-      .catch((error) =>
-        error instanceof ConvexError
-          ? setError(error.message)
-          : setError(error),
-      )
-      .then(() => navigate({ to: "/" }))
-      .finally(() => setIsSubmitting(false));
+    try {
+      await signIn("password", {
+        flow,
+        email,
+        password,
+        redirectTo: "/quests",
+      });
+      navigate({ to: "/" });
+    } catch (error) {
+      setError("Couldn't sign in. Check your information and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  if (flow === "reset")
+  if (flow === "reset") {
     return (
       <ForgotPassword onBack={() => setFlow("signIn")} defaultEmail={email} />
     );
+  }
 
   return (
     <Tabs selectedKey={flow} onSelectionChange={setFlow}>
