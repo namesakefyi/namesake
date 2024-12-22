@@ -140,9 +140,9 @@ export function PasswordStrength({
         )}
       </AriaMeter>
       {warning && <Banner variant="danger">{warning}</Banner>}
-      {suggestions && (
+      {suggestions && suggestions.length > 0 && (
         <Banner variant="info">
-          <p>
+          <span>
             <span>To fix this:</span>
             <br />
             <ul className="list-disc list-inside">
@@ -150,7 +150,7 @@ export function PasswordStrength({
                 <li key={suggestion}>{suggestion}</li>
               ))}
             </ul>
-          </p>
+          </span>
         </Banner>
       )}
     </div>

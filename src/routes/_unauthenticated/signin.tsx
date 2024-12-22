@@ -1,4 +1,4 @@
-import { Logo } from "@/components/app";
+import { Logo, PasswordStrength } from "@/components/app";
 import {
   AnimateChangeInHeight,
   Banner,
@@ -14,8 +14,10 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
+import { usePasswordStrength } from "@/utils/usePasswordStrength";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+
 import { ConvexError } from "convex/values";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
@@ -38,6 +40,7 @@ const SignIn = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate({ from: "/signin" });
   const isClosed = process.env.NODE_ENV === "production";
+  const passwordState = usePasswordStrength(password);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -137,7 +140,20 @@ const SignIn = () => {
               value={password}
               onChange={setPassword}
             />
-            <Button type="submit" isDisabled={isSubmitting} variant="primary">
+            {password && passwordState && (
+              <PasswordStrength
+                value={passwordState.score}
+                warning={passwordState.feedback.warning ?? undefined}
+                suggestions={passwordState.feedback.suggestions ?? undefined}
+              />
+            )}
+            <Button
+              type="submit"
+              isDisabled={
+                isSubmitting || (passwordState && passwordState.score < 3)
+              }
+              variant="primary"
+            >
               {isSubmitting ? "Registering..." : "Register"}
             </Button>
             <p className="text-sm text-gray-dim text-center text-balance">
@@ -179,6 +195,7 @@ const ForgotPassword = ({
   const [step, setStep] = useState<"forgot" | { email: string }>("forgot");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const passwordState = usePasswordStrength(newPassword);
 
   return step === "forgot" ? (
     <Form
@@ -278,7 +295,18 @@ const ForgotPassword = ({
         value={newPassword}
         onChange={setNewPassword}
       />
-      <Button type="submit" variant="primary" isDisabled={isSubmitting}>
+      {passwordState && (
+        <PasswordStrength
+          value={passwordState.score}
+          warning={passwordState.feedback.warning || undefined}
+          suggestions={passwordState.feedback.suggestions || undefined}
+        />
+      )}
+      <Button
+        type="submit"
+        variant="primary"
+        isDisabled={isSubmitting || (passwordState && passwordState?.score < 3)}
+      >
         Reset password
       </Button>
     </Form>
