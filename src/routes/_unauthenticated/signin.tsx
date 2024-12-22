@@ -54,7 +54,6 @@ const SignIn = () => {
       navigate({ to: "/" });
     } catch (error) {
       setError("Couldn't sign in. Check your information and try again.");
-      console.error(error);
     } finally {
       setIsSubmitting(false);
     }
