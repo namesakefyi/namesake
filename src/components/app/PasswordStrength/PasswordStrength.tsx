@@ -51,7 +51,7 @@ export const strengthConfig: Record<number, StrengthConfig> = {
     },
   },
   4: {
-    label: "Great",
+    label: "Great :)",
     color: {
       text: "text-green-10 dark:text-greendark-10",
       bg: "bg-green-9 dark:bg-greendark-9",
