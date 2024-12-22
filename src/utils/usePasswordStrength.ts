@@ -1,17 +1,26 @@
 import { type ZxcvbnResult, zxcvbnAsync } from "@zxcvbn-ts/core";
 import { zxcvbnOptions } from "@zxcvbn-ts/core";
-import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
-import * as zxcvbnEnPackage from "@zxcvbn-ts/language-en";
 import { useDeferredValue, useEffect, useState } from "react";
 
-const options = {
-  dictionary: {
-    ...zxcvbnCommonPackage.dictionary,
-    ...zxcvbnEnPackage.dictionary,
-  },
-  translations: zxcvbnEnPackage.translations,
+const loadOptions = async () => {
+  const zxcvbnCommonPackage = await import(
+    /* webpackChunkName: "zxcvbnCommonPackage" */ "@zxcvbn-ts/language-common"
+  );
+  const zxcvbnEnPackage = await import(
+    /* webpackChunkName: "zxcvbnEnPackage" */ "@zxcvbn-ts/language-en"
+  );
+  return {
+    dictionary: {
+      ...zxcvbnCommonPackage.dictionary,
+      ...zxcvbnEnPackage.dictionary,
+    },
+    translations: zxcvbnEnPackage.translations,
+  };
 };
-zxcvbnOptions.setOptions(options);
+
+loadOptions().then((options) => {
+  zxcvbnOptions.setOptions(options);
+});
 
 export function usePasswordStrength(password: string) {
   const [result, setResult] = useState<ZxcvbnResult>();
