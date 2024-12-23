@@ -29,6 +29,9 @@ jobs:
         branch:
           - ${{ github.head_ref }}
           - main
+
+    env:
+      artifact_name: ${{ matrix.branch }}
     
     outputs:
       artifact_main: ${{ steps.sanitize.outputs.artifact_main }}
@@ -69,11 +72,12 @@ jobs:
           else
             echo "artifact_branch=coverage-${name}" >> $GITHUB_OUTPUT
           fi
+          echo "artifact_name=${name}" >> $GITHUB_ENV
 
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.sanitize.outputs.artifact_main }}
+          name: ${{ env.artifact_name }}
           path: coverage
           overwrite: true
 
