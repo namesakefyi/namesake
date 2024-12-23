@@ -31,7 +31,7 @@ jobs:
           - main
     
     outputs:
-      matrix: ${{ steps.sanitize.outputs.ARTIFACT_NAME }}
+      artifact_name: ${{ steps.sanitize.outputs.ARTIFACT_NAME }}
 
     steps:
       - name: Checkout repo
@@ -84,7 +84,7 @@ jobs:
       - name: Download coverage (${{ github.head_ref }})
         uses: actions/download-artifact@v4
         with:
-          name: coverage-${{ steps.sanitize.outputs.ARTIFACT_NAME }}
+          name: coverage-${{ needs.test-coverage.outputs.artifact_name }}
           path: coverage
 
       - name: Download coverage (main)
