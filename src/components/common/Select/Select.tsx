@@ -1,16 +1,15 @@
-import { composeTailwindRenderProps, focusRing } from "@/components/utils";
+import { composeTailwindRenderProps } from "@/components/utils";
 import { ChevronDown } from "lucide-react";
 import type React from "react";
 import {
   Select as AriaSelect,
   type SelectProps as AriaSelectProps,
-  Button,
   ListBox,
   type ListBoxItemProps,
   SelectValue,
   type ValidationResult,
 } from "react-aria-components";
-import { tv } from "tailwind-variants";
+import { Button } from "../Button";
 import { FieldDescription, FieldError, Label } from "../Field";
 import {
   DropdownItem,
@@ -19,27 +18,13 @@ import {
 } from "../ListBox";
 import { Popover } from "../Popover";
 
-<<<<<<< HEAD
-const styles = tv({
-  extend: focusRing,
-  base: "flex items-center text-start gap-4 w-full cursor-pointer border border-black/10 dark:border-white/10 rounded-lg pl-3 pr-2 py-2 min-w-[150px] transition bg-gray-ui",
-  variants: {
-    isDisabled: {
-      false:
-        "hover:bg-gray-1 pressed:bg-gray-2 dark:hover:bg-graydark-1 dark:pressed:bg-graydark-2 group-invalid:border-red- forced-colors:group-invalid:border-[Mark]",
-      true: "opacity-50 forced-colors:text-[GrayText] forced-colors:border-[GrayText] cursor-default",
-    },
-  },
-});
-
-=======
->>>>>>> 5af4ea0 (Remove comment)
 export interface SelectProps<T extends object>
   extends Omit<AriaSelectProps<T>, "children"> {
   label?: string;
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);
   items?: Iterable<T>;
+  size?: "medium" | "large";
   children: React.ReactNode | ((item: T) => React.ReactNode);
 }
 
@@ -49,6 +34,7 @@ export function Select<T extends object>({
   errorMessage,
   children,
   items,
+  size = "medium",
   ...props
 }: SelectProps<T>) {
   return (
@@ -59,12 +45,12 @@ export function Select<T extends object>({
         "group flex flex-col gap-1.5",
       )}
     >
-      {label && <Label>{label}</Label>}
-      <Button className={styles}>
+      {label && <Label size={size}>{label}</Label>}
+      <Button className="text-left" size={size}>
         <SelectValue className="flex-1 text-gray-normal placeholder-shown:text-gray-9 dark:placeholder-shown:text-graydark-9" />
         <ChevronDown
           aria-hidden
-          className="w-4 h-4 text-gray-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText]"
+          className="w-4 h-4 text-gray-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText] shrink-0"
         />
       </Button>
       {description && <FieldDescription>{description}</FieldDescription>}

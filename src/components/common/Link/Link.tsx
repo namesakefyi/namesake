@@ -9,7 +9,7 @@ import { type ButtonProps, buttonStyles } from "../Button";
 
 export interface LinkProps extends AriaLinkProps {
   variant?: "primary" | "secondary";
-  button?: ButtonProps;
+  button?: Omit<ButtonProps, "children" | "icon">;
 }
 
 const linkStyles = tv({

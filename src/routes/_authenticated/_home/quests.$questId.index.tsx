@@ -105,8 +105,8 @@ function QuestDetailRoute() {
         <QuestTimeRequired quest={quest} />
       </div>
       <QuestUrls urls={quest.urls} />
-      <QuestForm quest={quest} />
       <RichText initialContent={quest.content} editable={false} />
+      <QuestForm quest={quest} />
     </AppContent>
   );
 }

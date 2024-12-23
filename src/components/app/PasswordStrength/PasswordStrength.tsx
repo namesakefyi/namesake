@@ -1,5 +1,6 @@
 import { Banner, Label } from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
+import { useEffect, useState } from "react";
 import {
   Meter as AriaMeter,
   type MeterProps as AriaMeterProps,
@@ -69,12 +70,32 @@ export function PasswordStrength({
   }
 
   const StrengthLabel = ({ label }: { label: string }) => {
+    const [displayLabel, setDisplayLabel] = useState("");
+
+    // Reveal characters one by one
+    useEffect(() => {
+      const chars = label.split("");
+      let currentLabel = "";
+
+      const intervalId = setInterval(() => {
+        if (chars.length === 0) {
+          clearInterval(intervalId);
+          return;
+        }
+
+        currentLabel = chars.pop() + currentLabel;
+        setDisplayLabel(currentLabel);
+      }, 75);
+
+      return () => clearInterval(intervalId);
+    }, [label]);
+
     const characters = useRandomReveal({
       isPlaying: true,
       duration: 0.7,
-      characters: label,
+      characters: displayLabel,
       revealEasing: "linear",
-      revealDuration: 0.2,
+      revealDuration: 0.3,
       updateInterval: 0.045,
     });
 
