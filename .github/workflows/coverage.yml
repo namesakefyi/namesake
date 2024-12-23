@@ -31,7 +31,8 @@ jobs:
           - main
     
     outputs:
-      artifact_name: ${{ steps.sanitize.outputs.ARTIFACT_NAME }}
+      artifact_main: ${{ steps.sanitize.outputs.artifact_main }}
+      artifact_branch: ${{ steps.sanitize.outputs.artifact_branch }}
 
     steps:
       - name: Checkout repo
@@ -63,12 +64,16 @@ jobs:
         run: |
           name=${{ matrix.branch }}
           name=$(echo -n "$name" | sed -e 's/[ \t:\/\\"<>|*?]/-/g' -e 's/--*/-/g')
-          echo "ARTIFACT_NAME=$name" >> $GITHUB_OUTPUT
+          if [ "${{ matrix.branch }}" == "main" ]; then
+            echo "artifact_main=coverage-${name}" >> $GITHUB_OUTPUT
+          else
+            echo "artifact_branch=coverage-${name}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-${{ steps.sanitize.outputs.ARTIFACT_NAME }}
+          name: ${{ steps.sanitize.outputs.artifact_main }}
           path: coverage
           overwrite: true
 
@@ -81,16 +86,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
   
-      - name: Download coverage (${{ github.head_ref }})
+      - name: Download coverage (${{ needs.test-coverage.outputs.artifact_branch }})
         uses: actions/download-artifact@v4
         with:
-          name: coverage-${{ needs.test-coverage.outputs.artifact_name }}
+          name: ${{ needs.test-coverage.outputs.artifact_branch }}
           path: coverage
 
       - name: Download coverage (main)
         uses: actions/download-artifact@v4
         with:
-          name: coverage-main
+          name: ${{ needs.test-coverage.outputs.artifact_main }}
           path: coverage-main
 
       - name: Report coverage
