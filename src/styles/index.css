@@ -117,6 +117,14 @@ body,
   min-height: 100dvh;
 }
 
+::selection {
+  @apply bg-amber-5 text-gray-12;
+}
+
+.dark ::selection {
+  @apply bg-purpledark-5 text-graydark-12;
+}
+
 .svc-full-creator {
   flex: 1;
 }

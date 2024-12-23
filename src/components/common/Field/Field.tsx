@@ -1,14 +1,14 @@
 import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 import {
   FieldError as AriaFieldError,
+  type GroupProps as AriaGroupProps,
   Input as AriaInput,
+  type InputProps as AriaInputProps,
   Label as AriaLabel,
+  type LabelProps as AriaLabelProps,
   TextArea as AriaTextArea,
   type FieldErrorProps,
   Group,
-  type GroupProps,
-  type InputProps,
-  type LabelProps,
   Text,
   type TextAreaProps,
   type TextProps,
@@ -17,14 +17,28 @@ import {
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
 
-export function Label(props: LabelProps) {
+interface LabelProps extends AriaLabelProps {
+  size?: "medium" | "large";
+}
+
+const labelStyles = tv({
+  base: "text-sm text-gray-dim cursor-default w-fit",
+  variants: {
+    size: {
+      medium: "text-sm",
+      large: "text-base",
+    },
+  },
+  defaultVariants: {
+    size: "medium",
+  },
+});
+
+export function Label({ size, ...props }: LabelProps) {
   return (
     <AriaLabel
       {...props}
-      className={twMerge(
-        "text-sm text-gray-normal cursor-default w-fit",
-        props.className,
-      )}
+      className={labelStyles({ size, className: props.className })}
     />
   );
 }
@@ -68,29 +82,58 @@ export const fieldBorderStyles = tv({
 
 export const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "group h-10 flex items-center bg-gray-subtle forced-colors:bg-[Field] border rounded-lg overflow-hidden",
-  variants: fieldBorderStyles.variants,
+  base: "group flex items-center bg-gray-subtle forced-colors:bg-[Field] border rounded-lg overflow-hidden",
+  variants: {
+    ...fieldBorderStyles.variants,
+    size: {
+      medium: "h-10",
+      large: "h-12",
+    },
+  },
+  defaultVariants: {
+    size: "medium",
+  },
 });
 
-export function FieldGroup(props: GroupProps) {
+interface GroupProps extends AriaGroupProps {
+  size?: "medium" | "large";
+}
+
+export function FieldGroup({ size, ...props }: GroupProps) {
   return (
     <Group
       {...props}
       className={composeRenderProps(props.className, (className, renderProps) =>
-        fieldGroupStyles({ ...renderProps, className }),
+        fieldGroupStyles({ ...renderProps, size, className }),
       )}
     />
   );
 }
 
-export const inputStyles =
-  "px-3 h-10 flex-1 min-w-0 outline outline-0 bg-transparent text-gray-normal disabled:text-gray-dim";
+interface InputProps extends Omit<AriaInputProps, "size"> {
+  size?: "medium" | "large";
+}
 
-export function Input(props: InputProps) {
+export const inputStyles = tv({
+  base: "flex-1 min-w-0 outline outline-0 bg-transparent text-gray-normal disabled:text-gray-dim",
+  variants: {
+    size: {
+      medium: "px-3 h-10",
+      large: "px-3.5 h-12 text-lg",
+    },
+  },
+  defaultVariants: {
+    size: "medium",
+  },
+});
+
+export function Input({ size, ...props }: InputProps) {
   return (
     <AriaInput
       {...props}
-      className={composeTailwindRenderProps(props.className, inputStyles)}
+      className={composeRenderProps(props.className, (className, renderProps) =>
+        inputStyles({ ...renderProps, size, className }),
+      )}
     />
   );
 }
@@ -99,7 +142,9 @@ export function InputTextArea(props: TextAreaProps) {
   return (
     <AriaTextArea
       {...props}
-      className={composeTailwindRenderProps(props.className, inputStyles)}
+      className={composeRenderProps(props.className, (className, renderProps) =>
+        inputStyles({ ...renderProps, className }),
+      )}
     />
   );
 }
