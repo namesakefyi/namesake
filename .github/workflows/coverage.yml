@@ -30,6 +30,13 @@ jobs:
           - ${{ github.head_ref }}
           - main
 
+    env:
+      artifact_name: ${{ matrix.branch }}
+    
+    outputs:
+      artifact_main: ${{ steps.sanitize.outputs.artifact_main }}
+      artifact_branch: ${{ steps.sanitize.outputs.artifact_branch }}
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -54,10 +61,23 @@ jobs:
       - name: Test coverage
         run: npx vitest --coverage.enabled true
 
+        # https://github.com/actions/upload-artifact/issues/22#issuecomment-873445944
+      - name: Sanitize name for artifact upload
+        id: sanitize
+        run: |
+          name=${{ matrix.branch }}
+          name=$(echo -n "$name" | sed -e 's/[ \t:\/\\"<>|*?]/-/g' -e 's/--*/-/g')
+          if [ "${{ matrix.branch }}" == "main" ]; then
+            echo "artifact_main=${name}" >> $GITHUB_OUTPUT
+          else
+            echo "artifact_branch=${name}" >> $GITHUB_OUTPUT
+          fi
+          echo "artifact_name=${name}" >> $GITHUB_ENV
+
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-${{ matrix.branch }}
+          name: ${{ env.artifact_name }}
           path: coverage
           overwrite: true
 
@@ -70,16 +90,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
   
-      - name: Download coverage (${{ github.head_ref }})
+      - name: Download coverage (${{ needs.test-coverage.outputs.artifact_branch }})
         uses: actions/download-artifact@v4
         with:
-          name: coverage-${{ github.head_ref }}
+          name: ${{ needs.test-coverage.outputs.artifact_branch }}
           path: coverage
 
       - name: Download coverage (main)
         uses: actions/download-artifact@v4
         with:
-          name: coverage-main
+          name: ${{ needs.test-coverage.outputs.artifact_main }}
           path: coverage-main
 
       - name: Report coverage

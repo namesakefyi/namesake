@@ -18,11 +18,6 @@ import {
 } from "../ListBox";
 import { Popover } from "../Popover";
 
-// const selectStyles = tv({
-//   extend: focusRing,
-//   base: "flex items-center text-start gap-4 w-full cursor-pointer min-w-[150px] transition",
-// });
-
 export interface SelectProps<T extends object>
   extends Omit<AriaSelectProps<T>, "children"> {
   label?: string;
