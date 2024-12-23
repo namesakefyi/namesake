@@ -91,9 +91,9 @@ function QuestEditRoute() {
         <QuestCosts quest={quest} editable />
         <QuestTimeRequired quest={quest} editable />
       </div>
-      <QuestForm quest={quest} editable />
       <QuestUrls urls={quest.urls} />
       <RichText initialContent={quest.content} onChange={setContent} />
+      <QuestForm quest={quest} editable />
     </AppContent>
   );
 }
