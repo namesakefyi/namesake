@@ -68,9 +68,9 @@ jobs:
           name=${{ matrix.branch }}
           name=$(echo -n "$name" | sed -e 's/[ \t:\/\\"<>|*?]/-/g' -e 's/--*/-/g')
           if [ "${{ matrix.branch }}" == "main" ]; then
-            echo "artifact_main=coverage-${name}" >> $GITHUB_OUTPUT
+            echo "artifact_main=${name}" >> $GITHUB_OUTPUT
           else
-            echo "artifact_branch=coverage-${name}" >> $GITHUB_OUTPUT
+            echo "artifact_branch=${name}" >> $GITHUB_OUTPUT
           fi
           echo "artifact_name=${name}" >> $GITHUB_ENV
 
