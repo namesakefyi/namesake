@@ -142,7 +142,7 @@ export const inputTextAreaStyles = tv({
   base: "flex-1 min-w-0 leading-snug outline outline-0 bg-transparent text-gray-normal disabled:text-gray-dim",
   variants: {
     size: {
-      medium: "px-3 py-1.5",
+      medium: "px-3 py-2",
       large: "px-3.5 py-2.5 text-lg leading-snug",
     },
   },
