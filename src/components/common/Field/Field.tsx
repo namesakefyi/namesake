@@ -68,21 +68,21 @@ export function FieldError(props: FieldErrorProps) {
 export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false: "border-gray-dim",
-      true: "border-gray-normal",
+      false: "ring-gray-6 dark:ring-graydark-6",
+      true: "ring-gray-7 dark:ring-graydark-7",
     },
     isInvalid: {
-      true: "border-red-normal bg-red-subtle forced-colors:border-[Mark]",
+      true: "ring-red-9 dark:ring-reddark-9",
     },
     isDisabled: {
-      true: "border-gray-dim forced-colors:border-[GrayText]",
+      true: "ring-gray-4 dark:ring-graydark-4",
     },
   },
 });
 
 const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "group flex items-center bg-gray-subtle forced-colors:bg-[Field] border rounded-lg overflow-hidden",
+  base: "border-none ring-inset ring-1 group flex items-center bg-gray-subtle forced-colors:bg-[Field] rounded-lg overflow-hidden",
   variants: {
     ...fieldBorderStyles.variants,
     size: {

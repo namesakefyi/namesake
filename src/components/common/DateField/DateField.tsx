@@ -10,7 +10,7 @@ import {
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
 import { FieldDescription, FieldError, Label } from "../Field";
-import { fieldBorderStyles } from "../Field/Field";
+import { FieldGroup } from "../Field/Field";
 
 export interface DateFieldProps<T extends DateValue>
   extends AriaDateFieldProps<T> {
@@ -36,7 +36,9 @@ export function DateField<T extends DateValue>({
       )}
     >
       {label && <Label size={size}>{label}</Label>}
-      <DateInput size={size} />
+      <FieldGroup size={size}>
+        <DateInput size={size} />
+      </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>
     </AriaDateField>
@@ -60,9 +62,8 @@ const segmentStyles = tv({
 
 const dateFieldStyles = tv({
   extend: focusRing,
-  base: "w-[12.5ch] tabular-nums group flex items-center bg-gray-subtle forced-colors:bg-[Field] border rounded-lg overflow-hidden",
+  base: "w-[12.5ch] tabular-nums group flex items-center overflow-hidden",
   variants: {
-    ...fieldBorderStyles.variants,
     size: {
       medium: "px-3 h-10",
       large: "px-3.5 h-12 text-lg",
