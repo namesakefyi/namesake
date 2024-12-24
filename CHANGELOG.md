@@ -1,5 +1,15 @@
 # namesake
 
+## 0.16.0
+
+### Minor Changes
+
+- e4a7813: fix: Show error when signing in with unregistered email
+
+### Patch Changes
+
+- 1bccc82: Refine password strength transitions
+
 ## 0.15.0
 
 ### Minor Changes
