@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react";
-import { AddressField } from ".";
+import { AddressField, type AddressFieldProps } from ".";
 
 const meta: Meta<typeof AddressField> = {
   component: AddressField,
@@ -10,7 +10,7 @@ const meta: Meta<typeof AddressField> = {
 
 export default meta;
 
-export const Example = (args: any) => <AddressField {...args} />;
+export const Example = (args: AddressFieldProps) => <AddressField {...args} />;
 
 Example.args = {
   children: (

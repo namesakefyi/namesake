@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react";
-import { FormQuestion } from ".";
+import { FormQuestion, type FormQuestionProps } from ".";
 
 const meta: Meta<typeof FormQuestion> = {
   component: FormQuestion,
@@ -15,7 +15,7 @@ const meta: Meta<typeof FormQuestion> = {
 
 export default meta;
 
-export const Example = (args: any) => <FormQuestion {...args} />;
+export const Example = (args: FormQuestionProps) => <FormQuestion {...args} />;
 
 Example.args = {
   title: "What is your name?",

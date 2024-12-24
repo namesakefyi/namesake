@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react";
-import { EmailField } from ".";
+import { EmailField, type EmailFieldProps } from ".";
 
 const meta: Meta<typeof EmailField> = {
   component: EmailField,
@@ -10,7 +10,7 @@ const meta: Meta<typeof EmailField> = {
 
 export default meta;
 
-export const Example = (args: any) => <EmailField {...args} />;
+export const Example = (args: EmailFieldProps) => <EmailField {...args} />;
 
 Example.args = {
   children: (

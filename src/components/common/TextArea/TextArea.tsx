@@ -1,37 +1,29 @@
-import { composeTailwindRenderProps, focusRing } from "@/components/utils";
+import { composeTailwindRenderProps } from "@/components/utils";
 import {
   TextField as AriaTextField,
   type TextFieldProps as AriaTextFieldProps,
   type ValidationResult,
 } from "react-aria-components";
-import { tv } from "tailwind-variants";
 import {
   FieldDescription,
   FieldError,
+  FieldGroup,
   InputTextArea,
   Label,
-  fieldBorderStyles,
 } from "../Field";
-
-const inputStyles = tv({
-  extend: focusRing,
-  base: "border rounded-lg flex",
-  variants: {
-    isFocused: fieldBorderStyles.variants.isFocusWithin,
-    ...fieldBorderStyles.variants,
-  },
-});
 
 export interface TextAreaProps extends AriaTextFieldProps {
   label?: string;
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);
+  size?: "medium" | "large";
 }
 
 export function TextArea({
   label,
   description,
   errorMessage,
+  size,
   ...props
 }: TextAreaProps) {
   return (
@@ -42,8 +34,10 @@ export function TextArea({
         "flex flex-col gap-1.5",
       )}
     >
-      {label && <Label>{label}</Label>}
-      <InputTextArea className={inputStyles} />
+      {label && <Label size={size}>{label}</Label>}
+      <FieldGroup size={size}>
+        <InputTextArea size={size} />
+      </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>
     </AriaTextField>

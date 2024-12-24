@@ -18,9 +18,17 @@ export interface CheckboxGroupProps
   children?: ReactNode;
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);
+  size?: "medium" | "large";
 }
 
-export function CheckboxGroup(props: CheckboxGroupProps) {
+export function CheckboxGroup({
+  label,
+  children,
+  description,
+  errorMessage,
+  size,
+  ...props
+}: CheckboxGroupProps) {
   return (
     <AriaCheckboxGroup
       {...props}
@@ -29,32 +37,41 @@ export function CheckboxGroup(props: CheckboxGroupProps) {
         "flex flex-col gap-2",
       )}
     >
-      <Label>{props.label}</Label>
-      {props.children}
-      {props.description && (
-        <FieldDescription>{props.description}</FieldDescription>
-      )}
-      <FieldError>{props.errorMessage}</FieldError>
+      <Label size={size}>{label}</Label>
+      {children}
+      {description && <FieldDescription>{description}</FieldDescription>}
+      <FieldError>{errorMessage}</FieldError>
     </AriaCheckboxGroup>
   );
 }
 
 const checkboxStyles = tv({
-  base: "flex gap-2 items-center group transition w-max",
+  base: "flex items-center group transition",
   variants: {
     isDisabled: {
       false: "text-gray-normal cursor-pointer",
       true: "opacity-50 forced-colors:text-[GrayText] cursor-default",
     },
+    size: {
+      medium: "gap-2",
+      large: "gap-3",
+    },
+    card: {
+      true: "w-full border border-gray-dim rounded-lg p-3 cursor-pointer hover:bg-graya-2 dark:hover:bg-graydarka-2 selected:bg-purplea-3 dark:selected:bg-purpledarka-3 selected:border-purple-dim",
+      false: "w-max",
+    },
+  },
+  defaultVariants: {
+    size: "medium",
   },
 });
 
 const boxStyles = tv({
   extend: focusRing,
-  base: "w-6 h-6 flex-shrink-0 rounded flex items-center justify-center border-2 transition",
+  base: "size-6 flex-shrink-0 rounded flex items-center justify-center border transition",
   variants: {
     isSelected: {
-      false: "bg-white dark:bg-gray-12 border-gray-dim",
+      false: "bg-white dark:bg-graydark-1 border-gray-dim",
       true: "bg-purple-9 dark:bg-purpledark-9 border-transparent",
     },
     isInvalid: {
@@ -63,26 +80,44 @@ const boxStyles = tv({
     isDisabled: {
       true: "text-gray-7 dark:text-graydark-7",
     },
+    size: {
+      medium: "size-5",
+      large: "size-7",
+    },
   },
 });
 
-const iconStyles =
-  "w-5 h-5 text-white group-disabled:text-gray-4 dark:group-disabled:text-gray-9";
+const iconStyles = tv({
+  base: "text-white group-disabled:text-gray-4 dark:group-disabled:text-gray-9",
+  variants: {
+    size: {
+      medium: "size-4",
+      large: "size-5 stroke-[2.5px]",
+    },
+  },
+});
 
 export interface CheckboxProps extends AriaCheckboxProps {
   label?: string;
   description?: string;
+  size?: "medium" | "large";
+  card?: boolean;
 }
 
-export function Checkbox(props: CheckboxProps) {
+export function Checkbox({
+  label,
+  description,
+  size,
+  card,
+  className,
+  ...props
+}: CheckboxProps) {
   return (
     <div>
       <AriaCheckbox
         {...props}
-        className={composeRenderProps(
-          props.className,
-          (className, renderProps) =>
-            checkboxStyles({ ...renderProps, className }),
+        className={composeRenderProps(className, (className, renderProps) =>
+          checkboxStyles({ ...renderProps, size, card, className }),
         )}
       >
         {({ isSelected, isIndeterminate, ...renderProps }) => (
@@ -90,24 +125,23 @@ export function Checkbox(props: CheckboxProps) {
             <div
               className={boxStyles({
                 isSelected: isSelected || isIndeterminate,
+                size,
                 ...renderProps,
               })}
             >
               {isIndeterminate ? (
-                <Minus aria-hidden className={iconStyles} />
+                <Minus aria-hidden className={iconStyles({ size })} />
               ) : isSelected ? (
-                <Check aria-hidden className={iconStyles} />
+                <Check aria-hidden className={iconStyles({ size })} />
               ) : null}
             </div>
-            {props.label}
+            {label}
             {renderProps.defaultChildren}
           </>
         )}
       </AriaCheckbox>
-      {props.description && (
-        <FieldDescription className="ml-8">
-          {props.description}
-        </FieldDescription>
+      {description && (
+        <FieldDescription className="ml-8">{description}</FieldDescription>
       )}
     </div>
   );

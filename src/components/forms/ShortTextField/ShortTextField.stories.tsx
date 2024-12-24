@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react";
-import { ShortTextField } from ".";
+import { ShortTextField, type ShortTextFieldProps } from ".";
 
 const meta: Meta<typeof ShortTextField> = {
   component: ShortTextField,
@@ -10,7 +10,9 @@ const meta: Meta<typeof ShortTextField> = {
 
 export default meta;
 
-export const Example = (args: any) => <ShortTextField {...args} />;
+export const Example = (args: ShortTextFieldProps) => (
+  <ShortTextField {...args} />
+);
 
 Example.args = {
   label: "Custom field",

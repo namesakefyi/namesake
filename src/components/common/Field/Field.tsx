@@ -7,10 +7,10 @@ import {
   Label as AriaLabel,
   type LabelProps as AriaLabelProps,
   TextArea as AriaTextArea,
+  type TextAreaProps as AriaTextAreaProps,
   type FieldErrorProps,
   Group,
   Text,
-  type TextAreaProps,
   type TextProps,
   composeRenderProps,
 } from "react-aria-components";
@@ -68,8 +68,8 @@ export function FieldError(props: FieldErrorProps) {
 export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false: "border-black/10 dark:border-white/10",
-      true: "border-black/15 dark:border-white/15",
+      false: "border-gray-dim",
+      true: "border-gray-normal",
     },
     isInvalid: {
       true: "border-red-normal bg-red-subtle forced-colors:border-[Mark]",
@@ -80,14 +80,14 @@ export const fieldBorderStyles = tv({
   },
 });
 
-export const fieldGroupStyles = tv({
+const fieldGroupStyles = tv({
   extend: focusRing,
   base: "group flex items-center bg-gray-subtle forced-colors:bg-[Field] border rounded-lg overflow-hidden",
   variants: {
     ...fieldBorderStyles.variants,
     size: {
-      medium: "h-10",
-      large: "h-12",
+      medium: "min-h-10",
+      large: "min-h-12 text-lg",
     },
   },
   defaultVariants: {
@@ -138,12 +138,29 @@ export function Input({ size, ...props }: InputProps) {
   );
 }
 
-export function InputTextArea(props: TextAreaProps) {
+export const inputTextAreaStyles = tv({
+  base: "flex-1 min-w-0 leading-snug outline outline-0 bg-transparent text-gray-normal disabled:text-gray-dim",
+  variants: {
+    size: {
+      medium: "px-3 py-1.5",
+      large: "px-3.5 py-2.5 text-lg leading-snug",
+    },
+  },
+  defaultVariants: {
+    size: "medium",
+  },
+});
+
+interface InputTextAreaProps extends Omit<AriaTextAreaProps, "size"> {
+  size?: "medium" | "large";
+}
+
+export function InputTextArea({ size, ...props }: InputTextAreaProps) {
   return (
     <AriaTextArea
       {...props}
       className={composeRenderProps(props.className, (className, renderProps) =>
-        inputStyles({ ...renderProps, className }),
+        inputTextAreaStyles({ ...renderProps, size, className }),
       )}
     />
   );

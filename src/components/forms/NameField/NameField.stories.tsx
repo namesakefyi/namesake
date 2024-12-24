@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react";
-import { NameField } from ".";
+import { NameField, type NameFieldProps } from ".";
 
 const meta: Meta<typeof NameField> = {
   component: NameField,
@@ -10,7 +10,7 @@ const meta: Meta<typeof NameField> = {
 
 export default meta;
 
-export const Example = (args: any) => <NameField {...args} />;
+export const Example = (args: NameFieldProps) => <NameField {...args} />;
 
 Example.args = {
   children: (
