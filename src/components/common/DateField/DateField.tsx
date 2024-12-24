@@ -1,32 +1,30 @@
-import { composeTailwindRenderProps } from "@/components/utils";
+import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 import {
   DateField as AriaDateField,
   type DateFieldProps as AriaDateFieldProps,
   DateInput as AriaDateInput,
-  type DateInputProps,
+  type DateInputProps as AriaDateInputProps,
   DateSegment,
   type DateValue,
   type ValidationResult,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
-import {
-  FieldDescription,
-  FieldError,
-  Label,
-  fieldGroupStyles,
-} from "../Field";
+import { FieldDescription, FieldError, Label } from "../Field";
+import { FieldGroup } from "../Field/Field";
 
 export interface DateFieldProps<T extends DateValue>
   extends AriaDateFieldProps<T> {
   label?: string;
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);
+  size?: "medium" | "large";
 }
 
 export function DateField<T extends DateValue>({
   label,
   description,
   errorMessage,
+  size = "medium",
   ...props
 }: DateFieldProps<T>) {
   return (
@@ -37,8 +35,10 @@ export function DateField<T extends DateValue>({
         "flex flex-col gap-1",
       )}
     >
-      {label && <Label>{label}</Label>}
-      <DateInput />
+      {label && <Label size={size}>{label}</Label>}
+      <FieldGroup size={size}>
+        <DateInput size={size} />
+      </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>
     </AriaDateField>
@@ -60,13 +60,34 @@ const segmentStyles = tv({
   },
 });
 
-export function DateInput(props: Omit<DateInputProps, "children">) {
+const dateFieldStyles = tv({
+  extend: focusRing,
+  base: "w-[12.5ch] tabular-nums group flex items-center overflow-hidden",
+  variants: {
+    size: {
+      medium: "px-3 h-10",
+      large: "px-3.5 h-12 text-lg",
+    },
+  },
+  defaultVariants: {
+    size: "medium",
+  },
+});
+
+interface DateInputProps extends AriaDateInputProps {
+  size?: "medium" | "large";
+}
+
+export function DateInput({
+  size,
+  ...props
+}: Omit<DateInputProps, "children">) {
   return (
     <AriaDateInput
       className={(renderProps) =>
-        fieldGroupStyles({
+        dateFieldStyles({
+          size,
           ...renderProps,
-          class: "block min-w-[150px] px-3 py-2",
         })
       }
       {...props}

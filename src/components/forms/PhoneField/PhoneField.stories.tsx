@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react";
-import { PhoneField } from ".";
+import { PhoneField, type PhoneFieldProps } from ".";
 
 const meta: Meta<typeof PhoneField> = {
   component: PhoneField,
@@ -10,7 +10,7 @@ const meta: Meta<typeof PhoneField> = {
 
 export default meta;
 
-export const Example = (args: any) => <PhoneField {...args} />;
+export const Example = (args: PhoneFieldProps) => <PhoneField {...args} />;
 
 Example.args = {
   children: (

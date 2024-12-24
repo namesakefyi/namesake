@@ -1,3 +1,4 @@
+import { composeTailwindRenderProps } from "@/components/utils";
 import {
   TimeField as AriaTimeField,
   type TimeFieldProps as AriaTimeFieldProps,
@@ -5,7 +6,7 @@ import {
   type ValidationResult,
 } from "react-aria-components";
 import { DateInput } from "../DateField";
-import { FieldDescription, FieldError, Label } from "../Field";
+import { FieldDescription, FieldError, FieldGroup, Label } from "../Field";
 
 export interface TimeFieldProps<T extends TimeValue>
   extends AriaTimeFieldProps<T> {
@@ -21,9 +22,17 @@ export function TimeField<T extends TimeValue>({
   ...props
 }: TimeFieldProps<T>) {
   return (
-    <AriaTimeField {...props}>
-      <Label>{label}</Label>
-      <DateInput />
+    <AriaTimeField
+      {...props}
+      className={composeTailwindRenderProps(
+        props.className,
+        "flex flex-col gap-1",
+      )}
+    >
+      {label && <Label>{label}</Label>}
+      <FieldGroup>
+        <DateInput />
+      </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>
     </AriaTimeField>

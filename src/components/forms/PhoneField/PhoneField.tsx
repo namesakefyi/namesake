@@ -3,7 +3,7 @@ import { useMaskito } from "@maskito/react";
 import type React from "react";
 import { useState } from "react";
 
-interface PhoneFieldProps {
+export interface PhoneFieldProps {
   children?: React.ReactNode;
 }
 

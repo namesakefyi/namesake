@@ -1,6 +1,6 @@
 import { TextField } from "@/components/common";
 
-interface NameFieldProps {
+export interface NameFieldProps {
   children?: React.ReactNode;
 }
 

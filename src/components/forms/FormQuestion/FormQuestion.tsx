@@ -1,6 +1,6 @@
 import { Heading } from "react-aria-components";
 
-interface FormQuestionProps {
+export interface FormQuestionProps {
   title: string;
   description?: string;
   children: React.ReactNode;

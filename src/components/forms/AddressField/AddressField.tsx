@@ -3,7 +3,7 @@ import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
 import { useMaskito } from "@maskito/react";
 import { useState } from "react";
 
-interface AddressFieldProps {
+export interface AddressFieldProps {
   children?: React.ReactNode;
 }
 

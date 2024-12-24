@@ -1,6 +1,6 @@
 import { TextField, type TextFieldProps } from "@/components/common";
 
-interface ShortTextFieldProps extends Omit<TextFieldProps, "size"> {
+export interface ShortTextFieldProps extends Omit<TextFieldProps, "size"> {
   label: string;
   name: string;
   children?: React.ReactNode;
