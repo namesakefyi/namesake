@@ -3,6 +3,7 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
   category,
+  formField,
   groupQuestsBy,
   jurisdiction,
   role,
@@ -10,6 +11,44 @@ import {
   theme,
   timeRequiredUnit,
 } from "./validators";
+
+// ----------------------------------------------
+// Forms
+// ----------------------------------------------
+
+const forms = defineTable({
+  /** The user who created the form. */
+  createdBy: v.id("users"),
+  /** The date the form was last updated. */
+  updatedAt: v.optional(v.number()),
+  /** The user who updated the form. */
+  updatedBy: v.optional(v.id("users")),
+  /** The pages that make up the form. */
+  pages: v.array(v.id("formPages")),
+});
+
+const formPages = defineTable({
+  /** The form that this page belongs to. */
+  formId: v.id("forms"),
+  /** The title of the page. (e.g. "What is your name?") */
+  title: v.string(),
+  /** An optional page description. */
+  description: v.optional(v.string()),
+  /** The fields for the page. */
+  /** TODO: Think about how this shape changes for different field types, how to nest types appropriately */
+  fields: v.optional(
+    v.array(
+      v.object({
+        type: formField,
+        label: v.string(),
+        name: v.string(),
+        required: v.optional(v.boolean()),
+      }),
+    ),
+  ),
+  /** Optional questions related to the page. */
+  questions: v.optional(v.array(v.id("questions"))),
+}).index("formId", ["formId"]);
 
 // ----------------------------------------------
 // Questions
@@ -77,12 +116,14 @@ const quests = defineTable({
   /** Links to official documentation about changing names for this quest. */
   urls: v.optional(v.array(v.string())),
   /** Time in ms since epoch when the quest was deleted. */
-  deletionTime: v.optional(v.number()),
+  deletedAt: v.optional(v.number()),
   /** Rich text comprising the contents of the quest, stored as HTML. */
   content: v.optional(v.string()),
-  /** A JSON schema defining the form fields for this quest. */
-  formSchema: v.optional(v.string()),
-}).index("category", ["category"]);
+  /** A form ID used to fill out this quest. */
+  formId: v.optional(v.id("forms")),
+})
+  .index("category", ["category"])
+  .index("formId", ["formId"]);
 
 /**
  * A PDF document that can be filled out by users.
@@ -101,7 +142,7 @@ const documents = defineTable({
   /** The US State the document applies to. */
   jurisdiction: jurisdiction,
   /** Time in ms since epoch when the document was deleted. */
-  deletionTime: v.optional(v.number()),
+  deletedAt: v.optional(v.number()),
 }).index("quest", ["questId"]);
 
 // ----------------------------------------------
@@ -167,13 +208,15 @@ const userQuests = defineTable({
   /** The status of the quest. */
   status: status,
   /** Time in ms since epoch when the user marked the quest as complete. */
-  completionTime: v.optional(v.number()),
+  completedAt: v.optional(v.number()),
 })
   .index("userId", ["userId"])
   .index("questId", ["questId"]);
 
 export default defineSchema({
   ...authTables,
+  forms,
+  formPages,
   questions,
   topics,
   documents,

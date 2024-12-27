@@ -72,7 +72,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
-          deletionTime: Date.now(),
+          deletedAt: Date.now(),
         });
 
         await ctx.db.insert("userQuests", {
@@ -297,7 +297,7 @@ describe("userQuests", () => {
       ).resolves.toBeNull();
     });
 
-    it("should add completionTime when status changed to complete", async () => {
+    it("should add completedAt when status changed to complete", async () => {
       const t = convexTest(schema, modules);
 
       const userId = await t.run(async (ctx) => {
@@ -325,7 +325,7 @@ describe("userQuests", () => {
       });
 
       expect(userQuest?.status).toBe("notStarted");
-      expect(userQuest?.completionTime).toBeUndefined();
+      expect(userQuest?.completedAt).toBeUndefined();
 
       await asUser.mutation(api.userQuests.setStatus, {
         questId,
@@ -337,10 +337,10 @@ describe("userQuests", () => {
       });
 
       expect(updatedUserQuest?.status).toBe("complete");
-      expect(updatedUserQuest?.completionTime).toBeTypeOf("number"); // Unix timestamp
+      expect(updatedUserQuest?.completedAt).toBeTypeOf("number"); // Unix timestamp
     });
 
-    it("should remove completionTime when status changed away from complete", async () => {
+    it("should remove completedAt when status changed away from complete", async () => {
       const t = convexTest(schema, modules);
 
       const userId = await t.run(async (ctx) => {
@@ -373,7 +373,7 @@ describe("userQuests", () => {
       });
 
       expect(updatedUserQuest?.status).toBe("complete");
-      expect(updatedUserQuest?.completionTime).toBeTypeOf("number");
+      expect(updatedUserQuest?.completedAt).toBeTypeOf("number");
 
       await asUser.mutation(api.userQuests.setStatus, {
         questId,
@@ -385,7 +385,7 @@ describe("userQuests", () => {
       });
 
       expect(updatedQuest?.status).toBe("notStarted");
-      expect(updatedQuest?.completionTime).toBeUndefined();
+      expect(updatedQuest?.completedAt).toBeUndefined();
     });
   });
 

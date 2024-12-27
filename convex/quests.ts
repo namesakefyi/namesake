@@ -1,5 +1,4 @@
 import { v } from "convex/values";
-import { Model } from "survey-core";
 import { query } from "./_generated/server";
 import { DEFAULT_TIME_REQUIRED } from "./constants";
 import { userMutation } from "./helpers";
@@ -30,7 +29,7 @@ export const getAllActive = query({
   handler: async (ctx) => {
     return await ctx.db
       .query("quests")
-      .filter((q) => q.eq(q.field("deletionTime"), undefined))
+      .filter((q) => q.eq(q.field("deletedAt"), undefined))
       .collect();
   },
 });
@@ -145,40 +144,17 @@ export const setContent = userMutation({
   },
 });
 
-export const setFormSchema = userMutation({
-  args: {
-    questId: v.id("quests"),
-    saveNo: v.number(),
-    formSchema: v.optional(v.string()),
-  },
-  handler: async (ctx, args) => {
-    if (!args.formSchema) return;
-    try {
-      const submittedSchema = JSON.parse(args.formSchema);
-      const survey = new Model(submittedSchema);
-      const validatedSchema = survey.toJSON();
-
-      console.log("Validated schema:", JSON.stringify(validatedSchema));
-      await ctx.db.patch(args.questId, {
-        formSchema: JSON.stringify(validatedSchema),
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  },
-});
-
 export const softDelete = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, { deletionTime: Date.now() });
+    await ctx.db.patch(args.questId, { deletedAt: Date.now() });
   },
 });
 
 export const undoSoftDelete = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, { deletionTime: undefined });
+    await ctx.db.patch(args.questId, { deletedAt: undefined });
   },
 });
 

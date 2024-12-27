@@ -99,7 +99,7 @@ function AdminQuestDetailRoute() {
           button={{ variant: "secondary" }}
         >
           <Pencil size={16} />
-          Edit Form
+          Edit form
         </Link>
       </PageHeader>
       <Form className="w-full items-start" onSubmit={handleSubmit}>

@@ -1,5 +1,3 @@
-import "survey-core/defaultV2.min.css";
-
 import { Link } from "@/components/common";
 import type { Doc, Id } from "@convex/_generated/dataModel";
 import { ArrowRight, Pencil, Plus } from "lucide-react";
@@ -31,10 +29,10 @@ export const EditButton = ({
 };
 
 export const QuestForm = ({ quest, editable }: QuestFormProps) => {
-  if (!quest.formSchema && !editable) return null;
+  if (!quest.formId && !editable) return null;
 
   return editable ? (
-    <EditButton isNew={!quest.formSchema} questId={quest._id} />
+    <EditButton isNew={!quest.formId} questId={quest._id} />
   ) : (
     <Link
       href={{

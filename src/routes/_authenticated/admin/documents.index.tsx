@@ -191,9 +191,9 @@ const DocumentTableRow = ({
     >
       <TableCell>
         <div>{document.title}</div>
-        {document.deletionTime && (
+        {document.deletedAt && (
           <span className="text-red-5" slot="description">
-            {`deleted ${new Date(document.deletionTime).toLocaleString()}`}
+            {`deleted ${new Date(document.deletedAt).toLocaleString()}`}
           </span>
         )}
       </TableCell>
@@ -215,7 +215,7 @@ const DocumentTableRow = ({
                 View PDF
               </MenuItem>
             )}
-            {document.deletionTime ? (
+            {document.deletedAt ? (
               <>
                 <MenuItem
                   onAction={() => undelete({ documentId: document._id })}

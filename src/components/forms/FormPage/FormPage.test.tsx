@@ -1,15 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { FormQuestion } from "./FormQuestion";
+import { FormPage } from "./FormPage";
 
-describe("FormQuestion", () => {
+describe("FormPage", () => {
   it("renders title correctly", () => {
     const testTitle = "What is your legal name?";
-    render(
-      <FormQuestion title={testTitle}>
-        <div>Form Content</div>
-      </FormQuestion>,
-    );
+    render(<FormPage title={testTitle} />);
 
     const titleElement = screen.getByText(testTitle);
     expect(titleElement).toBeInTheDocument();
@@ -22,11 +18,7 @@ describe("FormQuestion", () => {
     const testTitle = "What is your legal name?";
     const testDescription = "Type your name exactly as it appears on your ID.";
 
-    render(
-      <FormQuestion title={testTitle} description={testDescription}>
-        <div>Form Content</div>
-      </FormQuestion>,
-    );
+    render(<FormPage title={testTitle} description={testDescription} />);
 
     const descriptionElement = screen.getByText(testDescription);
     expect(descriptionElement).toBeInTheDocument();
@@ -37,27 +29,12 @@ describe("FormQuestion", () => {
   it("does not render description when not provided", () => {
     const testTitle = "Basic Information";
 
-    render(
-      <FormQuestion title={testTitle}>
-        <div>Form Content</div>
-      </FormQuestion>,
-    );
+    render(<FormPage title={testTitle} />);
 
     const titleElement = screen.getByText(testTitle);
     expect(titleElement).toBeInTheDocument();
 
     const descriptionQuery = screen.queryByRole("paragraph");
     expect(descriptionQuery).toBeNull();
-  });
-
-  it("renders children correctly", () => {
-    render(
-      <FormQuestion title="Test Question">
-        <input data-testid="test-input" />
-      </FormQuestion>,
-    );
-
-    const childElement = screen.getByTestId("test-input");
-    expect(childElement).toBeInTheDocument();
   });
 });
