@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import {
   CATEGORIES,
+  FORM_FIELDS,
   GROUP_QUESTS_BY,
   JURISDICTIONS,
   ROLES,
@@ -37,4 +38,8 @@ export const category = v.union(
 
 export const timeRequiredUnit = v.union(
   ...Object.keys(TIME_UNITS).map((unit) => v.literal(unit)),
+);
+
+export const formField = v.union(
+  ...Object.keys(FORM_FIELDS).map((field) => v.literal(field)),
 );

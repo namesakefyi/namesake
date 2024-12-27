@@ -25,7 +25,7 @@ export const getAllActive = query({
   handler: async (ctx) => {
     return await ctx.db
       .query("documents")
-      .filter((q) => q.eq(q.field("deletionTime"), undefined))
+      .filter((q) => q.eq(q.field("deletedAt"), undefined))
       .collect();
   },
 });
@@ -66,7 +66,7 @@ export const getByQuestId = query({
     const documents = await ctx.db
       .query("documents")
       .withIndex("quest", (q) => q.eq("questId", args.questId))
-      .filter((q) => q.eq(q.field("deletionTime"), undefined))
+      .filter((q) => q.eq(q.field("deletedAt"), undefined))
       .collect();
 
     return await Promise.all(
@@ -101,14 +101,14 @@ export const create = userMutation({
 export const softDelete = userMutation({
   args: { documentId: v.id("documents") },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.documentId, { deletionTime: Date.now() });
+    await ctx.db.patch(args.documentId, { deletedAt: Date.now() });
   },
 });
 
 export const undoSoftDelete = userMutation({
   args: { documentId: v.id("documents") },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.documentId, { deletionTime: undefined });
+    await ctx.db.patch(args.documentId, { deletedAt: undefined });
   },
 });
 

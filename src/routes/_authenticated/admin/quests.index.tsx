@@ -162,9 +162,9 @@ const QuestTableRow = ({
       <TableCell>
         <div className="flex items-center gap-2">
           <div>{quest.title}</div>
-          {quest.deletionTime && (
+          {quest.deletedAt && (
             <span className="text-red-9 dark:text-reddark-9" slot="description">
-              {`deleted ${new Date(quest.deletionTime).toLocaleString()}`}
+              {`deleted ${new Date(quest.deletedAt).toLocaleString()}`}
             </span>
           )}
         </div>
@@ -190,7 +190,7 @@ const QuestTableRow = ({
             icon={Ellipsis}
           />
           <Menu>
-            {quest.deletionTime ? (
+            {quest.deletedAt ? (
               <>
                 <MenuItem onAction={() => undelete({ questId: quest._id })}>
                   Undelete

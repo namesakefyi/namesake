@@ -19,7 +19,8 @@ export const buttonStyles = tv({
   base: "py-2 text-sm font-medium whitespace-nowrap rounded-lg flex gap-1.5 items-center justify-center border border-gray-dim transition",
   variants: {
     variant: {
-      primary: "bg-purple-solid text-white",
+      primary:
+        "bg-purple-solid text-white border-purple-10 dark:border-purpledark-10",
       secondary: "bg-gray-ghost text-gray-normal",
       destructive: "bg-red-solid",
       icon: "bg-transparent hover:bg-graya-3 dark:hover:bg-graydarka-3 text-gray-dim hover:text-gray-normal border-0 flex items-center justify-center rounded-full",

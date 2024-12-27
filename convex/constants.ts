@@ -1,5 +1,6 @@
 import {
   Calendar,
+  Calendar1,
   CalendarClock,
   CalendarDays,
   CircleArrowRight,
@@ -17,6 +18,8 @@ import {
   House,
   Landmark,
   LaptopMinimal,
+  LayoutList,
+  ListChecks,
   LoaderCircle,
   type LucideIcon,
   Mail,
@@ -27,6 +30,9 @@ import {
   Scale,
   ShoppingBag,
   Sun,
+  Text,
+  TextCursorInput,
+  UserPen,
   Zap,
 } from "lucide-react";
 
@@ -330,4 +336,66 @@ export const DEFAULT_TIME_REQUIRED: TimeRequired = {
   min: 5,
   max: 10,
   unit: "minutes",
+};
+
+type FormFieldDetails = {
+  label: string;
+  description: string;
+  icon: LucideIcon;
+};
+
+export type FormField =
+  | "address"
+  | "checkboxGroup"
+  | "email"
+  | "longText"
+  | "memorableDate"
+  | "name"
+  | "radioGroup"
+  | "shortText";
+
+export const FORM_FIELDS: Record<FormField, FormFieldDetails> = {
+  address: {
+    label: "Address",
+    description:
+      "Fields for a full address, including street, city, state, and ZIP.",
+    icon: MapPin,
+  },
+  checkboxGroup: {
+    label: "Checkbox Group",
+    description:
+      "A group of checkboxes which allows a user to select one or more options.",
+    icon: ListChecks,
+  },
+  email: {
+    label: "Email",
+    description: "A field for an email address.",
+    icon: Mail,
+  },
+  longText: {
+    label: "Long Text",
+    description: "A field for a long text entry.",
+    icon: Text,
+  },
+  memorableDate: {
+    label: "Memorable Date",
+    description: "A field for a memorable date such as a birthday.",
+    icon: Calendar1,
+  },
+  name: {
+    label: "Full Name",
+    description: "Fields for first, middle, and last name.",
+    icon: UserPen,
+  },
+  radioGroup: {
+    label: "Radio Group",
+    description:
+      "A group of radio buttons which allows a user to select one option.",
+    icon: LayoutList,
+  },
+  shortText: {
+    label: "Short Text",
+    description: "A field for a short text entry.",
+    icon: TextCursorInput,
+  },
 };

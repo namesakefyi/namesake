@@ -18,7 +18,7 @@ export const getAll = userQuery({
     const quests = await Promise.all(
       userQuests.map(async (userQuest) => {
         const quest = await ctx.db.get(userQuest.questId);
-        return quest && quest.deletionTime === undefined
+        return quest && quest.deletedAt === undefined
           ? { ...quest, ...userQuest }
           : null;
       }),
@@ -52,7 +52,7 @@ export const getAvailable = userQuery({
 
     const allActiveQuests = await ctx.db
       .query("quests")
-      .filter((q) => q.eq(q.field("deletionTime"), undefined))
+      .filter((q) => q.eq(q.field("deletedAt"), undefined))
       .collect();
 
     return allActiveQuests.filter((quest) => !userQuestIds.includes(quest._id));
@@ -82,7 +82,7 @@ export const countCompleted = userQuery({
       .collect();
 
     const completedQuests = userQuests.filter(
-      (quest) => quest.completionTime !== undefined,
+      (quest) => quest.completedAt !== undefined,
     );
 
     return completedQuests.length;
@@ -164,7 +164,7 @@ export const setStatus = userMutation({
     if (args.status === "complete") {
       await ctx.db.patch(userQuest._id, {
         status: args.status,
-        completionTime: Date.now(),
+        completedAt: Date.now(),
       });
     }
 
@@ -172,7 +172,7 @@ export const setStatus = userMutation({
     if (userQuest.status === "complete") {
       await ctx.db.patch(userQuest._id, {
         status: args.status,
-        completionTime: undefined,
+        completedAt: undefined,
       });
     }
 
@@ -233,7 +233,7 @@ export const getByCategory = userQuery({
     const questsWithDetails = await Promise.all(
       userQuests.map(async (userQuest) => {
         const quest = await ctx.db.get(userQuest.questId);
-        return quest && quest.deletionTime === undefined
+        return quest && quest.deletedAt === undefined
           ? { ...quest, ...userQuest }
           : null;
       }),
@@ -266,7 +266,7 @@ export const getByDate = userQuery({
     const questsWithDetails = await Promise.all(
       userQuests.map(async (userQuest) => {
         const quest = await ctx.db.get(userQuest.questId);
-        return quest && quest.deletionTime === undefined
+        return quest && quest.deletedAt === undefined
           ? { ...quest, ...userQuest }
           : null;
       }),
@@ -310,7 +310,7 @@ export const getByStatus = userQuery({
     const questsWithDetails = await Promise.all(
       userQuests.map(async (userQuest) => {
         const quest = await ctx.db.get(userQuest.questId);
-        return quest && quest.deletionTime === undefined
+        return quest && quest.deletedAt === undefined
           ? { ...quest, ...userQuest }
           : null;
       }),
