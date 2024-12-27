@@ -334,6 +334,52 @@ describe("formPages", () => {
       expect(result.form?.updatedBy).toBe(userId);
       expect(result.form?.updatedAt).toBeTruthy();
     });
+
+    it("should throw an error when updating a non-existent page", async () => {
+      const t = convexTest(schema, modules);
+
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "test@example.com",
+          role: "user",
+        });
+      });
+
+      const pageId = await t.run(async (ctx) => {
+        const formId = await ctx.db.insert("forms", {
+          createdBy: userId,
+          pages: [],
+        });
+
+        return await ctx.db.insert("formPages", {
+          formId,
+          title: "Page to Delete",
+          fields: [],
+        });
+      });
+
+      // Delete the page before attempting to update
+      await t.run(async (ctx) => {
+        await ctx.db.delete(pageId);
+      });
+
+      const asUser = t.withIdentity({ subject: userId });
+
+      await expect(
+        asUser.mutation(api.formPages.update, {
+          pageId,
+          title: "Updated Page",
+          fields: [
+            {
+              type: "text",
+              label: "First Name",
+              name: "firstName",
+              required: true,
+            },
+          ],
+        }),
+      ).rejects.toThrow("Page not found");
+    });
   });
 
   describe("remove", () => {
