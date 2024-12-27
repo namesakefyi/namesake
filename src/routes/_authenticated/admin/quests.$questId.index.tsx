@@ -18,7 +18,7 @@ import {
 } from "@convex/constants";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
-import { CircleHelp, Trash } from "lucide-react";
+import { CircleHelp, Pencil, Trash } from "lucide-react";
 import { memo, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -95,9 +95,10 @@ function AdminQuestDetailRoute() {
     <>
       <PageHeader title={title}>
         <Link
-          button={{ variant: "secondary" }}
           href={{ to: "/admin/quests/$questId/form", params: { questId } }}
+          button={{ variant: "secondary" }}
         >
+          <Pencil size={16} />
           Edit form
         </Link>
       </PageHeader>
