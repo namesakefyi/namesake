@@ -1,5 +1,3 @@
-import "survey-core/defaultV2.min.css";
-
 import { Link } from "@/components/common";
 import type { Doc, Id } from "@convex/_generated/dataModel";
 import { ArrowRight, Pencil, Plus } from "lucide-react";
