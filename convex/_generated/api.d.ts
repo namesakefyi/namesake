@@ -19,6 +19,7 @@ import type * as documents from "../documents.js";
 import type * as errors from "../errors.js";
 import type * as faqTopics from "../faqTopics.js";
 import type * as faqs from "../faqs.js";
+import type * as formFields from "../formFields.js";
 import type * as formPages from "../formPages.js";
 import type * as forms from "../forms.js";
 import type * as helpers from "../helpers.js";
@@ -47,6 +48,7 @@ declare const fullApi: ApiFromModules<{
   errors: typeof errors;
   faqTopics: typeof faqTopics;
   faqs: typeof faqs;
+  formFields: typeof formFields;
   formPages: typeof formPages;
   forms: typeof forms;
   helpers: typeof helpers;

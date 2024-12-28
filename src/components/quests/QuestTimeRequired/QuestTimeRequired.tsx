@@ -49,7 +49,7 @@ export const QuestTimeRequired = ({
               onPress={() => setIsEditing(true)}
               aria-label="Edit time required"
             />
-            <Tooltip>Edit</Tooltip>
+            <Tooltip>Edit time required</Tooltip>
           </TooltipTrigger>
           <EditQuestTimeRequiredModal
             quest={quest}

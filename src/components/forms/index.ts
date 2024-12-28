@@ -1,5 +1,7 @@
 export * from "./AddressField";
 export * from "./CheckboxGroupField";
+export * from "./EditableFormField";
+export * from "./EditableFormPage";
 export * from "./EmailField";
 export * from "./FormPage";
 export * from "./LongTextField";

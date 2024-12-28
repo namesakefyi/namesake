@@ -3,17 +3,20 @@ import {
   Badge,
   Button,
   Empty,
-  Link,
   Menu,
   MenuItem,
+  MenuSeparator,
   MenuTrigger,
-  RichText,
 } from "@/components/common";
 import {
+  QuestContent,
   QuestCosts,
+  QuestDetails,
+  QuestDocuments,
   QuestForm,
   QuestTimeRequired,
   QuestUrls,
+  QuestUsageCount,
   StatusSelect,
 } from "@/components/quests";
 import { api } from "@convex/_generated/api";
@@ -21,7 +24,7 @@ import type { Id } from "@convex/_generated/dataModel";
 import type { Status } from "@convex/constants";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
-import { Ellipsis, Milestone, Pencil } from "lucide-react";
+import { Ellipsis, Milestone } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/_home/quests/$questId/")({
@@ -73,17 +76,6 @@ function QuestDetailRoute() {
           onChange={handleStatusChange}
           isCore={quest.category === "core"}
         />
-        {canEdit && (
-          <Link
-            href={{ to: "/quests/$questId/edit", params: { questId } }}
-            button={{
-              variant: "ghost",
-            }}
-          >
-            <Pencil size={16} />
-            Edit
-          </Link>
-        )}
         <MenuTrigger>
           <Button
             aria-label="Quest settings"
@@ -92,6 +84,19 @@ function QuestDetailRoute() {
             className="-mr-2"
           />
           <Menu placement="bottom end">
+            {canEdit && (
+              <>
+                <MenuItem
+                  href={{
+                    to: "/quests/$questId/edit",
+                    params: { questId },
+                  }}
+                >
+                  Edit quest
+                </MenuItem>
+                <MenuSeparator />
+              </>
+            )}
             <MenuItem
               onAction={() => handleRemoveQuest(quest._id, quest.title)}
             >
@@ -100,13 +105,17 @@ function QuestDetailRoute() {
           </Menu>
         </MenuTrigger>
       </PageHeader>
-      <div className="flex gap-4 mb-4">
-        <QuestCosts quest={quest} />
-        <QuestTimeRequired quest={quest} />
+      <div className="flex flex-col gap-6">
+        <QuestDetails>
+          <QuestCosts quest={quest} />
+          <QuestTimeRequired quest={quest} />
+          <QuestUsageCount quest={quest} />
+        </QuestDetails>
+        <QuestDocuments quest={quest} />
+        <QuestUrls urls={quest.urls} />
+        <QuestContent initialContent={quest.content} editable={false} />
+        <QuestForm quest={quest} />
       </div>
-      <QuestUrls urls={quest.urls} />
-      <RichText initialContent={quest.content} editable={false} />
-      <QuestForm quest={quest} />
     </AppContent>
   );
 }

@@ -16,6 +16,10 @@ import {
 // Forms
 // ----------------------------------------------
 
+/**
+ * A series of fields and pages to guide a user through
+ * an application for a single quest.
+ */
 const forms = defineTable({
   /** The user who created the form. */
   createdBy: v.id("users"),
@@ -27,6 +31,9 @@ const forms = defineTable({
   pages: v.array(v.id("formPages")),
 });
 
+/**
+ * A single page within a form which contains one or more fields.
+ */
 const formPages = defineTable({
   /** The form that this page belongs to. */
   formId: v.id("forms"),
@@ -35,20 +42,33 @@ const formPages = defineTable({
   /** An optional page description. */
   description: v.optional(v.string()),
   /** The fields for the page. */
-  /** TODO: Think about how this shape changes for different field types, how to nest types appropriately */
-  fields: v.optional(
-    v.array(
-      v.object({
-        type: formField,
-        label: v.string(),
-        name: v.string(),
-        required: v.optional(v.boolean()),
-      }),
-    ),
-  ),
+  fields: v.optional(v.array(v.id("formFields"))),
   /** Optional faqs related to the page. */
   faqs: v.optional(v.array(v.id("faqs"))),
 }).index("formId", ["formId"]);
+
+/**
+ * A single field or a group of related fields within a page.
+ */
+const formFields = defineTable({
+  /** The type of field, e.g. "email", "checkboxGroup", "longText" */
+  type: formField,
+  /** The user-visible label for the field. */
+  label: v.string(),
+  /** A unique key for the field used to store user data. */
+  name: v.string(),
+  /** Whether the field is required. */
+  required: v.optional(v.boolean()),
+  /** Options for group fields like checkboxes, radios, and selects. */
+  options: v.optional(
+    v.array(
+      v.object({
+        label: v.string(),
+        value: v.string(),
+      }),
+    ),
+  ),
+});
 
 // ----------------------------------------------
 // FAQs
@@ -139,8 +159,6 @@ const documents = defineTable({
   creationUser: v.id("users"),
   /** The storageId for the PDF file. */
   file: v.optional(v.id("_storage")),
-  /** The US State the document applies to. */
-  jurisdiction: jurisdiction,
   /** Time in ms since epoch when the document was deleted. */
   deletedAt: v.optional(v.number()),
 }).index("quest", ["questId"]);
@@ -177,9 +195,9 @@ const users = defineTable({
 const userFormData = defineTable({
   /** The user who owns the data. */
   userId: v.id("users"),
-  /** The name of the field, e.g. "firstName". */
+  /** The name of the field, e.g. "firstName" or "isMinor". */
   field: v.string(),
-  /** The value of the field. */
+  /** The value of the field, e.g. "Eva" or "false". */
   value: v.any(),
 })
   .index("userId", ["userId"])
@@ -215,10 +233,11 @@ const userQuests = defineTable({
 
 export default defineSchema({
   ...authTables,
-  forms,
-  formPages,
   faqs,
   faqTopics,
+  forms,
+  formPages,
+  formFields,
   documents,
   quests,
   users,

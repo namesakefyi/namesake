@@ -18,7 +18,7 @@ export const EditButton = ({
   return (
     <Link
       href={{
-        to: "/admin/quests/$questId/form",
+        to: "/quests/$questId/edit/form",
         params: { questId },
       }}
       button={{ variant: "secondary", size: "large" }}

@@ -1,21 +1,33 @@
 import { AppContent, PageHeader } from "@/components/app";
-import { Badge, Empty, Link, RichText } from "@/components/common";
 import {
+  Badge,
+  Button,
+  Empty,
+  Link,
+  Tooltip,
+  TooltipTrigger,
+} from "@/components/common";
+import {
+  EditQuestBasicsModal,
+  QuestContent,
   QuestCosts,
+  QuestDetails,
+  QuestDocuments,
   QuestForm,
   QuestTimeRequired,
   QuestUrls,
+  QuestUsageCount,
 } from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
-import { Check, LoaderCircle, Milestone } from "lucide-react";
+import { Check, LoaderCircle, Milestone, Pencil } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute(
-  "/_authenticated/_home/quests/$questId/edit",
+  "/_authenticated/_home/quests/$questId/edit/",
 )({
   beforeLoad: ({ context }) => {
     const isAdmin = context.role === "admin";
@@ -34,6 +46,7 @@ export const Route = createFileRoute(
 
 function QuestEditRoute() {
   const { questId } = Route.useParams();
+  const [isEditing, setIsEditing] = useState(false);
 
   const quest = useQuery(api.quests.getById, {
     questId: questId as Id<"quests">,
@@ -71,11 +84,30 @@ function QuestEditRoute() {
     <AppContent>
       <PageHeader
         title={quest.title}
-        badge={quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
+        badge={
+          <>
+            {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
+            <TooltipTrigger>
+              <Button
+                variant="icon"
+                size="small"
+                icon={Pencil}
+                onPress={() => setIsEditing(true)}
+                aria-label="Edit details"
+              />
+              <Tooltip>Edit details</Tooltip>
+            </TooltipTrigger>
+            <EditQuestBasicsModal
+              quest={quest}
+              open={isEditing}
+              onOpenChange={setIsEditing}
+            />
+          </>
+        }
       >
         <Link
           href={{ to: "/quests/$questId", params: { questId: quest._id } }}
-          button={{ variant: "ghost" }}
+          button={{ variant: "primary" }}
           onPress={handleSave}
           isDisabled={isSaving}
         >
@@ -87,13 +119,17 @@ function QuestEditRoute() {
           Save
         </Link>
       </PageHeader>
-      <div className="flex gap-4 mb-4">
-        <QuestCosts quest={quest} editable />
-        <QuestTimeRequired quest={quest} editable />
+      <div className="flex flex-col gap-6">
+        <QuestDetails>
+          <QuestCosts quest={quest} editable />
+          <QuestTimeRequired quest={quest} editable />
+          <QuestUsageCount quest={quest} />
+        </QuestDetails>
+        <QuestDocuments quest={quest} editable />
+        <QuestUrls urls={quest.urls} />
+        <QuestContent initialContent={quest.content} onChange={setContent} />
+        <QuestForm quest={quest} editable />
       </div>
-      <QuestUrls urls={quest.urls} />
-      <RichText initialContent={quest.content} onChange={setContent} />
-      <QuestForm quest={quest} editable />
     </AppContent>
   );
 }
