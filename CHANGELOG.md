@@ -1,5 +1,18 @@
 # namesake
 
+## 0.16.0
+
+### Minor Changes
+
+- 189df29: Improve design of browse page and allow previewing quests before addition
+- e4a7813: fix: Show error when signing in with unregistered email
+- d362596: Allow editing all quest details directly from quest page
+- 5133df0: Migrate from SurveyJS to a custom implementation for forms
+
+### Patch Changes
+
+- 1bccc82: Refine password strength transitions
+
 ## 0.15.0
 
 ### Minor Changes
