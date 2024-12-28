@@ -77,12 +77,19 @@ interface NavGroupProps {
   label: string;
   children: React.ReactNode;
   count?: number;
+  icon?: LucideIcon;
 }
 
-export const NavGroup = ({ label, children, count }: NavGroupProps) => {
+export const NavGroup = ({
+  label,
+  children,
+  count,
+  icon: Icon,
+}: NavGroupProps) => {
   return (
     <div className="flex flex-col gap-0.5 [&:not(:first-child)]:mt-4">
       <Header className="text-sm h-8 font-medium text-gray-dim border-b border-gray-4 dark:border-graydark-4 flex justify-start items-center gap-1.5">
+        {Icon && <Icon size={20} className="size-4" />}
         {label}
         {count && (
           <Badge size="xs" className="rounded-full">

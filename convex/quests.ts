@@ -4,8 +4,13 @@ import { DEFAULT_TIME_REQUIRED } from "./constants";
 import { userMutation } from "./helpers";
 import { category, jurisdiction, timeRequiredUnit } from "./validators";
 
-// TODO: Add `returns` value validation
-// https://docs.convex.dev/functions/validation
+export const count = query({
+  args: {},
+  handler: async (ctx) => {
+    const quests = await ctx.db.query("quests").collect();
+    return quests.length;
+  },
+});
 
 export const getAll = query({
   args: {},

@@ -1,6 +1,5 @@
-import { AppContent, PageHeader } from "@/components/app";
+import { AppContent } from "@/components/app";
 import {
-  Badge,
   Button,
   Empty,
   Menu,
@@ -14,9 +13,9 @@ import {
   QuestDetails,
   QuestDocuments,
   QuestForm,
+  QuestPageHeader,
   QuestTimeRequired,
   QuestUrls,
-  QuestUsageCount,
   StatusSelect,
 } from "@/components/quests";
 import { api } from "@convex/_generated/api";
@@ -67,10 +66,7 @@ function QuestDetailRoute() {
 
   return (
     <AppContent>
-      <PageHeader
-        title={quest.title}
-        badge={quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
-      >
+      <QuestPageHeader quest={quest}>
         <StatusSelect
           status={userQuest.status as Status}
           onChange={handleStatusChange}
@@ -104,12 +100,11 @@ function QuestDetailRoute() {
             </MenuItem>
           </Menu>
         </MenuTrigger>
-      </PageHeader>
+      </QuestPageHeader>
       <div className="flex flex-col gap-6">
         <QuestDetails>
           <QuestCosts quest={quest} />
           <QuestTimeRequired quest={quest} />
-          <QuestUsageCount quest={quest} />
         </QuestDetails>
         <QuestDocuments quest={quest} />
         <QuestUrls urls={quest.urls} />
