@@ -1,6 +1,5 @@
-import { AppContent, PageHeader } from "@/components/app";
+import { AppContent } from "@/components/app";
 import {
-  Badge,
   Button,
   Empty,
   Link,
@@ -14,9 +13,9 @@ import {
   QuestDetails,
   QuestDocuments,
   QuestForm,
+  QuestPageHeader,
   QuestTimeRequired,
   QuestUrls,
-  QuestUsageCount,
 } from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
@@ -82,27 +81,19 @@ function QuestEditRoute() {
 
   return (
     <AppContent>
-      <PageHeader
-        title={quest.title}
+      <QuestPageHeader
+        quest={quest}
         badge={
-          <>
-            {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
-            <TooltipTrigger>
-              <Button
-                variant="icon"
-                size="small"
-                icon={Pencil}
-                onPress={() => setIsEditing(true)}
-                aria-label="Edit details"
-              />
-              <Tooltip>Edit details</Tooltip>
-            </TooltipTrigger>
-            <EditQuestBasicsModal
-              quest={quest}
-              open={isEditing}
-              onOpenChange={setIsEditing}
+          <TooltipTrigger>
+            <Button
+              variant="icon"
+              size="small"
+              icon={Pencil}
+              onPress={() => setIsEditing(true)}
+              aria-label="Edit details"
             />
-          </>
+            <Tooltip>Edit details</Tooltip>
+          </TooltipTrigger>
         }
       >
         <Link
@@ -118,12 +109,16 @@ function QuestEditRoute() {
           )}
           Save
         </Link>
-      </PageHeader>
+        <EditQuestBasicsModal
+          quest={quest}
+          open={isEditing}
+          onOpenChange={setIsEditing}
+        />
+      </QuestPageHeader>
       <div className="flex flex-col gap-6">
         <QuestDetails>
           <QuestCosts quest={quest} editable />
           <QuestTimeRequired quest={quest} editable />
-          <QuestUsageCount quest={quest} />
         </QuestDetails>
         <QuestDocuments quest={quest} editable />
         <QuestUrls urls={quest.urls} />

@@ -8,9 +8,6 @@ import { DUPLICATE_EMAIL, INVALID_EMAIL } from "./errors";
 import { userMutation, userQuery } from "./helpers";
 import { jurisdiction } from "./validators";
 
-// TODO: Add `returns` value validation
-// https://docs.convex.dev/functions/validation
-
 export const getAll = query({
   args: {},
   handler: async (ctx) => {

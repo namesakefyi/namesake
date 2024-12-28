@@ -4,9 +4,6 @@ import { type Category, STATUS, type Status } from "./constants";
 import { userMutation, userQuery } from "./helpers";
 import { status } from "./validators";
 
-// TODO: Add `returns` value validation
-// https://docs.convex.dev/functions/validation
-
 export const getAll = userQuery({
   args: {},
   handler: async (ctx, _args) => {

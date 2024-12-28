@@ -16,11 +16,13 @@ import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as UnauthenticatedSigninImport } from './routes/_unauthenticated/signin'
 import { Route as AuthenticatedHomeImport } from './routes/_authenticated/_home'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings/route'
+import { Route as AuthenticatedBrowseRouteImport } from './routes/_authenticated/browse.route'
 import { Route as AuthenticatedSettingsIndexImport } from './routes/_authenticated/settings/index'
-import { Route as AuthenticatedBrowseIndexImport } from './routes/_authenticated/browse/index'
+import { Route as AuthenticatedBrowseIndexImport } from './routes/_authenticated/browse.index'
 import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/_home/index'
 import { Route as AuthenticatedSettingsDataImport } from './routes/_authenticated/settings/data'
 import { Route as AuthenticatedSettingsAccountImport } from './routes/_authenticated/settings/account'
+import { Route as AuthenticatedBrowseQuestIdImport } from './routes/_authenticated/browse.$questId'
 import { Route as AuthenticatedHomeQuestsIndexImport } from './routes/_authenticated/_home/quests.index'
 import { Route as AuthenticatedHomeQuestsQuestIdIndexImport } from './routes/_authenticated/_home/quests.$questId.index'
 import { Route as AuthenticatedHomeQuestsQuestIdFormImport } from './routes/_authenticated/_home/quests.$questId.form'
@@ -58,6 +60,12 @@ const AuthenticatedSettingsRouteRoute = AuthenticatedSettingsRouteImport.update(
   } as any,
 )
 
+const AuthenticatedBrowseRouteRoute = AuthenticatedBrowseRouteImport.update({
+  id: '/browse',
+  path: '/browse',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
 const AuthenticatedSettingsIndexRoute = AuthenticatedSettingsIndexImport.update(
   {
     id: '/',
@@ -67,9 +75,9 @@ const AuthenticatedSettingsIndexRoute = AuthenticatedSettingsIndexImport.update(
 )
 
 const AuthenticatedBrowseIndexRoute = AuthenticatedBrowseIndexImport.update({
-  id: '/browse/',
-  path: '/browse/',
-  getParentRoute: () => AuthenticatedRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedBrowseRouteRoute,
 } as any)
 
 const AuthenticatedHomeIndexRoute = AuthenticatedHomeIndexImport.update({
@@ -90,6 +98,14 @@ const AuthenticatedSettingsAccountRoute =
     path: '/account',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
+
+const AuthenticatedBrowseQuestIdRoute = AuthenticatedBrowseQuestIdImport.update(
+  {
+    id: '/$questId',
+    path: '/$questId',
+    getParentRoute: () => AuthenticatedBrowseRouteRoute,
+  } as any,
+)
 
 const AuthenticatedHomeQuestsIndexRoute =
   AuthenticatedHomeQuestsIndexImport.update({
@@ -144,6 +160,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnauthenticatedImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated/browse': {
+      id: '/_authenticated/browse'
+      path: '/browse'
+      fullPath: '/browse'
+      preLoaderRoute: typeof AuthenticatedBrowseRouteImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
       path: '/settings'
@@ -164,6 +187,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/signin'
       preLoaderRoute: typeof UnauthenticatedSigninImport
       parentRoute: typeof UnauthenticatedImport
+    }
+    '/_authenticated/browse/$questId': {
+      id: '/_authenticated/browse/$questId'
+      path: '/$questId'
+      fullPath: '/browse/$questId'
+      preLoaderRoute: typeof AuthenticatedBrowseQuestIdImport
+      parentRoute: typeof AuthenticatedBrowseRouteImport
     }
     '/_authenticated/settings/account': {
       id: '/_authenticated/settings/account'
@@ -188,10 +218,10 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/browse/': {
       id: '/_authenticated/browse/'
-      path: '/browse'
-      fullPath: '/browse'
+      path: '/'
+      fullPath: '/browse/'
       preLoaderRoute: typeof AuthenticatedBrowseIndexImport
-      parentRoute: typeof AuthenticatedImport
+      parentRoute: typeof AuthenticatedBrowseRouteImport
     }
     '/_authenticated/settings/': {
       id: '/_authenticated/settings/'
@@ -240,6 +270,22 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface AuthenticatedBrowseRouteRouteChildren {
+  AuthenticatedBrowseQuestIdRoute: typeof AuthenticatedBrowseQuestIdRoute
+  AuthenticatedBrowseIndexRoute: typeof AuthenticatedBrowseIndexRoute
+}
+
+const AuthenticatedBrowseRouteRouteChildren: AuthenticatedBrowseRouteRouteChildren =
+  {
+    AuthenticatedBrowseQuestIdRoute: AuthenticatedBrowseQuestIdRoute,
+    AuthenticatedBrowseIndexRoute: AuthenticatedBrowseIndexRoute,
+  }
+
+const AuthenticatedBrowseRouteRouteWithChildren =
+  AuthenticatedBrowseRouteRoute._addFileChildren(
+    AuthenticatedBrowseRouteRouteChildren,
+  )
+
 interface AuthenticatedSettingsRouteRouteChildren {
   AuthenticatedSettingsAccountRoute: typeof AuthenticatedSettingsAccountRoute
   AuthenticatedSettingsDataRoute: typeof AuthenticatedSettingsDataRoute
@@ -284,15 +330,15 @@ const AuthenticatedHomeRouteWithChildren =
   AuthenticatedHomeRoute._addFileChildren(AuthenticatedHomeRouteChildren)
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedBrowseRouteRoute: typeof AuthenticatedBrowseRouteRouteWithChildren
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRouteWithChildren
-  AuthenticatedBrowseIndexRoute: typeof AuthenticatedBrowseIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedBrowseRouteRoute: AuthenticatedBrowseRouteRouteWithChildren,
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedHomeRoute: AuthenticatedHomeRouteWithChildren,
-  AuthenticatedBrowseIndexRoute: AuthenticatedBrowseIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -313,12 +359,14 @@ const UnauthenticatedRouteWithChildren = UnauthenticatedRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '': typeof AuthenticatedHomeRouteWithChildren
+  '/browse': typeof AuthenticatedBrowseRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/signin': typeof UnauthenticatedSigninRoute
+  '/browse/$questId': typeof AuthenticatedBrowseQuestIdRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/data': typeof AuthenticatedSettingsDataRoute
   '/': typeof AuthenticatedHomeIndexRoute
-  '/browse': typeof AuthenticatedBrowseIndexRoute
+  '/browse/': typeof AuthenticatedBrowseIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/quests': typeof AuthenticatedHomeQuestsIndexRoute
   '/quests/$questId/form': typeof AuthenticatedHomeQuestsQuestIdFormRoute
@@ -330,6 +378,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '': typeof UnauthenticatedRouteWithChildren
   '/signin': typeof UnauthenticatedSigninRoute
+  '/browse/$questId': typeof AuthenticatedBrowseQuestIdRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/data': typeof AuthenticatedSettingsDataRoute
   '/': typeof AuthenticatedHomeIndexRoute
@@ -346,9 +395,11 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_unauthenticated': typeof UnauthenticatedRouteWithChildren
+  '/_authenticated/browse': typeof AuthenticatedBrowseRouteRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/_authenticated/_home': typeof AuthenticatedHomeRouteWithChildren
   '/_unauthenticated/signin': typeof UnauthenticatedSigninRoute
+  '/_authenticated/browse/$questId': typeof AuthenticatedBrowseQuestIdRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/data': typeof AuthenticatedSettingsDataRoute
   '/_authenticated/_home/': typeof AuthenticatedHomeIndexRoute
@@ -365,12 +416,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | ''
+    | '/browse'
     | '/settings'
     | '/signin'
+    | '/browse/$questId'
     | '/settings/account'
     | '/settings/data'
     | '/'
-    | '/browse'
+    | '/browse/'
     | '/settings/'
     | '/quests'
     | '/quests/$questId/form'
@@ -381,6 +434,7 @@ export interface FileRouteTypes {
   to:
     | ''
     | '/signin'
+    | '/browse/$questId'
     | '/settings/account'
     | '/settings/data'
     | '/'
@@ -395,9 +449,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authenticated'
     | '/_unauthenticated'
+    | '/_authenticated/browse'
     | '/_authenticated/settings'
     | '/_authenticated/_home'
     | '/_unauthenticated/signin'
+    | '/_authenticated/browse/$questId'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/data'
     | '/_authenticated/_home/'
@@ -438,15 +494,23 @@ export const routeTree = rootRoute
     "/_authenticated": {
       "filePath": "_authenticated.tsx",
       "children": [
+        "/_authenticated/browse",
         "/_authenticated/settings",
-        "/_authenticated/_home",
-        "/_authenticated/browse/"
+        "/_authenticated/_home"
       ]
     },
     "/_unauthenticated": {
       "filePath": "_unauthenticated.tsx",
       "children": [
         "/_unauthenticated/signin"
+      ]
+    },
+    "/_authenticated/browse": {
+      "filePath": "_authenticated/browse.route.tsx",
+      "parent": "/_authenticated",
+      "children": [
+        "/_authenticated/browse/$questId",
+        "/_authenticated/browse/"
       ]
     },
     "/_authenticated/settings": {
@@ -474,6 +538,10 @@ export const routeTree = rootRoute
       "filePath": "_unauthenticated/signin.tsx",
       "parent": "/_unauthenticated"
     },
+    "/_authenticated/browse/$questId": {
+      "filePath": "_authenticated/browse.$questId.tsx",
+      "parent": "/_authenticated/browse"
+    },
     "/_authenticated/settings/account": {
       "filePath": "_authenticated/settings/account.tsx",
       "parent": "/_authenticated/settings"
@@ -487,8 +555,8 @@ export const routeTree = rootRoute
       "parent": "/_authenticated/_home"
     },
     "/_authenticated/browse/": {
-      "filePath": "_authenticated/browse/index.tsx",
-      "parent": "/_authenticated"
+      "filePath": "_authenticated/browse.index.tsx",
+      "parent": "/_authenticated/browse"
     },
     "/_authenticated/settings/": {
       "filePath": "_authenticated/settings/index.tsx",

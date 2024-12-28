@@ -1,6 +1,7 @@
-import { AppContent, PageHeader } from "@/components/app";
-import { Badge, Empty } from "@/components/common";
+import { AppContent } from "@/components/app";
+import { Empty } from "@/components/common";
 import { EditableFormPage } from "@/components/forms";
+import { QuestPageHeader } from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute } from "@tanstack/react-router";
@@ -49,10 +50,7 @@ function RouteComponent() {
 
   return (
     <AppContent>
-      <PageHeader
-        title={`Editing form for ${quest.title}`}
-        badge={quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
-      />
+      <QuestPageHeader quest={quest} />
       {pages && pages.length > 0 ? (
         pages.map((page) => (
           <EditableFormPage key={page._id} pageId={page._id} />
