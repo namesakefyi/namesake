@@ -128,9 +128,7 @@ function IndexRoute() {
                   {completedQuests}
                 </span>{" "}
                 <span className="text-gray-8 dark:text-graydark-8">/</span>{" "}
-                <span className="text-gray-dim">
-                  {userQuestCount} quests complete
-                </span>
+                <span className="text-gray-dim">{userQuestCount} complete</span>
               </span>
             }
             labelHidden

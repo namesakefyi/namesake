@@ -80,6 +80,21 @@ export const fieldBorderStyles = tv({
   },
 });
 
+export const innerBorderStyles = tv({
+  variants: {
+    isFocusWithin: {
+      false: "border-gray-6 dark:border-graydark-6",
+      true: "border-gray-7 dark:border-graydark-7",
+    },
+    isInvalid: {
+      true: "border-red-9 dark:border-reddark-9",
+    },
+    isDisabled: {
+      true: "border-gray-4 dark:border-graydark-4",
+    },
+  },
+});
+
 const fieldGroupStyles = tv({
   extend: focusRing,
   base: "border-none ring-inset ring-1 group flex items-center bg-gray-subtle forced-colors:bg-[Field] rounded-lg overflow-hidden",

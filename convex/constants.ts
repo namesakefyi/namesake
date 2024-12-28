@@ -342,6 +342,7 @@ type FormFieldDetails = {
   label: string;
   description: string;
   icon: LucideIcon;
+  hasOptions?: boolean;
 };
 
 export type FormField =
@@ -366,6 +367,7 @@ export const FORM_FIELDS: Record<FormField, FormFieldDetails> = {
     description:
       "A group of checkboxes which allows a user to select one or more options.",
     icon: ListChecks,
+    hasOptions: true,
   },
   email: {
     label: "Email",
@@ -392,6 +394,7 @@ export const FORM_FIELDS: Record<FormField, FormFieldDetails> = {
     description:
       "A group of radio buttons which allows a user to select one option.",
     icon: LayoutList,
+    hasOptions: true,
   },
   shortText: {
     label: "Short Text",

@@ -16,7 +16,7 @@ import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import { THEMES, type Theme } from "@convex/constants";
 import { Authenticated, useQuery } from "convex/react";
-import { CircleUser, Cog, GlobeLock, LogOut, Plus } from "lucide-react";
+import { CircleUser, Cog, LogOut, Plus } from "lucide-react";
 import { Logo } from "../Logo";
 
 type AppSidebarProps = {
@@ -28,7 +28,6 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
   const { theme, themeSelection, setTheme } = useTheme();
 
   const user = useQuery(api.users.getCurrent);
-  const isAdmin = user?.role === "admin";
 
   const handleSignOut = async () => {
     await signOut();
@@ -70,11 +69,6 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
               {user?.name}
             </Button>
             <Menu placement="top start">
-              {isAdmin && (
-                <MenuItem icon={GlobeLock} href={{ to: "/admin" }}>
-                  Admin
-                </MenuItem>
-              )}
               <MenuItem href={{ to: "/settings/account" }} icon={Cog}>
                 Settings and Help
               </MenuItem>

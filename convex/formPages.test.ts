@@ -5,6 +5,38 @@ import schema from "./schema";
 import { modules } from "./test.setup";
 
 describe("formPages", () => {
+  describe("getById", () => {
+    it("should return a page by its ID", async () => {
+      const t = convexTest(schema, modules);
+
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "test@example.com",
+          role: "user",
+        });
+      });
+
+      const asUser = t.withIdentity({ subject: userId });
+
+      const pageId = await t.run(async (ctx) => {
+        const formId = await ctx.db.insert("forms", {
+          createdBy: userId,
+          pages: [],
+        });
+
+        return await ctx.db.insert("formPages", {
+          formId,
+          title: "Test Page",
+          fields: [],
+        });
+      });
+
+      const page = await asUser.query(api.formPages.getById, { pageId });
+      expect(page).toBeTruthy();
+      expect(page?._id).toBe(pageId);
+    });
+  });
+
   describe("getAllByFormId", () => {
     it("should return all pages for a given form", async () => {
       const t = convexTest(schema, modules);
@@ -175,18 +207,20 @@ describe("formPages", () => {
         });
       });
 
+      const fieldId = await t.run(async (ctx) => {
+        return await ctx.db.insert("formFields", {
+          type: "shortText",
+          label: "First Name",
+          name: "firstName",
+          required: true,
+        });
+      });
+
       const pageId = await asUser.mutation(api.formPages.create, {
         formId,
         title: "New Page",
         description: "Page description",
-        fields: [
-          {
-            type: "text",
-            label: "First Name",
-            name: "firstName",
-            required: true,
-          },
-        ],
+        fields: [fieldId],
       });
 
       await t.run(async (ctx) => {
@@ -197,7 +231,6 @@ describe("formPages", () => {
         expect(page?.title).toBe("New Page");
         expect(page?.description).toBe("Page description");
         expect(page?.fields).toHaveLength(1);
-        expect(page?.fields?.[0].name).toBe("firstName");
       });
     });
 
@@ -262,14 +295,7 @@ describe("formPages", () => {
       await asUser.mutation(api.formPages.update, {
         pageId,
         title: "Updated Page",
-        fields: [
-          {
-            type: "text",
-            label: "First Name",
-            name: "firstName",
-            required: true,
-          },
-        ],
+        fields: [],
       });
 
       const updatedPage = await t.run(async (ctx) => {
@@ -277,8 +303,7 @@ describe("formPages", () => {
       });
 
       expect(updatedPage?.title).toBe("Updated Page");
-      expect(updatedPage?.fields).toHaveLength(1);
-      expect(updatedPage?.fields?.[0].name).toBe("firstName");
+      expect(updatedPage?.fields).toHaveLength(0);
     });
 
     it("should update updatedBy and updatedAt values for form", async () => {
@@ -313,14 +338,7 @@ describe("formPages", () => {
       await asUser.mutation(api.formPages.update, {
         pageId,
         title: "Updated Page",
-        fields: [
-          {
-            type: "text",
-            label: "First Name",
-            name: "firstName",
-            required: true,
-          },
-        ],
+        fields: [],
       });
 
       const result = await t.run(async (ctx) => {
@@ -369,14 +387,7 @@ describe("formPages", () => {
         asUser.mutation(api.formPages.update, {
           pageId,
           title: "Updated Page",
-          fields: [
-            {
-              type: "text",
-              label: "First Name",
-              name: "firstName",
-              required: true,
-            },
-          ],
+          fields: [],
         }),
       ).rejects.toThrow("Page not found");
     });

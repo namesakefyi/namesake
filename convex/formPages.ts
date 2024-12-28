@@ -1,7 +1,13 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { userMutation } from "./helpers";
-import { formField } from "./validators";
+
+export const getById = query({
+  args: { pageId: v.id("formPages") },
+  handler: async (ctx, { pageId }) => {
+    return await ctx.db.get(pageId);
+  },
+});
 
 export const getAllByFormId = query({
   args: { formId: v.id("forms") },
@@ -32,16 +38,7 @@ export const create = userMutation({
     formId: v.id("forms"),
     title: v.string(),
     description: v.optional(v.string()),
-    fields: v.optional(
-      v.array(
-        v.object({
-          type: formField,
-          label: v.string(),
-          name: v.string(),
-          required: v.optional(v.boolean()),
-        }),
-      ),
-    ),
+    fields: v.optional(v.array(v.id("formFields"))),
     faqs: v.optional(v.array(v.id("faqs"))),
   },
   handler: async (ctx, args) => {
@@ -71,16 +68,7 @@ export const update = userMutation({
     pageId: v.id("formPages"),
     title: v.optional(v.string()),
     description: v.optional(v.string()),
-    fields: v.optional(
-      v.array(
-        v.object({
-          type: v.string(),
-          label: v.string(),
-          name: v.string(),
-          required: v.optional(v.boolean()),
-        }),
-      ),
-    ),
+    fields: v.optional(v.array(v.id("formFields"))),
     faqs: v.optional(v.array(v.id("faqs"))),
   },
   handler: async (ctx, args) => {

@@ -1,10 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { userMutation } from "./helpers";
-import { jurisdiction } from "./validators";
-
-// TODO: Add `returns` value validation
-// https://docs.convex.dev/functions/validation
 
 export const getAll = query({
   args: {},
@@ -82,7 +78,6 @@ export const create = userMutation({
   args: {
     title: v.string(),
     code: v.optional(v.string()),
-    jurisdiction: jurisdiction,
     file: v.optional(v.id("_storage")),
     questId: v.id("quests"),
   },
@@ -90,7 +85,6 @@ export const create = userMutation({
     return await ctx.db.insert("documents", {
       title: args.title,
       code: args.code,
-      jurisdiction: args.jurisdiction,
       file: args.file,
       questId: args.questId,
       creationUser: ctx.userId,
