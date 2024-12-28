@@ -61,7 +61,7 @@ export const Route = createFileRoute("/_authenticated/_home")({
   component: IndexRoute,
 });
 
-export function sortGroupedQuests(
+function sortGroupedQuests(
   groupA: string,
   groupB: string,
   groupByValue: GroupQuestsBy,
