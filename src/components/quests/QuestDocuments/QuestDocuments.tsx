@@ -4,6 +4,7 @@ import type { Doc } from "@convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import { Heading } from "react-aria-components";
 import { DocumentCard } from "../DocumentCard";
 import { EditQuestDocumentModal } from "../EditQuestDocumentModal/EditQuestDocumentModal";
 
@@ -23,7 +24,7 @@ export const QuestDocuments = ({ quest, editable }: QuestDocumentsProps) => {
   return (
     <div className="p-4 rounded-lg border border-gray-dim">
       <header className="flex gap-1 items-center pb-4">
-        <h3 className="text-gray-dim text-sm">Documents</h3>
+        <Heading className="text-gray-dim text-sm">Documents</Heading>
         <Badge size="xs" className="rounded-full">
           {documents?.length || 0}
         </Badge>

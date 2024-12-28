@@ -5,7 +5,7 @@ export function Form(props: FormProps) {
   return (
     <AriaForm
       {...props}
-      className={twMerge("flex flex-col gap-6 w-full", props.className)}
+      className={twMerge("flex flex-col gap-6", props.className)}
     />
   );
 }

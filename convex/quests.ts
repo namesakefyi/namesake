@@ -134,16 +134,6 @@ export const setTimeRequired = userMutation({
   },
 });
 
-export const setTitle = userMutation({
-  args: {
-    questId: v.id("quests"),
-    title: v.string(),
-  },
-  handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, { title: args.title });
-  },
-});
-
 export const setContent = userMutation({
   args: {
     questId: v.id("quests"),
