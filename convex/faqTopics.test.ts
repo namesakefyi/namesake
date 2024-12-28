@@ -4,61 +4,61 @@ import { api } from "./_generated/api";
 import schema from "./schema";
 import { modules } from "./test.setup";
 
-describe("topics", () => {
+describe("faqTopics", () => {
   it("creates a topic", async () => {
     const t = convexTest(schema, modules);
     // Create a topic
-    const topicId = await t.mutation(api.topics.create, {
-      topic: "Immigration",
+    const topicId = await t.mutation(api.faqTopics.create, {
+      title: "Immigration",
     });
 
     // Verify topic creation
-    const topics = await t.query(api.topics.getAll);
+    const topics = await t.query(api.faqTopics.getAll);
     const createdTopic = topics.find((t) => t._id === topicId);
     expect(createdTopic).toBeTruthy();
-    expect(createdTopic?.topic).toBe("Immigration");
+    expect(createdTopic?.title).toBe("Immigration");
   });
 
   it("updates a topic", async () => {
     const t = convexTest(schema, modules);
     // Create a topic
-    const topicId = await t.mutation(api.topics.create, {
-      topic: "Immigration",
+    const topicId = await t.mutation(api.faqTopics.create, {
+      title: "Immigration",
     });
 
     // Update the topic
-    await t.mutation(api.topics.set, {
+    await t.mutation(api.faqTopics.set, {
       topicId,
-      topic: "Adoption",
+      title: "Adoption",
     });
 
     // Verify topic update
-    const topics = await t.query(api.topics.getAll);
+    const topics = await t.query(api.faqTopics.getAll);
     const updatedTopic = topics.find((t) => t._id === topicId);
     expect(updatedTopic).toBeTruthy();
-    expect(updatedTopic?.topic).toBe("Adoption");
+    expect(updatedTopic?.title).toBe("Adoption");
   });
 
   it("deletes a topic", async () => {
     const t = convexTest(schema, modules);
     // Create a topic
-    const topicId = await t.mutation(api.topics.create, {
-      topic: "Immigration",
+    const topicId = await t.mutation(api.faqTopics.create, {
+      title: "Immigration",
     });
 
     // Verify topic creation
-    const topics = await t.query(api.topics.getAll);
+    const topics = await t.query(api.faqTopics.getAll);
     const createdTopic = topics.find((t) => t._id === topicId);
     expect(createdTopic).toBeTruthy();
-    expect(createdTopic?.topic).toBe("Immigration");
+    expect(createdTopic?.title).toBe("Immigration");
 
     // Delete the topic
-    await t.mutation(api.topics.deleteForever, {
+    await t.mutation(api.faqTopics.deleteForever, {
       topicId,
     });
 
     // Verify topic deletion
-    const topicsAfter = await t.query(api.topics.getAll);
+    const topicsAfter = await t.query(api.faqTopics.getAll);
     const deletedTopic = topicsAfter.find((t) => t._id === topicId);
     expect(deletedTopic).toBeUndefined();
   });
@@ -68,31 +68,31 @@ describe("topics", () => {
 
     // Mock topics
     await t.run(async (ctx) => {
-      await ctx.db.insert("topics", { topic: "Immigration" });
-      await ctx.db.insert("topics", { topic: "Adoption" });
-      await ctx.db.insert("topics", { topic: "Costs" });
+      await ctx.db.insert("faqTopics", { title: "Immigration" });
+      await ctx.db.insert("faqTopics", { title: "Adoption" });
+      await ctx.db.insert("faqTopics", { title: "Costs" });
     });
 
     // Get all topics
-    const topics = await t.query(api.topics.getAll);
+    const topics = await t.query(api.faqTopics.getAll);
 
     // Verify topics
     expect(topics.length).toBe(3);
-    expect(topics[0].topic).toBe("Immigration");
-    expect(topics[1].topic).toBe("Adoption");
-    expect(topics[2].topic).toBe("Costs");
+    expect(topics[0].title).toBe("Immigration");
+    expect(topics[1].title).toBe("Adoption");
+    expect(topics[2].title).toBe("Costs");
   });
 
-  it("errors if attempting to delete a topic with questions", async () => {
+  it("errors if attempting to delete a topic with faqs", async () => {
     const t = convexTest(schema, modules);
 
     // Create a topic first
-    const topicId = await t.mutation(api.topics.create, {
-      topic: "Costs",
+    const topicId = await t.mutation(api.faqTopics.create, {
+      title: "Costs",
     });
 
-    // Create a question
-    await t.mutation(api.questions.create, {
+    // Create an faq
+    await t.mutation(api.faqs.create, {
       question: "How much does the process cost?",
       answer: "It varies.",
       topics: [topicId],
@@ -100,9 +100,9 @@ describe("topics", () => {
 
     // Attempt to delete the topic
     await expect(
-      t.mutation(api.topics.deleteForever, {
+      t.mutation(api.faqTopics.deleteForever, {
         topicId,
       }),
-    ).rejects.toThrowError("Cannot delete topic with questions");
+    ).rejects.toThrowError("Cannot delete topic attached to existing faqs");
   });
 });

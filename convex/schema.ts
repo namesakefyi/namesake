@@ -46,37 +46,37 @@ const formPages = defineTable({
       }),
     ),
   ),
-  /** Optional questions related to the page. */
-  questions: v.optional(v.array(v.id("questions"))),
+  /** Optional faqs related to the page. */
+  faqs: v.optional(v.array(v.id("faqs"))),
 }).index("formId", ["formId"]);
 
 // ----------------------------------------------
-// Questions
+// FAQs
 // ----------------------------------------------
-
-/**
- * A shared topic used to tag and organize questions.
- */
-const topics = defineTable({
-  /** The name of the topic. Should be short and unique. */
-  topic: v.string(),
-});
 
 /**
  * A frequently asked question and its answer.
  */
-const questions = defineTable({
+const faqs = defineTable({
   /** A frequently asked question. */
   question: v.string(),
   /** The rich text answer to the question, stored as HTML. */
   answer: v.string(),
   /** One or more topics related to the question. */
-  topics: v.array(v.id("topics")),
+  topics: v.array(v.id("faqTopics")),
   /** Optional quests related to the question. */
   relatedQuests: v.optional(v.array(v.id("quests"))),
 })
   .index("topics", ["topics"])
   .index("relatedQuests", ["relatedQuests"]);
+
+/**
+ * A shared topic used to tag and organize faqs.
+ */
+const faqTopics = defineTable({
+  /** The name of the topic. Should be short and unique. */
+  title: v.string(),
+});
 
 // ----------------------------------------------
 // Quests
@@ -217,8 +217,8 @@ export default defineSchema({
   ...authTables,
   forms,
   formPages,
-  questions,
-  topics,
+  faqs,
+  faqTopics,
   documents,
   quests,
   users,
