@@ -42,7 +42,7 @@ export const create = userMutation({
         }),
       ),
     ),
-    questions: v.optional(v.array(v.id("questions"))),
+    faqs: v.optional(v.array(v.id("faqs"))),
   },
   handler: async (ctx, args) => {
     const form = await ctx.db.get(args.formId);
@@ -55,7 +55,7 @@ export const create = userMutation({
       title: args.title,
       description: args.description,
       fields: args.fields,
-      questions: args.questions,
+      faqs: args.faqs,
     });
 
     await ctx.db.patch(args.formId, {
@@ -81,7 +81,7 @@ export const update = userMutation({
         }),
       ),
     ),
-    questions: v.optional(v.array(v.id("questions"))),
+    faqs: v.optional(v.array(v.id("faqs"))),
   },
   handler: async (ctx, args) => {
     const { pageId, ...updateData } = args;
