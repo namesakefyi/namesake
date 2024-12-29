@@ -1,138 +1,74 @@
+import { Link } from "@/components/common";
 import {
-  Button,
-  Select,
-  SelectItem,
-  Switch,
-  TextField,
-} from "@/components/common";
+  AddressField,
+  CheckboxGroupField,
+  EmailField,
+  LongTextField,
+  MemorableDateField,
+  NameField,
+  RadioGroupField,
+  ShortTextField,
+} from "@/components/forms";
 import type { Doc } from "@convex/_generated/dataModel";
-import { FORM_FIELDS, type FormField } from "@convex/constants";
-import { Plus, Trash2 } from "lucide-react";
-
-interface EditableOptionsProps {
-  options: Doc<"formFields">["options"];
-  onChange: (options: Doc<"formFields">["options"]) => void;
-}
-
-export function EditableOptions({
-  options = [],
-  onChange,
-}: EditableOptionsProps) {
-  const handleAddOption = () => {
-    const newOptions = [...options, { label: "", value: "" }];
-    onChange(newOptions);
-  };
-
-  const handleRemoveOption = (index: number) => {
-    const newOptions = options.filter((_, i) => i !== index);
-    onChange(newOptions);
-  };
-
-  const handleUpdateOption = (
-    index: number,
-    updates: Partial<{ label: string; value: string }>,
-  ) => {
-    const newOptions = options.map((option, i) =>
-      i === index ? { ...option, ...updates } : option,
-    );
-    onChange(newOptions);
-  };
-
-  return (
-    <div className="space-y-2">
-      <h4 className="text-sm font-medium">Options</h4>
-      {options.map((option, index) => (
-        <div key={option.value} className="flex space-x-2 items-center">
-          <TextField
-            label="Option Label"
-            value={option.label}
-            onChange={(value) => handleUpdateOption(index, { label: value })}
-          />
-          <TextField
-            label="Option Value"
-            value={option.value?.toString() || ""}
-            onChange={(value) => handleUpdateOption(index, { value: value })}
-          />
-          <Button
-            variant="icon"
-            icon={Trash2}
-            onPress={() => handleRemoveOption(index)}
-            aria-label="Remove option"
-          />
-        </div>
-      ))}
-      <Button variant="secondary" icon={Plus} onPress={handleAddOption}>
-        Add Option
-      </Button>
-    </div>
-  );
-}
+import { useSearch } from "@tanstack/react-router";
+import { tv } from "tailwind-variants";
 
 interface EditableFormFieldProps {
   field: Doc<"formFields">;
-  index: number;
-  onUpdate: (index: number, updates: Partial<Doc<"formFields">>) => void;
-  onRemove: (index: number) => void;
 }
 
-export function EditableFormField({
-  field,
-  index,
-  onUpdate,
-  onRemove,
-}: EditableFormFieldProps) {
-  const hasOptions = FORM_FIELDS[field.type as FormField].hasOptions;
+export function EditableFormField({ field }: EditableFormFieldProps) {
+  const search = useSearch({
+    strict: false,
+  });
+
+  const isSelected = search.field === field._id;
+
+  const itemStyles = tv({
+    base: "flex flex-col gap-4 px-6 py-5 relative",
+    variants: {
+      isSelected: {
+        true: "rounded-lg outline outline-2 outline-purple-9 dark:outline-purpledark-9",
+        false: "hover:bg-graya-3 dark:hover:bg-graydarka-3",
+      },
+    },
+  });
 
   return (
-    <div className="p-4 border rounded-lg border-gray-dim flex flex-col space-y-4">
-      <Select
-        label="Field Type"
-        selectedKey={field.type}
-        onSelectionChange={(value) =>
-          onUpdate(index, { type: value as keyof typeof FORM_FIELDS })
-        }
-      >
-        {Object.entries(FORM_FIELDS).map(
-          ([fieldType, { icon: Icon, label }]) => (
-            <SelectItem key={fieldType} id={fieldType} textValue={label}>
-              <Icon size={16} />
-              {label}
-            </SelectItem>
-          ),
-        )}
-      </Select>
-      <TextField
-        label="Label"
-        name={`label-${index}`}
-        value={field.label}
-        onChange={(value) => onUpdate(index, { label: value })}
-      />
-      <TextField
-        label="Name"
-        name={`name-${index}`}
-        value={field.name}
-        onChange={(value) => onUpdate(index, { name: value })}
-      />
-      {hasOptions && (
-        <EditableOptions
-          options={field.options}
-          onChange={(options) => onUpdate(index, { options })}
+    <div className={itemStyles({ isSelected })}>
+      {!isSelected && (
+        <Link
+          href={{ to: ".", search: { field: field._id } }}
+          aria-label="Edit field"
+          className="absolute inset-0"
         />
       )}
-      <div className="flex items-center space-x-2 justify-end">
-        <Switch
-          isSelected={field.required}
-          onChange={(value) => onUpdate(index, { required: value })}
-        >
-          Required
-        </Switch>
-        <Button
-          variant="icon"
-          icon={Trash2}
-          onPress={() => onRemove(index)}
-          aria-label="Remove field"
+      {field.type === "address" && <AddressField />}
+      {field.type === "shortText" && (
+        <ShortTextField label={field.label || ""} name={field.name || ""} />
+      )}
+      {field.type === "longText" && (
+        <LongTextField label={field.label || ""} name={field.name || ""} />
+      )}
+      {field.type === "email" && <EmailField />}
+      {field.type === "checkboxGroup" && (
+        <CheckboxGroupField
+          label={field.label || ""}
+          name={field.name || ""}
+          options={field.options || []}
         />
-      </div>
+      )}
+      {field.type === "radioGroup" && (
+        <RadioGroupField
+          label={field.label || ""}
+          name={field.name || ""}
+          options={field.options || []}
+        />
+      )}
+      {field.type === "memorableDate" && (
+        <MemorableDateField label={field.label || ""} />
+      )}
+      {field.type === "name" && <NameField />}
     </div>
   );
 }

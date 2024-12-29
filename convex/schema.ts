@@ -54,9 +54,9 @@ const formFields = defineTable({
   /** The type of field, e.g. "email", "checkboxGroup", "longText" */
   type: formField,
   /** The user-visible label for the field. */
-  label: v.string(),
+  label: v.optional(v.string()),
   /** A unique key for the field used to store user data. */
-  name: v.string(),
+  name: v.optional(v.string()),
   /** Whether the field is required. */
   required: v.optional(v.boolean()),
   /** Options for group fields like checkboxes, radios, and selects. */

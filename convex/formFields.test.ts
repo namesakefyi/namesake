@@ -123,7 +123,23 @@ describe("formFields", () => {
 
       const asUser = t.withIdentity({ subject: userId });
 
+      const formId = await t.run(async (ctx) => {
+        return await ctx.db.insert("forms", {
+          createdBy: userId,
+          pages: [],
+        });
+      });
+
+      const pageId = await t.run(async (ctx) => {
+        return await ctx.db.insert("formPages", {
+          formId,
+          title: "Test Page",
+          fields: [],
+        });
+      });
+
       const fieldId = await asUser.mutation(api.formFields.create, {
+        formPageId: pageId,
         type: "shortText",
         label: "Phone Number",
         name: "phoneNumber",

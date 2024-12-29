@@ -4,8 +4,9 @@ import { userMutation } from "./helpers";
 import { formField } from "./validators";
 
 export const getById = query({
-  args: { fieldId: v.id("formFields") },
+  args: { fieldId: v.optional(v.id("formFields")) },
   handler: async (ctx, { fieldId }) => {
+    if (!fieldId) return null;
     return await ctx.db.get(fieldId);
   },
 });
@@ -28,18 +29,33 @@ export const getAll = query({
 
 export const create = userMutation({
   args: {
+    formPageId: v.id("formPages"),
     type: formField,
-    label: v.string(),
-    name: v.string(),
+    label: v.optional(v.string()),
+    name: v.optional(v.string()),
     required: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.insert("formFields", {
+    const page = await ctx.db.get(args.formPageId);
+
+    if (!page) {
+      throw new Error("Form page not found");
+    }
+
+    const existingFields = page.fields ?? [];
+
+    const fieldId = await ctx.db.insert("formFields", {
       type: args.type,
       label: args.label,
       name: args.name,
       required: args.required,
     });
+
+    await ctx.db.patch(args.formPageId, {
+      fields: [...existingFields, fieldId],
+    });
+
+    return fieldId;
   },
 });
 
@@ -47,9 +63,17 @@ export const update = userMutation({
   args: {
     fieldId: v.id("formFields"),
     type: formField,
-    label: v.string(),
-    name: v.string(),
+    label: v.optional(v.string()),
+    name: v.optional(v.string()),
     required: v.optional(v.boolean()),
+    options: v.optional(
+      v.array(
+        v.object({
+          label: v.string(),
+          value: v.string(),
+        }),
+      ),
+    ),
   },
   handler: async (ctx, args) => {
     return await ctx.db.patch(args.fieldId, {
@@ -57,6 +81,7 @@ export const update = userMutation({
       label: args.label,
       name: args.name,
       required: args.required,
+      options: args.options,
     });
   },
 });
@@ -64,6 +89,8 @@ export const update = userMutation({
 export const remove = userMutation({
   args: { fieldId: v.id("formFields") },
   handler: async (ctx, { fieldId }) => {
+    // TODO: Remove field from all form pages
+
     return await ctx.db.delete(fieldId);
   },
 });

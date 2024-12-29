@@ -27,7 +27,7 @@ import { Route as AuthenticatedHomeQuestsIndexImport } from './routes/_authentic
 import { Route as AuthenticatedHomeQuestsQuestIdIndexImport } from './routes/_authenticated/_home/quests.$questId.index'
 import { Route as AuthenticatedHomeQuestsQuestIdFormImport } from './routes/_authenticated/_home/quests.$questId.form'
 import { Route as AuthenticatedHomeQuestsQuestIdEditIndexImport } from './routes/_authenticated/_home/quests.$questId.edit.index'
-import { Route as AuthenticatedHomeQuestsQuestIdEditFormImport } from './routes/_authenticated/_home/quests.$questId.edit.form'
+import { Route as AuthenticatedHomeQuestsQuestIdEditFormImport } from './routes/_authenticated/_home_.quests.$questId.edit.form'
 
 // Create/Update Routes
 
@@ -137,9 +137,9 @@ const AuthenticatedHomeQuestsQuestIdEditIndexRoute =
 
 const AuthenticatedHomeQuestsQuestIdEditFormRoute =
   AuthenticatedHomeQuestsQuestIdEditFormImport.update({
-    id: '/quests/$questId/edit/form',
+    id: '/_home_/quests/$questId/edit/form',
     path: '/quests/$questId/edit/form',
-    getParentRoute: () => AuthenticatedHomeRoute,
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -251,12 +251,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeQuestsQuestIdIndexImport
       parentRoute: typeof AuthenticatedHomeImport
     }
-    '/_authenticated/_home/quests/$questId/edit/form': {
-      id: '/_authenticated/_home/quests/$questId/edit/form'
+    '/_authenticated/_home_/quests/$questId/edit/form': {
+      id: '/_authenticated/_home_/quests/$questId/edit/form'
       path: '/quests/$questId/edit/form'
       fullPath: '/quests/$questId/edit/form'
       preLoaderRoute: typeof AuthenticatedHomeQuestsQuestIdEditFormImport
-      parentRoute: typeof AuthenticatedHomeImport
+      parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/_home/quests/$questId/edit/': {
       id: '/_authenticated/_home/quests/$questId/edit/'
@@ -309,7 +309,6 @@ interface AuthenticatedHomeRouteChildren {
   AuthenticatedHomeQuestsIndexRoute: typeof AuthenticatedHomeQuestsIndexRoute
   AuthenticatedHomeQuestsQuestIdFormRoute: typeof AuthenticatedHomeQuestsQuestIdFormRoute
   AuthenticatedHomeQuestsQuestIdIndexRoute: typeof AuthenticatedHomeQuestsQuestIdIndexRoute
-  AuthenticatedHomeQuestsQuestIdEditFormRoute: typeof AuthenticatedHomeQuestsQuestIdEditFormRoute
   AuthenticatedHomeQuestsQuestIdEditIndexRoute: typeof AuthenticatedHomeQuestsQuestIdEditIndexRoute
 }
 
@@ -320,8 +319,6 @@ const AuthenticatedHomeRouteChildren: AuthenticatedHomeRouteChildren = {
     AuthenticatedHomeQuestsQuestIdFormRoute,
   AuthenticatedHomeQuestsQuestIdIndexRoute:
     AuthenticatedHomeQuestsQuestIdIndexRoute,
-  AuthenticatedHomeQuestsQuestIdEditFormRoute:
-    AuthenticatedHomeQuestsQuestIdEditFormRoute,
   AuthenticatedHomeQuestsQuestIdEditIndexRoute:
     AuthenticatedHomeQuestsQuestIdEditIndexRoute,
 }
@@ -333,12 +330,15 @@ interface AuthenticatedRouteChildren {
   AuthenticatedBrowseRouteRoute: typeof AuthenticatedBrowseRouteRouteWithChildren
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRouteWithChildren
+  AuthenticatedHomeQuestsQuestIdEditFormRoute: typeof AuthenticatedHomeQuestsQuestIdEditFormRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedBrowseRouteRoute: AuthenticatedBrowseRouteRouteWithChildren,
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedHomeRoute: AuthenticatedHomeRouteWithChildren,
+  AuthenticatedHomeQuestsQuestIdEditFormRoute:
+    AuthenticatedHomeQuestsQuestIdEditFormRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -408,7 +408,7 @@ export interface FileRoutesById {
   '/_authenticated/_home/quests/': typeof AuthenticatedHomeQuestsIndexRoute
   '/_authenticated/_home/quests/$questId/form': typeof AuthenticatedHomeQuestsQuestIdFormRoute
   '/_authenticated/_home/quests/$questId/': typeof AuthenticatedHomeQuestsQuestIdIndexRoute
-  '/_authenticated/_home/quests/$questId/edit/form': typeof AuthenticatedHomeQuestsQuestIdEditFormRoute
+  '/_authenticated/_home_/quests/$questId/edit/form': typeof AuthenticatedHomeQuestsQuestIdEditFormRoute
   '/_authenticated/_home/quests/$questId/edit/': typeof AuthenticatedHomeQuestsQuestIdEditIndexRoute
 }
 
@@ -462,7 +462,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_home/quests/'
     | '/_authenticated/_home/quests/$questId/form'
     | '/_authenticated/_home/quests/$questId/'
-    | '/_authenticated/_home/quests/$questId/edit/form'
+    | '/_authenticated/_home_/quests/$questId/edit/form'
     | '/_authenticated/_home/quests/$questId/edit/'
   fileRoutesById: FileRoutesById
 }
@@ -496,7 +496,8 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/browse",
         "/_authenticated/settings",
-        "/_authenticated/_home"
+        "/_authenticated/_home",
+        "/_authenticated/_home_/quests/$questId/edit/form"
       ]
     },
     "/_unauthenticated": {
@@ -530,7 +531,6 @@ export const routeTree = rootRoute
         "/_authenticated/_home/quests/",
         "/_authenticated/_home/quests/$questId/form",
         "/_authenticated/_home/quests/$questId/",
-        "/_authenticated/_home/quests/$questId/edit/form",
         "/_authenticated/_home/quests/$questId/edit/"
       ]
     },
@@ -574,9 +574,9 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/_home/quests.$questId.index.tsx",
       "parent": "/_authenticated/_home"
     },
-    "/_authenticated/_home/quests/$questId/edit/form": {
-      "filePath": "_authenticated/_home/quests.$questId.edit.form.tsx",
-      "parent": "/_authenticated/_home"
+    "/_authenticated/_home_/quests/$questId/edit/form": {
+      "filePath": "_authenticated/_home_.quests.$questId.edit.form.tsx",
+      "parent": "/_authenticated"
     },
     "/_authenticated/_home/quests/$questId/edit/": {
       "filePath": "_authenticated/_home/quests.$questId.edit.index.tsx",

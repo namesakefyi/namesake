@@ -12,7 +12,7 @@ import {
   QuestCosts,
   QuestDetails,
   QuestDocuments,
-  QuestForm,
+  QuestFormButton,
   QuestPageHeader,
   QuestTimeRequired,
   QuestUrls,
@@ -123,7 +123,7 @@ function QuestEditRoute() {
         <QuestDocuments quest={quest} editable />
         <QuestUrls urls={quest.urls} />
         <QuestContent initialContent={quest.content} onChange={setContent} />
-        <QuestForm quest={quest} editable />
+        <QuestFormButton quest={quest} editable />
       </div>
     </AppContent>
   );

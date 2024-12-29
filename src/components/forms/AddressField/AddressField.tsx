@@ -28,8 +28,9 @@ export function AddressField({ children }: AddressFieldProps) {
           autoComplete="street-address"
           value={address}
           onChange={setAddress}
-          maxLength={48}
+          maxLength={40}
           size="large"
+          className="max-w-[40ch]"
         />
         <TextField
           label="City"
@@ -37,8 +38,9 @@ export function AddressField({ children }: AddressFieldProps) {
           autoComplete="address-level2"
           value={city}
           onChange={setCity}
-          maxLength={48}
+          maxLength={40}
           size="large"
+          className="max-w-[40ch]"
         />
         <div className="flex gap-2 *:flex-1">
           <Select
