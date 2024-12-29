@@ -29,7 +29,7 @@ export function CheckboxGroupField({
         <span className="italic text-gray-dim text-sm">
           Select all that apply:
         </span>
-        {options.map(({ label, ...option }) => (
+        {options?.map(({ label, ...option }) => (
           <Checkbox
             key={option.value}
             {...option}

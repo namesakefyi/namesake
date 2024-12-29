@@ -48,7 +48,6 @@ export const create = userMutation({
       type: args.type,
       label: args.label,
       name: args.name,
-      required: args.required,
     });
 
     await ctx.db.patch(args.formPageId, {
@@ -80,7 +79,6 @@ export const update = userMutation({
       type: args.type,
       label: args.label,
       name: args.name,
-      required: args.required,
       options: args.options,
     });
   },

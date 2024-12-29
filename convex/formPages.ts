@@ -3,15 +3,17 @@ import { mutation, query } from "./_generated/server";
 import { userMutation } from "./helpers";
 
 export const getById = query({
-  args: { pageId: v.id("formPages") },
+  args: { pageId: v.optional(v.id("formPages")) },
   handler: async (ctx, { pageId }) => {
+    if (!pageId) return null;
     return await ctx.db.get(pageId);
   },
 });
 
 export const getAllByFormId = query({
-  args: { formId: v.id("forms") },
+  args: { formId: v.optional(v.id("forms")) },
   handler: async (ctx, { formId }) => {
+    if (!formId) return null;
     return await ctx.db
       .query("formPages")
       .filter((q) => q.eq(q.field("formId"), formId))

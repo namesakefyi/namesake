@@ -27,7 +27,7 @@ export function RadioGroupField({
     <div className="@container flex flex-col gap-4">
       <RadioGroup label={label} name={name} size="large">
         <span className="italic text-gray-dim text-sm">Select one:</span>
-        {options.map(({ label, ...option }) => (
+        {options?.map(({ label, ...option }) => (
           <Radio key={option.value} {...option} size="large" card>
             {label}
           </Radio>

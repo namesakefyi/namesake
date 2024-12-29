@@ -79,6 +79,7 @@ export function Button({
         <Icon
           size={size === "large" ? 20 : 16}
           strokeWidth={size === "large" ? 2.5 : 2}
+          className="shrink-0"
         />
       )}
       {children}

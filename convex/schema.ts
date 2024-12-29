@@ -57,8 +57,6 @@ const formFields = defineTable({
   label: v.optional(v.string()),
   /** A unique key for the field used to store user data. */
   name: v.optional(v.string()),
-  /** Whether the field is required. */
-  required: v.optional(v.boolean()),
   /** Options for group fields like checkboxes, radios, and selects. */
   options: v.optional(
     v.array(

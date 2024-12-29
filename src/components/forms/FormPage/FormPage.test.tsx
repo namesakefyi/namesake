@@ -1,13 +1,21 @@
+import type { Id } from "@convex/_generated/dataModel";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { FormPage } from "./FormPage";
 
 describe("FormPage", () => {
-  it("renders title correctly", () => {
-    const testTitle = "What is your legal name?";
-    render(<FormPage title={testTitle} />);
+  const mockPage = {
+    _id: "1234" as Id<"formPages">,
+    _creationTime: 1234,
+    formId: "1234" as Id<"forms">,
+    title: "What is your legal name?",
+    description: "Type your name exactly as it appears on your ID.",
+  };
 
-    const titleElement = screen.getByText(testTitle);
+  it("renders title correctly", () => {
+    render(<FormPage page={mockPage} />);
+
+    const titleElement = screen.getByText(mockPage.title);
     expect(titleElement).toBeInTheDocument();
     expect(titleElement).toHaveClass("text-2xl");
     expect(titleElement).toHaveClass("font-semibold");
@@ -15,23 +23,18 @@ describe("FormPage", () => {
   });
 
   it("renders optional description", () => {
-    const testTitle = "What is your legal name?";
-    const testDescription = "Type your name exactly as it appears on your ID.";
+    render(<FormPage page={mockPage} />);
 
-    render(<FormPage title={testTitle} description={testDescription} />);
-
-    const descriptionElement = screen.getByText(testDescription);
+    const descriptionElement = screen.getByText(mockPage.description);
     expect(descriptionElement).toBeInTheDocument();
     expect(descriptionElement).toHaveClass("text-base");
     expect(descriptionElement).toHaveClass("text-gray-dim");
   });
 
   it("does not render description when not provided", () => {
-    const testTitle = "Basic Information";
+    render(<FormPage page={{ ...mockPage, description: undefined }} />);
 
-    render(<FormPage title={testTitle} />);
-
-    const titleElement = screen.getByText(testTitle);
+    const titleElement = screen.getByText(mockPage.title);
     expect(titleElement).toBeInTheDocument();
 
     const descriptionQuery = screen.queryByRole("paragraph");

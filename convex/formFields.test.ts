@@ -23,7 +23,6 @@ describe("formFields", () => {
           type: "shortText",
           label: "First Name",
           name: "firstName",
-          required: true,
         });
       });
 
@@ -32,7 +31,6 @@ describe("formFields", () => {
       expect(field?.label).toBe("First Name");
       expect(field?.name).toBe("firstName");
       expect(field?.type).toBe("shortText");
-      expect(field?.required).toBe(true);
     });
   });
 
@@ -54,14 +52,12 @@ describe("formFields", () => {
           type: "shortText",
           label: "First Name",
           name: "firstName",
-          required: true,
         });
 
         const field2Id = await ctx.db.insert("formFields", {
           type: "email",
           label: "Email",
           name: "email",
-          required: true,
         });
 
         return [field1Id, field2Id];
@@ -92,14 +88,12 @@ describe("formFields", () => {
           type: "shortText",
           label: "First Name",
           name: "firstName",
-          required: true,
         });
 
         await ctx.db.insert("formFields", {
           type: "email",
           label: "Email",
           name: "email",
-          required: true,
         });
       });
 
@@ -143,7 +137,6 @@ describe("formFields", () => {
         type: "shortText",
         label: "Phone Number",
         name: "phoneNumber",
-        required: false,
       });
 
       await t.run(async (ctx) => {
@@ -152,7 +145,6 @@ describe("formFields", () => {
         expect(field?.label).toBe("Phone Number");
         expect(field?.name).toBe("phoneNumber");
         expect(field?.type).toBe("shortText");
-        expect(field?.required).toBe(false);
       });
     });
   });
@@ -175,7 +167,6 @@ describe("formFields", () => {
           type: "shortText",
           label: "Original Label",
           name: "originalName",
-          required: false,
         });
       });
 
@@ -184,7 +175,6 @@ describe("formFields", () => {
         type: "email",
         label: "Updated Label",
         name: "updatedName",
-        required: true,
       });
 
       await t.run(async (ctx) => {
@@ -193,7 +183,6 @@ describe("formFields", () => {
         expect(field?.label).toBe("Updated Label");
         expect(field?.name).toBe("updatedName");
         expect(field?.type).toBe("email");
-        expect(field?.required).toBe(true);
       });
     });
   });
@@ -216,7 +205,6 @@ describe("formFields", () => {
           type: "shortText",
           label: "To Be Deleted",
           name: "toBeDeleted",
-          required: false,
         });
       });
 

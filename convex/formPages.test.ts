@@ -79,8 +79,8 @@ describe("formPages", () => {
         formId,
       });
       expect(pages).toHaveLength(2);
-      expect(pages.map((p) => p.title)).toContain("Page 1");
-      expect(pages.map((p) => p.title)).toContain("Page 2");
+      expect(pages?.map((p) => p.title)).toContain("Page 1");
+      expect(pages?.map((p) => p.title)).toContain("Page 2");
     });
 
     it("should return an empty array for a form with no pages", async () => {
@@ -212,7 +212,6 @@ describe("formPages", () => {
           type: "shortText",
           label: "First Name",
           name: "firstName",
-          required: true,
         });
       });
 

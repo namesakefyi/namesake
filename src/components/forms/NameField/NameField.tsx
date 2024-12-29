@@ -6,8 +6,8 @@ export interface NameFieldProps {
 
 export function NameField({ children }: NameFieldProps) {
   return (
-    <div className="@container flex flex-col gap-4">
-      <div className="flex flex-col gap-x-2 gap-y-4 *:flex-1 @lg:flex-row">
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-x-2 gap-y-4 *:max-w-[28ch]">
         <TextField
           label="First name"
           name="firstName"

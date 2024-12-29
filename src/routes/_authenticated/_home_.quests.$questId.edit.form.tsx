@@ -1,16 +1,16 @@
 import { AppContent } from "@/components/app";
-import { Badge, Button, Container, Empty, Link } from "@/components/common";
-import { EditableFormPage, EditableFormSidebar } from "@/components/forms";
+import { Badge, Container, Empty, Link } from "@/components/common";
+import { EditFormSidebar, FormPage } from "@/components/forms";
 import { QuestPageHeader } from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
-import { Plus, TextCursorInput } from "lucide-react";
+import { TextCursorInput } from "lucide-react";
 import { z } from "zod";
 
 const formEditSearchSchema = z.strictObject({
-  field: z.string().optional(),
+  page: z.string().optional(),
 });
 
 export const Route = createFileRoute(
@@ -22,19 +22,16 @@ export const Route = createFileRoute(
 
 function QuestEditFormRouteComponent() {
   const { questId } = Route.useParams();
-  const { field: fieldId } = Route.useSearch();
+  const { page: pageId } = Route.useSearch();
 
-  const selectedField = useQuery(api.formFields.getById, {
-    fieldId: fieldId as Id<"formFields">,
-  });
   const quest = useQuery(api.quests.getById, {
     questId: questId as Id<"quests">,
   });
   const form = useQuery(api.forms.getByQuestId, {
     questId: questId as Id<"quests">,
   });
-  const pages = useQuery(api.formPages.getAllByQuestId, {
-    questId: questId as Id<"quests">,
+  const selectedPage = useQuery(api.formPages.getById, {
+    pageId: pageId as Id<"formPages">,
   });
 
   const createForm = useMutation(api.forms.create);
@@ -73,23 +70,10 @@ function QuestEditFormRouteComponent() {
               Done
             </Link>
           </QuestPageHeader>
-          <div className="flex flex-col gap-4">
-            {pages &&
-              pages.length > 0 &&
-              pages.map((page) => (
-                <EditableFormPage key={page._id} pageId={page._id} />
-              ))}
-            <Button
-              icon={Plus}
-              onPress={() => createPage({ formId: form._id, title: "" })}
-              size="large"
-            >
-              Add page
-            </Button>
-          </div>
+          {selectedPage && <FormPage page={selectedPage} />}
         </AppContent>
       </Container>
-      <EditableFormSidebar field={selectedField} />
+      <EditFormSidebar form={form} />
     </div>
   );
 }
