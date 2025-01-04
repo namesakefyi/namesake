@@ -1,5 +1,5 @@
 import { TextArea, TextField } from "@/components/common";
-import { EditFormSidebarSection } from "@/components/forms";
+import { EditFormFields, EditFormSidebarSection } from "@/components/forms";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
@@ -50,6 +50,7 @@ export function EditFormPage({ page }: EditFormPageProps) {
         value={values.description}
         onChange={(description) => setValues({ ...values, description })}
       />
+      <EditFormFields page={page} />
     </EditFormSidebarSection>
   );
 }

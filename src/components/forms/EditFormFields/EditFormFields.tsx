@@ -1,5 +1,4 @@
 import { Button, Select, SelectItem, TextField } from "@/components/common";
-import { EditFormSidebarSection } from "@/components/forms";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { FORM_FIELDS, type FormField } from "@convex/constants";
@@ -46,20 +45,23 @@ export function EditableOptions({
           className="flex flex-col gap-2 pl-4 border-l-gray-6 dark:border-l-graydark-6 border-l-2"
         >
           <TextField
-            label="Label"
+            label="Option Label"
             value={option.label}
             onChange={(value) => handleUpdateOption(index, { label: value })}
+            size="small"
           />
           <TextField
-            label="Value"
+            label="Option Value"
             value={option.value?.toString() || ""}
             onChange={(value) => handleUpdateOption(index, { value: value })}
+            size="small"
           />
           <Button
             variant="icon"
             icon={Trash2}
             onPress={() => handleRemoveOption(index)}
             aria-label="Remove option"
+            size="small"
           />
         </div>
       ))}
@@ -69,7 +71,7 @@ export function EditableOptions({
         size="small"
         onPress={handleAddOption}
       >
-        Add Option
+        Add option
       </Button>
     </div>
   );
@@ -82,9 +84,22 @@ interface EditFormFieldProps {
 function EditFormField({ field }: EditFormFieldProps) {
   const [values, setValues] = useState({
     type: field?.type ?? "shortText",
-    label: field?.label,
+    label: field?.label ?? "Label",
     name: field?.name,
-    options: field?.options,
+    options: field?.options ?? [
+      {
+        label: "Option 1",
+        value: "option1",
+      },
+      {
+        label: "Option 2",
+        value: "option2",
+      },
+      {
+        label: "Option 3",
+        value: "option3",
+      },
+    ],
   });
   const [debouncedValues] = useDebounce(values, 1000);
 
@@ -134,19 +149,21 @@ function EditFormField({ field }: EditFormFieldProps) {
           size="small"
         />
       </div>
-      <div className="pl-4 border-l-2 border-gray-dim flex flex-col gap-4">
+      <div className="pl-4 border-l-2 border-gray-dim flex flex-col gap-2">
         {/* TODO: Labels are conditional, don't always apply (e.g. full name, address) */}
         <TextField
           label="Label"
           name={`${field._id}-label`}
           value={values.label}
           onChange={(value) => setValues({ ...values, label: value })}
+          size="small"
         />
         <TextField
           label="Name"
           name={`${field._id}-name`}
           value={values.name}
           onChange={(value) => setValues({ ...values, name: value })}
+          size="small"
         />
         {hasOptions && (
           <EditableOptions
@@ -176,15 +193,13 @@ export function EditFormFields({ page }: EditFormFieldsProps) {
   };
 
   return (
-    <EditFormSidebarSection title="Fields">
-      <div className="flex flex-col gap-6">
-        {fields?.map((field) => (
-          <EditFormField key={field._id} field={field} />
-        ))}
-        <Button onPress={handleAddField} icon={Plus} size="small">
-          Add field
-        </Button>
-      </div>
-    </EditFormSidebarSection>
+    <div className="flex flex-col gap-6">
+      {fields?.map((field) => (
+        <EditFormField key={field._id} field={field} />
+      ))}
+      <Button onPress={handleAddField} icon={Plus} size="small">
+        Add field
+      </Button>
+    </div>
   );
 }

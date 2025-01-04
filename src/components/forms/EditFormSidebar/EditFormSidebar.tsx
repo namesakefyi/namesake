@@ -1,36 +1,8 @@
-import { Select, SelectItem } from "@/components/common";
-import { EditFormFields, EditFormPage } from "@/components/forms";
+import { EditFormPage } from "@/components/forms";
 import { api } from "@convex/_generated/api";
-import type { Doc, Id } from "@convex/_generated/dataModel";
-import { useSearch } from "@tanstack/react-router";
+import type { Doc } from "@convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { useEffect, useState } from "react";
 import { Heading } from "react-aria-components";
-
-interface PageSelectProps {
-  pages?: Doc<"formPages">[] | null;
-  selectedPageId?: Id<"formPages">;
-}
-
-function PageSelect({ pages, selectedPageId }: PageSelectProps) {
-  if (!pages) return "Add page"; // TODO: Button
-
-  return (
-    <div className="px-5 py-3">
-      <Select label="Page" selectedKey={selectedPageId}>
-        {pages?.map((page, index) => (
-          <SelectItem
-            key={page._id}
-            id={page._id}
-            href={{ to: ".", search: { page: page._id } }}
-          >
-            {index + 1} {page.title ?? "Untitled page"}
-          </SelectItem>
-        ))}
-      </Select>
-    </div>
-  );
-}
 
 interface EditFormSidebarSectionProps {
   title: string;
@@ -54,26 +26,15 @@ interface EditFormSidebarProps {
 }
 
 export function EditFormSidebar({ form }: EditFormSidebarProps) {
-  const search = useSearch({ strict: false });
   const pages = useQuery(api.formPages.getAllByFormId, {
     formId: form?._id,
   });
-  const [selectedPage, setSelectedPage] = useState<
-    Doc<"formPages"> | undefined
-  >(pages?.filter((page) => page._id === search.page)[0]);
-
-  useEffect(() => {
-    setSelectedPage(pages?.filter((page) => page._id === search.page)[0]);
-  }, [pages, search.page]);
 
   return (
-    <aside className="w-80 bg-gray-2 dark:bg-graydark-2 flex flex-col border-l border-gray-dim sticky top-0 h-screen overflow-y-auto">
-      <PageSelect
-        pages={pages}
-        selectedPageId={search.page as Id<"formPages">}
-      />
-      <EditFormPage page={selectedPage} />
-      <EditFormFields page={selectedPage} />
+    <aside className="w-96 bg-gray-2 dark:bg-graydark-2 flex flex-col border-l border-gray-dim sticky top-0 h-screen overflow-y-auto">
+      {pages?.map((page) => (
+        <EditFormPage key={page._id} page={page} />
+      ))}
     </aside>
   );
 }

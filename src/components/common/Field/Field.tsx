@@ -17,14 +17,17 @@ import {
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
 
+export type FieldSize = "small" | "medium" | "large";
+
 interface LabelProps extends AriaLabelProps {
-  size?: "medium" | "large";
+  size?: FieldSize;
 }
 
 const labelStyles = tv({
   base: "text-sm text-gray-dim cursor-default w-fit",
   variants: {
     size: {
+      small: "text-xs",
       medium: "text-sm",
       large: "text-base",
     },
@@ -101,6 +104,7 @@ const fieldGroupStyles = tv({
   variants: {
     ...fieldBorderStyles.variants,
     size: {
+      small: "min-h-8",
       medium: "min-h-10",
       large: "min-h-12 text-lg",
     },
@@ -111,7 +115,7 @@ const fieldGroupStyles = tv({
 });
 
 interface GroupProps extends AriaGroupProps {
-  size?: "medium" | "large";
+  size?: FieldSize;
 }
 
 export function FieldGroup({ size, ...props }: GroupProps) {
@@ -126,13 +130,14 @@ export function FieldGroup({ size, ...props }: GroupProps) {
 }
 
 interface InputProps extends Omit<AriaInputProps, "size"> {
-  size?: "medium" | "large";
+  size?: FieldSize;
 }
 
 export const inputStyles = tv({
   base: "flex-1 min-w-0 outline outline-0 bg-transparent text-gray-normal disabled:text-gray-dim",
   variants: {
     size: {
+      small: "px-2 h-8 text-sm",
       medium: "px-3 h-10",
       large: "px-3.5 h-12 text-lg",
     },
@@ -157,6 +162,7 @@ export const inputTextAreaStyles = tv({
   base: "flex-1 min-w-0 leading-snug outline outline-0 bg-transparent text-gray-normal disabled:text-gray-dim",
   variants: {
     size: {
+      small: "px-2 py-1",
       medium: "px-3 py-2",
       large: "px-3.5 py-2.5 text-lg leading-snug",
     },
@@ -167,7 +173,7 @@ export const inputTextAreaStyles = tv({
 });
 
 interface InputTextAreaProps extends Omit<AriaTextAreaProps, "size"> {
-  size?: "medium" | "large";
+  size?: FieldSize;
 }
 
 export function InputTextArea({ size, ...props }: InputTextAreaProps) {

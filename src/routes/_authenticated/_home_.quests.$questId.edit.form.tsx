@@ -7,22 +7,15 @@ import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { TextCursorInput } from "lucide-react";
-import { z } from "zod";
-
-const formEditSearchSchema = z.strictObject({
-  page: z.string().optional(),
-});
 
 export const Route = createFileRoute(
   "/_authenticated/_home_/quests/$questId/edit/form",
 )({
   component: QuestEditFormRouteComponent,
-  validateSearch: (search) => formEditSearchSchema.parse(search),
 });
 
 function QuestEditFormRouteComponent() {
   const { questId } = Route.useParams();
-  const { page: pageId } = Route.useSearch();
 
   const quest = useQuery(api.quests.getById, {
     questId: questId as Id<"quests">,
@@ -30,8 +23,8 @@ function QuestEditFormRouteComponent() {
   const form = useQuery(api.forms.getByQuestId, {
     questId: questId as Id<"quests">,
   });
-  const selectedPage = useQuery(api.formPages.getById, {
-    pageId: pageId as Id<"formPages">,
+  const pages = useQuery(api.formPages.getAllByFormId, {
+    formId: form?._id,
   });
 
   const createForm = useMutation(api.forms.create);
@@ -70,7 +63,11 @@ function QuestEditFormRouteComponent() {
               Done
             </Link>
           </QuestPageHeader>
-          {selectedPage && <FormPage page={selectedPage} />}
+          <div className="flex flex-col gap-6">
+            {pages?.map((page) => (
+              <FormPage key={page._id} page={page} />
+            ))}
+          </div>
         </AppContent>
       </Container>
       <EditFormSidebar form={form} />

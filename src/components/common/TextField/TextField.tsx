@@ -12,6 +12,7 @@ import {
   FieldDescription,
   FieldError,
   FieldGroup,
+  type FieldSize,
   Input,
   Label,
 } from "../Field";
@@ -23,7 +24,7 @@ export interface TextFieldProps extends AriaTextFieldProps {
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
   errorMessage?: string | ((validation: ValidationResult) => string);
-  size?: "medium" | "large";
+  size?: FieldSize;
 }
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
