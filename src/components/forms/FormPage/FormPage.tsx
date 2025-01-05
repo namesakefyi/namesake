@@ -41,12 +41,7 @@ export function FormPage({ page, children, className }: FormPageProps) {
   });
 
   return (
-    <section
-      className={twMerge(
-        "flex flex-col p-8 gap-12 border border-gray-dim rounded-xl",
-        className,
-      )}
-    >
+    <section className={twMerge("flex flex-col gap-8 py-12", className)}>
       <FormHeader title={page?.title} description={page?.description} />
       {fields?.map((field) => (
         <FormField key={field._id} field={field} />

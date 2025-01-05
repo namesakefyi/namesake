@@ -63,7 +63,7 @@ function QuestEditFormRouteComponent() {
               Done
             </Link>
           </QuestPageHeader>
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col divide-y divide-gray-dim">
             {pages?.map((page) => (
               <FormPage key={page._id} page={page} />
             ))}
