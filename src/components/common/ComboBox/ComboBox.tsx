@@ -50,9 +50,11 @@ export function ComboBox<T extends object>({
       <Label>{label}</Label>
       <FieldGroup>
         <Input />
-        <Button variant="icon" className="w-7 h-7 p-0 mr-1 outline-offset-0">
-          <ChevronDown aria-hidden className="w-4 h-4" />
-        </Button>
+        <Button
+          variant="icon"
+          className="w-7 h-7 p-0 mr-1 outline-offset-0"
+          icon={ChevronDown}
+        />
       </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>

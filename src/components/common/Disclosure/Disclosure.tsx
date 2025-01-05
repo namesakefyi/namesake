@@ -28,14 +28,14 @@ export function Disclosure({ title, children, ...props }: DisclosureProps) {
           className="w-full justify-start"
           slot="trigger"
           size="small"
-        >
-          <ChevronRight
-            size={16}
-            className={twMerge(
+          icon={ChevronRight}
+          iconProps={{
+            className: twMerge(
               "transition-transform opacity-60",
               "group-data-[expanded]:rotate-90",
-            )}
-          />
+            ),
+          }}
+        >
           {title}
         </Button>
       </Header>

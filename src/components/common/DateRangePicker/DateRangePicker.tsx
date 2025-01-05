@@ -43,9 +43,12 @@ export function DateRangePicker<T extends DateValue>({
           –
         </span>
         <DateInput slot="end" className="flex-1 px-3 py-2" />
-        <Button variant="icon" className="w-7 h-7 p-0 mr-1 outline-offset-0">
-          <CalendarIcon aria-hidden className="w-4 h-4" />
-        </Button>
+        <Button
+          variant="icon"
+          className="w-7 h-7 p-0 mr-1 outline-offset-0"
+          icon={CalendarIcon}
+          aria-label="Open date picker"
+        />
       </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>
