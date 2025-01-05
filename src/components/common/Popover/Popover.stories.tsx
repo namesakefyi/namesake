@@ -15,9 +15,7 @@ export default meta;
 
 export const Example = (args: any) => (
   <DialogTrigger>
-    <Button variant="icon" aria-label="Help">
-      <CircleHelp />
-    </Button>
+    <Button variant="icon" aria-label="Help" icon={CircleHelp} />
     <Popover {...args} className="max-w-[250px]">
       <p className="text-sm">
         For help accessing your account, please contact support.

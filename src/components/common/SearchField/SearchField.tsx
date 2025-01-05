@@ -51,6 +51,7 @@ export function SearchField({
           className="mr-1 w-7 h-7 p-0 group-empty:invisible"
           size="small"
           icon={CircleX}
+          aria-label="Clear search"
         />
       </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}

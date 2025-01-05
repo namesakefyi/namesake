@@ -108,7 +108,9 @@ export const EditEmailSetting = ({ user }: EditEmailSettingProps) => {
       description="What email would you like to use for Namesake?"
     >
       <Button icon={Pencil} onPress={() => setIsEmailModalOpen(true)}>
-        {user?.email ?? "Set email"}
+        <span className="truncate max-w-[24ch]">
+          {user?.email ?? "Set email"}
+        </span>
       </Button>
       <EditEmailModal
         isOpen={isEmailModalOpen}

@@ -66,7 +66,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
               variant="ghost"
               icon={CircleUser}
             >
-              {user?.name}
+              <span className="truncate max-w-[16ch]">{user?.name}</span>
             </Button>
             <Menu placement="top start">
               <MenuItem href={{ to: "/settings/account" }} icon={Cog}>

@@ -100,7 +100,9 @@ export const EditNameSetting = ({ user }: EditNameSettingProps) => {
   return (
     <SettingsItem label="Name" description="How should Namesake refer to you?">
       <Button icon={Pencil} onPress={() => setIsNameModalOpen(true)}>
-        {user?.name ?? "Set name"}
+        <span className="truncate max-w-[24ch]">
+          {user?.name ?? "Set name"}
+        </span>
       </Button>
       <EditNameModal
         isOpen={isNameModalOpen}

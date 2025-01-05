@@ -15,9 +15,12 @@ export type StatPopoverProps = {
 export const StatPopover = ({ tooltip, children }: StatPopoverProps) => (
   <DialogTrigger>
     <TooltipTrigger>
-      <Button variant="icon" size="small" aria-label={tooltip}>
-        <CircleHelp />
-      </Button>
+      <Button
+        variant="icon"
+        size="small"
+        aria-label={tooltip}
+        icon={CircleHelp}
+      />
       <Tooltip>{tooltip}</Tooltip>
     </TooltipTrigger>
     <Popover title={tooltip} className="p-4">
