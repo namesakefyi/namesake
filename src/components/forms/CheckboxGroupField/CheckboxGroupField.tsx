@@ -14,18 +14,25 @@ export interface CheckboxGroupFieldProps extends CheckboxGroupProps {
   children?: React.ReactNode;
   name: string;
   label: string;
+  labelHidden?: boolean;
   options: CheckboxOption[];
 }
 
 export function CheckboxGroupField({
   name,
   label,
+  labelHidden,
   options,
   children,
 }: CheckboxGroupFieldProps) {
   return (
     <div className="@container flex flex-col gap-4">
-      <CheckboxGroup label={label} name={name} size="large">
+      <CheckboxGroup
+        label={!labelHidden ? label : undefined}
+        aria-label={label}
+        name={name}
+        size="large"
+      >
         <span className="italic text-gray-dim text-sm">
           Select all that apply:
         </span>

@@ -67,7 +67,12 @@ export function Select<T extends object>({
   );
 }
 
-export function SelectItem(props: ListBoxItemProps) {
+export interface SelectItemProps extends ListBoxItemProps {
+  description?: string;
+  children: React.ReactNode;
+}
+
+export function SelectItem(props: SelectItemProps) {
   return <DropdownItem {...props} />;
 }
 

@@ -93,6 +93,9 @@ importers:
       convex-helpers:
         specifier: ^0.1.67
         version: 0.1.67(convex@1.17.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(zod@3.24.1)
+      language-name-map:
+        specifier: ^0.3.0
+        version: 0.3.0
       lucide-react:
         specifier: ^0.469.0
         version: 0.469.0(react@19.0.0)
@@ -3933,6 +3936,9 @@ packages:
   jwt-decode@4.0.0:
     resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
     engines: {node: '>=18'}
+
+  language-name-map@0.3.0:
+    resolution: {integrity: sha512-uoBHtfY6h4S2RoIpyqvQGhynX2hshQu/9S4ySbppGxG5VwEsiWZJ83xSjzx25Mb+Bmc+WxpQC0H54eNZVMWLuA==}
 
   leac@0.6.0:
     resolution: {integrity: sha512-y+SqErxb8h7nE/fiEX07jsbuhrpO9lL8eca7/Y1nuWV2moNlXhyd59iDGcRf6moVyDMbmTNzL40SUyrFU/yDpg==}
@@ -9643,6 +9649,8 @@ snapshots:
   jwt-decode@3.1.2: {}
 
   jwt-decode@4.0.0: {}
+
+  language-name-map@0.3.0: {}
 
   leac@0.6.0: {}
 

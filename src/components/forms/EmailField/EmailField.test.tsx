@@ -7,7 +7,7 @@ describe("EmailField", () => {
   it("renders email input field", () => {
     render(<EmailField />);
 
-    const emailInput = screen.getByLabelText("Email");
+    const emailInput = screen.getByLabelText("Email address");
 
     expect(emailInput).toBeInTheDocument();
     expect(emailInput).toHaveAttribute("type", "email");
@@ -18,7 +18,7 @@ describe("EmailField", () => {
   it("allows entering an email address", async () => {
     render(<EmailField />);
 
-    const emailInput: HTMLInputElement = screen.getByLabelText("Email");
+    const emailInput: HTMLInputElement = screen.getByLabelText("Email address");
 
     await userEvent.type(emailInput, "user@example.com");
     expect(emailInput.value).toBe("user@example.com");

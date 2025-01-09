@@ -3,7 +3,6 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
   category,
-  formField,
   groupQuestsBy,
   jurisdiction,
   role,
@@ -11,62 +10,6 @@ import {
   theme,
   timeRequiredUnit,
 } from "./validators";
-
-// ----------------------------------------------
-// Forms
-// ----------------------------------------------
-
-/**
- * A series of fields and pages to guide a user through
- * an application for a single quest.
- */
-const forms = defineTable({
-  /** The user who created the form. */
-  createdBy: v.id("users"),
-  /** The date the form was last updated. */
-  updatedAt: v.optional(v.number()),
-  /** The user who updated the form. */
-  updatedBy: v.optional(v.id("users")),
-  /** The pages that make up the form. */
-  pages: v.array(v.id("formPages")),
-});
-
-/**
- * A single page within a form which contains one or more fields.
- */
-const formPages = defineTable({
-  /** The form that this page belongs to. */
-  formId: v.id("forms"),
-  /** The title of the page. (e.g. "What is your name?") */
-  title: v.string(),
-  /** An optional page description. */
-  description: v.optional(v.string()),
-  /** The fields for the page. */
-  fields: v.optional(v.array(v.id("formFields"))),
-  /** Optional faqs related to the page. */
-  faqs: v.optional(v.array(v.id("faqs"))),
-}).index("formId", ["formId"]);
-
-/**
- * A single field or a group of related fields within a page.
- */
-const formFields = defineTable({
-  /** The type of field, e.g. "email", "checkboxGroup", "longText" */
-  type: formField,
-  /** The user-visible label for the field. */
-  label: v.optional(v.string()),
-  /** A unique key for the field used to store user data. */
-  name: v.optional(v.string()),
-  /** Options for group fields like checkboxes, radios, and selects. */
-  options: v.optional(
-    v.array(
-      v.object({
-        label: v.string(),
-        value: v.string(),
-      }),
-    ),
-  ),
-});
 
 // ----------------------------------------------
 // FAQs
@@ -137,11 +80,7 @@ const quests = defineTable({
   deletedAt: v.optional(v.number()),
   /** Rich text comprising the contents of the quest, stored as HTML. */
   content: v.optional(v.string()),
-  /** A form ID used to fill out this quest. */
-  formId: v.optional(v.id("forms")),
-})
-  .index("category", ["category"])
-  .index("formId", ["formId"]);
+}).index("category", ["category"]);
 
 /**
  * A PDF document that can be filled out by users.
@@ -233,9 +172,6 @@ export default defineSchema({
   ...authTables,
   faqs,
   faqTopics,
-  forms,
-  formPages,
-  formFields,
   documents,
   quests,
   users,

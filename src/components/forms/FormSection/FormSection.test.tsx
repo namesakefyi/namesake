@@ -1,40 +1,36 @@
-import type { Id } from "@convex/_generated/dataModel";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { FormPage } from "./FormPage";
+import { FormSection } from "./FormSection";
 
-describe("FormPage", () => {
-  const mockPage = {
-    _id: "1234" as Id<"formPages">,
-    _creationTime: 1234,
-    formId: "1234" as Id<"forms">,
+describe("FormSection", () => {
+  const formSection = {
     title: "What is your legal name?",
     description: "Type your name exactly as it appears on your ID.",
   };
 
   it("renders title correctly", () => {
-    render(<FormPage page={mockPage} />);
+    render(<FormSection {...formSection} />);
 
-    const titleElement = screen.getByText(mockPage.title);
+    const titleElement = screen.getByText(formSection.title);
     expect(titleElement).toBeInTheDocument();
-    expect(titleElement).toHaveClass("text-2xl");
-    expect(titleElement).toHaveClass("font-semibold");
+    expect(titleElement).toHaveClass("text-4xl");
+    expect(titleElement).toHaveClass("font-medium");
     expect(titleElement).toHaveClass("text-gray-normal");
   });
 
   it("renders optional description", () => {
-    render(<FormPage page={mockPage} />);
+    render(<FormSection {...formSection} />);
 
-    const descriptionElement = screen.getByText(mockPage.description);
+    const descriptionElement = screen.getByText(formSection.description);
     expect(descriptionElement).toBeInTheDocument();
-    expect(descriptionElement).toHaveClass("text-base");
+    expect(descriptionElement).toHaveClass("text-xl");
     expect(descriptionElement).toHaveClass("text-gray-dim");
   });
 
   it("does not render description when not provided", () => {
-    render(<FormPage page={{ ...mockPage, description: undefined }} />);
+    render(<FormSection {...formSection} description={undefined} />);
 
-    const titleElement = screen.getByText(mockPage.title);
+    const titleElement = screen.getByText(formSection.title);
     expect(titleElement).toBeInTheDocument();
 
     const descriptionQuery = screen.queryByRole("paragraph");
