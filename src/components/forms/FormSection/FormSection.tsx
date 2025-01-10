@@ -1,3 +1,4 @@
+import { smartquotes } from "@/helpers/smartquotes";
 import { Heading } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 
@@ -11,16 +12,20 @@ interface FormHeaderProps {
 
 function FormHeader({ title, description }: FormHeaderProps) {
   return (
-    <header className={"flex flex-col"}>
-      <Heading className="text-2xl font-semibold text-gray-normal">
-        {title}
+    <header className="flex flex-col gap-2">
+      <Heading className="text-4xl font-medium text-gray-normal text-pretty">
+        {smartquotes(title)}
       </Heading>
-      {description && <p className="text-base text-gray-dim">{description}</p>}
+      {description && (
+        <p className="text-xl text-gray-dim text-pretty">
+          {smartquotes(description)}
+        </p>
+      )}
     </header>
   );
 }
 
-export interface FormPageProps extends FormHeaderProps {
+export interface FormSectionProps extends FormHeaderProps {
   /** The contents of the page. */
   children?: React.ReactNode;
 
@@ -28,14 +33,19 @@ export interface FormPageProps extends FormHeaderProps {
   className?: string;
 }
 
-export function FormPage({
+export function FormSection({
   title,
   description,
   children,
   className,
-}: FormPageProps) {
+}: FormSectionProps) {
   return (
-    <section className={twMerge("flex flex-col gap-4", className)}>
+    <section
+      className={twMerge(
+        "flex flex-col gap-8 p-8 justify-center h-screen snap-center",
+        className,
+      )}
+    >
       <FormHeader title={title} description={description} />
       {children}
     </section>

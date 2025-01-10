@@ -1,8 +1,8 @@
 import type { Meta } from "@storybook/react";
-import { FormPage, type FormPageProps } from ".";
+import { FormSection, type FormSectionProps } from ".";
 
-const meta: Meta<typeof FormPage> = {
-  component: FormPage,
+const meta: Meta<typeof FormSection> = {
+  component: FormSection,
   parameters: {
     layout: "padded",
   },
@@ -10,7 +10,7 @@ const meta: Meta<typeof FormPage> = {
 
 export default meta;
 
-export const Example = (args: FormPageProps) => <FormPage {...args} />;
+export const Example = (args: FormSectionProps) => <FormSection {...args} />;
 
 Example.args = {
   children: (

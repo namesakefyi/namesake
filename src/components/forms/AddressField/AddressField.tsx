@@ -21,15 +21,16 @@ export function AddressField({ children }: AddressFieldProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-x-2 gap-y-4">
+      <div className="grid gap-4 grid-cols-[1fr_auto] [grid-template-areas:'street_street''city_city''state_zip'] max-w-[48ch]">
         <TextField
           label="Street address"
           name="addressStreet"
           autoComplete="street-address"
           value={address}
           onChange={setAddress}
-          maxLength={48}
+          maxLength={40}
           size="large"
+          className="[grid-area:street]"
         />
         <TextField
           label="City"
@@ -37,40 +38,39 @@ export function AddressField({ children }: AddressFieldProps) {
           autoComplete="address-level2"
           value={city}
           onChange={setCity}
-          maxLength={48}
+          maxLength={40}
+          size="large"
+          className="[grid-area:city]"
+        />
+        <Select
+          label="State"
+          name="addressState"
+          placeholder="Select state"
+          autoComplete="address-level1"
+          selectedKey={state}
+          onSelectionChange={(key) => {
+            setState(key as Jurisdiction);
+          }}
+          className="[grid-area:state]"
+          size="large"
+        >
+          {Object.entries(JURISDICTIONS).map(([value, label]) => (
+            <SelectItem key={value} id={value}>
+              {label}
+            </SelectItem>
+          ))}
+        </Select>
+        <TextField
+          label="ZIP"
+          name="addressZip"
+          autoComplete="postal-code"
+          value={zip}
+          onInput={(e) => setZip(e.currentTarget.value)}
+          ref={maskedZIPRef}
+          className="max-w-[14ch] [grid-area:zip]"
+          maxLength={10}
           size="large"
         />
-        <div className="flex gap-2 *:flex-1">
-          <Select
-            label="State"
-            name="addressState"
-            placeholder="Select state"
-            autoComplete="address-level1"
-            selectedKey={state}
-            onSelectionChange={(key) => {
-              setState(key as Jurisdiction);
-            }}
-            className="max-w-[22ch]"
-            size="large"
-          >
-            {Object.entries(JURISDICTIONS).map(([value, label]) => (
-              <SelectItem key={value} id={value}>
-                {label}
-              </SelectItem>
-            ))}
-          </Select>
-          <TextField
-            label="ZIP"
-            name="addressZip"
-            autoComplete="postal-code"
-            value={zip}
-            onInput={(e) => setZip(e.currentTarget.value)}
-            ref={maskedZIPRef}
-            className="max-w-[14ch]"
-            maxLength={10}
-            size="large"
-          />
-        </div>
       </div>
       {children}
     </div>

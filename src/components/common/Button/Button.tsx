@@ -6,6 +6,7 @@ import {
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import type { FieldSize } from "../Field";
 
 export interface ButtonProps extends AriaButtonProps {
   children?: React.ReactNode;
@@ -15,7 +16,7 @@ export interface ButtonProps extends AriaButtonProps {
   endIcon?: LucideIcon;
   endIconProps?: LucideProps;
   variant?: "primary" | "secondary" | "destructive" | "icon" | "ghost";
-  size?: "small" | "medium" | "large";
+  size?: FieldSize;
 }
 
 export const buttonStyles = tv({
@@ -86,6 +87,7 @@ export function Button({
         <Icon
           size={size === "large" ? 20 : 16}
           strokeWidth={size === "large" ? 2.5 : 2}
+          className="shrink-0"
           {...iconProps}
         />
       )}

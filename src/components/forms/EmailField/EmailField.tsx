@@ -8,7 +8,7 @@ export function EmailField({ children }: EmailFieldProps) {
   return (
     <div className="flex flex-col gap-4">
       <TextField
-        label="Email"
+        label="Email address"
         type="email"
         name="email"
         autoComplete="email"

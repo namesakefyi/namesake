@@ -11,10 +11,11 @@ export interface BannerProps {
   children: React.ReactNode;
   icon?: LucideIcon;
   variant?: "info" | "success" | "danger" | "warning";
+  size?: "medium" | "large";
 }
 
 const bannerStyles = tv({
-  base: "flex gap-2 p-2.5 px-3 pr-4 items-start w-full text-sm rounded-lg bg-gray-3 dark:bg-graydark-3 text-gray-dim",
+  base: "flex items-start w-full rounded-lg bg-gray-3 dark:bg-graydark-3 text-gray-dim",
   variants: {
     variant: {
       info: "bg-blue-3 dark:bg-bluedark-3 text-blue-normal [&_a]:text-blue-normal",
@@ -25,9 +26,14 @@ const bannerStyles = tv({
       warning:
         "bg-amber-3 dark:bg-amberdark-3 text-amber-normal [&_a]:text-amber-normal",
     },
+    size: {
+      medium: "gap-2 p-2.5 px-3 pr-4 text-sm",
+      large: "gap-3 p-3 text-base",
+    },
   },
   defaultVariants: {
     variant: undefined,
+    size: "medium",
   },
 });
 
@@ -46,7 +52,7 @@ const iconStyles = tv({
   },
 });
 
-export function Banner({ children, icon: Icon, variant }: BannerProps) {
+export function Banner({ children, icon: Icon, size, variant }: BannerProps) {
   const DefaultIcon = () => {
     switch (variant) {
       case "success":
@@ -63,7 +69,7 @@ export function Banner({ children, icon: Icon, variant }: BannerProps) {
   Icon = Icon ?? DefaultIcon();
 
   return (
-    <div role="alert" className={bannerStyles({ variant })}>
+    <div role="alert" className={bannerStyles({ variant, size })}>
       <Icon size={20} className={iconStyles({ variant })} />
       {children}
     </div>

@@ -1,5 +1,5 @@
 import { AppContent } from "@/components/app";
-import { AddOrGoToQuestButton } from "@/components/browse";
+import { AddOrGoToQuestButton, PreviewOrAddedBadge } from "@/components/browse";
 import {
   QuestContent,
   QuestCosts,
@@ -29,7 +29,10 @@ function RouteComponent() {
 
   return (
     <AppContent>
-      <QuestPageHeader quest={quest}>
+      <QuestPageHeader
+        quest={quest}
+        badge={<PreviewOrAddedBadge quest={quest} />}
+      >
         <AddOrGoToQuestButton quest={quest} />
       </QuestPageHeader>
       <div className="flex flex-col gap-6">

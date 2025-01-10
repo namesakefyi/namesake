@@ -28,7 +28,7 @@ function SettingsAccountRoute() {
       ) : user === null ? (
         "User not found, please reload"
       ) : (
-        <>
+        <div className="pb-8">
           <SettingsGroup title="Personal Information">
             <EditNameSetting user={user} />
             <EditEmailSetting user={user} />
@@ -42,7 +42,7 @@ function SettingsAccountRoute() {
           <SettingsGroup title="Danger Zone">
             <DeleteAccountSetting />
           </SettingsGroup>
-        </>
+        </div>
       )}
     </>
   );
