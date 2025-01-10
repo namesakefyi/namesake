@@ -74,9 +74,8 @@ export function StatusSelect({ status, isCore, onChange }: StatusSelectProps) {
 
   return (
     <MenuTrigger>
-      <Button variant="ghost" className="px-2 gap-1">
+      <Button variant="ghost" className="px-2 gap-1" endIcon={ChevronDown}>
         <StatusBadge status={status} size="lg" />
-        <ChevronDown size={16} className="right-0" />
       </Button>
       <Menu
         placement="bottom end"

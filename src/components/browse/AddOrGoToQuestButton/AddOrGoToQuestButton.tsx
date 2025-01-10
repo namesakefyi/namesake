@@ -46,12 +46,9 @@ export function AddOrGoToQuestButton({
         size={size}
         variant={size === "small" ? "secondary" : "primary"}
         className={className}
+        icon={isAdding ? LoaderCircle : Plus}
+        iconProps={isAdding ? { className: "animate-spin" } : {}}
       >
-        {isAdding ? (
-          <LoaderCircle size={16} className="animate-spin" />
-        ) : (
-          <Plus size={16} />
-        )}
         Add
       </Button>
     );

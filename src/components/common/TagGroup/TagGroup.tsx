@@ -6,13 +6,13 @@ import {
   TagGroup as AriaTagGroup,
   type TagGroupProps as AriaTagGroupProps,
   type TagProps as AriaTagProps,
-  Button,
   TagList,
   type TagListProps,
   Text,
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { Button } from "../Button";
 import { FieldDescription, Label } from "../Field";
 
 const SizeContext = createContext<"medium" | "large">("medium");
@@ -120,9 +120,14 @@ export function Tag({ children, ...props }: TagProps) {
         <>
           {children}
           {allowsRemoving && (
-            <Button slot="remove" className={removeButtonStyles}>
-              <X aria-hidden className="w-3 h-3" />
-            </Button>
+            <Button
+              slot="remove"
+              size="small"
+              variant="icon"
+              className={removeButtonStyles}
+              icon={X}
+              aria-label="Remove tag"
+            />
           )}
         </>
       ))}

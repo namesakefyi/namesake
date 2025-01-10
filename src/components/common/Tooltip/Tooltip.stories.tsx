@@ -12,15 +12,11 @@ export default meta;
 export const Example = (args: any) => (
   <div className="flex gap-2">
     <TooltipTrigger>
-      <Button variant="secondary" className="px-2">
-        <Save />
-      </Button>
+      <Button variant="secondary" className="px-2" icon={Save} />
       <Tooltip {...args}>Save</Tooltip>
     </TooltipTrigger>
     <TooltipTrigger>
-      <Button variant="secondary" className="px-2">
-        <Printer />
-      </Button>
+      <Button variant="secondary" className="px-2" icon={Printer} />
       <Tooltip {...args}>Print</Tooltip>
     </TooltipTrigger>
   </div>

@@ -23,6 +23,17 @@ describe("EditNameSetting", () => {
     expect(screen.getByText("John Doe")).toBeInTheDocument();
   });
 
+  it("truncates very long names", () => {
+    render(
+      <EditNameSetting
+        user={{ ...mockUser, name: "Evaaaaaaaaaaaaaaaaaaaa" }}
+      />,
+    );
+    expect(screen.getByText("Evaaaaaaaaaaaaaaaaaaaa")).toHaveClass(
+      "truncate max-w-[24ch]",
+    );
+  });
+
   it("renders 'Set name' if name is not set", () => {
     render(<EditNameSetting user={{ ...mockUser, name: undefined }} />);
     expect(

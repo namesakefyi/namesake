@@ -33,6 +33,17 @@ describe("EditEmailSetting", () => {
     ).toBeInTheDocument();
   });
 
+  it("truncates very long emails", () => {
+    render(
+      <EditEmailSetting
+        user={{ ...mockUser, email: "evaaaaaaaaaaaaaaaaaaaa@gmail.com" }}
+      />,
+    );
+    expect(screen.getByText("evaaaaaaaaaaaaaaaaaaaa@gmail.com")).toHaveClass(
+      "truncate max-w-[24ch]",
+    );
+  });
+
   it("populates the correct email when the modal is opened", async () => {
     const user = userEvent.setup();
     render(<EditEmailSetting user={mockUser} />);

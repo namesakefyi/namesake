@@ -1,5 +1,5 @@
 import { focusRing } from "@/components/utils";
-import type { LucideIcon } from "lucide-react";
+import type { LucideIcon, LucideProps } from "lucide-react";
 import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,
@@ -10,7 +10,11 @@ import type { FieldSize } from "../Field";
 
 export interface ButtonProps extends AriaButtonProps {
   children?: React.ReactNode;
+  label?: string;
   icon?: LucideIcon;
+  iconProps?: LucideProps;
+  endIcon?: LucideIcon;
+  endIconProps?: LucideProps;
   variant?: "primary" | "secondary" | "destructive" | "icon" | "ghost";
   size?: FieldSize;
 }
@@ -60,6 +64,9 @@ export function Button({
   variant,
   size,
   icon: Icon,
+  iconProps,
+  endIcon: EndIcon,
+  endIconProps,
   className,
   children,
   ...props
@@ -81,9 +88,17 @@ export function Button({
           size={size === "large" ? 20 : 16}
           strokeWidth={size === "large" ? 2.5 : 2}
           className="shrink-0"
+          {...iconProps}
         />
       )}
       {children}
+      {EndIcon && (
+        <EndIcon
+          size={size === "large" ? 20 : 16}
+          strokeWidth={size === "large" ? 2.5 : 2}
+          {...endIconProps}
+        />
+      )}
     </AriaButton>
   );
 }
