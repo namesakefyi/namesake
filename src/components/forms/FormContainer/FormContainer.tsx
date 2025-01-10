@@ -4,15 +4,10 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
-import type { Jurisdiction } from "@convex/constants";
 import { useRouter } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 
 export interface FormContainerProps {
-  /** The title of the quest. */
-  title: string;
-  /** The state for the quest. */
-  jurisdiction?: Jurisdiction;
   /** The contents of the page. */
   children?: React.ReactNode;
 }

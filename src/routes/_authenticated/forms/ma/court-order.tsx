@@ -21,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/forms/ma/court-order")({
 
 function RouteComponent() {
   return (
-    <FormContainer title="Court Order" jurisdiction="MA">
+    <FormContainer>
       <FormSection
         title="Let's get started."
         description="The questions below are used to fill out the necessary forms to file your name change."
