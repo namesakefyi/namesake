@@ -22,20 +22,21 @@ export function FormContainer({ children }: FormContainerProps) {
 
   return (
     <main className="h-screen w-screen fixed overflow-y-scroll snap-y snap-proximity">
+      <Container className="w-[720px]">{children}</Container>
+      {/* Intentionally placed *after* content to prioritize tab order */}
       <TooltipTrigger>
         <Button
           className="fixed top-4 left-4 z-10"
           onPress={() => {
             history.go(-1);
           }}
-          aria-label="Go back"
+          aria-label="Save and exit"
           icon={ArrowLeft}
           variant="icon"
           size="large"
         />
-        <Tooltip placement="right">Go back</Tooltip>
+        <Tooltip placement="right">Save and exit</Tooltip>
       </TooltipTrigger>
-      <Container className="w-[720px]">{children}</Container>
     </main>
   );
 }

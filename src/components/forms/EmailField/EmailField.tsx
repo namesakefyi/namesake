@@ -13,7 +13,6 @@ export function EmailField({ children }: EmailFieldProps) {
         name="email"
         autoComplete="email"
         size="large"
-        className="max-w-[40ch]"
       />
       {children}
     </div>

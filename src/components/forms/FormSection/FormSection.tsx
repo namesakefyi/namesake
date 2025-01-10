@@ -42,7 +42,7 @@ export function FormSection({
   return (
     <section
       className={twMerge(
-        "flex flex-col gap-8 py-8 justify-center h-screen snap-center",
+        "flex flex-col gap-8 p-8 justify-center h-screen snap-center",
         className,
       )}
     >

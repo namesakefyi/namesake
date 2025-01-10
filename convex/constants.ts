@@ -331,3 +331,9 @@ export const DEFAULT_TIME_REQUIRED: TimeRequired = {
   max: 10,
   unit: "minutes",
 };
+
+export const COMMON_PRONOUNS = [
+  "they/them/theirs",
+  "she/her/hers",
+  "he/him/his",
+];

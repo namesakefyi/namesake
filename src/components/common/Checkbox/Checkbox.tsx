@@ -57,7 +57,7 @@ const checkboxStyles = tv({
       large: "gap-3",
     },
     card: {
-      true: "w-full border border-gray-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-graya-2 dark:hover:bg-graydarka-2 selected:bg-purplea-3 dark:selected:bg-purpledarka-3 selected:border-purple-dim",
+      true: "border border-gray-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-graya-2 dark:hover:bg-graydarka-2 selected:bg-purplea-3 dark:selected:bg-purpledarka-3 selected:border-purple-dim",
       false: "w-max",
     },
   },

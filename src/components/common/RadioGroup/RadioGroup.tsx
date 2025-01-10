@@ -36,7 +36,7 @@ export function RadioGroup({
       )}
     >
       <Label size={size}>{label}</Label>
-      <div className="flex group-orientation-vertical:flex-col gap-2 group-orientation-horizontal:gap-4">
+      <div className="flex group-orientation-vertical:flex-col gap-2 group-orientation-horizontal:gap-4 group-orientation-horizontal:flex-wrap">
         {children}
       </div>
       {description && <FieldDescription>{description}</FieldDescription>}
@@ -46,7 +46,7 @@ export function RadioGroup({
 }
 
 const radioItemStyles = tv({
-  base: "flex items-center group text-gray-normal disabled:opacity-50 forced-colors:disabled:text-[GrayText] transition",
+  base: "flex shrink-0 items-center group text-gray-normal disabled:opacity-50 forced-colors:disabled:text-[GrayText] transition",
   variants: {
     size: {
       medium: "gap-2",

@@ -6,8 +6,10 @@ import {
   FormContainer,
   FormSection,
   LanguageSelectField,
+  LongTextField,
   NameField,
   PhoneField,
+  PronounSelectField,
 } from "@/components/forms";
 import { YesNoField } from "@/components/forms/YesNoField/YesNoField";
 import { createFileRoute } from "@tanstack/react-router";
@@ -30,17 +32,37 @@ function RouteComponent() {
         </Banner>
       </FormSection>
       <FormSection
+        title="What is your new name?"
+        description="This is the name you're making official! Type it exactly as you want it to appear."
+      >
+        <NameField />
+      </FormSection>
+      <FormSection
         title="What is your current legal name?"
         description="This is the name you're leaving behind. Type it exactly as it appears on your ID."
       >
         <NameField />
       </FormSection>
+      <FormSection title="What is the reason you're changing your name?">
+        <LongTextField name="reason" label="Reason for name change" />
+      </FormSection>
       <FormSection
         title="What is your contact information?"
         description="The court uses this to communicate with you about your status."
+        className="@container"
       >
-        <EmailField />
-        <PhoneField />
+        <div className="grid grid-cols-1 @lg:grid-cols-[auto_1fr] @lg:grid- gap-4">
+          <PhoneField />
+          <EmailField />
+        </div>
+      </FormSection>
+      <FormSection title="Are you currently unhoused or without permanent housing?">
+        <YesNoField
+          name="unhoused"
+          label="Are you currently unhoused or without permanent housing?"
+          noLabel="No, I have a Massachusetts residential address"
+          labelHidden
+        />
       </FormSection>
       <FormSection
         title="What is your residential address?"
@@ -48,10 +70,6 @@ function RouteComponent() {
       >
         {/* TODO: Make Massachusetts state always selected */}
         <AddressField />
-        <CheckboxField
-          name="unhoused"
-          label="I'm currently unhoused or without permanent housing"
-        />
         <CheckboxField
           name="differentMailingAddress"
           label="I use a different mailing address"
@@ -71,7 +89,7 @@ function RouteComponent() {
         />
       </FormSection>
       <FormSection title="Please list all past legal names.">
-        {/* TODO: Make conditional, add inputs */}
+        <LongTextField name="pastNames" label="Past legal names" />
       </FormSection>
       <FormSection
         title="If there is a hearing for your name change, do you need an interpreter?"
@@ -87,6 +105,14 @@ function RouteComponent() {
         {/* TODO: Make conditional */}
         <LanguageSelectField />
       </FormSection>
+      <FormSection title="Do you want to share your pronouns with the court staff?">
+        <YesNoField
+          name="sharePronouns"
+          label="Share my pronouns with the court staff?"
+          labelHidden
+        />
+        <PronounSelectField />
+      </FormSection>
       <FormSection
         title="Do you want your original documents returned afterwards?"
         description="The court will return your birth certificate and any other documents you provided."
@@ -98,20 +124,6 @@ function RouteComponent() {
           yesLabel="Yes, return my documents"
           noLabel="No, I don't need my documents returned"
         />
-      </FormSection>
-      <FormSection title="Do you want to share your pronouns with the court staff?">
-        <YesNoField
-          name="sharePronouns"
-          label="Share my pronouns with the court staff?"
-          labelHidden
-        />
-        {/* TODO: Add pronouns */}
-      </FormSection>
-      <FormSection
-        title="Finally, what is your new name?"
-        description="This is the name you're making official! Type it exactly as you want it to appear."
-      >
-        <NameField />
       </FormSection>
     </FormContainer>
   );

@@ -23,7 +23,11 @@ export function LanguageSelectField({ children }: LanguageSelectFieldProps) {
           .map(([language, { name, native }]) => (
             <SelectItem key={language} id={language} textValue={name}>
               {name}
-              <Text slot="description" className="text-gray-dim">
+              <Text
+                slot="description"
+                className="text-gray-dim"
+                data-testid="native-name"
+              >
                 {native}
               </Text>
             </SelectItem>
