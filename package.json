@@ -126,7 +126,7 @@
     "tailwindcss-radix-colors": "^1.4.1",
     "tailwindcss-react-aria-components": "^1.2.0",
     "typescript": "^5.7.3",
-    "vite": "^6.0.7",
+    "vite": "^6.0.9",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.8"
   },
