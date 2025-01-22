@@ -35,7 +35,6 @@ describe("userSettings", () => {
         return await ctx.db.insert("userSettings", {
           userId,
           theme: "dark",
-          groupQuestsBy: "category",
         });
       });
 
@@ -43,7 +42,6 @@ describe("userSettings", () => {
 
       expect(settings._id).toBe(settingsId);
       expect(settings.theme).toBe("dark");
-      expect(settings.groupQuestsBy).toBe("category");
     });
   });
 
@@ -83,7 +81,6 @@ describe("userSettings", () => {
         return await ctx.db.insert("userSettings", {
           userId,
           theme: "light",
-          groupQuestsBy: "category",
         });
       });
 
@@ -93,57 +90,6 @@ describe("userSettings", () => {
 
       const settings = await t.query(api.userSettings.getByUserId, { userId });
       expect(settings.theme).toBe("dark");
-      expect(settings.groupQuestsBy).toBe("category"); // unchanged
-    });
-  });
-
-  describe("setGroupQuestsBy", () => {
-    it("should throw error if user settings not found", async () => {
-      const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
-
-      await expect(
-        asUser.mutation(api.userSettings.setGroupQuestsBy, {
-          groupQuestsBy: "status",
-        }),
-      ).rejects.toThrow("User settings not found");
-    });
-
-    it("should update existing user settings groupQuestsBy", async () => {
-      const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
-
-      await t.run(async (ctx) => {
-        return await ctx.db.insert("userSettings", {
-          userId,
-          theme: "dark",
-          groupQuestsBy: "category",
-        });
-      });
-
-      await asUser.mutation(api.userSettings.setGroupQuestsBy, {
-        groupQuestsBy: "status",
-      });
-
-      const settings = await t.query(api.userSettings.getByUserId, { userId });
-      expect(settings.groupQuestsBy).toBe("status");
-      expect(settings.theme).toBe("dark"); // unchanged
     });
   });
 });

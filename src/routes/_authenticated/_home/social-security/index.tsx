@@ -1,14 +1,15 @@
 import { AppContent, PageHeader } from "@/components/app";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_authenticated/browse/")({
+export const Route = createFileRoute("/_authenticated/_home/social-security/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   return (
     <AppContent>
-      <PageHeader title="Browse quests" />
+      <PageHeader title="Social Security" />
+      <p>Not yet available.</p>
     </AppContent>
   );
 }

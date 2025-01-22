@@ -83,7 +83,6 @@ describe("auth", () => {
 
       expect(userSettings).toBeDefined();
       expect(userSettings?.theme).toBe("system");
-      expect(userSettings?.groupQuestsBy).toBe("dateAdded");
     });
   });
 });

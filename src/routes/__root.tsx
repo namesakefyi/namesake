@@ -1,4 +1,4 @@
-import type { Role } from "@convex/constants";
+import type { Jurisdiction, Role } from "@convex/constants";
 import {
   type NavigateOptions,
   Outlet,
@@ -29,6 +29,8 @@ interface RouterContext {
   title: string;
   auth: Promise<ConvexAuthState>;
   role: Role;
+  residence: Jurisdiction;
+  birthplace: Jurisdiction;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({

@@ -147,13 +147,6 @@ export const setStatus = userMutation({
     // Throw if status is invalid
     if (!STATUS[args.status as Status]) throw new Error("Invalid status");
 
-    // Prevent setting "filed" on non-core quests
-    if (
-      STATUS[args.status as Status].isCoreOnly === true &&
-      quest.category !== "core"
-    )
-      throw new Error("This status is reserved for core quests only.");
-
     // Prevent setting the existing status
     if (userQuest.status === args.status) return;
 
@@ -321,7 +314,6 @@ export const getByStatus = userQuery({
     const initial: Record<Status, typeof validQuests> = {
       notStarted: [],
       inProgress: [],
-      filed: [],
       complete: [],
     };
 

@@ -8,15 +8,13 @@ import {
   MenuTrigger,
   Popover,
   SubmenuTrigger,
-  Tooltip,
-  TooltipTrigger,
 } from "@/components/common";
 import { useTheme } from "@/utils/useTheme";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import { THEMES, type Theme } from "@convex/constants";
 import { Authenticated, useQuery } from "convex/react";
-import { CircleUser, Cog, LogOut, Plus } from "lucide-react";
+import { CircleUser, Cog, LogOut } from "lucide-react";
 import { Logo } from "../Logo";
 
 type AppSidebarProps = {
@@ -42,20 +40,6 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
         <Badge className="-mb-1" variant="waiting">
           Beta
         </Badge>
-        <div className="ml-auto">
-          <TooltipTrigger>
-            <Link
-              href={{ to: "/browse" }}
-              button={{
-                variant: "icon",
-                className: "-mr-1",
-              }}
-            >
-              <Plus size={20} />
-            </Link>
-            <Tooltip placement="right">Browse and add quests</Tooltip>
-          </TooltipTrigger>
-        </div>
       </div>
       <div className="app-padding flex-1">{children}</div>
       <div className="app-padding h-header -ml-3 shrink-0 flex items-center sticky bottom-0 bg-gray-1 dark:bg-graydark-2">

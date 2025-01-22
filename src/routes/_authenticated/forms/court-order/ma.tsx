@@ -15,7 +15,7 @@ import { YesNoField } from "@/components/forms/YesNoField/YesNoField";
 import { createFileRoute } from "@tanstack/react-router";
 import { Lock } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/forms/ma/court-order")({
+export const Route = createFileRoute("/_authenticated/forms/court-order/ma")({
   component: RouteComponent,
 });
 

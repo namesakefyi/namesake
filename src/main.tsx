@@ -3,6 +3,7 @@ import { Logo } from "@/components/app";
 import { Empty } from "@/components/common";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
+import type { Jurisdiction, Role } from "@convex/constants";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import {
   type ConvexAuthState,
@@ -52,6 +53,8 @@ const router = createRouter({
     title: undefined!,
     auth: undefined!,
     role: undefined!,
+    residence: undefined!,
+    birthplace: undefined!,
   },
   defaultPreload: "intent",
   defaultNotFoundComponent: NotFoundComponent,
@@ -71,7 +74,10 @@ const authClient: Promise<ConvexAuthState> = new Promise((resolve) => {
 const InnerApp = () => {
   const title = "Namesake";
   const auth = useConvexAuth();
-  const role = useQuery(api.users.getCurrentRole) ?? undefined;
+  const user = useQuery(api.users.getCurrent);
+  const role = user?.role as Role;
+  const residence = user?.residence as Jurisdiction;
+  const birthplace = user?.birthplace as Jurisdiction;
 
   useEffect(() => {
     if (auth.isLoading) return;
@@ -82,7 +88,7 @@ const InnerApp = () => {
   return (
     <RouterProvider
       router={router}
-      context={{ title, auth: authClient, role }}
+      context={{ title, auth: authClient, role, residence, birthplace }}
     />
   );
 };

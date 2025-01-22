@@ -18,7 +18,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 type EditResidenceModalProps = {
-  defaultResidence: Jurisdiction;
+  defaultResidence: Jurisdiction | undefined;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onSubmit: () => void;
@@ -30,7 +30,9 @@ const EditResidenceModal = ({
   onOpenChange,
   onSubmit,
 }: EditResidenceModalProps) => {
-  const [residence, setResidence] = useState<Jurisdiction>(defaultResidence);
+  const [residence, setResidence] = useState<Jurisdiction | undefined>(
+    defaultResidence,
+  );
   const [error, setError] = useState<string>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 

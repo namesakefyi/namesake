@@ -3,7 +3,6 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
   category,
-  groupQuestsBy,
   jurisdiction,
   role,
   status,
@@ -50,7 +49,7 @@ const faqTopics = defineTable({
 const quests = defineTable({
   /** The title of the quest. (e.g. "Court Order") */
   title: v.string(),
-  /** The category of the quest. (e.g. "Core", "Social") */
+  /** The category of the quest. (e.g. "Education", "Social") */
   category: v.optional(category),
   /** The user who created the quest. */
   creationUser: v.id("users"),
@@ -127,7 +126,7 @@ const users = defineTable({
 }).index("email", ["email"]);
 
 /**
- * A unique piece of user data that has been enteed through filling a form.
+ * A unique piece of user data that has been entered through filling a form.
  */
 const userFormData = defineTable({
   /** The user who owns the data. */
@@ -148,8 +147,6 @@ const userSettings = defineTable({
   userId: v.id("users"),
   /** The user's preferred color scheme. (e.g. "system", "light", "dark") */
   theme: v.optional(theme),
-  /** The user's preferred way to group quests. (e.g. "dateAdded", "category") */
-  groupQuestsBy: v.optional(groupQuestsBy),
 }).index("userId", ["userId"]);
 
 /**
