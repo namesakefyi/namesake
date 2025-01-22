@@ -7,10 +7,13 @@ import {
   ListBoxItem,
 } from "@/components/common";
 import { api } from "@convex/_generated/api";
-import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
+import {
+  CORE_QUESTS,
+  JURISDICTIONS,
+  type Jurisdiction,
+} from "@convex/constants";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation } from "convex/react";
-import { Gavel } from "lucide-react";
 import { useState } from "react";
 import type { Selection } from "react-aria-components";
 
@@ -73,18 +76,18 @@ export const JurisdictionInterstitial = ({
       description: "Please select your birthplace.",
     },
     "court-order": {
-      title: "What state do you live in?",
+      title: "Where do you live?",
       description: "Please select your state.",
     },
     "state-id": {
-      title: "What state do you live in?",
+      title: "Where do you live?",
       description: "Please select your state.",
     },
   };
 
   return (
     <Empty
-      icon={Gavel}
+      icon={CORE_QUESTS[type].icon}
       title={copy[type].title}
       subtitle={copy[type].description}
       className="h-[100dvh]"

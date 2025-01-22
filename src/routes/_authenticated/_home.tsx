@@ -19,6 +19,7 @@ export const Route = createFileRoute("/_authenticated/_home")({
 
 function IndexRoute() {
   const MyQuests = () => {
+    const user = useQuery(api.users.getCurrent);
     const userQuestCount = useQuery(api.userQuests.count);
     const completedQuests = useQuery(api.userQuests.countCompleted);
     const questsByCategory = useQuery(api.userQuests.getByCategory);
@@ -51,6 +52,7 @@ function IndexRoute() {
             size="large"
           >
             Court Order
+            {user?.residence && <Badge size="xs">{user.residence}</Badge>}
           </NavItem>
           <NavItem
             href={{ to: "/state-id" }}
@@ -58,6 +60,7 @@ function IndexRoute() {
             size="large"
           >
             State ID
+            {user?.residence && <Badge size="xs">{user.residence}</Badge>}
           </NavItem>
           <NavItem
             href={{ to: "/social-security" }}
@@ -79,6 +82,7 @@ function IndexRoute() {
             size="large"
           >
             Birth Certificate
+            {user?.birthplace && <Badge size="xs">{user.birthplace}</Badge>}
           </NavItem>
           {Object.keys(questsByCategory).length > 0 &&
             Object.entries(questsByCategory).map(([group, quests]) => {

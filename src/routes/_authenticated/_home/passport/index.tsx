@@ -10,6 +10,7 @@ function RouteComponent() {
   return (
     <AppContent>
       <PageHeader title="Passport" badge={<Badge>US</Badge>} />
+      <p>Not yet available.</p>
     </AppContent>
   );
 }

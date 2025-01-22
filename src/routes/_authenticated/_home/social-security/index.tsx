@@ -9,6 +9,7 @@ function RouteComponent() {
   return (
     <AppContent>
       <PageHeader title="Social Security" />
+      <p>Not yet available.</p>
     </AppContent>
   );
 }
