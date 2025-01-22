@@ -12,7 +12,12 @@ export default {
     tailwindcssReactAriaComponents,
     tailwindcssAnimate,
     tailwindcssAriaAttributes,
-    tailwindcssRadixColors,
+    tailwindcssRadixColors({
+      exclude: ["mauve", "sage", "olive", "sand"],
+      aliases: {
+        slate: "gray",
+      },
+    }),
     tailwindcssContainerQueries,
   ],
 } satisfies Config;

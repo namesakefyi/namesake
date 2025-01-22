@@ -117,7 +117,7 @@ function IndexRoute() {
 
     return (
       <AppSidebar>
-        <div className="flex items-center mb-4 bg-gray-app z-10">
+        <div className="flex items-center mb-4 z-10">
           <ProgressBar
             label="Quest progress"
             value={completedQuests}
