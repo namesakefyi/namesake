@@ -2,6 +2,7 @@ export * from "./DocumentCard";
 export * from "./EditQuestBasicsModal";
 export * from "./EditQuestCostsModal";
 export * from "./EditQuestTimeRequiredModal";
+export * from "./JurisdictionInterstitial";
 export * from "./QuestContent";
 export * from "./QuestCosts";
 export * from "./QuestDetails";

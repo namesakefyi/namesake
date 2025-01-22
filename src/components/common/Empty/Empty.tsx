@@ -30,7 +30,7 @@ export function Empty({
         className,
       )}
     >
-      <Icon size={40} className="text-gray-8 dark:text-graydark-8" />
+      <Icon size={40} className="text-gray-8 dark:text-graydark-8 shrink-0" />
       <h2 className="font-semibold text-xl">{title}</h2>
       {subtitle && <p className="text-gray-dim -mt-3">{subtitle}</p>}
       <div className="flex gap-2">
