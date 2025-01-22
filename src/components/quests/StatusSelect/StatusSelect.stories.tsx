@@ -14,11 +14,3 @@ Example.args = {
   status: "notStarted",
   onChange: (status: Status) => console.log("Status changed to:", status),
 };
-
-export const WithCoreStatuses = (args: any) => <StatusSelect {...args} />;
-
-WithCoreStatuses.args = {
-  status: "filed",
-  onChange: (status: Status) => console.log("Status changed to:", status),
-  isCore: true,
-};

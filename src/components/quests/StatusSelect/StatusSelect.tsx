@@ -58,11 +58,10 @@ export function StatusBadge({ status, condensed, ...props }: StatusBadgeProps) {
 
 interface StatusSelectProps {
   status: Status;
-  isCore?: boolean;
   onChange: (status: Status) => void;
 }
 
-export function StatusSelect({ status, isCore, onChange }: StatusSelectProps) {
+export function StatusSelect({ status, onChange }: StatusSelectProps) {
   const [selectedStatus, setSelectedStatus] = useState<Selection>(
     new Set([status]),
   );
@@ -85,19 +84,16 @@ export function StatusSelect({ status, isCore, onChange }: StatusSelectProps) {
         onSelectionChange={handleSelectionChange}
       >
         <MenuSection title="Status">
-          {Object.entries(STATUS).map(([status, details]) => {
-            if (!isCore && details.isCoreOnly) return null;
-            return (
-              <MenuItem
-                key={status}
-                id={status}
-                aria-label={details.label}
-                className="h-9"
-              >
-                <StatusBadge status={status as Status} size="lg" />
-              </MenuItem>
-            );
-          })}
+          {Object.entries(STATUS).map(([status, details]) => (
+            <MenuItem
+              key={status}
+              id={status}
+              aria-label={details.label}
+              className="h-9"
+            >
+              <StatusBadge status={status as Status} size="lg" />
+            </MenuItem>
+          ))}
         </MenuSection>
       </Menu>
     </MenuTrigger>

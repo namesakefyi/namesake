@@ -1,8 +1,8 @@
 import {
+  Baby,
   Calendar,
   CalendarClock,
   CalendarDays,
-  CircleArrowRight,
   CircleCheckBig,
   CircleDashed,
   CircleHelp,
@@ -11,10 +11,13 @@ import {
   Clock,
   Computer,
   Gamepad2,
+  Gavel,
+  Globe,
   GraduationCap,
   HeartPulse,
   History,
   House,
+  IdCard,
   Landmark,
   LaptopMinimal,
   LoaderCircle,
@@ -22,9 +25,9 @@ import {
   Mail,
   MapPin,
   MessageCircle,
-  Milestone,
   Moon,
   Scale,
+  ShieldCheck,
   ShoppingBag,
   Sun,
   Zap,
@@ -117,13 +120,6 @@ export const ROLES = {
 } as const;
 export type Role = keyof typeof ROLES;
 
-export const GROUP_QUESTS_BY = {
-  dateAdded: "Date added",
-  category: "Category",
-  status: "Status",
-} as const;
-export type GroupQuestsBy = keyof typeof GROUP_QUESTS_BY;
-
 /**
  * Generic group details.
  * Used for UI display of filter groups.
@@ -134,11 +130,48 @@ export type GroupDetails = {
 };
 
 /**
+ * Core quests.
+ * Used to display the primary quests.
+ */
+export type CoreQuest =
+  | "court-order"
+  | "state-id"
+  | "social-security"
+  | "passport"
+  | "birth-certificate";
+
+export const CORE_QUESTS: Record<CoreQuest, GroupDetails> = {
+  "court-order": {
+    label: "Court Order",
+    icon: Gavel,
+  },
+  "state-id": {
+    label: "State ID",
+    icon: IdCard,
+  },
+  "social-security": {
+    label: "Social Security",
+    icon: ShieldCheck,
+  },
+  passport: {
+    label: "Passport",
+    icon: Globe,
+  },
+  "birth-certificate": {
+    label: "Birth Certificate",
+    icon: Baby,
+  },
+};
+
+export const CORE_QUESTS_ORDER: CoreQuest[] = Object.keys(
+  CORE_QUESTS,
+) as CoreQuest[];
+
+/**
  * Categories.
  * Used to filter quests in the quests list.
  */
 export type Category =
-  | "core"
   | "entertainment"
   | "devices"
   | "education"
@@ -155,10 +188,6 @@ export type Category =
   | "other";
 
 export const CATEGORIES: Record<Category, GroupDetails> = {
-  core: {
-    label: "Core",
-    icon: Milestone,
-  },
   entertainment: {
     label: "Arts and Entertainment",
     icon: Clapperboard,
@@ -246,14 +275,11 @@ export const DATE_ADDED_ORDER: DateAdded[] = Object.keys(
 
 /**
  * User quest statuses.
- * "filed" is only available for core quests.
- * "notStarted", "inProgress", and "complete" are available for all quests.
  */
-export type Status = "notStarted" | "inProgress" | "filed" | "complete";
+export type Status = "notStarted" | "inProgress" | "complete";
 
 interface StatusDetails extends GroupDetails {
   variant?: "info" | "warning" | "danger" | "waiting" | "success";
-  isCoreOnly?: boolean;
 }
 
 export const STATUS: Record<Status, StatusDetails> = {
@@ -265,12 +291,6 @@ export const STATUS: Record<Status, StatusDetails> = {
     label: "In progress",
     icon: LoaderCircle,
     variant: "warning",
-  },
-  filed: {
-    label: "Filed",
-    icon: CircleArrowRight,
-    isCoreOnly: true,
-    variant: "waiting",
   },
   complete: {
     label: "Done",

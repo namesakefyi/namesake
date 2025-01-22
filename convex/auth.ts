@@ -29,7 +29,6 @@ export const createOrUpdateUser = async (ctx: MutationCtx, args: any) => {
       ctx.db.insert("userSettings", {
         userId,
         theme: "system",
-        groupQuestsBy: "dateAdded",
       });
       return userId;
     });

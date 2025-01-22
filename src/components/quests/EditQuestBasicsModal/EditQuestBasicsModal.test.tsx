@@ -11,7 +11,7 @@ describe("EditQuestBasicsModal", () => {
   const mockQuest = {
     _id: "quest123" as Id<"quests">,
     title: "Original Quest Title",
-    category: "core",
+    category: "education",
     jurisdiction: "CA",
     creationUser: "user123" as Id<"users">,
     _creationTime: Date.now(),
@@ -42,7 +42,7 @@ describe("EditQuestBasicsModal", () => {
 
     // Check category select
     const categorySelect = screen.getByLabelText(/category/i);
-    expect(categorySelect).toHaveTextContent(CATEGORIES.core.label);
+    expect(categorySelect).toHaveTextContent(CATEGORIES.education.label);
 
     // Check jurisdiction select
     const jurisdictionSelect = screen.getByLabelText(/state/i);

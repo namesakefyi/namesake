@@ -12,7 +12,6 @@ import {
   QuestCosts,
   QuestDetails,
   QuestDocuments,
-  QuestFormButton,
   QuestPageHeader,
   QuestTimeRequired,
   QuestUrls,
@@ -70,7 +69,6 @@ function QuestDetailRoute() {
         <StatusSelect
           status={userQuest.status as Status}
           onChange={handleStatusChange}
-          isCore={quest.category === "core"}
         />
         <MenuTrigger>
           <Button
@@ -109,7 +107,6 @@ function QuestDetailRoute() {
         <QuestDocuments quest={quest} />
         <QuestUrls urls={quest.urls} />
         <QuestContent initialContent={quest.content} editable={false} />
-        <QuestFormButton quest={quest} />
       </div>
     </AppContent>
   );

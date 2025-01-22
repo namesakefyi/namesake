@@ -168,7 +168,7 @@ describe("userQuests", () => {
       const questId = await asUser.run(async (ctx) => {
         return await ctx.db.insert("quests", {
           title: "Test Quest",
-          category: "core",
+          category: "education",
           jurisdiction: "MA",
           creationUser: userId,
         });
@@ -233,7 +233,7 @@ describe("userQuests", () => {
       const questId = await t.run(async (ctx) => {
         return ctx.db.insert("quests", {
           title: "Test Quest",
-          category: "core",
+          category: "education",
           jurisdiction: "MA",
           creationUser: userId,
         });
@@ -247,54 +247,6 @@ describe("userQuests", () => {
           status: "invalid",
         }),
       ).rejects.toThrow("Invalid status");
-    });
-
-    it("should prevent setting 'filed' status on non-core quests", async () => {
-      const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
-
-      const nonCoreQuestId = await t.run(async (ctx) => {
-        return ctx.db.insert("quests", {
-          title: "Test Quest",
-          category: "housing",
-          jurisdiction: "MA",
-          creationUser: userId,
-        });
-      });
-
-      const coreQuestId = await t.run(async (ctx) => {
-        return ctx.db.insert("quests", {
-          title: "Test Quest",
-          category: "core",
-          jurisdiction: "MA",
-          creationUser: userId,
-        });
-      });
-
-      await asUser.mutation(api.userQuests.create, { questId: nonCoreQuestId });
-      await asUser.mutation(api.userQuests.create, { questId: coreQuestId });
-
-      await expect(
-        asUser.mutation(api.userQuests.setStatus, {
-          questId: nonCoreQuestId,
-          status: "filed",
-        }),
-      ).rejects.toThrow("This status is reserved for core quests only.");
-
-      await expect(
-        asUser.mutation(api.userQuests.setStatus, {
-          questId: coreQuestId,
-          status: "filed",
-        }),
-      ).resolves.toBeNull();
     });
 
     it("should add completedAt when status changed to complete", async () => {
@@ -441,7 +393,7 @@ describe("userQuests", () => {
       await t.run(async (ctx) => {
         const quest1Id = await ctx.db.insert("quests", {
           title: "Test Quest 1",
-          category: "core",
+          category: "education",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
         });
@@ -470,9 +422,9 @@ describe("userQuests", () => {
         api.userQuests.getByCategory,
         {},
       );
-      expect(Object.keys(questsByCategory)).toContain("core");
+      expect(Object.keys(questsByCategory)).toContain("education");
       expect(Object.keys(questsByCategory)).toContain("housing");
-      expect(questsByCategory.core).toHaveLength(1);
+      expect(questsByCategory.education).toHaveLength(1);
       expect(questsByCategory.housing).toHaveLength(1);
     });
   });
@@ -493,7 +445,7 @@ describe("userQuests", () => {
       await t.run(async (ctx) => {
         const quest1Id = await ctx.db.insert("quests", {
           title: "Active Quest",
-          category: "core",
+          category: "education",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
         });
