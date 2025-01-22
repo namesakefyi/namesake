@@ -1,4 +1,4 @@
-import { Banner } from '@/components/common'
+import { Banner } from "@/components/common";
 import {
   AddressField,
   CheckboxField,
@@ -10,14 +10,14 @@ import {
   NameField,
   PhoneField,
   PronounSelectField,
-} from '@/components/forms'
-import { YesNoField } from '@/components/forms/YesNoField/YesNoField'
-import { createFileRoute } from '@tanstack/react-router'
-import { Lock } from 'lucide-react'
+} from "@/components/forms";
+import { YesNoField } from "@/components/forms/YesNoField/YesNoField";
+import { createFileRoute } from "@tanstack/react-router";
+import { Lock } from "lucide-react";
 
-export const Route = createFileRoute('/_authenticated/forms/court-order/ma')({
+export const Route = createFileRoute("/_authenticated/forms/court-order/ma")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
   return (
@@ -126,5 +126,5 @@ function RouteComponent() {
         />
       </FormSection>
     </FormContainer>
-  )
+  );
 }
