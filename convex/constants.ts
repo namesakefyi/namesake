@@ -15,7 +15,6 @@ import {
   Globe,
   GraduationCap,
   HeartPulse,
-  History,
   House,
   IdCard,
   Landmark,
@@ -163,10 +162,6 @@ export const CORE_QUESTS: Record<CoreQuest, GroupDetails> = {
   },
 };
 
-export const CORE_QUESTS_ORDER: CoreQuest[] = Object.keys(
-  CORE_QUESTS,
-) as CoreQuest[];
-
 /**
  * Categories.
  * Used to filter quests in the quests list.
@@ -245,33 +240,6 @@ export const CATEGORIES: Record<Category, GroupDetails> = {
     icon: CircleHelp,
   },
 };
-
-export const CATEGORY_ORDER: Category[] = Object.keys(CATEGORIES) as Category[];
-
-/**
- * Date added filters.
- * Used to filter quests in the quests list.
- */
-export type DateAdded = "lastWeek" | "lastMonth" | "earlier";
-
-export const DATE_ADDED: Record<DateAdded, GroupDetails> = {
-  lastWeek: {
-    label: "Last 7 days",
-    icon: Calendar,
-  },
-  lastMonth: {
-    label: "Last 30 days",
-    icon: CalendarDays,
-  },
-  earlier: {
-    label: "Earlier",
-    icon: History,
-  },
-};
-
-export const DATE_ADDED_ORDER: DateAdded[] = Object.keys(
-  DATE_ADDED,
-) as DateAdded[];
 
 /**
  * User quest statuses.
