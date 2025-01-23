@@ -1,3 +1,13 @@
+import {
+  Button,
+  DropdownItem,
+  DropdownSection,
+  type DropdownSectionProps,
+  FieldDescription,
+  FieldError,
+  Label,
+  Popover,
+} from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
 import { ChevronDown } from "lucide-react";
 import type React from "react";
@@ -9,14 +19,6 @@ import {
   SelectValue,
   type ValidationResult,
 } from "react-aria-components";
-import { Button } from "../Button";
-import { FieldDescription, FieldError, Label } from "../Field";
-import {
-  DropdownItem,
-  DropdownSection,
-  type DropdownSectionProps,
-} from "../ListBox";
-import { Popover } from "../Popover";
 
 export interface SelectProps<T extends object>
   extends Omit<AriaSelectProps<T>, "children"> {

@@ -1,3 +1,4 @@
+import { FieldDescription, FieldError, Label } from "@/components/common";
 import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 import { Check, Minus } from "lucide-react";
 import type { ReactNode } from "react";
@@ -10,7 +11,6 @@ import {
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
-import { FieldDescription, FieldError, Label } from "../Field";
 
 export interface CheckboxGroupProps
   extends Omit<AriaCheckboxGroupProps, "children"> {

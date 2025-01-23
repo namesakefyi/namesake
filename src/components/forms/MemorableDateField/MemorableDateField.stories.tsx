@@ -1,5 +1,8 @@
+import {
+  MemorableDateField,
+  type MemorableDateFieldProps,
+} from "@/components/forms";
 import type { Meta } from "@storybook/react";
-import { MemorableDateField, type MemorableDateFieldProps } from ".";
 
 const meta: Meta<typeof MemorableDateField> = {
   component: MemorableDateField,

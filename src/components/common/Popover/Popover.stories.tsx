@@ -1,8 +1,6 @@
+import { Button, DialogTrigger, Popover } from "@/components/common";
 import type { Meta } from "@storybook/react";
 import { CircleHelp } from "lucide-react";
-import { Popover } from ".";
-import { Button } from "../Button";
-import { DialogTrigger } from "../Dialog";
 
 const meta: Meta<typeof Popover> = {
   component: Popover,

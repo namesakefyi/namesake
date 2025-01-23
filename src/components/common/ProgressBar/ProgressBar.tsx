@@ -1,10 +1,10 @@
+import { Label } from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
 import {
   ProgressBar as AriaProgressBar,
   type ProgressBarProps as AriaProgressBarProps,
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
-import { Label } from "../Field";
 
 export interface ProgressBarProps extends AriaProgressBarProps {
   label: string;

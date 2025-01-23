@@ -1,9 +1,7 @@
+import { Button, DialogTrigger, Popover } from "@/components/common";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { Button } from "../Button";
-import { DialogTrigger } from "../Dialog";
-import { Popover } from "./Popover";
 
 describe("Popover", () => {
   it("should render with an accessible title", async () => {

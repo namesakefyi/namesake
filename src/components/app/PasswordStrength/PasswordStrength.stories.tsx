@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react";
-import { PasswordStrength } from ".";
+import { PasswordStrength } from "./PasswordStrength";
 
 const meta: Meta<typeof PasswordStrength> = {
   component: PasswordStrength,

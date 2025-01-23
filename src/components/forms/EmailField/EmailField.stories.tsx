@@ -1,5 +1,5 @@
+import { EmailField, type EmailFieldProps } from "@/components/forms";
 import type { Meta } from "@storybook/react";
-import { EmailField, type EmailFieldProps } from ".";
 
 const meta: Meta<typeof EmailField> = {
   component: EmailField,

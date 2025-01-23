@@ -1,9 +1,9 @@
 import { Badge } from "@/components/common";
+import { StatusSelect } from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import { CORE_QUESTS, type CoreQuest, type Status } from "@convex/constants";
 import { useMutation, useQuery } from "convex/react";
 import { Heading } from "react-aria-components";
-import { StatusSelect } from "../StatusSelect";
 
 interface CoreQuestHeaderProps {
   type: CoreQuest;

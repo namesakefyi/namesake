@@ -1,5 +1,5 @@
+import { ShortTextField, type ShortTextFieldProps } from "@/components/forms";
 import type { Meta } from "@storybook/react";
-import { ShortTextField, type ShortTextFieldProps } from ".";
 
 const meta: Meta<typeof ShortTextField> = {
   component: ShortTextField,

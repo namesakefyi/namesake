@@ -1,3 +1,4 @@
+import { AnimateChangeInHeight, Button } from "@/components/common";
 import { ChevronRight } from "lucide-react";
 import {
   Disclosure as AriaDisclosure,
@@ -9,8 +10,6 @@ import {
   type Key,
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
-import { AnimateChangeInHeight } from "../AnimateChangeInHeight";
-import { Button } from "../Button";
 
 export interface DisclosureProps
   extends Omit<AriaDisclosureProps, "children" | "id"> {

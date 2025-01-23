@@ -1,6 +1,5 @@
+import { Card } from "@/components/common";
 import type { Meta, StoryObj } from "@storybook/react";
-
-import { Card } from "./Card";
 
 const meta = {
   component: Card,

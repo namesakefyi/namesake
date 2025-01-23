@@ -1,10 +1,12 @@
+import {
+  Button,
+  Checkbox,
+  Separator,
+  ToggleButton,
+  Toolbar,
+} from "@/components/common";
 import { Bold, Italic, Underline } from "lucide-react";
 import { Group } from "react-aria-components";
-import { Toolbar } from ".";
-import { Button } from "../Button";
-import { Checkbox } from "../Checkbox";
-import { Separator } from "../Separator";
-import { ToggleButton } from "../ToggleButton";
 
 import type { Meta } from "@storybook/react";
 

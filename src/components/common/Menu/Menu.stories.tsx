@@ -1,15 +1,15 @@
-import type { Meta } from "@storybook/react";
-import { Ellipsis } from "lucide-react";
 import {
+  Button,
   Menu,
   MenuItem,
   MenuSection,
   MenuSeparator,
   MenuTrigger,
+  Popover,
   SubmenuTrigger,
-} from ".";
-import { Button } from "../Button";
-import { Popover } from "../Popover";
+} from "@/components/common";
+import type { Meta } from "@storybook/react";
+import { Ellipsis } from "lucide-react";
 
 const meta: Meta<typeof Menu> = {
   component: Menu,

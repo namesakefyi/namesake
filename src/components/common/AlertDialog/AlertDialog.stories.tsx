@@ -1,8 +1,5 @@
+import { AlertDialog, Button, DialogTrigger, Modal } from "@/components/common";
 import type { Meta } from "@storybook/react";
-import { AlertDialog } from ".";
-import { Button } from "../Button";
-import { DialogTrigger } from "../Dialog";
-import { Modal } from "../Modal";
 
 const meta: Meta<typeof AlertDialog> = {
   component: AlertDialog,

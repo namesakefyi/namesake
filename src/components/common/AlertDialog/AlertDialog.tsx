@@ -1,9 +1,8 @@
+import { Button, Dialog, type DialogProps } from "@/components/common";
 import { Info, TriangleAlert } from "lucide-react";
 import type { ReactNode } from "react";
 import { chain } from "react-aria";
 import { Heading } from "react-aria-components";
-import { Button } from "../Button";
-import { Dialog, type DialogProps } from "../Dialog";
 
 interface AlertDialogProps extends Omit<DialogProps, "children"> {
   title: string;

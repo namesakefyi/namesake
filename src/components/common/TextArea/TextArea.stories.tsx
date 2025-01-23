@@ -1,8 +1,6 @@
 import type { Meta } from "@storybook/react";
 
-import { Button } from "../Button";
-import { Form } from "../Form";
-import { TextArea } from "./TextArea";
+import { Button, Form, TextArea } from "@/components/common";
 
 const meta = {
   component: TextArea,

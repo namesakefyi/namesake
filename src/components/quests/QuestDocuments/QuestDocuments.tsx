@@ -1,12 +1,11 @@
 import { Badge, Button, Tooltip, TooltipTrigger } from "@/components/common";
+import { DocumentCard, EditQuestDocumentModal } from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { Heading } from "react-aria-components";
-import { DocumentCard } from "../DocumentCard";
-import { EditQuestDocumentModal } from "../EditQuestDocumentModal/EditQuestDocumentModal";
 
 type QuestDocumentsProps = {
   quest: Doc<"quests">;

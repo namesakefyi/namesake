@@ -1,4 +1,5 @@
-import { ReadingScore } from "@/components/quests/ReadingScore";
+import { Separator, ToggleButton } from "@/components/common";
+import { ReadingScore } from "@/components/quests";
 import Blockquote from "@tiptap/extension-blockquote";
 import Bold from "@tiptap/extension-bold";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -27,8 +28,6 @@ import {
 import { useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
-import { Separator } from "../Separator";
-import { ToggleButton } from "../ToggleButton";
 
 export interface RichTextProps {
   className?: string;

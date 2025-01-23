@@ -1,3 +1,4 @@
+import { Checkbox } from "@/components/common";
 import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 import { ChevronUp } from "lucide-react";
 import {
@@ -22,7 +23,6 @@ import {
   useTableOptions,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
-import { Checkbox } from "../Checkbox";
 
 export function Table(props: TableProps) {
   return (

@@ -1,9 +1,7 @@
+import { Button, DialogTrigger, Menu, MenuItem } from "@/components/common";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { Button } from "../Button";
-import { DialogTrigger } from "../Dialog";
-import { Menu, MenuItem } from "./Menu";
 
 describe("Menu", () => {
   it("renders Menu with accessible title", async () => {

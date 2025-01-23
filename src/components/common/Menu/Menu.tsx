@@ -1,4 +1,11 @@
 import {
+  DropdownSection,
+  type DropdownSectionProps,
+  Popover,
+  type PopoverProps,
+  dropdownItemStyles,
+} from "@/components/common";
+import {
   Check,
   ChevronRight,
   ExternalLink,
@@ -17,12 +24,6 @@ import {
   type SubmenuTriggerProps,
   composeRenderProps,
 } from "react-aria-components";
-import {
-  DropdownSection,
-  type DropdownSectionProps,
-  dropdownItemStyles,
-} from "../ListBox";
-import { Popover, type PopoverProps } from "../Popover";
 
 interface MenuProps<T> extends AriaMenuProps<T> {
   placement?: PopoverProps["placement"];
