@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import {
   CATEGORIES,
+  CORE_QUESTS,
   JURISDICTIONS,
   ROLES,
   STATUS,
@@ -30,4 +31,8 @@ export const category = v.union(
 
 export const timeRequiredUnit = v.union(
   ...Object.keys(TIME_UNITS).map((unit) => v.literal(unit)),
+);
+
+export const coreQuest = v.union(
+  ...Object.keys(CORE_QUESTS).map((quest) => v.literal(quest)),
 );

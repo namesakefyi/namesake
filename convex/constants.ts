@@ -1,5 +1,4 @@
 import {
-  Baby,
   Calendar,
   CalendarClock,
   CalendarDays,
@@ -10,6 +9,7 @@ import {
   Clapperboard,
   Clock,
   Computer,
+  FileBadge,
   Gamepad2,
   Gavel,
   Globe,
@@ -158,7 +158,7 @@ export const CORE_QUESTS: Record<CoreQuest, GroupDetails> = {
   },
   "birth-certificate": {
     label: "Birth Certificate",
-    icon: Baby,
+    icon: FileBadge,
   },
 };
 

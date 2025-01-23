@@ -20,16 +20,16 @@ import { Route as AuthenticatedSettingsIndexImport } from './routes/_authenticat
 import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/_home/index'
 import { Route as AuthenticatedSettingsDataImport } from './routes/_authenticated/settings/data'
 import { Route as AuthenticatedSettingsAccountImport } from './routes/_authenticated/settings/account'
-import { Route as AuthenticatedHomeStateIdIndexImport } from './routes/_authenticated/_home/state-id/index'
-import { Route as AuthenticatedHomeSocialSecurityIndexImport } from './routes/_authenticated/_home/social-security/index'
+import { Route as AuthenticatedHomeStateIdIndexImport } from './routes/_authenticated/_home/state-id.index'
+import { Route as AuthenticatedHomeSocialSecurityIndexImport } from './routes/_authenticated/_home/social-security.index'
 import { Route as AuthenticatedHomeQuestsIndexImport } from './routes/_authenticated/_home/quests.index'
-import { Route as AuthenticatedHomePassportIndexImport } from './routes/_authenticated/_home/passport/index'
-import { Route as AuthenticatedHomeCourtOrderIndexImport } from './routes/_authenticated/_home/court-order/index'
-import { Route as AuthenticatedHomeBirthCertificateIndexImport } from './routes/_authenticated/_home/birth-certificate/index'
+import { Route as AuthenticatedHomePassportIndexImport } from './routes/_authenticated/_home/passport.index'
+import { Route as AuthenticatedHomeCourtOrderIndexImport } from './routes/_authenticated/_home/court-order.index'
+import { Route as AuthenticatedHomeBirthCertificateIndexImport } from './routes/_authenticated/_home/birth-certificate.index'
 import { Route as AuthenticatedFormsCourtOrderMaImport } from './routes/_authenticated/forms/court-order/ma'
-import { Route as AuthenticatedHomeStateIdJurisdictionImport } from './routes/_authenticated/_home/state-id/$jurisdiction'
-import { Route as AuthenticatedHomeCourtOrderJurisdictionImport } from './routes/_authenticated/_home/court-order/$jurisdiction'
-import { Route as AuthenticatedHomeBirthCertificateJurisdictionImport } from './routes/_authenticated/_home/birth-certificate/$jurisdiction'
+import { Route as AuthenticatedHomeStateIdJurisdictionImport } from './routes/_authenticated/_home/state-id.$jurisdiction'
+import { Route as AuthenticatedHomeCourtOrderJurisdictionImport } from './routes/_authenticated/_home/court-order.$jurisdiction'
+import { Route as AuthenticatedHomeBirthCertificateJurisdictionImport } from './routes/_authenticated/_home/birth-certificate.$jurisdiction'
 import { Route as AuthenticatedHomeQuestsQuestIdIndexImport } from './routes/_authenticated/_home/quests.$questId.index'
 import { Route as AuthenticatedHomeQuestsQuestIdEditIndexImport } from './routes/_authenticated/_home/quests.$questId.edit.index'
 
@@ -639,15 +639,15 @@ export const routeTree = rootRoute
       "parent": "/_authenticated/settings"
     },
     "/_authenticated/_home/birth-certificate/$jurisdiction": {
-      "filePath": "_authenticated/_home/birth-certificate/$jurisdiction.tsx",
+      "filePath": "_authenticated/_home/birth-certificate.$jurisdiction.tsx",
       "parent": "/_authenticated/_home"
     },
     "/_authenticated/_home/court-order/$jurisdiction": {
-      "filePath": "_authenticated/_home/court-order/$jurisdiction.tsx",
+      "filePath": "_authenticated/_home/court-order.$jurisdiction.tsx",
       "parent": "/_authenticated/_home"
     },
     "/_authenticated/_home/state-id/$jurisdiction": {
-      "filePath": "_authenticated/_home/state-id/$jurisdiction.tsx",
+      "filePath": "_authenticated/_home/state-id.$jurisdiction.tsx",
       "parent": "/_authenticated/_home"
     },
     "/_authenticated/forms/court-order/ma": {
@@ -655,15 +655,15 @@ export const routeTree = rootRoute
       "parent": "/_authenticated"
     },
     "/_authenticated/_home/birth-certificate/": {
-      "filePath": "_authenticated/_home/birth-certificate/index.tsx",
+      "filePath": "_authenticated/_home/birth-certificate.index.tsx",
       "parent": "/_authenticated/_home"
     },
     "/_authenticated/_home/court-order/": {
-      "filePath": "_authenticated/_home/court-order/index.tsx",
+      "filePath": "_authenticated/_home/court-order.index.tsx",
       "parent": "/_authenticated/_home"
     },
     "/_authenticated/_home/passport/": {
-      "filePath": "_authenticated/_home/passport/index.tsx",
+      "filePath": "_authenticated/_home/passport.index.tsx",
       "parent": "/_authenticated/_home"
     },
     "/_authenticated/_home/quests/": {
@@ -671,11 +671,11 @@ export const routeTree = rootRoute
       "parent": "/_authenticated/_home"
     },
     "/_authenticated/_home/social-security/": {
-      "filePath": "_authenticated/_home/social-security/index.tsx",
+      "filePath": "_authenticated/_home/social-security.index.tsx",
       "parent": "/_authenticated/_home"
     },
     "/_authenticated/_home/state-id/": {
-      "filePath": "_authenticated/_home/state-id/index.tsx",
+      "filePath": "_authenticated/_home/state-id.index.tsx",
       "parent": "/_authenticated/_home"
     },
     "/_authenticated/_home/quests/$questId/": {

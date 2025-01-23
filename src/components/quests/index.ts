@@ -1,3 +1,4 @@
+export * from "./CoreQuestHeader";
 export * from "./DocumentCard";
 export * from "./EditQuestBasicsModal";
 export * from "./EditQuestCostsModal";

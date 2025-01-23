@@ -1,5 +1,5 @@
-import { AppContent, PageHeader } from "@/components/app";
-import { Badge } from "@/components/common";
+import { AppContent } from "@/components/app";
+import { CoreQuestHeader } from "@/components/quests";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_home/passport/")({
@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_authenticated/_home/passport/")({
 function RouteComponent() {
   return (
     <AppContent>
-      <PageHeader title="Passport" badge={<Badge>US</Badge>} />
+      <CoreQuestHeader type="passport" badge="United States" />
       <p>Not yet available.</p>
     </AppContent>
   );
