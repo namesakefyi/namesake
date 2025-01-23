@@ -1,5 +1,5 @@
+import { PhoneField, type PhoneFieldProps } from "@/components/forms";
 import type { Meta } from "@storybook/react";
-import { PhoneField, type PhoneFieldProps } from ".";
 
 const meta: Meta<typeof PhoneField> = {
   component: PhoneField,

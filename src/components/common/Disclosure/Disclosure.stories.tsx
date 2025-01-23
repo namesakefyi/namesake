@@ -1,5 +1,5 @@
+import { Disclosure, DisclosureGroup } from "@/components/common";
 import type { Meta } from "@storybook/react";
-import { Disclosure, DisclosureGroup } from ".";
 
 const meta: Meta<typeof Disclosure> = {
   component: Disclosure,

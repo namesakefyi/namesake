@@ -1,7 +1,6 @@
+import { Button, Tooltip, TooltipTrigger } from "@/components/common";
 import type { Meta } from "@storybook/react";
 import { Printer, Save } from "lucide-react";
-import { Tooltip, TooltipTrigger } from ".";
-import { Button } from "../Button";
 
 const meta: Meta<typeof Tooltip> = {
   component: Tooltip,

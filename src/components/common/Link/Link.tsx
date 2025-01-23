@@ -1,3 +1,4 @@
+import { type ButtonProps, buttonStyles } from "@/components/common";
 import { focusRing } from "@/components/utils";
 import {
   Link as AriaLink,
@@ -5,7 +6,6 @@ import {
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
-import { type ButtonProps, buttonStyles } from "../Button";
 
 export interface LinkProps extends AriaLinkProps {
   variant?: "primary" | "secondary";

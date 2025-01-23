@@ -1,7 +1,7 @@
 import { ToggleButton, ToggleButtonGroup } from "@/components/common";
+import { SettingsItem } from "@/components/settings";
 import { useTheme } from "@/utils/useTheme";
 import { THEMES } from "@convex/constants";
-import { SettingsItem } from "../SettingsItem";
 
 export const EditThemeSetting = () => {
   const { themeSelection, setTheme } = useTheme();

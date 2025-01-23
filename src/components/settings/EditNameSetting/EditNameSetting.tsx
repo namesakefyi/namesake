@@ -7,13 +7,13 @@ import {
   ModalHeader,
   TextField,
 } from "@/components/common";
+import { SettingsItem } from "@/components/settings";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { SettingsItem } from "../SettingsItem";
 
 type EditNameModalProps = {
   defaultName: string;

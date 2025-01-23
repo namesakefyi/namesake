@@ -1,7 +1,7 @@
+import { StatGroup } from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import type { Doc, Id } from "@convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { StatGroup } from "../StatGroup";
 
 interface QuestUsageCountProps {
   quest: Doc<"quests">;

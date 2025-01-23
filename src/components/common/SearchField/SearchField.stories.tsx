@@ -1,7 +1,5 @@
+import { Button, Form, SearchField } from "@/components/common";
 import type { Meta } from "@storybook/react";
-import { SearchField } from ".";
-import { Button } from "../Button";
-import { Form } from "../Form";
 
 const meta: Meta<typeof SearchField> = {
   component: SearchField,

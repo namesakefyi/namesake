@@ -1,3 +1,4 @@
+import { Logo } from "@/components/app";
 import {
   Badge,
   Button,
@@ -15,7 +16,6 @@ import { api } from "@convex/_generated/api";
 import { THEMES, type Theme } from "@convex/constants";
 import { Authenticated, useQuery } from "convex/react";
 import { CircleUser, Cog, LogOut } from "lucide-react";
-import { Logo } from "../Logo";
 
 type AppSidebarProps = {
   children: React.ReactNode;

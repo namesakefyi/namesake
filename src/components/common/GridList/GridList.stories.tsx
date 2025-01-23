@@ -1,5 +1,5 @@
+import { GridList, GridListItem } from "@/components/common";
 import type { Meta } from "@storybook/react";
-import { GridList, GridListItem } from ".";
 
 const meta: Meta<typeof GridList> = {
   component: GridList,

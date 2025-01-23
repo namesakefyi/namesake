@@ -1,5 +1,8 @@
+import {
+  CheckboxGroupField,
+  type CheckboxGroupFieldProps,
+} from "@/components/forms";
 import type { Meta } from "@storybook/react";
-import { CheckboxGroupField, type CheckboxGroupFieldProps } from ".";
 
 const meta: Meta<typeof CheckboxGroupField> = {
   component: CheckboxGroupField,

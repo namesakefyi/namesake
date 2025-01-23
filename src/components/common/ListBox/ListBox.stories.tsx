@@ -1,5 +1,5 @@
+import { ListBox, ListBoxItem } from "@/components/common";
 import type { Meta } from "@storybook/react";
-import { ListBox, ListBoxItem } from ".";
 
 const meta: Meta<typeof ListBox> = {
   component: ListBox,

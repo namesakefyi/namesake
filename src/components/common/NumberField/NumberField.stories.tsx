@@ -1,7 +1,6 @@
+import { Button, Form } from "@/components/common";
 import type { Meta } from "@storybook/react";
-import { NumberField } from ".";
-import { Button } from "../Button";
-import { Form } from "../Form";
+import { NumberField } from "./NumberField";
 
 const meta: Meta<typeof NumberField> = {
   component: NumberField,

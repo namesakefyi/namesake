@@ -1,5 +1,5 @@
+import { LongTextField, type LongTextFieldProps } from "@/components/forms";
 import type { Meta } from "@storybook/react";
-import { LongTextField, type LongTextFieldProps } from ".";
 
 const meta: Meta<typeof LongTextField> = {
   component: LongTextField,

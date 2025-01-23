@@ -1,5 +1,5 @@
+import { ToggleButton } from "@/components/common";
 import type { Meta } from "@storybook/react";
-import { ToggleButton } from ".";
 
 const meta: Meta<typeof ToggleButton> = {
   component: ToggleButton,

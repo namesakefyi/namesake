@@ -1,5 +1,5 @@
+import { AddressField, type AddressFieldProps } from "@/components/forms";
 import type { Meta } from "@storybook/react";
-import { AddressField, type AddressFieldProps } from ".";
 
 const meta: Meta<typeof AddressField> = {
   component: AddressField,

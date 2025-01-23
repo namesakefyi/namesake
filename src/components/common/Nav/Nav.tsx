@@ -1,10 +1,9 @@
+import { Badge, Link, type LinkProps } from "@/components/common";
 import { focusRing } from "@/components/utils";
 import { useMatchRoute } from "@tanstack/react-router";
 import { ExternalLink, type LucideIcon } from "lucide-react";
 import { Header } from "react-aria-components";
 import { tv } from "tailwind-variants";
-import { Badge } from "../Badge";
-import { Link, type LinkProps } from "../Link";
 
 interface NavItemProps extends LinkProps {
   icon?: LucideIcon;

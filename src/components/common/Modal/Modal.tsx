@@ -1,3 +1,4 @@
+import { Dialog } from "@/components/common";
 import {
   Modal as AriaModal,
   Heading,
@@ -6,7 +7,6 @@ import {
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
-import { Dialog } from "../Dialog";
 
 const overlayStyles = tv({
   base: "fixed top-0 left-0 w-full h-[--visual-viewport-height] isolate z-20 bg-black/[15%] flex items-center justify-center p-4 backdrop-blur-lg",

@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react";
-
 import { CircleHelp } from "lucide-react";
 import { Empty } from "./Empty";
 

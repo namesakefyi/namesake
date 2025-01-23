@@ -1,6 +1,5 @@
+import { Banner } from "@/components/common";
 import type { Meta, StoryObj } from "@storybook/react";
-
-import { Banner } from "./Banner";
 
 const meta = {
   component: Banner,
