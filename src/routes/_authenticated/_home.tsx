@@ -19,27 +19,31 @@ export const Route = createFileRoute("/_authenticated/_home")({
 
 function IndexRoute() {
   const MyQuests = () => {
-    const user = useQuery(api.users.getCurrent);
-    const userQuestCount = useQuery(api.userQuests.count);
-    const completedQuests = useQuery(api.userQuests.countCompleted);
-    const questsByCategory = useQuery(api.userQuests.getByCategory);
+    const coreQuestCount = useQuery(api.userCoreQuests.count) ?? 0;
+    const userQuestCount = useQuery(api.userQuests.count) ?? 0;
+    const totalCount = coreQuestCount + userQuestCount;
 
-    if (questsByCategory === undefined) return;
+    const completedCoreQuests =
+      useQuery(api.userCoreQuests.countCompleted) ?? 0;
+    const completedQuests = useQuery(api.userQuests.countCompleted) ?? 0;
+    const completedTotal = completedCoreQuests + completedQuests;
+
+    const questsByCategory = useQuery(api.userQuests.getByCategory);
 
     return (
       <AppSidebar>
         <div className="flex items-center mb-4">
           <ProgressBar
             label="Quest progress"
-            value={completedQuests}
-            maxValue={userQuestCount}
+            value={completedTotal}
+            maxValue={totalCount}
             valueLabel={
               <span className="text-gray-normal">
                 <span className="text-gray-normal text-base font-medium mr-0.5 leading-none">
-                  {completedQuests}
+                  {completedTotal}
                 </span>{" "}
                 <span className="text-gray-8 dark:text-graydark-8">/</span>{" "}
-                <span className="text-gray-dim">{userQuestCount} complete</span>
+                <span className="text-gray-dim">{totalCount} complete</span>
               </span>
             }
             labelHidden
@@ -52,7 +56,6 @@ function IndexRoute() {
             size="large"
           >
             Court Order
-            {user?.residence && <Badge size="xs">{user.residence}</Badge>}
           </NavItem>
           <NavItem
             href={{ to: "/state-id" }}
@@ -60,7 +63,6 @@ function IndexRoute() {
             size="large"
           >
             State ID
-            {user?.residence && <Badge size="xs">{user.residence}</Badge>}
           </NavItem>
           <NavItem
             href={{ to: "/social-security" }}
@@ -82,9 +84,9 @@ function IndexRoute() {
             size="large"
           >
             Birth Certificate
-            {user?.birthplace && <Badge size="xs">{user.birthplace}</Badge>}
           </NavItem>
-          {Object.keys(questsByCategory).length > 0 &&
+          {questsByCategory &&
+            Object.keys(questsByCategory).length > 0 &&
             Object.entries(questsByCategory).map(([group, quests]) => {
               if (quests.length === 0) return null;
               const { label } = CATEGORIES[group as keyof typeof CATEGORIES];

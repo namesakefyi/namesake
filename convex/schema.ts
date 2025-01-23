@@ -3,6 +3,7 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
   category,
+  coreQuest,
   jurisdiction,
   role,
   status,
@@ -150,6 +151,22 @@ const userSettings = defineTable({
 }).index("userId", ["userId"]);
 
 /**
+ * A user's unique progress in completing a core quest.
+ */
+const userCoreQuests = defineTable({
+  /** The user who is working on the quest. */
+  userId: v.id("users"),
+  /** The quest that the user is working on, e.g. "court-order", "passport" */
+  type: coreQuest,
+  /** The status of the quest. */
+  status: status,
+  /** Time in ms since epoch when the user marked the quest as complete. */
+  completedAt: v.optional(v.number()),
+})
+  .index("userId", ["userId"])
+  .index("type", ["type"]);
+
+/**
  * A user's unique progress in completing a quest.
  */
 const userQuests = defineTable({
@@ -174,5 +191,6 @@ export default defineSchema({
   users,
   userFormData,
   userSettings,
+  userCoreQuests,
   userQuests,
 });

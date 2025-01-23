@@ -34,7 +34,7 @@ export function Tabs(props: TabsProps) {
 }
 
 const tabListStyles = tv({
-  base: "grid bg-gray-3 dark:bg-graydark-3 rounded-lg p-1",
+  base: "grid bg-gray-3 dark:bg-graydark-1 rounded-lg p-1",
   variants: {
     orientation: {
       horizontal: "grid-flow-col auto-cols-fr",
@@ -60,10 +60,10 @@ const tabProps = tv({
   variants: {
     isSelected: {
       false: "text-gray-dim hover:text-gray-normal",
-      true: "bg-white dark:bg-gray-12 shadow-sm forced-colors:text-[HighlightText] forced-colors:bg-[Highlight]",
+      true: "bg-white dark:bg-graydark-3 shadow-sm forced-colors:text-[HighlightText] forced-colors:bg-[Highlight]",
     },
     isDisabled: {
-      true: "opacity-50 cursor-default forced-colors:text-[GrayText] selected:text-gray-3 dark:selected:text-gray-5 forced-colors:selected:text-[HighlightText] selected:bg-gray-2 dark:selected:bg-gray-6 forced-colors:selected:bg-[GrayText]",
+      true: "opacity-50 cursor-default forced-colors:text-[GrayText] selected:text-gray-3 dark:selected:text-graydark-3 forced-colors:selected:text-[HighlightText] selected:bg-gray-2 dark:selected:bg-gray-6 forced-colors:selected:bg-[GrayText]",
     },
   },
 });

@@ -1,4 +1,5 @@
-import { AppContent, PageHeader } from "@/components/app";
+import { AppContent } from "@/components/app";
+import { CoreQuestHeader } from "@/components/quests";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_home/social-security/")({
@@ -8,7 +9,7 @@ export const Route = createFileRoute("/_authenticated/_home/social-security/")({
 function RouteComponent() {
   return (
     <AppContent>
-      <PageHeader title="Social Security" />
+      <CoreQuestHeader type="social-security" badge="United States" />
       <p>Not yet available.</p>
     </AppContent>
   );

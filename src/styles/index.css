@@ -109,6 +109,7 @@
 
 body {
   color-scheme: dark light;
+  -webkit-font-smoothing: antialiased;
   @apply bg-gray-1 dark:bg-graydark-2;
 }
 

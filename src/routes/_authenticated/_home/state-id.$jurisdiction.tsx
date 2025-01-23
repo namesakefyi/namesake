@@ -1,10 +1,10 @@
-import { AppContent, PageHeader } from "@/components/app";
-import { Badge } from "@/components/common";
-import { JURISDICTIONS } from "@convex/constants";
+import { AppContent } from "@/components/app";
+import { CoreQuestHeader } from "@/components/quests";
+import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
-  "/_authenticated/_home/birth-certificate/$jurisdiction",
+  "/_authenticated/_home/state-id/$jurisdiction",
 )({
   beforeLoad: ({ params }) => {
     // If route is not a valid jurisdiction, redirect to base route
@@ -13,7 +13,7 @@ export const Route = createFileRoute(
         params.jurisdiction.toUpperCase() as keyof typeof JURISDICTIONS
       ]
     ) {
-      throw redirect({ to: "/birth-certificate" });
+      throw redirect({ to: "/state-id" });
     }
   },
   component: RouteComponent,
@@ -22,15 +22,12 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { jurisdiction } = Route.useParams();
 
-  const badge = (
-    <Badge>
-      {JURISDICTIONS[jurisdiction.toUpperCase() as keyof typeof JURISDICTIONS]}
-    </Badge>
-  );
-
   return (
     <AppContent>
-      <PageHeader title="Birth Certificate" badge={badge} />
+      <CoreQuestHeader
+        type="state-id"
+        badge={JURISDICTIONS[jurisdiction.toUpperCase() as Jurisdiction]}
+      />
       <p>Not yet available.</p>
     </AppContent>
   );

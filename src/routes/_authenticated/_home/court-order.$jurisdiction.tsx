@@ -1,7 +1,7 @@
-import { AppContent, PageHeader } from "@/components/app";
-import { Badge, Link } from "@/components/common";
-import { Step, Steps } from "@/components/quests";
-import { JURISDICTIONS } from "@convex/constants";
+import { AppContent } from "@/components/app";
+import { Link } from "@/components/common";
+import { CoreQuestHeader, Step, Steps } from "@/components/quests";
+import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute(
@@ -23,17 +23,15 @@ export const Route = createFileRoute(
 export function RouteComponent() {
   const { jurisdiction } = Route.useParams();
 
-  const state =
-    JURISDICTIONS[jurisdiction.toUpperCase() as keyof typeof JURISDICTIONS];
-
-  const badge = <Badge>{state}</Badge>;
-
   return (
     <AppContent>
-      <PageHeader title="Court Order" badge={badge} />
+      <CoreQuestHeader
+        type="court-order"
+        badge={JURISDICTIONS[jurisdiction.toUpperCase() as Jurisdiction]}
+      />
       {jurisdiction !== "ma" ? (
         // TODO: Better organization of content.
-        <p>Court order via Namesake is not yet available in {state}.</p>
+        <p>Court order via Namesake is not yet available here.</p>
       ) : (
         <Steps>
           <Step title="Get prepared">

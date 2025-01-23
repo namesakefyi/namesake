@@ -5,7 +5,7 @@ import { z } from "zod";
 import { query } from "./_generated/server";
 import type { Role } from "./constants";
 import { DUPLICATE_EMAIL, INVALID_EMAIL } from "./errors";
-import { userMutation, userQuery } from "./helpers";
+import { userMutation } from "./helpers";
 import { jurisdiction } from "./validators";
 
 export const getAll = query({
@@ -15,10 +15,12 @@ export const getAll = query({
   },
 });
 
-export const getCurrent = userQuery({
+export const getCurrent = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.get(ctx.userId);
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return undefined;
+    return await ctx.db.get(userId);
   },
 });
 

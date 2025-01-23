@@ -24,6 +24,7 @@ import type * as http from "../http.js";
 import type * as passwordReset from "../passwordReset.js";
 import type * as quests from "../quests.js";
 import type * as seed from "../seed.js";
+import type * as userCoreQuests from "../userCoreQuests.js";
 import type * as userFormData from "../userFormData.js";
 import type * as userQuests from "../userQuests.js";
 import type * as userSettings from "../userSettings.js";
@@ -50,6 +51,7 @@ declare const fullApi: ApiFromModules<{
   passwordReset: typeof passwordReset;
   quests: typeof quests;
   seed: typeof seed;
+  userCoreQuests: typeof userCoreQuests;
   userFormData: typeof userFormData;
   userQuests: typeof userQuests;
   userSettings: typeof userSettings;

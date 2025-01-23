@@ -21,7 +21,7 @@ interface StatusBadgeProps extends Omit<BadgeProps, "children"> {
 }
 
 const badgeStyles = tv({
-  base: "flex items-center transition-colors rounded-full",
+  base: "flex items-center transition-colors rounded-full select-none",
   variants: {
     condensed: {
       true: "size-5 p-0 lg:size-6",
@@ -73,7 +73,12 @@ export function StatusSelect({ status, onChange }: StatusSelectProps) {
 
   return (
     <MenuTrigger>
-      <Button variant="ghost" className="px-2 gap-1" endIcon={ChevronDown}>
+      <Button
+        variant="ghost"
+        size="small"
+        className="gap-1 pl-1 rounded-full -mb-2"
+        endIcon={ChevronDown}
+      >
         <StatusBadge status={status} size="lg" />
       </Button>
       <Menu
