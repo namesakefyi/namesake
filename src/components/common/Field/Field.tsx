@@ -100,12 +100,12 @@ export const innerBorderStyles = tv({
 
 const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "border-none ring-inset ring-1 group flex items-center bg-gray-subtle forced-colors:bg-[Field] rounded-lg overflow-hidden",
+  base: "border-none text-sm ring-inset ring-1 group flex items-center bg-gray-subtle forced-colors:bg-[Field] rounded-lg overflow-hidden",
   variants: {
     ...fieldBorderStyles.variants,
     size: {
       small: "min-h-8",
-      medium: "min-h-10",
+      medium: "min-h-10 ",
       large: "min-h-12 text-lg",
     },
   },

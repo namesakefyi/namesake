@@ -8,17 +8,18 @@ import {
 } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import {
-  CORE_QUESTS,
+  CATEGORIES,
   JURISDICTIONS,
   type Jurisdiction,
 } from "@convex/constants";
 import { useNavigate } from "@tanstack/react-router";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 import type { Selection } from "react-aria-components";
+import { toast } from "sonner";
 
 interface JurisdictionInterstitialProps {
-  type: "court-order" | "state-id" | "birth-certificate";
+  type: "courtOrder" | "stateId" | "birthCertificate";
 }
 
 export const JurisdictionInterstitial = ({
@@ -29,15 +30,20 @@ export const JurisdictionInterstitial = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string>();
 
+  const selection =
+    selected !== "all" ? selected.values().next().value?.toString() : undefined;
+
   const updateResidence = useMutation(api.users.setResidence);
   const updateBirthplace = useMutation(api.users.setBirthplace);
+  const addQuest = useMutation(api.userQuests.create);
+  const findQuest = useQuery(api.quests.getByCategoryAndJurisdiction, {
+    category: type,
+    jurisdiction: selection,
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(undefined);
-
-    const selection =
-      selected !== "all" && selected.values().next().value?.toString();
 
     if (!selection) {
       setError("Please select a state.");
@@ -47,16 +53,24 @@ export const JurisdictionInterstitial = ({
     try {
       setIsSubmitting(true);
 
-      if (type === "birth-certificate") {
+      if (type === "birthCertificate") {
         await updateBirthplace({ birthplace: selection as Jurisdiction });
       } else {
         await updateResidence({ residence: selection as Jurisdiction });
       }
 
-      navigate({
-        to: `/${type}/$jurisdiction`,
-        params: { jurisdiction: selection.toLowerCase() },
-      });
+      if (findQuest?._id) {
+        await addQuest({ questId: findQuest._id });
+        navigate({
+          to: "/$questSlug",
+          params: { questSlug: findQuest.slug },
+        });
+      } else {
+        navigate({ to: "/" });
+        toast.error(
+          "Namesake doesn't support that state yet. Please check back soon.",
+        );
+      }
     } catch (err) {
       setError("Failed to update. Please try again.");
     } finally {
@@ -71,15 +85,15 @@ export const JurisdictionInterstitial = ({
       description: string;
     }
   > = {
-    "birth-certificate": {
+    birthCertificate: {
       title: "Where were you born?",
       description: "Please select your birthplace.",
     },
-    "court-order": {
+    courtOrder: {
       title: "Where do you live?",
       description: "Please select your state.",
     },
-    "state-id": {
+    stateId: {
       title: "Where do you live?",
       description: "Please select your state.",
     },
@@ -87,7 +101,7 @@ export const JurisdictionInterstitial = ({
 
   return (
     <Empty
-      icon={CORE_QUESTS[type].icon}
+      icon={CATEGORIES[type].icon}
       title={copy[type].title}
       subtitle={copy[type].description}
       className="h-[100dvh]"

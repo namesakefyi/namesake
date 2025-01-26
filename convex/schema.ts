@@ -3,7 +3,6 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
   category,
-  coreQuest,
   jurisdiction,
   role,
   status,
@@ -50,6 +49,8 @@ const faqTopics = defineTable({
 const quests = defineTable({
   /** The title of the quest. (e.g. "Court Order") */
   title: v.string(),
+  /** The slug of the quest. (e.g. "court-order") */
+  slug: v.string(),
   /** The category of the quest. (e.g. "Education", "Social") */
   category: v.optional(category),
   /** The user who created the quest. */
@@ -78,9 +79,24 @@ const quests = defineTable({
   urls: v.optional(v.array(v.string())),
   /** Time in ms since epoch when the quest was deleted. */
   deletedAt: v.optional(v.number()),
-  /** Rich text comprising the contents of the quest, stored as HTML. */
+  /** Steps in the quest */
+  steps: v.optional(v.array(v.id("questSteps"))),
+})
+  .index("slug", ["slug"])
+  .index("category", ["category"])
+  .index("categoryAndJurisdiction", ["category", "jurisdiction"]);
+
+/**
+ * A single step within a quest.
+ */
+const questSteps = defineTable({
+  /** The quest this step belongs to. */
+  questId: v.id("quests"),
+  /** The title of the step. (e.g. "Get prepared") */
+  title: v.optional(v.string()),
+  /** Rich text comprising the contents of the step, stored as HTML. */
   content: v.optional(v.string()),
-}).index("category", ["category"]);
+}).index("quest", ["questId"]);
 
 /**
  * A PDF document that can be filled out by users.
@@ -151,22 +167,6 @@ const userSettings = defineTable({
 }).index("userId", ["userId"]);
 
 /**
- * A user's unique progress in completing a core quest.
- */
-const userCoreQuests = defineTable({
-  /** The user who is working on the quest. */
-  userId: v.id("users"),
-  /** The quest that the user is working on, e.g. "court-order", "passport" */
-  type: coreQuest,
-  /** The status of the quest. */
-  status: status,
-  /** Time in ms since epoch when the user marked the quest as complete. */
-  completedAt: v.optional(v.number()),
-})
-  .index("userId", ["userId"])
-  .index("type", ["type"]);
-
-/**
  * A user's unique progress in completing a quest.
  */
 const userQuests = defineTable({
@@ -188,9 +188,9 @@ export default defineSchema({
   faqTopics,
   documents,
   quests,
+  questSteps,
   users,
   userFormData,
   userSettings,
-  userCoreQuests,
   userQuests,
 });

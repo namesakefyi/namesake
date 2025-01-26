@@ -18,6 +18,7 @@ import { tv } from "tailwind-variants";
 interface StatusBadgeProps extends Omit<BadgeProps, "children"> {
   status: Status;
   condensed?: boolean;
+  className?: string;
 }
 
 const badgeStyles = tv({
@@ -30,7 +31,12 @@ const badgeStyles = tv({
   },
 });
 
-export function StatusBadge({ status, condensed, ...props }: StatusBadgeProps) {
+export function StatusBadge({
+  status,
+  condensed,
+  className,
+  ...props
+}: StatusBadgeProps) {
   if (status === undefined) return null;
 
   const { label, icon, variant } = STATUS[status];
@@ -40,7 +46,7 @@ export function StatusBadge({ status, condensed, ...props }: StatusBadgeProps) {
       icon={icon}
       variant={variant}
       {...props}
-      className={badgeStyles({ condensed })}
+      className={badgeStyles({ condensed, className })}
     >
       {!condensed && label}
     </Badge>
@@ -76,7 +82,7 @@ export function StatusSelect({ status, onChange }: StatusSelectProps) {
       <Button
         variant="ghost"
         size="small"
-        className="gap-1 pl-1 rounded-full -mb-2"
+        className="gap-1 pl-1 rounded-full"
         endIcon={ChevronDown}
       >
         <StatusBadge status={status} size="lg" />

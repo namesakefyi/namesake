@@ -20,7 +20,7 @@ const navItemStyles = tv({
       true: "bg-gray-3 hover:bg-gray-3 dark:bg-graydark-3 dark:hover:bg-graydark-3",
     },
     size: {
-      medium: "h-8 lg:h-9  gap-1.5",
+      medium: "h-8 lg:h-9 gap-1.5",
       large: "h-12 gap-2",
     },
   },

@@ -22,6 +22,7 @@ describe("userQuests", () => {
         // Create quests
         const quest1Id = await ctx.db.insert("quests", {
           title: "Test Quest 1",
+          slug: "test-quest-1",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -29,6 +30,7 @@ describe("userQuests", () => {
 
         const quest2Id = await ctx.db.insert("quests", {
           title: "Test Quest 2",
+          slug: "test-quest-2",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -69,6 +71,7 @@ describe("userQuests", () => {
       await t.run(async (ctx) => {
         const questId = await ctx.db.insert("quests", {
           title: "Deleted Quest",
+          slug: "deleted-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -103,6 +106,7 @@ describe("userQuests", () => {
       await t.run(async (ctx) => {
         const questId = await ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -136,6 +140,7 @@ describe("userQuests", () => {
       const questId = await asUser.run(async (ctx) => {
         return await ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -168,6 +173,7 @@ describe("userQuests", () => {
       const questId = await asUser.run(async (ctx) => {
         return await ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "education",
           jurisdiction: "MA",
           creationUser: userId,
@@ -201,6 +207,7 @@ describe("userQuests", () => {
       const questId = await t.run(async (ctx) => {
         return ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -233,6 +240,7 @@ describe("userQuests", () => {
       const questId = await t.run(async (ctx) => {
         return ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "education",
           jurisdiction: "MA",
           creationUser: userId,
@@ -264,6 +272,7 @@ describe("userQuests", () => {
       const questId = await t.run(async (ctx) => {
         return ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -307,6 +316,7 @@ describe("userQuests", () => {
       const questId = await t.run(async (ctx) => {
         return ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -357,6 +367,7 @@ describe("userQuests", () => {
       const questId = await t.run(async (ctx) => {
         return await ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -393,6 +404,7 @@ describe("userQuests", () => {
       await t.run(async (ctx) => {
         const quest1Id = await ctx.db.insert("quests", {
           title: "Test Quest 1",
+          slug: "test-quest-1",
           category: "education",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -400,6 +412,7 @@ describe("userQuests", () => {
 
         const quest2Id = await ctx.db.insert("quests", {
           title: "Test Quest 2",
+          slug: "test-quest-2",
           category: "housing",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
