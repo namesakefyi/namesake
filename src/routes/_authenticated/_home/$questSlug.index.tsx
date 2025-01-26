@@ -23,7 +23,7 @@ import { useMutation, useQuery } from "convex/react";
 import { Ellipsis, Milestone } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/_home/$questSlug")({
+export const Route = createFileRoute("/_authenticated/_home/$questSlug/")({
   component: QuestDetailRoute,
 });
 
@@ -78,8 +78,8 @@ function QuestDetailRoute() {
             {canEdit && (
               <MenuItem
                 href={{
-                  to: "/$questSlug/edit",
-                  params: { questSlug },
+                  to: "/admin/quests/$questId",
+                  params: { questId: quest._id },
                 }}
               >
                 Edit quest
