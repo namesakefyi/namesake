@@ -183,7 +183,7 @@ const QuestStep = ({
   return (
     <Step className="w-full">
       <div className="flex items-start gap-2">
-        <div className="flex flex-col gap-4 flex-1 -mt-1.5">
+        <div className="flex flex-col gap-2 flex-1 -mt-1.5">
           <TextField
             aria-label="Title"
             size="large"
