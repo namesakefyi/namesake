@@ -37,7 +37,6 @@
   "dependencies": {
     "@auth/core": "0.37.4",
     "@convex-dev/auth": "^0.0.80",
-    "@directus/sdk": "^19.0.0",
     "@faker-js/faker": "^9.4.0",
     "@maskito/core": "^3.2.1",
     "@maskito/react": "^3.2.1",
@@ -75,7 +74,6 @@
     "react-aria-components": "^1.6.0",
     "react-dom": "^19.0.0",
     "react-helmet-async": "^2.0.5",
-    "react-markdown": "^9.0.3",
     "react-random-reveal": "^2.0.1",
     "resend": "4.1.1",
     "sonner": "^1.7.2",

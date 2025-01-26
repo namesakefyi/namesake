@@ -32,15 +32,6 @@ export const createOrUpdateUser = async (ctx: MutationCtx, args: any) => {
         theme: "system",
       });
 
-      // Initialize default core quests
-      // for (const quest of Object.keys(CORE_QUESTS)) {
-      //   ctx.db.insert("userQuests", {
-      //     userId,
-      //     type: quest,
-      //     status: "notStarted",
-      //   });
-      // }
-
       return userId;
     });
 };
