@@ -29,7 +29,6 @@ function IndexRoute() {
     const completedQuests = useQuery(api.userQuests.countCompleted) ?? 0;
     const questsByCategory = useQuery(api.userQuests.getByCategory);
 
-    // Derive core categories from constants
     const CORE_CATEGORIES: Record<
       CoreCategory,
       { to: string; label: string; icon: LucideIcon }
@@ -105,7 +104,7 @@ function IndexRoute() {
                   <StatusBadge
                     status={userQuest.status as Status}
                     condensed
-                    className="ml-auto"
+                    className="ml-auto mr-1"
                   />
                 </NavItem>
               );
@@ -149,7 +148,7 @@ function IndexRoute() {
                       <StatusBadge
                         status={quest.status as Status}
                         condensed
-                        className="ml-auto"
+                        className="ml-auto mr-1"
                       />
                     </NavItem>
                   ))}
