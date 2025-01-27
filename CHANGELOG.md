@@ -1,5 +1,17 @@
 # namesake
 
+## 0.17.0
+
+### Minor Changes
+
+- e50f02a: Display structured steps for all quests and improve admin editing experience
+- 56a570c: Display statuses for all core quests
+- 24464bb: Display core quests by default and redirect user to appropriate state documentation
+
+### Patch Changes
+
+- d07a946: Truncate long usernames and emails within settings and the sidebar
+
 ## 0.16.0
 
 ### Minor Changes
