@@ -2,8 +2,8 @@ import { Heading } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 
 interface StepProps {
-  title?: string;
   children: React.ReactNode;
+  title?: string;
   className?: string;
   actions?: React.ReactNode;
 }

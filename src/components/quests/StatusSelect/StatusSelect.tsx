@@ -6,8 +6,6 @@ import {
   MenuItem,
   MenuSection,
   MenuTrigger,
-  Tooltip,
-  TooltipTrigger,
 } from "@/components/common";
 import { STATUS, type Status } from "@convex/constants";
 import { ChevronDown } from "lucide-react";
@@ -41,24 +39,16 @@ export function StatusBadge({
 
   const { label, icon, variant } = STATUS[status];
 
-  const InnerBadge = (
+  return (
     <Badge
       icon={icon}
       variant={variant}
       {...props}
+      aria-label={condensed ? label : undefined}
       className={badgeStyles({ condensed, className })}
     >
       {!condensed && label}
     </Badge>
-  );
-
-  if (!condensed) return InnerBadge;
-
-  return (
-    <TooltipTrigger>
-      {InnerBadge}
-      <Tooltip>{label}</Tooltip>
-    </TooltipTrigger>
   );
 }
 

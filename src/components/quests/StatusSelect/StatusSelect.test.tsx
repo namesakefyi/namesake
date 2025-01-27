@@ -2,7 +2,7 @@ import { STATUS } from "@convex/constants";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { StatusSelect } from "./StatusSelect";
+import { StatusBadge, StatusSelect } from "./StatusSelect";
 
 describe("StatusSelect", () => {
   it("renders the current status badge", () => {
@@ -37,5 +37,24 @@ describe("StatusSelect", () => {
     await userEvent.keyboard("[Enter]");
     expect(mockOnChange).toHaveBeenCalledWith("complete");
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+});
+
+describe("StatusBadge", () => {
+  it("renders a condensed badge", () => {
+    render(<StatusBadge status="inProgress" condensed />);
+
+    // Should not show the label text directly
+    expect(screen.queryByText(STATUS.inProgress.label)).not.toBeInTheDocument();
+
+    // Should show the icon only
+    const badge = screen.getByTestId("badge");
+    expect(badge).toHaveClass("size-5");
+  });
+
+  it("returns null when status is undefined", () => {
+    const { container } = render(<StatusBadge status={undefined as any} />);
+
+    expect(container).toBeEmptyDOMElement();
   });
 });

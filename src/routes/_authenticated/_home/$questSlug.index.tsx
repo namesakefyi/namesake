@@ -24,7 +24,7 @@ export const Route = createFileRoute("/_authenticated/_home/$questSlug/")({
   component: QuestDetailRoute,
   validateSearch: (search: Record<string, unknown>): QuestSearch => {
     return {
-      edit: Boolean(search.edit) === true ? true : undefined,
+      edit: search.edit === true ? true : undefined,
     };
   },
 });
