@@ -96,6 +96,8 @@ export const QuestUrls = ({ quest, editable = false }: QuestUrlsProps) => {
     }
   };
 
+  if (!editable && quest.urls?.length === 0) return null;
+
   return (
     <div className="flex flex-col items-start gap-1 mb-4">
       {quest.urls?.map((url) => (

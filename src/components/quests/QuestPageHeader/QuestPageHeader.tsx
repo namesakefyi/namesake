@@ -1,14 +1,23 @@
 import type { PageHeaderProps } from "@/components/app";
-import { Badge, Button } from "@/components/common";
+import {
+  Badge,
+  Button,
+  Link,
+  Menu,
+  MenuItem,
+  MenuTrigger,
+} from "@/components/common";
 import { api } from "@convex/_generated/api";
-import type { Doc } from "@convex/_generated/dataModel";
+import type { Doc, Id } from "@convex/_generated/dataModel";
 import {
   CATEGORIES,
   type Category,
   type CoreCategory,
   type Status,
 } from "@convex/constants";
-import { Authenticated, useMutation } from "convex/react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { Authenticated, useMutation, useQuery } from "convex/react";
+import { Ellipsis } from "lucide-react";
 import { useState } from "react";
 import { Heading } from "react-aria-components";
 import { toast } from "sonner";
@@ -58,9 +67,24 @@ export function QuestPageHeader({
   badge,
   children,
 }: QuestPageHeaderProps) {
+  const navigate = useNavigate();
   const changeStatus = useMutation(api.userQuests.setStatus);
   const addQuest = useMutation(api.userQuests.create);
+  const deleteForever = useMutation(api.userQuests.deleteForever);
   const [isAddingQuest, setIsAddingQuest] = useState(false);
+  const user = useQuery(api.users.getCurrent);
+  const search = useSearch({
+    strict: false,
+  });
+  const canEdit = user?.role === "admin";
+  const isEditing = search.edit;
+
+  const handleRemoveQuest = (questId: Id<"quests">, title: string) => {
+    deleteForever({ questId }).then(() => {
+      toast(`Removed ${title} quest`);
+      navigate({ to: "/" });
+    });
+  };
 
   const handleStatusChange = (status: Status) => {
     if (quest) changeStatus({ questId: quest._id, status });
@@ -84,14 +108,14 @@ export function QuestPageHeader({
         <div className="flex gap-2 items-center">
           <Heading className="text-4xl font-medium">{quest?.title}</Heading>
           <div className="flex gap-2 items-center -mb-1">
-            {userQuest && (
+            {userQuest && !isEditing && (
               <StatusSelect
                 status={userQuest.status as Status}
                 onChange={handleStatusChange}
               />
             )}
             <Authenticated>
-              {userQuest === null && (
+              {userQuest === null && !isEditing && (
                 <Button
                   size="small"
                   onPress={handleAddQuest}
@@ -99,6 +123,49 @@ export function QuestPageHeader({
                 >
                   Add Quest
                 </Button>
+              )}
+              {isEditing && (
+                <Link
+                  button={{
+                    size: "small",
+                  }}
+                  href={{
+                    search: { edit: undefined },
+                  }}
+                >
+                  Finish editing
+                </Link>
+              )}
+              {quest && (
+                <MenuTrigger>
+                  <Button
+                    aria-label="Quest settings"
+                    variant="icon"
+                    icon={Ellipsis}
+                    className="-mr-2"
+                    size="small"
+                  />
+                  <Menu placement="bottom end">
+                    {canEdit && !isEditing && (
+                      <MenuItem
+                        href={{
+                          search: { edit: true },
+                        }}
+                      >
+                        Edit quest
+                      </MenuItem>
+                    )}
+                    {userQuest && (
+                      <MenuItem
+                        onAction={() =>
+                          handleRemoveQuest(quest._id, quest.title)
+                        }
+                      >
+                        Remove quest
+                      </MenuItem>
+                    )}
+                  </Menu>
+                </MenuTrigger>
               )}
             </Authenticated>
             {children}

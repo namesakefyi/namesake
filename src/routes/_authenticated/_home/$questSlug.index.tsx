@@ -1,11 +1,5 @@
 import { AppContent } from "@/components/app";
-import {
-  Button,
-  Empty,
-  Menu,
-  MenuItem,
-  MenuTrigger,
-} from "@/components/common";
+import { Empty } from "@/components/common";
 import {
   QuestCosts,
   QuestDetails,
@@ -17,12 +11,10 @@ import {
 } from "@/components/quests";
 import { QuestBasics } from "@/components/quests/QuestBasics/QuestBasics";
 import { api } from "@convex/_generated/api";
-import type { Id } from "@convex/_generated/dataModel";
 import { JURISDICTIONS } from "@convex/constants";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMutation, useQuery } from "convex/react";
-import { Ellipsis, Milestone } from "lucide-react";
-import { toast } from "sonner";
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "convex/react";
+import { Milestone } from "lucide-react";
 
 type QuestSearch = {
   edit?: true | undefined;
@@ -41,22 +33,9 @@ function QuestDetailRoute() {
   const { questSlug } = Route.useParams();
   const { edit: isEditing } = Route.useSearch();
 
-  const navigate = useNavigate();
-  const user = useQuery(api.users.getCurrent);
-  const canEdit = user?.role === "admin";
-
   const questData = useQuery(api.quests.getWithUserQuest, {
     slug: questSlug,
   });
-
-  const deleteForever = useMutation(api.userQuests.deleteForever);
-
-  const handleRemoveQuest = (questId: Id<"quests">, title: string) => {
-    deleteForever({ questId }).then(() => {
-      toast(`Removed ${title} quest`);
-      navigate({ to: "/" });
-    });
-  };
 
   // TODO: Improve loading state to prevent flash of empty
   if (questData === undefined) return;
@@ -76,44 +55,7 @@ function QuestDetailRoute() {
 
   return (
     <AppContent>
-      <QuestPageHeader quest={quest} userQuest={userQuest} badge={badge}>
-        <MenuTrigger>
-          <Button
-            aria-label="Quest settings"
-            variant="icon"
-            icon={Ellipsis}
-            className="-mr-2"
-            size="small"
-          />
-          <Menu placement="bottom end">
-            {canEdit && !isEditing && (
-              <MenuItem
-                href={{
-                  search: { edit: true },
-                }}
-              >
-                Edit quest
-              </MenuItem>
-            )}
-            {isEditing && (
-              <MenuItem
-                href={{
-                  search: { edit: undefined },
-                }}
-              >
-                Finish editing
-              </MenuItem>
-            )}
-            {userQuest && (
-              <MenuItem
-                onAction={() => handleRemoveQuest(quest._id, quest.title)}
-              >
-                Remove quest
-              </MenuItem>
-            )}
-          </Menu>
-        </MenuTrigger>
-      </QuestPageHeader>
+      <QuestPageHeader quest={quest} userQuest={userQuest} badge={badge} />
       <div className="flex flex-col gap-6 pb-12">
         <QuestBasics quest={quest} editable={isEditing} />
         <QuestDetails>
