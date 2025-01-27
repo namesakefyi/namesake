@@ -8,9 +8,9 @@ export const Route = createFileRoute(
   beforeLoad: async ({ context: { birthplace } }) => {
     if (birthplace) {
       throw redirect({
-        to: "/birth-certificate/$jurisdiction",
+        to: "/$questSlug",
         params: {
-          jurisdiction: birthplace.toLowerCase(),
+          questSlug: `birth-certificate-${birthplace.toLowerCase()}`,
         },
       });
     }
@@ -21,7 +21,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   return (
     <AppContent>
-      <JurisdictionInterstitial type="birth-certificate" />
+      <JurisdictionInterstitial type="birthCertificate" />
     </AppContent>
   );
 }

@@ -149,6 +149,7 @@ describe("faqs", () => {
     const questId = await t.run(async (ctx) => {
       return await ctx.db.insert("quests", {
         title: "Court Order",
+        slug: "court-order",
         creationUser: userId,
       });
     });

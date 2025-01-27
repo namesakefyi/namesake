@@ -31,7 +31,7 @@ export function Empty({
   return (
     <div
       className={twMerge(
-        "flex flex-1 flex-col items-center justify-center gap-4 w-full min-h-80 text-gray-normal",
+        "flex flex-1 flex-col items-center justify-center gap-4 w-full min-h-60 text-gray-normal",
         className,
       )}
     >

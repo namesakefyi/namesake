@@ -9,9 +9,15 @@ import {
 } from "@/components/common";
 import { StatusBadge } from "@/components/quests";
 import { api } from "@convex/_generated/api";
-import { CATEGORIES, CORE_QUESTS, type Status } from "@convex/constants";
+import {
+  CATEGORIES,
+  type Category,
+  type CoreCategory,
+  type Status,
+} from "@convex/constants";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
+import type { LucideIcon } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/_home")({
   component: IndexRoute,
@@ -19,93 +25,131 @@ export const Route = createFileRoute("/_authenticated/_home")({
 
 function IndexRoute() {
   const MyQuests = () => {
-    const coreQuestCount = useQuery(api.userCoreQuests.count) ?? 0;
-    const userQuestCount = useQuery(api.userQuests.count) ?? 0;
-    const totalCount = coreQuestCount + userQuestCount;
-
-    const completedCoreQuests =
-      useQuery(api.userCoreQuests.countCompleted) ?? 0;
+    const userQuests = useQuery(api.userQuests.count) ?? 0;
     const completedQuests = useQuery(api.userQuests.countCompleted) ?? 0;
-    const completedTotal = completedCoreQuests + completedQuests;
-
     const questsByCategory = useQuery(api.userQuests.getByCategory);
+
+    const CORE_CATEGORIES: Record<
+      CoreCategory,
+      { to: string; label: string; icon: LucideIcon }
+    > = {
+      courtOrder: {
+        to: "court-order",
+        label: CATEGORIES.courtOrder.label,
+        icon: CATEGORIES.courtOrder.icon,
+      },
+      stateId: {
+        to: "state-id",
+        label: CATEGORIES.stateId.label,
+        icon: CATEGORIES.stateId.icon,
+      },
+      socialSecurity: {
+        to: "social-security",
+        label: CATEGORIES.socialSecurity.label,
+        icon: CATEGORIES.socialSecurity.icon,
+      },
+      passport: {
+        to: "passport",
+        label: CATEGORIES.passport.label,
+        icon: CATEGORIES.passport.icon,
+      },
+      birthCertificate: {
+        to: "birth-certificate",
+        label: CATEGORIES.birthCertificate.label,
+        icon: CATEGORIES.birthCertificate.icon,
+      },
+    } as const;
 
     return (
       <AppSidebar>
-        <div className="flex items-center mb-4">
-          <ProgressBar
-            label="Quest progress"
-            value={completedTotal}
-            maxValue={totalCount}
-            valueLabel={
-              <span className="text-gray-normal">
-                <span className="text-gray-normal text-base font-medium mr-0.5 leading-none">
-                  {completedTotal}
-                </span>{" "}
-                <span className="text-gray-8 dark:text-graydark-8">/</span>{" "}
-                <span className="text-gray-dim">{totalCount} complete</span>
-              </span>
-            }
-            labelHidden
-          />
-        </div>
+        {userQuests > 0 && (
+          <div className="flex items-center mb-4">
+            <ProgressBar
+              label="Quest progress"
+              value={completedQuests}
+              maxValue={userQuests}
+              valueLabel={
+                <span className="text-gray-normal">
+                  <span className="text-gray-normal text-base font-medium mr-0.5 leading-none">
+                    {completedQuests}
+                  </span>{" "}
+                  <span className="text-gray-8 dark:text-graydark-8">/</span>{" "}
+                  <span className="text-gray-dim">{userQuests} complete</span>
+                </span>
+              }
+              labelHidden
+            />
+          </div>
+        )}
         <Nav>
-          <NavItem
-            href={{ to: "/court-order" }}
-            icon={CORE_QUESTS["court-order"].icon}
-            size="large"
-          >
-            Court Order
-          </NavItem>
-          <NavItem
-            href={{ to: "/state-id" }}
-            icon={CORE_QUESTS["state-id"].icon}
-            size="large"
-          >
-            State ID
-          </NavItem>
-          <NavItem
-            href={{ to: "/social-security" }}
-            icon={CORE_QUESTS["social-security"].icon}
-            size="large"
-          >
-            Social Security
-          </NavItem>
-          <NavItem
-            href={{ to: "/passport" }}
-            icon={CORE_QUESTS.passport.icon}
-            size="large"
-          >
-            Passport
-          </NavItem>
-          <NavItem
-            href={{ to: "/birth-certificate" }}
-            icon={CORE_QUESTS["birth-certificate"].icon}
-            size="large"
-          >
-            Birth Certificate
-          </NavItem>
+          {(Object.keys(CORE_CATEGORIES) as CoreCategory[]).map((category) => {
+            const userQuest = questsByCategory?.[category]?.[0];
+            const config = CORE_CATEGORIES[category];
+
+            if (userQuest) {
+              return (
+                <NavItem
+                  key={userQuest._id}
+                  href={{
+                    to: "/$questSlug",
+                    params: { questSlug: userQuest.slug },
+                  }}
+                  icon={config.icon}
+                  size="large"
+                >
+                  {userQuest.title}
+                  {userQuest.jurisdiction && (
+                    <Badge size="xs">{userQuest.jurisdiction}</Badge>
+                  )}
+                  <StatusBadge
+                    status={userQuest.status as Status}
+                    condensed
+                    className="ml-auto mr-1"
+                  />
+                </NavItem>
+              );
+            }
+
+            return (
+              <NavItem
+                key={category}
+                href={{ to: "/$questSlug", params: { questSlug: config.to } }}
+                icon={config.icon}
+                size="large"
+                className="border border-dashed border-gray-dim"
+              >
+                {config.label}
+              </NavItem>
+            );
+          })}
+
           {questsByCategory &&
-            Object.keys(questsByCategory).length > 0 &&
             Object.entries(questsByCategory).map(([group, quests]) => {
-              if (quests.length === 0) return null;
+              if (quests.length === 0 || group in CORE_CATEGORIES) return null;
+
               const { label } = CATEGORIES[group as keyof typeof CATEGORIES];
 
               return (
-                <NavGroup key={label} label={label} count={quests.length}>
+                <NavGroup key={label} label={label}>
                   {quests.map((quest) => (
                     <NavItem
                       key={quest._id}
                       href={{
-                        to: "/quests/$questId",
-                        params: { questId: quest.questId },
+                        to: "/$questSlug",
+                        params: { questSlug: quest.slug },
                       }}
+                      size="large"
+                      icon={CATEGORIES[quest.category as Category].icon}
                     >
-                      <StatusBadge status={quest.status as Status} condensed />
                       {quest.title}
                       {quest.jurisdiction && (
                         <Badge size="xs">{quest.jurisdiction}</Badge>
                       )}
+                      <StatusBadge
+                        status={quest.status as Status}
+                        condensed
+                        className="ml-auto mr-1"
+                      />
                     </NavItem>
                   ))}
                 </NavGroup>

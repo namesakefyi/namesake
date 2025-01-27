@@ -249,7 +249,7 @@ const ForgotPassword = ({
           if (result.redirect) {
             navigate({ to: result.redirect.toString() });
           }
-          navigate({ to: "/quests" });
+          navigate({ to: "/" });
         } catch (error) {
           console.error(error);
           setDidSendCode(false);

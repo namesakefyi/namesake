@@ -1,6 +1,4 @@
-export * from "./CoreQuestHeader/CoreQuestHeader";
 export * from "./DocumentCard/DocumentCard";
-export * from "./EditQuestBasicsModal/EditQuestBasicsModal";
 export * from "./EditQuestCostsModal/EditQuestCostsModal";
 export * from "./EditQuestDocumentModal/EditQuestDocumentModal";
 export * from "./EditQuestTimeRequiredModal/EditQuestTimeRequiredModal";
@@ -10,6 +8,7 @@ export * from "./QuestCosts/QuestCosts";
 export * from "./QuestDetails/QuestDetails";
 export * from "./QuestDocuments/QuestDocuments";
 export * from "./QuestPageHeader/QuestPageHeader";
+export * from "./QuestSteps/QuestSteps";
 export * from "./QuestTimeRequired/QuestTimeRequired";
 export * from "./QuestUrls/QuestUrls";
 export * from "./QuestUsageCount/QuestUsageCount";

@@ -126,40 +126,7 @@ export type Role = keyof typeof ROLES;
 export type GroupDetails = {
   label: string;
   icon: LucideIcon;
-};
-
-/**
- * Core quests.
- * Used to display the primary quests.
- */
-export type CoreQuest =
-  | "court-order"
-  | "state-id"
-  | "social-security"
-  | "passport"
-  | "birth-certificate";
-
-export const CORE_QUESTS: Record<CoreQuest, GroupDetails> = {
-  "court-order": {
-    label: "Court Order",
-    icon: Gavel,
-  },
-  "state-id": {
-    label: "State ID",
-    icon: IdCard,
-  },
-  "social-security": {
-    label: "Social Security",
-    icon: ShieldCheck,
-  },
-  passport: {
-    label: "Passport",
-    icon: Globe,
-  },
-  "birth-certificate": {
-    label: "Birth Certificate",
-    icon: FileBadge,
-  },
+  isCore?: boolean;
 };
 
 /**
@@ -167,6 +134,14 @@ export const CORE_QUESTS: Record<CoreQuest, GroupDetails> = {
  * Used to filter quests in the quests list.
  */
 export type Category =
+  // Core Types
+  | "courtOrder"
+  | "stateId"
+  | "socialSecurity"
+  | "passport"
+  | "birthCertificate"
+
+  // Non-Core Types
   | "entertainment"
   | "devices"
   | "education"
@@ -182,7 +157,37 @@ export type Category =
   | "travel"
   | "other";
 
+export type CoreCategory = keyof Pick<
+  typeof CATEGORIES,
+  "courtOrder" | "stateId" | "socialSecurity" | "passport" | "birthCertificate"
+>;
+
 export const CATEGORIES: Record<Category, GroupDetails> = {
+  courtOrder: {
+    label: "Court Order",
+    icon: Gavel,
+    isCore: true,
+  },
+  stateId: {
+    label: "State ID",
+    icon: IdCard,
+    isCore: true,
+  },
+  socialSecurity: {
+    label: "Social Security",
+    icon: ShieldCheck,
+    isCore: true,
+  },
+  passport: {
+    label: "Passport",
+    icon: Globe,
+    isCore: true,
+  },
+  birthCertificate: {
+    label: "Birth Certificate",
+    icon: FileBadge,
+    isCore: true,
+  },
   entertainment: {
     label: "Arts and Entertainment",
     icon: Clapperboard,
