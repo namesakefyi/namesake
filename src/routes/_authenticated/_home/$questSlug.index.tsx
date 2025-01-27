@@ -15,6 +15,7 @@ import {
   QuestTimeRequired,
   QuestUrls,
 } from "@/components/quests";
+import { QuestBasics } from "@/components/quests/QuestBasics/QuestBasics";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { JURISDICTIONS } from "@convex/constants";
@@ -23,12 +24,22 @@ import { useMutation, useQuery } from "convex/react";
 import { Ellipsis, Milestone } from "lucide-react";
 import { toast } from "sonner";
 
+type QuestSearch = {
+  edit?: true | undefined;
+};
+
 export const Route = createFileRoute("/_authenticated/_home/$questSlug/")({
   component: QuestDetailRoute,
+  validateSearch: (search: Record<string, unknown>): QuestSearch => {
+    return {
+      edit: Boolean(search.edit) === true ? true : undefined,
+    };
+  },
 });
 
 function QuestDetailRoute() {
   const { questSlug } = Route.useParams();
+  const { edit: isEditing } = Route.useSearch();
 
   const navigate = useNavigate();
   const user = useQuery(api.users.getCurrent);
@@ -75,14 +86,22 @@ function QuestDetailRoute() {
             size="small"
           />
           <Menu placement="bottom end">
-            {canEdit && (
+            {canEdit && !isEditing && (
               <MenuItem
                 href={{
-                  to: "/admin/quests/$questId",
-                  params: { questId: quest._id },
+                  search: { edit: true },
                 }}
               >
                 Edit quest
+              </MenuItem>
+            )}
+            {isEditing && (
+              <MenuItem
+                href={{
+                  search: { edit: undefined },
+                }}
+              >
+                Finish editing
               </MenuItem>
             )}
             {userQuest && (
@@ -95,14 +114,15 @@ function QuestDetailRoute() {
           </Menu>
         </MenuTrigger>
       </QuestPageHeader>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 pb-12">
+        <QuestBasics quest={quest} editable={isEditing} />
         <QuestDetails>
-          <QuestCosts quest={quest} />
-          <QuestTimeRequired quest={quest} />
+          <QuestCosts quest={quest} editable={isEditing} />
+          <QuestTimeRequired quest={quest} editable={isEditing} />
         </QuestDetails>
-        <QuestDocuments quest={quest} />
-        <QuestUrls urls={quest.urls} />
-        <QuestSteps quest={quest} />
+        <QuestDocuments quest={quest} editable={isEditing} />
+        <QuestUrls quest={quest} editable={isEditing} />
+        <QuestSteps quest={quest} editable={isEditing} />
       </div>
     </AppContent>
   );

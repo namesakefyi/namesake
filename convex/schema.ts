@@ -93,9 +93,16 @@ const questSteps = defineTable({
   /** The quest this step belongs to. */
   questId: v.id("quests"),
   /** The title of the step. (e.g. "Get prepared") */
-  title: v.optional(v.string()),
+  title: v.string(),
   /** Rich text comprising the contents of the step, stored as HTML. */
   content: v.optional(v.string()),
+  /** An optional call to action for the step. */
+  button: v.optional(
+    v.object({
+      text: v.string(),
+      url: v.string(),
+    }),
+  ),
 }).index("quest", ["questId"]);
 
 /**

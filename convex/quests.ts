@@ -127,7 +127,7 @@ export const create = userMutation({
       ? `${slug}-${Math.random().toString(36).substring(2, 7)}`
       : slug;
 
-    return await ctx.db.insert("quests", {
+    const questId = await ctx.db.insert("quests", {
       title: args.title,
       category: args.category,
       jurisdiction: args.jurisdiction,
@@ -135,6 +135,8 @@ export const create = userMutation({
       timeRequired: DEFAULT_TIME_REQUIRED,
       creationUser: ctx.userId,
     });
+
+    return { questId, slug: finalSlug };
   },
 });
 
@@ -163,6 +165,34 @@ export const setUrls = userMutation({
   args: { questId: v.id("quests"), urls: v.optional(v.array(v.string())) },
   handler: async (ctx, args) => {
     await ctx.db.patch(args.questId, { urls: args.urls });
+  },
+});
+
+export const addUrl = userMutation({
+  args: { questId: v.id("quests"), url: v.string() },
+  handler: async (ctx, args) => {
+    const quest = await ctx.db.get(args.questId);
+
+    if (!quest) throw new Error("Quest not found");
+
+    const existingUrls = quest.urls || [];
+
+    await ctx.db.patch(args.questId, { urls: [...existingUrls, args.url] });
+  },
+});
+
+export const deleteUrl = userMutation({
+  args: { questId: v.id("quests"), url: v.string() },
+  handler: async (ctx, args) => {
+    const quest = await ctx.db.get(args.questId);
+
+    if (!quest) throw new Error("Quest not found");
+
+    const existingUrls = quest.urls || [];
+
+    await ctx.db.patch(args.questId, {
+      urls: existingUrls.filter((u) => u !== args.url),
+    });
   },
 });
 
@@ -205,7 +235,7 @@ export const setTimeRequired = userMutation({
 export const addStep = userMutation({
   args: {
     questId: v.id("quests"),
-    title: v.optional(v.string()),
+    title: v.string(),
     content: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
