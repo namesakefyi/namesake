@@ -33,6 +33,7 @@ export * from "./RichText/RichText";
 export * from "./SearchField/SearchField";
 export * from "./Select/Select";
 export * from "./Separator/Separator";
+export * from "./Skeleton/Skeleton";
 export * from "./Slider/Slider";
 export * from "./Switch/Switch";
 export * from "./Table/Table";

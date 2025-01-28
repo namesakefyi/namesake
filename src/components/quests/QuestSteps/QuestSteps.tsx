@@ -199,30 +199,42 @@ export const QuestSteps = ({ quest, editable = false }: QuestStepsProps) => {
 
   const hasSteps = steps && steps.length > 0;
 
+  // Loading state
+  if (steps === undefined)
+    return (
+      <Steps>
+        {Array.from({ length: quest.steps?.length ?? 3 }).map((_, index) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: It's fine
+          <Step key={index} isLoading={true} />
+        ))}
+      </Steps>
+    );
+
+  // Empty state
+  if (!hasSteps) {
+    return (
+      <Empty
+        title="No steps"
+        icon={Milestone}
+        button={
+          editable
+            ? { children: "Add step", onPress: handleAddStep }
+            : undefined
+        }
+      />
+    );
+  }
+
   return (
     <>
-      {!hasSteps ? (
-        <Empty
-          title="No steps"
-          icon={Milestone}
-          button={
-            editable
-              ? { children: "Add step", onPress: handleAddStep }
-              : undefined
-          }
-        />
-      ) : (
-        <>
-          <Steps>
-            {steps
-              .filter((step) => step !== null)
-              .map((step) => (
-                <QuestStep key={step._id} step={step} editable={editable} />
-              ))}
-          </Steps>
-          {editable && <Button onPress={handleAddStep}>Add step</Button>}
-        </>
-      )}
+      <Steps>
+        {steps
+          .filter((step) => step !== null)
+          .map((step) => (
+            <QuestStep key={step._id} step={step} editable={editable} />
+          ))}
+      </Steps>
+      {editable && <Button onPress={handleAddStep}>Add step</Button>}
     </>
   );
 };

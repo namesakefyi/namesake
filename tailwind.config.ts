@@ -20,4 +20,21 @@ export default {
     }),
     tailwindcssContainerQueries,
   ],
+  theme: {
+    extend: {
+      animation: {
+        "fade-in": "fade-in 0.2s ease-in 0.2s both",
+      },
+      keyframes: {
+        "fade-in": {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
+        },
+      },
+    },
+  },
 } satisfies Config;
