@@ -15,7 +15,13 @@ type SkeletonProps = {
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export const Skeleton = ({ className }: SkeletonProps) => {
-  return <div className={skeletonStyles({ className })} aria-hidden />;
+  return (
+    <div
+      className={skeletonStyles({ className })}
+      aria-hidden
+      data-testid="skeleton"
+    />
+  );
 };
 
 export const SkeletonCircle = ({ className }: SkeletonProps) => {
@@ -23,6 +29,7 @@ export const SkeletonCircle = ({ className }: SkeletonProps) => {
     <div
       className={skeletonStyles({ className, type: "circle" })}
       aria-hidden
+      data-testid="skeleton-circle"
     />
   );
 };
@@ -50,7 +57,11 @@ export const SkeletonText = ({
   align = "left",
 }: SkeletonTextProps) => {
   return (
-    <div className={skeletonParagraphStyles({ className, align })} aria-hidden>
+    <div
+      className={skeletonParagraphStyles({ className, align })}
+      aria-hidden
+      data-testid="skeleton-text"
+    >
       {Array.from({ length: lines }).map((_, index) => {
         const minWidth = 70;
         const maxWidth = 90;
