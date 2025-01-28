@@ -1,11 +1,14 @@
-import { Badge, Button, Tooltip, TooltipTrigger } from "@/components/common";
-import { DocumentCard, EditQuestDocumentModal } from "@/components/quests";
+import { Empty } from "@/components/common";
+import {
+  DocumentCard,
+  EditQuestDocumentModal,
+  QuestSection,
+} from "@/components/quests";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { Plus } from "lucide-react";
+import { FileIcon } from "lucide-react";
 import { useState } from "react";
-import { Heading } from "react-aria-components";
 
 type QuestDocumentsProps = {
   quest: Doc<"quests">;
@@ -18,48 +21,43 @@ export const QuestDocuments = ({ quest, editable }: QuestDocumentsProps) => {
     questId: quest._id,
   });
 
-  if ((!documents || documents.length === 0) && !editable) return null;
+  const hasDocuments = documents && documents.length > 0;
+
+  if (!hasDocuments && !editable) return null;
 
   return (
-    <div className="p-4 rounded-lg border border-gray-dim">
-      <header className="flex gap-1 items-center pb-4">
-        <Heading className="text-gray-dim text-sm">Documents</Heading>
-        <Badge size="xs" className="rounded-full">
-          {documents?.length || 0}
-        </Badge>
-        {editable && (
-          <>
-            <TooltipTrigger>
-              <Button
-                onPress={() => setIsEditing(true)}
-                variant="ghost"
-                icon={Plus}
-                size="small"
-                aria-label="Add document"
-              />
-              <Tooltip>Add document</Tooltip>
-            </TooltipTrigger>
-            <EditQuestDocumentModal
-              quest={quest}
-              isOpen={isEditing}
-              onOpenChange={setIsEditing}
+    <QuestSection
+      title="Documents"
+      action={
+        editable
+          ? {
+              children: "Add document",
+              onPress: () => setIsEditing(true),
+            }
+          : undefined
+      }
+    >
+      {editable && (
+        <EditQuestDocumentModal
+          quest={quest}
+          isOpen={isEditing}
+          onOpenChange={setIsEditing}
+        />
+      )}
+      {!hasDocuments ? (
+        <Empty title="No documents" icon={FileIcon} />
+      ) : (
+        <div className="flex gap-4 overflow-x-auto p-4 -m-4">
+          {documents?.map((document) => (
+            <DocumentCard
+              key={document._id}
+              title={document.title}
+              code={document.code}
+              downloadUrl={document.url ?? undefined}
             />
-          </>
-        )}
-      </header>
-      <div className="flex gap-4 overflow-x-auto p-4 -m-4">
-        {documents?.map((document) => (
-          <DocumentCard
-            key={document._id}
-            title={document.title}
-            code={document.code}
-            downloadUrl={document.url ?? undefined}
-          />
-        ))}
-        {editable && documents?.length === 0 && (
-          <Button onPress={() => setIsEditing(true)}>Uplaod document</Button>
-        )}
-      </div>
-    </div>
+          ))}
+        </div>
+      )}
+    </QuestSection>
   );
 };

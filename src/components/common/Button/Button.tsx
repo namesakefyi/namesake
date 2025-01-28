@@ -27,7 +27,7 @@ export const buttonStyles = tv({
       primary:
         "bg-purple-solid text-white border-purple-10 dark:border-purpledark-10 shadow-sm",
       secondary:
-        "bg-white dark:bg-graydark-3 hover:bg-white dark:hover:bg-graydark-4 text-gray-normal shadow-sm",
+        "bg-white dark:bg-graydark-3 hover:bg-white dark:hover:bg-graydark-4 hover:border-gray-7 dark:hover:border-graydark-7 text-gray-normal shadow-sm",
       destructive: "bg-red-solid",
       icon: "bg-transparent hover:bg-graya-3 dark:hover:bg-graydarka-3 text-gray-dim hover:text-gray-normal border-0 flex items-center justify-center rounded-full",
       ghost:
