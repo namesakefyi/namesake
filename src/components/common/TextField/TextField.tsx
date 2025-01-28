@@ -26,6 +26,7 @@ export interface TextFieldProps extends AriaTextFieldProps {
   suffix?: React.ReactNode;
   errorMessage?: string | ((validation: ValidationResult) => string);
   size?: FieldSize;
+  placeholder?: string;
 }
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
@@ -38,6 +39,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       errorMessage,
       type,
       size = "medium",
+      placeholder,
       ...props
     },
     ref,
@@ -63,6 +65,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
               type === "tel" && "tabular-nums",
             )}
             size={size}
+            placeholder={placeholder}
           />
           {suffix}
           {type === "password" && (

@@ -1,5 +1,6 @@
 import {
   Button,
+  Empty,
   Link,
   Menu,
   MenuItem,
@@ -12,15 +13,21 @@ import { useMutation } from "convex/react";
 import { Link as LinkIcon, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { QuestSection } from "../QuestSection/QuestSection";
 
-type QuestUrlProps = {
+type QuestReferenceProps = {
   quest: Doc<"quests">;
   url: string;
   editable?: boolean;
   onSave: (url: string) => void;
 };
 
-const QuestUrl = ({ quest, url, editable, onSave }: QuestUrlProps) => {
+const QuestReference = ({
+  quest,
+  url,
+  editable,
+  onSave,
+}: QuestReferenceProps) => {
   const [text, setText] = useState(url);
   const [isEditing, setIsEditing] = useState(false);
   const deleteUrl = useMutation(api.quests.deleteUrl);
@@ -34,15 +41,21 @@ const QuestUrl = ({ quest, url, editable, onSave }: QuestUrlProps) => {
   };
 
   const handleSave = () => {
-    onSave(text);
+    onSave(url);
     setIsEditing(false);
   };
 
   return (
     <div key={url} className="flex gap-1 items-center justify-between">
       {isEditing ? (
-        <div className="flex gap-1 items-end">
-          <TextField value={text} onChange={setText} type="url" label="URL" />
+        <div className="flex gap-1 items-end w-full">
+          <TextField
+            value={text}
+            onChange={setText}
+            type="url"
+            label="URL"
+            className="flex-1"
+          />
           <Button type="button" variant="secondary" onPress={handleSave}>
             Save
           </Button>
@@ -72,14 +85,17 @@ const QuestUrl = ({ quest, url, editable, onSave }: QuestUrlProps) => {
   );
 };
 
-type QuestUrlsProps = {
+type QuestReferencesProps = {
   quest: Doc<"quests">;
   editable?: boolean;
 };
 
-export const QuestUrls = ({ quest, editable = false }: QuestUrlsProps) => {
+export const QuestReferences = ({
+  quest,
+  editable = false,
+}: QuestReferencesProps) => {
   const [isAddingNew, setIsAddingNew] = useState(false);
-  const [newUrl, setNewUrl] = useState("");
+  const [newUrl, setNewUrl] = useState("https://");
   const updateUrls = useMutation(api.quests.setUrls);
 
   const handleSave = (oldUrl: string, newUrl: string) => {
@@ -90,59 +106,67 @@ export const QuestUrls = ({ quest, editable = false }: QuestUrlsProps) => {
 
       updateUrls({ questId: quest._id, urls: updatedUrls });
       setIsAddingNew(false);
-      setNewUrl("");
+      setNewUrl("https://");
     } catch (error) {
       toast.error("Couldn't update URL");
     }
   };
 
-  if (!editable && quest.urls?.length === 0) return null;
+  if (!editable && !quest.urls) return null;
 
   return (
-    <div className="flex flex-col items-start gap-1 mb-4">
-      {quest.urls?.map((url) => (
-        <QuestUrl
-          key={url}
-          quest={quest}
-          url={url}
-          editable={editable}
-          onSave={(newUrl) => handleSave(url, newUrl)}
-        />
-      ))}
-      {editable &&
-        (isAddingNew ? (
-          <div className="flex gap-1 items-end">
-            <TextField
-              value={newUrl}
-              onChange={setNewUrl}
-              type="url"
-              label="URL"
-              className="flex-1"
-            />
-            <Button
-              type="button"
-              variant="secondary"
-              onPress={() => setIsAddingNew(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              onPress={() => handleSave("", newUrl)}
-            >
-              Save
-            </Button>
-          </div>
-        ) : (
+    <QuestSection
+      title="References"
+      action={
+        editable
+          ? {
+              children: "Add reference",
+              onPress: () => setIsAddingNew(true),
+            }
+          : undefined
+      }
+    >
+      {editable && isAddingNew && (
+        <div className="flex gap-1 items-end w-full mb-4">
+          <TextField
+            value={newUrl}
+            onChange={setNewUrl}
+            type="url"
+            aria-label="URL"
+            className="flex-1"
+            autoFocus
+          />
           <Button
             type="button"
             variant="secondary"
-            onPress={() => setIsAddingNew(true)}
+            onPress={() => setIsAddingNew(false)}
           >
-            Add URL
+            Cancel
           </Button>
-        ))}
-    </div>
+          <Button
+            type="button"
+            variant="secondary"
+            onPress={() => handleSave("", newUrl)}
+          >
+            Save
+          </Button>
+        </div>
+      )}
+      {!quest.urls ? (
+        <Empty title="No references" icon={LinkIcon} />
+      ) : (
+        <div className="flex flex-col gap-1">
+          {quest.urls?.map((url) => (
+            <QuestReference
+              key={url}
+              quest={quest}
+              url={url}
+              editable={editable}
+              onSave={(newUrl) => handleSave(url, newUrl)}
+            />
+          ))}
+        </div>
+      )}
+    </QuestSection>
   );
 };

@@ -1,5 +1,6 @@
 import {
   Button,
+  Empty,
   Form,
   Link,
   Menu,
@@ -11,7 +12,7 @@ import {
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
-import { MoreHorizontal, Trash } from "lucide-react";
+import { Milestone, MoreHorizontal, Trash } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Step, Steps } from "../Steps/Steps";
@@ -196,18 +197,32 @@ export const QuestSteps = ({ quest, editable = false }: QuestStepsProps) => {
     });
   };
 
+  const hasSteps = steps && steps.length > 0;
+
   return (
     <>
-      {steps && (
-        <Steps>
-          {steps
-            .filter((step) => step !== null)
-            .map((step) => (
-              <QuestStep key={step._id} step={step} editable={editable} />
-            ))}
-        </Steps>
+      {!hasSteps ? (
+        <Empty
+          title="No steps"
+          icon={Milestone}
+          button={
+            editable
+              ? { children: "Add step", onPress: handleAddStep }
+              : undefined
+          }
+        />
+      ) : (
+        <>
+          <Steps>
+            {steps
+              .filter((step) => step !== null)
+              .map((step) => (
+                <QuestStep key={step._id} step={step} editable={editable} />
+              ))}
+          </Steps>
+          {editable && <Button onPress={handleAddStep}>Add step</Button>}
+        </>
       )}
-      {editable && <Button onPress={handleAddStep}>Add step</Button>}
     </>
   );
 };

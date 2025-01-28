@@ -5,9 +5,9 @@ import {
   QuestDetails,
   QuestDocuments,
   QuestPageHeader,
+  QuestReferences,
   QuestSteps,
   QuestTimeRequired,
-  QuestUrls,
 } from "@/components/quests";
 import { QuestBasics } from "@/components/quests/QuestBasics/QuestBasics";
 import { api } from "@convex/_generated/api";
@@ -62,9 +62,9 @@ function QuestDetailRoute() {
           <QuestCosts quest={quest} editable={isEditing} />
           <QuestTimeRequired quest={quest} editable={isEditing} />
         </QuestDetails>
-        <QuestDocuments quest={quest} editable={isEditing} />
-        <QuestUrls quest={quest} editable={isEditing} />
         <QuestSteps quest={quest} editable={isEditing} />
+        <QuestDocuments quest={quest} editable={isEditing} />
+        <QuestReferences quest={quest} editable={isEditing} />
       </div>
     </AppContent>
   );
