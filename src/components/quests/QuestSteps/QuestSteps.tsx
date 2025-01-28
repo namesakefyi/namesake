@@ -13,7 +13,7 @@ import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { Milestone, MoreHorizontal, Trash } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Step, Steps } from "../Steps/Steps";
 
@@ -117,7 +117,6 @@ const QuestStepForm = ({ step, onSave, onCancel }: QuestStepFormProps) => {
 type QuestStepProps = {
   step: Doc<"questSteps">;
   editable?: boolean;
-  isLoading?: boolean;
 };
 
 export const QuestStep = ({ step, editable = false }: QuestStepProps) => {
@@ -185,7 +184,6 @@ type QuestStepsProps = {
 };
 
 export const QuestSteps = ({ quest, editable = false }: QuestStepsProps) => {
-  const [isLoading, setIsLoading] = useState(true);
   const addStep = useMutation(api.quests.addStep);
 
   const steps = useQuery(api.questSteps.getByIds, {
@@ -199,16 +197,21 @@ export const QuestSteps = ({ quest, editable = false }: QuestStepsProps) => {
     });
   };
 
-  useEffect(() => {
-    setIsLoading(true);
-    if (steps !== undefined) {
-      setIsLoading(false);
-    }
-  }, [steps]);
-
   const hasSteps = steps && steps.length > 0;
 
-  if (!hasSteps && !isLoading) {
+  // Loading state
+  if (steps === undefined)
+    return (
+      <Steps>
+        {Array.from({ length: quest.steps?.length ?? 3 }).map((_, index) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: It's fine
+          <Step key={index} isLoading={true} />
+        ))}
+      </Steps>
+    );
+
+  // Empty state
+  if (!hasSteps) {
     return (
       <Empty
         title="No steps"
@@ -222,29 +225,13 @@ export const QuestSteps = ({ quest, editable = false }: QuestStepsProps) => {
     );
   }
 
-  // Loading state
-  if (steps === undefined)
-    return (
-      <Steps>
-        {Array.from({ length: quest.steps?.length ?? 3 }).map((_, index) => (
-          // biome-ignore lint/suspicious/noArrayIndexKey: It's fine
-          <Step key={index} isLoading={true} />
-        ))}
-      </Steps>
-    );
-
   return (
     <>
       <Steps>
         {steps
           .filter((step) => step !== null)
           .map((step) => (
-            <QuestStep
-              key={step._id}
-              step={step}
-              editable={editable}
-              isLoading={isLoading}
-            />
+            <QuestStep key={step._id} step={step} editable={editable} />
           ))}
       </Steps>
       {editable && <Button onPress={handleAddStep}>Add step</Button>}
