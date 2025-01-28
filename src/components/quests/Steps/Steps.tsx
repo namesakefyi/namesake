@@ -1,14 +1,22 @@
+import { Skeleton, SkeletonText } from "@/components/common";
 import { Heading } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 
 interface StepProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   title?: string;
   className?: string;
   actions?: React.ReactNode;
+  isLoading?: boolean;
 }
 
-export const Step = ({ title, children, className, actions }: StepProps) => {
+export const Step = ({
+  title,
+  children,
+  className,
+  actions,
+  isLoading,
+}: StepProps) => {
   return (
     <li
       className={twMerge(
@@ -16,13 +24,24 @@ export const Step = ({ title, children, className, actions }: StepProps) => {
         className,
       )}
     >
-      <div className="flex justify-between items-start">
-        {title && (
-          <Heading className="text-2xl font-medium pb-3">{title}</Heading>
-        )}
-        {actions}
-      </div>
-      <div className="text-gray-dim flex flex-col gap-4">{children}</div>
+      {isLoading ? (
+        <div className="flex flex-col gap-4">
+          <Skeleton className="max-w-60 h-8" />
+          <SkeletonText lines={3} />
+        </div>
+      ) : (
+        <>
+          <div className="flex justify-between items-start">
+            {title && (
+              <Heading className="text-2xl font-medium pb-3">{title}</Heading>
+            )}
+            {actions}
+          </div>
+          {children && (
+            <div className="text-gray-dim flex flex-col gap-4">{children}</div>
+          )}
+        </>
+      )}
     </li>
   );
 };
