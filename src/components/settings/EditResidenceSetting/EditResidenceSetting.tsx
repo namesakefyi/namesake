@@ -36,6 +36,7 @@ export const EditResidenceSetting = ({ user }: EditResidenceSettingProps) => {
     e.preventDefault();
     setError(undefined);
 
+    // This shouldn't be possible, but just in case
     if (!residence) {
       setError("Please select a state.");
       return;
