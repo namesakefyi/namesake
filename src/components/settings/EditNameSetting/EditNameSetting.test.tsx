@@ -49,6 +49,9 @@ describe("EditNameSetting", () => {
 
     await user.click(screen.getByRole("button", { name: "John Doe" }));
 
+    // Autofocus input
+    expect(screen.getByRole("textbox", { name: "Name" })).toHaveFocus();
+
     expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue(
       "John Doe",
     );

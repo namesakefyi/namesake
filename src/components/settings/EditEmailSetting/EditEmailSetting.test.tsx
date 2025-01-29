@@ -54,6 +54,9 @@ describe("EditEmailSetting", () => {
       screen.getByRole("button", { name: "testuser@example.com" }),
     );
 
+    // Autofocus input
+    expect(screen.getByRole("textbox", { name: "Email" })).toHaveFocus();
+
     expect(screen.getByRole("textbox", { name: "Email" })).toHaveValue(
       "testuser@example.com",
     );
