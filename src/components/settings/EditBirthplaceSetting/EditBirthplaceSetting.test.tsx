@@ -25,25 +25,38 @@ describe("EditBirthplaceSetting", () => {
 
   it("renders correct jurisdiction if it exists", () => {
     render(<EditBirthplaceSetting user={mockUser} />);
-    expect(screen.getByText(JURISDICTIONS.CA)).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { hidden: true })).toHaveValue("CA");
+    expect(screen.getByRole("button")).toHaveTextContent(JURISDICTIONS.CA);
   });
 
-  it("renders 'Set birthplace' if birthplace is not set", () => {
+  it("shows empty select if birthplace is not set", () => {
     render(
       <EditBirthplaceSetting user={{ ...mockUser, birthplace: undefined }} />,
     );
-    expect(
-      screen.getByRole("button", { name: "Set birthplace" }),
-    ).toBeInTheDocument();
+    const stateSelect = screen.getByLabelText("State");
+    expect(stateSelect).toHaveValue("");
   });
 
-  it("populates correct jurisdiction when modal is opened", async () => {
+  it("shows save/cancel buttons when birthplace is changed", async () => {
     const user = userEvent.setup();
     render(<EditBirthplaceSetting user={mockUser} />);
-    await user.click(screen.getByRole("button", { name: JURISDICTIONS.CA }));
+
+    // Initially buttons should not be visible
     expect(
-      screen.getByRole("button", { name: `${JURISDICTIONS.CA} State` }),
-    ).toBeInTheDocument();
+      screen.queryByRole("button", { name: "Save" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Cancel" }),
+    ).not.toBeInTheDocument();
+
+    // Change birthplace
+    const stateSelect = screen.getByLabelText("State");
+    await user.click(stateSelect);
+    await user.click(screen.getByRole("option", { name: JURISDICTIONS.NY }));
+
+    // Buttons should now be visible
+    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
   });
 
   it("updates birthplace and submits the form", async () => {
@@ -51,19 +64,18 @@ describe("EditBirthplaceSetting", () => {
     mockSetBirthplace.mockResolvedValueOnce(undefined);
 
     render(<EditBirthplaceSetting user={mockUser} />);
-    await user.click(screen.getByRole("button", { name: JURISDICTIONS.CA }));
+
+    // Change birthplace
     const stateSelect = screen.getByLabelText("State");
-
     await user.click(stateSelect);
-
     await user.click(screen.getByRole("option", { name: JURISDICTIONS.NY }));
 
+    // Submit form
     await user.click(screen.getByRole("button", { name: "Save" }));
 
     expect(mockSetBirthplace).toHaveBeenCalledWith({
       birthplace: "NY",
     });
-
     expect(toast.success).toHaveBeenCalledWith("Birthplace updated.");
   });
 
@@ -73,16 +85,41 @@ describe("EditBirthplaceSetting", () => {
 
     render(<EditBirthplaceSetting user={mockUser} />);
 
-    await user.click(screen.getByRole("button", { name: JURISDICTIONS.CA }));
+    // Change birthplace
     const stateSelect = screen.getByLabelText("State");
     await user.click(stateSelect);
-
     await user.click(screen.getByRole("option", { name: JURISDICTIONS.NY }));
 
+    // Submit form
     await user.click(screen.getByRole("button", { name: "Save" }));
 
-    expect(screen.getByRole("alert")).toHaveTextContent(
-      "Failed to update birthplace. Please try again.",
-    );
+    expect(
+      screen.getByText("Failed to update birthplace. Please try again."),
+    ).toBeInTheDocument();
+  });
+
+  it("resets to original value when cancel is clicked", async () => {
+    const user = userEvent.setup();
+    render(<EditBirthplaceSetting user={mockUser} />);
+
+    // Change birthplace
+    const stateSelect = screen.getByLabelText("State");
+    await user.click(stateSelect);
+    await user.click(screen.getByRole("option", { name: JURISDICTIONS.NY }));
+
+    // Click cancel
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+
+    // Should reset to original value
+    expect(screen.getByRole("combobox", { hidden: true })).toHaveValue("CA");
+    expect(screen.getByRole("button")).toHaveTextContent(JURISDICTIONS.CA);
+
+    // Buttons should be hidden
+    expect(
+      screen.queryByRole("button", { name: "Save" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Cancel" }),
+    ).not.toBeInTheDocument();
   });
 });

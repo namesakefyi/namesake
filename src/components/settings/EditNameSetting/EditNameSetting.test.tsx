@@ -20,7 +20,9 @@ describe("EditNameSetting", () => {
 
   it("renders correct username if exists", () => {
     render(<EditNameSetting user={mockUser} />);
-    expect(screen.getByText("John Doe")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "John Doe" }),
+    ).toBeInTheDocument();
   });
 
   it("truncates very long names", () => {
@@ -41,24 +43,35 @@ describe("EditNameSetting", () => {
     ).toBeInTheDocument();
   });
 
-  it("populates correct username when modal is opened", async () => {
+  it("shows edit form when edit button is clicked", async () => {
     const user = userEvent.setup();
     render(<EditNameSetting user={mockUser} />);
+
     await user.click(screen.getByRole("button", { name: "John Doe" }));
-    expect(screen.getByRole("textbox")).toHaveValue("John Doe");
+
+    // Autofocus input
+    expect(screen.getByRole("textbox", { name: "Name" })).toHaveFocus();
+
+    expect(screen.getByRole("textbox", { name: "Name" })).toHaveValue(
+      "John Doe",
+    );
+    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
   });
 
   it("displays an error when the name is too long", async () => {
     const user = userEvent.setup();
     render(<EditNameSetting user={mockUser} />);
-    await user.click(screen.getByRole("button", { name: "John Doe" }));
-    const input = screen.getByLabelText("Name");
 
+    await user.click(screen.getByRole("button", { name: "John Doe" }));
+    const input = screen.getByRole("textbox", { name: "Name" });
+
+    await user.clear(input);
     await user.type(input, "a".repeat(101));
     await user.click(screen.getByRole("button", { name: "Save" }));
 
     expect(
-      await screen.findByText("Name must be less than 100 characters."),
+      screen.getByText("Name must be less than 100 characters."),
     ).toBeInTheDocument();
   });
 
@@ -67,10 +80,11 @@ describe("EditNameSetting", () => {
 
     const updateName = vi.fn();
     (useMutation as ReturnType<typeof vi.fn>).mockReturnValue(updateName);
+
     render(<EditNameSetting user={mockUser} />);
     await user.click(screen.getByRole("button", { name: "John Doe" }));
 
-    const input = screen.getByLabelText("Name");
+    const input = screen.getByRole("textbox", { name: "Name" });
     await user.clear(input);
     await user.type(input, "Jane Doe");
     await user.click(screen.getByRole("button", { name: "Save" }));
@@ -79,6 +93,9 @@ describe("EditNameSetting", () => {
       expect(updateName).toHaveBeenCalledWith({ name: "Jane Doe" }),
     );
     expect(toast.success).toHaveBeenCalledWith("Name updated.");
+
+    // Should return to view mode
+    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
   });
 
   it("displays an error when the form submission fails", async () => {
@@ -88,29 +105,35 @@ describe("EditNameSetting", () => {
       .fn()
       .mockRejectedValue(new Error("Failed to update name"));
     (useMutation as ReturnType<typeof vi.fn>).mockReturnValue(updateName);
+
     render(<EditNameSetting user={mockUser} />);
     await user.click(screen.getByRole("button", { name: "John Doe" }));
 
-    const input = screen.getByLabelText("Name");
+    const input = screen.getByRole("textbox", { name: "Name" });
     await user.clear(input);
     await user.type(input, "Jane Doe");
     await user.click(screen.getByRole("button", { name: "Save" }));
+
     expect(
-      await screen.findByText("Failed to update name. Please try again."),
+      screen.getByText("Failed to update name. Please try again."),
     ).toBeInTheDocument();
   });
 
-  it("closes the modal without saving when the cancel button is clicked", async () => {
+  it("resets to original value when cancel is clicked", async () => {
     const user = userEvent.setup();
 
     render(<EditNameSetting user={mockUser} />);
     await user.click(screen.getByRole("button", { name: "John Doe" }));
-    const input = screen.getByLabelText("Name");
+
+    const input = screen.getByRole("textbox", { name: "Name" });
     await user.clear(input);
     await user.type(input, "Jane Doe");
     await user.click(screen.getByRole("button", { name: "Cancel" }));
 
-    expect(screen.queryByText("Edit name")).not.toBeInTheDocument();
-    expect(screen.getByText("John Doe")).toBeInTheDocument();
+    // Should return to view mode with original value
+    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "John Doe" }),
+    ).toBeInTheDocument();
   });
 });

@@ -23,7 +23,9 @@ describe("EditEmailSetting", () => {
 
   it("renders the correct email if it exists", () => {
     render(<EditEmailSetting user={mockUser} />);
-    expect(screen.getByText("testuser@example.com")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "testuser@example.com" }),
+    ).toBeInTheDocument();
   });
 
   it("renders 'Set email' if email is not set", () => {
@@ -44,21 +46,27 @@ describe("EditEmailSetting", () => {
     );
   });
 
-  it("populates the correct email when the modal is opened", async () => {
+  it("shows edit form with current email when edit button is clicked", async () => {
     const user = userEvent.setup();
     render(<EditEmailSetting user={mockUser} />);
+
     await user.click(
       screen.getByRole("button", { name: "testuser@example.com" }),
     );
-    expect(screen.getByRole("textbox", { name: /email/i })).toHaveValue(
+
+    // Autofocus input
+    expect(screen.getByRole("textbox", { name: "Email" })).toHaveFocus();
+
+    expect(screen.getByRole("textbox", { name: "Email" })).toHaveValue(
       "testuser@example.com",
     );
+    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
   });
 
   it("displays an error for an invalid email address", async () => {
     const user = userEvent.setup();
     const mockError = new ConvexError(INVALID_EMAIL);
-
     const updateEmail = vi.fn().mockRejectedValue(mockError);
     (useMutation as ReturnType<typeof vi.fn>).mockReturnValue(updateEmail);
 
@@ -67,20 +75,19 @@ describe("EditEmailSetting", () => {
       screen.getByRole("button", { name: "testuser@example.com" }),
     );
 
-    const input = screen.getByRole("textbox", { name: /email/i });
+    const input = screen.getByRole("textbox", { name: "Email" });
     await user.clear(input);
     await user.type(input, "newuser@zmail");
     await user.click(screen.getByRole("button", { name: "Save" }));
 
     expect(
-      await screen.findByText("Please enter a valid email address."),
+      screen.getByText("Please enter a valid email address."),
     ).toBeInTheDocument();
   });
 
   it("displays an error when the email is already in use", async () => {
     const user = userEvent.setup();
     const mockError = new ConvexError(DUPLICATE_EMAIL);
-
     const updateEmail = vi.fn().mockRejectedValue(mockError);
     (useMutation as ReturnType<typeof vi.fn>).mockReturnValue(updateEmail);
 
@@ -89,22 +96,19 @@ describe("EditEmailSetting", () => {
       screen.getByRole("button", { name: "testuser@example.com" }),
     );
 
-    const input = screen.getByRole("textbox", { name: /email/i });
+    const input = screen.getByRole("textbox", { name: "Email" });
     await user.clear(input);
     await user.type(input, "newuser@example.com");
     await user.click(screen.getByRole("button", { name: "Save" }));
 
     expect(
-      await screen.findByText(
-        "This email is currently in use. Try another one.",
-      ),
+      screen.getByText("This email is currently in use. Try another one."),
     ).toBeInTheDocument();
   });
 
   it("displays a fallback error when an unknown ConvexError is received", async () => {
     const user = userEvent.setup();
     const mockError = new ConvexError("UNKNOWN_ERROR");
-
     const updateEmail = vi.fn().mockRejectedValue(mockError);
     (useMutation as ReturnType<typeof vi.fn>).mockReturnValue(updateEmail);
 
@@ -113,13 +117,13 @@ describe("EditEmailSetting", () => {
       screen.getByRole("button", { name: "testuser@example.com" }),
     );
 
-    const input = screen.getByRole("textbox", { name: /email/i });
+    const input = screen.getByRole("textbox", { name: "Email" });
     await user.clear(input);
     await user.type(input, "newuser@example.com");
     await user.click(screen.getByRole("button", { name: "Save" }));
 
     expect(
-      await screen.findByText("Something went wrong. Please try again later."),
+      screen.getByText("Something went wrong. Please try again later."),
     ).toBeInTheDocument();
   });
 
@@ -127,9 +131,7 @@ describe("EditEmailSetting", () => {
     const user = userEvent.setup();
     const updateEmail = vi
       .fn()
-      .mockRejectedValue(
-        new Error("Failed to update email. Please try again."),
-      );
+      .mockRejectedValue(new Error("Failed to update email"));
     (useMutation as ReturnType<typeof vi.fn>).mockReturnValue(updateEmail);
 
     render(<EditEmailSetting user={mockUser} />);
@@ -137,13 +139,13 @@ describe("EditEmailSetting", () => {
       screen.getByRole("button", { name: "testuser@example.com" }),
     );
 
-    const input = screen.getByRole("textbox", { name: /email/i });
+    const input = screen.getByRole("textbox", { name: "Email" });
     await user.clear(input);
     await user.type(input, "newuser@example.com");
     await user.click(screen.getByRole("button", { name: "Save" }));
 
     expect(
-      await screen.findByText("Failed to update email. Please try again."),
+      screen.getByText("Failed to update email. Please try again."),
     ).toBeInTheDocument();
   });
 
@@ -157,7 +159,7 @@ describe("EditEmailSetting", () => {
       screen.getByRole("button", { name: "testuser@example.com" }),
     );
 
-    const input = screen.getByRole("textbox", { name: /email/i });
+    const input = screen.getByRole("textbox", { name: "Email" });
     await user.clear(input);
     await user.type(input, "newuser@example.com");
     await user.click(screen.getByRole("button", { name: "Save" }));
@@ -168,9 +170,12 @@ describe("EditEmailSetting", () => {
       }),
     );
     expect(toast.success).toHaveBeenCalledWith("Email updated.");
+
+    // Should return to view mode
+    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
   });
 
-  it("closes the modal without saving when the cancel button is clicked", async () => {
+  it("resets to original value when cancel is clicked", async () => {
     const user = userEvent.setup();
 
     render(<EditEmailSetting user={mockUser} />);
@@ -178,12 +183,15 @@ describe("EditEmailSetting", () => {
       screen.getByRole("button", { name: "testuser@example.com" }),
     );
 
-    const input = screen.getByRole("textbox", { name: /email/i });
+    const input = screen.getByRole("textbox", { name: "Email" });
     await user.clear(input);
     await user.type(input, "newuser@example.com");
     await user.click(screen.getByRole("button", { name: "Cancel" }));
 
-    expect(screen.queryByText("Email address")).not.toBeInTheDocument();
-    expect(screen.getByText("testuser@example.com")).toBeInTheDocument();
+    // Should return to view mode with original value
+    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "testuser@example.com" }),
+    ).toBeInTheDocument();
   });
 });

@@ -1,47 +1,42 @@
-import {
-  Banner,
-  Button,
-  Form,
-  Modal,
-  ModalFooter,
-  ModalHeader,
-  Select,
-  SelectItem,
-} from "@/components/common";
+import { Banner, Button, Form, Select, SelectItem } from "@/components/common";
 import { SettingsItem } from "@/components/settings";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
 import { useMutation } from "convex/react";
-import { Pencil } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-type EditResidenceModalProps = {
-  defaultResidence: Jurisdiction | undefined;
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-  onSubmit: () => void;
+type EditResidenceSettingProps = {
+  user: Doc<"users">;
 };
 
-const EditResidenceModal = ({
-  defaultResidence,
-  isOpen,
-  onOpenChange,
-  onSubmit,
-}: EditResidenceModalProps) => {
+export const EditResidenceSetting = ({ user }: EditResidenceSettingProps) => {
+  const [isEditing, setIsEditing] = useState(false);
   const [residence, setResidence] = useState<Jurisdiction | undefined>(
-    defaultResidence,
+    user.residence as Jurisdiction,
   );
   const [error, setError] = useState<string>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const updateResidence = useMutation(api.users.setResidence);
 
+  useEffect(() => {
+    if (residence !== user.residence) {
+      setIsEditing(true);
+    }
+  }, [residence, user.residence]);
+
+  const handleCancel = () => {
+    setResidence(user.residence as Jurisdiction);
+    setIsEditing(false);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(undefined);
 
+    // This shouldn't be possible, but just in case
     if (!residence) {
       setError("Please select a state.");
       return;
@@ -50,8 +45,8 @@ const EditResidenceModal = ({
     try {
       setIsSubmitting(true);
       await updateResidence({ residence });
-      onSubmit();
       toast.success("Residence updated.");
+      setIsEditing(false);
     } catch (err) {
       setError("Failed to update residence. Please try again.");
     } finally {
@@ -60,15 +55,13 @@ const EditResidenceModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <ModalHeader
-        title="Edit residence"
-        description="Where do you live? This location is used to select the forms for your court order and state ID."
-      />
-      <Form onSubmit={handleSubmit} className="w-full">
-        {error && <Banner variant="danger">{error}</Banner>}
+    <SettingsItem
+      label="Residence"
+      description="Where do you live? This location is used to select the forms for your court order and state ID."
+    >
+      <Form onSubmit={handleSubmit} className="gap-2 items-end">
         <Select
-          label="State"
+          aria-label="State"
           name="residence"
           selectedKey={residence}
           onSelectionChange={(key) => {
@@ -76,8 +69,8 @@ const EditResidenceModal = ({
             setError(undefined);
           }}
           isRequired
-          className="w-full"
           placeholder="Select state"
+          isDisabled={isSubmitting}
         >
           {Object.entries(JURISDICTIONS).map(([value, label]) => (
             <SelectItem key={value} id={value}>
@@ -85,46 +78,28 @@ const EditResidenceModal = ({
             </SelectItem>
           ))}
         </Select>
-        <ModalFooter>
-          <Button
-            variant="secondary"
-            onPress={() => onOpenChange(false)}
-            isDisabled={isSubmitting}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" variant="primary" isDisabled={isSubmitting}>
-            Save
-          </Button>
-        </ModalFooter>
+        {isEditing && (
+          <div className="flex gap-1 justify-end">
+            <Button
+              variant="secondary"
+              onPress={handleCancel}
+              isDisabled={isSubmitting}
+              size="small"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              size="small"
+              isDisabled={isSubmitting}
+            >
+              Save
+            </Button>
+          </div>
+        )}
+        {error && <Banner variant="danger">{error}</Banner>}
       </Form>
-    </Modal>
-  );
-};
-
-type EditResidenceSettingProps = {
-  user: Doc<"users">;
-};
-
-export const EditResidenceSetting = ({ user }: EditResidenceSettingProps) => {
-  const [isResidenceModalOpen, setIsResidenceModalOpen] = useState(false);
-
-  return (
-    <SettingsItem
-      label="Residence"
-      description="Where do you live? This location is used to select the forms for your court order and state ID."
-    >
-      <Button icon={Pencil} onPress={() => setIsResidenceModalOpen(true)}>
-        {user?.residence
-          ? JURISDICTIONS[user.residence as Jurisdiction]
-          : "Set residence"}
-      </Button>
-      <EditResidenceModal
-        isOpen={isResidenceModalOpen}
-        onOpenChange={setIsResidenceModalOpen}
-        defaultResidence={user.residence as Jurisdiction}
-        onSubmit={() => setIsResidenceModalOpen(false)}
-      />
     </SettingsItem>
   );
 };
