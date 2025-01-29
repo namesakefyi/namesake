@@ -180,8 +180,23 @@ const userQuests = defineTable({
   .index("userId", ["userId"])
   .index("questId", ["questId"]);
 
+// ----------------------------------------------
+// Early Access
+// ----------------------------------------------
+
+/**
+ * Codes to enable early access to the app.
+ */
+const earlyAccessCodes = defineTable({
+  /** The user who created the code. */
+  createdBy: v.id("users"),
+  /** The user who used the code to sign up. */
+  claimedBy: v.optional(v.id("users")),
+}).index("createdBy", ["createdBy"]);
+
 export default defineSchema({
   ...authTables,
+  earlyAccessCodes,
   documents,
   quests,
   questSteps,

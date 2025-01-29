@@ -24,6 +24,7 @@ import { Route as AuthenticatedSettingsDataImport } from './routes/_authenticate
 import { Route as AuthenticatedSettingsAccountImport } from './routes/_authenticated/settings/account'
 import { Route as AuthenticatedAdminQuestsIndexImport } from './routes/_authenticated/admin/quests.index'
 import { Route as AuthenticatedAdminDocumentsIndexImport } from './routes/_authenticated/admin/documents.index'
+import { Route as AuthenticatedAdminBetaIndexImport } from './routes/_authenticated/admin/beta.index'
 import { Route as AuthenticatedHomeStateIdIndexImport } from './routes/_authenticated/_home/state-id.index'
 import { Route as AuthenticatedHomeCourtOrderIndexImport } from './routes/_authenticated/_home/court-order.index'
 import { Route as AuthenticatedHomeBirthCertificateIndexImport } from './routes/_authenticated/_home/birth-certificate.index'
@@ -112,6 +113,13 @@ const AuthenticatedAdminDocumentsIndexRoute =
   AuthenticatedAdminDocumentsIndexImport.update({
     id: '/documents/',
     path: '/documents/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+
+const AuthenticatedAdminBetaIndexRoute =
+  AuthenticatedAdminBetaIndexImport.update({
+    id: '/beta/',
+    path: '/beta/',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 
@@ -280,6 +288,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeStateIdIndexImport
       parentRoute: typeof AuthenticatedHomeImport
     }
+    '/_authenticated/admin/beta/': {
+      id: '/_authenticated/admin/beta/'
+      path: '/beta'
+      fullPath: '/admin/beta'
+      preLoaderRoute: typeof AuthenticatedAdminBetaIndexImport
+      parentRoute: typeof AuthenticatedAdminRouteImport
+    }
     '/_authenticated/admin/documents/': {
       id: '/_authenticated/admin/documents/'
       path: '/documents'
@@ -302,6 +317,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminDocumentsDocumentIdRoute: typeof AuthenticatedAdminDocumentsDocumentIdRoute
+  AuthenticatedAdminBetaIndexRoute: typeof AuthenticatedAdminBetaIndexRoute
   AuthenticatedAdminDocumentsIndexRoute: typeof AuthenticatedAdminDocumentsIndexRoute
   AuthenticatedAdminQuestsIndexRoute: typeof AuthenticatedAdminQuestsIndexRoute
 }
@@ -311,6 +327,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
     AuthenticatedAdminDocumentsDocumentIdRoute:
       AuthenticatedAdminDocumentsDocumentIdRoute,
+    AuthenticatedAdminBetaIndexRoute: AuthenticatedAdminBetaIndexRoute,
     AuthenticatedAdminDocumentsIndexRoute:
       AuthenticatedAdminDocumentsIndexRoute,
     AuthenticatedAdminQuestsIndexRoute: AuthenticatedAdminQuestsIndexRoute,
@@ -405,6 +422,7 @@ export interface FileRoutesByFullPath {
   '/birth-certificate': typeof AuthenticatedHomeBirthCertificateIndexRoute
   '/court-order': typeof AuthenticatedHomeCourtOrderIndexRoute
   '/state-id': typeof AuthenticatedHomeStateIdIndexRoute
+  '/admin/beta': typeof AuthenticatedAdminBetaIndexRoute
   '/admin/documents': typeof AuthenticatedAdminDocumentsIndexRoute
   '/admin/quests': typeof AuthenticatedAdminQuestsIndexRoute
 }
@@ -423,6 +441,7 @@ export interface FileRoutesByTo {
   '/birth-certificate': typeof AuthenticatedHomeBirthCertificateIndexRoute
   '/court-order': typeof AuthenticatedHomeCourtOrderIndexRoute
   '/state-id': typeof AuthenticatedHomeStateIdIndexRoute
+  '/admin/beta': typeof AuthenticatedAdminBetaIndexRoute
   '/admin/documents': typeof AuthenticatedAdminDocumentsIndexRoute
   '/admin/quests': typeof AuthenticatedAdminQuestsIndexRoute
 }
@@ -446,6 +465,7 @@ export interface FileRoutesById {
   '/_authenticated/_home/birth-certificate/': typeof AuthenticatedHomeBirthCertificateIndexRoute
   '/_authenticated/_home/court-order/': typeof AuthenticatedHomeCourtOrderIndexRoute
   '/_authenticated/_home/state-id/': typeof AuthenticatedHomeStateIdIndexRoute
+  '/_authenticated/admin/beta/': typeof AuthenticatedAdminBetaIndexRoute
   '/_authenticated/admin/documents/': typeof AuthenticatedAdminDocumentsIndexRoute
   '/_authenticated/admin/quests/': typeof AuthenticatedAdminQuestsIndexRoute
 }
@@ -468,6 +488,7 @@ export interface FileRouteTypes {
     | '/birth-certificate'
     | '/court-order'
     | '/state-id'
+    | '/admin/beta'
     | '/admin/documents'
     | '/admin/quests'
   fileRoutesByTo: FileRoutesByTo
@@ -485,6 +506,7 @@ export interface FileRouteTypes {
     | '/birth-certificate'
     | '/court-order'
     | '/state-id'
+    | '/admin/beta'
     | '/admin/documents'
     | '/admin/quests'
   id:
@@ -506,6 +528,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_home/birth-certificate/'
     | '/_authenticated/_home/court-order/'
     | '/_authenticated/_home/state-id/'
+    | '/_authenticated/admin/beta/'
     | '/_authenticated/admin/documents/'
     | '/_authenticated/admin/quests/'
   fileRoutesById: FileRoutesById
@@ -556,6 +579,7 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/admin/",
         "/_authenticated/admin/documents/$documentId",
+        "/_authenticated/admin/beta/",
         "/_authenticated/admin/documents/",
         "/_authenticated/admin/quests/"
       ]
@@ -627,6 +651,10 @@ export const routeTree = rootRoute
     "/_authenticated/_home/state-id/": {
       "filePath": "_authenticated/_home/state-id.index.tsx",
       "parent": "/_authenticated/_home"
+    },
+    "/_authenticated/admin/beta/": {
+      "filePath": "_authenticated/admin/beta.index.tsx",
+      "parent": "/_authenticated/admin"
     },
     "/_authenticated/admin/documents/": {
       "filePath": "_authenticated/admin/documents.index.tsx",

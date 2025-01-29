@@ -16,7 +16,9 @@ import type {
 import type * as auth from "../auth.js";
 import type * as constants from "../constants.js";
 import type * as documents from "../documents.js";
+import type * as earlyAccessCodes from "../earlyAccessCodes.js";
 import type * as errors from "../errors.js";
+import type * as faqs from "../faqs.js";
 import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
 import type * as passwordReset from "../passwordReset.js";
@@ -42,7 +44,9 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   constants: typeof constants;
   documents: typeof documents;
+  earlyAccessCodes: typeof earlyAccessCodes;
   errors: typeof errors;
+  faqs: typeof faqs;
   helpers: typeof helpers;
   http: typeof http;
   passwordReset: typeof passwordReset;
