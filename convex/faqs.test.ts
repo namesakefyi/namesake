@@ -8,16 +8,10 @@ describe("faqs", () => {
   it("creates an faq", async () => {
     const t = convexTest(schema, modules);
 
-    // Create a topic first
-    const topicId = await t.mutation(api.faqTopics.create, {
-      title: "Costs",
-    });
-
     // Create an faq
     const faqId = await t.mutation(api.faqs.create, {
       question: "How much does the process cost?",
       answer: "It varies.",
-      topics: [topicId],
     });
 
     // Verify faq creation
@@ -26,22 +20,15 @@ describe("faqs", () => {
     expect(createdFaq).toBeTruthy();
     expect(createdFaq?.question).toBe("How much does the process cost?");
     expect(createdFaq?.answer).toBe("It varies.");
-    expect(createdFaq?.topics).toContain(topicId);
   });
 
   it("updates an faq", async () => {
     const t = convexTest(schema, modules);
 
-    // Create a topic first
-    const topicId = await t.mutation(api.faqTopics.create, {
-      title: "Costs",
-    });
-
     // Create an faq
     const faqId = await t.mutation(api.faqs.create, {
       question: "How much does the process cost?",
       answer: "It varies.",
-      topics: [topicId],
     });
 
     // Update the faq
@@ -50,7 +37,6 @@ describe("faqs", () => {
       question: {
         question: "How much does the process cost, exactly?",
         answer: "It varies a lot.",
-        topics: [topicId],
       },
     });
 
@@ -67,9 +53,12 @@ describe("faqs", () => {
   it("gets all faqs", async () => {
     const t = convexTest(schema, modules);
 
-    // Create a topic first
-    const topicId = await t.mutation(api.faqTopics.create, {
-      title: "Costs",
+    // Create a user
+    const userId = await t.run(async (ctx) => {
+      return await ctx.db.insert("users", {
+        role: "user",
+        emailVerified: true,
+      });
     });
 
     // Mock faqs
@@ -77,12 +66,14 @@ describe("faqs", () => {
       await ctx.db.insert("faqs", {
         question: "How much does the process cost?",
         answer: "It varies.",
-        topics: [topicId],
+        creationUser: userId,
+        updatedAt: Date.now(),
       });
       await ctx.db.insert("faqs", {
         question: "What documents do I need?",
         answer: "You'll need passport, visa, and other supporting documents.",
-        topics: [topicId],
+        creationUser: userId,
+        updatedAt: Date.now(),
       });
     });
 
@@ -97,17 +88,10 @@ describe("faqs", () => {
 
   it("deletes a faq", async () => {
     const t = convexTest(schema, modules);
-
-    // Create a topic first
-    const topicId = await t.mutation(api.faqTopics.create, {
-      title: "Costs",
-    });
-
     // Create a question
     const faqId = await t.mutation(api.faqs.create, {
       question: "How much does the process cost?",
       answer: "It varies.",
-      topics: [topicId],
     });
 
     // Verify faq creation
@@ -116,7 +100,6 @@ describe("faqs", () => {
     expect(createdFaq).toBeTruthy();
     expect(createdFaq?.question).toBe("How much does the process cost?");
     expect(createdFaq?.answer).toBe("It varies.");
-    expect(createdFaq?.topics).toContain(topicId);
 
     // Delete the faq
     await t.mutation(api.faqs.deleteForever, {
@@ -127,48 +110,5 @@ describe("faqs", () => {
     const faqsAfter = await t.query(api.faqs.getAll);
     const deletedFaq = faqsAfter.find((f) => f._id === faqId);
     expect(deletedFaq).toBeUndefined();
-  });
-
-  it("errors if attempting to delete a faq with related quests", async () => {
-    const t = convexTest(schema, modules);
-
-    // Create a topic first
-    const topicId = await t.mutation(api.faqTopics.create, {
-      title: "Costs",
-    });
-
-    // Create a user
-    const userId = await t.run(async (ctx) => {
-      return await ctx.db.insert("users", {
-        role: "user",
-        emailVerified: true,
-      });
-    });
-
-    // Create a quest
-    const questId = await t.run(async (ctx) => {
-      return await ctx.db.insert("quests", {
-        title: "Court Order",
-        slug: "court-order",
-        creationUser: userId,
-      });
-    });
-
-    // Create an faq
-    const faqId = await t.mutation(api.faqs.create, {
-      question: "How much does the process cost?",
-      answer: "It varies.",
-      topics: [topicId],
-      relatedQuests: [questId],
-    });
-
-    // Attempt to delete the faq
-    await expect(
-      t.mutation(api.faqs.deleteForever, {
-        faqId,
-      }),
-    ).rejects.toThrowError(
-      "There are related quests for this question. Please delete them first.",
-    );
   });
 });

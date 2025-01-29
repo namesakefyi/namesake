@@ -46,11 +46,22 @@ export const getByIds = query({
   },
 });
 
+export const getByFaqIds = query({
+  args: { faqIds: v.array(v.id("faqs")) },
+  handler: async (ctx, { faqIds }) => {
+    return await ctx.db
+      .query("questSteps")
+      .withIndex("faqs", (q) => q.eq("faqs", faqIds))
+      .collect();
+  },
+});
+
 export const update = userMutation({
   args: {
     questStepId: v.id("questSteps"),
     title: v.optional(v.string()),
     content: v.optional(v.string()),
+    faqs: v.optional(v.array(v.id("faqs"))),
     button: v.optional(
       v.object({
         text: v.string(),
@@ -62,6 +73,7 @@ export const update = userMutation({
     const patch: any = {};
     if (args.title !== undefined) patch.title = args.title;
     if (args.content !== undefined) patch.content = args.content;
+    if (args.faqs !== undefined) patch.faqs = args.faqs;
     if (args.button !== undefined) patch.button = args.button;
 
     return await ctx.db.patch(args.questStepId, patch);

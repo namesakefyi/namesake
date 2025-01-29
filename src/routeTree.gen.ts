@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as UnauthenticatedImport } from './routes/_unauthenticated'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as UnauthenticatedSigninImport } from './routes/_unauthenticated/signin'
+import { Route as UnauthenticatedFaqsImport } from './routes/_unauthenticated/faqs'
 import { Route as AuthenticatedHomeImport } from './routes/_authenticated/_home'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin/route'
@@ -23,6 +24,7 @@ import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/_
 import { Route as AuthenticatedSettingsDataImport } from './routes/_authenticated/settings/data'
 import { Route as AuthenticatedSettingsAccountImport } from './routes/_authenticated/settings/account'
 import { Route as AuthenticatedAdminQuestsIndexImport } from './routes/_authenticated/admin/quests.index'
+import { Route as AuthenticatedAdminFaqsIndexImport } from './routes/_authenticated/admin/faqs.index'
 import { Route as AuthenticatedAdminDocumentsIndexImport } from './routes/_authenticated/admin/documents.index'
 import { Route as AuthenticatedHomeStateIdIndexImport } from './routes/_authenticated/_home/state-id.index'
 import { Route as AuthenticatedHomeCourtOrderIndexImport } from './routes/_authenticated/_home/court-order.index'
@@ -46,6 +48,12 @@ const AuthenticatedRoute = AuthenticatedImport.update({
 const UnauthenticatedSigninRoute = UnauthenticatedSigninImport.update({
   id: '/signin',
   path: '/signin',
+  getParentRoute: () => UnauthenticatedRoute,
+} as any)
+
+const UnauthenticatedFaqsRoute = UnauthenticatedFaqsImport.update({
+  id: '/faqs',
+  path: '/faqs',
   getParentRoute: () => UnauthenticatedRoute,
 } as any)
 
@@ -105,6 +113,13 @@ const AuthenticatedAdminQuestsIndexRoute =
   AuthenticatedAdminQuestsIndexImport.update({
     id: '/quests/',
     path: '/quests/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+
+const AuthenticatedAdminFaqsIndexRoute =
+  AuthenticatedAdminFaqsIndexImport.update({
+    id: '/faqs/',
+    path: '/faqs/',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 
@@ -195,6 +210,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof AuthenticatedHomeImport
       parentRoute: typeof AuthenticatedImport
+    }
+    '/_unauthenticated/faqs': {
+      id: '/_unauthenticated/faqs'
+      path: '/faqs'
+      fullPath: '/faqs'
+      preLoaderRoute: typeof UnauthenticatedFaqsImport
+      parentRoute: typeof UnauthenticatedImport
     }
     '/_unauthenticated/signin': {
       id: '/_unauthenticated/signin'
@@ -287,6 +309,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminDocumentsIndexImport
       parentRoute: typeof AuthenticatedAdminRouteImport
     }
+    '/_authenticated/admin/faqs/': {
+      id: '/_authenticated/admin/faqs/'
+      path: '/faqs'
+      fullPath: '/admin/faqs'
+      preLoaderRoute: typeof AuthenticatedAdminFaqsIndexImport
+      parentRoute: typeof AuthenticatedAdminRouteImport
+    }
     '/_authenticated/admin/quests/': {
       id: '/_authenticated/admin/quests/'
       path: '/quests'
@@ -303,6 +332,7 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminDocumentsDocumentIdRoute: typeof AuthenticatedAdminDocumentsDocumentIdRoute
   AuthenticatedAdminDocumentsIndexRoute: typeof AuthenticatedAdminDocumentsIndexRoute
+  AuthenticatedAdminFaqsIndexRoute: typeof AuthenticatedAdminFaqsIndexRoute
   AuthenticatedAdminQuestsIndexRoute: typeof AuthenticatedAdminQuestsIndexRoute
 }
 
@@ -313,6 +343,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
       AuthenticatedAdminDocumentsDocumentIdRoute,
     AuthenticatedAdminDocumentsIndexRoute:
       AuthenticatedAdminDocumentsIndexRoute,
+    AuthenticatedAdminFaqsIndexRoute: AuthenticatedAdminFaqsIndexRoute,
     AuthenticatedAdminQuestsIndexRoute: AuthenticatedAdminQuestsIndexRoute,
   }
 
@@ -378,10 +409,12 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface UnauthenticatedRouteChildren {
+  UnauthenticatedFaqsRoute: typeof UnauthenticatedFaqsRoute
   UnauthenticatedSigninRoute: typeof UnauthenticatedSigninRoute
 }
 
 const UnauthenticatedRouteChildren: UnauthenticatedRouteChildren = {
+  UnauthenticatedFaqsRoute: UnauthenticatedFaqsRoute,
   UnauthenticatedSigninRoute: UnauthenticatedSigninRoute,
 }
 
@@ -393,6 +426,7 @@ export interface FileRoutesByFullPath {
   '': typeof AuthenticatedHomeRouteWithChildren
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
+  '/faqs': typeof UnauthenticatedFaqsRoute
   '/signin': typeof UnauthenticatedSigninRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/data': typeof AuthenticatedSettingsDataRoute
@@ -406,11 +440,13 @@ export interface FileRoutesByFullPath {
   '/court-order': typeof AuthenticatedHomeCourtOrderIndexRoute
   '/state-id': typeof AuthenticatedHomeStateIdIndexRoute
   '/admin/documents': typeof AuthenticatedAdminDocumentsIndexRoute
+  '/admin/faqs': typeof AuthenticatedAdminFaqsIndexRoute
   '/admin/quests': typeof AuthenticatedAdminQuestsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '': typeof UnauthenticatedRouteWithChildren
+  '/faqs': typeof UnauthenticatedFaqsRoute
   '/signin': typeof UnauthenticatedSigninRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/data': typeof AuthenticatedSettingsDataRoute
@@ -424,6 +460,7 @@ export interface FileRoutesByTo {
   '/court-order': typeof AuthenticatedHomeCourtOrderIndexRoute
   '/state-id': typeof AuthenticatedHomeStateIdIndexRoute
   '/admin/documents': typeof AuthenticatedAdminDocumentsIndexRoute
+  '/admin/faqs': typeof AuthenticatedAdminFaqsIndexRoute
   '/admin/quests': typeof AuthenticatedAdminQuestsIndexRoute
 }
 
@@ -434,6 +471,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/_authenticated/_home': typeof AuthenticatedHomeRouteWithChildren
+  '/_unauthenticated/faqs': typeof UnauthenticatedFaqsRoute
   '/_unauthenticated/signin': typeof UnauthenticatedSigninRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/data': typeof AuthenticatedSettingsDataRoute
@@ -447,6 +485,7 @@ export interface FileRoutesById {
   '/_authenticated/_home/court-order/': typeof AuthenticatedHomeCourtOrderIndexRoute
   '/_authenticated/_home/state-id/': typeof AuthenticatedHomeStateIdIndexRoute
   '/_authenticated/admin/documents/': typeof AuthenticatedAdminDocumentsIndexRoute
+  '/_authenticated/admin/faqs/': typeof AuthenticatedAdminFaqsIndexRoute
   '/_authenticated/admin/quests/': typeof AuthenticatedAdminQuestsIndexRoute
 }
 
@@ -456,6 +495,7 @@ export interface FileRouteTypes {
     | ''
     | '/admin'
     | '/settings'
+    | '/faqs'
     | '/signin'
     | '/settings/account'
     | '/settings/data'
@@ -469,10 +509,12 @@ export interface FileRouteTypes {
     | '/court-order'
     | '/state-id'
     | '/admin/documents'
+    | '/admin/faqs'
     | '/admin/quests'
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
+    | '/faqs'
     | '/signin'
     | '/settings/account'
     | '/settings/data'
@@ -486,6 +528,7 @@ export interface FileRouteTypes {
     | '/court-order'
     | '/state-id'
     | '/admin/documents'
+    | '/admin/faqs'
     | '/admin/quests'
   id:
     | '__root__'
@@ -494,6 +537,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/settings'
     | '/_authenticated/_home'
+    | '/_unauthenticated/faqs'
     | '/_unauthenticated/signin'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/data'
@@ -507,6 +551,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_home/court-order/'
     | '/_authenticated/_home/state-id/'
     | '/_authenticated/admin/documents/'
+    | '/_authenticated/admin/faqs/'
     | '/_authenticated/admin/quests/'
   fileRoutesById: FileRoutesById
 }
@@ -547,6 +592,7 @@ export const routeTree = rootRoute
     "/_unauthenticated": {
       "filePath": "_unauthenticated.tsx",
       "children": [
+        "/_unauthenticated/faqs",
         "/_unauthenticated/signin"
       ]
     },
@@ -557,6 +603,7 @@ export const routeTree = rootRoute
         "/_authenticated/admin/",
         "/_authenticated/admin/documents/$documentId",
         "/_authenticated/admin/documents/",
+        "/_authenticated/admin/faqs/",
         "/_authenticated/admin/quests/"
       ]
     },
@@ -579,6 +626,10 @@ export const routeTree = rootRoute
         "/_authenticated/_home/court-order/",
         "/_authenticated/_home/state-id/"
       ]
+    },
+    "/_unauthenticated/faqs": {
+      "filePath": "_unauthenticated/faqs.tsx",
+      "parent": "/_unauthenticated"
     },
     "/_unauthenticated/signin": {
       "filePath": "_unauthenticated/signin.tsx",
@@ -630,6 +681,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/admin/documents/": {
       "filePath": "_authenticated/admin/documents.index.tsx",
+      "parent": "/_authenticated/admin"
+    },
+    "/_authenticated/admin/faqs/": {
+      "filePath": "_authenticated/admin/faqs.index.tsx",
       "parent": "/_authenticated/admin"
     },
     "/_authenticated/admin/quests/": {

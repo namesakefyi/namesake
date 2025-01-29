@@ -22,21 +22,15 @@ const faqs = defineTable({
   question: v.string(),
   /** The rich text answer to the question, stored as HTML. */
   answer: v.string(),
-  /** One or more topics related to the question. */
-  topics: v.array(v.id("faqTopics")),
-  /** Optional quests related to the question. */
-  relatedQuests: v.optional(v.array(v.id("quests"))),
+  /** The user who created the FAQ. */
+  creationUser: v.id("users"),
+  /** Date the FAQ was updated, in ms since epoch. */
+  updatedAt: v.number(),
+  /** The US State the FAQ applies to. */
+  jurisdiction: v.optional(jurisdiction),
 })
-  .index("topics", ["topics"])
-  .index("relatedQuests", ["relatedQuests"]);
-
-/**
- * A shared topic used to tag and organize faqs.
- */
-const faqTopics = defineTable({
-  /** The name of the topic. Should be short and unique. */
-  title: v.string(),
-});
+  .index("creationUser", ["creationUser"])
+  .index("updatedAt", ["updatedAt"]);
 
 // ----------------------------------------------
 // Quests
@@ -96,6 +90,8 @@ const questSteps = defineTable({
   title: v.string(),
   /** Rich text comprising the contents of the step, stored as HTML. */
   content: v.optional(v.string()),
+  /** Questions related to the step. */
+  faqs: v.optional(v.array(v.id("faqs"))),
   /** An optional call to action for the step. */
   button: v.optional(
     v.object({
@@ -103,7 +99,9 @@ const questSteps = defineTable({
       url: v.string(),
     }),
   ),
-}).index("quest", ["questId"]);
+})
+  .index("quest", ["questId"])
+  .index("faqs", ["faqs"]);
 
 /**
  * A PDF document that can be filled out by users.
@@ -192,7 +190,6 @@ const userQuests = defineTable({
 export default defineSchema({
   ...authTables,
   faqs,
-  faqTopics,
   documents,
   quests,
   questSteps,
