@@ -2,4 +2,4 @@
 "namesake": minor
 ---
 
-Add admin interface for saving faqs"
+Support adding, editing, and deleting frequently asked questions for each quest
