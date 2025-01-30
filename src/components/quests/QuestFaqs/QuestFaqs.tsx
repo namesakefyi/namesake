@@ -214,16 +214,14 @@ export const QuestFaqs = ({ quest, editable = false }: QuestFaqsProps) => {
         <Empty title="No questions" icon={CircleHelp} />
       ) : (
         <div className="flex flex-col">
-          {faqs
-            .filter((faq) => faq !== null)
-            .map((faq) => (
-              <QuestFaq
-                questId={quest._id}
-                key={faq._id}
-                faq={faq}
-                editable={editable}
-              />
-            ))}
+          {faqs.map((faq) => (
+            <QuestFaq
+              questId={quest._id}
+              key={faq._id}
+              faq={faq}
+              editable={editable}
+            />
+          ))}
         </div>
       )}
     </QuestSection>

@@ -17,7 +17,7 @@ export const getByIds = query({
         return questFaq;
       }),
     );
-    return questFaqs;
+    return questFaqs.filter((faq) => faq !== null);
   },
 });
 

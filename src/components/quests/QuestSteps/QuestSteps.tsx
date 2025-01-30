@@ -228,11 +228,9 @@ export const QuestSteps = ({ quest, editable = false }: QuestStepsProps) => {
   return (
     <>
       <Steps>
-        {steps
-          .filter((step) => step !== null)
-          .map((step) => (
-            <QuestStep key={step._id} step={step} editable={editable} />
-          ))}
+        {steps.map((step) => (
+          <QuestStep key={step._id} step={step} editable={editable} />
+        ))}
       </Steps>
       {editable && <Button onPress={handleAddStep}>Add step</Button>}
     </>

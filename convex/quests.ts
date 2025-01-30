@@ -95,10 +95,11 @@ export const getById = query({
 export const getByFaqId = query({
   args: { questFaqId: v.id("questFaqs") },
   handler: async (ctx, args) => {
-    return await ctx.db
-      .query("quests")
-      .withIndex("faqs", (q) => q.eq("faqs", [args.questFaqId]))
-      .first();
+    for await (const quest of ctx.db.query("quests")) {
+      if (quest.faqs?.includes(args.questFaqId)) {
+        return quest;
+      }
+    }
   },
 });
 

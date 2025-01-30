@@ -42,7 +42,7 @@ export const getByIds = query({
         return questStep;
       }),
     );
-    return questSteps;
+    return questSteps.filter((step) => step !== null);
   },
 });
 
@@ -51,7 +51,6 @@ export const update = userMutation({
     questStepId: v.id("questSteps"),
     title: v.optional(v.string()),
     content: v.optional(v.string()),
-    faqs: v.optional(v.array(v.id("faqs"))),
     button: v.optional(
       v.object({
         text: v.string(),
@@ -63,7 +62,6 @@ export const update = userMutation({
     const patch: any = {};
     if (args.title !== undefined) patch.title = args.title;
     if (args.content !== undefined) patch.content = args.content;
-    if (args.faqs !== undefined) patch.faqs = args.faqs;
     if (args.button !== undefined) patch.button = args.button;
 
     return await ctx.db.patch(args.questStepId, patch);
