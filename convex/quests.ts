@@ -6,6 +6,7 @@ import {
   type Jurisdiction,
 } from "./constants";
 import { generateQuestSlug, userMutation, userQuery } from "./helpers";
+import { create as createQuestFaq } from "./questFaqs";
 import { category, jurisdiction, timeRequiredUnit } from "./validators";
 
 export const count = query({
@@ -88,6 +89,16 @@ export const getById = query({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     return await ctx.db.get(args.questId);
+  },
+});
+
+export const getByFaqId = query({
+  args: { questFaqId: v.id("questFaqs") },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("quests")
+      .withIndex("faqs", (q) => q.eq("faqs", [args.questFaqId]))
+      .first();
   },
 });
 
@@ -239,15 +250,15 @@ export const addStep = userMutation({
     content: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    const quest = await ctx.db.get(args.questId);
+
+    if (!quest) throw new Error("Quest not found");
+
     const newStep = await ctx.db.insert("questSteps", {
       questId: args.questId,
       title: args.title,
       content: args.content,
     });
-
-    const quest = await ctx.db.get(args.questId);
-
-    if (!quest) throw new Error("Quest not found");
 
     const existingSteps = quest.steps || [];
 
@@ -279,6 +290,37 @@ export const deleteStep = userMutation({
 
     // Delete the step
     await ctx.db.delete(args.stepId);
+  },
+});
+
+export const addFaq = userMutation({
+  args: { questId: v.id("quests"), question: v.string(), answer: v.string() },
+  handler: async (ctx, args) => {
+    const quest = await ctx.db.get(args.questId);
+
+    if (!quest) throw new Error("Quest not found");
+
+    const questFaqId = await createQuestFaq(ctx, {
+      question: args.question,
+      answer: args.answer,
+    });
+
+    const existingFaqs = quest.faqs || [];
+
+    await ctx.db.patch(args.questId, { faqs: [...existingFaqs, questFaqId] });
+  },
+});
+
+export const deleteFaq = userMutation({
+  args: { questId: v.id("quests"), questFaqId: v.id("questFaqs") },
+  handler: async (ctx, args) => {
+    const quest = await ctx.db.get(args.questId);
+
+    if (!quest) throw new Error("Quest not found");
+
+    const updatedFaqs = quest.faqs?.filter((id) => id !== args.questFaqId);
+
+    await ctx.db.patch(args.questId, { faqs: updatedFaqs });
   },
 });
 

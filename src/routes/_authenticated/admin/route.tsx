@@ -1,7 +1,7 @@
 import { AppContent, AppSidebar } from "@/components/app";
 import { Container, Nav, NavGroup, NavItem } from "@/components/common";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import { CircleHelp, FileText, Milestone } from "lucide-react";
+import { FileText, Milestone } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: ({ context }) => {
@@ -29,9 +29,6 @@ function AdminRoute() {
             </NavItem>
             <NavItem icon={FileText} href={{ to: "/admin/documents" }}>
               Documents
-            </NavItem>
-            <NavItem icon={CircleHelp} href={{ to: "/admin/faqs" }}>
-              FAQs
             </NavItem>
           </NavGroup>
         </Nav>

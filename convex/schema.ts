@@ -11,28 +11,6 @@ import {
 } from "./validators";
 
 // ----------------------------------------------
-// FAQs
-// ----------------------------------------------
-
-/**
- * A frequently asked question and its answer.
- */
-const faqs = defineTable({
-  /** A frequently asked question. */
-  question: v.string(),
-  /** The rich text answer to the question, stored as HTML. */
-  answer: v.string(),
-  /** The user who created the FAQ. */
-  creationUser: v.id("users"),
-  /** Date the FAQ was updated, in ms since epoch. */
-  updatedAt: v.number(),
-  /** The US State the FAQ applies to. */
-  jurisdiction: v.optional(jurisdiction),
-})
-  .index("creationUser", ["creationUser"])
-  .index("updatedAt", ["updatedAt"]);
-
-// ----------------------------------------------
 // Quests
 // ----------------------------------------------
 
@@ -75,10 +53,13 @@ const quests = defineTable({
   deletedAt: v.optional(v.number()),
   /** Steps in the quest */
   steps: v.optional(v.array(v.id("questSteps"))),
+  /** Questions related to the quest. */
+  faqs: v.optional(v.array(v.id("questFaqs"))),
 })
   .index("slug", ["slug"])
   .index("category", ["category"])
-  .index("categoryAndJurisdiction", ["category", "jurisdiction"]);
+  .index("categoryAndJurisdiction", ["category", "jurisdiction"])
+  .index("faqs", ["faqs"]);
 
 /**
  * A single step within a quest.
@@ -90,8 +71,6 @@ const questSteps = defineTable({
   title: v.string(),
   /** Rich text comprising the contents of the step, stored as HTML. */
   content: v.optional(v.string()),
-  /** Questions related to the step. */
-  faqs: v.optional(v.array(v.id("faqs"))),
   /** An optional call to action for the step. */
   button: v.optional(
     v.object({
@@ -99,9 +78,23 @@ const questSteps = defineTable({
       url: v.string(),
     }),
   ),
+}).index("quest", ["questId"]);
+
+/**
+ * A frequently asked question and its answer.
+ */
+const questFaqs = defineTable({
+  /** A frequently asked question. */
+  question: v.string(),
+  /** The rich text answer to the question, stored as HTML. */
+  answer: v.string(),
+  /** The user who published the FAQ. */
+  author: v.id("users"),
+  /** Date the FAQ was updated, in ms since epoch. */
+  updatedAt: v.number(),
 })
-  .index("quest", ["questId"])
-  .index("faqs", ["faqs"]);
+  .index("author", ["author"])
+  .index("updatedAt", ["updatedAt"]);
 
 /**
  * A PDF document that can be filled out by users.
@@ -189,10 +182,10 @@ const userQuests = defineTable({
 
 export default defineSchema({
   ...authTables,
-  faqs,
   documents,
   quests,
   questSteps,
+  questFaqs,
   users,
   userFormData,
   userSettings,

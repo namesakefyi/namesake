@@ -46,16 +46,6 @@ export const getByIds = query({
   },
 });
 
-export const getByFaqIds = query({
-  args: { faqIds: v.array(v.id("faqs")) },
-  handler: async (ctx, { faqIds }) => {
-    return await ctx.db
-      .query("questSteps")
-      .withIndex("faqs", (q) => q.eq("faqs", faqIds))
-      .collect();
-  },
-});
-
 export const update = userMutation({
   args: {
     questStepId: v.id("questSteps"),
