@@ -66,7 +66,7 @@ describe("questFaqs", () => {
     expect(faqs[0]?.answer).toBe("It varies a lot.");
   });
 
-  it("deletes a questFaq", async () => {
+  it("deletes a questFaq and removes it from associated quest", async () => {
     const t = convexTest(schema, modules);
 
     const userId = await t.run(async (ctx) => {
@@ -78,29 +78,45 @@ describe("questFaqs", () => {
 
     const asUser = t.withIdentity({ subject: userId });
 
-    // Create a question
+    // Create a quest
+    const questId = await t.run(async (ctx) => {
+      return await ctx.db.insert("quests", {
+        title: "Test Quest",
+        slug: "test-quest",
+        category: "Test Category",
+        jurisdiction: "Test Jurisdiction",
+        creationUser: userId,
+      });
+    });
+
+    // Create an FAQ
     const faqId = await asUser.mutation(api.questFaqs.create, {
       question: "How much does the process cost?",
       answer: "It varies.",
     });
 
-    // Verify faq creation
-    const faqs = await t.query(api.questFaqs.getByIds, {
-      questFaqIds: [faqId],
+    // Associate FAQ with quest
+    await t.run(async (ctx) => {
+      await ctx.db.patch(questId, {
+        faqs: [faqId],
+      });
     });
-    expect(faqs.length).toBe(1);
-    expect(faqs[0]?.question).toBe("How much does the process cost?");
-    expect(faqs[0]?.answer).toBe("It varies.");
 
-    // Delete the faq
+    // Delete the FAQ
     await asUser.mutation(api.questFaqs.deleteForever, {
       questFaqId: faqId,
     });
 
-    // Verify faq deletion
-    const faqsAfter = await t.query(api.questFaqs.getByIds, {
+    // Verify FAQ is deleted
+    const faqs = await t.query(api.questFaqs.getByIds, {
       questFaqIds: [faqId],
     });
-    expect(faqsAfter.length).toBe(0);
+    expect(faqs.length).toBe(0);
+
+    // Verify FAQ is removed from quest
+    const quest = await t.run(async (ctx) => {
+      return await ctx.db.get(questId);
+    });
+    expect(quest?.faqs).toEqual([]);
   });
 });
