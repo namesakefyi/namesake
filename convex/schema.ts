@@ -11,34 +11,6 @@ import {
 } from "./validators";
 
 // ----------------------------------------------
-// FAQs
-// ----------------------------------------------
-
-/**
- * A frequently asked question and its answer.
- */
-const faqs = defineTable({
-  /** A frequently asked question. */
-  question: v.string(),
-  /** The rich text answer to the question, stored as HTML. */
-  answer: v.string(),
-  /** One or more topics related to the question. */
-  topics: v.array(v.id("faqTopics")),
-  /** Optional quests related to the question. */
-  relatedQuests: v.optional(v.array(v.id("quests"))),
-})
-  .index("topics", ["topics"])
-  .index("relatedQuests", ["relatedQuests"]);
-
-/**
- * A shared topic used to tag and organize faqs.
- */
-const faqTopics = defineTable({
-  /** The name of the topic. Should be short and unique. */
-  title: v.string(),
-});
-
-// ----------------------------------------------
 // Quests
 // ----------------------------------------------
 
@@ -81,10 +53,13 @@ const quests = defineTable({
   deletedAt: v.optional(v.number()),
   /** Steps in the quest */
   steps: v.optional(v.array(v.id("questSteps"))),
+  /** Questions related to the quest. */
+  faqs: v.optional(v.array(v.id("questFaqs"))),
 })
   .index("slug", ["slug"])
   .index("category", ["category"])
-  .index("categoryAndJurisdiction", ["category", "jurisdiction"]);
+  .index("categoryAndJurisdiction", ["category", "jurisdiction"])
+  .index("faqs", ["faqs"]);
 
 /**
  * A single step within a quest.
@@ -104,6 +79,22 @@ const questSteps = defineTable({
     }),
   ),
 }).index("quest", ["questId"]);
+
+/**
+ * A frequently asked question and its answer.
+ */
+const questFaqs = defineTable({
+  /** A frequently asked question. */
+  question: v.string(),
+  /** The rich text answer to the question, stored as HTML. */
+  answer: v.string(),
+  /** The user who published the FAQ. */
+  author: v.id("users"),
+  /** Date the FAQ was updated, in ms since epoch. */
+  updatedAt: v.number(),
+})
+  .index("author", ["author"])
+  .index("updatedAt", ["updatedAt"]);
 
 /**
  * A PDF document that can be filled out by users.
@@ -191,11 +182,10 @@ const userQuests = defineTable({
 
 export default defineSchema({
   ...authTables,
-  faqs,
-  faqTopics,
   documents,
   quests,
   questSteps,
+  questFaqs,
   users,
   userFormData,
   userSettings,

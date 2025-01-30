@@ -32,6 +32,7 @@ export interface RichTextProps {
   initialContent?: string;
   onChange?: (content: string) => void;
   editable?: boolean;
+  placeholder?: string;
 }
 
 export function RichText({
@@ -40,6 +41,7 @@ export function RichText({
   initialContent,
   onChange,
   editable = true,
+  placeholder = "Write something...",
 }: RichTextProps) {
   const editor = useEditor({
     extensions: [
@@ -51,7 +53,7 @@ export function RichText({
       Typography,
       History,
       Placeholder.configure({
-        placeholder: "Write something...",
+        placeholder,
       }),
 
       // Basic formatting

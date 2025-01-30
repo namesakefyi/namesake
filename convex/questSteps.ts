@@ -42,7 +42,7 @@ export const getByIds = query({
         return questStep;
       }),
     );
-    return questSteps;
+    return questSteps.filter((step) => step !== null);
   },
 });
 
