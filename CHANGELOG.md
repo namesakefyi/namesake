@@ -1,5 +1,11 @@
 # namesake
 
+## 0.19.1
+
+### Patch Changes
+
+- ecb4f87: Fix deploy workflow and PostHog env variables
+
 ## 0.19.0
 
 ### Minor Changes
