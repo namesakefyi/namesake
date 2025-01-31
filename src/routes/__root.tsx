@@ -4,6 +4,7 @@ import {
   Outlet,
   type ToOptions,
   createRootRouteWithContext,
+  useLocation,
   useRouter,
 } from "@tanstack/react-router";
 import type { ConvexAuthState } from "convex/react";
@@ -15,6 +16,8 @@ import {
   OctagonAlert,
 } from "lucide-react";
 import { useTheme } from "next-themes";
+import posthog from "posthog-js";
+import { useEffect } from "react";
 import { RouterProvider } from "react-aria-components";
 import { Toaster } from "sonner";
 
@@ -23,6 +26,21 @@ declare module "react-aria-components" {
     href: ToOptions | string;
     routerOptions: Omit<NavigateOptions, keyof ToOptions>;
   }
+}
+
+function PostHogPageView() {
+  const location = useLocation();
+
+  // Track pageviews
+  useEffect(() => {
+    if (posthog) {
+      posthog.capture("$pageview", {
+        $current_url: location.pathname,
+      });
+    }
+  }, [location]);
+
+  return null;
 }
 
 interface RouterContext {
@@ -55,6 +73,7 @@ function RootRoute() {
       }
     >
       <Outlet />
+      <PostHogPageView />
       <Toaster
         theme={theme as "light" | "dark" | "system"}
         offset={16}
