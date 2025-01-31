@@ -13,8 +13,8 @@ import {
 import { QuestBasics } from "@/components/quests/QuestBasics/QuestBasics";
 import { api } from "@convex/_generated/api";
 import { JURISDICTIONS } from "@convex/constants";
-import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "convex/react";
+import { createFileRoute, notFound } from "@tanstack/react-router";
+import { rootRouteId } from "@tanstack/react-router";
 import { Milestone } from "lucide-react";
 
 type QuestSearch = {
@@ -23,6 +23,15 @@ type QuestSearch = {
 
 export const Route = createFileRoute("/_authenticated/_home/$questSlug/")({
   component: QuestDetailRoute,
+  loader: async ({ params: { questSlug }, context: { convex } }) => {
+    const questData = await convex.query(api.quests.getWithUserQuest, {
+      slug: questSlug,
+    });
+    if (questData.quest === null) {
+      throw notFound({ routeId: rootRouteId });
+    }
+    return { questData };
+  },
   validateSearch: (search: Record<string, unknown>): QuestSearch => {
     return {
       edit: search.edit === true ? true : undefined,
@@ -31,12 +40,8 @@ export const Route = createFileRoute("/_authenticated/_home/$questSlug/")({
 });
 
 function QuestDetailRoute() {
-  const { questSlug } = Route.useParams();
   const { edit: isEditing } = Route.useSearch();
-
-  const questData = useQuery(api.quests.getWithUserQuest, {
-    slug: questSlug,
-  });
+  const { questData } = Route.useLoaderData();
 
   // TODO: Improve loading state to prevent flash of empty
   if (questData === undefined) return;

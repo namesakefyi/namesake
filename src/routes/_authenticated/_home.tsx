@@ -1,7 +1,6 @@
 import { AppSidebar } from "@/components/app";
 import {
   Badge,
-  Container,
   Nav,
   NavGroup,
   NavItem,
@@ -169,9 +168,9 @@ function IndexRoute() {
   };
 
   return (
-    <Container className="flex">
+    <div className="flex">
       <MyQuests />
       <Outlet />
-    </Container>
+    </div>
   );
 }

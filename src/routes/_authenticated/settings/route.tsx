@@ -1,5 +1,5 @@
 import { AppContent, AppSidebar } from "@/components/app";
-import { Container, Nav, NavGroup, NavItem } from "@/components/common";
+import { Nav, NavGroup, NavItem } from "@/components/common";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import {
   Bug,
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/settings")({
 
 function SettingsRoute() {
   return (
-    <Container className="flex">
+    <div className="flex">
       <AppSidebar>
         <Nav>
           <NavGroup label="Settings">
@@ -91,6 +91,6 @@ function SettingsRoute() {
       <AppContent>
         <Outlet />
       </AppContent>
-    </Container>
+    </div>
   );
 }

@@ -52,6 +52,7 @@ const NotFoundComponent = () => (
 const router = createRouter({
   routeTree,
   context: {
+    convex: undefined!,
     title: undefined!,
     auth: undefined!,
     role: undefined!,
@@ -90,7 +91,7 @@ const InnerApp = () => {
   return (
     <RouterProvider
       router={router}
-      context={{ title, auth: authClient, role, residence, birthplace }}
+      context={{ convex, title, auth: authClient, role, residence, birthplace }}
     />
   );
 };
