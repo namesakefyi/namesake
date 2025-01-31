@@ -2,7 +2,7 @@ import { Banner, Button, Form, Select, SelectItem } from "@/components/common";
 import { SettingsItem } from "@/components/settings";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
-import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
+import { BIRTHPLACES, type Birthplace } from "@convex/constants";
 import { useMutation } from "convex/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -13,8 +13,8 @@ type EditBirthplaceSettingProps = {
 
 export const EditBirthplaceSetting = ({ user }: EditBirthplaceSettingProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [birthplace, setBirthplace] = useState<Jurisdiction>(
-    user.birthplace as Jurisdiction,
+  const [birthplace, setBirthplace] = useState<Birthplace>(
+    user.birthplace as Birthplace,
   );
   const [error, setError] = useState<string>();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,7 +27,7 @@ export const EditBirthplaceSetting = ({ user }: EditBirthplaceSettingProps) => {
   }, [birthplace, user.birthplace]);
 
   const handleCancel = () => {
-    setBirthplace(user.birthplace as Jurisdiction);
+    setBirthplace(user.birthplace as Birthplace);
     setIsEditing(false);
   };
 
@@ -63,14 +63,14 @@ export const EditBirthplaceSetting = ({ user }: EditBirthplaceSettingProps) => {
           name="birthplace"
           selectedKey={birthplace}
           onSelectionChange={(key) => {
-            setBirthplace(key as Jurisdiction);
+            setBirthplace(key as Birthplace);
             setError(undefined);
           }}
           isRequired
           placeholder="Select state"
           isDisabled={isSubmitting}
         >
-          {Object.entries(JURISDICTIONS).map(([value, label]) => (
+          {Object.entries(BIRTHPLACES).map(([value, label]) => (
             <SelectItem key={value} id={value}>
               {label}
             </SelectItem>

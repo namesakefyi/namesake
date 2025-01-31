@@ -6,7 +6,7 @@ import { query } from "./_generated/server";
 import type { Role } from "./constants";
 import { DUPLICATE_EMAIL, INVALID_EMAIL } from "./errors";
 import { userMutation } from "./helpers";
-import { jurisdiction } from "./validators";
+import { birthplace, jurisdiction } from "./validators";
 
 export const getAll = query({
   args: {},
@@ -91,7 +91,7 @@ export const setResidence = userMutation({
 });
 
 export const setBirthplace = userMutation({
-  args: { birthplace: jurisdiction },
+  args: { birthplace: birthplace },
   handler: async (ctx, args) => {
     await ctx.db.patch(ctx.userId, { birthplace: args.birthplace });
   },

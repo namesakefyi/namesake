@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import {
+  BIRTHPLACES,
   CATEGORIES,
   JURISDICTIONS,
   ROLES,
@@ -10,6 +11,10 @@ import {
 
 export const jurisdiction = v.union(
   ...Object.keys(JURISDICTIONS).map((jurisdiction) => v.literal(jurisdiction)),
+);
+
+export const birthplace = v.union(
+  ...Object.keys(BIRTHPLACES).map((birthplace) => v.literal(birthplace)),
 );
 
 export const status = v.union(
