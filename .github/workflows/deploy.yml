@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.DEPLOY_PAT }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -32,6 +34,8 @@ jobs:
       - name: Deploy Convex and build app
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          VITE_REACT_APP_PUBLIC_POSTHOG_KEY: ${{ secrets.VITE_REACT_APP_PUBLIC_POSTHOG_KEY }}
+          VITE_REACT_APP_PUBLIC_POSTHOG_HOST: ${{ secrets.VITE_REACT_APP_PUBLIC_POSTHOG_HOST }}
         run: npx convex deploy --cmd 'pnpm build'
 
       - name: Deploy to Cloudflare Pages
