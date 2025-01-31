@@ -1,5 +1,15 @@
 # namesake
 
+## 0.19.0
+
+### Minor Changes
+
+- c11f544: Track web vitals and performance analytics with PostHog
+
+### Patch Changes
+
+- 6b25e40: Support selecting a birthplace outside the US
+
 ## 0.18.0
 
 ### Minor Changes
