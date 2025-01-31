@@ -1,5 +1,18 @@
 # namesake
 
+## 0.18.0
+
+### Minor Changes
+
+- 0e9f77a: Enable early access codes for beta testing
+- 6a2bc7b: Refine design for quest documents and references
+- 7e28449: Allow editing user settings inline instead of opening a dialog window
+- fb4f688: Support adding, editing, and deleting frequently asked questions for each quest
+
+### Patch Changes
+
+- fb82f83: Improve loading state of quests with skeleton loader component
+
 ## 0.17.0
 
 ### Minor Changes
