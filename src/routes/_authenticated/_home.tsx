@@ -25,6 +25,7 @@ export const Route = createFileRoute("/_authenticated/_home")({
 
 function IndexRoute() {
   const MyQuests = () => {
+    const user = useQuery(api.users.getCurrent);
     const userQuests = useQuery(api.userQuests.count) ?? 0;
     const completedQuests = useQuery(api.userQuests.countCompleted) ?? 0;
     const questsByCategory = useQuery(api.userQuests.getByCategory);
@@ -85,6 +86,13 @@ function IndexRoute() {
           {(Object.keys(CORE_CATEGORIES) as CoreCategory[]).map((category) => {
             const userQuest = questsByCategory?.[category]?.[0];
             const config = CORE_CATEGORIES[category];
+
+            if (
+              category === "birthCertificate" &&
+              user?.birthplace === "other"
+            ) {
+              return null;
+            }
 
             if (userQuest) {
               return (

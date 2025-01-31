@@ -88,6 +88,12 @@ export const JURISDICTIONS = {
 } as const;
 export type Jurisdiction = keyof typeof JURISDICTIONS;
 
+export const BIRTHPLACES = {
+  ...JURISDICTIONS,
+  other: "I was born outside the US",
+};
+export type Birthplace = keyof typeof BIRTHPLACES;
+
 /**
  * Fields for input forms.
  */

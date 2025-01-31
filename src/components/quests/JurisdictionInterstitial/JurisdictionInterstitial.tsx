@@ -8,6 +8,7 @@ import {
 } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import {
+  BIRTHPLACES,
   CATEGORIES,
   JURISDICTIONS,
   type Jurisdiction,
@@ -67,9 +68,16 @@ export const JurisdictionInterstitial = ({
         });
       } else {
         navigate({ to: "/" });
-        toast.error(
-          "Namesake doesn't support that state yet. Please check back soon.",
-        );
+
+        if (type === "birthCertificate" && selection === "other") {
+          toast.info(
+            "Namesake can only assist with birth certificates for US states.",
+          );
+        } else {
+          toast.info(
+            "Namesake doesn't support that state yet. Please check back soon.",
+          );
+        }
       }
     } catch (err) {
       setError("Failed to update. Please try again.");
@@ -118,7 +126,9 @@ export const JurisdictionInterstitial = ({
           className="flex-1 max-h-[60dvh]"
           aria-label="Select a state"
         >
-          {Object.entries(JURISDICTIONS).map(([value, label]) => (
+          {Object.entries(
+            type === "birthCertificate" ? BIRTHPLACES : JURISDICTIONS,
+          ).map(([value, label]) => (
             <ListBoxItem key={value} id={value}>
               {label}
             </ListBoxItem>

@@ -2,6 +2,7 @@ import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
+  birthplace,
   category,
   jurisdiction,
   role,
@@ -134,8 +135,8 @@ const users = defineTable({
   emailVerified: v.optional(v.boolean()),
   /** The US State where the user resides. */
   residence: v.optional(jurisdiction),
-  /** The US State where the user was born. */
-  birthplace: v.optional(jurisdiction),
+  /** The US State where the user was born, or "other" if they were born outside the US. */
+  birthplace: v.optional(birthplace),
   /** Whether the user is a minor. */
   isMinor: v.optional(v.boolean()),
 }).index("email", ["email"]);
