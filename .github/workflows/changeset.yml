@@ -1,4 +1,4 @@
-name: Changeset
+name: Version and Deploy
 
 on:
   push:
@@ -10,6 +10,42 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   changeset:
     name: Update changelog and tags
+    runs-on: ubuntu-latest
+    permissions: write-all
+    outputs:
+      hasChangesets: ${{ steps.changesets.outputs.hasChangesets }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Create release pull request or bump version tag
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          title: 'ci: Release'
+          publish: pnpm changeset tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    name: Deploy
+    needs: changeset
+    # If no changesets are present, they have been merged; we should deploy
+    if: needs.changeset.outputs.hasChangesets == 'false'
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
@@ -30,10 +66,19 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Create release pull request or bump version tag
-        uses: changesets/action@v1
-        with:
-          title: 'ci: Release'
-          publish: pnpm changeset tag
+      - name: Deploy Convex and build app
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          VITE_REACT_APP_PUBLIC_POSTHOG_KEY: ${{ secrets.VITE_REACT_APP_PUBLIC_POSTHOG_KEY }}
+          VITE_REACT_APP_PUBLIC_POSTHOG_HOST: ${{ secrets.VITE_REACT_APP_PUBLIC_POSTHOG_HOST }}
+        run: npx convex deploy --cmd 'pnpm build'
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: 'namesake'
+          directory: 'dist'
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
