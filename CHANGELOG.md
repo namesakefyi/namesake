@@ -1,5 +1,11 @@
 # namesake
 
+## 0.19.2
+
+### Patch Changes
+
+- ca58bb2: Reconfigure app layout for mobile support
+
 ## 0.19.1
 
 ### Patch Changes
