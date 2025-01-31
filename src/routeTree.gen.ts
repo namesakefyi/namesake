@@ -23,6 +23,7 @@ import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/_
 import { Route as AuthenticatedSettingsDataImport } from './routes/_authenticated/settings/data'
 import { Route as AuthenticatedSettingsAccountImport } from './routes/_authenticated/settings/account'
 import { Route as AuthenticatedAdminQuestsIndexImport } from './routes/_authenticated/admin/quests.index'
+import { Route as AuthenticatedAdminEarlyAccessIndexImport } from './routes/_authenticated/admin/early-access.index'
 import { Route as AuthenticatedAdminDocumentsIndexImport } from './routes/_authenticated/admin/documents.index'
 import { Route as AuthenticatedHomeStateIdIndexImport } from './routes/_authenticated/_home/state-id.index'
 import { Route as AuthenticatedHomeCourtOrderIndexImport } from './routes/_authenticated/_home/court-order.index'
@@ -105,6 +106,13 @@ const AuthenticatedAdminQuestsIndexRoute =
   AuthenticatedAdminQuestsIndexImport.update({
     id: '/quests/',
     path: '/quests/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+
+const AuthenticatedAdminEarlyAccessIndexRoute =
+  AuthenticatedAdminEarlyAccessIndexImport.update({
+    id: '/early-access/',
+    path: '/early-access/',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 
@@ -287,6 +295,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminDocumentsIndexImport
       parentRoute: typeof AuthenticatedAdminRouteImport
     }
+    '/_authenticated/admin/early-access/': {
+      id: '/_authenticated/admin/early-access/'
+      path: '/early-access'
+      fullPath: '/admin/early-access'
+      preLoaderRoute: typeof AuthenticatedAdminEarlyAccessIndexImport
+      parentRoute: typeof AuthenticatedAdminRouteImport
+    }
     '/_authenticated/admin/quests/': {
       id: '/_authenticated/admin/quests/'
       path: '/quests'
@@ -303,6 +318,7 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminDocumentsDocumentIdRoute: typeof AuthenticatedAdminDocumentsDocumentIdRoute
   AuthenticatedAdminDocumentsIndexRoute: typeof AuthenticatedAdminDocumentsIndexRoute
+  AuthenticatedAdminEarlyAccessIndexRoute: typeof AuthenticatedAdminEarlyAccessIndexRoute
   AuthenticatedAdminQuestsIndexRoute: typeof AuthenticatedAdminQuestsIndexRoute
 }
 
@@ -313,6 +329,8 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
       AuthenticatedAdminDocumentsDocumentIdRoute,
     AuthenticatedAdminDocumentsIndexRoute:
       AuthenticatedAdminDocumentsIndexRoute,
+    AuthenticatedAdminEarlyAccessIndexRoute:
+      AuthenticatedAdminEarlyAccessIndexRoute,
     AuthenticatedAdminQuestsIndexRoute: AuthenticatedAdminQuestsIndexRoute,
   }
 
@@ -406,6 +424,7 @@ export interface FileRoutesByFullPath {
   '/court-order': typeof AuthenticatedHomeCourtOrderIndexRoute
   '/state-id': typeof AuthenticatedHomeStateIdIndexRoute
   '/admin/documents': typeof AuthenticatedAdminDocumentsIndexRoute
+  '/admin/early-access': typeof AuthenticatedAdminEarlyAccessIndexRoute
   '/admin/quests': typeof AuthenticatedAdminQuestsIndexRoute
 }
 
@@ -424,6 +443,7 @@ export interface FileRoutesByTo {
   '/court-order': typeof AuthenticatedHomeCourtOrderIndexRoute
   '/state-id': typeof AuthenticatedHomeStateIdIndexRoute
   '/admin/documents': typeof AuthenticatedAdminDocumentsIndexRoute
+  '/admin/early-access': typeof AuthenticatedAdminEarlyAccessIndexRoute
   '/admin/quests': typeof AuthenticatedAdminQuestsIndexRoute
 }
 
@@ -447,6 +467,7 @@ export interface FileRoutesById {
   '/_authenticated/_home/court-order/': typeof AuthenticatedHomeCourtOrderIndexRoute
   '/_authenticated/_home/state-id/': typeof AuthenticatedHomeStateIdIndexRoute
   '/_authenticated/admin/documents/': typeof AuthenticatedAdminDocumentsIndexRoute
+  '/_authenticated/admin/early-access/': typeof AuthenticatedAdminEarlyAccessIndexRoute
   '/_authenticated/admin/quests/': typeof AuthenticatedAdminQuestsIndexRoute
 }
 
@@ -469,6 +490,7 @@ export interface FileRouteTypes {
     | '/court-order'
     | '/state-id'
     | '/admin/documents'
+    | '/admin/early-access'
     | '/admin/quests'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -486,6 +508,7 @@ export interface FileRouteTypes {
     | '/court-order'
     | '/state-id'
     | '/admin/documents'
+    | '/admin/early-access'
     | '/admin/quests'
   id:
     | '__root__'
@@ -507,6 +530,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_home/court-order/'
     | '/_authenticated/_home/state-id/'
     | '/_authenticated/admin/documents/'
+    | '/_authenticated/admin/early-access/'
     | '/_authenticated/admin/quests/'
   fileRoutesById: FileRoutesById
 }
@@ -557,6 +581,7 @@ export const routeTree = rootRoute
         "/_authenticated/admin/",
         "/_authenticated/admin/documents/$documentId",
         "/_authenticated/admin/documents/",
+        "/_authenticated/admin/early-access/",
         "/_authenticated/admin/quests/"
       ]
     },
@@ -630,6 +655,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/admin/documents/": {
       "filePath": "_authenticated/admin/documents.index.tsx",
+      "parent": "/_authenticated/admin"
+    },
+    "/_authenticated/admin/early-access/": {
+      "filePath": "_authenticated/admin/early-access.index.tsx",
       "parent": "/_authenticated/admin"
     },
     "/_authenticated/admin/quests/": {

@@ -39,7 +39,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
           <Logo className="h-5 lg:h-[1.35rem]" />
         </Link>
         <Badge className="-mb-1" variant="waiting">
-          Beta
+          Early Access
         </Badge>
       </div>
       <div className="app-padding flex-1">{children}</div>

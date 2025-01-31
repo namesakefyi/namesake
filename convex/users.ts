@@ -15,6 +15,14 @@ export const getAll = query({
   },
 });
 
+export const getById = query({
+  args: { userId: v.optional(v.id("users")) },
+  handler: async (ctx, { userId }) => {
+    if (!userId) return undefined;
+    return await ctx.db.get(userId);
+  },
+});
+
 export const getCurrent = query({
   args: {},
   handler: async (ctx) => {
