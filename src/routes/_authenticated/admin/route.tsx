@@ -30,7 +30,7 @@ function AdminRoute() {
             <NavItem icon={FileText} href={{ to: "/admin/documents" }}>
               Documents
             </NavItem>
-            <NavItem icon={FlaskConical} href={{ to: "/admin/beta" }}>
+            <NavItem icon={FlaskConical} href={{ to: "/admin/early-access" }}>
               Early Access
             </NavItem>
           </NavGroup>

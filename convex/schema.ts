@@ -190,8 +190,8 @@ const userQuests = defineTable({
 const earlyAccessCodes = defineTable({
   /** The user who created the code. */
   createdBy: v.id("users"),
-  /** The user who used the code to sign up. */
-  claimedBy: v.optional(v.id("users")),
+  /** The time the code was claimed. */
+  claimedAt: v.optional(v.number()),
 }).index("createdBy", ["createdBy"]);
 
 export default defineSchema({
