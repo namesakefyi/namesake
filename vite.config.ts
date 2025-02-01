@@ -10,6 +10,7 @@ import { configDefaults, coverageConfigDefaults } from "vitest/config";
 import { defineConfig as defineVitestConfig } from "vitest/config";
 
 const viteConfig = defineViteConfig({
+  base: "https://namesake.fyi",
   build: {
     rollupOptions: {
       output: {

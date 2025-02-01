@@ -1,6 +1,7 @@
 import Resend from "@auth/core/providers/resend";
 import { alphabet, generateRandomString } from "oslo/crypto";
 import { Resend as ResendAPI } from "resend";
+import { PasswordReset } from "../../emails/PasswordReset";
 
 export const ResendOTPPasswordReset = Resend({
   id: "resend-otp",
@@ -14,7 +15,7 @@ export const ResendOTPPasswordReset = Resend({
       from: "Namesake <no-reply@namesake.fyi>",
       to: [email],
       subject: "Reset your Namesake password",
-      text: `Your password reset code is: ${token}`,
+      react: PasswordReset({ resetCode: token }),
     });
     if (error) {
       throw new Error("Failed to send password reset email");

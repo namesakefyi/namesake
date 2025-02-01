@@ -25,7 +25,10 @@
     "test:e2e": "playwright test",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "email:build": "email build",
+    "email:dev": "email dev",
+    "email:export": "email export"
   },
   "resolutions": {
     "@types/mime": "3.0.4",
@@ -40,6 +43,7 @@
     "@faker-js/faker": "^9.4.0",
     "@maskito/core": "^3.2.1",
     "@maskito/react": "^3.2.1",
+    "@react-email/components": "0.0.32",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tanstack/react-router": "^1.97.24",
     "@tiptap/extension-blockquote": "^2.11.3",
@@ -121,6 +125,7 @@
     "npm-run-all": "^4.1.5",
     "playwright": "^1.50.0",
     "prop-types": "^15.8.1",
+    "react-email": "3.0.6",
     "rollup-plugin-webpack-stats": "^2.0.1",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-aria-attributes": "^2.0.1",

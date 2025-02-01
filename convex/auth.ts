@@ -1,7 +1,7 @@
 import { Password } from "@convex-dev/auth/providers/Password";
 import { convexAuth } from "@convex-dev/auth/server";
 import type { MutationCtx } from "./_generated/server";
-import { ResendOTPPasswordReset } from "./passwordReset";
+import { ResendOTPPasswordReset } from "./email/passwordReset";
 import { getByEmail } from "./users";
 
 export const createOrUpdateUser = async (ctx: MutationCtx, args: any) => {
