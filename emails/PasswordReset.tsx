@@ -17,10 +17,6 @@ interface PasswordResetProps {
   resetCode?: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
-
 export const PasswordReset = ({ resetCode }: PasswordResetProps) => (
   <Html>
     <Head />
@@ -29,7 +25,7 @@ export const PasswordReset = ({ resetCode }: PasswordResetProps) => (
       <Body className="bg-white font-sans text-[#111111]">
         <Container className="my-[40px] px-[16px] mx-auto max-w-[452px]">
           <Heading className="text-[32px] font-bold mt-0">
-            Reset your Namesake password
+            Reset your password
           </Heading>
           <Text className="text-[#333333]">Your password reset code is:</Text>
           <code className="block p-[20px] text-center text-[24px] max-w-[420px] bg-[#f4f4f4] rounded-lg text-[#333333]">
@@ -41,10 +37,10 @@ export const PasswordReset = ({ resetCode }: PasswordResetProps) => (
           </Text>
           <Hr />
           <Img
-            src={`${baseUrl}/static/namesake-logo.png`}
+            src="/static/namesake-logo.png"
             width="120"
             height="24"
-            alt="Namesake's Logo"
+            alt="Namesake Logo"
             className="mt-6"
           />
           <Section className="mt-4 text-[14px] text-[#999999]">
@@ -54,7 +50,7 @@ export const PasswordReset = ({ resetCode }: PasswordResetProps) => (
             >
               namesake.fyi
             </Link>
-            &nbsp;&nbsp;&hearts;&nbsp;&nbsp;T4T
+            &nbsp;&nbsp;T4T
           </Section>
         </Container>
       </Body>
