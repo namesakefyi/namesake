@@ -70,24 +70,6 @@ pnpm dev
 
 The app should now be available at http://localhost:5173. You're all set up!
 
-### Register a local Namesake account
-
-Upon opening your app at http://localhost:5173 you will be greeted with a login form. To login, you will need an account. Currently, registering requires an early access code. To generate a code for your local Namesake instance:
-
-1. Open your [Convex dashboard](https://dashboard.convex.dev)
-2. Navigate to your Namesake project
-3. Click into the "Data" tab
-4. Select the `users` table
-5. Copy the `_id` of any user
-6. Switch to the `earlyAccessCodes` table
-7. Click the "+ Add Documents" button
-8. Paste the `_id` in the `createdBy` property and click "Save"
-9. Copy the `_id` of the newly created document
-10. Return to your local app
-11. Select the "Register" tab
-10. Paste the `_id` into the "Early Access Code" input
-11. Register an account
-
 Now that the development app is running, let's get familiar with what's inside.
 
 ## Project structure
