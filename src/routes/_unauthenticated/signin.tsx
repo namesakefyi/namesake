@@ -135,7 +135,7 @@ const SignIn = () => {
         </Form>
       </TabPanel>
       <TabPanel id="signUp">
-        {isCodeRequired ? (
+        {import.meta.env.PROD && isCodeRequired ? (
           <Form onSubmit={handleCodeSubmit} className="items-stretch">
             <Banner variant="info">
               Namesake is in early access. To register, please enter a code.
