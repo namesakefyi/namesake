@@ -231,7 +231,7 @@ importers:
         version: 3.7.2(@swc/helpers@0.5.15)(vite@6.0.11(@types/node@22.10.10)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.7.0))
       '@vitest/coverage-v8':
         specifier: ^2.1.8
-        version: 2.1.8(vitest@2.1.8)
+        version: 2.1.8(vitest@2.1.8(@edge-runtime/vm@5.0.0)(@types/node@22.10.10)(@vitest/ui@2.1.8)(jsdom@25.0.0(canvas@2.11.2)))
       '@vitest/ui':
         specifier: ^2.1.8
         version: 2.1.8(vitest@2.1.8)
@@ -269,8 +269,8 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1(rollup@4.32.0)
       tailwind-merge:
-        specifier: ^2.6.0
-        version: 2.6.0
+        specifier: ^3.0.1
+        version: 3.0.1
       tailwindcss-aria-attributes:
         specifier: ^2.0.1
         version: 2.0.1(tailwindcss@3.4.17)
@@ -4962,6 +4962,11 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  semver@7.7.0:
+    resolution: {integrity: sha512-DrfFnPzblFmNrIZzg5RzHegbiRWg7KMR7btwi2yjHwx06zsUbO5g613sVwEV7FTwmzJu+Io0lJe2GJ3LxqpvBQ==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   server-only@0.0.1:
     resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
 
@@ -5173,8 +5178,8 @@ packages:
   tailwind-merge@2.5.4:
     resolution: {integrity: sha512-0q8cfZHMu9nuYP/b5Shb7Y7Sh1B7Nnl5GqNr1U+n2p6+mybvRtayrQ+0042Z5byvTA8ihjlP8Odo8/VnHbZu4Q==}
 
-  tailwind-merge@2.6.0:
-    resolution: {integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==}
+  tailwind-merge@3.0.1:
+    resolution: {integrity: sha512-AvzE8FmSoXC7nC+oU5GlQJbip2UO7tmOhOfQyOmPhrStOGXHU08j8mZEHZ4BmCqY5dWTCo4ClWkNyRNx1wpT0g==}
 
   tailwind-variants@0.3.1:
     resolution: {integrity: sha512-krn67M3FpPwElg4FsZrOQd0U26o7UDH/QOkK8RNaiCCrr052f6YJPBUfNKnPo/s/xRzNPtv1Mldlxsg8Tb46BQ==}
@@ -6453,7 +6458,7 @@ snapshots:
       nopt: 5.0.0
       npmlog: 5.0.1
       rimraf: 3.0.2
-      semver: 7.6.3
+      semver: 7.7.0
       tar: 6.2.1
     transitivePeerDependencies:
       - encoding
@@ -8239,7 +8244,7 @@ snapshots:
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  '@vitest/coverage-v8@2.1.8(vitest@2.1.8)':
+  '@vitest/coverage-v8@2.1.8(vitest@2.1.8(@edge-runtime/vm@5.0.0)(@types/node@22.10.10)(@vitest/ui@2.1.8)(jsdom@25.0.0(canvas@2.11.2)))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -10874,6 +10879,9 @@ snapshots:
 
   semver@7.6.3: {}
 
+  semver@7.7.0:
+    optional: true
+
   server-only@0.0.1: {}
 
   set-blocking@2.0.0:
@@ -11109,7 +11117,7 @@ snapshots:
 
   tailwind-merge@2.5.4: {}
 
-  tailwind-merge@2.6.0: {}
+  tailwind-merge@3.0.1: {}
 
   tailwind-variants@0.3.1(tailwindcss@3.4.17):
     dependencies:
