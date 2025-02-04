@@ -45,7 +45,6 @@ export function RichText({
 }: RichTextProps) {
   const editor = useEditor({
     extensions: [
-      // Required
       Document,
       Text,
       Paragraph,
@@ -55,15 +54,12 @@ export function RichText({
       Placeholder.configure({
         placeholder,
       }),
-
-      // Basic formatting
       Bold,
       Italic,
       Link.configure({
         openOnClick: false,
         defaultProtocol: "https",
       }),
-
       Blockquote,
       BulletList,
       ListItem,
@@ -93,8 +89,8 @@ export function RichText({
     base: "w-full",
     variants: {
       editable: {
-        true: "px-3.5 py-3 [&_.tiptap]:outline-none",
-        false: "ring-0 rounded-none bg-transparent",
+        true: "px-3.5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500",
+        false: "ring-0 rounded-none bg-transparent focus:outline-none focus:ring-0",
       },
     },
   });
@@ -103,46 +99,48 @@ export function RichText({
     <FieldGroup className={styles({ editable })}>
       <EditorContent
         editor={editor}
-        className={twMerge("w-full prose", className)}
+        className={twMerge("w-full prose", className, !editable && "pointer-events-none")}
       />
-      <BubbleMenu
-        editor={editor}
-        className="bg-gray-1 dark:bg-graydark-2 border border-gray-dim p-1.5 gap-px rounded-xl shadow-md flex items-center data-[state=visible]:opacity-100 data-[state=hidden]:opacity-0 transition-opacity *:border-none"
-      >
-        <ToggleButton
-          onPress={() => editor.chain().focus().toggleBold().run()}
-          isDisabled={!editor.can().chain().focus().toggleBold().run()}
-          isSelected={editor.isActive("bold")}
-          icon={BoldIcon}
-          aria-label="Toggle bold text"
-          size="small"
-        />
-        <ToggleButton
-          onPress={() => editor.chain().focus().toggleItalic().run()}
-          isDisabled={!editor.can().chain().focus().toggleItalic().run()}
-          isSelected={editor.isActive("italic")}
-          icon={ItalicIcon}
-          aria-label="Toggle italic text"
-          size="small"
-        />
-        <Separator orientation="vertical" />
-        <ToggleButton
-          onPress={() => editor.chain().focus().toggleBulletList().run()}
-          isDisabled={!editor.can().chain().focus().toggleBulletList().run()}
-          isSelected={editor.isActive("bulletList")}
-          icon={List}
-          aria-label="Toggle bulleted list"
-          size="small"
-        />
-        <ToggleButton
-          onPress={() => editor.chain().focus().toggleOrderedList().run()}
-          isDisabled={!editor.can().chain().focus().toggleOrderedList().run()}
-          isSelected={editor.isActive("orderedList")}
-          icon={ListOrdered}
-          aria-label="Toggle numbered list"
-          size="small"
-        />
-      </BubbleMenu>
+      {editable && (
+        <BubbleMenu
+          editor={editor}
+          className="bg-gray-1 dark:bg-graydark-2 border border-gray-dim p-1.5 gap-px rounded-xl shadow-md flex items-center data-[state=visible]:opacity-100 data-[state=hidden]:opacity-0 transition-opacity *:border-none"
+        >
+          <ToggleButton
+            onPress={() => editor.chain().focus().toggleBold().run()}
+            isDisabled={!editor.can().chain().focus().toggleBold().run()}
+            isSelected={editor.isActive("bold")}
+            icon={BoldIcon}
+            aria-label="Toggle bold text"
+            size="small"
+          />
+          <ToggleButton
+            onPress={() => editor.chain().focus().toggleItalic().run()}
+            isDisabled={!editor.can().chain().focus().toggleItalic().run()}
+            isSelected={editor.isActive("italic")}
+            icon={ItalicIcon}
+            aria-label="Toggle italic text"
+            size="small"
+          />
+          <Separator orientation="vertical" />
+          <ToggleButton
+            onPress={() => editor.chain().focus().toggleBulletList().run()}
+            isDisabled={!editor.can().chain().focus().toggleBulletList().run()}
+            isSelected={editor.isActive("bulletList")}
+            icon={List}
+            aria-label="Toggle bulleted list"
+            size="small"
+          />
+          <ToggleButton
+            onPress={() => editor.chain().focus().toggleOrderedList().run()}
+            isDisabled={!editor.can().chain().focus().toggleOrderedList().run()}
+            isSelected={editor.isActive("orderedList")}
+            icon={ListOrdered}
+            aria-label="Toggle numbered list"
+            size="small"
+          />
+        </BubbleMenu>
+      )}
       {showReadingScore && (
         <div className="border-t border-gray-dim">
           <ReadingScore text={editor.state.doc.textContent} />
