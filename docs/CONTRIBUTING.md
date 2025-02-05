@@ -26,9 +26,6 @@ cd namesake
 pnpm install
 ```
 
-> [!NOTE]
-> Cloning the repo requires Git LFS (Large File Storage), see [install instructions](https://docs.github.com/en/repositories/working-with-files/managing-large-files/installing-git-large-file-storage).
-
 ### Connect to Convex (first time only)
 
 The first time you set up the app, you'll need to connect to our backend service, [Convex](https://www.convex.dev/). Run:
