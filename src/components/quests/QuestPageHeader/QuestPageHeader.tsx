@@ -22,6 +22,11 @@ import { useState } from "react";
 import { Heading } from "react-aria-components";
 import { toast } from "sonner";
 import { StatusSelect } from "../StatusSelect/StatusSelect";
+import flowerImg from "./flower.png";
+import gavelImg from "./gavel.png";
+import idImg from "./id.png";
+import passportImg from "./passport.png";
+import socialSecurityImg from "./social-security.png";
 
 interface QuestPageHeaderProps extends Omit<PageHeaderProps, "title"> {
   quest?: Doc<"quests"> | null;
@@ -32,23 +37,23 @@ function CoreQuestIllustration({ category }: { category: CoreCategory }) {
   const illustration: Record<CoreCategory, { alt: string; src: string }> = {
     courtOrder: {
       alt: "A gavel with a snail on it",
-      src: "/images/gavel.png",
+      src: gavelImg,
     },
     passport: {
       alt: "A snail on a passport",
-      src: "/images/passport.png",
+      src: passportImg,
     },
     socialSecurity: {
       alt: "A snail on a social security card",
-      src: "/images/social-security.png",
+      src: socialSecurityImg,
     },
     stateId: {
       alt: "A snail on a Massachusetts ID card",
-      src: "/images/id.png",
+      src: idImg,
     },
     birthCertificate: {
       alt: "A snail on a flower",
-      src: "/images/flower.png",
+      src: flowerImg,
     },
   };
 
