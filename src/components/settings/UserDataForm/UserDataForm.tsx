@@ -80,6 +80,8 @@ export function UserDataForm({ initialData }: UserDataFormProps) {
     return <LoaderCircle className="w-4 h-4 animate-spin" />;
   }
 
+  const isExistingField = initialData.field !== "";
+
   return (
     <Form onSubmit={handleSubmit}>
       <div className="flex gap-2 items-end">
@@ -89,6 +91,7 @@ export function UserDataForm({ initialData }: UserDataFormProps) {
           value={field}
           onChange={setField}
           placeholder="Enter field name"
+          isDisabled={isExistingField}
         />
         <TextField
           label="Value"

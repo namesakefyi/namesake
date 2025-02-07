@@ -31,6 +31,9 @@ export function UserDataForms() {
     setupEncryption();
   }, []);
 
+  // Check if we already have an empty form
+  const hasEmptyForm = formData.some((data) => data.field === "");
+
   return (
     <>
       <div className="mt-4 flex flex-col gap-4">
@@ -39,13 +42,15 @@ export function UserDataForms() {
           <UserDataForm key={idx} initialData={data} />
         ))}
       </div>
-      <Button
-        className="w-fit mt-4"
-        variant="secondary"
-        onPress={() => setFormData([...formData, { field: "", value: "" }])}
-      >
-        Add Value
-      </Button>
+      {!hasEmptyForm && (
+        <Button
+          className="w-fit mt-4"
+          variant="secondary"
+          onPress={() => setFormData([...formData, { field: "", value: "" }])}
+        >
+          Add Value
+        </Button>
+      )}
     </>
   );
 }
