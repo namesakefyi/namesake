@@ -24,9 +24,12 @@ export function UserDataForm({ initialData }: UserDataFormProps) {
   const save = useMutation(api.userFormData.set);
 
   useEffect(() => {
+    console.log("initialData", initialData);
     const loadEncryptionKey = async () => {
+      console.log("TRYING!")
       try {
         const key = await getEncryptionKey();
+        console.log("key", key);
         setEncryptionKey(key);
 
         if (!key) {
