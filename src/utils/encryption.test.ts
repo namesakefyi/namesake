@@ -1,9 +1,9 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import {
-  decryptData,
-  encryptData,
-  getEncryptionKey,
   initializeEncryption,
+  getEncryptionKey,
+  encryptData,
+  decryptData,
 } from "./encryption";
 
 interface MockIDBRequest {
@@ -33,9 +33,6 @@ describe("encryption", () => {
       onsuccess: null,
     };
 
-    // Set a timeout to simulate the request being resolved
-    // The timeout is necessary because the request will
-    // hang otherwise.
     setTimeout(() => {
       if (request.onsuccess) {
         request.onsuccess({ target: request } as any);
@@ -70,62 +67,40 @@ describe("encryption", () => {
     },
   };
 
+  // Mock key for consistent testing
+  const mockJWK = {
+    kty: "oct",
+    k: "mock-key-material",
+    alg: "A256GCM",
+    ext: true,
+    key_ops: ["encrypt", "decrypt"],
+  };
+
   beforeEach(() => {
     // Clear store data
     storeData.clear();
 
-    // Mock crypto.subtle as the test environment doesn't have a crypto implementation
-    // This test suite is only used to test round trips.
+    // Mock crypto.subtle
     const mockSubtle = {
-      generateKey: vi
-        .fn()
-        .mockImplementation(async (algorithm, extractable, keyUsages) => {
-          return {
-            type: "secret",
-            extractable,
-            algorithm,
-            usages: keyUsages,
-          };
-        }),
-      encrypt: vi
-        .fn()
-        .mockImplementation(async () => new Uint8Array([1, 2, 3])),
-      decrypt: vi
-        .fn()
-        .mockImplementation(async () => new Uint8Array([4, 5, 6])),
-      importKey: vi
-        .fn()
-        .mockImplementation(
-          async (_format, _keyData, algorithm, extractable, keyUsages) => {
-            return {
-              type: "secret",
-              extractable,
-              algorithm,
-              usages: keyUsages,
-            };
-          },
-        ),
-      exportKey: vi
-        .fn()
-        .mockImplementation(async () => new Uint8Array([7, 8, 9])),
-      deriveKey: vi
-        .fn()
-        .mockImplementation(
-          async (
-            _algorithm,
-            _baseKey,
-            derivedKeyAlgorithm,
-            extractable,
-            keyUsages,
-          ) => {
-            return {
-              type: "secret",
-              extractable,
-              algorithm: derivedKeyAlgorithm,
-              usages: keyUsages,
-            };
-          },
-        ),
+      generateKey: vi.fn().mockImplementation(async (algorithm, extractable, keyUsages) => {
+        return {
+          type: "secret",
+          extractable,
+          algorithm,
+          usages: keyUsages,
+        };
+      }),
+      encrypt: vi.fn().mockImplementation(async () => new Uint8Array([1, 2, 3])),
+      decrypt: vi.fn().mockImplementation(async () => new Uint8Array([4, 5, 6])),
+      exportKey: vi.fn().mockImplementation(async () => mockJWK),
+      importKey: vi.fn().mockImplementation(async (_format, _keyData, algorithm, extractable, keyUsages) => {
+        return {
+          type: "secret",
+          extractable,
+          algorithm,
+          usages: keyUsages,
+        };
+      }),
     };
 
     // Mock crypto
@@ -159,43 +134,63 @@ describe("encryption", () => {
   });
 
   describe("initialization", () => {
-    it("should initialize encryption and create necessary keys", async () => {
+    it("should initialize encryption and store the serialized DEK", async () => {
       await initializeEncryption();
 
-      expect(mockStore.put).toHaveBeenCalledWith(
-        "AAAAAAAAAAAAAAAAAAAAAA==",
-        "device-salt",
+      // Verify the DEK was generated and stored
+      expect(window.crypto.subtle.generateKey).toHaveBeenCalledWith(
+        { name: "AES-GCM", length: 256 },
+        true,
+        ["encrypt", "decrypt"]
       );
 
+      // Verify the DEK was exported as JWK
+      expect(window.crypto.subtle.exportKey).toHaveBeenCalledWith(
+        "jwk",
+        expect.any(Object)
+      );
+
+      // Verify the serialized DEK was stored
       expect(mockStore.put).toHaveBeenCalledWith(
-        "AAAAAAAAAAAAAAAAAQID",
-        "device-dek",
+        JSON.stringify(mockJWK),
+        "device-dek"
       );
     });
 
-    it("should not reinitialize if encryption is already set up", async () => {
+    it("should not reinitialize if DEK already exists", async () => {
       // Set up existing DEK
-      storeData.set("device-dek", "existing-encrypted-dek");
-
+      storeData.set("device-dek", JSON.stringify(mockJWK));
+      
       await initializeEncryption();
-      expect(mockStore.put).not.toHaveBeenCalled();
 
-      expect(mockStore.get).toHaveBeenCalledWith("device-dek");
+      // Verify no new key was generated
+      expect(window.crypto.subtle.generateKey).not.toHaveBeenCalled();
+      expect(mockStore.put).not.toHaveBeenCalled();
     });
   });
 
   describe("key management", () => {
-    it("should retrieve encryption key successfully", async () => {
-      // First initialize
-      await initializeEncryption();
+    it("should retrieve and deserialize DEK successfully", async () => {
+      // Store a serialized DEK
+      storeData.set("device-dek", JSON.stringify(mockJWK));
 
-      // Then get the key
       const key = await getEncryptionKey();
+      
+      // Verify key was imported as non-extractable
+      expect(window.crypto.subtle.importKey).toHaveBeenCalledWith(
+        "jwk",
+        mockJWK,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["encrypt", "decrypt"]
+      );
+
       expect(key).toBeDefined();
       expect(key).toHaveProperty("type", "secret");
+      expect(key).toHaveProperty("extractable", false);
     });
 
-    it("should return null if no encryption key exists", async () => {
+    it("should return null if no DEK exists", async () => {
       const key = await getEncryptionKey();
       expect(key).toBeNull();
     });
@@ -218,14 +213,13 @@ describe("encryption", () => {
       // Mock the decrypt operation to return our original data
       const mockCrypto = window.crypto as any;
       mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
-        new TextEncoder().encode(originalData),
+        new TextEncoder().encode(originalData)
       );
 
       const decrypted = await decryptData(encrypted, key);
       expect(decrypted).toBe(originalData);
     });
 
-    // This is a sanity check to ensure that the encrypt is being called.
     it("should encrypt different values to different ciphertexts", async () => {
       await initializeEncryption();
       const key = await getEncryptionKey();
@@ -237,30 +231,12 @@ describe("encryption", () => {
 
       // Change mock implementation for second encryption
       const mockCrypto = window.crypto as any;
-      mockCrypto.subtle.encrypt.mockImplementationOnce(
-        async () => new Uint8Array([4, 5, 6]),
+      mockCrypto.subtle.encrypt.mockImplementationOnce(async () =>
+        new Uint8Array([4, 5, 6])
       );
 
       const encrypted2 = await encryptData(data, key);
       expect(encrypted1).not.toBe(encrypted2);
-    });
-
-    it("should fail to decrypt with wrong key", async () => {
-      await initializeEncryption();
-      const key = await getEncryptionKey();
-      expect(key).toBeDefined();
-      if (!key) throw new Error("Key should exist");
-
-      const data = "test data";
-      const encrypted = await encryptData(data, key);
-
-      // Mock decrypt to throw error for wrong key
-      const mockCrypto = window.crypto as any;
-      mockCrypto.subtle.decrypt.mockRejectedValueOnce(
-        new Error("Decryption failed"),
-      );
-
-      await expect(decryptData(encrypted, key)).rejects.toThrow();
     });
 
     it("should handle empty strings", async () => {
@@ -275,7 +251,7 @@ describe("encryption", () => {
       // Mock decrypt to return empty string
       const mockCrypto = window.crypto as any;
       mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
-        new TextEncoder().encode(emptyString),
+        new TextEncoder().encode(emptyString)
       );
 
       const decrypted = await decryptData(encrypted, key);
@@ -294,7 +270,7 @@ describe("encryption", () => {
       // Mock decrypt to return special characters
       const mockCrypto = window.crypto as any;
       mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
-        new TextEncoder().encode(specialChars),
+        new TextEncoder().encode(specialChars)
       );
 
       const decrypted = await decryptData(encrypted, key);
@@ -313,7 +289,7 @@ describe("encryption", () => {
       // Mock decrypt to return unicode string
       const mockCrypto = window.crypto as any;
       mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
-        new TextEncoder().encode(unicode),
+        new TextEncoder().encode(unicode)
       );
 
       const decrypted = await decryptData(encrypted, key);
@@ -331,7 +307,7 @@ describe("encryption", () => {
             const error = new Error("IndexedDB error");
             Object.defineProperty(request, "error", {
               value: error,
-              writable: true,
+              writable: true
             });
             request.onerror({ target: request } as any);
           }
@@ -351,10 +327,17 @@ describe("encryption", () => {
       // Mock decrypt to throw error for invalid data
       const mockCrypto = window.crypto as any;
       mockCrypto.subtle.decrypt.mockRejectedValueOnce(
-        new Error("Invalid data"),
+        new Error("Invalid data")
       );
 
       await expect(decryptData("invalid-data", key)).rejects.toThrow();
+    });
+
+    it("should handle invalid serialized DEK", async () => {
+      // Store invalid JWK
+      storeData.set("device-dek", "invalid-jwk");
+
+      await expect(getEncryptionKey()).rejects.toThrow();
     });
   });
 });
