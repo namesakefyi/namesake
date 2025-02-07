@@ -6,7 +6,7 @@ const IV_LENGTH = 12;
 
 /**
  * Encryption module using AES-GCM with a single key:
- * - Data Encryption Key (DEK): Used to encrypt/decrypt data
+ * Data Encryption Key (DEK): Used to encrypt/decrypt data
  */
 
 export async function encryptData(
