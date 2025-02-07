@@ -77,9 +77,7 @@ export function UserDataForm({ initialData }: UserDataFormProps) {
 
   if (didError) {
     return (
-      <Banner variant="danger">
-        Error decrypting {initialData.field}
-      </Banner>
+      <Banner variant="danger">Error decrypting {initialData.field}</Banner>
     );
   }
 
