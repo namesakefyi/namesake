@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  initializeEncryption,
-  getEncryptionKey,
-  encryptData,
   decryptData,
+  encryptData,
+  getEncryptionKey,
+  initializeEncryption,
 } from "./encryption";
 
 interface MockIDBRequest {
@@ -79,10 +79,27 @@ describe("encryption", () => {
         // Return 12 bytes IV + 16 bytes ciphertext
         return new Uint8Array([
           ...new Uint8Array(12), // IV
-          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 // ciphertext
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16, // ciphertext
         ]);
       }),
-      decrypt: vi.fn().mockImplementation(async () => new Uint8Array([4, 5, 6])),
+      decrypt: vi
+        .fn()
+        .mockImplementation(async () => new Uint8Array([4, 5, 6])),
       exportKey: vi.fn().mockImplementation(async () => new Uint8Array(32)), // 32 bytes for AES-256
       importKey: vi.fn().mockImplementation(async () => ({
         type: "secret",
@@ -119,7 +136,10 @@ describe("encryption", () => {
     it("should initialize encryption and store DEK", async () => {
       await initializeEncryption();
       expect(window.crypto.subtle.generateKey).toHaveBeenCalled();
-      expect(mockStore.put).toHaveBeenCalledWith(expect.any(String), "device-dek");
+      expect(mockStore.put).toHaveBeenCalledWith(
+        expect.any(String),
+        "device-dek",
+      );
     });
 
     it("should not reinitialize if DEK exists", async () => {
@@ -152,13 +172,13 @@ describe("encryption", () => {
       const encrypted = await encryptData(data, key);
       expect(encrypted).toBeDefined();
       expect(typeof encrypted).toBe("string");
-      
+
       // Verify it's valid base64
       expect(() => atob(encrypted)).not.toThrow();
 
       const mockCrypto = window.crypto as any;
       mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
-        new TextEncoder().encode(data)
+        new TextEncoder().encode(data),
       );
 
       const decrypted = await decryptData(encrypted, key);
@@ -176,7 +196,7 @@ describe("encryption", () => {
 
       const mockCrypto = window.crypto as any;
       mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
-        new TextEncoder().encode(data)
+        new TextEncoder().encode(data),
       );
 
       const decrypted = await decryptData(encrypted, key);
@@ -194,7 +214,7 @@ describe("encryption", () => {
 
       const mockCrypto = window.crypto as any;
       mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
-        new TextEncoder().encode(data)
+        new TextEncoder().encode(data),
       );
 
       const decrypted = await decryptData(encrypted, key);
@@ -225,7 +245,9 @@ describe("encryption", () => {
       if (!key) throw new Error("Key should exist");
 
       const mockCrypto = window.crypto as any;
-      mockCrypto.subtle.decrypt.mockRejectedValueOnce(new Error("Invalid data"));
+      mockCrypto.subtle.decrypt.mockRejectedValueOnce(
+        new Error("Invalid data"),
+      );
 
       // Use valid base64 but invalid encrypted data
       await expect(decryptData("AAAA", key)).rejects.toThrow();

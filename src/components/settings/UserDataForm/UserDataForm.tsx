@@ -1,4 +1,4 @@
-import { Button, Form, TextField } from "@/components/common";
+import { Banner, Button, Form, TextField } from "@/components/common";
 import { decryptData, encryptData, getEncryptionKey } from "@/utils/encryption";
 import { api } from "@convex/_generated/api";
 import { useMutation } from "convex/react";
@@ -20,16 +20,14 @@ export function UserDataForm({ initialData }: UserDataFormProps) {
   const [isSaving, setIsSaving] = useState(false);
   const isDirty =
     field === initialData.field && decryptedValue === initialDecryptedValue;
+  const [didError, setDidError] = useState(false);
 
   const save = useMutation(api.userFormData.set);
 
   useEffect(() => {
-    console.log("initialData", initialData);
     const loadEncryptionKey = async () => {
-      console.log("TRYING!")
       try {
         const key = await getEncryptionKey();
-        console.log("key", key);
         setEncryptionKey(key);
 
         if (!key) {
@@ -43,6 +41,7 @@ export function UserDataForm({ initialData }: UserDataFormProps) {
             setInitialDecryptedValue(decryptedValue);
           } catch (error: any) {
             posthog.captureException(error);
+            setDidError(true);
           }
         } else {
           setDecryptedValue("");
@@ -50,6 +49,7 @@ export function UserDataForm({ initialData }: UserDataFormProps) {
         }
       } catch (error: any) {
         posthog.captureException(error);
+        setDidError(true);
       }
     };
 
@@ -64,17 +64,24 @@ export function UserDataForm({ initialData }: UserDataFormProps) {
       return;
     }
 
-    setIsSaving(true);
     try {
+      setIsSaving(true);
+
       // Encrypt the value before saving
       const encryptedValue = await encryptData(decryptedValue, encryptionKey);
       await save({ field, value: encryptedValue });
-    } catch (error) {
-      console.error("Error saving encrypted data:", error);
     } finally {
       setIsSaving(false);
     }
   };
+
+  if (didError) {
+    return (
+      <Banner variant="danger">
+        Error decrypting {initialData.field}
+      </Banner>
+    );
+  }
 
   if (encryptionKey === null || decryptedValue === undefined) {
     return <LoaderCircle className="w-4 h-4 animate-spin" />;

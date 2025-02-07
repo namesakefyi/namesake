@@ -31,7 +31,9 @@ export async function decryptData(
   encryptedDataString: string,
   dek: CryptoKey,
 ): Promise<string> {
-  const encryptedData = new Uint8Array(base64ToArrayBuffer(encryptedDataString));
+  const encryptedData = new Uint8Array(
+    base64ToArrayBuffer(encryptedDataString),
+  );
   const iv = encryptedData.slice(0, IV_LENGTH);
   const data = encryptedData.slice(IV_LENGTH);
   const decryptedData = await window.crypto.subtle.decrypt(
@@ -59,7 +61,9 @@ export async function getEncryptionKey(): Promise<CryptoKey | null> {
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
-  const binary = Array.from(bytes).map(byte => String.fromCharCode(byte)).join('');
+  const binary = Array.from(bytes)
+    .map((byte) => String.fromCharCode(byte))
+    .join("");
   return btoa(binary);
 }
 
@@ -106,7 +110,7 @@ async function deserializeDEK(serializedDEK: string): Promise<CryptoKey> {
     keyData,
     { name: "AES-GCM", length: 256 },
     true,
-    ["encrypt", "decrypt"]
+    ["encrypt", "decrypt"],
   );
 }
 
