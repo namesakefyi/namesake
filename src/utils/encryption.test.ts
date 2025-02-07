@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  initializeEncryption,
-  getEncryptionKey,
-  encryptData,
   decryptData,
+  encryptData,
+  getEncryptionKey,
+  initializeEncryption,
 } from "./encryption";
 
 interface MockIDBRequest {
@@ -77,33 +77,55 @@ describe("encryption", () => {
     // Mock crypto.subtle as the test environment doesn't have a crypto implementation
     // This test suite is only used to test round trips.
     const mockSubtle = {
-      generateKey: vi.fn().mockImplementation(async (algorithm, extractable, keyUsages) => {
-        return {
-          type: "secret",
-          extractable,
-          algorithm,
-          usages: keyUsages,
-        };
-      }),
-      encrypt: vi.fn().mockImplementation(async () => new Uint8Array([1, 2, 3])),
-      decrypt: vi.fn().mockImplementation(async () => new Uint8Array([4, 5, 6])),
-      importKey: vi.fn().mockImplementation(async (_format, _keyData, algorithm, extractable, keyUsages) => {
-        return {
-          type: "secret",
-          extractable,
-          algorithm,
-          usages: keyUsages,
-        };
-      }),
-      exportKey: vi.fn().mockImplementation(async () => new Uint8Array([7, 8, 9])),
-      deriveKey: vi.fn().mockImplementation(async (_algorithm, _baseKey, derivedKeyAlgorithm, extractable, keyUsages) => {
-        return {
-          type: "secret",
-          extractable,
-          algorithm: derivedKeyAlgorithm,
-          usages: keyUsages,
-        };
-      }),
+      generateKey: vi
+        .fn()
+        .mockImplementation(async (algorithm, extractable, keyUsages) => {
+          return {
+            type: "secret",
+            extractable,
+            algorithm,
+            usages: keyUsages,
+          };
+        }),
+      encrypt: vi
+        .fn()
+        .mockImplementation(async () => new Uint8Array([1, 2, 3])),
+      decrypt: vi
+        .fn()
+        .mockImplementation(async () => new Uint8Array([4, 5, 6])),
+      importKey: vi
+        .fn()
+        .mockImplementation(
+          async (_format, _keyData, algorithm, extractable, keyUsages) => {
+            return {
+              type: "secret",
+              extractable,
+              algorithm,
+              usages: keyUsages,
+            };
+          },
+        ),
+      exportKey: vi
+        .fn()
+        .mockImplementation(async () => new Uint8Array([7, 8, 9])),
+      deriveKey: vi
+        .fn()
+        .mockImplementation(
+          async (
+            _algorithm,
+            _baseKey,
+            derivedKeyAlgorithm,
+            extractable,
+            keyUsages,
+          ) => {
+            return {
+              type: "secret",
+              extractable,
+              algorithm: derivedKeyAlgorithm,
+              usages: keyUsages,
+            };
+          },
+        ),
     };
 
     // Mock crypto
@@ -154,13 +176,11 @@ describe("encryption", () => {
     it("should not reinitialize if encryption is already set up", async () => {
       // Set up existing DEK
       storeData.set("device-dek", "existing-encrypted-dek");
-      
+
       await initializeEncryption();
       expect(mockStore.put).not.toHaveBeenCalled();
 
-      expect(mockStore.get).toHaveBeenCalledWith(
-        "device-dek",
-      );
+      expect(mockStore.get).toHaveBeenCalledWith("device-dek");
     });
   });
 
@@ -168,7 +188,7 @@ describe("encryption", () => {
     it("should retrieve encryption key successfully", async () => {
       // First initialize
       await initializeEncryption();
-      
+
       // Then get the key
       const key = await getEncryptionKey();
       expect(key).toBeDefined();
@@ -190,17 +210,17 @@ describe("encryption", () => {
 
       const originalData = "sensitive information";
       const encrypted = await encryptData(originalData, key);
-      
+
       expect(encrypted).toBeDefined();
       expect(encrypted).not.toBe(originalData);
       expect(typeof encrypted).toBe("string");
 
       // Mock the decrypt operation to return our original data
       const mockCrypto = window.crypto as any;
-      mockCrypto.subtle.decrypt.mockImplementationOnce(async () => 
-        new TextEncoder().encode(originalData)
+      mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
+        new TextEncoder().encode(originalData),
       );
-      
+
       const decrypted = await decryptData(encrypted, key);
       expect(decrypted).toBe(originalData);
     });
@@ -214,13 +234,13 @@ describe("encryption", () => {
 
       const data = "test data";
       const encrypted1 = await encryptData(data, key);
-      
+
       // Change mock implementation for second encryption
       const mockCrypto = window.crypto as any;
-      mockCrypto.subtle.encrypt.mockImplementationOnce(async () => 
-        new Uint8Array([4, 5, 6])
+      mockCrypto.subtle.encrypt.mockImplementationOnce(
+        async () => new Uint8Array([4, 5, 6]),
       );
-      
+
       const encrypted2 = await encryptData(data, key);
       expect(encrypted1).not.toBe(encrypted2);
     });
@@ -236,7 +256,9 @@ describe("encryption", () => {
 
       // Mock decrypt to throw error for wrong key
       const mockCrypto = window.crypto as any;
-      mockCrypto.subtle.decrypt.mockRejectedValueOnce(new Error("Decryption failed"));
+      mockCrypto.subtle.decrypt.mockRejectedValueOnce(
+        new Error("Decryption failed"),
+      );
 
       await expect(decryptData(encrypted, key)).rejects.toThrow();
     });
@@ -252,8 +274,8 @@ describe("encryption", () => {
 
       // Mock decrypt to return empty string
       const mockCrypto = window.crypto as any;
-      mockCrypto.subtle.decrypt.mockImplementationOnce(async () => 
-        new TextEncoder().encode(emptyString)
+      mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
+        new TextEncoder().encode(emptyString),
       );
 
       const decrypted = await decryptData(encrypted, key);
@@ -271,10 +293,10 @@ describe("encryption", () => {
 
       // Mock decrypt to return special characters
       const mockCrypto = window.crypto as any;
-      mockCrypto.subtle.decrypt.mockImplementationOnce(async () => 
-        new TextEncoder().encode(specialChars)
+      mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
+        new TextEncoder().encode(specialChars),
       );
-      
+
       const decrypted = await decryptData(encrypted, key);
       expect(decrypted).toBe(specialChars);
     });
@@ -290,10 +312,10 @@ describe("encryption", () => {
 
       // Mock decrypt to return unicode string
       const mockCrypto = window.crypto as any;
-      mockCrypto.subtle.decrypt.mockImplementationOnce(async () => 
-        new TextEncoder().encode(unicode)
+      mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
+        new TextEncoder().encode(unicode),
       );
-      
+
       const decrypted = await decryptData(encrypted, key);
       expect(decrypted).toBe(unicode);
     });
@@ -307,9 +329,9 @@ describe("encryption", () => {
         setTimeout(() => {
           if (request.onerror) {
             const error = new Error("IndexedDB error");
-            Object.defineProperty(request, 'error', {
+            Object.defineProperty(request, "error", {
               value: error,
-              writable: true
+              writable: true,
             });
             request.onerror({ target: request } as any);
           }
@@ -328,9 +350,11 @@ describe("encryption", () => {
 
       // Mock decrypt to throw error for invalid data
       const mockCrypto = window.crypto as any;
-      mockCrypto.subtle.decrypt.mockRejectedValueOnce(new Error("Invalid data"));
+      mockCrypto.subtle.decrypt.mockRejectedValueOnce(
+        new Error("Invalid data"),
+      );
 
       await expect(decryptData("invalid-data", key)).rejects.toThrow();
     });
   });
-}); 
+});

@@ -15,11 +15,11 @@ const KEK_ITERATIONS = 600000;
 
 /**
  * Encryption module using AES-GCM with a two-key system:
- * 
+ *
  * - Data Encryption Key (DEK): Used to encrypt/decrypt actual data
  * - Key Encryption Key (KEK): Protects the DEK
- * 
- * The encrypted DEK is stored in IndexedDB. The KEK is non-extractable 
+ *
+ * The encrypted DEK is stored in IndexedDB. The KEK is non-extractable
  * and derived from a device-specific salt (stored in IndexedDB) using PBKDF2.
  */
 
@@ -213,7 +213,7 @@ async function generateKEK(): Promise<CryptoKey> {
     kekSeed,
     { name: "PBKDF2" },
     false,
-    ["deriveBits", "deriveKey"]
+    ["deriveBits", "deriveKey"],
   );
 
   return await window.crypto.subtle.deriveKey(
@@ -229,7 +229,7 @@ async function generateKEK(): Promise<CryptoKey> {
       length: 256,
     },
     false,
-    ["encrypt", "decrypt"]
+    ["encrypt", "decrypt"],
   );
 }
 
@@ -245,7 +245,7 @@ async function storeKEKSeed(seed: Uint8Array): Promise<void> {
     const transaction = db.transaction(STORE_NAME, "readwrite");
     const store = transaction.objectStore(STORE_NAME);
     const request = store.put(arrayBufferToBase64(seed), KEK_SEED_KEY);
-    
+
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve();
   });
@@ -258,7 +258,7 @@ async function retrieveKEKSeed(): Promise<Uint8Array | null> {
     const transaction = db.transaction(STORE_NAME, "readonly");
     const store = transaction.objectStore(STORE_NAME);
     const request = store.get(KEK_SEED_KEY);
-    
+
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
       if (!request.result) {
@@ -283,10 +283,7 @@ async function generateDEK(): Promise<CryptoKey> {
 }
 
 // Encrypt the DEK with the KEK
-async function encryptDEK(
-  kek: CryptoKey,
-  dek: CryptoKey,
-): Promise<string> {
+async function encryptDEK(kek: CryptoKey, dek: CryptoKey): Promise<string> {
   const iv = window.crypto.getRandomValues(new Uint8Array(IV_LENGTH));
   const exportedDEK = await window.crypto.subtle.exportKey("raw", dek);
 
