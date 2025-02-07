@@ -3,6 +3,7 @@ build
 dist
 dist-ssr
 *.tsbuildinfo
+convex/README.md
 
 # Logs
 logs
