@@ -2,4 +2,4 @@
 "namesake": minor
 ---
 
-adds encryption helper and placeholder ui for testing it
+Add end-to-end encryption of user form data
