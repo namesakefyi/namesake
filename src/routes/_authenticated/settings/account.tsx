@@ -1,6 +1,5 @@
 import { PageHeader } from "@/components/app";
 import {
-  DeleteAccountSetting,
   EditBirthplaceSetting,
   EditEmailSetting,
   EditMinorSetting,
@@ -38,9 +37,6 @@ function SettingsAccountRoute() {
           </SettingsGroup>
           <SettingsGroup title="Appearance">
             <EditThemeSetting />
-          </SettingsGroup>
-          <SettingsGroup title="Danger Zone">
-            <DeleteAccountSetting />
           </SettingsGroup>
         </div>
       )}

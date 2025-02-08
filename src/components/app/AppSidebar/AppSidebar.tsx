@@ -5,32 +5,26 @@ import {
   Link,
   Menu,
   MenuItem,
-  MenuSeparator,
   MenuTrigger,
   Popover,
   SubmenuTrigger,
 } from "@/components/common";
 import { useTheme } from "@/utils/useTheme";
-import { useAuthActions } from "@convex-dev/auth/react";
+import { UserButton } from "@clerk/clerk-react";
 import { api } from "@convex/_generated/api";
 import { THEMES, type Theme } from "@convex/constants";
 import { Authenticated, useQuery } from "convex/react";
-import { CircleUser, Cog, GlobeLock, LogOut } from "lucide-react";
+import { CircleUser, Cog, GlobeLock } from "lucide-react";
 
 type AppSidebarProps = {
   children: React.ReactNode;
 };
 
 export const AppSidebar = ({ children }: AppSidebarProps) => {
-  const { signOut } = useAuthActions();
   const { theme, themeSelection, setTheme } = useTheme();
 
   const user = useQuery(api.users.getCurrent);
   const isAdmin = user?.role === "admin";
-
-  const handleSignOut = async () => {
-    await signOut();
-  };
 
   return (
     <div className="w-72 lg:w-80 xl:w-[22rem] flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto bg-white dark:bg-graydark-1 border-r border-gray-dim">
@@ -45,6 +39,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
       <div className="app-padding flex-1">{children}</div>
       <div className="app-padding h-header -ml-3 shrink-0 flex items-center sticky bottom-0 bg-white dark:bg-graydark-1">
         <Authenticated>
+          <UserButton />
           <MenuTrigger>
             <Button
               aria-label="User settings"
@@ -84,10 +79,6 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
                   </Menu>
                 </Popover>
               </SubmenuTrigger>
-              <MenuSeparator />
-              <MenuItem icon={LogOut} onAction={handleSignOut}>
-                Sign out
-              </MenuItem>
             </Menu>
           </MenuTrigger>
         </Authenticated>
