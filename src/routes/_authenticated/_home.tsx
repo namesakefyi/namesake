@@ -1,6 +1,7 @@
 import { AppSidebar } from "@/components/app";
 import {
   Badge,
+  Banner,
   Nav,
   NavGroup,
   NavItem,
@@ -16,7 +17,7 @@ import {
 } from "@convex/constants";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
-import type { LucideIcon } from "lucide-react";
+import { type LucideIcon, Milestone } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/_home")({
   component: IndexRoute,
@@ -74,13 +75,26 @@ function IndexRoute() {
                     {completedQuests}
                   </span>{" "}
                   <span className="text-gray-8 dark:text-graydark-8">/</span>{" "}
-                  <span className="text-gray-dim">{userQuests} complete</span>
+                  <span className="text-gray-dim">
+                    {userQuests} quests complete
+                  </span>
                 </span>
               }
               labelHidden
             />
           </div>
         )}
+        <Banner
+          variant="info"
+          className="mb-2 -mx-2"
+          icon={Milestone}
+          onDismiss={() => {}}
+        >
+          <p>
+            Namesake organizes name changes into <strong>quests</strong>. Here
+            are some quests to get started.
+          </p>
+        </Banner>
         <Nav>
           {(Object.keys(CORE_CATEGORIES) as CoreCategory[]).map((category) => {
             const userQuest = questsByCategory?.[category]?.[0];
