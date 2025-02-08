@@ -41,17 +41,6 @@ Once your Convex account and project is created, a `.env.local` file will be gen
 > [!NOTE]
 > If this is your first time using Convex, [follow the tour](https://docs.convex.dev/get-started) to understand how the system works and read [The Zen of Convex](https://docs.convex.dev/zen) to understand best practices.
 
-### Set up authentication (first time only)
-
-Namesake authenticates users with [Convex Auth](https://labs.convex.dev/auth). To initialize authentication for local development, run:
-
-```shell
-npx @convex-dev/auth
-```
-
-> [!NOTE]
-> If you run into issues or prefer to set up authentication manually, refer to Convex Auth's [manual setup guide](https://labs.convex.dev/auth/setup/manual).
-
 ## Making changes
 
 ### Start the dev server
@@ -92,14 +81,13 @@ Below are Namesake's core dependencies. The links below each lead to docs.
 | Tech                                                                                | What For                                           |
 | ----------------------------------------------------------------------------------- | -------------------------------------------------- |
 | [Convex](https://docs.convex.dev/)                                                  | Type-safe database, file storage, realtime updates |
-| [Convex Auth](https://labs.convex.dev/auth)                                         | User authentication                                |
+| [Clerk](https://clerk.com/)                                                         | User authentication                                |
 | [TanStack Router](https://tanstack.com/router/latest/docs/framework/react/overview) | File-based routing                                 |
 | [React](https://react.dev/reference/react)                                          | Front-end web framework                            |
 | [React Aria](https://react-spectrum.adobe.com/react-aria)                           | Accessible components and design system            |
 | [Tailwind](https://tailwindcss.com/docs)                                            | Utility-first styling                              |
 | [Lucide Icons](https://lucide.dev/icons/)                                           | SVG icons                                          |
 | [Radix Colors](https://www.radix-ui.com/colors)                                     | Accessible color palette                           |
-| [Resend](https://resend.com/docs)                                                   | Email sending                                      |
 | [Vitest](https://vitest.dev/guide/)                                                 | Unit testing                                       |
 | [Playwright](https://playwright.dev/docs)                                           | End-to-end testing                                 |
 | [Biome](https://biomejs.dev/)                                                       | Formatting and linting                             |

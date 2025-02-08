@@ -1,9 +1,10 @@
 import "./styles/index.css";
 import { Logo } from "@/components/app";
 import { Empty } from "@/components/common";
-import { ConvexAuthProvider } from "@convex-dev/auth/react";
+import { ClerkProvider, useAuth } from "@clerk/clerk-react";
 import { api } from "@convex/_generated/api";
-import type { Jurisdiction, Role } from "@convex/constants";
+import type { Jurisdiction } from "@convex/constants";
+import type { Role } from "@convex/constants";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import {
   type ConvexAuthState,
@@ -11,6 +12,7 @@ import {
   useConvexAuth,
   useQuery,
 } from "convex/react";
+import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { ArrowLeft, TriangleAlert } from "lucide-react";
 import { LazyMotion, domAnimation } from "motion/react";
 import { ThemeProvider } from "next-themes";
@@ -20,6 +22,12 @@ import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import { routeTree } from "./routeTree.gen";
+
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error("Missing Publishable Key");
+}
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
@@ -111,20 +119,22 @@ if (!rootElement.innerHTML) {
   const root = createRoot(rootElement);
   root.render(
     <StrictMode>
-      <HelmetProvider>
-        <ConvexAuthProvider client={convex}>
-          <PostHogProvider
-            apiKey={import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_KEY}
-            options={postHogOptions}
-          >
-            <ThemeProvider attribute="class" disableTransitionOnChange>
-              <LazyMotion strict features={domAnimation}>
-                <InnerApp />
-              </LazyMotion>
-            </ThemeProvider>
-          </PostHogProvider>
-        </ConvexAuthProvider>
-      </HelmetProvider>
+      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+        <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+          <HelmetProvider>
+            <PostHogProvider
+              apiKey={import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_KEY}
+              options={postHogOptions}
+            >
+              <ThemeProvider attribute="class" disableTransitionOnChange>
+                <LazyMotion strict features={domAnimation}>
+                  <InnerApp />
+                </LazyMotion>
+              </ThemeProvider>
+            </PostHogProvider>
+          </HelmetProvider>
+        </ConvexProviderWithClerk>
+      </ClerkProvider>
     </StrictMode>,
   );
 }

@@ -13,14 +13,12 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as auth from "../auth.js";
 import type * as constants from "../constants.js";
 import type * as documents from "../documents.js";
 import type * as earlyAccessCodes from "../earlyAccessCodes.js";
 import type * as errors from "../errors.js";
 import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
-import type * as passwordReset from "../passwordReset.js";
 import type * as questFaqs from "../questFaqs.js";
 import type * as questSteps from "../questSteps.js";
 import type * as quests from "../quests.js";
@@ -40,14 +38,12 @@ import type * as validators from "../validators.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  auth: typeof auth;
   constants: typeof constants;
   documents: typeof documents;
   earlyAccessCodes: typeof earlyAccessCodes;
   errors: typeof errors;
   helpers: typeof helpers;
   http: typeof http;
-  passwordReset: typeof passwordReset;
   questFaqs: typeof questFaqs;
   questSteps: typeof questSteps;
   quests: typeof quests;

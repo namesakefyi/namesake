@@ -14,11 +14,6 @@ vi.mock("sonner", () => ({
   },
 }));
 
-// Mock the auth hook
-vi.mock("@convex-dev/auth/react", () => ({
-  useAuthActions: vi.fn(),
-}));
-
 // Mock the useTheme hook
 vi.mock("@/utils/useTheme", () => ({
   useTheme: vi.fn(),

@@ -1,7 +1,7 @@
 export default {
   providers: [
     {
-      domain: process.env.CONVEX_SITE_URL,
+      domain: "https://working-lamb-77.clerk.accounts.dev",
       applicationID: "convex",
     },
   ],

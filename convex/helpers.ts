@@ -1,27 +1,45 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
 import {
   customCtx,
   customMutation,
   customQuery,
 } from "convex-helpers/server/customFunctions";
-import { mutation, query } from "./_generated/server";
+import { type QueryCtx, mutation, query } from "./_generated/server";
 import type { Category, Jurisdiction } from "./constants";
+
+export async function getUserByExternalId(ctx: QueryCtx, externalId: string) {
+  return await ctx.db
+    .query("users")
+    .withIndex("externalId", (q) => q.eq("externalId", externalId))
+    .unique();
+}
+
+export async function getCurrentUser(ctx: QueryCtx) {
+  const identity = await ctx.auth.getUserIdentity();
+  if (identity === null) {
+    return null;
+  }
+  return await getUserByExternalId(ctx, identity.subject);
+}
+
+export async function getCurrentUserOrThrow(ctx: QueryCtx) {
+  const userRecord = await getCurrentUser(ctx);
+  if (!userRecord) throw new Error("Can't get current user");
+  return userRecord;
+}
 
 export const userQuery = customQuery(
   query,
   customCtx(async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
-    return { userId, ctx };
+    const user = await getCurrentUserOrThrow(ctx);
+    return { userId: user._id, ctx };
   }),
 );
 
 export const userMutation = customMutation(mutation, {
   args: {},
   input: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
-    return { ctx: { userId }, args: {} };
+    const user = await getCurrentUserOrThrow(ctx);
+    return { ctx: { userId: user._id }, args: {} };
   },
 });
 

@@ -1,4 +1,3 @@
-import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
@@ -139,7 +138,11 @@ const users = defineTable({
   birthplace: v.optional(birthplace),
   /** Whether the user is a minor. */
   isMinor: v.optional(v.boolean()),
-}).index("email", ["email"]);
+  /** The Clerk ID of the user, stored in the "subject" JWT field. */
+  externalId: v.optional(v.string()),
+})
+  .index("email", ["email"])
+  .index("externalId", ["externalId"]);
 
 /**
  * A unique piece of user data that has been entered through filling a form.
@@ -196,7 +199,6 @@ const earlyAccessCodes = defineTable({
 }).index("createdBy", ["createdBy"]);
 
 export default defineSchema({
-  ...authTables,
   earlyAccessCodes,
   documents,
   quests,

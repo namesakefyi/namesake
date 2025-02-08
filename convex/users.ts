@@ -1,11 +1,10 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
-import { v } from "convex/values";
+import type { UserJSON } from "@clerk/backend";
+import { type Validator, v } from "convex/values";
 import { ConvexError } from "convex/values";
 import { z } from "zod";
-import { query } from "./_generated/server";
-import type { Role } from "./constants";
+import { internalMutation, query } from "./_generated/server";
 import { DUPLICATE_EMAIL, INVALID_EMAIL } from "./errors";
-import { userMutation } from "./helpers";
+import { getCurrentUser, getUserByExternalId, userMutation } from "./helpers";
 import { birthplace, jurisdiction } from "./validators";
 
 export const getAll = query({
@@ -26,20 +25,7 @@ export const getById = query({
 export const getCurrent = query({
   args: {},
   handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) return undefined;
-    return await ctx.db.get(userId);
-  },
-});
-
-export const getCurrentRole = query({
-  args: {},
-  handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) return undefined;
-    const user = await ctx.db.get(userId);
-    if (!user) return undefined;
-    return user.role as Role;
+    return await getCurrentUser(ctx);
   },
 });
 
@@ -50,6 +36,57 @@ export const getByEmail = query({
       .query("users")
       .withIndex("email", (q) => q.eq("email", args.email))
       .first();
+  },
+});
+
+export const upsertFromClerk = internalMutation({
+  // No runtime validation, trust Clerk
+  args: { data: v.any() as Validator<UserJSON> },
+  async handler(ctx, { data }) {
+    const userAttributes = {
+      email: data.email_addresses[0].email_address,
+      externalId: data.id,
+    };
+
+    const user = await getUserByExternalId(ctx, data.id);
+    if (user === null) {
+      await ctx.db.insert("users", {
+        ...userAttributes,
+        role: "user",
+      });
+    } else {
+      await ctx.db.patch(user._id, userAttributes);
+    }
+  },
+});
+
+export const deleteFromClerk = internalMutation({
+  args: { clerkUserId: v.string() },
+  async handler(ctx, { clerkUserId }) {
+    const user = await getUserByExternalId(ctx, clerkUserId);
+
+    if (user !== null) {
+      // Delete userQuests
+      const userQuests = await ctx.db
+        .query("userQuests")
+        .withIndex("userId", (q) => q.eq("userId", user._id))
+        .collect();
+      for (const userQuest of userQuests) await ctx.db.delete(userQuest._id);
+
+      // Delete userSettings
+      const userSettings = await ctx.db
+        .query("userSettings")
+        .withIndex("userId", (q) => q.eq("userId", user._id))
+        .first();
+      if (userSettings) await ctx.db.delete(userSettings._id);
+
+      // Finally, delete the user
+      await ctx.db.delete(user._id);
+    } else {
+      console.warn(
+        `Can't delete user, there is none for Clerk user ID: ${clerkUserId}`,
+      );
+    }
   },
 });
 
@@ -101,44 +138,5 @@ export const setCurrentUserIsMinor = userMutation({
   args: { isMinor: v.boolean() },
   handler: async (ctx, args) => {
     await ctx.db.patch(ctx.userId, { isMinor: args.isMinor });
-  },
-});
-
-// TODO: This throws an error when deleting own account
-// Implement RLS check for whether this is the user's own account
-// or a different account being deleted by an admin
-export const deleteCurrentUser = userMutation({
-  args: {},
-  handler: async (ctx) => {
-    // Delete userQuests
-    const userQuests = await ctx.db
-      .query("userQuests")
-      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-      .collect();
-    for (const userQuest of userQuests) await ctx.db.delete(userQuest._id);
-
-    // Delete userSettings
-    const userSettings = await ctx.db
-      .query("userSettings")
-      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-      .first();
-    if (userSettings) await ctx.db.delete(userSettings._id);
-
-    // Delete authAccounts
-    const authAccounts = await ctx.db
-      .query("authAccounts")
-      .withIndex("userIdAndProvider", (q) => q.eq("userId", ctx.userId))
-      .collect();
-    for (const account of authAccounts) await ctx.db.delete(account._id);
-
-    // Delete authSessions
-    const authSessions = await ctx.db
-      .query("authSessions")
-      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-      .collect();
-    for (const session of authSessions) await ctx.db.delete(session._id);
-
-    // Finally, delete the user
-    await ctx.db.delete(ctx.userId);
   },
 });

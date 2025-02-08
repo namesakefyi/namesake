@@ -1,4 +1,3 @@
-export * from "./DeleteAccountSetting/DeleteAccountSetting";
 export * from "./EditBirthplaceSetting/EditBirthplaceSetting";
 export * from "./EditNameSetting/EditNameSetting";
 export * from "./EditEmailSetting/EditEmailSetting";

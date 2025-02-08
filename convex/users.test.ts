@@ -55,29 +55,6 @@ describe("users", () => {
     });
   });
 
-  describe("getCurrentRole", () => {
-    it("should return the current user's role", async () => {
-      const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "admin",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
-      const role = await asUser.query(api.users.getCurrentRole, {});
-      expect(role).toBe("admin");
-    });
-
-    it("should return null if user not authenticated", async () => {
-      const t = convexTest(schema, modules);
-      const role = await t.query(api.users.getCurrentRole, {});
-      expect(role).toBeNull();
-    });
-  });
-
   describe("getByEmail", () => {
     it("should return user by email", async () => {
       const t = convexTest(schema, modules);
@@ -255,69 +232,6 @@ describe("users", () => {
         return await ctx.db.get(userId);
       });
       expect(user?.isMinor).toBe(true);
-    });
-  });
-
-  describe("deleteCurrentUser", () => {
-    it("should delete user and all associated data", async () => {
-      const t = convexTest(schema, modules);
-
-      // Create test user
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      // Create associated data
-      await t.run(async (ctx) => {
-        // Create user settings
-        await ctx.db.insert("userSettings", {
-          userId,
-          theme: "dark",
-        });
-
-        // Create quest
-        const questId = await ctx.db.insert("quests", {
-          title: "Test Quest",
-          slug: "test-quest",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
-          creationUser: userId,
-        });
-
-        // Create user quest
-        await ctx.db.insert("userQuests", {
-          userId,
-          questId,
-          status: "active",
-        });
-      });
-
-      // Delete user and verify all data is deleted
-      const asUser = t.withIdentity({ subject: userId });
-      await asUser.mutation(api.users.deleteCurrentUser, {});
-
-      await t.run(async (ctx) => {
-        // Verify user is deleted
-        const user = await ctx.db.get(userId);
-        expect(user).toBeNull();
-
-        // Verify user settings are deleted
-        const settings = await ctx.db
-          .query("userSettings")
-          .withIndex("userId", (q) => q.eq("userId", userId))
-          .first();
-        expect(settings).toBeNull();
-
-        // Verify user quests are deleted
-        const quests = await ctx.db
-          .query("userQuests")
-          .withIndex("userId", (q) => q.eq("userId", userId))
-          .collect();
-        expect(quests).toHaveLength(0);
-      });
     });
   });
 });
