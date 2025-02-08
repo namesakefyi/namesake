@@ -1,5 +1,11 @@
 # namesake
 
+## 0.20.0
+
+### Minor Changes
+
+- 0882e88: Add end-to-end encryption of user form data
+
 ## 0.19.3
 
 ### Patch Changes
