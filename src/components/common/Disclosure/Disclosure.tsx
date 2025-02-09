@@ -62,7 +62,7 @@ export function Disclosure({
             )}
           />
         </AriaButton>
-        {actions}
+        {actions && <div className="shrink-0 mt-2">{actions}</div>}
       </Header>
       <AnimateChangeInHeight className="w-full">
         <AriaDisclosurePanel className={disclosurePanelStyles()}>
