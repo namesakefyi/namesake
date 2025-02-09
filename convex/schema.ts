@@ -56,11 +56,14 @@ const quests = defineTable({
   steps: v.optional(v.array(v.id("questSteps"))),
   /** Questions related to the quest. */
   faqs: v.optional(v.array(v.id("questFaqs"))),
+  /** Time in ms since epoch when the quest was last updated. */
+  updatedAt: v.optional(v.number()),
 })
   .index("slug", ["slug"])
   .index("category", ["category"])
   .index("categoryAndJurisdiction", ["category", "jurisdiction"])
-  .index("faqs", ["faqs"]);
+  .index("faqs", ["faqs"])
+  .index("updatedAt", ["updatedAt"]);
 
 /**
  * A single step within a quest.
