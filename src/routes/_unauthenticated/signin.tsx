@@ -72,6 +72,13 @@ const SignIn = () => {
     setError(null);
 
     try {
+      if (flow === "signUp" && passwordState && passwordState.score < 3) {
+        setError(
+          `Please choose a stronger password. ${passwordState.feedback.warning}`,
+        );
+        setIsSubmitting(false);
+        return;
+      }
       await signIn("password", {
         flow,
         email,
@@ -179,19 +186,9 @@ const SignIn = () => {
               onChange={setPassword}
             />
             {password && passwordState && (
-              <PasswordStrength
-                value={passwordState.score}
-                warning={passwordState.feedback.warning ?? undefined}
-                suggestions={passwordState.feedback.suggestions ?? undefined}
-              />
+              <PasswordStrength value={passwordState.score} className="-mt-4" />
             )}
-            <Button
-              type="submit"
-              isDisabled={
-                isSubmitting || (passwordState && passwordState.score < 3)
-              }
-              variant="primary"
-            >
+            <Button type="submit" isDisabled={isSubmitting} variant="primary">
               {isSubmitting ? "Registering..." : "Register"}
             </Button>
             <p className="text-sm text-gray-dim text-center text-balance">
@@ -293,6 +290,13 @@ const ForgotPassword = ({
         setIsSubmitting(true);
 
         try {
+          if (passwordState && passwordState.score < 3) {
+            setError(
+              `Please choose a stronger password. ${passwordState.feedback.warning}`,
+            );
+            setIsSubmitting(false);
+            return;
+          }
           const result = await signIn("password", {
             flow: "reset-verification",
             redirectTo: "/quests",
@@ -334,17 +338,9 @@ const ForgotPassword = ({
         onChange={setNewPassword}
       />
       {passwordState && (
-        <PasswordStrength
-          value={passwordState.score}
-          warning={passwordState.feedback.warning || undefined}
-          suggestions={passwordState.feedback.suggestions || undefined}
-        />
+        <PasswordStrength value={passwordState.score} className="-mt-2" />
       )}
-      <Button
-        type="submit"
-        variant="primary"
-        isDisabled={isSubmitting || (passwordState && passwordState?.score < 3)}
-      >
+      <Button type="submit" variant="primary" isDisabled={isSubmitting}>
         Reset password
       </Button>
     </Form>
