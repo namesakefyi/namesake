@@ -1,4 +1,5 @@
 import { v } from "convex/values";
+import type { Doc, Id } from "./_generated/dataModel";
 import { query } from "./_generated/server";
 import {
   type Category,
@@ -153,43 +154,42 @@ export const create = userMutation({
   },
 });
 
+function updateQuest(
+  ctx: Parameters<typeof userMutation.call>[1],
+  questId: Id<"quests">,
+  update: Partial<Doc<"quests">>,
+) {
+  return ctx.db.patch(questId, {
+    ...update,
+    updatedAt: Date.now(),
+  });
+}
+
 export const setTitle = userMutation({
   args: { questId: v.id("quests"), title: v.string() },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, {
-      title: args.title,
-      updatedAt: Date.now(),
-    });
+    await updateQuest(ctx, args.questId, { title: args.title });
   },
 });
 
 export const setJurisdiction = userMutation({
   args: { questId: v.id("quests"), jurisdiction: v.optional(jurisdiction) },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, {
-      jurisdiction: args.jurisdiction,
-      updatedAt: Date.now(),
-    });
+    await updateQuest(ctx, args.questId, { jurisdiction: args.jurisdiction });
   },
 });
 
 export const setCategory = userMutation({
   args: { questId: v.id("quests"), category: v.optional(category) },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, {
-      category: args.category,
-      updatedAt: Date.now(),
-    });
+    await updateQuest(ctx, args.questId, { category: args.category });
   },
 });
 
 export const setUrls = userMutation({
   args: { questId: v.id("quests"), urls: v.optional(v.array(v.string())) },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, {
-      urls: args.urls,
-      updatedAt: Date.now(),
-    });
+    await updateQuest(ctx, args.questId, { urls: args.urls });
   },
 });
 
@@ -197,15 +197,9 @@ export const addUrl = userMutation({
   args: { questId: v.id("quests"), url: v.string() },
   handler: async (ctx, args) => {
     const quest = await ctx.db.get(args.questId);
-
     if (!quest) throw new Error("Quest not found");
-
     const existingUrls = quest.urls || [];
-
-    await ctx.db.patch(args.questId, {
-      urls: [...existingUrls, args.url],
-      updatedAt: Date.now(),
-    });
+    await updateQuest(ctx, args.questId, { urls: [...existingUrls, args.url] });
   },
 });
 
@@ -238,10 +232,7 @@ export const setCosts = userMutation({
     ),
   },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, {
-      costs: args.costs,
-      updatedAt: Date.now(),
-    });
+    await updateQuest(ctx, args.questId, { costs: args.costs });
   },
 });
 
@@ -258,10 +249,7 @@ export const setTimeRequired = userMutation({
     ),
   },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, {
-      timeRequired: args.timeRequired,
-      updatedAt: Date.now(),
-    });
+    await updateQuest(ctx, args.questId, { timeRequired: args.timeRequired });
   },
 });
 
