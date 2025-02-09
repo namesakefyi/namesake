@@ -1,15 +1,15 @@
-import type { Meta } from "@storybook/react";
-import { Ellipsis } from "lucide-react";
 import {
+  Button,
   Menu,
   MenuItem,
   MenuSection,
   MenuSeparator,
   MenuTrigger,
+  Popover,
   SubmenuTrigger,
-} from ".";
-import { Button } from "../Button";
-import { Popover } from "../Popover";
+} from "@/components/common";
+import type { Meta } from "@storybook/react";
+import { Ellipsis } from "lucide-react";
 
 const meta: Meta<typeof Menu> = {
   component: Menu,
@@ -19,9 +19,7 @@ export default meta;
 
 export const Example = (args: any) => (
   <MenuTrigger>
-    <Button variant="secondary" className="px-2">
-      <Ellipsis className="w-5 h-5" />
-    </Button>
+    <Button variant="secondary" icon={Ellipsis} aria-label="Open menu" />
     <Menu {...args}>
       <MenuItem id="new">New…</MenuItem>
       <MenuItem id="open">Open…</MenuItem>
@@ -41,9 +39,7 @@ DisabledItems.args = {
 
 export const Sections = (args: any) => (
   <MenuTrigger>
-    <Button variant="secondary" className="px-2">
-      <Ellipsis className="w-5 h-5" />
-    </Button>
+    <Button variant="secondary" icon={Ellipsis} aria-label="Open menu" />
     <Menu {...args}>
       <MenuSection title="Your Content">
         <MenuItem id="repos">Repositories</MenuItem>
@@ -63,9 +59,7 @@ export const Sections = (args: any) => (
 
 export const Submenu = (args: any) => (
   <MenuTrigger>
-    <Button variant="secondary" className="px-2">
-      <Ellipsis className="w-5 h-5" />
-    </Button>
+    <Button variant="secondary" icon={Ellipsis} aria-label="Open menu" />
     <Menu {...args}>
       <MenuItem id="new">New…</MenuItem>
       <SubmenuTrigger>

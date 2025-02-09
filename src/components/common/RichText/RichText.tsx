@@ -1,10 +1,10 @@
-import { ReadingScore } from "@/components/quests/ReadingScore";
+import { FieldGroup, Separator, ToggleButton } from "@/components/common";
+import { ReadingScore } from "@/components/quests";
 import Blockquote from "@tiptap/extension-blockquote";
 import Bold from "@tiptap/extension-bold";
 import BulletList from "@tiptap/extension-bullet-list";
 import Document from "@tiptap/extension-document";
 import HardBreak from "@tiptap/extension-hard-break";
-import Heading from "@tiptap/extension-heading";
 import History from "@tiptap/extension-history";
 import Italic from "@tiptap/extension-italic";
 import Link from "@tiptap/extension-link";
@@ -18,8 +18,6 @@ import Typography from "@tiptap/extension-typography";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import {
   Bold as BoldIcon,
-  Heading2,
-  Heading3,
   Italic as ItalicIcon,
   List,
   ListOrdered,
@@ -27,8 +25,6 @@ import {
 import { useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
-import { Separator } from "../Separator";
-import { ToggleButton } from "../ToggleButton";
 
 export interface RichTextProps {
   className?: string;
@@ -36,6 +32,7 @@ export interface RichTextProps {
   initialContent?: string;
   onChange?: (content: string) => void;
   editable?: boolean;
+  placeholder?: string;
 }
 
 export function RichText({
@@ -44,6 +41,7 @@ export function RichText({
   initialContent,
   onChange,
   editable = true,
+  placeholder = "Write something...",
 }: RichTextProps) {
   const editor = useEditor({
     extensions: [
@@ -55,7 +53,7 @@ export function RichText({
       Typography,
       History,
       Placeholder.configure({
-        placeholder: "Write something...",
+        placeholder,
       }),
 
       // Basic formatting
@@ -66,10 +64,6 @@ export function RichText({
         defaultProtocol: "https",
       }),
 
-      // Advanced formatting
-      Heading.configure({
-        levels: [2, 3],
-      }),
       Blockquote,
       BulletList,
       ListItem,
@@ -99,13 +93,14 @@ export function RichText({
     base: "w-full",
     variants: {
       editable: {
-        true: "[&_.tiptap]:outline-none",
+        true: "px-3.5 py-3 [&_.tiptap]:outline-none",
+        false: "ring-0 rounded-none bg-transparent",
       },
     },
   });
 
   return (
-    <div className={styles({ editable })}>
+    <FieldGroup className={styles({ editable })}>
       <EditorContent
         editor={editor}
         className={twMerge("w-full prose", className)}
@@ -132,31 +127,6 @@ export function RichText({
         />
         <Separator orientation="vertical" />
         <ToggleButton
-          onPress={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          isDisabled={
-            !editor.can().chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          isSelected={editor.isActive("heading", { level: 2 })}
-          icon={Heading2}
-          aria-label="Toggle second-level heading text"
-          size="small"
-        />
-        <ToggleButton
-          onPress={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
-          isDisabled={
-            !editor.can().chain().focus().toggleHeading({ level: 3 }).run()
-          }
-          isSelected={editor.isActive("heading", { level: 3 })}
-          icon={Heading3}
-          aria-label="Toggle third-level heading text"
-          size="small"
-        />
-        <Separator orientation="vertical" />
-        <ToggleButton
           onPress={() => editor.chain().focus().toggleBulletList().run()}
           isDisabled={!editor.can().chain().focus().toggleBulletList().run()}
           isSelected={editor.isActive("bulletList")}
@@ -178,6 +148,6 @@ export function RichText({
           <ReadingScore text={editor.state.doc.textContent} />
         </div>
       )}
-    </div>
+    </FieldGroup>
   );
 }

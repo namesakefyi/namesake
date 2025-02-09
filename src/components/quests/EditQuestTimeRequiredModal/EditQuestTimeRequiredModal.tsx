@@ -135,7 +135,7 @@ export const EditQuestTimeRequiredModal = ({
 
   return (
     <Modal isOpen={open}>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} className="w-full">
         <ModalHeader title="Edit time required" />
         {timeInput && (
           <TimeRequiredInput timeRequired={timeInput} onChange={setTimeInput} />

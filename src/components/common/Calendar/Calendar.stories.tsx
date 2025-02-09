@@ -1,5 +1,5 @@
+import { Calendar } from "@/components/common";
 import type { Meta } from "@storybook/react";
-import { Calendar } from ".";
 
 const meta: Meta<typeof Calendar> = {
   component: Calendar,

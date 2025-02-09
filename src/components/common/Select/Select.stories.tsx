@@ -1,7 +1,11 @@
+import {
+  Button,
+  Form,
+  Select,
+  SelectItem,
+  SelectSection,
+} from "@/components/common";
 import type { Meta } from "@storybook/react";
-import { Select, SelectItem, SelectSection } from ".";
-import { Button } from "../Button";
-import { Form } from "../Form";
 
 const meta: Meta<typeof Select> = {
   component: Select,

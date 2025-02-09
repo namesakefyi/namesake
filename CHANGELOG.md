@@ -1,5 +1,72 @@
 # namesake
 
+## 0.19.3
+
+### Patch Changes
+
+- 4fafdc2: Fix broken images in quest headers
+- b00d80a: Patch Vitest vulnerability
+
+## 0.19.2
+
+### Patch Changes
+
+- ca58bb2: Reconfigure app layout for mobile support
+
+## 0.19.1
+
+### Patch Changes
+
+- ecb4f87: Fix deploy workflow and PostHog env variables
+
+## 0.19.0
+
+### Minor Changes
+
+- c11f544: Track web vitals and performance analytics with PostHog
+
+### Patch Changes
+
+- 6b25e40: Support selecting a birthplace outside the US
+
+## 0.18.0
+
+### Minor Changes
+
+- 0e9f77a: Enable early access codes for beta testing
+- 6a2bc7b: Refine design for quest documents and references
+- 7e28449: Allow editing user settings inline instead of opening a dialog window
+- fb4f688: Support adding, editing, and deleting frequently asked questions for each quest
+
+### Patch Changes
+
+- fb82f83: Improve loading state of quests with skeleton loader component
+
+## 0.17.0
+
+### Minor Changes
+
+- e50f02a: Display structured steps for all quests and improve admin editing experience
+- 56a570c: Display statuses for all core quests
+- 24464bb: Display core quests by default and redirect user to appropriate state documentation
+
+### Patch Changes
+
+- d07a946: Truncate long usernames and emails within settings and the sidebar
+
+## 0.16.0
+
+### Minor Changes
+
+- 189df29: Improve design of browse page and allow previewing quests before addition
+- e4a7813: fix: Show error when signing in with unregistered email
+- d362596: Allow editing all quest details directly from quest page
+- 5133df0: Migrate from SurveyJS to a custom implementation for forms
+
+### Patch Changes
+
+- 1bccc82: Refine password strength transitions
+
 ## 0.15.0
 
 ### Minor Changes

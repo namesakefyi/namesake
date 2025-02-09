@@ -1,40 +1,35 @@
-import {
-  Banner,
-  Button,
-  Form,
-  Modal,
-  ModalFooter,
-  ModalHeader,
-  Select,
-  SelectItem,
-} from "@/components/common";
+import { Banner, Button, Form, Select, SelectItem } from "@/components/common";
 import { SettingsItem } from "@/components/settings";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
-import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
+import { BIRTHPLACES, type Birthplace } from "@convex/constants";
 import { useMutation } from "convex/react";
-import { Pencil } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-type EditBirthplaceModalProps = {
-  defaultBirthplace: Jurisdiction;
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-  onSubmit: () => void;
+type EditBirthplaceSettingProps = {
+  user: Doc<"users">;
 };
 
-const EditBirthplaceModal = ({
-  defaultBirthplace,
-  isOpen,
-  onOpenChange,
-  onSubmit,
-}: EditBirthplaceModalProps) => {
-  const [birthplace, setBirthplace] = useState<Jurisdiction>(defaultBirthplace);
+export const EditBirthplaceSetting = ({ user }: EditBirthplaceSettingProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [birthplace, setBirthplace] = useState<Birthplace>(
+    user.birthplace as Birthplace,
+  );
   const [error, setError] = useState<string>();
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const updateBirthplace = useMutation(api.users.setBirthplace);
+
+  useEffect(() => {
+    if (birthplace !== user.birthplace) {
+      setIsEditing(true);
+    }
+  }, [birthplace, user.birthplace]);
+
+  const handleCancel = () => {
+    setBirthplace(user.birthplace as Birthplace);
+    setIsEditing(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -48,8 +43,8 @@ const EditBirthplaceModal = ({
     try {
       setIsSubmitting(true);
       await updateBirthplace({ birthplace });
-      onSubmit();
       toast.success("Birthplace updated.");
+      setIsEditing(false);
     } catch (err) {
       setError("Failed to update birthplace. Please try again.");
     } finally {
@@ -58,71 +53,51 @@ const EditBirthplaceModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <ModalHeader
-        title="Edit birthplace"
-        description="Where were you born? This location is used to select the forms for your birth certificate."
-      />
-      <Form onSubmit={handleSubmit} className="w-full">
-        {error && <Banner variant="danger">{error}</Banner>}
+    <SettingsItem
+      label="Birthplace"
+      description="Where were you born? This location is used to select the forms for your birth certificate."
+    >
+      <Form onSubmit={handleSubmit} className="gap-2 items-end">
         <Select
-          label="State"
+          aria-label="State"
           name="birthplace"
           selectedKey={birthplace}
           onSelectionChange={(key) => {
-            setBirthplace(key as Jurisdiction);
+            setBirthplace(key as Birthplace);
             setError(undefined);
           }}
           isRequired
-          className="w-full"
           placeholder="Select state"
+          isDisabled={isSubmitting}
         >
-          {Object.entries(JURISDICTIONS).map(([value, label]) => (
+          {Object.entries(BIRTHPLACES).map(([value, label]) => (
             <SelectItem key={value} id={value}>
               {label}
             </SelectItem>
           ))}
         </Select>
-        <ModalFooter>
-          <Button
-            variant="secondary"
-            onPress={() => onOpenChange(false)}
-            isDisabled={isSubmitting}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" variant="primary" isDisabled={isSubmitting}>
-            Save
-          </Button>
-        </ModalFooter>
+        {isEditing && (
+          <div className="flex gap-1 justify-end">
+            <Button
+              variant="secondary"
+              isDisabled={isSubmitting}
+              size="small"
+              onPress={handleCancel}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              isDisabled={isSubmitting}
+              size="small"
+            >
+              Save
+            </Button>
+          </div>
+        )}
+        {error && <Banner variant="danger">{error}</Banner>}
       </Form>
-    </Modal>
-  );
-};
-
-type EditBirthplaceSettingProps = {
-  user: Doc<"users">;
-};
-
-export const EditBirthplaceSetting = ({ user }: EditBirthplaceSettingProps) => {
-  const [isBirthplaceModalOpen, setIsBirthplaceModalOpen] = useState(false);
-
-  return (
-    <SettingsItem
-      label="Birthplace"
-      description="Where were you born? This location is used to select the forms for your birth certificate."
-    >
-      <Button icon={Pencil} onPress={() => setIsBirthplaceModalOpen(true)}>
-        {user?.birthplace
-          ? JURISDICTIONS[user.birthplace as Jurisdiction]
-          : "Set birthplace"}
-      </Button>
-      <EditBirthplaceModal
-        defaultBirthplace={user.birthplace as Jurisdiction}
-        isOpen={isBirthplaceModalOpen}
-        onOpenChange={setIsBirthplaceModalOpen}
-        onSubmit={() => setIsBirthplaceModalOpen(false)}
-      />
     </SettingsItem>
   );
 };

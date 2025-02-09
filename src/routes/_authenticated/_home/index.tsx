@@ -1,3 +1,4 @@
+import { AppContent, PageHeader } from "@/components/app";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_home/")({
@@ -5,5 +6,9 @@ export const Route = createFileRoute("/_authenticated/_home/")({
 });
 
 function IndexRoute() {
-  return;
+  return (
+    <AppContent>
+      <PageHeader title="Home" />
+    </AppContent>
+  );
 }

@@ -1,7 +1,11 @@
+import {
+  Button,
+  ComboBox,
+  ComboBoxItem,
+  ComboBoxSection,
+  Form,
+} from "@/components/common";
 import type { Meta } from "@storybook/react";
-import { ComboBox, ComboBoxItem, ComboBoxSection } from ".";
-import { Button } from "../Button";
-import { Form } from "../Form";
 
 const meta: Meta<typeof ComboBox> = {
   component: ComboBox,

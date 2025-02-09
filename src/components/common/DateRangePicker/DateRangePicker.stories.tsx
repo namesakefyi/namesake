@@ -1,7 +1,5 @@
+import { Button, DateRangePicker, Form } from "@/components/common";
 import type { Meta } from "@storybook/react";
-import { DateRangePicker } from ".";
-import { Button } from "../Button";
-import { Form } from "../Form";
 
 const meta: Meta<typeof DateRangePicker> = {
   component: DateRangePicker,

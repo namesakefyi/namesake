@@ -15,7 +15,7 @@
     @apply text-base lg:text-lg;
 
     a {
-      @apply underline underline-offset-2 decoration-gray-9 dark:decoration-graydark-9 hover:decoration-inherit;
+      @apply underline underline-offset-2 hover:decoration-inherit;
     }
 
     *:not(li) + * {
@@ -108,13 +108,22 @@
 }
 
 body {
-  @apply bg-gray-app;
   color-scheme: dark light;
+  -webkit-font-smoothing: antialiased;
+  @apply bg-gray-1 dark:bg-graydark-2;
 }
 
 body,
 #root {
   min-height: 100dvh;
+}
+
+::selection {
+  @apply bg-amber-5 text-gray-12;
+}
+
+.dark ::selection {
+  @apply bg-purpledark-5 text-graydark-12;
 }
 
 .svc-full-creator {

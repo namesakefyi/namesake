@@ -1,12 +1,13 @@
-import type { Role } from "@convex/constants";
+import type { Jurisdiction, Role } from "@convex/constants";
 import {
   type NavigateOptions,
   Outlet,
   type ToOptions,
   createRootRouteWithContext,
+  useLocation,
   useRouter,
 } from "@tanstack/react-router";
-import type { ConvexAuthState } from "convex/react";
+import type { ConvexAuthState, ConvexReactClient } from "convex/react";
 import {
   AlertTriangle,
   Check,
@@ -15,6 +16,8 @@ import {
   OctagonAlert,
 } from "lucide-react";
 import { useTheme } from "next-themes";
+import posthog from "posthog-js";
+import { useEffect } from "react";
 import { RouterProvider } from "react-aria-components";
 import { Toaster } from "sonner";
 
@@ -25,10 +28,28 @@ declare module "react-aria-components" {
   }
 }
 
+function PostHogPageView() {
+  const location = useLocation();
+
+  // Track pageviews
+  useEffect(() => {
+    if (posthog) {
+      posthog.capture("$pageview", {
+        $current_url: location.pathname,
+      });
+    }
+  }, [location]);
+
+  return null;
+}
+
 interface RouterContext {
+  convex: ConvexReactClient;
   title: string;
   auth: Promise<ConvexAuthState>;
   role: Role;
+  residence: Jurisdiction;
+  birthplace: Jurisdiction;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
@@ -53,6 +74,7 @@ function RootRoute() {
       }
     >
       <Outlet />
+      <PostHogPageView />
       <Toaster
         theme={theme as "light" | "dark" | "system"}
         offset={16}

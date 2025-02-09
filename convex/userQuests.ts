@@ -4,9 +4,6 @@ import { type Category, STATUS, type Status } from "./constants";
 import { userMutation, userQuery } from "./helpers";
 import { status } from "./validators";
 
-// TODO: Add `returns` value validation
-// https://docs.convex.dev/functions/validation
-
 export const getAll = userQuery({
   args: {},
   handler: async (ctx, _args) => {
@@ -18,7 +15,7 @@ export const getAll = userQuery({
     const quests = await Promise.all(
       userQuests.map(async (userQuest) => {
         const quest = await ctx.db.get(userQuest.questId);
-        return quest && quest.deletionTime === undefined
+        return quest && quest.deletedAt === undefined
           ? { ...quest, ...userQuest }
           : null;
       }),
@@ -52,7 +49,7 @@ export const getAvailable = userQuery({
 
     const allActiveQuests = await ctx.db
       .query("quests")
-      .filter((q) => q.eq(q.field("deletionTime"), undefined))
+      .filter((q) => q.eq(q.field("deletedAt"), undefined))
       .collect();
 
     return allActiveQuests.filter((quest) => !userQuestIds.includes(quest._id));
@@ -82,7 +79,7 @@ export const countCompleted = userQuery({
       .collect();
 
     const completedQuests = userQuests.filter(
-      (quest) => quest.completionTime !== undefined,
+      (quest) => quest.completedAt !== undefined,
     );
 
     return completedQuests.length;
@@ -150,13 +147,6 @@ export const setStatus = userMutation({
     // Throw if status is invalid
     if (!STATUS[args.status as Status]) throw new Error("Invalid status");
 
-    // Prevent setting "filed" on non-core quests
-    if (
-      STATUS[args.status as Status].isCoreOnly === true &&
-      quest.category !== "core"
-    )
-      throw new Error("This status is reserved for core quests only.");
-
     // Prevent setting the existing status
     if (userQuest.status === args.status) return;
 
@@ -164,7 +154,7 @@ export const setStatus = userMutation({
     if (args.status === "complete") {
       await ctx.db.patch(userQuest._id, {
         status: args.status,
-        completionTime: Date.now(),
+        completedAt: Date.now(),
       });
     }
 
@@ -172,7 +162,7 @@ export const setStatus = userMutation({
     if (userQuest.status === "complete") {
       await ctx.db.patch(userQuest._id, {
         status: args.status,
-        completionTime: undefined,
+        completedAt: undefined,
       });
     }
 
@@ -233,7 +223,7 @@ export const getByCategory = userQuery({
     const questsWithDetails = await Promise.all(
       userQuests.map(async (userQuest) => {
         const quest = await ctx.db.get(userQuest.questId);
-        return quest && quest.deletionTime === undefined
+        return quest && quest.deletedAt === undefined
           ? { ...quest, ...userQuest }
           : null;
       }),
@@ -252,86 +242,5 @@ export const getByCategory = userQuery({
       },
       {} as Record<string, typeof validQuests>,
     );
-  },
-});
-
-export const getByDate = userQuery({
-  args: {},
-  handler: async (ctx) => {
-    const userQuests = await ctx.db
-      .query("userQuests")
-      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-      .collect();
-
-    const questsWithDetails = await Promise.all(
-      userQuests.map(async (userQuest) => {
-        const quest = await ctx.db.get(userQuest.questId);
-        return quest && quest.deletionTime === undefined
-          ? { ...quest, ...userQuest }
-          : null;
-      }),
-    );
-
-    const validQuests = questsWithDetails.filter(
-      (q): q is NonNullable<typeof q> => q !== null,
-    );
-
-    const now = Date.now();
-    const oneWeekAgo = now - 7 * 24 * 60 * 60 * 1000;
-    const oneMonthAgo = now - 30 * 24 * 60 * 60 * 1000;
-
-    return validQuests.reduce(
-      (acc, quest) => {
-        if (quest._creationTime > oneWeekAgo) {
-          acc.lastWeek.push(quest);
-        } else if (quest._creationTime > oneMonthAgo) {
-          acc.lastMonth.push(quest);
-        } else {
-          acc.earlier.push(quest);
-        }
-        return acc;
-      },
-      { lastWeek: [], lastMonth: [], earlier: [] } as Record<
-        string,
-        typeof validQuests
-      >,
-    );
-  },
-});
-
-export const getByStatus = userQuery({
-  args: {},
-  handler: async (ctx) => {
-    const userQuests = await ctx.db
-      .query("userQuests")
-      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-      .collect();
-
-    const questsWithDetails = await Promise.all(
-      userQuests.map(async (userQuest) => {
-        const quest = await ctx.db.get(userQuest.questId);
-        return quest && quest.deletionTime === undefined
-          ? { ...quest, ...userQuest }
-          : null;
-      }),
-    );
-
-    const validQuests = questsWithDetails.filter(
-      (q): q is NonNullable<typeof q> => q !== null,
-    );
-
-    // Initialize an object with all possible status keys
-    const initial: Record<Status, typeof validQuests> = {
-      notStarted: [],
-      inProgress: [],
-      filed: [],
-      complete: [],
-    };
-
-    // Group quests by their status
-    return validQuests.reduce((acc, quest) => {
-      acc[quest.status as Status].push(quest);
-      return acc;
-    }, initial);
   },
 });

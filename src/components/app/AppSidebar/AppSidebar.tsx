@@ -1,3 +1,4 @@
+import { Logo } from "@/components/app";
 import {
   Badge,
   Button,
@@ -8,16 +9,13 @@ import {
   MenuTrigger,
   Popover,
   SubmenuTrigger,
-  Tooltip,
-  TooltipTrigger,
 } from "@/components/common";
 import { useTheme } from "@/utils/useTheme";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import { THEMES, type Theme } from "@convex/constants";
 import { Authenticated, useQuery } from "convex/react";
-import { CircleUser, Cog, GlobeLock, LogOut, Plus } from "lucide-react";
-import { Logo } from "../Logo";
+import { CircleUser, Cog, GlobeLock, LogOut } from "lucide-react";
 
 type AppSidebarProps = {
   children: React.ReactNode;
@@ -35,31 +33,17 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
   };
 
   return (
-    <div className="w-72 lg:w-80 xl:w-[22rem] flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto border-r border-gray-dim">
-      <div className="app-padding h-header flex gap-2 items-center shrink-0 sticky top-0 bg-gray-app z-20">
+    <div className="w-72 lg:w-80 xl:w-[22rem] flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto bg-white dark:bg-graydark-1 border-r border-gray-dim">
+      <div className="app-padding h-header flex gap-2 items-center shrink-0 sticky top-0 bg-white dark:bg-graydark-1 z-20">
         <Link href={{ to: "/" }} className="p-1 -m-1">
           <Logo className="h-5 lg:h-[1.35rem]" />
         </Link>
         <Badge className="-mb-1" variant="waiting">
-          Beta
+          Early Access
         </Badge>
-        <div className="ml-auto">
-          <TooltipTrigger>
-            <Link
-              href={{ to: "/browse" }}
-              button={{
-                variant: "icon",
-                className: "-mr-1",
-              }}
-            >
-              <Plus size={20} />
-            </Link>
-            <Tooltip placement="right">Browse and add quests</Tooltip>
-          </TooltipTrigger>
-        </div>
       </div>
       <div className="app-padding flex-1">{children}</div>
-      <div className="app-padding h-header -ml-3 shrink-0 flex items-center sticky bottom-0 bg-gray-app">
+      <div className="app-padding h-header -ml-3 shrink-0 flex items-center sticky bottom-0 bg-white dark:bg-graydark-1">
         <Authenticated>
           <MenuTrigger>
             <Button
@@ -67,7 +51,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
               variant="ghost"
               icon={CircleUser}
             >
-              {user?.name}
+              <span className="truncate max-w-[16ch]">{user?.name}</span>
             </Button>
             <Menu placement="top start">
               {isAdmin && (

@@ -1,6 +1,4 @@
-import { Radio, RadioGroup } from ".";
-import { Button } from "../Button";
-import { Form } from "../Form";
+import { Button, Form, Radio, RadioGroup } from "@/components/common";
 
 export default {
   component: RadioGroup,

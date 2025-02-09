@@ -1,23 +1,24 @@
+import { Button, FieldDescription, Label } from "@/components/common";
 import { focusRing } from "@/components/utils";
 import { X } from "lucide-react";
+import { createContext, useContext } from "react";
 import {
   Tag as AriaTag,
   TagGroup as AriaTagGroup,
   type TagGroupProps as AriaTagGroupProps,
   type TagProps as AriaTagProps,
-  Button,
   TagList,
   type TagListProps,
   Text,
   composeRenderProps,
 } from "react-aria-components";
-import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
-import { FieldDescription, Label } from "../Field";
+
+const SizeContext = createContext<"medium" | "large">("medium");
 
 const tagStyles = tv({
   extend: focusRing,
-  base: "transition cursor-pointer text-sm rounded-full border px-3 py-1 flex items-center max-w-fit gap-1",
+  base: "transition cursor-pointer rounded-full border flex items-center max-w-fit gap-1",
   variants: {
     allowsRemoving: {
       true: "pr-1",
@@ -30,6 +31,10 @@ const tagStyles = tv({
     isDisabled: {
       true: "cursor-default text-gray-dim opacity-50 forced-colors:text-[GrayText]",
     },
+    size: {
+      medium: "text-sm px-3 py-1",
+      large: "text-base px-4 py-1.5",
+    },
   },
 });
 
@@ -39,9 +44,26 @@ export interface TagGroupProps<T>
   label?: string;
   description?: string;
   errorMessage?: string;
+  size?: "medium" | "large";
 }
 
-export interface TagProps extends AriaTagProps {}
+export interface TagProps extends AriaTagProps {
+  size?: "medium" | "large";
+}
+
+const tagGroupStyles = tv({
+  base: "flex flex-col gap-2",
+});
+
+const tagListStyles = tv({
+  base: "flex flex-wrap",
+  variants: {
+    size: {
+      medium: "gap-y-2 gap-x-1",
+      large: "gap-y-2.5 gap-x-1.5",
+    },
+  },
+});
 
 export function TagGroup<T extends object>({
   label,
@@ -49,29 +71,30 @@ export function TagGroup<T extends object>({
   errorMessage,
   items,
   children,
+  className,
+  size = "medium",
   renderEmptyState,
   ...props
 }: TagGroupProps<T>) {
   return (
-    <AriaTagGroup
-      {...props}
-      className={twMerge("flex flex-col gap-2", props.className)}
-    >
-      <Label>{label}</Label>
-      <TagList
-        items={items}
-        renderEmptyState={renderEmptyState}
-        className="flex flex-wrap gap-1"
-      >
-        {children}
-      </TagList>
-      {description && <FieldDescription>{description}</FieldDescription>}
-      {errorMessage && (
-        <Text slot="errorMessage" className="text-sm text-red-9">
-          {errorMessage}
-        </Text>
-      )}
-    </AriaTagGroup>
+    <SizeContext.Provider value={size}>
+      <AriaTagGroup {...props} className={tagGroupStyles({ className })}>
+        <Label size={size}>{label}</Label>
+        <TagList
+          items={items}
+          renderEmptyState={renderEmptyState}
+          className={tagListStyles({ size, className })}
+        >
+          {children}
+        </TagList>
+        {description && <FieldDescription>{description}</FieldDescription>}
+        {errorMessage && (
+          <Text slot="errorMessage" className="text-sm text-red-9">
+            {errorMessage}
+          </Text>
+        )}
+      </AriaTagGroup>
+    </SizeContext.Provider>
   );
 }
 
@@ -81,6 +104,7 @@ const removeButtonStyles = tv({
 });
 
 export function Tag({ children, ...props }: TagProps) {
+  const size = useContext(SizeContext);
   const textValue = typeof children === "string" ? children : undefined;
 
   return (
@@ -88,19 +112,24 @@ export function Tag({ children, ...props }: TagProps) {
       textValue={textValue}
       {...props}
       className={composeRenderProps(props.className, (className, renderProps) =>
-        tagStyles({ ...renderProps, className }),
+        tagStyles({ ...renderProps, size, className }),
       )}
     >
-      {({ defaultChildren, allowsRemoving }) => (
+      {composeRenderProps(children, (children, { allowsRemoving }) => (
         <>
-          {defaultChildren}
+          {children}
           {allowsRemoving && (
-            <Button slot="remove" className={removeButtonStyles}>
-              <X aria-hidden className="w-3 h-3" />
-            </Button>
+            <Button
+              slot="remove"
+              size="small"
+              variant="icon"
+              className={removeButtonStyles}
+              icon={X}
+              aria-label="Remove tag"
+            />
           )}
         </>
-      )}
+      ))}
     </AriaTag>
   );
 }

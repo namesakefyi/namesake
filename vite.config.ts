@@ -4,12 +4,11 @@ import autoprefixer from "autoprefixer";
 import cssnano from "cssnano";
 import webpackStatsPlugin from "rollup-plugin-webpack-stats";
 import tailwindcss from "tailwindcss";
-import { defineConfig as defineViteConfig, mergeConfig } from "vite";
+import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { configDefaults, coverageConfigDefaults } from "vitest/config";
-import { defineConfig as defineVitestConfig } from "vitest/config";
 
-const viteConfig = defineViteConfig({
+export default defineConfig({
   build: {
     rollupOptions: {
       output: {
@@ -35,9 +34,6 @@ const viteConfig = defineViteConfig({
       plugins: [autoprefixer(), tailwindcss(), cssnano()],
     },
   },
-});
-
-const vitestConfig = defineVitestConfig({
   test: {
     globals: true,
     environmentMatchGlobs: [
@@ -70,5 +66,3 @@ const vitestConfig = defineVitestConfig({
     },
   },
 });
-
-export default mergeConfig(viteConfig, vitestConfig);

@@ -61,7 +61,7 @@ const NewQuestModal = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const questId = await create({
+    const { questId, slug } = await create({
       title,
       category: category ?? undefined,
       jurisdiction: jurisdiction ?? undefined,
@@ -72,8 +72,8 @@ const NewQuestModal = ({
       clearForm();
       onSubmit();
       navigate({
-        to: "/admin/quests/$questId",
-        params: { questId },
+        to: "/$questSlug",
+        params: { questSlug: slug },
       });
     }
   };
@@ -108,11 +108,11 @@ const NewQuestModal = ({
           })}
         </Select>
         <Select
-          label="Jurisdiction"
+          label="State"
           name="jurisdiction"
           selectedKey={jurisdiction}
           onSelectionChange={(key) => setJurisdiction(key as Jurisdiction)}
-          placeholder="Select a jurisdiction"
+          placeholder="Select a state"
         >
           {Object.entries(JURISDICTIONS).map(([value, label]) => (
             <SelectItem key={value} id={value}>
@@ -157,24 +157,18 @@ const QuestTableRow = ({
     <TableRow
       key={quest._id}
       className="flex gap-2 items-center"
-      href={{ to: "/admin/quests/$questId", params: { questId: quest._id } }}
+      href={{ to: "/$questSlug", params: { questSlug: quest.slug } }}
     >
       <TableCell>
         <div className="flex items-center gap-2">
           <div>{quest.title}</div>
-          {quest.deletionTime && (
+          {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
+          {quest.deletedAt && (
             <span className="text-red-9 dark:text-reddark-9" slot="description">
-              {`deleted ${new Date(quest.deletionTime).toLocaleString()}`}
+              {`deleted ${new Date(quest.deletedAt).toLocaleString()}`}
             </span>
           )}
         </div>
-      </TableCell>
-      <TableCell>
-        {quest.jurisdiction ? (
-          <Badge>{quest.jurisdiction}</Badge>
-        ) : (
-          <span className="text-gray-dim opacity-50">—</span>
-        )}
       </TableCell>
       <TableCell>
         <Category />
@@ -190,7 +184,7 @@ const QuestTableRow = ({
             icon={Ellipsis}
           />
           <Menu>
-            {quest.deletionTime ? (
+            {quest.deletedAt ? (
               <>
                 <MenuItem onAction={() => undelete({ questId: quest._id })}>
                   Undelete
@@ -231,7 +225,6 @@ function QuestsRoute() {
       <Table aria-label="Quests">
         <TableHeader>
           <TableColumn isRowHeader>Quest</TableColumn>
-          <TableColumn>Jurisdiction</TableColumn>
           <TableColumn>Category</TableColumn>
           <TableColumn>Used By</TableColumn>
           <TableColumn>Created</TableColumn>

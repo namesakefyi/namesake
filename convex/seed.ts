@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
 import { internalMutation } from "./_generated/server";
-import { DEFAULT_TIME_REQUIRED, JURISDICTIONS } from "./constants";
 
 const seed = internalMutation(async (ctx) => {
   if (process.env.NODE_ENV === "production") {
@@ -23,7 +22,7 @@ const seed = internalMutation(async (ctx) => {
     try {
       const firstName = faker.person.firstName();
       const lastName = faker.person.lastName();
-      const userId = await ctx.db.insert("users", {
+      await ctx.db.insert("users", {
         name: firstName,
         email: faker.internet.email({
           firstName: firstName,
@@ -34,23 +33,6 @@ const seed = internalMutation(async (ctx) => {
         emailVerified: faker.datatype.boolean(),
       });
       console.log(`Created user ${firstName} ${lastName}`);
-
-      const questTitle = faker.helpers.arrayElement([
-        "Court Order",
-        "State ID",
-        "Birth Certificate",
-      ]);
-      const questJurisdiction = faker.helpers.arrayElement(
-        Object.keys(JURISDICTIONS),
-      );
-      await ctx.db.insert("quests", {
-        title: questTitle,
-        category: "core",
-        jurisdiction: questJurisdiction,
-        timeRequired: DEFAULT_TIME_REQUIRED,
-        creationUser: userId,
-      });
-      console.log(`Created quest ${questTitle} (${questJurisdiction})`);
     } catch (e) {
       throw new Error(`Failed to seed data: ${e}`);
     }

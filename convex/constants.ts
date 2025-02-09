@@ -2,7 +2,6 @@ import {
   Calendar,
   CalendarClock,
   CalendarDays,
-  CircleArrowRight,
   CircleCheckBig,
   CircleDashed,
   CircleHelp,
@@ -10,11 +9,14 @@ import {
   Clapperboard,
   Clock,
   Computer,
+  FileBadge,
   Gamepad2,
+  Gavel,
+  Globe,
   GraduationCap,
   HeartPulse,
-  History,
   House,
+  IdCard,
   Landmark,
   LaptopMinimal,
   LoaderCircle,
@@ -22,9 +24,9 @@ import {
   Mail,
   MapPin,
   MessageCircle,
-  Milestone,
   Moon,
   Scale,
+  ShieldCheck,
   ShoppingBag,
   Sun,
   Zap,
@@ -86,6 +88,12 @@ export const JURISDICTIONS = {
 } as const;
 export type Jurisdiction = keyof typeof JURISDICTIONS;
 
+export const BIRTHPLACES = {
+  ...JURISDICTIONS,
+  other: "I was born outside the US",
+};
+export type Birthplace = keyof typeof BIRTHPLACES;
+
 /**
  * Fields for input forms.
  */
@@ -117,13 +125,6 @@ export const ROLES = {
 } as const;
 export type Role = keyof typeof ROLES;
 
-export const GROUP_QUESTS_BY = {
-  dateAdded: "Date added",
-  category: "Category",
-  status: "Status",
-} as const;
-export type GroupQuestsBy = keyof typeof GROUP_QUESTS_BY;
-
 /**
  * Generic group details.
  * Used for UI display of filter groups.
@@ -131,6 +132,7 @@ export type GroupQuestsBy = keyof typeof GROUP_QUESTS_BY;
 export type GroupDetails = {
   label: string;
   icon: LucideIcon;
+  isCore?: boolean;
 };
 
 /**
@@ -138,7 +140,14 @@ export type GroupDetails = {
  * Used to filter quests in the quests list.
  */
 export type Category =
-  | "core"
+  // Core Types
+  | "courtOrder"
+  | "stateId"
+  | "socialSecurity"
+  | "passport"
+  | "birthCertificate"
+
+  // Non-Core Types
   | "entertainment"
   | "devices"
   | "education"
@@ -154,10 +163,36 @@ export type Category =
   | "travel"
   | "other";
 
+export type CoreCategory = keyof Pick<
+  typeof CATEGORIES,
+  "courtOrder" | "stateId" | "socialSecurity" | "passport" | "birthCertificate"
+>;
+
 export const CATEGORIES: Record<Category, GroupDetails> = {
-  core: {
-    label: "Core",
-    icon: Milestone,
+  courtOrder: {
+    label: "Court Order",
+    icon: Gavel,
+    isCore: true,
+  },
+  stateId: {
+    label: "State ID",
+    icon: IdCard,
+    isCore: true,
+  },
+  socialSecurity: {
+    label: "Social Security",
+    icon: ShieldCheck,
+    isCore: true,
+  },
+  passport: {
+    label: "Passport",
+    icon: Globe,
+    isCore: true,
+  },
+  birthCertificate: {
+    label: "Birth Certificate",
+    icon: FileBadge,
+    isCore: true,
   },
   entertainment: {
     label: "Arts and Entertainment",
@@ -217,43 +252,13 @@ export const CATEGORIES: Record<Category, GroupDetails> = {
   },
 };
 
-export const CATEGORY_ORDER: Category[] = Object.keys(CATEGORIES) as Category[];
-
-/**
- * Date added filters.
- * Used to filter quests in the quests list.
- */
-export type DateAdded = "lastWeek" | "lastMonth" | "earlier";
-
-export const DATE_ADDED: Record<DateAdded, GroupDetails> = {
-  lastWeek: {
-    label: "Last 7 days",
-    icon: Calendar,
-  },
-  lastMonth: {
-    label: "Last 30 days",
-    icon: CalendarDays,
-  },
-  earlier: {
-    label: "Earlier",
-    icon: History,
-  },
-};
-
-export const DATE_ADDED_ORDER: DateAdded[] = Object.keys(
-  DATE_ADDED,
-) as DateAdded[];
-
 /**
  * User quest statuses.
- * "filed" is only available for core quests.
- * "notStarted", "inProgress", and "complete" are available for all quests.
  */
-export type Status = "notStarted" | "inProgress" | "filed" | "complete";
+export type Status = "notStarted" | "inProgress" | "complete";
 
 interface StatusDetails extends GroupDetails {
   variant?: "info" | "warning" | "danger" | "waiting" | "success";
-  isCoreOnly?: boolean;
 }
 
 export const STATUS: Record<Status, StatusDetails> = {
@@ -265,12 +270,6 @@ export const STATUS: Record<Status, StatusDetails> = {
     label: "In progress",
     icon: LoaderCircle,
     variant: "warning",
-  },
-  filed: {
-    label: "Filed",
-    icon: CircleArrowRight,
-    isCoreOnly: true,
-    variant: "waiting",
   },
   complete: {
     label: "Done",
@@ -331,3 +330,9 @@ export const DEFAULT_TIME_REQUIRED: TimeRequired = {
   max: 10,
   unit: "minutes",
 };
+
+export const COMMON_PRONOUNS = [
+  "they/them/theirs",
+  "she/her/hers",
+  "he/him/his",
+];

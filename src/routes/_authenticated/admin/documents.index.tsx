@@ -12,7 +12,6 @@ import {
   Modal,
   ModalFooter,
   ModalHeader,
-  Select,
   SelectItem,
   Table,
   TableBody,
@@ -24,7 +23,6 @@ import {
 } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { DataModel, Id } from "@convex/_generated/dataModel";
-import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { Ellipsis, FileText, Plus } from "lucide-react";
@@ -51,28 +49,24 @@ const NewDocumentModal = ({
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [code, setCode] = useState("");
-  const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
   const [questId, setQuestId] = useState<Id<"quests"> | null>(null);
 
   const clearForm = () => {
     setFile(null);
     setTitle("");
     setCode("");
-    setJurisdiction(null);
     setQuestId(null);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (jurisdiction === null) throw new Error("Jurisdiction is required");
     if (file === null) throw new Error("File is required");
     if (questId === null) throw new Error("Quest is required");
 
     setIsSubmitting(true);
     const documentId = await createDocument({
       title,
-      jurisdiction,
       code,
       questId,
     });
@@ -108,19 +102,6 @@ const NewDocumentModal = ({
           className="w-full"
         />
         <TextField label="Code" value={code} onChange={setCode} />
-        <Select
-          label="State"
-          selectedKey={jurisdiction}
-          onSelectionChange={(key) => setJurisdiction(key as Jurisdiction)}
-          isRequired
-          className="w-full"
-        >
-          {Object.entries(JURISDICTIONS).map(([key, value]) => (
-            <SelectItem key={key} id={key}>
-              {value}
-            </SelectItem>
-          ))}
-        </Select>
         <ComboBox
           label="Quest"
           selectedKey={questId}
@@ -191,14 +172,11 @@ const DocumentTableRow = ({
     >
       <TableCell>
         <div>{document.title}</div>
-        {document.deletionTime && (
+        {document.deletedAt && (
           <span className="text-red-5" slot="description">
-            {`deleted ${new Date(document.deletionTime).toLocaleString()}`}
+            {`deleted ${new Date(document.deletedAt).toLocaleString()}`}
           </span>
         )}
-      </TableCell>
-      <TableCell>
-        {document.jurisdiction && <Badge>{document.jurisdiction}</Badge>}
       </TableCell>
       <TableCell>{new Date(document._creationTime).toLocaleString()}</TableCell>
       <TableCell>
@@ -215,7 +193,7 @@ const DocumentTableRow = ({
                 View PDF
               </MenuItem>
             )}
-            {document.deletionTime ? (
+            {document.deletedAt ? (
               <>
                 <MenuItem
                   onAction={() => undelete({ documentId: document._id })}
@@ -261,7 +239,6 @@ function DocumentsRoute() {
       <Table aria-label="Documents">
         <TableHeader>
           <TableColumn isRowHeader>Title</TableColumn>
-          <TableColumn>Jurisdiction</TableColumn>
           <TableColumn>Created</TableColumn>
           <TableColumn />
         </TableHeader>

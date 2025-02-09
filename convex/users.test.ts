@@ -276,12 +276,12 @@ describe("users", () => {
         await ctx.db.insert("userSettings", {
           userId,
           theme: "dark",
-          groupQuestsBy: "category",
         });
 
         // Create quest
         const questId = await ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,

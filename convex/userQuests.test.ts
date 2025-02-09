@@ -22,6 +22,7 @@ describe("userQuests", () => {
         // Create quests
         const quest1Id = await ctx.db.insert("quests", {
           title: "Test Quest 1",
+          slug: "test-quest-1",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -29,6 +30,7 @@ describe("userQuests", () => {
 
         const quest2Id = await ctx.db.insert("quests", {
           title: "Test Quest 2",
+          slug: "test-quest-2",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -69,10 +71,11 @@ describe("userQuests", () => {
       await t.run(async (ctx) => {
         const questId = await ctx.db.insert("quests", {
           title: "Deleted Quest",
+          slug: "deleted-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
-          deletionTime: Date.now(),
+          deletedAt: Date.now(),
         });
 
         await ctx.db.insert("userQuests", {
@@ -103,6 +106,7 @@ describe("userQuests", () => {
       await t.run(async (ctx) => {
         const questId = await ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -136,6 +140,7 @@ describe("userQuests", () => {
       const questId = await asUser.run(async (ctx) => {
         return await ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -168,7 +173,8 @@ describe("userQuests", () => {
       const questId = await asUser.run(async (ctx) => {
         return await ctx.db.insert("quests", {
           title: "Test Quest",
-          category: "core",
+          slug: "test-quest",
+          category: "education",
           jurisdiction: "MA",
           creationUser: userId,
         });
@@ -201,6 +207,7 @@ describe("userQuests", () => {
       const questId = await t.run(async (ctx) => {
         return ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -233,7 +240,8 @@ describe("userQuests", () => {
       const questId = await t.run(async (ctx) => {
         return ctx.db.insert("quests", {
           title: "Test Quest",
-          category: "core",
+          slug: "test-quest",
+          category: "education",
           jurisdiction: "MA",
           creationUser: userId,
         });
@@ -249,55 +257,7 @@ describe("userQuests", () => {
       ).rejects.toThrow("Invalid status");
     });
 
-    it("should prevent setting 'filed' status on non-core quests", async () => {
-      const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
-
-      const nonCoreQuestId = await t.run(async (ctx) => {
-        return ctx.db.insert("quests", {
-          title: "Test Quest",
-          category: "housing",
-          jurisdiction: "MA",
-          creationUser: userId,
-        });
-      });
-
-      const coreQuestId = await t.run(async (ctx) => {
-        return ctx.db.insert("quests", {
-          title: "Test Quest",
-          category: "core",
-          jurisdiction: "MA",
-          creationUser: userId,
-        });
-      });
-
-      await asUser.mutation(api.userQuests.create, { questId: nonCoreQuestId });
-      await asUser.mutation(api.userQuests.create, { questId: coreQuestId });
-
-      await expect(
-        asUser.mutation(api.userQuests.setStatus, {
-          questId: nonCoreQuestId,
-          status: "filed",
-        }),
-      ).rejects.toThrow("This status is reserved for core quests only.");
-
-      await expect(
-        asUser.mutation(api.userQuests.setStatus, {
-          questId: coreQuestId,
-          status: "filed",
-        }),
-      ).resolves.toBeNull();
-    });
-
-    it("should add completionTime when status changed to complete", async () => {
+    it("should add completedAt when status changed to complete", async () => {
       const t = convexTest(schema, modules);
 
       const userId = await t.run(async (ctx) => {
@@ -312,6 +272,7 @@ describe("userQuests", () => {
       const questId = await t.run(async (ctx) => {
         return ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -325,7 +286,7 @@ describe("userQuests", () => {
       });
 
       expect(userQuest?.status).toBe("notStarted");
-      expect(userQuest?.completionTime).toBeUndefined();
+      expect(userQuest?.completedAt).toBeUndefined();
 
       await asUser.mutation(api.userQuests.setStatus, {
         questId,
@@ -337,10 +298,10 @@ describe("userQuests", () => {
       });
 
       expect(updatedUserQuest?.status).toBe("complete");
-      expect(updatedUserQuest?.completionTime).toBeTypeOf("number"); // Unix timestamp
+      expect(updatedUserQuest?.completedAt).toBeTypeOf("number"); // Unix timestamp
     });
 
-    it("should remove completionTime when status changed away from complete", async () => {
+    it("should remove completedAt when status changed away from complete", async () => {
       const t = convexTest(schema, modules);
 
       const userId = await t.run(async (ctx) => {
@@ -355,6 +316,7 @@ describe("userQuests", () => {
       const questId = await t.run(async (ctx) => {
         return ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -373,7 +335,7 @@ describe("userQuests", () => {
       });
 
       expect(updatedUserQuest?.status).toBe("complete");
-      expect(updatedUserQuest?.completionTime).toBeTypeOf("number");
+      expect(updatedUserQuest?.completedAt).toBeTypeOf("number");
 
       await asUser.mutation(api.userQuests.setStatus, {
         questId,
@@ -385,7 +347,7 @@ describe("userQuests", () => {
       });
 
       expect(updatedQuest?.status).toBe("notStarted");
-      expect(updatedQuest?.completionTime).toBeUndefined();
+      expect(updatedQuest?.completedAt).toBeUndefined();
     });
   });
 
@@ -405,6 +367,7 @@ describe("userQuests", () => {
       const questId = await t.run(async (ctx) => {
         return await ctx.db.insert("quests", {
           title: "Test Quest",
+          slug: "test-quest",
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -441,13 +404,15 @@ describe("userQuests", () => {
       await t.run(async (ctx) => {
         const quest1Id = await ctx.db.insert("quests", {
           title: "Test Quest 1",
-          category: "core",
+          slug: "test-quest-1",
+          category: "education",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
         });
 
         const quest2Id = await ctx.db.insert("quests", {
           title: "Test Quest 2",
+          slug: "test-quest-2",
           category: "housing",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
@@ -470,59 +435,10 @@ describe("userQuests", () => {
         api.userQuests.getByCategory,
         {},
       );
-      expect(Object.keys(questsByCategory)).toContain("core");
+      expect(Object.keys(questsByCategory)).toContain("education");
       expect(Object.keys(questsByCategory)).toContain("housing");
-      expect(questsByCategory.core).toHaveLength(1);
+      expect(questsByCategory.education).toHaveLength(1);
       expect(questsByCategory.housing).toHaveLength(1);
-    });
-  });
-
-  describe("getByStatus", () => {
-    it("should return quests grouped by status", async () => {
-      const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
-
-      await t.run(async (ctx) => {
-        const quest1Id = await ctx.db.insert("quests", {
-          title: "Active Quest",
-          category: "core",
-          jurisdiction: "Test Jurisdiction",
-          creationUser: userId,
-        });
-
-        const quest2Id = await ctx.db.insert("quests", {
-          title: "Completed Quest",
-          category: "housing",
-          jurisdiction: "Test Jurisdiction",
-          creationUser: userId,
-        });
-
-        await ctx.db.insert("userQuests", {
-          userId,
-          questId: quest1Id,
-          status: "inProgress",
-        });
-
-        await ctx.db.insert("userQuests", {
-          userId,
-          questId: quest2Id,
-          status: "complete",
-        });
-      });
-
-      const questsByStatus = await asUser.query(api.userQuests.getByStatus, {});
-      expect(Object.keys(questsByStatus)).toContain("inProgress");
-      expect(Object.keys(questsByStatus)).toContain("complete");
-      expect(questsByStatus.inProgress).toHaveLength(1);
-      expect(questsByStatus.complete).toHaveLength(1);
     });
   });
 });

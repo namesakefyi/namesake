@@ -24,27 +24,40 @@ describe("EditResidenceSetting", () => {
     );
   });
 
-  it("renders correct jurisdiction if it exists", () => {
+  it("renders current residence if it exists", () => {
     render(<EditResidenceSetting user={mockUser} />);
-    expect(screen.getByText(JURISDICTIONS.CA)).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { hidden: true })).toHaveValue("CA");
+    expect(screen.getByRole("button")).toHaveTextContent(JURISDICTIONS.CA);
   });
 
-  it("renders 'Set residence' if residence is not set", () => {
+  it("shows empty select if residence is not set", () => {
     render(
       <EditResidenceSetting user={{ ...mockUser, residence: undefined }} />,
     );
-    expect(
-      screen.getByRole("button", { name: "Set residence" }),
-    ).toBeInTheDocument();
+    const stateSelect = screen.getByLabelText("State");
+    expect(stateSelect).toHaveValue("");
   });
 
-  it("populates correct jurisdiction when modal is opened", async () => {
+  it("shows save/cancel buttons when residence is changed", async () => {
     const user = userEvent.setup();
     render(<EditResidenceSetting user={mockUser} />);
-    await user.click(screen.getByRole("button", { name: JURISDICTIONS.CA }));
+
+    // Initially buttons should not be visible
     expect(
-      screen.getByRole("button", { name: `${JURISDICTIONS.CA} State` }),
-    ).toBeInTheDocument();
+      screen.queryByRole("button", { name: "Save" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Cancel" }),
+    ).not.toBeInTheDocument();
+
+    // Change residence
+    const stateSelect = screen.getByLabelText("State");
+    await user.click(stateSelect);
+    await user.click(screen.getByRole("option", { name: JURISDICTIONS.NY }));
+
+    // Buttons should now be visible
+    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
   });
 
   it("updates residence and submits the form", async () => {
@@ -52,19 +65,18 @@ describe("EditResidenceSetting", () => {
     mockSetResidence.mockResolvedValueOnce(undefined);
 
     render(<EditResidenceSetting user={mockUser} />);
-    await user.click(screen.getByRole("button", { name: JURISDICTIONS.CA }));
+
+    // Change residence
     const stateSelect = screen.getByLabelText("State");
-
     await user.click(stateSelect);
-
     await user.click(screen.getByRole("option", { name: JURISDICTIONS.NY }));
 
+    // Submit form
     await user.click(screen.getByRole("button", { name: "Save" }));
 
     expect(mockSetResidence).toHaveBeenCalledWith({
       residence: "NY",
     });
-
     expect(toast.success).toHaveBeenCalledWith("Residence updated.");
   });
 
@@ -74,16 +86,41 @@ describe("EditResidenceSetting", () => {
 
     render(<EditResidenceSetting user={mockUser} />);
 
-    await user.click(screen.getByRole("button", { name: JURISDICTIONS.CA }));
+    // Change residence
     const stateSelect = screen.getByLabelText("State");
     await user.click(stateSelect);
-
     await user.click(screen.getByRole("option", { name: JURISDICTIONS.NY }));
 
+    // Submit form
     await user.click(screen.getByRole("button", { name: "Save" }));
 
     expect(
       screen.getByText("Failed to update residence. Please try again."),
     ).toBeInTheDocument();
+  });
+
+  it("resets to original value when cancel is clicked", async () => {
+    const user = userEvent.setup();
+    render(<EditResidenceSetting user={mockUser} />);
+
+    // Change residence
+    const stateSelect = screen.getByLabelText("State");
+    await user.click(stateSelect);
+    await user.click(screen.getByRole("option", { name: JURISDICTIONS.NY }));
+
+    // Click cancel
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+
+    // Should reset to original value
+    expect(screen.getByRole("combobox", { hidden: true })).toHaveValue("CA");
+    expect(screen.getByRole("button")).toHaveTextContent(JURISDICTIONS.CA);
+
+    // Buttons should be hidden
+    expect(
+      screen.queryByRole("button", { name: "Save" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Cancel" }),
+    ).not.toBeInTheDocument();
   });
 });

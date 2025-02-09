@@ -1,37 +1,26 @@
-import {
-  Banner,
-  Button,
-  Form,
-  Modal,
-  ModalFooter,
-  ModalHeader,
-  TextField,
-} from "@/components/common";
+import { Banner, Button, Form, TextField } from "@/components/common";
+import { SettingsItem } from "@/components/settings";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
-import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { SettingsItem } from "../SettingsItem";
 
-type EditNameModalProps = {
-  defaultName: string;
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-  onSubmit: () => void;
+type EditNameSettingProps = {
+  user: Doc<"users">;
 };
 
-const EditNameModal = ({
-  defaultName,
-  isOpen,
-  onOpenChange,
-  onSubmit,
-}: EditNameModalProps) => {
+export const EditNameSetting = ({ user }: EditNameSettingProps) => {
   const updateName = useMutation(api.users.setName);
-  const [name, setName] = useState(defaultName);
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState(user.name ?? "");
   const [error, setError] = useState<string>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setName(user.name ?? "");
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,8 +34,8 @@ const EditNameModal = ({
     try {
       setIsSubmitting(true);
       await updateName({ name: name.trim() });
-      onSubmit();
       toast.success("Name updated.");
+      setIsEditing(false);
     } catch (err) {
       setError("Failed to update name. Please try again.");
     } finally {
@@ -55,59 +44,50 @@ const EditNameModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <ModalHeader
-        title="Edit name"
-        description="How should Namesake refer to you? This can be different from your legal name."
-      />
-      <Form onSubmit={handleSubmit} className="w-full">
-        {error && <Banner variant="danger">{error}</Banner>}
-        <TextField
-          label="Name"
-          name="name"
-          value={name}
-          onChange={(value) => {
-            setName(value);
-            setError(undefined);
-          }}
-          className="w-full"
-          isRequired
-        />
-        <ModalFooter>
-          <Button
-            variant="secondary"
-            isDisabled={isSubmitting}
-            onPress={() => onOpenChange(false)}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" variant="primary" isDisabled={isSubmitting}>
-            Save
-          </Button>
-        </ModalFooter>
-      </Form>
-    </Modal>
-  );
-};
-
-type EditNameSettingProps = {
-  user: Doc<"users">;
-};
-
-export const EditNameSetting = ({ user }: EditNameSettingProps) => {
-  const [isNameModalOpen, setIsNameModalOpen] = useState(false);
-
-  return (
-    <SettingsItem label="Name" description="How should Namesake refer to you?">
-      <Button icon={Pencil} onPress={() => setIsNameModalOpen(true)}>
-        {user?.name ?? "Set name"}
-      </Button>
-      <EditNameModal
-        isOpen={isNameModalOpen}
-        onOpenChange={setIsNameModalOpen}
-        defaultName={user.name ?? ""}
-        onSubmit={() => setIsNameModalOpen(false)}
-      />
+    <SettingsItem
+      label="Display name"
+      description="How should Namesake refer to you? This can be different from your legal name."
+    >
+      {!isEditing ? (
+        <Button onPress={() => setIsEditing(true)}>
+          <span className="truncate max-w-[24ch]">
+            {user?.name ?? "Set name"}
+          </span>
+        </Button>
+      ) : (
+        <Form onSubmit={handleSubmit} className="gap-2">
+          <TextField
+            aria-label="Name"
+            name="name"
+            value={name}
+            onChange={(value) => {
+              setName(value);
+              setError(undefined);
+            }}
+            className="w-full"
+            isRequired
+            autoFocus
+          />
+          <div className="flex gap-1 justify-end">
+            <Button
+              size="small"
+              isDisabled={isSubmitting}
+              onPress={handleCancel}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              isDisabled={isSubmitting}
+              size="small"
+            >
+              Save
+            </Button>
+          </div>
+          {error && <Banner variant="danger">{error}</Banner>}
+        </Form>
+      )}
     </SettingsItem>
   );
 };

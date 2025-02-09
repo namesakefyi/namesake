@@ -1,3 +1,11 @@
+import {
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  Input,
+  Label,
+  innerBorderStyles,
+} from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import {
@@ -7,14 +15,6 @@ import {
   type ButtonProps,
   type ValidationResult,
 } from "react-aria-components";
-import {
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  Input,
-  Label,
-  fieldBorderStyles,
-} from "../Field";
 
 export interface NumberFieldProps extends AriaNumberFieldProps {
   label?: string;
@@ -49,7 +49,7 @@ export function NumberField({
             )}
             <Input />
             <div
-              className={fieldBorderStyles({
+              className={innerBorderStyles({
                 ...renderProps,
                 class: "flex flex-col border-s h-10",
               })}
@@ -58,7 +58,7 @@ export function NumberField({
                 <ChevronUp aria-hidden className="w-4 h-4" />
               </StepperButton>
               <div
-                className={fieldBorderStyles({
+                className={innerBorderStyles({
                   ...renderProps,
                   class: "border-b",
                 })}

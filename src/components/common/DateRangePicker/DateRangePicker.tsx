@@ -1,3 +1,13 @@
+import {
+  Button,
+  DateInput,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  Label,
+  Popover,
+  RangeCalendar,
+} from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
 import { Calendar as CalendarIcon } from "lucide-react";
 import {
@@ -6,11 +16,6 @@ import {
   type DateValue,
   type ValidationResult,
 } from "react-aria-components";
-import { Button } from "../Button";
-import { DateInput } from "../DateField";
-import { FieldDescription, FieldError, FieldGroup, Label } from "../Field";
-import { Popover } from "../Popover";
-import { RangeCalendar } from "../RangeCalendar";
 
 export interface DateRangePickerProps<T extends DateValue>
   extends AriaDateRangePickerProps<T> {
@@ -43,9 +48,12 @@ export function DateRangePicker<T extends DateValue>({
           –
         </span>
         <DateInput slot="end" className="flex-1 px-3 py-2" />
-        <Button variant="icon" className="w-7 h-7 p-0 mr-1 outline-offset-0">
-          <CalendarIcon aria-hidden className="w-4 h-4" />
-        </Button>
+        <Button
+          variant="icon"
+          className="w-7 h-7 p-0 mr-1 outline-offset-0"
+          icon={CalendarIcon}
+          aria-label="Open date picker"
+        />
       </FieldGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>

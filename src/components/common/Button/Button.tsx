@@ -1,5 +1,6 @@
+import type { FieldSize } from "@/components/common";
 import { focusRing } from "@/components/utils";
-import type { LucideIcon } from "lucide-react";
+import type { LucideIcon, LucideProps } from "lucide-react";
 import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,
@@ -9,26 +10,33 @@ import { tv } from "tailwind-variants";
 
 export interface ButtonProps extends AriaButtonProps {
   children?: React.ReactNode;
+  label?: string;
   icon?: LucideIcon;
+  iconProps?: LucideProps;
+  endIcon?: LucideIcon;
+  endIconProps?: LucideProps;
   variant?: "primary" | "secondary" | "destructive" | "icon" | "ghost";
-  size?: "small" | "medium";
+  size?: FieldSize;
 }
 
 export const buttonStyles = tv({
   extend: focusRing,
-  base: "py-2 text-sm font-medium whitespace-nowrap rounded-lg flex gap-1.5 items-center justify-center border border-black/10 dark:border-white/10",
+  base: "py-2 text-sm font-medium whitespace-nowrap rounded-lg flex gap-1.5 items-center justify-center border border-gray-dim transition",
   variants: {
     variant: {
-      primary: "bg-purple-solid text-white",
-      secondary: "bg-gray-ghost text-gray-normal",
+      primary:
+        "bg-purple-solid text-white border-purple-10 dark:border-purpledark-10 shadow-sm",
+      secondary:
+        "bg-white dark:bg-graydark-3 hover:bg-white dark:hover:bg-graydark-4 hover:border-gray-7 dark:hover:border-graydark-7 text-gray-normal shadow-sm",
       destructive: "bg-red-solid",
-      icon: "bg-transparent hover:bg-graya-3 dark:hover:bg-graydarka-3 text-gray-dim hover:text-gray-normal border-0 flex items-center justify-center rounded-full",
+      icon: "bg-transparent hover:bg-graya-3 dark:hover:bg-graydarka-3 text-gray-dim hover:text-gray-normal border-0 flex shrink-0 items-center justify-center rounded-full",
       ghost:
         "bg-transparent hover:bg-graya-3 dark:hover:bg-graydarka-3 text-gray-dim hover:text-gray-normal border-0",
     },
     size: {
       small: "h-8 px-2",
       medium: "h-10 px-3",
+      large: "h-12 px-3.5 text-lg",
     },
     isDisabled: {
       false: "cursor-pointer",
@@ -57,6 +65,9 @@ export function Button({
   variant,
   size,
   icon: Icon,
+  iconProps,
+  endIcon: EndIcon,
+  endIconProps,
   className,
   children,
   ...props
@@ -73,8 +84,22 @@ export function Button({
         }),
       )}
     >
-      {Icon && <Icon size={16} />}
+      {Icon && (
+        <Icon
+          size={size === "large" ? 20 : 16}
+          strokeWidth={size === "large" ? 2.5 : 2}
+          className="shrink-0"
+          {...iconProps}
+        />
+      )}
       {children}
+      {EndIcon && (
+        <EndIcon
+          size={size === "large" ? 20 : 16}
+          strokeWidth={size === "large" ? 2.5 : 2}
+          {...endIconProps}
+        />
+      )}
     </AriaButton>
   );
 }

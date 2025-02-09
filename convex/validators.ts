@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import {
+  BIRTHPLACES,
   CATEGORIES,
-  GROUP_QUESTS_BY,
   JURISDICTIONS,
   ROLES,
   STATUS,
@@ -11,6 +11,10 @@ import {
 
 export const jurisdiction = v.union(
   ...Object.keys(JURISDICTIONS).map((jurisdiction) => v.literal(jurisdiction)),
+);
+
+export const birthplace = v.union(
+  ...Object.keys(BIRTHPLACES).map((birthplace) => v.literal(birthplace)),
 );
 
 export const status = v.union(
@@ -23,12 +27,6 @@ export const theme = v.union(
 
 export const role = v.union(
   ...Object.keys(ROLES).map((role) => v.literal(role)),
-);
-
-export const groupQuestsBy = v.union(
-  ...Object.keys(GROUP_QUESTS_BY).map((groupQuestsBy) =>
-    v.literal(groupQuestsBy),
-  ),
 );
 
 export const category = v.union(

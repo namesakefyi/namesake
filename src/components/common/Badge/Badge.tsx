@@ -52,6 +52,7 @@ export function Badge({ icon: Icon, className, ...props }: BadgeProps) {
         size: props.size,
         className,
       })}
+      data-testid="badge"
     >
       {Icon && <Icon className={icon({ variant: props.variant })} />}
       {props.children}

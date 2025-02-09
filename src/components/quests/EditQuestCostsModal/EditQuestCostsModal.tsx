@@ -36,6 +36,7 @@ const CostInput = memo(function CostInput({
         onChange={(value) =>
           onChange({ cost: value, description: cost.description })
         }
+        minValue={0}
         maxValue={2000}
         isRequired
       />

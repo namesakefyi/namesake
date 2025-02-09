@@ -1,6 +1,17 @@
 import { v } from "convex/values";
 import { userMutation, userQuery } from "./helpers";
 
+export const list = userQuery({
+  args: {},
+  handler: async (ctx, _args) => {
+    const userData = await ctx.db
+      .query("userFormData")
+      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
+      .collect();
+    return userData;
+  },
+});
+
 export const get = userQuery({
   args: {},
   handler: async (ctx, _args) => {

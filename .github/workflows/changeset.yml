@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with: 
+          token: ${{ secrets.DEPLOY_PAT }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4

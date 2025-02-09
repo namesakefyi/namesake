@@ -16,12 +16,15 @@ import {
 } from "@/components/common";
 import { usePasswordStrength } from "@/utils/usePasswordStrength";
 import { useAuthActions } from "@convex-dev/auth/react";
+import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-
+import { useMutation } from "convex/react";
 import { ConvexError } from "convex/values";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import type { Key } from "react-aria";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_unauthenticated/signin")({
   beforeLoad: async ({ context }) => {
@@ -34,38 +37,60 @@ export const Route = createFileRoute("/_unauthenticated/signin")({
 const SignIn = () => {
   const { signIn } = useAuthActions();
   const [flow, setFlow] = useState<Key>("signIn");
+  const [isCodeRequired, setIsCodeRequired] = useState(true);
+  const [code, setCode] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate({ from: "/signin" });
-  const isClosed = process.env.NODE_ENV === "production";
+
   const passwordState = usePasswordStrength(password);
+  const redeemCode = useMutation(api.earlyAccessCodes.redeem);
+
+  const handleCodeSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      setError(null);
+      setIsSubmitting(true);
+      await redeemCode({
+        earlyAccessCodeId: code as Id<"earlyAccessCodes">,
+      });
+      toast.success("Code redeemed!");
+      setIsCodeRequired(false);
+    } catch (error) {
+      setError(error instanceof ConvexError ? error.message : "Invalid code.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
-    await signIn("password", {
-      flow,
-      email,
-      password,
-      redirectTo: "/quests",
-    })
-      .catch((error) =>
-        error instanceof ConvexError
-          ? setError(error.message)
-          : setError(error),
-      )
-      .then(() => navigate({ to: "/" }))
-      .finally(() => setIsSubmitting(false));
+    try {
+      await signIn("password", {
+        flow,
+        email,
+        password,
+        redirectTo: "/",
+      });
+      navigate({ to: "/" });
+    } catch (error) {
+      setError("Couldn't sign in. Check your information and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  if (flow === "reset")
+  if (flow === "reset") {
     return (
       <ForgotPassword onBack={() => setFlow("signIn")} defaultEmail={email} />
     );
+  }
 
   return (
     <Tabs selectedKey={flow} onSelectionChange={setFlow}>
@@ -73,9 +98,9 @@ const SignIn = () => {
         <Tab id="signIn">Sign in</Tab>
         <Tab id="signUp">Register</Tab>
       </TabList>
-      {error && <Banner variant="danger">{error}</Banner>}
       <TabPanel id="signIn">
         <Form onSubmit={handleSubmit} className="items-stretch">
+          {error && <Banner variant="danger">{error}</Banner>}
           <TextField
             label="Email"
             name="email"
@@ -113,16 +138,29 @@ const SignIn = () => {
         </Form>
       </TabPanel>
       <TabPanel id="signUp">
-        {isClosed ? (
-          <Banner variant="info">
-            <p>
-              Namesake is in active development and currently closed to signups.
-              For name change support, join us on{" "}
-              <Link href="https://namesake.fyi/chat">Discord</Link>.
-            </p>
-          </Banner>
+        {import.meta.env.PROD && isCodeRequired ? (
+          <Form onSubmit={handleCodeSubmit} className="items-stretch">
+            <Banner variant="info">
+              Namesake is in early access. To register, please enter a code.
+            </Banner>
+            {error && <Banner variant="danger">{error}</Banner>}
+            <TextField
+              label="Early Access Code"
+              name="code"
+              type="text"
+              isRequired
+              value={code}
+              onChange={setCode}
+              minLength={32}
+              maxLength={32}
+            />
+            <Button type="submit" variant="primary" isDisabled={isSubmitting}>
+              Continue
+            </Button>
+          </Form>
         ) : (
           <Form onSubmit={handleSubmit} className="items-stretch">
+            {error && <Banner variant="danger">{error}</Banner>}
             <TextField
               label="Email"
               name="email"
@@ -265,7 +303,7 @@ const ForgotPassword = ({
           if (result.redirect) {
             navigate({ to: result.redirect.toString() });
           }
-          navigate({ to: "/quests" });
+          navigate({ to: "/" });
         } catch (error) {
           console.error(error);
           setDidSendCode(false);

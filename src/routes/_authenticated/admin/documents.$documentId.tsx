@@ -1,5 +1,5 @@
 import { PageHeader } from "@/components/app";
-import { Badge, Link } from "@/components/common";
+import { Badge } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute } from "@tanstack/react-router";
@@ -27,23 +27,8 @@ function AdminDocumentDetailRoute() {
     <div>
       <PageHeader
         title={document.title}
-        badge={
-          <>
-            <Badge size="lg">{document.jurisdiction}</Badge>
-            <Badge size="lg">{document.code}</Badge>
-          </>
-        }
-      >
-        <Link
-          href={{
-            to: "/admin/quests/$questId",
-            params: { questId: document.questId },
-          }}
-          button={{ variant: "secondary" }}
-        >
-          Go to quest
-        </Link>
-      </PageHeader>
+        badge={<Badge size="lg">{document.code}</Badge>}
+      />
       {fileUrl && (
         <object
           className="w-full aspect-square max-h-full rounded-lg"

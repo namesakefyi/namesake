@@ -1,7 +1,7 @@
 import { AppContent, AppSidebar } from "@/components/app";
-import { Container, Nav, NavGroup, NavItem } from "@/components/common";
+import { Nav, NavGroup, NavItem } from "@/components/common";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import { FileText, Milestone } from "lucide-react";
+import { FileText, FlaskConical, Milestone } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: ({ context }) => {
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 function AdminRoute() {
   return (
-    <Container className="flex">
+    <div className="flex">
       <AppSidebar>
         <Nav>
           <NavGroup label="Content">
@@ -30,12 +30,15 @@ function AdminRoute() {
             <NavItem icon={FileText} href={{ to: "/admin/documents" }}>
               Documents
             </NavItem>
+            <NavItem icon={FlaskConical} href={{ to: "/admin/early-access" }}>
+              Early Access
+            </NavItem>
           </NavGroup>
         </Nav>
       </AppSidebar>
       <AppContent>
         <Outlet />
       </AppContent>
-    </Container>
+    </div>
   );
 }

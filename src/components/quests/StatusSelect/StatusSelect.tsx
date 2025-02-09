@@ -6,8 +6,6 @@ import {
   MenuItem,
   MenuSection,
   MenuTrigger,
-  Tooltip,
-  TooltipTrigger,
 } from "@/components/common";
 import { STATUS, type Status } from "@convex/constants";
 import { ChevronDown } from "lucide-react";
@@ -18,10 +16,11 @@ import { tv } from "tailwind-variants";
 interface StatusBadgeProps extends Omit<BadgeProps, "children"> {
   status: Status;
   condensed?: boolean;
+  className?: string;
 }
 
 const badgeStyles = tv({
-  base: "flex items-center transition-colors rounded-full",
+  base: "flex items-center transition-colors rounded-full select-none",
   variants: {
     condensed: {
       true: "size-5 p-0 lg:size-6",
@@ -30,39 +29,35 @@ const badgeStyles = tv({
   },
 });
 
-export function StatusBadge({ status, condensed, ...props }: StatusBadgeProps) {
+export function StatusBadge({
+  status,
+  condensed,
+  className,
+  ...props
+}: StatusBadgeProps) {
   if (status === undefined) return null;
 
   const { label, icon, variant } = STATUS[status];
 
-  const InnerBadge = (
+  return (
     <Badge
       icon={icon}
       variant={variant}
       {...props}
-      className={badgeStyles({ condensed })}
+      aria-label={condensed ? label : undefined}
+      className={badgeStyles({ condensed, className })}
     >
       {!condensed && label}
     </Badge>
-  );
-
-  if (!condensed) return InnerBadge;
-
-  return (
-    <TooltipTrigger>
-      {InnerBadge}
-      <Tooltip>{label}</Tooltip>
-    </TooltipTrigger>
   );
 }
 
 interface StatusSelectProps {
   status: Status;
-  isCore?: boolean;
   onChange: (status: Status) => void;
 }
 
-export function StatusSelect({ status, isCore, onChange }: StatusSelectProps) {
+export function StatusSelect({ status, onChange }: StatusSelectProps) {
   const [selectedStatus, setSelectedStatus] = useState<Selection>(
     new Set([status]),
   );
@@ -74,9 +69,13 @@ export function StatusSelect({ status, isCore, onChange }: StatusSelectProps) {
 
   return (
     <MenuTrigger>
-      <Button variant="ghost" className="px-2 gap-1">
+      <Button
+        variant="ghost"
+        size="small"
+        className="gap-1 pl-1 rounded-full"
+        endIcon={ChevronDown}
+      >
         <StatusBadge status={status} size="lg" />
-        <ChevronDown size={16} className="right-0" />
       </Button>
       <Menu
         placement="bottom end"
@@ -86,19 +85,16 @@ export function StatusSelect({ status, isCore, onChange }: StatusSelectProps) {
         onSelectionChange={handleSelectionChange}
       >
         <MenuSection title="Status">
-          {Object.entries(STATUS).map(([status, details]) => {
-            if (!isCore && details.isCoreOnly) return null;
-            return (
-              <MenuItem
-                key={status}
-                id={status}
-                aria-label={details.label}
-                className="h-9"
-              >
-                <StatusBadge status={status as Status} size="lg" />
-              </MenuItem>
-            );
-          })}
+          {Object.entries(STATUS).map(([status, details]) => (
+            <MenuItem
+              key={status}
+              id={status}
+              aria-label={details.label}
+              className="h-9"
+            >
+              <StatusBadge status={status as Status} size="lg" />
+            </MenuItem>
+          ))}
         </MenuSection>
       </Menu>
     </MenuTrigger>

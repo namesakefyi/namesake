@@ -76,6 +76,28 @@ describe("EditQuestCostsModal", () => {
     expect(screen.getByLabelText("For")).toBeInTheDocument();
   });
 
+  it("does not allow negative costs", async () => {
+    const user = userEvent.setup();
+    render(
+      <EditQuestCostsModal
+        quest={mockQuest}
+        open={true}
+        onOpenChange={mockOnOpenChange}
+      />,
+    );
+
+    // Modify a cost
+    const costInputs = screen.getAllByLabelText("Cost") as HTMLInputElement[];
+    await user.clear(costInputs[0]);
+    await user.type(costInputs[0], "-1");
+    expect(costInputs[0].value).toBe("1");
+    expect(costInputs[0]).toHaveFocus();
+    await user.keyboard("{arrowup}");
+    expect(costInputs[0].value).toBe("2");
+    await user.keyboard("{arrowdown}{arrowdown}{arrowdown}{arrowdown}");
+    expect(costInputs[0].value).toBe("0");
+  });
+
   it("enforces maxLength and maxValue constraints on inputs", async () => {
     const user = userEvent.setup();
     render(

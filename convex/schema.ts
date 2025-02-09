@@ -2,42 +2,14 @@ import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
+  birthplace,
   category,
-  groupQuestsBy,
   jurisdiction,
   role,
   status,
   theme,
   timeRequiredUnit,
 } from "./validators";
-
-// ----------------------------------------------
-// Questions
-// ----------------------------------------------
-
-/**
- * A shared topic used to tag and organize questions.
- */
-const topics = defineTable({
-  /** The name of the topic. Should be short and unique. */
-  topic: v.string(),
-});
-
-/**
- * A frequently asked question and its answer.
- */
-const questions = defineTable({
-  /** A frequently asked question. */
-  question: v.string(),
-  /** The rich text answer to the question, stored as HTML. */
-  answer: v.string(),
-  /** One or more topics related to the question. */
-  topics: v.array(v.id("topics")),
-  /** Optional quests related to the question. */
-  relatedQuests: v.optional(v.array(v.id("quests"))),
-})
-  .index("topics", ["topics"])
-  .index("relatedQuests", ["relatedQuests"]);
 
 // ----------------------------------------------
 // Quests
@@ -50,7 +22,9 @@ const questions = defineTable({
 const quests = defineTable({
   /** The title of the quest. (e.g. "Court Order") */
   title: v.string(),
-  /** The category of the quest. (e.g. "Core", "Social") */
+  /** The slug of the quest. (e.g. "court-order") */
+  slug: v.string(),
+  /** The category of the quest. (e.g. "Education", "Social") */
   category: v.optional(category),
   /** The user who created the quest. */
   creationUser: v.id("users"),
@@ -77,12 +51,51 @@ const quests = defineTable({
   /** Links to official documentation about changing names for this quest. */
   urls: v.optional(v.array(v.string())),
   /** Time in ms since epoch when the quest was deleted. */
-  deletionTime: v.optional(v.number()),
-  /** Rich text comprising the contents of the quest, stored as HTML. */
+  deletedAt: v.optional(v.number()),
+  /** Steps in the quest */
+  steps: v.optional(v.array(v.id("questSteps"))),
+  /** Questions related to the quest. */
+  faqs: v.optional(v.array(v.id("questFaqs"))),
+})
+  .index("slug", ["slug"])
+  .index("category", ["category"])
+  .index("categoryAndJurisdiction", ["category", "jurisdiction"])
+  .index("faqs", ["faqs"]);
+
+/**
+ * A single step within a quest.
+ */
+const questSteps = defineTable({
+  /** The quest this step belongs to. */
+  questId: v.id("quests"),
+  /** The title of the step. (e.g. "Get prepared") */
+  title: v.string(),
+  /** Rich text comprising the contents of the step, stored as HTML. */
   content: v.optional(v.string()),
-  /** A JSON schema defining the form fields for this quest. */
-  formSchema: v.optional(v.string()),
-}).index("category", ["category"]);
+  /** An optional call to action for the step. */
+  button: v.optional(
+    v.object({
+      text: v.string(),
+      url: v.string(),
+    }),
+  ),
+}).index("quest", ["questId"]);
+
+/**
+ * A frequently asked question and its answer.
+ */
+const questFaqs = defineTable({
+  /** A frequently asked question. */
+  question: v.string(),
+  /** The rich text answer to the question, stored as HTML. */
+  answer: v.string(),
+  /** The user who published the FAQ. */
+  author: v.id("users"),
+  /** Date the FAQ was updated, in ms since epoch. */
+  updatedAt: v.number(),
+})
+  .index("author", ["author"])
+  .index("updatedAt", ["updatedAt"]);
 
 /**
  * A PDF document that can be filled out by users.
@@ -98,10 +111,8 @@ const documents = defineTable({
   creationUser: v.id("users"),
   /** The storageId for the PDF file. */
   file: v.optional(v.id("_storage")),
-  /** The US State the document applies to. */
-  jurisdiction: jurisdiction,
   /** Time in ms since epoch when the document was deleted. */
-  deletionTime: v.optional(v.number()),
+  deletedAt: v.optional(v.number()),
 }).index("quest", ["questId"]);
 
 // ----------------------------------------------
@@ -124,21 +135,21 @@ const users = defineTable({
   emailVerified: v.optional(v.boolean()),
   /** The US State where the user resides. */
   residence: v.optional(jurisdiction),
-  /** The US State where the user was born. */
-  birthplace: v.optional(jurisdiction),
+  /** The US State where the user was born, or "other" if they were born outside the US. */
+  birthplace: v.optional(birthplace),
   /** Whether the user is a minor. */
   isMinor: v.optional(v.boolean()),
 }).index("email", ["email"]);
 
 /**
- * A unique piece of user data that has been enteed through filling a form.
+ * A unique piece of user data that has been entered through filling a form.
  */
 const userFormData = defineTable({
   /** The user who owns the data. */
   userId: v.id("users"),
-  /** The name of the field, e.g. "firstName". */
+  /** The name of the field, e.g. "firstName" or "isMinor". */
   field: v.string(),
-  /** The value of the field. */
+  /** The value of the field, e.g. "Eva" or "false". */
   value: v.any(),
 })
   .index("userId", ["userId"])
@@ -152,8 +163,6 @@ const userSettings = defineTable({
   userId: v.id("users"),
   /** The user's preferred color scheme. (e.g. "system", "light", "dark") */
   theme: v.optional(theme),
-  /** The user's preferred way to group quests. (e.g. "dateAdded", "category") */
-  groupQuestsBy: v.optional(groupQuestsBy),
 }).index("userId", ["userId"]);
 
 /**
@@ -167,17 +176,32 @@ const userQuests = defineTable({
   /** The status of the quest. */
   status: status,
   /** Time in ms since epoch when the user marked the quest as complete. */
-  completionTime: v.optional(v.number()),
+  completedAt: v.optional(v.number()),
 })
   .index("userId", ["userId"])
   .index("questId", ["questId"]);
 
+// ----------------------------------------------
+// Early Access
+// ----------------------------------------------
+
+/**
+ * Codes to enable early access to the app.
+ */
+const earlyAccessCodes = defineTable({
+  /** The user who created the code. */
+  createdBy: v.id("users"),
+  /** The time the code was claimed. */
+  claimedAt: v.optional(v.number()),
+}).index("createdBy", ["createdBy"]);
+
 export default defineSchema({
   ...authTables,
-  questions,
-  topics,
+  earlyAccessCodes,
   documents,
   quests,
+  questSteps,
+  questFaqs,
   users,
   userFormData,
   userSettings,

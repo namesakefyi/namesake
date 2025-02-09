@@ -1,3 +1,4 @@
+import { Button } from "@/components/common";
 import { focusRing } from "@/components/utils";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
@@ -14,7 +15,6 @@ import {
   useLocale,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
-import { Button } from "../Button";
 
 const cellStyles = tv({
   extend: focusRing,

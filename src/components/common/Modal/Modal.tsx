@@ -1,3 +1,4 @@
+import { Dialog } from "@/components/common";
 import {
   Modal as AriaModal,
   Heading,
@@ -6,7 +7,6 @@ import {
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
-import { Dialog } from "../Dialog";
 
 const overlayStyles = tv({
   base: "fixed top-0 left-0 w-full h-[--visual-viewport-height] isolate z-20 bg-black/[15%] flex items-center justify-center p-4 backdrop-blur-lg",
@@ -21,7 +21,7 @@ const overlayStyles = tv({
 });
 
 const modalStyles = tv({
-  base: "p-5 w-[400px] max-w-full max-h-full rounded-2xl bg-gray-subtle forced-colors:bg-[Canvas] flex flex-col items-start gap-4 shadow-2xl bg-clip-padding border border-gray-dim",
+  base: "p-5 w-[400px] max-w-full max-h-full rounded-2xl bg-white dark:bg-graydark-2 forced-colors:bg-[Canvas] flex flex-col items-start gap-4 shadow-2xl bg-clip-padding border border-gray-dim",
   variants: {
     isEntering: {
       true: "animate-in zoom-in-105 ease-out duration-2",

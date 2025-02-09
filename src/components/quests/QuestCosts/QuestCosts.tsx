@@ -71,7 +71,7 @@ export const QuestCosts = ({ quest, editable = false }: QuestCostsProps) => {
               onPress={() => setIsEditing(true)}
               aria-label="Edit costs"
             />
-            <Tooltip>Edit</Tooltip>
+            <Tooltip>Edit costs</Tooltip>
           </TooltipTrigger>
           <EditQuestCostsModal
             quest={quest}

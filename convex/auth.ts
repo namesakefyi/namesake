@@ -26,11 +26,12 @@ export const createOrUpdateUser = async (ctx: MutationCtx, args: any) => {
       role: process.env.NODE_ENV === "development" ? "admin" : "user",
     })
     .then((userId) => {
+      // Initialize default user settings
       ctx.db.insert("userSettings", {
         userId,
         theme: "system",
-        groupQuestsBy: "dateAdded",
       });
+
       return userId;
     });
 };

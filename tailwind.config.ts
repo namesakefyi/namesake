@@ -1,3 +1,4 @@
+import tailwindcssContainerQueries from "@tailwindcss/container-queries";
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 import tailwindcssAriaAttributes from "tailwindcss-aria-attributes";
@@ -11,6 +12,29 @@ export default {
     tailwindcssReactAriaComponents,
     tailwindcssAnimate,
     tailwindcssAriaAttributes,
-    tailwindcssRadixColors,
+    tailwindcssRadixColors({
+      exclude: ["mauve", "sage", "olive", "sand"],
+      aliases: {
+        slate: "gray",
+      },
+    }),
+    tailwindcssContainerQueries,
   ],
+  theme: {
+    extend: {
+      animation: {
+        "fade-in": "fade-in 0.2s ease-in 0.2s both",
+      },
+      keyframes: {
+        "fade-in": {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
+        },
+      },
+    },
+  },
 } satisfies Config;
