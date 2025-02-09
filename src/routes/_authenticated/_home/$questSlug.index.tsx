@@ -11,6 +11,7 @@ import {
   QuestTimeRequired,
 } from "@/components/quests";
 import { QuestBasics } from "@/components/quests/QuestBasics/QuestBasics";
+import { QuestUpdated } from "@/components/quests/QuestUpdated/QuestUpdated";
 import { api } from "@convex/_generated/api";
 import { JURISDICTIONS } from "@convex/constants";
 import { createFileRoute, notFound } from "@tanstack/react-router";
@@ -67,6 +68,7 @@ function QuestDetailRoute() {
         <QuestDetails>
           <QuestCosts quest={quest} editable={isEditing} />
           <QuestTimeRequired quest={quest} editable={isEditing} />
+          <QuestUpdated quest={quest} />
         </QuestDetails>
         <QuestSteps quest={quest} editable={isEditing} />
         <QuestFaqs quest={quest} editable={isEditing} />
