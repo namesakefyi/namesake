@@ -7,7 +7,11 @@ interface QuestUpdatedProps {
 
 export function QuestUpdated({ quest }: QuestUpdatedProps) {
   const updated = quest.updatedAt
-    ? new Date(quest.updatedAt).toLocaleString()
+    ? new Date(quest.updatedAt).toLocaleDateString(navigator.language, {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
     : "Never";
 
   return <StatGroup label="Last Updated" value={updated} />;
