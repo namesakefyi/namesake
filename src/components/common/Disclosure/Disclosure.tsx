@@ -26,7 +26,7 @@ export interface DisclosureProps
 
 const disclosureTriggerStyles = tv({
   extend: focusRing,
-  base: "group flex-1 flex rounded-lg transition-colors text-gray-dim hover:text-gray-normal justify-between min-h-10 text-lg font-medium text-left",
+  base: "group flex-1 flex rounded-lg transition-colors text-gray-dim hover:text-gray-normal justify-between text-lg font-medium text-left py-2",
 });
 
 const disclosurePanelStyles = tv({
