@@ -174,7 +174,14 @@ const QuestTableRow = ({
         <Category />
       </TableCell>
       <TableCell>{questCount}</TableCell>
-      <TableCell>{new Date(quest._creationTime).toLocaleString()}</TableCell>
+      <TableCell>
+        {new Date(quest._creationTime).toLocaleDateString()}
+      </TableCell>
+      <TableCell>
+        {quest.updatedAt
+          ? new Date(quest.updatedAt).toLocaleDateString()
+          : "Never"}
+      </TableCell>
       <TableCell>
         <MenuTrigger>
           <Button
@@ -228,6 +235,7 @@ function QuestsRoute() {
           <TableColumn>Category</TableColumn>
           <TableColumn>Used By</TableColumn>
           <TableColumn>Created</TableColumn>
+          <TableColumn>Updated</TableColumn>
           <TableColumn />
         </TableHeader>
         <TableBody
