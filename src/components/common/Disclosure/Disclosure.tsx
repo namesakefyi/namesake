@@ -26,7 +26,7 @@ export interface DisclosureProps
 
 const disclosureTriggerStyles = tv({
   extend: focusRing,
-  base: "group flex-1 flex rounded-lg transition-colors text-gray-dim hover:text-gray-normal justify-between items-center min-h-10 text-lg font-medium text-left",
+  base: "group flex-1 flex rounded-lg transition-colors text-gray-dim hover:text-gray-normal justify-between min-h-10 text-lg font-medium text-left",
 });
 
 const disclosurePanelStyles = tv({
@@ -42,7 +42,7 @@ export function Disclosure({
 }: DisclosureProps) {
   return (
     <AriaDisclosure className={twMerge("group", className)} {...props}>
-      <Header className="flex items-center gap-1 w-full">
+      <Header className="flex items-start gap-1 w-full">
         <AriaButton
           className={composeRenderProps(className, (className, renderProps) =>
             disclosureTriggerStyles({
