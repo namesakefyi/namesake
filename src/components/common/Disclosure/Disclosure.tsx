@@ -26,7 +26,7 @@ export interface DisclosureProps
 
 const disclosureTriggerStyles = tv({
   extend: focusRing,
-  base: "group flex-1 flex rounded-lg transition-colors text-gray-dim hover:text-gray-normal justify-between items-center h-10 text-lg font-medium",
+  base: "group flex-1 flex rounded-lg transition-colors text-gray-dim hover:text-gray-normal justify-between items-center min-h-10 text-lg font-medium text-left",
 });
 
 const disclosurePanelStyles = tv({
@@ -57,7 +57,7 @@ export function Disclosure({
             size={20}
             className={twMerge(
               "group-hover:bg-graya-3 dark:group-hover:bg-graydarka-3 group-hover:text-gray-normal rounded-full size-8 p-1.5",
-              "transition-transform opacity-60",
+              "transition-transform opacity-60 shrink-0 ml-2",
               "group-data-[expanded]:rotate-180",
             )}
           />
