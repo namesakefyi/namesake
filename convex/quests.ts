@@ -146,6 +146,7 @@ export const create = userMutation({
       slug: finalSlug,
       timeRequired: DEFAULT_TIME_REQUIRED,
       creationUser: ctx.userId,
+      updatedAt: Date.now(),
     });
 
     return { questId, slug: finalSlug };
@@ -155,28 +156,40 @@ export const create = userMutation({
 export const setTitle = userMutation({
   args: { questId: v.id("quests"), title: v.string() },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, { title: args.title });
+    await ctx.db.patch(args.questId, {
+      title: args.title,
+      updatedAt: Date.now(),
+    });
   },
 });
 
 export const setJurisdiction = userMutation({
   args: { questId: v.id("quests"), jurisdiction: v.optional(jurisdiction) },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, { jurisdiction: args.jurisdiction });
+    await ctx.db.patch(args.questId, {
+      jurisdiction: args.jurisdiction,
+      updatedAt: Date.now(),
+    });
   },
 });
 
 export const setCategory = userMutation({
   args: { questId: v.id("quests"), category: v.optional(category) },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, { category: args.category });
+    await ctx.db.patch(args.questId, {
+      category: args.category,
+      updatedAt: Date.now(),
+    });
   },
 });
 
 export const setUrls = userMutation({
   args: { questId: v.id("quests"), urls: v.optional(v.array(v.string())) },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, { urls: args.urls });
+    await ctx.db.patch(args.questId, {
+      urls: args.urls,
+      updatedAt: Date.now(),
+    });
   },
 });
 
@@ -189,7 +202,10 @@ export const addUrl = userMutation({
 
     const existingUrls = quest.urls || [];
 
-    await ctx.db.patch(args.questId, { urls: [...existingUrls, args.url] });
+    await ctx.db.patch(args.questId, {
+      urls: [...existingUrls, args.url],
+      updatedAt: Date.now(),
+    });
   },
 });
 
@@ -204,6 +220,7 @@ export const deleteUrl = userMutation({
 
     await ctx.db.patch(args.questId, {
       urls: existingUrls.filter((u) => u !== args.url),
+      updatedAt: Date.now(),
     });
   },
 });
@@ -221,7 +238,10 @@ export const setCosts = userMutation({
     ),
   },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, { costs: args.costs });
+    await ctx.db.patch(args.questId, {
+      costs: args.costs,
+      updatedAt: Date.now(),
+    });
   },
 });
 
@@ -240,6 +260,7 @@ export const setTimeRequired = userMutation({
   handler: async (ctx, args) => {
     await ctx.db.patch(args.questId, {
       timeRequired: args.timeRequired,
+      updatedAt: Date.now(),
     });
   },
 });
@@ -265,6 +286,7 @@ export const addStep = userMutation({
 
     await ctx.db.patch(args.questId, {
       steps: [...existingSteps, newStep],
+      updatedAt: Date.now(),
     });
   },
 });
@@ -287,6 +309,7 @@ export const deleteStep = userMutation({
 
     await ctx.db.patch(args.questId, {
       steps: updatedSteps,
+      updatedAt: Date.now(),
     });
 
     // Delete the step
@@ -308,7 +331,10 @@ export const addFaq = userMutation({
 
     const existingFaqs = quest.faqs || [];
 
-    await ctx.db.patch(args.questId, { faqs: [...existingFaqs, questFaqId] });
+    await ctx.db.patch(args.questId, {
+      faqs: [...existingFaqs, questFaqId],
+      updatedAt: Date.now(),
+    });
   },
 });
 
@@ -321,7 +347,10 @@ export const deleteFaq = userMutation({
 
     const updatedFaqs = quest.faqs?.filter((id) => id !== args.questFaqId);
 
-    await ctx.db.patch(args.questId, { faqs: updatedFaqs });
+    await ctx.db.patch(args.questId, {
+      faqs: updatedFaqs,
+      updatedAt: Date.now(),
+    });
   },
 });
 
