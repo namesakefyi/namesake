@@ -52,7 +52,7 @@ export function Disclosure({
           )}
           slot="trigger"
         >
-          {title}
+          <span className="my-0.5">{title}</span>
           <ChevronDown
             size={20}
             className={twMerge(
