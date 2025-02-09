@@ -56,8 +56,8 @@ export function Disclosure({
           <ChevronDown
             size={20}
             className={twMerge(
-              "group-hover:bg-graya-3 dark:group-hover:bg-graydarka-3 group-hover:text-gray-normal rounded-full size-8 p-1.5",
-              "transition-transform opacity-60 shrink-0 ml-2",
+              "group-hover:bg-graya-3 dark:group-hover:bg-graydarka-3 group-hover:text-gray-normal rounded-full size-8 p-1.5 shrink-0 ml-2",
+              "transition-transform opacity-60",
               "group-data-[expanded]:rotate-180",
             )}
           />
