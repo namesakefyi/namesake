@@ -212,9 +212,8 @@ export const deleteUrl = userMutation({
 
     const existingUrls = quest.urls || [];
 
-    await ctx.db.patch(args.questId, {
+    await updateQuest(ctx, args.questId, {
       urls: existingUrls.filter((u) => u !== args.url),
-      updatedAt: Date.now(),
     });
   },
 });
@@ -271,10 +270,8 @@ export const addStep = userMutation({
     });
 
     const existingSteps = quest.steps || [];
-
-    await ctx.db.patch(args.questId, {
+    await updateQuest(ctx, args.questId, {
       steps: [...existingSteps, newStep],
-      updatedAt: Date.now(),
     });
   },
 });
@@ -295,12 +292,7 @@ export const deleteStep = userMutation({
       (stepId) => stepId !== args.stepId,
     );
 
-    await ctx.db.patch(args.questId, {
-      steps: updatedSteps,
-      updatedAt: Date.now(),
-    });
-
-    // Delete the step
+    await updateQuest(ctx, args.questId, { steps: updatedSteps });
     await ctx.db.delete(args.stepId);
   },
 });
@@ -319,9 +311,8 @@ export const addFaq = userMutation({
 
     const existingFaqs = quest.faqs || [];
 
-    await ctx.db.patch(args.questId, {
+    await updateQuest(ctx, args.questId, {
       faqs: [...existingFaqs, questFaqId],
-      updatedAt: Date.now(),
     });
   },
 });
@@ -335,24 +326,21 @@ export const deleteFaq = userMutation({
 
     const updatedFaqs = quest.faqs?.filter((id) => id !== args.questFaqId);
 
-    await ctx.db.patch(args.questId, {
-      faqs: updatedFaqs,
-      updatedAt: Date.now(),
-    });
+    await updateQuest(ctx, args.questId, { faqs: updatedFaqs });
   },
 });
 
 export const softDelete = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, { deletedAt: Date.now() });
+    await updateQuest(ctx, args.questId, { deletedAt: Date.now() });
   },
 });
 
 export const undoSoftDelete = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
-    await ctx.db.patch(args.questId, { deletedAt: undefined });
+    await updateQuest(ctx, args.questId, { deletedAt: undefined });
   },
 });
 
