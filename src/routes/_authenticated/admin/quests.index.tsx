@@ -1,3 +1,4 @@
+import { TimeAgo } from "@/components/TimeAgo";
 import { PageHeader } from "@/components/app";
 import {
   Badge,
@@ -175,12 +176,14 @@ const QuestTableRow = ({
       </TableCell>
       <TableCell>{questCount}</TableCell>
       <TableCell>
-        {new Date(quest._creationTime).toLocaleDateString()}
+        <TimeAgo date={new Date(quest._creationTime)} />
       </TableCell>
       <TableCell>
-        {quest.updatedAt
-          ? new Date(quest.updatedAt).toLocaleDateString()
-          : "Never"}
+        {quest.updatedAt ? (
+          <TimeAgo date={new Date(quest.updatedAt)} />
+        ) : (
+          "Never"
+        )}
       </TableCell>
       <TableCell>
         <MenuTrigger>
