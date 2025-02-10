@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import type { Doc, Id } from "./_generated/dataModel";
-import { query } from "./_generated/server";
+import { type MutationCtx, query } from "./_generated/server";
 import {
   type Category,
   DEFAULT_TIME_REQUIRED,
@@ -155,7 +155,7 @@ export const create = userMutation({
 });
 
 function updateQuest(
-  ctx: Parameters<typeof userMutation.call>[1],
+  ctx: MutationCtx,
   questId: Id<"quests">,
   update: Partial<Doc<"quests">>,
 ) {
