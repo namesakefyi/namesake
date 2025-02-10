@@ -11,6 +11,7 @@ import {
   QuestTimeRequired,
 } from "@/components/quests";
 import { QuestBasics } from "@/components/quests/QuestBasics/QuestBasics";
+import { QuestPageFooter } from "@/components/quests/QuestPageFooter/QuestPageFooter";
 import { api } from "@convex/_generated/api";
 import { JURISDICTIONS } from "@convex/constants";
 import { createFileRoute, notFound } from "@tanstack/react-router";
@@ -73,6 +74,7 @@ function QuestDetailRoute() {
         <QuestDocuments quest={quest} editable={isEditing} />
         <QuestReferences quest={quest} editable={isEditing} />
       </div>
+      <QuestPageFooter quest={quest} />
     </AppContent>
   );
 }
