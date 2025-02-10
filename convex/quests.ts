@@ -293,6 +293,8 @@ export const deleteStep = userMutation({
     );
 
     await updateQuest(ctx, args.questId, { steps: updatedSteps });
+
+    // Delete the step
     await ctx.db.delete(args.stepId);
   },
 });
