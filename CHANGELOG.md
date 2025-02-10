@@ -1,5 +1,16 @@
 # namesake
 
+## 0.20.0
+
+### Minor Changes
+
+- 0882e88: Add end-to-end encryption of user form data
+- f329558: Add pasword strength meter and enforce minimum password strength for new registrations
+
+### Patch Changes
+
+- eed5d89: Fixes layout issues with long questions
+
 ## 0.19.3
 
 ### Patch Changes
