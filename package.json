@@ -79,7 +79,6 @@
     "react-dom": "^19.0.0",
     "react-helmet-async": "^2.0.5",
     "react-random-reveal": "^2.0.1",
-    "react-relative-time": "^0.0.9",
     "resend": "4.1.2",
     "sonner": "^1.7.4",
     "storybook": "^8.5.3",

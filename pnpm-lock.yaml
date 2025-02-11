@@ -144,9 +144,6 @@ importers:
       react-random-reveal:
         specifier: ^2.0.1
         version: 2.0.1(react@19.0.0)
-      react-relative-time:
-        specifier: ^0.0.9
-        version: 0.0.9(react@19.0.0)
       resend:
         specifier: 4.1.2
         version: 4.1.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -4697,11 +4694,6 @@ packages:
     resolution: {integrity: sha512-FDxoD75CbPbtrfn/RoYM7Iq9syLB5n/JdPHPEaXV5lj7W5hH7XyJqMQXqTpgAr3GjoWfFxotqWfB+V2IW6GcYw==}
     peerDependencies:
       react: '>=16.8.0'
-
-  react-relative-time@0.0.9:
-    resolution: {integrity: sha512-Vf59erCwSaJaYp/IhoEtq7dtt1y4YNDqNegmOY8sK2P6oHHe3sLOXjz9VTCr0yvL2Y7W6uwufrxU4jOX8fS/dA==}
-    peerDependencies:
-      react: '>=0.13.0'
 
   react-stately@3.35.0:
     resolution: {integrity: sha512-1BH21J/TOHpyZe7c+f1BU2bnRWaBDTjLH0WdBuzNfPOXu7RBG3ebPIRvqd7UkPaVfIcol2QJnxe8S0a314JWKA==}
@@ -10477,10 +10469,6 @@ snapshots:
     dependencies:
       react: 19.0.0
       use-elapsed-time: 3.0.2(react@19.0.0)
-
-  react-relative-time@0.0.9(react@19.0.0):
-    dependencies:
-      react: 19.0.0
 
   react-stately@3.35.0(react@19.0.0):
     dependencies:
