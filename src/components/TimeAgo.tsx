@@ -49,6 +49,6 @@ export function getRelativeTimeString(
   const division = TIME_DIVISIONS[divisionIndex];
   const divisor = divisionIndex ? TIME_DIVISIONS[divisionIndex - 1].seconds : 1;
 
-  const rtf = new Intl.RelativeTimeFormat(lang, { numeric: "auto" });
-  return rtf.format(Math.floor(deltaSeconds / divisor), division.unit);
+  const timeFormat = new Intl.RelativeTimeFormat(lang, { numeric: "auto" });
+  return timeFormat.format(Math.floor(deltaSeconds / divisor), division.unit);
 }
