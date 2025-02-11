@@ -7,8 +7,8 @@ interface QuestPageFooterProps {
 
 export function QuestPageFooter({ quest }: QuestPageFooterProps) {
   return (
-    <div className="border-t border-gray-dim py-4">
+    <footer className="border-t border-gray-dim py-4">
       <QuestUpdated quest={quest} />
-    </div>
+    </footer>
   );
 }
