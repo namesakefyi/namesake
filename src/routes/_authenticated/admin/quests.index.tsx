@@ -1,4 +1,4 @@
-import { TimeAgo } from "@/components/TimeAgo";
+import { FormattedDate } from "@/components/FormattedDate";
 import { PageHeader } from "@/components/app";
 import {
   Badge,
@@ -176,11 +176,11 @@ const QuestTableRow = ({
       </TableCell>
       <TableCell>{questCount}</TableCell>
       <TableCell>
-        <TimeAgo date={new Date(quest._creationTime)} />
+        <FormattedDate date={new Date(quest._creationTime)} />
       </TableCell>
       <TableCell>
         {quest.updatedAt ? (
-          <TimeAgo date={new Date(quest.updatedAt)} />
+          <FormattedDate date={new Date(quest.updatedAt)} />
         ) : (
           "Never"
         )}
