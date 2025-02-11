@@ -108,6 +108,8 @@ describe("quests", () => {
       expect(quest?.jurisdiction).toBe("MA");
       expect(quest?.slug).toBe(slug);
       expect(quest?.creationUser).toBe(userId);
+      expect(quest?.updatedAt).toBeCloseTo(Date.now(), -3);
+      expect(quest?.updatedBy).toBeUndefined();
     });
 
     it("should generate unique slugs for duplicate titles", async () => {
@@ -162,6 +164,8 @@ describe("quests", () => {
       const quest = await asUser.query(api.quests.getById, { questId });
       expect(quest?.deletedAt).toBeDefined();
       expect(typeof quest?.deletedAt).toBe("number");
+      expect(quest?.updatedAt).toBeCloseTo(Date.now(), -3);
+      expect(quest?.updatedBy).toBe(userId);
     });
 
     it("should be reversible", async () => {
@@ -187,6 +191,8 @@ describe("quests", () => {
 
       const quest = await asUser.query(api.quests.getById, { questId });
       expect(quest?.deletedAt).toBeUndefined();
+      expect(quest?.updatedAt).toBeCloseTo(Date.now(), -3);
+      expect(quest?.updatedBy).toBe(userId);
     });
   });
 
