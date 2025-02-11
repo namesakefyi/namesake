@@ -38,7 +38,7 @@ export function getRelativeTimeString(
   const miliseconds = date.getTime();
   const deltaSeconds = Math.round((miliseconds - Date.now()) / 1000);
 
-  if (Math.abs(deltaSeconds) < 60) {
+  if (Math.abs(deltaSeconds) < 60 && lang.startsWith("en")) {
     return "just now";
   }
 
