@@ -34,12 +34,16 @@ export function TimeField<T extends TimeValue>({
         "flex flex-col gap-1",
       )}
     >
-      {label && <Label>{label}</Label>}
-      <FieldGroup>
-        <DateInput />
-      </FieldGroup>
-      {description && <FieldDescription>{description}</FieldDescription>}
-      <FieldError>{errorMessage}</FieldError>
+      {(renderProps) => (
+        <>
+          {label && <Label>{label}</Label>}
+          <FieldGroup {...renderProps}>
+            <DateInput />
+          </FieldGroup>
+          {description && <FieldDescription>{description}</FieldDescription>}
+          <FieldError>{errorMessage}</FieldError>
+        </>
+      )}
     </AriaTimeField>
   );
 }
