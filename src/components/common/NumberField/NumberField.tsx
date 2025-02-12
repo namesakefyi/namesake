@@ -38,40 +38,44 @@ export function NumberField({
         "group flex flex-col gap-1.5",
       )}
     >
-      {label && <Label>{label}</Label>}
-      <FieldGroup>
-        {(renderProps) => (
-          <>
-            {prefix && (
-              <span className="text-gray-9 dark:text-graydark-9 ml-2 -mr-2">
-                {prefix}
-              </span>
+      {(renderProps) => (
+        <>
+          {label && <Label>{label}</Label>}
+          <FieldGroup {...renderProps}>
+            {(renderProps) => (
+              <>
+                {prefix && (
+                  <span className="text-gray-9 dark:text-graydark-9 ml-2 -mr-2">
+                    {prefix}
+                  </span>
+                )}
+                <Input />
+                <div
+                  className={innerBorderStyles({
+                    ...renderProps,
+                    class: "flex flex-col border-s h-10",
+                  })}
+                >
+                  <StepperButton slot="increment">
+                    <ChevronUp aria-hidden className="w-4 h-4" />
+                  </StepperButton>
+                  <div
+                    className={innerBorderStyles({
+                      ...renderProps,
+                      class: "border-b",
+                    })}
+                  />
+                  <StepperButton slot="decrement">
+                    <ChevronDown aria-hidden className="w-4 h-4" />
+                  </StepperButton>
+                </div>
+              </>
             )}
-            <Input />
-            <div
-              className={innerBorderStyles({
-                ...renderProps,
-                class: "flex flex-col border-s h-10",
-              })}
-            >
-              <StepperButton slot="increment">
-                <ChevronUp aria-hidden className="w-4 h-4" />
-              </StepperButton>
-              <div
-                className={innerBorderStyles({
-                  ...renderProps,
-                  class: "border-b",
-                })}
-              />
-              <StepperButton slot="decrement">
-                <ChevronDown aria-hidden className="w-4 h-4" />
-              </StepperButton>
-            </div>
-          </>
-        )}
-      </FieldGroup>
-      {description && <FieldDescription>{description}</FieldDescription>}
-      <FieldError>{errorMessage}</FieldError>
+          </FieldGroup>
+          {description && <FieldDescription>{description}</FieldDescription>}
+          <FieldError>{errorMessage}</FieldError>
+        </>
+      )}
     </AriaNumberField>
   );
 }

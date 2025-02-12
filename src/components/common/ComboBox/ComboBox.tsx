@@ -45,25 +45,29 @@ export function ComboBox<T extends object>({
         "group flex flex-col gap-1",
       )}
     >
-      <Label>{label}</Label>
-      <FieldGroup>
-        <Input />
-        <Button
-          variant="icon"
-          className="w-7 h-7 p-0 mr-1 outline-offset-0"
-          icon={ChevronDown}
-        />
-      </FieldGroup>
-      {description && <FieldDescription>{description}</FieldDescription>}
-      <FieldError>{errorMessage}</FieldError>
-      <Popover title="Select an option" className="w-[--trigger-width]">
-        <ListBox
-          items={items}
-          className="outline-0 p-1 max-h-[inherit] overflow-auto [clip-path:inset(0_0_0_0_round_.75rem)]"
-        >
-          {children}
-        </ListBox>
-      </Popover>
+      {(renderProps) => (
+        <>
+          <Label>{label}</Label>
+          <FieldGroup {...renderProps}>
+            <Input />
+            <Button
+              variant="icon"
+              className="w-7 h-7 p-0 mr-1 outline-offset-0"
+              icon={ChevronDown}
+            />
+          </FieldGroup>
+          {description && <FieldDescription>{description}</FieldDescription>}
+          <FieldError>{errorMessage}</FieldError>
+          <Popover title="Select an option" className="w-[--trigger-width]">
+            <ListBox
+              items={items}
+              className="outline-0 p-1 max-h-[inherit] overflow-auto [clip-path:inset(0_0_0_0_round_.75rem)]"
+            >
+              {children}
+            </ListBox>
+          </Popover>
+        </>
+      )}
     </AriaComboBox>
   );
 }
