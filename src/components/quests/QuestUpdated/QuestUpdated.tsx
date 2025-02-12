@@ -8,7 +8,7 @@ export function QuestUpdated({ quest }: QuestUpdatedProps) {
   const updatedTime = quest.updatedAt ? (
     <TimeAgo date={new Date(quest.updatedAt)} />
   ) : (
-    "Never"
+    "some time ago"
   );
 
   return <span className="text-gray-dim text-sm">Updated {updatedTime}</span>;
