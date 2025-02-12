@@ -1,10 +1,20 @@
 import { convexTest } from "convex-test";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "./_generated/api";
 import schema from "./schema";
 import { modules } from "./test.setup";
 
+const NOW = 662585400000;
+
 describe("quests", () => {
+  beforeEach(() => {
+    vi.setSystemTime(NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   describe("getAll", () => {
     it("should return all quests", async () => {
       const t = convexTest(schema, modules);
@@ -108,8 +118,7 @@ describe("quests", () => {
       expect(quest?.jurisdiction).toBe("MA");
       expect(quest?.slug).toBe(slug);
       expect(quest?.creationUser).toBe(userId);
-      expect(quest?.updatedAt).toBeCloseTo(Date.now(), -3);
-      expect(quest?.updatedBy).toBeUndefined();
+      expect(quest?.updatedAt).toBe(NOW);
       expect(quest?.updatedBy).toBe(userId);
     });
 
@@ -165,7 +174,7 @@ describe("quests", () => {
       const quest = await asUser.query(api.quests.getById, { questId });
       expect(quest?.deletedAt).toBeDefined();
       expect(typeof quest?.deletedAt).toBe("number");
-      expect(quest?.updatedAt).toBeCloseTo(Date.now(), -3);
+      expect(quest?.updatedAt).toBe(NOW);
       expect(quest?.updatedBy).toBe(userId);
     });
 
@@ -192,7 +201,7 @@ describe("quests", () => {
 
       const quest = await asUser.query(api.quests.getById, { questId });
       expect(quest?.deletedAt).toBeUndefined();
-      expect(quest?.updatedAt).toBeCloseTo(Date.now(), -3);
+      expect(quest?.updatedAt).toBe(NOW);
       expect(quest?.updatedBy).toBe(userId);
     });
   });
