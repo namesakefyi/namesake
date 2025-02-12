@@ -1,10 +1,35 @@
 import { convexTest } from "convex-test";
-import { describe, expect, it } from "vitest";
+import type { TestConvex } from "convex-test";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "./_generated/api";
+import type { Id } from "./_generated/dataModel";
 import schema from "./schema";
 import { modules } from "./test.setup";
 
+const NOW = 662585400000;
+
+const expectQuestUpdated = async (
+  t: TestConvex<typeof schema>,
+  questId: Id<"quests">,
+  userId: Id<"users">,
+) => {
+  const updatedQuest = await t.run(async (ctx) => {
+    return await ctx.db.get(questId);
+  });
+  expect(updatedQuest?.updatedAt).toBe(NOW);
+  expect(updatedQuest?.updatedBy).toBe(userId);
+};
+
 describe("questSteps", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(NOW);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   describe("create", () => {
     it("should create a quest step", async () => {
       const t = convexTest(schema, modules);
@@ -91,6 +116,8 @@ describe("questSteps", () => {
         content: "Test Content",
       });
       expect(questStep?.button).toBeUndefined();
+
+      await expectQuestUpdated(t, questId, userId);
     });
   });
 
@@ -206,6 +233,8 @@ describe("questSteps", () => {
           url: "https://example.com/new",
         },
       });
+
+      await expectQuestUpdated(t, questId, userId);
     });
 
     it("should allow partial updates", async () => {
