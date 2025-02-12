@@ -110,6 +110,7 @@ describe("quests", () => {
       expect(quest?.creationUser).toBe(userId);
       expect(quest?.updatedAt).toBeCloseTo(Date.now(), -3);
       expect(quest?.updatedBy).toBeUndefined();
+      expect(quest?.updatedBy).toBe(userId);
     });
 
     it("should generate unique slugs for duplicate titles", async () => {

@@ -148,6 +148,7 @@ export const create = userMutation({
       timeRequired: DEFAULT_TIME_REQUIRED,
       creationUser: ctx.userId,
       updatedAt: Date.now(),
+      updatedBy: ctx.userId,
     });
 
     return { questId, slug: finalSlug };
