@@ -182,7 +182,7 @@ const QuestTableRow = ({
         {quest.updatedAt ? (
           <FormattedDate date={new Date(quest.updatedAt)} />
         ) : (
-          "Never"
+          "some time ago"
         )}
       </TableCell>
       <TableCell>
