@@ -36,13 +36,23 @@ export default defineConfig({
   },
   test: {
     globals: true,
-    environmentMatchGlobs: [
-      ["convex/**", "edge-runtime"],
-      ["**", "jsdom"],
-    ],
-    include: [
-      "src/**/*.{test,spec}.{ts,tsx}",
-      "convex/**/*.{test,spec}.{ts,tsx}",
+    workspace: [
+      {
+        extends: true,
+        test: {
+          name: "convex",
+          include: ["convex/**/*.test.ts"],
+          environment: "edge-runtime",
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: "jsdom",
+          include: ["src/**/*.test.{ts,tsx}"],
+          environment: "jsdom",
+        },
+      },
     ],
     exclude: [...configDefaults.exclude, "tests/**"],
     coverage: {
