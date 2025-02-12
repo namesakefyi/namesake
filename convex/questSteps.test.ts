@@ -6,7 +6,7 @@ import type { Id } from "./_generated/dataModel";
 import schema from "./schema";
 import { modules } from "./test.setup";
 
-const NOW = 662585400000;
+const UPDATE_TIMESTAMP = new Date("1969-06-28T01:20:00-04:00").getTime();
 
 const expectQuestUpdated = async (
   t: TestConvex<typeof schema>,
@@ -16,14 +16,14 @@ const expectQuestUpdated = async (
   const updatedQuest = await t.run(async (ctx) => {
     return await ctx.db.get(questId);
   });
-  expect(updatedQuest?.updatedAt).toBe(NOW);
+  expect(updatedQuest?.updatedAt).toBe(UPDATE_TIMESTAMP);
   expect(updatedQuest?.updatedBy).toBe(userId);
 };
 
 describe("questSteps", () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    vi.setSystemTime(NOW);
+    vi.setSystemTime(UPDATE_TIMESTAMP);
   });
 
   afterEach(() => {
