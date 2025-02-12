@@ -85,8 +85,8 @@ describe("questFaqs", () => {
   });
 
   it("deletes a questFaq and removes it from associated quest", async () => {
-    const INITIAL_QUEST_UPDATE_TIMESTAMP = 662585400000;
-    const DELETION_UPDATE_TIMESTAMP = 66658540000;
+    const INITIAL_QUEST_UPDATE_TIMESTAMP = new Date("1966-08-01").getTime();
+    const DELETION_UPDATE_TIMESTAMP = new Date("1966-08-02").getTime();
 
     const t = convexTest(schema, modules);
 
