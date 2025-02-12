@@ -313,6 +313,22 @@ export const addFaq = userMutation({
   },
 });
 
+export const addFaqId = userMutation({
+  args: {
+    questId: v.id("quests"),
+    questFaqId: v.id("questFaqs"),
+  },
+  handler: async (ctx, args) => {
+    const quest = await ctx.db.get(args.questId);
+    if (!quest) throw new Error("Quest not found");
+
+    const existingFaqs = quest.faqs || [];
+    await updateQuest(ctx, args.questId, ctx.userId, {
+      faqs: [...existingFaqs, args.questFaqId],
+    });
+  },
+});
+
 export const deleteFaq = userMutation({
   args: { questId: v.id("quests"), questFaqId: v.id("questFaqs") },
   handler: async (ctx, args) => {
