@@ -48,7 +48,7 @@ export default defineConfig({
       {
         extends: true,
         test: {
-          name: "jsdom",
+          name: "components",
           include: ["src/**/*.test.{ts,tsx}"],
           environment: "jsdom",
         },
