@@ -19,6 +19,9 @@ importers:
       '@convex-dev/auth':
         specifier: ^0.0.80
         version: 0.0.80(@auth/core@0.37.4)(convex@1.19.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
+      '@convex-dev/migrations':
+        specifier: ^0.2.5
+        version: 0.2.5(convex@1.19.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
       '@faker-js/faker':
         specifier: ^9.5.0
         version: 9.5.0
@@ -580,6 +583,11 @@ packages:
     peerDependenciesMeta:
       react:
         optional: true
+
+  '@convex-dev/migrations@0.2.5':
+    resolution: {integrity: sha512-qxIVTaIatOt4WbKygUZ1Wuu3e0EJ/hSxZVl5jrGCiLPlUjIQ9MpfstQquQmbcHtJOGkzt+CcVoJsISGXPciS/g==}
+    peerDependencies:
+      convex: ~1.16.5 || >=1.17.0 <1.25.0
 
   '@csstools/color-helpers@5.0.1':
     resolution: {integrity: sha512-MKtmkA0BX87PKaO1NFRTFH+UnkgnmySQOvNxJubsadusqPEC2aJ9MOQiMceZJJ6oitUl/i0L6u0M1IrmAOmgBA==}
@@ -5386,6 +5394,10 @@ snapshots:
       server-only: 0.0.1
     optionalDependencies:
       react: 19.0.0
+
+  '@convex-dev/migrations@0.2.5(convex@1.19.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
+    dependencies:
+      convex: 1.19.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
   '@csstools/color-helpers@5.0.1': {}
 

@@ -37,6 +37,7 @@
   "dependencies": {
     "@auth/core": "0.37.4",
     "@convex-dev/auth": "^0.0.80",
+    "@convex-dev/migrations": "^0.2.5",
     "@faker-js/faker": "^9.5.0",
     "@maskito/core": "^3.2.1",
     "@maskito/react": "^3.2.1",
