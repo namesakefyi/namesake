@@ -1,5 +1,20 @@
 # namesake
 
+## 0.20.0
+
+### Minor Changes
+
+- cdcf7d5: Set up migrations for future database updates
+- 3f68a59: Shows the date quests were last updated
+- 0882e88: Add end-to-end encryption of user form data
+- f329558: Add pasword strength meter and enforce minimum password strength for new registrations
+
+### Patch Changes
+
+- 0d77597: Fix error borders for invalid fields
+- 297b320: Patch esbuild security advisory
+- eed5d89: Fixes layout issues with long questions
+
 ## 0.19.3
 
 ### Patch Changes
