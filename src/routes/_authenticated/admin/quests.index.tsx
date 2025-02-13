@@ -1,3 +1,4 @@
+import { FormattedDate } from "@/components/FormattedDate";
 import { PageHeader } from "@/components/app";
 import {
   Badge,
@@ -174,7 +175,16 @@ const QuestTableRow = ({
         <Category />
       </TableCell>
       <TableCell>{questCount}</TableCell>
-      <TableCell>{new Date(quest._creationTime).toLocaleString()}</TableCell>
+      <TableCell>
+        <FormattedDate date={new Date(quest._creationTime)} />
+      </TableCell>
+      <TableCell>
+        {quest.updatedAt ? (
+          <FormattedDate date={new Date(quest.updatedAt)} />
+        ) : (
+          "some time ago"
+        )}
+      </TableCell>
       <TableCell>
         <MenuTrigger>
           <Button
@@ -228,6 +238,7 @@ function QuestsRoute() {
           <TableColumn>Category</TableColumn>
           <TableColumn>Used By</TableColumn>
           <TableColumn>Created</TableColumn>
+          <TableColumn>Updated</TableColumn>
           <TableColumn />
         </TableHeader>
         <TableBody
