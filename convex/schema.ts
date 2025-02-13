@@ -212,4 +212,5 @@ export default defineSchema({
   userFormData,
   userSettings,
   userQuests,
+  migrations: defineTable({}),
 });
