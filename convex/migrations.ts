@@ -1,12 +1,12 @@
 import { Migrations } from "@convex-dev/migrations";
-import { components } from "./_generated/api.js";
+import { components, internal } from "./_generated/api.js";
 import type { DataModel } from "./_generated/dataModel.js";
 
 export const migrations = new Migrations<DataModel>(components.migrations);
 export const run = migrations.runner();
 
-// Sets the `updatedAt` timestamp for all quests in preparation for making it required.
-export const setQuestsUpdatedAtTimestamp = migrations.define({
+// Set the updatedAt timestamp for quests where it is undefined.
+export const setQuestsUpdatedTimestamp = migrations.define({
   table: "quests",
   migrateOne: async (ctx, quest) => {
     if (quest.updatedAt === undefined) {
@@ -14,3 +14,8 @@ export const setQuestsUpdatedAtTimestamp = migrations.define({
     }
   },
 });
+
+// Run the setQuestsUpdatedTimestamp migration.
+export const runSetQuestsUpdatedTimestamp = migrations.runner(
+  internal.migrations.setQuestsUpdatedTimestamp,
+);
