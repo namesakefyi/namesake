@@ -34,12 +34,16 @@ export function TextArea({
         "flex flex-col gap-1.5",
       )}
     >
-      {label && <Label size={size}>{label}</Label>}
-      <FieldGroup size={size}>
-        <InputTextArea size={size} />
-      </FieldGroup>
-      {description && <FieldDescription>{description}</FieldDescription>}
-      <FieldError>{errorMessage}</FieldError>
+      {(renderProps) => (
+        <>
+          {label && <Label size={size}>{label}</Label>}
+          <FieldGroup {...renderProps} size={size}>
+            <InputTextArea size={size} />
+          </FieldGroup>
+          {description && <FieldDescription>{description}</FieldDescription>}
+          <FieldError>{errorMessage}</FieldError>
+        </>
+      )}
     </AriaTextField>
   );
 }

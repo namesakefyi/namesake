@@ -39,12 +39,16 @@ export function DateField<T extends DateValue>({
         "flex flex-col gap-1",
       )}
     >
-      {label && <Label size={size}>{label}</Label>}
-      <FieldGroup size={size}>
-        <DateInput size={size} />
-      </FieldGroup>
-      {description && <FieldDescription>{description}</FieldDescription>}
-      <FieldError>{errorMessage}</FieldError>
+      {(renderProps) => (
+        <>
+          {label && <Label size={size}>{label}</Label>}
+          <FieldGroup {...renderProps} size={size}>
+            <DateInput size={size} />
+          </FieldGroup>
+          {description && <FieldDescription>{description}</FieldDescription>}
+          <FieldError>{errorMessage}</FieldError>
+        </>
+      )}
     </AriaDateField>
   );
 }

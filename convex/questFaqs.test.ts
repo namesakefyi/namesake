@@ -1,10 +1,28 @@
 import { convexTest } from "convex-test";
-import { describe, expect, it } from "vitest";
+import type { TestConvex } from "convex-test";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { api } from "./_generated/api";
+import type { Id } from "./_generated/dataModel";
 import schema from "./schema";
 import { modules } from "./test.setup";
 
+const expectQuestUpdated = async (
+  t: TestConvex<typeof schema>,
+  questId: Id<"quests">,
+  userId: Id<"users">,
+  expectedTime: number,
+) => {
+  const updatedQuest = await t.run(async (ctx) => {
+    return await ctx.db.get(questId);
+  });
+  expect(updatedQuest?.updatedAt).toBe(expectedTime);
+  expect(updatedQuest?.updatedBy).toBe(userId);
+};
+
 describe("questFaqs", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
   it("creates a questFaq", async () => {
     const t = convexTest(schema, modules);
 
@@ -67,6 +85,9 @@ describe("questFaqs", () => {
   });
 
   it("deletes a questFaq and removes it from associated quest", async () => {
+    const INITIAL_QUEST_UPDATE_TIMESTAMP = new Date("1966-08-01").getTime();
+    const DELETION_UPDATE_TIMESTAMP = new Date("1966-08-02").getTime();
+
     const t = convexTest(schema, modules);
 
     const userId = await t.run(async (ctx) => {
@@ -89,6 +110,9 @@ describe("questFaqs", () => {
       });
     });
 
+    // Set first time before creating the association
+    vi.setSystemTime(INITIAL_QUEST_UPDATE_TIMESTAMP);
+
     // Create an FAQ
     const faqId = await asUser.mutation(api.questFaqs.create, {
       question: "How much does the process cost?",
@@ -96,11 +120,21 @@ describe("questFaqs", () => {
     });
 
     // Associate FAQ with quest
-    await t.run(async (ctx) => {
-      await ctx.db.patch(questId, {
-        faqs: [faqId],
-      });
+    await asUser.mutation(api.quests.addFaqId, {
+      questId: questId,
+      questFaqId: faqId,
     });
+
+    // Verify first update
+    await expectQuestUpdated(
+      t,
+      questId,
+      userId,
+      INITIAL_QUEST_UPDATE_TIMESTAMP,
+    );
+
+    // Set second time before deletion
+    vi.setSystemTime(DELETION_UPDATE_TIMESTAMP);
 
     // Delete the FAQ
     await asUser.mutation(api.questFaqs.deleteForever, {
@@ -112,6 +146,9 @@ describe("questFaqs", () => {
       questFaqIds: [faqId],
     });
     expect(faqs.length).toBe(0);
+
+    // Verify quest was updated
+    await expectQuestUpdated(t, questId, userId, DELETION_UPDATE_TIMESTAMP);
 
     // Verify FAQ is removed from quest
     const quest = await t.run(async (ctx) => {

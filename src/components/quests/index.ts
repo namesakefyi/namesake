@@ -6,6 +6,7 @@ export * from "./JurisdictionInterstitial/JurisdictionInterstitial";
 export * from "./QuestContent/QuestContent";
 export * from "./QuestCosts/QuestCosts";
 export * from "./QuestDetails/QuestDetails";
+export * from "./QuestUpdated/QuestUpdated";
 export * from "./QuestDocuments/QuestDocuments";
 export * from "./QuestFaqs/QuestFaqs";
 export * from "./QuestPageHeader/QuestPageHeader";

@@ -56,38 +56,42 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         )}
         type={type === "password" && isPasswordVisible ? "text" : type}
       >
-        {label && <Label size={size}>{label}</Label>}
-        <FieldGroup size={size}>
-          {prefix}
-          <Input
-            className={twMerge(
-              type === "password" && "font-mono",
-              type === "tel" && "tabular-nums",
-            )}
-            size={size}
-            placeholder={placeholder}
-          />
-          {suffix}
-          {type === "password" && (
-            <TooltipTrigger>
-              <Button
-                variant="icon"
-                aria-label={
-                  isPasswordVisible ? "Hide password" : "Show password"
-                }
-                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                size="small"
-                icon={isPasswordVisible ? Eye : EyeOff}
-                className="mr-1"
+        {(renderProps) => (
+          <>
+            {label && <Label size={size}>{label}</Label>}
+            <FieldGroup {...renderProps} size={size}>
+              {prefix}
+              <Input
+                className={twMerge(
+                  type === "password" && "font-mono",
+                  type === "tel" && "tabular-nums",
+                )}
+                size={size}
+                placeholder={placeholder}
               />
-              <Tooltip>
-                {isPasswordVisible ? "Hide password" : "Show password"}
-              </Tooltip>
-            </TooltipTrigger>
-          )}
-        </FieldGroup>
-        {description && <FieldDescription>{description}</FieldDescription>}
-        <FieldError>{errorMessage}</FieldError>
+              {suffix}
+              {type === "password" && (
+                <TooltipTrigger>
+                  <Button
+                    variant="icon"
+                    aria-label={
+                      isPasswordVisible ? "Hide password" : "Show password"
+                    }
+                    onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                    size="small"
+                    icon={isPasswordVisible ? Eye : EyeOff}
+                    className="mr-1"
+                  />
+                  <Tooltip>
+                    {isPasswordVisible ? "Hide password" : "Show password"}
+                  </Tooltip>
+                </TooltipTrigger>
+              )}
+            </FieldGroup>
+            {description && <FieldDescription>{description}</FieldDescription>}
+            <FieldError>{errorMessage}</FieldError>
+          </>
+        )}
       </AriaTextField>
     );
   },

@@ -1,4 +1,4 @@
-import { Logo } from "@/components/app";
+import { Logo, PasswordStrength } from "@/components/app";
 import {
   AnimateChangeInHeight,
   Banner,
@@ -14,6 +14,7 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
+import { usePasswordStrength } from "@/utils/usePasswordStrength";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
@@ -43,6 +44,8 @@ const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate({ from: "/signin" });
+
+  const passwordState = usePasswordStrength(password);
   const redeemCode = useMutation(api.earlyAccessCodes.redeem);
 
   const handleCodeSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -69,6 +72,13 @@ const SignIn = () => {
     setError(null);
 
     try {
+      if (flow === "signUp" && passwordState && passwordState.score < 3) {
+        setError(
+          `Please choose a stronger password. ${passwordState.feedback.warning}`,
+        );
+        setIsSubmitting(false);
+        return;
+      }
       await signIn("password", {
         flow,
         email,
@@ -135,7 +145,7 @@ const SignIn = () => {
         </Form>
       </TabPanel>
       <TabPanel id="signUp">
-        {isCodeRequired ? (
+        {import.meta.env.PROD && isCodeRequired ? (
           <Form onSubmit={handleCodeSubmit} className="items-stretch">
             <Banner variant="info">
               Namesake is in early access. To register, please enter a code.
@@ -175,6 +185,9 @@ const SignIn = () => {
               value={password}
               onChange={setPassword}
             />
+            {password && passwordState && (
+              <PasswordStrength value={passwordState.score} className="-mt-4" />
+            )}
             <Button type="submit" isDisabled={isSubmitting} variant="primary">
               {isSubmitting ? "Registering..." : "Register"}
             </Button>
@@ -217,6 +230,7 @@ const ForgotPassword = ({
   const [step, setStep] = useState<"forgot" | { email: string }>("forgot");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const passwordState = usePasswordStrength(newPassword);
 
   return step === "forgot" ? (
     <Form
@@ -276,6 +290,13 @@ const ForgotPassword = ({
         setIsSubmitting(true);
 
         try {
+          if (passwordState && passwordState.score < 3) {
+            setError(
+              `Please choose a stronger password. ${passwordState.feedback.warning}`,
+            );
+            setIsSubmitting(false);
+            return;
+          }
           const result = await signIn("password", {
             flow: "reset-verification",
             redirectTo: "/quests",
@@ -316,6 +337,9 @@ const ForgotPassword = ({
         value={newPassword}
         onChange={setNewPassword}
       />
+      {passwordState && (
+        <PasswordStrength value={passwordState.score} className="-mt-2" />
+      )}
       <Button type="submit" variant="primary" isDisabled={isSubmitting}>
         Reset password
       </Button>

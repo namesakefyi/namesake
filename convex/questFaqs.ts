@@ -1,10 +1,23 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import type { Id } from "./_generated/dataModel";
+import { type MutationCtx, query } from "./_generated/server";
 import { userMutation } from "./helpers";
 import {
   deleteFaq as deleteQuestFaq,
   getByFaqId as getQuestByFaqId,
 } from "./quests";
+
+// Helper function to update parent quest
+async function updateParentQuest(
+  ctx: MutationCtx,
+  questId: Id<"quests">,
+  userId: Id<"users">,
+) {
+  await ctx.db.patch(questId, {
+    updatedAt: Date.now(),
+    updatedBy: userId,
+  });
+}
 
 export const getByIds = query({
   args: { questFaqIds: v.optional(v.array(v.id("questFaqs"))) },
@@ -36,7 +49,7 @@ export const create = userMutation({
   },
 });
 
-export const update = mutation({
+export const update = userMutation({
   args: {
     questFaqId: v.id("questFaqs"),
     question: v.optional(v.string()),
@@ -46,6 +59,11 @@ export const update = mutation({
     const questFaq = await ctx.db.get(questFaqId);
     if (!questFaq) throw new Error("Quest FAQ not found");
 
+    const quest = await getQuestByFaqId(ctx, { questFaqId });
+    if (quest) {
+      await updateParentQuest(ctx, quest._id, ctx.userId);
+    }
+
     return await ctx.db.patch(questFaqId, {
       question,
       answer,
@@ -54,7 +72,7 @@ export const update = mutation({
   },
 });
 
-export const deleteForever = mutation({
+export const deleteForever = userMutation({
   args: { questFaqId: v.id("questFaqs") },
   handler: async (ctx, { questFaqId }) => {
     const questFaq = await ctx.db.get(questFaqId);
@@ -63,6 +81,7 @@ export const deleteForever = mutation({
     const quest = await getQuestByFaqId(ctx, { questFaqId });
 
     if (quest) {
+      await updateParentQuest(ctx, quest._id, ctx.userId);
       await deleteQuestFaq(ctx, { questId: quest._id, questFaqId });
     }
 

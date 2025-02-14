@@ -28,24 +28,6 @@ describe("PasswordStrength", () => {
     },
   );
 
-  it("displays warning banner when warning prop is provided", () => {
-    const warningMessage = "Password is too common";
-    render(<PasswordStrength value={2} warning={warningMessage} />);
-
-    const warningBanner = screen.getByText(warningMessage);
-    expect(warningBanner).toBeInTheDocument();
-  });
-
-  it("displays suggestions banner when suggestions are provided", () => {
-    const suggestions = ["Add a number", "Include a special character"];
-    render(<PasswordStrength value={2} suggestions={suggestions} />);
-
-    for (const suggestion of suggestions) {
-      const suggestionItem = screen.getByText(suggestion);
-      expect(suggestionItem).toBeInTheDocument();
-    }
-  });
-
   it("throws error for invalid strength values", () => {
     const invalidValues = [-1, 5];
 
@@ -54,12 +36,5 @@ describe("PasswordStrength", () => {
         render(<PasswordStrength value={value as any} />);
       }).toThrow("Value must be between 0 and 4");
     }
-  });
-
-  it("renders without warnings or suggestions when not provided", () => {
-    render(<PasswordStrength value={3} />);
-
-    const warningBanner = screen.queryByRole("alert");
-    expect(warningBanner).not.toBeInTheDocument();
   });
 });

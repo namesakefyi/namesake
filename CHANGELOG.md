@@ -1,5 +1,12 @@
 # namesake
 
+## 0.19.3
+
+### Patch Changes
+
+- 4fafdc2: Fix broken images in quest headers
+- b00d80a: Patch Vitest vulnerability
+
 ## 0.19.2
 
 ### Patch Changes

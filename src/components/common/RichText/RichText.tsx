@@ -94,7 +94,7 @@ export function RichText({
     variants: {
       editable: {
         true: "px-3.5 py-3 [&_.tiptap]:outline-none",
-        false: "ring-0 rounded-none bg-transparent",
+        false: "ring-0 rounded-none bg-transparent focus-within:!outline-none",
       },
     },
   });
