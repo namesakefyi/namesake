@@ -69,6 +69,9 @@ const tabProps = tv({
   },
 });
 
+// TODO: style [isSelected]::after ::view-transition-old|new(active-tab) and ::view-transition-group(.tabs)
+// https://codepen.io/robotdood/pen/GgRJYVN
+
 export function Tab(props: TabProps) {
   return (
     <AriaTab
