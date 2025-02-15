@@ -47,6 +47,7 @@ export function TabList<T extends object>(props: TabListProps<T>) {
   return (
     <AriaTabList
       {...props}
+      style={{ viewTransitionName: "tabs" }}
       className={composeRenderProps(props.className, (className, renderProps) =>
         tabListStyles({ ...renderProps, className }),
       )}
@@ -56,11 +57,11 @@ export function TabList<T extends object>(props: TabListProps<T>) {
 
 const tabProps = tv({
   extend: focusRing,
-  base: "flex items-center justify-center cursor-pointer rounded-md px-4 py-2 text-sm transition forced-color-adjust-none",
+  base: "flex items-center justify-center relative cursor-pointer px-4 py-2 text-sm transition forced-color-adjust-none isolate",
   variants: {
     isSelected: {
       false: "text-gray-dim hover:text-gray-normal",
-      true: "bg-white dark:bg-graydark-3 shadow-sm forced-colors:text-[HighlightText] forced-colors:bg-[Highlight]",
+      true: "after:absolute after:inset-0 after:bg-white after:-z-10 after:rounded-md after:dark:bg-graydark-3 after:shadow-sm forced-colors:text-[HighlightText] forced-colors:bg-[Highlight]",
     },
     isDisabled: {
       true: "opacity-50 cursor-default forced-colors:text-[GrayText] selected:text-gray-3 dark:selected:text-graydark-3 forced-colors:selected:text-[HighlightText] selected:bg-gray-2 dark:selected:bg-gray-6 forced-colors:selected:bg-[GrayText]",
@@ -72,8 +73,13 @@ export function Tab(props: TabProps) {
   return (
     <AriaTab
       {...props}
-      className={composeRenderProps(props.className, (className, renderProps) =>
-        tabProps({ ...renderProps, className }),
+      style={{ viewTransitionName: String(props.id) }}
+      className={composeRenderProps(
+        props.className,
+        (className, renderProps) => {
+          // console.log(renderProps);
+          return tabProps({ ...renderProps, className });
+        },
       )}
     />
   );
