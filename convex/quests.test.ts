@@ -35,6 +35,7 @@ describe("quests", () => {
           category: "education",
           jurisdiction: "MA",
           creationUser: userId,
+          updatedAt: NOW,
         });
 
         await ctx.db.insert("quests", {
@@ -43,6 +44,7 @@ describe("quests", () => {
           category: "housing",
           jurisdiction: "NY",
           creationUser: userId,
+          updatedAt: NOW,
         });
       });
 
@@ -73,6 +75,7 @@ describe("quests", () => {
           category: "education",
           jurisdiction: "MA",
           creationUser: userId,
+          updatedAt: NOW,
         });
 
         await ctx.db.insert("quests", {
@@ -82,6 +85,7 @@ describe("quests", () => {
           jurisdiction: "NY",
           creationUser: userId,
           deletedAt: Date.now(),
+          updatedAt: NOW,
         });
       });
 

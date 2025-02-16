@@ -179,11 +179,7 @@ const QuestTableRow = ({
         <FormattedDate date={new Date(quest._creationTime)} />
       </TableCell>
       <TableCell>
-        {quest.updatedAt ? (
-          <FormattedDate date={new Date(quest.updatedAt)} />
-        ) : (
-          "some time ago"
-        )}
+        <FormattedDate date={new Date(quest.updatedAt)} />
       </TableCell>
       <TableCell>
         <MenuTrigger>

@@ -4,6 +4,8 @@ import { api } from "./_generated/api";
 import schema from "./schema";
 import { modules } from "./test.setup";
 
+const NOW = Date.now();
+
 describe("userQuests", () => {
   describe("getAll", () => {
     it("should return all user quests", async () => {
@@ -26,6 +28,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: NOW,
         });
 
         const quest2Id = await ctx.db.insert("quests", {
@@ -34,6 +37,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: NOW,
         });
 
         // Create user quests
@@ -76,6 +80,7 @@ describe("userQuests", () => {
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
           deletedAt: Date.now(),
+          updatedAt: NOW,
         });
 
         await ctx.db.insert("userQuests", {
@@ -110,6 +115,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: NOW,
         });
 
         await ctx.db.insert("userQuests", {
@@ -144,6 +150,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: NOW,
         });
       });
 
@@ -177,6 +184,7 @@ describe("userQuests", () => {
           category: "education",
           jurisdiction: "MA",
           creationUser: userId,
+          updatedAt: NOW,
         });
       });
 
@@ -211,6 +219,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: NOW,
         });
       });
 
@@ -244,6 +253,7 @@ describe("userQuests", () => {
           category: "education",
           jurisdiction: "MA",
           creationUser: userId,
+          updatedAt: NOW,
         });
       });
 
@@ -276,6 +286,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: NOW,
         });
       });
 
@@ -320,6 +331,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: NOW,
         });
       });
 
@@ -371,6 +383,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: NOW,
         });
       });
 
@@ -408,6 +421,7 @@ describe("userQuests", () => {
           category: "education",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: NOW,
         });
 
         const quest2Id = await ctx.db.insert("quests", {
@@ -416,6 +430,7 @@ describe("userQuests", () => {
           category: "housing",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: NOW,
         });
 
         await ctx.db.insert("userQuests", {
