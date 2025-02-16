@@ -25,5 +25,12 @@
     ["tv\\(\\{([^]+?)\\}\\)", "(?:\"([^\"]*?)\")|(?:'([^']*?)')|(?:`[^`]*?`)"]
   ],
   "javascript.updateImportsOnFileMove.enabled": "never",
-  "typescript.updateImportsOnFileMove.enabled": "never"
+  "typescript.updateImportsOnFileMove.enabled": "never",
+  "cssvar.files": ["./node_modules/pollen-css/dist/pollen.css"],
+  // Do not ignore css files in node_modules, which is ignored by default
+  "cssvar.ignore": [],
+  // Use Pollen's inbuilt variable ordering
+  "cssvar.disableSort": true,
+  // Add support for autocomplete in other file types
+  "cssvar.extensions": ["css", "html", "jsx", "tsx"]
 }
