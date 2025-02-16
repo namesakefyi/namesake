@@ -1,0 +1,24 @@
+:root {
+  /* Absolute sizes */
+  --size-0: 4px;
+  --size-1: 8px;
+  --size-2: 12px;
+  --size-3: 16px;
+  --size-4: 24px;
+  --size-5: 32px;
+  --size-6: 48px;
+  --size-7: 64px;
+  --size-8: 96px;
+
+  /* Viewport-relative sizes */
+  /* @link https://utopia.fyi/space/calculator?c=320,16,1.2,1240,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+  --size-r0: clamp(0.25rem, 0.2283rem + 0.1087vw, 0.3125rem); /* 4px → 5px */
+  --size-r1: clamp(0.5rem, 0.4565rem + 0.2174vw, 0.625rem); /* 8px → 10px */
+  --size-r2: clamp(0.75rem, 0.6848rem + 0.3261vw, 0.9375rem); /* 12px → 15px */
+  --size-r3: clamp(1rem, 0.913rem + 0.4348vw, 1.25rem); /* 16px → 20px */
+  --size-r4: clamp(1.5rem, 1.3696rem + 0.6522vw, 1.875rem); /* 24px → 30px */
+  --size-r5: clamp(2rem, 1.8261rem + 0.8696vw, 2.5rem); /* 32px → 40px */
+  --size-r6: clamp(3rem, 2.7391rem + 1.3043vw, 3.75rem); /* 48px → 60px */
+  --size-r7: clamp(4rem, 3.6522rem + 1.7391vw, 5rem); /* 64px → 80px */
+  --size-r8: clamp(6rem, 5.4783rem + 2.6087vw, 7.5rem); /* 96px → 120px */
+}

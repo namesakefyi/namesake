@@ -1,21 +1,30 @@
+@import "colors.css";
+@import "fonts.css";
+@import "size.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer components {
   .app-padding {
-    @apply px-6 lg:px-8;
+    padding-inline: var(--size-5);
   }
 
   .h-header {
-    @apply h-16 lg:h-20;
+    height: var(--size-7);
   }
 
   .prose {
-    @apply text-base lg:text-lg;
+    font-size: var(--font-size-0);
 
     a {
-      @apply underline underline-offset-2 hover:decoration-inherit;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+
+      &:hover {
+        text-decoration-color: inherit;
+      }
     }
 
     *:not(li) + * {
@@ -23,17 +32,22 @@
     }
 
     h2 {
-      @apply text-2xl font-medium;
-      @apply pb-2;
-      @apply border-b border-gray-dim;
+      font-size: var(--font-size-2);
+      font-weight: var(--font-weight-medium);
+      padding-bottom: var(--size-2);
+      border-bottom: 1px;
+      border-color: var(--border-gray-dim);
     }
 
     h3 {
-      @apply text-xl font-medium;
+      font-weight: var(--font-weight-medium);
+      font-size: var(--font-size-2);
     }
 
     blockquote {
-      @apply border-l-2 border-gray-dim pl-4;
+      border-left: 2px;
+      border-color: var(--border-gray-dim);
+      padding-left: var(--size-3);
     }
 
     li {
@@ -51,7 +65,8 @@
       &::before {
         position: absolute;
         left: 0;
-        @apply tabular-nums text-gray-dim;
+        font-variant-numeric: tabular-nums;
+        color: var(--text-gray-dim);
       }
     }
 
@@ -87,7 +102,7 @@
   }
 
   .tiptap p.is-editor-empty:first-child::before {
-    @apply text-gray-dim;
+    color: var(--text-gray-dim);
     content: attr(data-placeholder);
     float: left;
     height: 0;
@@ -95,22 +110,10 @@
   }
 }
 
-/* Scale up hit targets on high resolution mobile devices. */
-@media (min-resolution: 200dpi) {
-  html {
-    font-size: 18px;
-  }
-
-  .text-sm {
-    /* ensure minimum font size of 16px */
-    font-size: 0.9rem;
-  }
-}
-
 body {
   color-scheme: dark light;
   -webkit-font-smoothing: antialiased;
-  @apply bg-gray-1 dark:bg-graydark-2;
+  background: var(--bg-app);
 }
 
 body,
@@ -119,11 +122,13 @@ body,
 }
 
 ::selection {
-  @apply bg-amber-5 text-gray-12;
+  background: var(--amber-5);
+  color: var(--amber-12);
 }
 
 .dark ::selection {
-  @apply bg-purpledark-5 text-graydark-12;
+  background: var(--purple-5);
+  color: var(--purple-12);
 }
 
 .svc-full-creator {

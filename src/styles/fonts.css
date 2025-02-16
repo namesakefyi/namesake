@@ -1,0 +1,17 @@
+:root {
+  /* Viewport-relative font sizes */
+  /* @link https://utopia.fyi/type/calculator?c=320,16,1.2,1240,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+  --font-size--2: clamp(0.6944rem, 0.6577rem + 0.1836vw, 0.8rem); /* 11.1111px → 12.8px */
+  --font-size--1: clamp(0.8333rem, 0.7754rem + 0.2899vw, 1rem); /* 13.3333px → 16px */
+  --font-size-0: clamp(1rem, 0.913rem + 0.4348vw, 1.25rem); /* 16px → 20px */
+  --font-size-1: clamp(1.2rem, 1.0739rem + 0.6304vw, 1.5625rem); /* 19.2px → 25px */
+  --font-size-2: clamp(1.44rem, 1.2615rem + 0.8924vw, 1.9531rem); /* 23.04px → 31.25px */
+  --font-size-3: clamp(1.728rem, 1.4799rem + 1.2407vw, 2.4414rem); /* 27.648px → 39.0625px */
+  --font-size-4: clamp(2.0736rem, 1.7334rem + 1.7011vw, 3.0518rem); /* 33.1776px → 48.8281px */
+  --font-size-5: clamp(2.4883rem, 2.027rem + 2.3067vw, 3.8147rem); /* 39.8131px → 61.0352px */
+
+  /* Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+}
