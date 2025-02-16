@@ -1,28 +1,21 @@
-@import "pollen-css/pollen.css";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer components {
   .app-padding {
-    padding-inline: var(--size-6);
+    @apply px-6 lg:px-8;
   }
 
   .h-header {
-    height: var(--size-16);
+    @apply h-16 lg:h-20;
   }
 
   .prose {
-    font-size: var(--scale-fluid-1);
+    @apply text-base lg:text-lg;
 
     a {
-      text-decoration: underline;
-      text-underline-offset: 2px;
-
-      &:hover {
-        text-decoration-color: inherit;
-      }
+      @apply underline underline-offset-2 hover:decoration-inherit;
     }
 
     *:not(li) + * {
@@ -30,22 +23,17 @@
     }
 
     h2 {
-      font-size: var(--scale-fluid-2);
-      font-weight: var(--weight-medium);
-      padding-bottom: var(--size-2);
-      border-bottom: 1px;
-      border-color: var(--border-gray-dim);
+      @apply text-2xl font-medium;
+      @apply pb-2;
+      @apply border-b border-gray-dim;
     }
 
     h3 {
-      font-size: var(--scale-fluid-1);
-      font-weight: var(--weight-medium);
+      @apply text-xl font-medium;
     }
 
     blockquote {
-      border-left: 2px;
-      border-color: var(--border-gray-dim);
-      padding-left: var(--size-3);
+      @apply border-l-2 border-gray-dim pl-4;
     }
 
     li {
@@ -63,8 +51,7 @@
       &::before {
         position: absolute;
         left: 0;
-        font-variant-numeric: tabular-nums;
-        color: var(--text-gray-dim);
+        @apply tabular-nums text-gray-dim;
       }
     }
 
@@ -100,7 +87,7 @@
   }
 
   .tiptap p.is-editor-empty:first-child::before {
-    color: var(--text-gray-dim);
+    @apply text-gray-dim;
     content: attr(data-placeholder);
     float: left;
     height: 0;
@@ -108,10 +95,22 @@
   }
 }
 
+/* Scale up hit targets on high resolution mobile devices. */
+@media (min-resolution: 200dpi) {
+  html {
+    font-size: 18px;
+  }
+
+  .text-sm {
+    /* ensure minimum font size of 16px */
+    font-size: 0.9rem;
+  }
+}
+
 body {
   color-scheme: dark light;
   -webkit-font-smoothing: antialiased;
-  background: var(--bg-app);
+  @apply bg-gray-1 dark:bg-graydark-2;
 }
 
 body,
@@ -120,13 +119,11 @@ body,
 }
 
 ::selection {
-  background: var(--amber-5);
-  color: var(--amber-12);
+  @apply bg-amber-5 text-gray-12;
 }
 
 .dark ::selection {
-  background: var(--purple-5);
-  color: var(--purple-12);
+  @apply bg-purpledark-5 text-graydark-12;
 }
 
 .svc-full-creator {
