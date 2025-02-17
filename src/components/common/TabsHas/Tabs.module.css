@@ -132,7 +132,7 @@
   gap: var(--tablist-gap-y) var(--tablist-gap-x);
   position: relative;
   isolation: isolate;
-  --count: 2; /* update in Tabs.tsx */
+  --count: 1; /* updated in Tabs.tsx */
 }
 
 /* not great maybe? */

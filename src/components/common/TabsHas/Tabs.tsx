@@ -15,17 +15,20 @@ export function Tabs(props: TabsProps) {
 }
 
 export function TabList<T extends object>(props: TabListProps<T>) {
-  return <AriaTabList {...props} className={styles["tab-list"]} />;
+  const count = Array.isArray(props.children) ? props.children.length : 1;
+  return (
+    <AriaTabList
+      {...props}
+      className={styles["tab-list"]}
+      style={{
+        ["--count" as string]: count,
+      }}
+    />
+  );
 }
 
 export function Tab(props: TabProps) {
-  return (
-    <AriaTab
-      {...props}
-      className={`focus-ring ${styles.tab}`}
-      style={{ viewTransitionName: String(props.id) }}
-    />
-  );
+  return <AriaTab {...props} className={`focus-ring ${styles.tab}`} />;
 }
 
 export function TabPanel(props: TabPanelProps) {
