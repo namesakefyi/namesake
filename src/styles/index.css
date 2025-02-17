@@ -1,10 +1,3 @@
-@import url("./props/borders.css");
-@import url("./props/colors.css");
-@import url("./props/fonts.css");
-@import url("./props/shadows.css");
-@import url("./props/sizes.css");
-@import url("./utils/focus-ring.css");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

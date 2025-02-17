@@ -1,0 +1,41 @@
+.tab-list {
+  /* [tabListStyles.base] n/a */
+  --tablist-gap-x: 0;
+  --tablist-gap-y: 0;
+  /* [tabListStyles.base] p-1 */
+  --tablist-padding-x: 0.25rem;
+  --tablist-padding-y: 0.25rem;
+  /* [tabProps.base] px-4 py-2 */
+  --tab-padding-x: 1rem;
+  --tab-padding-y: 0.5rem;
+
+  --count: 1; /* updated in Tabs.tsx > TabList */
+  --active: 0; /* updated in Tabs.tsx > TabList  */
+}
+
+.tab-list::after {
+  /* Tailwind's `after:transition` class is not working for me :/ */
+  transition: translate 0.2s ease;
+}
+
+.tab-list[data-orientation="horizontal"]::after {
+  --tablist-width: calc(100% - (var(--tablist-padding-x) * 2));
+  --tab-start-offset: var(--tablist-padding-x);
+
+  width: calc(var(--tablist-width) / var(--count));
+  height: calc(100% - (var(--tablist-padding-y) * 2));
+
+  translate: calc(var(--tab-start-offset) + var(--active) * 100%)
+    calc(var(--tablist-padding-y));
+}
+
+.tab-list[data-orientation="vertical"]::after {
+  --tablist-height: calc(100% - (var(--tablist-padding-y) * 2));
+  --tab-start-offset: var(--tablist-padding-y);
+
+  width: calc(100% - (var(--tablist-padding-x) * 2));
+  height: calc(var(--tablist-height) / var(--count));
+
+  translate: calc(var(--tablist-padding-x))
+    calc(var(--tab-start-offset) + var(--active) * 100%);
+}
