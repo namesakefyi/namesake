@@ -1,0 +1,217 @@
+.tabs {
+  display: flex;
+  gap: var(--size-4);
+}
+
+.tabs[data-orientation="horizontal"] {
+  flex-direction: column;
+}
+
+.tabs[data-orientation="vertical"] {
+  flex-direction: row;
+  width: 800px;
+}
+
+/*  */
+
+.tab-list {
+  display: grid;
+  background-color: var(--gray-3);
+  border-radius: var(--radius-lg);
+  padding: var(--size-1);
+}
+
+.tab-list[data-orientation="horizontal"] {
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+}
+
+.tab-list[data-orientation="vertical"] {
+  grid-auto-flow: row;
+  grid-auto-rows: minmax(0, 1fr);
+}
+
+/*  */
+
+.tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  cursor: pointer;
+  padding: var(--size-2) var(--size-4);
+
+  color: var(--gray-11);
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
+
+  transition: color 0.2s ease-in-out;
+  forced-color-adjust: none;
+
+  isolation: isolate;
+}
+
+.tab:hover {
+  color: var(--gray-12);
+}
+
+.tab[data-selected] {
+  color: var(--gray-12);
+}
+
+.tab[data-selected]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: white;
+  z-index: -10;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.tab[data-disabled] {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.tab[data-disabled][data-selected] {
+  color: var(--gray-3);
+  background-color: var(--gray-2);
+}
+
+.dark .tab[data-selected]::after {
+  background-color: var(--gray-3);
+}
+
+.dark .tab[data-disabled][data-selected] {
+  color: var(--gray-3);
+  background-color: var(--gray-6);
+}
+
+/* TODO forced-colors */
+@media (forced-colors: active) {
+  .tab[data-selected] {
+    /* [tabProps.isSelected] forced-colors:text-[HighlightText] forced-colors:bg-[Highlight] */
+    color: var(--todo);
+    background-color: var(--todo);
+  }
+
+  .tab[data-disabled] {
+    /* [tabProps.isDisabled] forced-colors:text-[GrayText] */
+    color: var(--todo);
+  }
+
+  .tab[data-disabled][data-selected] {
+    /* [tabProps.isDisabled:selected] forced-colors:selected:text-[HighlightText] */
+    color: var(--todo);
+    background-color: var(--todo);
+  }
+}
+
+/*  */
+
+.tab-panel {
+  flex: 1;
+}
+
+/*
+ * CSS :has() attempt
+ * https://codepen.io/jh3y/pen/MWxbrEp
+ * https://codepen.io/robotdood/pen/emYpJZp
+ */
+
+.tab-list {
+  --tablist-gap-x: var(--size-1);
+  --tablist-gap-y: var(--size-1);
+  --tablist-padding-x: var(--size-1);
+  --tablist-padding-y: var(--size-1);
+  --tab-padding-x: var(--size-1);
+  --tab-padding-y: var(--size-1);
+
+  gap: var(--tablist-gap-y) var(--tablist-gap-x);
+  position: relative;
+  isolation: isolate;
+  --count: 2; /* update in Tabs.tsx */
+}
+
+/* not great maybe? */
+.tab-list:has([data-selected]:nth-of-type(1)) {
+  --active: 0;
+}
+.tab-list:has([data-selected]:nth-of-type(2)) {
+  --active: 1;
+}
+.tab-list:has([data-selected]:nth-of-type(3)) {
+  --active: 2;
+}
+.tab-list:has([data-selected]:nth-of-type(4)) {
+  --active: 3;
+}
+.tab-list:has([data-selected]:nth-of-type(5)) {
+  --active: 4;
+}
+.tab-list:has([data-selected]:nth-of-type(6)) {
+  --active: 5;
+}
+
+.tab-list::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: white;
+  z-index: -10;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: translate 0.2s ease;
+}
+
+.tab[data-selected]::after {
+  display: none;
+}
+
+.tab {
+  padding: var(--tab-padding-y) var(--tab-padding-x);
+}
+
+.tab-list[data-orientation="horizontal"]::after {
+  --tablist-width: calc(
+    100% -
+    (var(--tablist-padding-x) * 2) -
+    (var(--tablist-gap-x))
+  );
+  --tablist-gap-total: calc(var(--active) * var(--tablist-gap-x));
+  --tab-start-offset: var(--tablist-padding-x);
+
+  width: calc(var(--tablist-width) / var(--count));
+  height: calc(100% - (var(--tablist-padding-y) * 2));
+
+  translate: calc(
+      var(--tab-start-offset) +
+      var(--tablist-gap-total) +
+      var(--active) *
+      100%
+    )
+    calc(var(--tablist-padding-y));
+}
+
+.tab-list[data-orientation="vertical"]::after {
+  --tablist-height: calc(
+    100% -
+    (var(--tablist-padding-y) * 2) -
+    (var(--tablist-gap-y))
+  );
+  --tablist-gap-total: calc(var(--active) * var(--tablist-gap-y));
+  --tab-start-offset: var(--tablist-padding-y);
+
+  width: calc(100% - (var(--tablist-padding-x) * 2));
+  height: calc(var(--tablist-height) / var(--count));
+
+  translate: calc(var(--tablist-padding-x))
+    calc(
+      var(--tab-start-offset) +
+      var(--tablist-gap-total) +
+      var(--active) *
+      100%
+    );
+}

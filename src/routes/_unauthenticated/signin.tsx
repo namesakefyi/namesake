@@ -6,14 +6,21 @@ import {
   Card,
   Form,
   Link,
-  Tab,
-  TabList,
-  TabPanel,
-  Tabs,
+  // Tab,
+  // TabList,
+  // TabPanel,
+  // Tabs,
   TextField,
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
+import {
+  //
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
+} from "@/components/common/TabsHas/Tabs";
 import { usePasswordStrength } from "@/utils/usePasswordStrength";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";

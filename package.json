@@ -41,6 +41,7 @@
     "@faker-js/faker": "^9.5.0",
     "@maskito/core": "^3.2.1",
     "@maskito/react": "^3.2.1",
+    "@radix-ui/colors": "^3.0.0",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tanstack/react-router": "^1.102.5",
     "@tiptap/extension-blockquote": "^2.11.5",
