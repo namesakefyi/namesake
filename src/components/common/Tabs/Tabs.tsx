@@ -37,7 +37,7 @@ export function Tabs(props: TabsProps) {
 }
 
 const tabListStyles = tv({
-  base: "grid bg-gray-3 dark:bg-graydark-1 rounded-lg p-1 relative isolate after:absolute after:inset-0 after:bg-white after:-z-10 after:rounded-md after:shadow-sm",
+  base: "grid bg-gray-3 dark:bg-graydark-1 rounded-lg p-1 relative isolate after:absolute after:inset-0 after:bg-white after:-z-10 after:rounded-md after:shadow-sm after:dark:bg-graydark-3",
   variants: {
     orientation: {
       horizontal: "grid-flow-col auto-cols-fr",
