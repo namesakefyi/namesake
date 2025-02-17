@@ -21,6 +21,8 @@ import {
   TabPanel,
   Tabs,
 } from "@/components/common/TabsHas/Tabs";
+// } from "@/components/common/TabsViewTransitions/Tabs";
+// } from "@/components/common";
 import { usePasswordStrength } from "@/utils/usePasswordStrength";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";

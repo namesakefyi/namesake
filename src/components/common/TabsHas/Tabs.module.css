@@ -126,8 +126,8 @@
   --tablist-gap-y: var(--size-1);
   --tablist-padding-x: var(--size-1);
   --tablist-padding-y: var(--size-1);
-  --tab-padding-x: var(--size-1);
-  --tab-padding-y: var(--size-1);
+  --tab-padding-x: var(--size-4);
+  --tab-padding-y: var(--size-2);
 
   gap: var(--tablist-gap-y) var(--tablist-gap-x);
   position: relative;
