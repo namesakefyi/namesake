@@ -105,7 +105,7 @@ export function FormNavigation() {
       </TooltipTrigger>
       <MenuTrigger>
         <TooltipTrigger>
-          <Button variant="icon" icon={MenuIcon} />
+          <Button variant="icon" icon={MenuIcon} aria-label="All questions" />
           <Tooltip>All questions</Tooltip>
         </TooltipTrigger>
         <Menu>

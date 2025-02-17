@@ -36,4 +36,24 @@ describe("FormSection", () => {
     const descriptionQuery = screen.queryByRole("paragraph");
     expect(descriptionQuery).toBeNull();
   });
+
+  it("formats the question title as id and omits punctuation", () => {
+    render(<FormSection {...formSection} title="What is your legal name?" />);
+    const section = screen.getByTestId("form-section");
+    expect(section).toHaveAttribute("id", "what-is-your-legal-name");
+  });
+
+  it("omits apostrophes from the id", () => {
+    render(
+      <FormSection
+        {...formSection}
+        title="What is the reason you're changing your name?"
+      />,
+    );
+    const section = screen.getByTestId("form-section");
+    expect(section).toHaveAttribute(
+      "id",
+      "what-is-the-reason-youre-changing-your-name",
+    );
+  });
 });

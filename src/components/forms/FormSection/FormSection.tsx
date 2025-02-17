@@ -58,6 +58,7 @@ export function FormSection({
     <section
       id={id}
       data-form-section
+      data-testid="form-section"
       className={twMerge(
         "flex flex-col gap-8 p-8 justify-center h-screen snap-center",
         className,
