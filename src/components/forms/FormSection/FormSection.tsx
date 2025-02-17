@@ -13,7 +13,10 @@ interface FormHeaderProps {
 function FormHeader({ title, description }: FormHeaderProps) {
   return (
     <header className="flex flex-col gap-2">
-      <Heading className="text-4xl font-medium text-gray-normal text-pretty">
+      <Heading
+        className="text-4xl font-medium text-gray-normal text-pretty"
+        data-section-title
+      >
         {smartquotes(title)}
       </Heading>
       {description && (
@@ -23,6 +26,16 @@ function FormHeader({ title, description }: FormHeaderProps) {
       )}
     </header>
   );
+}
+
+function getQuestionId(question: string) {
+  let sanitizedQuestion = question;
+  // Remove trailing punctuation
+  sanitizedQuestion = sanitizedQuestion.replace(/[^\w\s]/g, "");
+  // Remove apostrophes
+  sanitizedQuestion = sanitizedQuestion.replace(/'/g, "");
+
+  return encodeURIComponent(sanitizedQuestion.toLowerCase().replace(/ /g, "-"));
 }
 
 export interface FormSectionProps extends FormHeaderProps {
@@ -39,8 +52,13 @@ export function FormSection({
   children,
   className,
 }: FormSectionProps) {
+  const id = getQuestionId(title);
+
   return (
     <section
+      id={id}
+      data-form-section
+      data-testid="form-section"
       className={twMerge(
         "flex flex-col gap-8 p-8 justify-center h-screen snap-center",
         className,

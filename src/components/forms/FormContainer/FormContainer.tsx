@@ -4,6 +4,7 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
+import { FormNavigation } from "@/components/forms";
 import { useRouter } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 
@@ -32,6 +33,7 @@ export function FormContainer({ children }: FormContainerProps) {
         />
         <Tooltip placement="right">Save and exit</Tooltip>
       </TooltipTrigger>
+      <FormNavigation />
     </main>
   );
 }
