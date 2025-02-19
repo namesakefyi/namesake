@@ -54,7 +54,7 @@ export function FormNavigation() {
               current: section,
               next: formSections[index + 1],
             });
-            router.navigate({ to: ".", hash: section.hash });
+            router.navigate({ to: ".", hash: section.hash, replace: true });
           }
         }
       }
@@ -82,6 +82,7 @@ export function FormNavigation() {
       <TooltipTrigger>
         <Link
           href={{ to: ".", hash: activeSection?.previous?.hash }}
+          routerOptions={{ replace: true }}
           button={{ variant: "icon" }}
           className="flex-1"
           aria-label="Previous question"
@@ -94,6 +95,7 @@ export function FormNavigation() {
       <TooltipTrigger>
         <Link
           href={{ to: ".", hash: activeSection?.next?.hash }}
+          routerOptions={{ replace: true }}
           button={{ variant: "icon" }}
           className="flex-1"
           aria-label="Next question"
@@ -110,7 +112,11 @@ export function FormNavigation() {
         </TooltipTrigger>
         <Menu>
           {formSections.map(({ hash, title }) => (
-            <MenuItem key={hash} href={{ to: ".", hash }}>
+            <MenuItem
+              key={hash}
+              href={{ to: ".", hash }}
+              routerOptions={{ replace: true }}
+            >
               {title}
             </MenuItem>
           ))}
