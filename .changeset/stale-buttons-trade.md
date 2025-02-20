@@ -2,4 +2,4 @@
 "namesake": minor
 ---
 
-Add redacted name component
+Add redacted text component
