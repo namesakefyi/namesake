@@ -81,7 +81,7 @@
     "react-helmet-async": "^2.0.5",
     "react-random-reveal": "^2.0.1",
     "resend": "4.1.2",
-    "sonner": "^1.7.4",
+    "sonner": "^2.0.1",
     "storybook": "^8.5.8",
     "tailwind-variants": "^0.3.1",
     "tailwindcss": "^3.4.17",
