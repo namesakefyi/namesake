@@ -127,7 +127,7 @@
     "playwright": "^1.50.1",
     "prop-types": "^15.8.1",
     "rollup-plugin-webpack-stats": "^2.0.2",
-    "tailwind-merge": "^2.6.0",
+    "tailwind-merge": "^3.0.2",
     "tailwindcss-aria-attributes": "^2.0.1",
     "tailwindcss-radix-colors": "^1.4.1",
     "tailwindcss-react-aria-components": "^1.2.0",
