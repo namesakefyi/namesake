@@ -12,10 +12,16 @@ Namesake is a web application which helps people in the U.S. navigate the legal 
 We 💖 our contributors! Namesake is built by, and for, the trans community, and we welcome contributors of all genders and skill levels.
 
 😌 Keep Namesake safe for everyone by reviewing our [code of conduct](https://github.com/namesakefyi/namesake?tab=coc-ov-file).   
-📖 Read our [contribution guide](/docs/CONTRIBUTING.md) to learn how to [set up your local environment](/docs/CONTRIBUTING.md#getting-started) and more.  
+📖 Read our [contribution guide](/CONTRIBUTING.md) to learn how to [set up your local environment](/CONTRIBUTING.md#getting-started) and more.  
 🐕 Explore some [good first issues](https://github.com/namesakefyi/namesake/contribute) to take on.  
 👋 Come [chat with us](https://namesake.fyi/chat) on Discord!
 
 ## Support
 
 Having trouble? Get help in the [Namesake Discord](https://namesake.fyi/chat) or [post an issue](https://github.com/namesakefyi/namesake/issues).
+
+## License
+
+MIT
+
+Copyright (c) 2025–present [Namesake contributors](https://github.com/namesakefyi/namesake/contributors)
