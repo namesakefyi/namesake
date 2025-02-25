@@ -150,6 +150,14 @@ export const setStatus = userMutation({
     // Prevent setting the existing status
     if (userQuest.status === args.status) return;
 
+    // if the status is changing to in progress, set the start time
+    if (args.status === "inProgress") {
+      await ctx.db.patch(userQuest._id, {
+        status: args.status,
+        startedAt: Date.now(),
+      });
+    }
+
     // If the status is changing to complete, set the completion time
     if (args.status === "complete") {
       await ctx.db.patch(userQuest._id, {
