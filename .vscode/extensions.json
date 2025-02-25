@@ -1,4 +1,8 @@
 {
-  "recommendations": ["biomejs.biome", "bradlc.vscode-tailwindcss"],
+  "recommendations": [
+    "biomejs.biome",
+    "bradlc.vscode-tailwindcss",
+    "phoenisx.cssvar"
+  ],
   "unwantedRecommendations": ["dbaeumer.vscode-eslint"]
 }

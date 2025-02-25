@@ -6,6 +6,9 @@
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit"
   },
+  "[css]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
   "[javascript]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
@@ -22,10 +25,5 @@
     ["tv\\(\\{([^]+?)\\}\\)", "(?:\"([^\"]*?)\")|(?:'([^']*?)')|(?:`[^`]*?`)"]
   ],
   "javascript.updateImportsOnFileMove.enabled": "never",
-  "typescript.updateImportsOnFileMove.enabled": "never",
-  "typescript.experimental.updateImportsOnPaste": true,
-  "javascript.experimental.updateImportsOnPaste": true,
-  "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  "typescript.updateImportsOnFileMove.enabled": "never"
 }
