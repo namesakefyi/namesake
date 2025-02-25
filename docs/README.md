@@ -19,3 +19,9 @@ We 💖 our contributors! Namesake is built by, and for, the trans community, an
 ## Support
 
 Having trouble? Get help in the [Namesake Discord](https://namesake.fyi/chat) or [post an issue](https://github.com/namesakefyi/namesake/issues).
+
+## License
+
+MIT
+
+Copyright (c) 2025–present [Namesake contributors](https://github.com/namesakefyi/namesake/contributors)
