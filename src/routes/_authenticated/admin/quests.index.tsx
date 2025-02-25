@@ -1,5 +1,5 @@
-import { FormattedDate } from "@/components/FormattedDate";
 import { PageHeader } from "@/components/app";
+import { FormattedDate } from "@/components/common";
 import {
   Badge,
   Button,

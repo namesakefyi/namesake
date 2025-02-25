@@ -1,4 +1,4 @@
-import { TimeAgo } from "@/components/TimeAgo";
+import { TimeAgo } from "@/components/common";
 import type { Doc } from "@convex/_generated/dataModel";
 
 interface QuestUpdatedProps {

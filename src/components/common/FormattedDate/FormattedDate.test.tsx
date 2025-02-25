@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 import { FormattedDate } from "./FormattedDate";
-
 describe("FormattedDate", () => {
   const originalLanguage = navigator.language;
 

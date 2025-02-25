@@ -46,3 +46,5 @@ export * from "./ToggleButton/ToggleButton";
 export * from "./ToggleButtonGroup/ToggleButtonGroup";
 export * from "./Toolbar/Toolbar";
 export * from "./Tooltip/Tooltip";
+export * from "./FormattedDate/FormattedDate";
+export * from "./TimeAgo/TimeAgo";
