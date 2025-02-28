@@ -50,7 +50,6 @@ describe("questSteps", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
-          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 
@@ -98,7 +97,6 @@ describe("questSteps", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
-          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 
@@ -143,7 +141,6 @@ describe("questSteps", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
-          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 
@@ -205,7 +202,6 @@ describe("questSteps", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
-          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 
@@ -260,7 +256,6 @@ describe("questSteps", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
-          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 

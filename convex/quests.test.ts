@@ -4,11 +4,11 @@ import { api } from "./_generated/api";
 import schema from "./schema";
 import { modules } from "./test.setup";
 
-const UPDATE_TIMESTAMP = 662585400000;
+const NOW = 662585400000;
 
 describe("quests", () => {
   beforeEach(() => {
-    vi.setSystemTime(UPDATE_TIMESTAMP);
+    vi.setSystemTime(NOW);
   });
 
   afterEach(() => {
@@ -35,7 +35,6 @@ describe("quests", () => {
           category: "education",
           jurisdiction: "MA",
           creationUser: userId,
-          updatedAt: UPDATE_TIMESTAMP,
         });
 
         await ctx.db.insert("quests", {
@@ -44,7 +43,6 @@ describe("quests", () => {
           category: "housing",
           jurisdiction: "NY",
           creationUser: userId,
-          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 
@@ -75,7 +73,6 @@ describe("quests", () => {
           category: "education",
           jurisdiction: "MA",
           creationUser: userId,
-          updatedAt: UPDATE_TIMESTAMP,
         });
 
         await ctx.db.insert("quests", {
@@ -85,7 +82,6 @@ describe("quests", () => {
           jurisdiction: "NY",
           creationUser: userId,
           deletedAt: Date.now(),
-          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 
@@ -122,7 +118,7 @@ describe("quests", () => {
       expect(quest?.jurisdiction).toBe("MA");
       expect(quest?.slug).toBe(slug);
       expect(quest?.creationUser).toBe(userId);
-      expect(quest?.updatedAt).toBe(UPDATE_TIMESTAMP);
+      expect(quest?.updatedAt).toBe(NOW);
       expect(quest?.updatedBy).toBe(userId);
     });
 
@@ -178,7 +174,7 @@ describe("quests", () => {
       const quest = await asUser.query(api.quests.getById, { questId });
       expect(quest?.deletedAt).toBeDefined();
       expect(typeof quest?.deletedAt).toBe("number");
-      expect(quest?.updatedAt).toBe(UPDATE_TIMESTAMP);
+      expect(quest?.updatedAt).toBe(NOW);
       expect(quest?.updatedBy).toBe(userId);
     });
 
@@ -205,7 +201,7 @@ describe("quests", () => {
 
       const quest = await asUser.query(api.quests.getById, { questId });
       expect(quest?.deletedAt).toBeUndefined();
-      expect(quest?.updatedAt).toBe(UPDATE_TIMESTAMP);
+      expect(quest?.updatedAt).toBe(NOW);
       expect(quest?.updatedBy).toBe(userId);
     });
   });

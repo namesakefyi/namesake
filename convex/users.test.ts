@@ -285,7 +285,6 @@ describe("users", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
-          updatedAt: Date.now(),
         });
 
         // Create user quest
