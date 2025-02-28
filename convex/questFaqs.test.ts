@@ -107,6 +107,7 @@ describe("questFaqs", () => {
         category: "Test Category",
         jurisdiction: "Test Jurisdiction",
         creationUser: userId,
+        updatedAt: INITIAL_QUEST_UPDATE_TIMESTAMP,
       });
     });
 
