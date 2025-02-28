@@ -1,14 +1,15 @@
-import { TimeAgo } from "@/components/common";
+import { TimeAgo } from "@/components/TimeAgo";
 import type { Doc } from "@convex/_generated/dataModel";
 
 interface QuestUpdatedProps {
   quest: Doc<"quests">;
 }
-
 export function QuestUpdated({ quest }: QuestUpdatedProps) {
-  return (
-    <span className="text-gray-dim text-sm">
-      Updated <TimeAgo date={new Date(quest.updatedAt)} />
-    </span>
+  const updatedTime = quest.updatedAt ? (
+    <TimeAgo date={new Date(quest.updatedAt)} />
+  ) : (
+    "some time ago"
   );
+
+  return <span className="text-gray-dim text-sm">Updated {updatedTime}</span>;
 }

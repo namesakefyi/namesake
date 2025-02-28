@@ -57,7 +57,7 @@ const quests = defineTable({
   /** Questions related to the quest. */
   faqs: v.optional(v.array(v.id("questFaqs"))),
   /** Time in ms since epoch when the quest was last updated. */
-  updatedAt: v.number(),
+  updatedAt: v.optional(v.number()),
   /** The user who last updated the quest. */
   updatedBy: v.optional(v.id("users")),
 })
