@@ -1,5 +1,5 @@
-import { Tab, TabList, TabPanel, Tabs } from "@/components/common";
 import type { Meta } from "@storybook/react";
+import { Tab, TabList, TabPanel, Tabs } from "./Tabs";
 
 const meta: Meta<typeof Tabs> = {
   component: Tabs,
@@ -12,7 +12,9 @@ export const Example = (args: any) => (
     <TabList aria-label="History of Ancient Rome">
       <Tab id="FoR">Founding of Rome</Tab>
       <Tab id="MaR">Monarchy and Republic</Tab>
-      <Tab id="Emp">Empire</Tab>
+      <Tab id="Emp" isDisabled>
+        Empire
+      </Tab>
     </TabList>
     <TabPanel id="FoR">Arma virumque cano, Troiae qui primus ab oris.</TabPanel>
     <TabPanel id="MaR">Senatus Populusque Romanus.</TabPanel>
