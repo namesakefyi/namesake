@@ -4,47 +4,46 @@ import { describe, expect, it } from "vitest";
 import { RedactedText } from "./RedactedText";
 
 describe("RedactedText", () => {
-  it("renders children text as redacted initially", () => {
+  it("renders text as redacted initially", () => {
     render(<RedactedText>Secret text</RedactedText>);
 
-    const button = screen.getByRole("button", { name: "Reveal spoiler" });
+    const checkbox = screen.getByRole("checkbox", { name: "Reveal spoiler" });
     const text = screen.getByText("Secret text");
+    const hiddenAnnouncement = screen.getByText(
+      "Spoiler text hidden. Check checkbox to reveal.",
+    );
 
-    expect(button).toBeInTheDocument();
+    expect(checkbox).toBeInTheDocument();
+    expect(checkbox).not.toBeChecked();
     expect(text).toHaveAttribute("aria-hidden", "true");
-    expect(button).toHaveClass("[&>mark]:bg-gray-9", "[&>mark]:text-gray-9");
+    expect(text).toHaveClass("bg-gray-9", "text-gray-9");
+    expect(hiddenAnnouncement).toHaveClass("sr-only");
   });
 
   it("reveals text when clicked", async () => {
     const user = userEvent.setup();
     render(<RedactedText>Secret text</RedactedText>);
 
-    const button = screen.getByRole("button");
-    await user.click(button);
+    const checkbox = screen.getByRole("checkbox");
+    await user.click(checkbox);
 
     const text = screen.getByText("Secret text");
+    const revealedAnnouncement = screen.getByText(
+      "Spoiler text revealed: Secret text",
+    );
+
+    expect(checkbox).toBeChecked();
     expect(text).toHaveAttribute("aria-hidden", "false");
-    expect(button).toHaveClass("[&>mark]:bg-transparent");
-    expect(button).not.toHaveAttribute("aria-label");
+    expect(text).toHaveClass("bg-transparent");
+    expect(revealedAnnouncement).toHaveClass("sr-only");
   });
 
   it("reveals text when pressing Enter", async () => {
     const user = userEvent.setup();
     render(<RedactedText>Secret text</RedactedText>);
 
-    const button = screen.getByRole("button");
-    await user.type(button, "{Enter}");
-
-    const text = screen.getByText("Secret text");
-    expect(text).toHaveAttribute("aria-hidden", "false");
-  });
-
-  it("reveals text when pressing Space", async () => {
-    const user = userEvent.setup();
-    render(<RedactedText>Secret text</RedactedText>);
-
-    const button = screen.getByRole("button");
-    await user.type(button, " ");
+    const checkbox = screen.getByRole("checkbox");
+    await user.type(checkbox, "{Enter}");
 
     const text = screen.getByText("Secret text");
     expect(text).toHaveAttribute("aria-hidden", "false");
@@ -53,8 +52,8 @@ describe("RedactedText", () => {
   it("applies custom className", () => {
     render(<RedactedText className="custom-class">Secret text</RedactedText>);
 
-    const button = screen.getByRole("button");
-    expect(button).toHaveClass("custom-class");
+    const wrapper = screen.getByRole("checkbox").closest("label");
+    expect(wrapper).toHaveClass("custom-class");
   });
 
   it("returns null when children is empty", () => {
