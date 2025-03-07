@@ -1,3 +1,4 @@
+import { focusRing } from "@/components/utils";
 import { useState } from "react";
 import { tv } from "tailwind-variants";
 
@@ -7,7 +8,8 @@ export interface RedactedTextProps {
 }
 
 const styles = tv({
-  base: "inline relative",
+  extend: focusRing,
+  base: "inline relative rounded-sm",
   variants: {
     revealed: {
       true: "cursor-text select-text",
@@ -28,11 +30,16 @@ const contentStyles = tv({
 
 export function RedactedText({ children, className }: RedactedTextProps) {
   const [revealed, setRevealed] = useState(false);
+  const [isFocusVisible, setIsFocusVisible] = useState(false);
 
   if (!children) return null;
 
   return (
-    <label className={styles({ revealed, className })}>
+    <label
+      className={styles({ revealed, isFocusVisible, className })}
+      onFocus={() => setIsFocusVisible(true)}
+      onBlur={() => setIsFocusVisible(false)}
+    >
       <input
         type="checkbox"
         checked={revealed}

@@ -38,12 +38,13 @@ describe("RedactedText", () => {
     expect(revealedAnnouncement).toHaveClass("sr-only");
   });
 
-  it("reveals text when pressing Enter", async () => {
+  it("reveals text when pressing spacebar on checkbox", async () => {
     const user = userEvent.setup();
     render(<RedactedText>Secret text</RedactedText>);
 
     const checkbox = screen.getByRole("checkbox");
-    await user.type(checkbox, "{Enter}");
+    checkbox.focus();
+    await user.keyboard(" ");
 
     const text = screen.getByText("Secret text");
     expect(text).toHaveAttribute("aria-hidden", "false");
