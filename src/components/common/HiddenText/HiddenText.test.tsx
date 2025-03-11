@@ -1,46 +1,58 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { RedactedText } from "./RedactedText";
+import { HiddenText } from "./HiddenText";
 
-describe("RedactedText", () => {
-  it("renders text as redacted initially", () => {
-    render(<RedactedText>Secret text</RedactedText>);
+describe("HiddenText", () => {
+  it("renders text hidden by default", () => {
+    render(<HiddenText>Secret text</HiddenText>);
 
-    const checkbox = screen.getByRole("checkbox", { name: "Reveal spoiler" });
+    const checkbox = screen.getByRole("checkbox");
+    expect(checkbox).toHaveAttribute("title", "Hidden text, toggle to reveal");
     const text = screen.getByText("Secret text");
-    const hiddenAnnouncement = screen.getByText(
-      "Spoiler text hidden. Check checkbox to reveal.",
-    );
 
     expect(checkbox).toBeInTheDocument();
     expect(checkbox).not.toBeChecked();
     expect(text).toHaveAttribute("aria-hidden", "true");
-    expect(text).toHaveClass("bg-gray-9", "text-gray-9");
-    expect(hiddenAnnouncement).toHaveClass("sr-only");
+    expect(text).toHaveClass("text-transparent");
+  });
+
+  it("prevents selecting hidden text", () => {
+    render(<HiddenText>Secret text</HiddenText>);
+
+    const wrapper = screen.getByRole("checkbox").closest("label");
+    expect(wrapper).toHaveClass("select-none");
+  });
+
+  it("allows selecting revealed text", async () => {
+    const user = userEvent.setup();
+    render(<HiddenText>Secret text</HiddenText>);
+
+    const checkbox = screen.getByRole("checkbox");
+    await user.click(checkbox);
+
+    const wrapper = screen.getByRole("checkbox").closest("label");
+    expect(wrapper).toHaveClass("cursor-text");
   });
 
   it("reveals text when clicked", async () => {
     const user = userEvent.setup();
-    render(<RedactedText>Secret text</RedactedText>);
+    render(<HiddenText>Secret text</HiddenText>);
 
     const checkbox = screen.getByRole("checkbox");
     await user.click(checkbox);
 
     const text = screen.getByText("Secret text");
-    const revealedAnnouncement = screen.getByText(
-      "Spoiler text revealed: Secret text",
-    );
 
     expect(checkbox).toBeChecked();
     expect(text).toHaveAttribute("aria-hidden", "false");
+    expect(text).not.toHaveClass("text-transparent");
     expect(text).toHaveClass("bg-transparent");
-    expect(revealedAnnouncement).toHaveClass("sr-only");
   });
 
   it("reveals text when pressing spacebar on checkbox", async () => {
     const user = userEvent.setup();
-    render(<RedactedText>Secret text</RedactedText>);
+    render(<HiddenText>Secret text</HiddenText>);
 
     const checkbox = screen.getByRole("checkbox");
     checkbox.focus();
@@ -48,17 +60,19 @@ describe("RedactedText", () => {
 
     const text = screen.getByText("Secret text");
     expect(text).toHaveAttribute("aria-hidden", "false");
+    expect(text).not.toHaveClass("text-transparent");
+    expect(text).toHaveClass("bg-transparent");
   });
 
   it("applies custom className", () => {
-    render(<RedactedText className="custom-class">Secret text</RedactedText>);
+    render(<HiddenText className="custom-class">Secret text</HiddenText>);
 
     const wrapper = screen.getByRole("checkbox").closest("label");
     expect(wrapper).toHaveClass("custom-class");
   });
 
   it("returns null when children is empty", () => {
-    const { container } = render(<RedactedText>{""}</RedactedText>);
+    const { container } = render(<HiddenText>{""}</HiddenText>);
     expect(container).toBeEmptyDOMElement();
   });
 });
