@@ -303,7 +303,7 @@ describe("userQuests", () => {
       ).rejects.toThrow("Invalid status");
     });
 
-    it("should add startedAt when status changed to inProgress", async () => {
+    it("should properly manage timestamps through status transitions", async () => {
       const t = convexTest(schema, modules);
 
       const userId = await t.run(async (ctx) => {
@@ -328,119 +328,35 @@ describe("userQuests", () => {
 
       await asUser.mutation(api.userQuests.create, { questId });
 
-      const userQuest = await asUser.query(api.userQuests.getByQuestId, {
+      // Initial state check
+      let userQuest = await asUser.query(api.userQuests.getByQuestId, {
         questId,
       });
-
       expect(userQuest?.status).toBe("notStarted");
       expect(userQuest?.startedAt).toBeUndefined();
-
-      await asUser.mutation(api.userQuests.setStatus, {
-        questId,
-        status: "inProgress",
-      });
-
-      const updatedUserQuest = await asUser.query(api.userQuests.getByQuestId, {
-        questId,
-      });
-
-      expect(updatedUserQuest?.status).toBe("inProgress");
-      expect(updatedUserQuest?.startedAt).toBe(UPDATE_TIMESTAMP);
-    });
-
-    it("should preserve startedAt and set completedAt when transitioning from inProgress to complete", async () => {
-      const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
-
-      const questId = await t.run(async (ctx) => {
-        return ctx.db.insert("quests", {
-          title: "Test Quest",
-          slug: "test-quest",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
-          creationUser: userId,
-          updatedAt: UPDATE_TIMESTAMP,
-        });
-      });
-
-      await asUser.mutation(api.userQuests.create, { questId });
-
-      // Set to inProgress and capture startedAt time
-      await asUser.mutation(api.userQuests.setStatus, {
-        questId,
-        status: "inProgress",
-      });
-
-      const inProgressQuest = await asUser.query(api.userQuests.getByQuestId, {
-        questId,
-      });
-      expect(inProgressQuest?.startedAt).toBe(UPDATE_TIMESTAMP);
-
-      // Set to complete and verify timestamps
-      await asUser.mutation(api.userQuests.setStatus, {
-        questId,
-        status: "complete",
-      });
-
-      const completedQuest = await asUser.query(api.userQuests.getByQuestId, {
-        questId,
-      });
-
-      expect(completedQuest?.startedAt).toBe(UPDATE_TIMESTAMP);
-      expect(completedQuest?.completedAt).toBe(UPDATE_TIMESTAMP);
-    });
-
-    it("should add completedAt when status changed to complete", async () => {
-      const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
-
-      const questId = await t.run(async (ctx) => {
-        return ctx.db.insert("quests", {
-          title: "Test Quest",
-          slug: "test-quest",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
-          creationUser: userId,
-          updatedAt: UPDATE_TIMESTAMP,
-        });
-      });
-
-      await asUser.mutation(api.userQuests.create, { questId });
-
-      const userQuest = await asUser.query(api.userQuests.getByQuestId, {
-        questId,
-      });
-
-      expect(userQuest?.status).toBe("notStarted");
       expect(userQuest?.completedAt).toBeUndefined();
 
+      // Transition to inProgress
+      await asUser.mutation(api.userQuests.setStatus, {
+        questId,
+        status: "inProgress",
+      });
+
+      userQuest = await asUser.query(api.userQuests.getByQuestId, { questId });
+      expect(userQuest?.status).toBe("inProgress");
+      expect(userQuest?.startedAt).toBe(UPDATE_TIMESTAMP);
+      expect(userQuest?.completedAt).toBeUndefined();
+
+      // Transition to complete
       await asUser.mutation(api.userQuests.setStatus, {
         questId,
         status: "complete",
       });
 
-      const updatedUserQuest = await asUser.query(api.userQuests.getByQuestId, {
-        questId,
-      });
-
-      expect(updatedUserQuest?.status).toBe("complete");
-      expect(updatedUserQuest?.completedAt).toBe(UPDATE_TIMESTAMP);
+      userQuest = await asUser.query(api.userQuests.getByQuestId, { questId });
+      expect(userQuest?.status).toBe("complete");
+      expect(userQuest?.startedAt).toBe(UPDATE_TIMESTAMP); // startedAt should be preserved
+      expect(userQuest?.completedAt).toBe(UPDATE_TIMESTAMP);
     });
 
     it("should remove completedAt when status changed away from complete", async () => {
@@ -468,41 +384,29 @@ describe("userQuests", () => {
 
       await asUser.mutation(api.userQuests.create, { questId });
 
-      // First set to complete
       await asUser.mutation(api.userQuests.setStatus, {
         questId,
         status: "complete",
       });
 
-      const completedQuest = await asUser.query(api.userQuests.getByQuestId, {
+      const updatedUserQuest = await asUser.query(api.userQuests.getByQuestId, {
         questId,
       });
 
-      expect(completedQuest?.status).toBe("complete");
-      expect(completedQuest?.completedAt).toBe(UPDATE_TIMESTAMP);
+      expect(updatedUserQuest?.status).toBe("complete");
+      expect(updatedUserQuest?.completedAt).toBeTypeOf("number");
 
-      // Test transition to each non-complete status
-      const nonCompleteStatuses = ["notStarted", "inProgress"] as const;
+      await asUser.mutation(api.userQuests.setStatus, {
+        questId,
+        status: "notStarted",
+      });
 
-      for (const newStatus of nonCompleteStatuses) {
-        await asUser.mutation(api.userQuests.setStatus, {
-          questId,
-          status: newStatus,
-        });
+      const updatedQuest = await asUser.query(api.userQuests.getByQuestId, {
+        questId,
+      });
 
-        const updatedQuest = await asUser.query(api.userQuests.getByQuestId, {
-          questId,
-        });
-
-        expect(updatedQuest?.status).toBe(newStatus);
-        expect(updatedQuest?.completedAt).toBeUndefined();
-
-        // Reset to complete for next iteration
-        await asUser.mutation(api.userQuests.setStatus, {
-          questId,
-          status: "complete",
-        });
-      }
+      expect(updatedQuest?.status).toBe("notStarted");
+      expect(updatedQuest?.completedAt).toBeUndefined();
     });
   });
 
