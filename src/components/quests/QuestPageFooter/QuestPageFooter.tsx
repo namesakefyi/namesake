@@ -1,5 +1,5 @@
-import { TimeAgo } from "@/components/TimeAgo";
 import { IconText } from "@/components/common/IconText";
+import { TimeAgo } from "@/components/common/TimeAgo/TimeAgo";
 import type { Doc } from "@convex/_generated/dataModel";
 import { Check, Clock } from "lucide-react";
 
