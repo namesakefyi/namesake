@@ -144,19 +144,11 @@ export const setStatus = userMutation({
     });
     if (userQuest === null) throw new Error("User quest not found");
 
-    console.log(`Status transition request for quest ${args.questId}:`, {
-      from: userQuest.status,
-      to: args.status,
-      currentStartDate: userQuest.startedAt,
-      currentCompleteDate: userQuest.completedAt,
-    });
-
     // Throw if status is invalid
     if (!STATUS[args.status as Status]) throw new Error("Invalid status");
 
     // Prevent setting the existing status
     if (userQuest.status === args.status) {
-      console.log("No status change needed - already at target status");
       return;
     }
 
@@ -172,27 +164,22 @@ export const setStatus = userMutation({
     // Handle all status transitions
     switch (args.status) {
       case "notStarted":
-        console.log("Resetting to notStarted - clearing all dates");
         update.startedAt = undefined;
         update.completedAt = undefined;
         break;
 
       case "inProgress":
-        console.log("Setting to inProgress - setting start date");
         update.startedAt = Date.now();
         if (userQuest.status === "complete") {
-          console.log("Coming from complete status - clearing completion date");
           update.completedAt = undefined;
         }
         break;
 
       case "complete":
-        console.log("Setting to complete - setting completion date");
         update.completedAt = Date.now();
         break;
     }
 
-    console.log("Applying update:", update);
     await ctx.db.patch(userQuest._id, update);
   },
 });
