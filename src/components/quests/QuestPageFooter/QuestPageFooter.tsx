@@ -8,17 +8,6 @@ interface QuestPageFooterProps {
   userQuest?: Doc<"userQuests"> | null;
 }
 
-export function QuestPageFooter({ quest, userQuest }: QuestPageFooterProps) {
-  return (
-    <footer className="border-t border-gray-dim py-4 flex items-center">
-      <div className="flex-1">
-        {userQuest && <QuestCompletedDate userQuest={userQuest} />}
-      </div>
-      <QuestUpdated quest={quest} />
-    </footer>
-  );
-}
-
 function QuestCompletedDate({ userQuest }: { userQuest: Doc<"userQuests"> }) {
   if (!userQuest || userQuest.status !== "complete" || !userQuest.completedAt)
     return null;
@@ -43,4 +32,15 @@ export function QuestUpdated({ quest }: QuestUpdatedProps) {
   );
 
   return <IconText icon={Clock}>Updated {updatedTime}</IconText>;
+}
+
+export function QuestPageFooter({ quest, userQuest }: QuestPageFooterProps) {
+  return (
+    <footer className="border-t border-gray-dim py-4 flex items-center">
+      <div className="flex-1">
+        {userQuest && <QuestCompletedDate userQuest={userQuest} />}
+      </div>
+      <QuestUpdated quest={quest} />
+    </footer>
+  );
 }
