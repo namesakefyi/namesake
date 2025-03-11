@@ -2,4 +2,4 @@
 "namesake": minor
 ---
 
-Add redacted text component
+Add spoiler component for hiding and showing text such as old names
