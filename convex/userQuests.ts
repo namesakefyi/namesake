@@ -144,38 +144,56 @@ export const setStatus = userMutation({
     });
     if (userQuest === null) throw new Error("User quest not found");
 
+    console.log(`Status transition request for quest ${args.questId}:`, {
+      from: userQuest.status,
+      to: args.status,
+      currentStartDate: userQuest.startedAt,
+      currentCompleteDate: userQuest.completedAt,
+    });
+
     // Throw if status is invalid
     if (!STATUS[args.status as Status]) throw new Error("Invalid status");
 
     // Prevent setting the existing status
-    if (userQuest.status === args.status) return;
-
-    // if the status is changing to in progress, set the start time
-    if (args.status === "inProgress") {
-      await ctx.db.patch(userQuest._id, {
-        status: args.status,
-        startedAt: Date.now(),
-      });
+    if (userQuest.status === args.status) {
+      console.log("No status change needed - already at target status");
+      return;
     }
 
-    // If the status is changing to complete, set the completion time
-    if (args.status === "complete") {
-      await ctx.db.patch(userQuest._id, {
-        status: args.status,
-        completedAt: Date.now(),
-      });
+    // Build the update object based on status transitions
+    const update: {
+      status: Status;
+      startedAt?: number | undefined;
+      completedAt?: number | undefined;
+    } = {
+      status: args.status as Status,
+    };
+
+    // Handle all status transitions
+    switch (args.status) {
+      case "notStarted":
+        console.log("Resetting to notStarted - clearing all dates");
+        update.startedAt = undefined;
+        update.completedAt = undefined;
+        break;
+
+      case "inProgress":
+        console.log("Setting to inProgress - setting start date");
+        update.startedAt = Date.now();
+        if (userQuest.status === "complete") {
+          console.log("Coming from complete status - clearing completion date");
+          update.completedAt = undefined;
+        }
+        break;
+
+      case "complete":
+        console.log("Setting to complete - setting completion date");
+        update.completedAt = Date.now();
+        break;
     }
 
-    // If the status was already complete, unset completion time
-    if (userQuest.status === "complete") {
-      await ctx.db.patch(userQuest._id, {
-        status: args.status,
-        completedAt: undefined,
-      });
-    }
-
-    // Otherwise, just update the status
-    await ctx.db.patch(userQuest._id, { status: args.status });
+    console.log("Applying update:", update);
+    await ctx.db.patch(userQuest._id, update);
   },
 });
 
