@@ -164,7 +164,6 @@ export const setStatus = userMutation({
     // Handle all status transitions
     switch (args.status) {
       case "notStarted":
-        update.startedAt = undefined;
         update.completedAt = undefined;
         break;
 
