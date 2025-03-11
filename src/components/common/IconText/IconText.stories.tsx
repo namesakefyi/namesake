@@ -1,6 +1,6 @@
+import { IconText } from "@/components/common";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Check, Clock, Star } from "lucide-react";
-import { IconText } from "./IconText";
 
 const meta = {
   title: "Common/IconText",
