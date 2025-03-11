@@ -74,7 +74,7 @@ function QuestDetailRoute() {
         <QuestDocuments quest={quest} editable={isEditing} />
         <QuestReferences quest={quest} editable={isEditing} />
       </div>
-      <QuestPageFooter quest={quest} />
+      <QuestPageFooter quest={quest} userQuest={userQuest} />
     </AppContent>
   );
 }

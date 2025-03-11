@@ -183,6 +183,8 @@ const userQuests = defineTable({
   status: status,
   /** Time in ms since epoch when the user marked the quest as complete. */
   completedAt: v.optional(v.number()),
+  /** Time in ms since epoch when the user started the quest. */
+  startedAt: v.optional(v.number()),
 })
   .index("userId", ["userId"])
   .index("questId", ["questId"]);

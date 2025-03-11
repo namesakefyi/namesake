@@ -20,6 +20,7 @@ export * from "./FileTrigger/FileTrigger";
 export * from "./Form/Form";
 export * from "./FormattedDate/FormattedDate";
 export * from "./GridList/GridList";
+export * from "./IconText/IconText";
 export * from "./Link/Link";
 export * from "./ListBox/ListBox";
 export * from "./Menu/Menu";
