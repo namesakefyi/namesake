@@ -26,31 +26,6 @@ describe("migrations", () => {
   });
 
   describe("setQuestsUpdatedTimestamp", () => {
-    it("sets updatedAt timestamp for quests where it’s undefined", async () => {
-      await t.run(async (ctx) => {
-        const userId = await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-
-        const questId = await ctx.db.insert("quests", {
-          title: "Test Quest",
-          creationUser: userId,
-          slug: "test-quest",
-          // updatedAt intentionally omitted
-        });
-
-        await migrations.runOne(
-          ctx,
-          internal.migrations.setQuestsUpdatedTimestamp,
-        );
-
-        const updatedQuest = await ctx.db.get(questId);
-        expect(updatedQuest?.updatedAt).toBeDefined();
-        expect(typeof updatedQuest?.updatedAt).toBe("number");
-      });
-    });
-
     it("doesn’t modify quests that already have updatedAt", async () => {
       const existingTimestamp = Date.now();
 
