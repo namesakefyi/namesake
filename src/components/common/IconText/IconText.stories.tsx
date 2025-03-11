@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Check, Clock, Star } from "lucide-react";
-import { Label } from "./Label";
+import { IconText } from "./IconText";
 
 const meta = {
-  title: "Common/Label",
-  component: Label,
+  title: "Common/IconText",
+  component: IconText,
   parameters: {
     layout: "centered",
   },
   tags: ["autodocs"],
-} satisfies Meta<typeof Label>;
+} satisfies Meta<typeof IconText>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
