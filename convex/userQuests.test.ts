@@ -1,5 +1,6 @@
 import { convexTest } from "convex-test";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { vi } from "vitest";
 import { api } from "./_generated/api";
 import schema from "./schema";
 import { modules } from "./test.setup";
@@ -7,6 +8,15 @@ import { modules } from "./test.setup";
 const UPDATE_TIMESTAMP = Date.now();
 
 describe("userQuests", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(UPDATE_TIMESTAMP);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   describe("getAll", () => {
     it("should return all user quests", async () => {
       const t = convexTest(schema, modules);
@@ -195,7 +205,33 @@ describe("userQuests", () => {
     });
 
     it("should throw if quest already exists", async () => {
-      // ADD
+      const t = convexTest(schema, modules);
+
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "test@example.com",
+          role: "user",
+        });
+      });
+
+      const asUser = t.withIdentity({ subject: userId });
+
+      const questId = await t.run(async (ctx) => {
+        return await ctx.db.insert("quests", {
+          title: "Test Quest",
+          slug: "test-quest",
+          category: "Test Category",
+          jurisdiction: "Test Jurisdiction",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+      });
+
+      await asUser.mutation(api.userQuests.create, { questId });
+
+      await expect(
+        asUser.mutation(api.userQuests.create, { questId }),
+      ).rejects.toThrow("Quest already exists for user");
     });
   });
 
@@ -267,6 +303,101 @@ describe("userQuests", () => {
       ).rejects.toThrow("Invalid status");
     });
 
+    it("should add startedAt when status changed to inProgress", async () => {
+      const t = convexTest(schema, modules);
+
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "test@example.com",
+          role: "user",
+        });
+      });
+
+      const asUser = t.withIdentity({ subject: userId });
+
+      const questId = await t.run(async (ctx) => {
+        return ctx.db.insert("quests", {
+          title: "Test Quest",
+          slug: "test-quest",
+          category: "Test Category",
+          jurisdiction: "Test Jurisdiction",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+      });
+
+      await asUser.mutation(api.userQuests.create, { questId });
+
+      const userQuest = await asUser.query(api.userQuests.getByQuestId, {
+        questId,
+      });
+
+      expect(userQuest?.status).toBe("notStarted");
+      expect(userQuest?.startedAt).toBeUndefined();
+
+      await asUser.mutation(api.userQuests.setStatus, {
+        questId,
+        status: "inProgress",
+      });
+
+      const updatedUserQuest = await asUser.query(api.userQuests.getByQuestId, {
+        questId,
+      });
+
+      expect(updatedUserQuest?.status).toBe("inProgress");
+      expect(updatedUserQuest?.startedAt).toBe(UPDATE_TIMESTAMP);
+    });
+
+    it("should preserve startedAt and set completedAt when transitioning from inProgress to complete", async () => {
+      const t = convexTest(schema, modules);
+
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "test@example.com",
+          role: "user",
+        });
+      });
+
+      const asUser = t.withIdentity({ subject: userId });
+
+      const questId = await t.run(async (ctx) => {
+        return ctx.db.insert("quests", {
+          title: "Test Quest",
+          slug: "test-quest",
+          category: "Test Category",
+          jurisdiction: "Test Jurisdiction",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+      });
+
+      await asUser.mutation(api.userQuests.create, { questId });
+
+      // Set to inProgress and capture startedAt time
+      await asUser.mutation(api.userQuests.setStatus, {
+        questId,
+        status: "inProgress",
+      });
+
+      const inProgressQuest = await asUser.query(api.userQuests.getByQuestId, {
+        questId,
+      });
+      expect(inProgressQuest?.startedAt).toBe(UPDATE_TIMESTAMP);
+
+      // Set to complete and verify timestamps
+      await asUser.mutation(api.userQuests.setStatus, {
+        questId,
+        status: "complete",
+      });
+
+      const completedQuest = await asUser.query(api.userQuests.getByQuestId, {
+        questId,
+      });
+
+      expect(completedQuest?.startedAt).toBe(UPDATE_TIMESTAMP);
+      expect(completedQuest?.completedAt).toBe(UPDATE_TIMESTAMP);
+    });
+
     it("should add completedAt when status changed to complete", async () => {
       const t = convexTest(schema, modules);
 
@@ -309,7 +440,7 @@ describe("userQuests", () => {
       });
 
       expect(updatedUserQuest?.status).toBe("complete");
-      expect(updatedUserQuest?.completedAt).toBeTypeOf("number"); // Unix timestamp
+      expect(updatedUserQuest?.completedAt).toBe(UPDATE_TIMESTAMP);
     });
 
     it("should remove completedAt when status changed away from complete", async () => {
