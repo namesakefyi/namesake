@@ -1,6 +1,7 @@
+import { TimeAgo } from "@/components/TimeAgo";
+import { IconText } from "@/components/common/IconText";
 import type { Doc } from "@convex/_generated/dataModel";
-import { QuestCompletedDate } from "../QuestCompletedDate/QuestCompletedDate";
-import { QuestUpdated } from "../QuestUpdated/QuestUpdated";
+import { Check, Clock } from "lucide-react";
 
 interface QuestPageFooterProps {
   quest: Doc<"quests">;
@@ -16,4 +17,30 @@ export function QuestPageFooter({ quest, userQuest }: QuestPageFooterProps) {
       <QuestUpdated quest={quest} />
     </footer>
   );
+}
+
+function QuestCompletedDate({ userQuest }: { userQuest: Doc<"userQuests"> }) {
+  if (!userQuest || userQuest.status !== "complete" || !userQuest.completedAt)
+    return null;
+
+  const completedDate = new Date(userQuest.completedAt);
+
+  return (
+    <IconText icon={Check}>
+      Completed <TimeAgo date={completedDate} />
+    </IconText>
+  );
+}
+
+interface QuestUpdatedProps {
+  quest: Doc<"quests">;
+}
+export function QuestUpdated({ quest }: QuestUpdatedProps) {
+  const updatedTime = quest.updatedAt ? (
+    <TimeAgo date={new Date(quest.updatedAt)} />
+  ) : (
+    "some time ago"
+  );
+
+  return <IconText icon={Clock}>Updated {updatedTime}</IconText>;
 }
