@@ -22,6 +22,7 @@ import { Route as AuthenticatedAdminIndexImport } from './routes/_authenticated/
 import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/_home/index'
 import { Route as AuthenticatedSettingsDataImport } from './routes/_authenticated/settings/data'
 import { Route as AuthenticatedSettingsAccountImport } from './routes/_authenticated/settings/account'
+import { Route as AuthenticatedFormsMaCourtOrderImport } from './routes/_authenticated/forms/ma-court-order'
 import { Route as AuthenticatedAdminQuestsIndexImport } from './routes/_authenticated/admin/quests.index'
 import { Route as AuthenticatedAdminEarlyAccessIndexImport } from './routes/_authenticated/admin/early-access.index'
 import { Route as AuthenticatedAdminDocumentsIndexImport } from './routes/_authenticated/admin/documents.index'
@@ -29,7 +30,6 @@ import { Route as AuthenticatedHomeStateIdIndexImport } from './routes/_authenti
 import { Route as AuthenticatedHomeCourtOrderIndexImport } from './routes/_authenticated/_home/court-order.index'
 import { Route as AuthenticatedHomeBirthCertificateIndexImport } from './routes/_authenticated/_home/birth-certificate.index'
 import { Route as AuthenticatedHomeQuestSlugIndexImport } from './routes/_authenticated/_home/$questSlug.index'
-import { Route as AuthenticatedFormsCourtOrderMaImport } from './routes/_authenticated/forms/court-order/ma'
 import { Route as AuthenticatedAdminDocumentsDocumentIdImport } from './routes/_authenticated/admin/documents.$documentId'
 
 // Create/Update Routes
@@ -102,6 +102,13 @@ const AuthenticatedSettingsAccountRoute =
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 
+const AuthenticatedFormsMaCourtOrderRoute =
+  AuthenticatedFormsMaCourtOrderImport.update({
+    id: '/forms/ma-court-order',
+    path: '/forms/ma-court-order',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 const AuthenticatedAdminQuestsIndexRoute =
   AuthenticatedAdminQuestsIndexImport.update({
     id: '/quests/',
@@ -149,13 +156,6 @@ const AuthenticatedHomeQuestSlugIndexRoute =
     id: '/$questSlug/',
     path: '/$questSlug/',
     getParentRoute: () => AuthenticatedHomeRoute,
-  } as any)
-
-const AuthenticatedFormsCourtOrderMaRoute =
-  AuthenticatedFormsCourtOrderMaImport.update({
-    id: '/forms/court-order/ma',
-    path: '/forms/court-order/ma',
-    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 const AuthenticatedAdminDocumentsDocumentIdRoute =
@@ -211,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnauthenticatedSigninImport
       parentRoute: typeof UnauthenticatedImport
     }
+    '/_authenticated/forms/ma-court-order': {
+      id: '/_authenticated/forms/ma-court-order'
+      path: '/forms/ma-court-order'
+      fullPath: '/forms/ma-court-order'
+      preLoaderRoute: typeof AuthenticatedFormsMaCourtOrderImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/settings/account': {
       id: '/_authenticated/settings/account'
       path: '/account'
@@ -252,13 +259,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/documents/$documentId'
       preLoaderRoute: typeof AuthenticatedAdminDocumentsDocumentIdImport
       parentRoute: typeof AuthenticatedAdminRouteImport
-    }
-    '/_authenticated/forms/court-order/ma': {
-      id: '/_authenticated/forms/court-order/ma'
-      path: '/forms/court-order/ma'
-      fullPath: '/forms/court-order/ma'
-      preLoaderRoute: typeof AuthenticatedFormsCourtOrderMaImport
-      parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/_home/$questSlug/': {
       id: '/_authenticated/_home/$questSlug/'
@@ -381,14 +381,14 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRouteWithChildren
-  AuthenticatedFormsCourtOrderMaRoute: typeof AuthenticatedFormsCourtOrderMaRoute
+  AuthenticatedFormsMaCourtOrderRoute: typeof AuthenticatedFormsMaCourtOrderRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedHomeRoute: AuthenticatedHomeRouteWithChildren,
-  AuthenticatedFormsCourtOrderMaRoute: AuthenticatedFormsCourtOrderMaRoute,
+  AuthenticatedFormsMaCourtOrderRoute: AuthenticatedFormsMaCourtOrderRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -412,13 +412,13 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/signin': typeof UnauthenticatedSigninRoute
+  '/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/data': typeof AuthenticatedSettingsDataRoute
   '/': typeof AuthenticatedHomeIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/admin/documents/$documentId': typeof AuthenticatedAdminDocumentsDocumentIdRoute
-  '/forms/court-order/ma': typeof AuthenticatedFormsCourtOrderMaRoute
   '/$questSlug': typeof AuthenticatedHomeQuestSlugIndexRoute
   '/birth-certificate': typeof AuthenticatedHomeBirthCertificateIndexRoute
   '/court-order': typeof AuthenticatedHomeCourtOrderIndexRoute
@@ -431,13 +431,13 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '': typeof UnauthenticatedRouteWithChildren
   '/signin': typeof UnauthenticatedSigninRoute
+  '/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/data': typeof AuthenticatedSettingsDataRoute
   '/': typeof AuthenticatedHomeIndexRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
   '/admin/documents/$documentId': typeof AuthenticatedAdminDocumentsDocumentIdRoute
-  '/forms/court-order/ma': typeof AuthenticatedFormsCourtOrderMaRoute
   '/$questSlug': typeof AuthenticatedHomeQuestSlugIndexRoute
   '/birth-certificate': typeof AuthenticatedHomeBirthCertificateIndexRoute
   '/court-order': typeof AuthenticatedHomeCourtOrderIndexRoute
@@ -455,13 +455,13 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/_authenticated/_home': typeof AuthenticatedHomeRouteWithChildren
   '/_unauthenticated/signin': typeof UnauthenticatedSigninRoute
+  '/_authenticated/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/data': typeof AuthenticatedSettingsDataRoute
   '/_authenticated/_home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/admin/documents/$documentId': typeof AuthenticatedAdminDocumentsDocumentIdRoute
-  '/_authenticated/forms/court-order/ma': typeof AuthenticatedFormsCourtOrderMaRoute
   '/_authenticated/_home/$questSlug/': typeof AuthenticatedHomeQuestSlugIndexRoute
   '/_authenticated/_home/birth-certificate/': typeof AuthenticatedHomeBirthCertificateIndexRoute
   '/_authenticated/_home/court-order/': typeof AuthenticatedHomeCourtOrderIndexRoute
@@ -478,13 +478,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/settings'
     | '/signin'
+    | '/forms/ma-court-order'
     | '/settings/account'
     | '/settings/data'
     | '/'
     | '/admin/'
     | '/settings/'
     | '/admin/documents/$documentId'
-    | '/forms/court-order/ma'
     | '/$questSlug'
     | '/birth-certificate'
     | '/court-order'
@@ -496,13 +496,13 @@ export interface FileRouteTypes {
   to:
     | ''
     | '/signin'
+    | '/forms/ma-court-order'
     | '/settings/account'
     | '/settings/data'
     | '/'
     | '/admin'
     | '/settings'
     | '/admin/documents/$documentId'
-    | '/forms/court-order/ma'
     | '/$questSlug'
     | '/birth-certificate'
     | '/court-order'
@@ -518,13 +518,13 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/_home'
     | '/_unauthenticated/signin'
+    | '/_authenticated/forms/ma-court-order'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/data'
     | '/_authenticated/_home/'
     | '/_authenticated/admin/'
     | '/_authenticated/settings/'
     | '/_authenticated/admin/documents/$documentId'
-    | '/_authenticated/forms/court-order/ma'
     | '/_authenticated/_home/$questSlug/'
     | '/_authenticated/_home/birth-certificate/'
     | '/_authenticated/_home/court-order/'
@@ -565,7 +565,7 @@ export const routeTree = rootRoute
         "/_authenticated/admin",
         "/_authenticated/settings",
         "/_authenticated/_home",
-        "/_authenticated/forms/court-order/ma"
+        "/_authenticated/forms/ma-court-order"
       ]
     },
     "/_unauthenticated": {
@@ -609,6 +609,10 @@ export const routeTree = rootRoute
       "filePath": "_unauthenticated/signin.tsx",
       "parent": "/_unauthenticated"
     },
+    "/_authenticated/forms/ma-court-order": {
+      "filePath": "_authenticated/forms/ma-court-order.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/settings/account": {
       "filePath": "_authenticated/settings/account.tsx",
       "parent": "/_authenticated/settings"
@@ -632,10 +636,6 @@ export const routeTree = rootRoute
     "/_authenticated/admin/documents/$documentId": {
       "filePath": "_authenticated/admin/documents.$documentId.tsx",
       "parent": "/_authenticated/admin"
-    },
-    "/_authenticated/forms/court-order/ma": {
-      "filePath": "_authenticated/forms/court-order/ma.tsx",
-      "parent": "/_authenticated"
     },
     "/_authenticated/_home/$questSlug/": {
       "filePath": "_authenticated/_home/$questSlug.index.tsx",

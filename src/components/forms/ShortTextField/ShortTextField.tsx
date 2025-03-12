@@ -28,9 +28,9 @@ export function ShortTextField({
             {...field}
             label={label}
             size="large"
-            {...props}
             isInvalid={invalid}
             errorMessage={error?.message}
+            {...props}
           />
         )}
       />

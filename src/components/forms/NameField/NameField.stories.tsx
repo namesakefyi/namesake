@@ -13,6 +13,7 @@ export default meta;
 export const Example = (args: NameFieldProps) => <NameField {...args} />;
 
 Example.args = {
+  type: "newName",
   children: (
     <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
       Children
