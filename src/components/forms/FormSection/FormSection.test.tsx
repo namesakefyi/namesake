@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { FormSection } from "./FormSection";
+import { FormSection, FormSubSection } from "./FormSection";
 
 describe("FormSection", () => {
   const formSection = {
@@ -55,5 +55,40 @@ describe("FormSection", () => {
       "id",
       "what-is-the-reason-youre-changing-your-name",
     );
+  });
+});
+
+describe("FormSubSection", () => {
+  it("renders title", () => {
+    render(<FormSubSection title="What is your legal name?" />);
+
+    const titleElement = screen.getByText("What is your legal name?");
+    expect(titleElement).toBeInTheDocument();
+    expect(titleElement).toHaveClass("text-2xl");
+  });
+
+  it("does not render title when not provided", () => {
+    render(<FormSubSection title={undefined} />);
+
+    const titleElement = screen.queryByText("What is your legal name?");
+    expect(titleElement).toBeNull();
+  });
+
+  it("renders children", () => {
+    render(
+      <FormSubSection title="What is your legal name?">
+        <div>Test content</div>
+      </FormSubSection>,
+    );
+    expect(screen.getByText("Test content")).toBeInTheDocument();
+  });
+
+  it("does not render when not visible", () => {
+    render(
+      <FormSubSection title="What is your legal name?" isVisible={false} />,
+    );
+
+    const titleElement = screen.queryByText("What is your legal name?");
+    expect(titleElement).toBeNull();
   });
 });
