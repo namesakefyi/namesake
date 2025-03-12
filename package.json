@@ -9,6 +9,7 @@
     "dev": "npm-run-all --parallel dev:frontend dev:backend",
     "dev:frontend": "vite",
     "dev:backend": "convex dev",
+    "dev:delete": "bash scripts/deleteConvexTables.sh",
     "build": "tsc -b && vite build",
     "lint": "biome lint",
     "lint:fix": "biome lint --write",
