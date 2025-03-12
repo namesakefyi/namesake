@@ -148,26 +148,38 @@ export const setStatus = userMutation({
     if (!STATUS[args.status as Status]) throw new Error("Invalid status");
 
     // Prevent setting the existing status
-    if (userQuest.status === args.status) return;
-
-    // If the status is changing to complete, set the completion time
-    if (args.status === "complete") {
-      await ctx.db.patch(userQuest._id, {
-        status: args.status,
-        completedAt: Date.now(),
-      });
+    if (userQuest.status === args.status) {
+      return;
     }
 
-    // If the status was already complete, unset completion time
-    if (userQuest.status === "complete") {
-      await ctx.db.patch(userQuest._id, {
-        status: args.status,
-        completedAt: undefined,
-      });
+    // Build the update object based on status transitions
+    const update: {
+      status: Status;
+      startedAt?: number | undefined;
+      completedAt?: number | undefined;
+    } = {
+      status: args.status as Status,
+    };
+
+    // Handle all status transitions
+    switch (args.status) {
+      case "notStarted":
+        update.completedAt = undefined;
+        break;
+
+      case "inProgress":
+        update.startedAt = Date.now();
+        if (userQuest.status === "complete") {
+          update.completedAt = undefined;
+        }
+        break;
+
+      case "complete":
+        update.completedAt = Date.now();
+        break;
     }
 
-    // Otherwise, just update the status
-    await ctx.db.patch(userQuest._id, { status: args.status });
+    await ctx.db.patch(userQuest._id, update);
   },
 });
 
