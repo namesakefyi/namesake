@@ -1,7 +1,11 @@
 import userEvent from "@testing-library/user-event";
 import { renderWithFormProvider, screen } from "@tests/test-utils";
 import { describe, expect, it } from "vitest";
-import { YesNoField } from "./YesNoField";
+import {
+  YesNoField,
+  getBooleanValueFromYesNoString,
+  getYesNoStringFromBoolean,
+} from "./YesNoField";
 
 describe("YesNoField", () => {
   it("renders with default labels", () => {
@@ -89,5 +93,37 @@ describe("YesNoField", () => {
 
     const childComponent = screen.getByTestId("child-component");
     expect(childComponent).toBeInTheDocument();
+  });
+});
+
+describe("getYesNoStringFromBoolean", () => {
+  it("returns 'yes' if the value is true", () => {
+    expect(getYesNoStringFromBoolean(true)).toBe("yes");
+  });
+
+  it("returns 'no' if the value is false", () => {
+    expect(getYesNoStringFromBoolean(false)).toBe("no");
+  });
+
+  it("returns null if the value is undefined", () => {
+    expect(getYesNoStringFromBoolean(undefined as any)).toBeNull();
+  });
+
+  it("returns null if the value is null", () => {
+    expect(getYesNoStringFromBoolean(null as any)).toBeNull();
+  });
+});
+
+describe("getBooleanValueFromYesNoString", () => {
+  it("returns true if the value is 'yes'", () => {
+    expect(getBooleanValueFromYesNoString("yes")).toBe(true);
+  });
+
+  it("returns false otherwise", () => {
+    expect(getBooleanValueFromYesNoString("no")).toBe(false);
+    expect(getBooleanValueFromYesNoString("")).toBe(false);
+    expect(getBooleanValueFromYesNoString("garbage")).toBe(false);
+    expect(getBooleanValueFromYesNoString(null as any)).toBe(false);
+    expect(getBooleanValueFromYesNoString(undefined as any)).toBe(false);
   });
 });
