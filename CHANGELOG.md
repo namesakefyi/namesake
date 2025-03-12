@@ -1,5 +1,12 @@
 # namesake
 
+## 0.21.0
+
+### Minor Changes
+
+- 376da9c: Show the quest completion date in the footer
+- 2cdb562: Add spoiler component for hiding and showing text such as old names
+
 ## 0.20.0
 
 ### Minor Changes
