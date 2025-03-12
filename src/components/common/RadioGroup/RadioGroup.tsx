@@ -100,6 +100,7 @@ export const Radio = forwardRef<HTMLLabelElement, RadioProps>(
         {(renderProps) => (
           <>
             <div className={radioStyles({ ...renderProps, size })} />
+            {/* Types workaround: https://github.com/adobe/react-spectrum/issues/7434 */}
             {typeof props.children === "function"
               ? props.children(renderProps)
               : props.children}

@@ -6,9 +6,9 @@ import { Controller, useFormContext } from "react-hook-form";
 /**
  * Converts a boolean value to a string value.
  * @param value - The boolean value to convert.
- * @returns "yes" if the value is true, "no" if the value is false.
+ * @returns "yes" if the value is true, "no" if the value is false, null if the value is undefined or null.
  */
-const getYesNoStringFromBoolean = (value: boolean) => {
+export const getYesNoStringFromBoolean = (value: boolean) => {
   if (value === undefined || value === null) return null;
   if (value) return "yes";
   return "no";
@@ -19,7 +19,7 @@ const getYesNoStringFromBoolean = (value: boolean) => {
  * @param value - The string value to convert.
  * @returns true if the value is "yes", false if the value is "no".
  */
-const getBooleanValueFromYesNoString = (value: string) => {
+export const getBooleanValueFromYesNoString = (value: string) => {
   return value === "yes";
 };
 
