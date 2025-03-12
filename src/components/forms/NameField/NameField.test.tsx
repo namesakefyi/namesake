@@ -1,11 +1,11 @@
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithFormProvider, screen } from "@tests/test-utils";
 import { describe, expect, it } from "vitest";
 import { NameField } from "./NameField";
 
 describe("NameField", () => {
   it("renders all name input fields", () => {
-    render(<NameField />);
+    renderWithFormProvider(<NameField type="newName" />);
 
     const firstNameInput = screen.getByLabelText("First name");
     const middleNameInput = screen.getByLabelText("Middle name");
@@ -17,7 +17,7 @@ describe("NameField", () => {
   });
 
   it("has correct autocomplete attributes", () => {
-    render(<NameField />);
+    renderWithFormProvider(<NameField type="newName" />);
 
     const firstNameInput = screen.getByLabelText("First name");
     const middleNameInput = screen.getByLabelText("Middle name");
@@ -29,7 +29,7 @@ describe("NameField", () => {
   });
 
   it("allows entering text in all name fields", async () => {
-    render(<NameField />);
+    renderWithFormProvider(<NameField type="newName" />);
 
     const firstNameInput: HTMLInputElement =
       screen.getByLabelText("First name");
@@ -47,8 +47,8 @@ describe("NameField", () => {
   });
 
   it("supports optional children", () => {
-    render(
-      <NameField>
+    renderWithFormProvider(
+      <NameField type="newName">
         <div data-testid="child-component">Additional Info</div>
       </NameField>,
     );

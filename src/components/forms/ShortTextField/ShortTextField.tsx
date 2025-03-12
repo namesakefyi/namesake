@@ -1,8 +1,10 @@
 import { TextField, type TextFieldProps } from "@/components/common";
+import type { UserFormDataField } from "@convex/constants";
+import { Controller, useFormContext } from "react-hook-form";
 
 export interface ShortTextFieldProps extends Omit<TextFieldProps, "size"> {
   label: string;
-  name: string;
+  name: UserFormDataField;
   children?: React.ReactNode;
 }
 
@@ -10,11 +12,28 @@ export function ShortTextField({
   label,
   name,
   children,
+  defaultValue,
   ...props
 }: ShortTextFieldProps) {
+  const { control } = useFormContext();
+
   return (
     <div className="flex flex-col gap-4">
-      <TextField label={label} name={name} size="large" {...props} />
+      <Controller
+        control={control}
+        name={name}
+        defaultValue={defaultValue ?? ""}
+        render={({ field, fieldState: { invalid, error } }) => (
+          <TextField
+            {...field}
+            label={label}
+            size="large"
+            {...props}
+            isInvalid={invalid}
+            errorMessage={error?.message}
+          />
+        )}
+      />
       {children}
     </div>
   );

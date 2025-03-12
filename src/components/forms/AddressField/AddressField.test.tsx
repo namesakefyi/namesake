@@ -1,12 +1,12 @@
 import { JURISDICTIONS } from "@convex/constants";
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithFormProvider, screen } from "@tests/test-utils";
 import { describe, expect, it } from "vitest";
 import { AddressField } from "./AddressField";
 
 describe("AddressField", () => {
   it("renders all address input fields", () => {
-    render(<AddressField />);
+    renderWithFormProvider(<AddressField type="residence" />);
 
     const streetAddressInput = screen.getByLabelText("Street address");
     const cityInput = screen.getByLabelText("City");
@@ -20,7 +20,7 @@ describe("AddressField", () => {
   });
 
   it("allows entering address details", async () => {
-    render(<AddressField />);
+    renderWithFormProvider(<AddressField type="residence" />);
 
     const streetAddressInput = screen.getByLabelText("Street address");
     const cityInput = screen.getByLabelText("City");
@@ -46,8 +46,8 @@ describe("AddressField", () => {
   });
 
   it("supports optional children", () => {
-    render(
-      <AddressField>
+    renderWithFormProvider(
+      <AddressField type="residence">
         <div data-testid="child-component">Additional Info</div>
       </AddressField>,
     );
@@ -57,11 +57,13 @@ describe("AddressField", () => {
   });
 
   it("includes all autocomplete attributes", () => {
-    render(<AddressField />);
+    renderWithFormProvider(<AddressField type="residence" />);
 
     const streetAddressInput = screen.getByLabelText("Street address");
     const cityInput = screen.getByLabelText("City");
-    // const stateSelect = screen.getByLabelText("Statel");
+    const stateSelect = screen.getByRole("combobox", {
+      hidden: true,
+    });
     const zipInput = screen.getByLabelText("ZIP");
 
     expect(streetAddressInput).toHaveAttribute(
@@ -69,11 +71,42 @@ describe("AddressField", () => {
       "street-address",
     );
     expect(cityInput).toHaveAttribute("autocomplete", "address-level2");
-
-    // RAC currently doesn't pass down autoComplete
-    // Fixed in https://github.com/adobe/react-spectrum/pull/7452
-    // Waiting for react-aria-components to update npm package; uncomment after
-    // expect(stateSelect).toHaveAttribute("autocomplete", "address-level1");
+    expect(stateSelect).toHaveAttribute("autocomplete", "address-level1");
     expect(zipInput).toHaveAttribute("autocomplete", "postal-code");
+  });
+
+  it("renders the correct names for the residence type", () => {
+    renderWithFormProvider(<AddressField type="residence" />);
+
+    const streetAddressInput = screen.getByLabelText("Street address");
+    const cityInput = screen.getByLabelText("City");
+    const stateSelect = screen.getByRole("combobox", {
+      hidden: true,
+    });
+    const zipInput = screen.getByLabelText("ZIP");
+
+    expect(streetAddressInput).toHaveAttribute(
+      "name",
+      "residenceStreetAddress",
+    );
+    expect(cityInput).toHaveAttribute("name", "residenceCity");
+    expect(stateSelect).toHaveAttribute("name", "residenceState");
+    expect(zipInput).toHaveAttribute("name", "residenceZipCode");
+  });
+
+  it("renders the correct names for the mailing type", () => {
+    renderWithFormProvider(<AddressField type="mailing" />);
+
+    const streetAddressInput = screen.getByLabelText("Street address");
+    const cityInput = screen.getByLabelText("City");
+    const stateSelect = screen.getByRole("combobox", {
+      hidden: true,
+    });
+    const zipInput = screen.getByLabelText("ZIP");
+
+    expect(streetAddressInput).toHaveAttribute("name", "mailingStreetAddress");
+    expect(cityInput).toHaveAttribute("name", "mailingCity");
+    expect(stateSelect).toHaveAttribute("name", "mailingState");
+    expect(zipInput).toHaveAttribute("name", "mailingZipCode");
   });
 });

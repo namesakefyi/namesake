@@ -1,4 +1,5 @@
 import { composeTailwindRenderProps, focusRing } from "@/components/utils";
+import { forwardRef } from "react";
 import {
   FieldError as AriaFieldError,
   type GroupProps as AriaGroupProps,
@@ -147,16 +148,20 @@ export const inputStyles = tv({
   },
 });
 
-export function Input({ size, ...props }: InputProps) {
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  { size, ...props },
+  ref,
+) {
   return (
     <AriaInput
       {...props}
+      ref={ref}
       className={composeRenderProps(props.className, (className, renderProps) =>
         inputStyles({ ...renderProps, size, className }),
       )}
     />
   );
-}
+});
 
 export const inputTextAreaStyles = tv({
   base: "flex-1 min-w-0 leading-snug outline outline-0 bg-transparent text-gray-normal disabled:text-gray-dim",
@@ -176,13 +181,17 @@ interface InputTextAreaProps extends Omit<AriaTextAreaProps, "size"> {
   size?: FieldSize;
 }
 
-export function InputTextArea({ size, ...props }: InputTextAreaProps) {
+export const InputTextArea = forwardRef<
+  HTMLTextAreaElement,
+  InputTextAreaProps
+>(function InputTextArea({ size, ...props }, ref) {
   return (
     <AriaTextArea
       {...props}
+      ref={ref}
       className={composeRenderProps(props.className, (className, renderProps) =>
         inputTextAreaStyles({ ...renderProps, size, className }),
       )}
     />
   );
-}
+});

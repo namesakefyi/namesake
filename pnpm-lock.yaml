@@ -112,6 +112,9 @@ importers:
       lucide-react:
         specifier: ^0.479.0
         version: 0.479.0(react@19.0.0)
+      merge-refs:
+        specifier: ^1.3.0
+        version: 1.3.0(@types/react@19.0.10)
       motion:
         specifier: ^12.4.10
         version: 12.4.10(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -145,6 +148,9 @@ importers:
       react-helmet-async:
         specifier: ^2.0.5
         version: 2.0.5(react@19.0.0)
+      react-hook-form:
+        specifier: ^7.54.2
+        version: 7.54.2(react@19.0.0)
       react-random-reveal:
         specifier: ^2.0.1
         version: 2.0.1(react@19.0.0)
@@ -294,8 +300,8 @@ importers:
         specifier: ^1.4.1
         version: 1.4.1(tailwindcss@3.4.17)
       tailwindcss-react-aria-components:
-        specifier: ^1.2.0
-        version: 1.2.0(tailwindcss@3.4.17)
+        specifier: ^2.0.0
+        version: 2.0.0(tailwindcss@3.4.17)
       typescript:
         specifier: ^5.8.2
         version: 5.8.2
@@ -3770,6 +3776,14 @@ packages:
     resolution: {integrity: sha512-S3UwM3yj5mtUSEfP41UZmt/0SCoVYUcU1rkXv+BQ5Ig8ndL4sPoJNBUJERafdPb5jjHJGuMgytgKvKIf58XNBw==}
     engines: {node: '>= 0.10.0'}
 
+  merge-refs@1.3.0:
+    resolution: {integrity: sha512-nqXPXbso+1dcKDpPCXvwZyJILz+vSLqGGOnDrYHQYE+B8n9JTCekVLC65AfCpR4ggVyA/45Y0iR9LDyS2iI+zA==}
+    peerDependencies:
+      '@types/react': ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
 
@@ -4476,6 +4490,12 @@ packages:
     peerDependencies:
       react: ^16.6.0 || ^17.0.0 || ^18.0.0
 
+  react-hook-form@7.54.2:
+    resolution: {integrity: sha512-eHpAUgUjWbZocoQYUHposymRb4ZP6d0uwUnooL2uOybA9/3tPUvoAKqEWK1WaSiTxxOfTpffNZP7QwlnM3/gEg==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -4879,10 +4899,10 @@ packages:
     peerDependencies:
       tailwindcss: '>=3.0.0'
 
-  tailwindcss-react-aria-components@1.2.0:
-    resolution: {integrity: sha512-ynlQIfAdoWAz0Og0dCe/d4QVE+L8Yuo6rtK9apdhehZZMoLC1GdwtnvLZyUyx+wHwnTjRuNtFPdN0DpPsPXJJg==}
+  tailwindcss-react-aria-components@2.0.0:
+    resolution: {integrity: sha512-l8YdpXX//qx0Mz2bW3YKLjboTQxR3zLrFhlHniAIn+mTwVM1yvT0Jp7Pn3eFrqi+qtOMmcJzXaF2rsKezSr0SQ==}
     peerDependencies:
-      tailwindcss: '*'
+      tailwindcss: ^4.0.0
 
   tailwindcss@3.4.17:
     resolution: {integrity: sha512-w33E2aCvSDP0tW9RZuNXadXlkHXqFzSkQew/aIa2i/Sj8fThxwovwlXHSPXTbAHwEIhBFXAedUhP2tueAKP8Og==}
@@ -9259,6 +9279,10 @@ snapshots:
 
   memorystream@0.3.1: {}
 
+  merge-refs@1.3.0(@types/react@19.0.10):
+    optionalDependencies:
+      '@types/react': 19.0.10
+
   merge-stream@2.0.0: {}
 
   merge2@1.4.1: {}
@@ -9984,6 +10008,10 @@ snapshots:
       react-fast-compare: 3.2.2
       shallowequal: 1.1.0
 
+  react-hook-form@7.54.2(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+
   react-is@16.13.1: {}
 
   react-is@17.0.2: {}
@@ -10471,7 +10499,7 @@ snapshots:
       '@radix-ui/colors': 3.0.0
       tailwindcss: 3.4.17
 
-  tailwindcss-react-aria-components@1.2.0(tailwindcss@3.4.17):
+  tailwindcss-react-aria-components@2.0.0(tailwindcss@3.4.17):
     dependencies:
       tailwindcss: 3.4.17
 
