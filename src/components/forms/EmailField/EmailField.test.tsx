@@ -1,11 +1,11 @@
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithFormProvider, screen } from "@tests/test-utils";
 import { describe, expect, it } from "vitest";
 import { EmailField } from "./EmailField";
 
 describe("EmailField", () => {
   it("renders email input field", () => {
-    render(<EmailField />);
+    renderWithFormProvider(<EmailField name="email" />);
 
     const emailInput = screen.getByLabelText("Email address");
 
@@ -16,7 +16,7 @@ describe("EmailField", () => {
   });
 
   it("allows entering an email address", async () => {
-    render(<EmailField />);
+    renderWithFormProvider(<EmailField name="email" />);
 
     const emailInput: HTMLInputElement = screen.getByLabelText("Email address");
 
@@ -25,8 +25,8 @@ describe("EmailField", () => {
   });
 
   it("supports optional children", () => {
-    render(
-      <EmailField>
+    renderWithFormProvider(
+      <EmailField name="email">
         <div data-testid="child-component">Additional Info</div>
       </EmailField>,
     );

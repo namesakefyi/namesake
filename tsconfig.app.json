@@ -18,7 +18,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@convex/*": ["convex/*"]
+      "@convex/*": ["convex/*"],
+      "@tests/*": ["tests/*"]
     }
   }
 }

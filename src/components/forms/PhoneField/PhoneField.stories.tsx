@@ -13,6 +13,7 @@ export default meta;
 export const Example = (args: PhoneFieldProps) => <PhoneField {...args} />;
 
 Example.args = {
+  name: "phoneNumber",
   children: (
     <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
       Children

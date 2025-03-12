@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithFormProvider, screen } from "@tests/test-utils";
 import { describe, expect, it } from "vitest";
 import { CheckboxField } from "./CheckboxField";
 
@@ -7,16 +7,18 @@ describe("CheckboxField", () => {
   it("renders checkbox group with correct label", () => {
     const testLabel = "I would like my documents returned";
 
-    render(<CheckboxField name="test-checkbox" label={testLabel} />);
+    renderWithFormProvider(
+      <CheckboxField name="shouldReturnOriginalDocuments" label={testLabel} />,
+    );
 
     const groupLabel = screen.getByText(testLabel);
     expect(groupLabel).toBeInTheDocument();
   });
 
   it("allows selecting the checkbox", async () => {
-    render(
+    renderWithFormProvider(
       <CheckboxField
-        name="test-checkbox"
+        name="shouldReturnOriginalDocuments"
         label="I would like my documents returned"
       />,
     );
@@ -33,9 +35,9 @@ describe("CheckboxField", () => {
   });
 
   it("supports optional children", () => {
-    render(
+    renderWithFormProvider(
       <CheckboxField
-        name="test-checkbox"
+        name="shouldReturnOriginalDocuments"
         label="I would like my documents returned"
       >
         <div data-testid="child-component">Additional Info</div>

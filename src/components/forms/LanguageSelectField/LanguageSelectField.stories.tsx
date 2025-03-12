@@ -1,11 +1,11 @@
 import {
-  MemorableDateField,
-  type MemorableDateFieldProps,
+  LanguageSelectField,
+  type LanguageSelectFieldProps,
 } from "@/components/forms";
 import type { Meta } from "@storybook/react";
 
-const meta: Meta<typeof MemorableDateField> = {
-  component: MemorableDateField,
+const meta: Meta<typeof LanguageSelectField> = {
+  component: LanguageSelectField,
   parameters: {
     layout: "padded",
   },
@@ -13,13 +13,13 @@ const meta: Meta<typeof MemorableDateField> = {
 
 export default meta;
 
-export const Example = (args: MemorableDateFieldProps) => (
-  <MemorableDateField {...args} />
+export const Example = (args: LanguageSelectFieldProps) => (
+  <LanguageSelectField {...args} />
 );
 
 Example.args = {
-  name: "dateOfBirth",
-  label: "Birthdate",
+  label: "Language",
+  name: "language",
   children: (
     <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
       Children

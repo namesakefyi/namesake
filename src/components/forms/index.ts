@@ -13,3 +13,4 @@ export * from "./PhoneField/PhoneField";
 export * from "./PronounSelectField/PronounSelectField";
 export * from "./RadioGroupField/RadioGroupField";
 export * from "./ShortTextField/ShortTextField";
+export * from "./YesNoField/YesNoField";

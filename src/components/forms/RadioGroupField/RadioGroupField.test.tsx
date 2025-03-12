@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithFormProvider, screen } from "@tests/test-utils";
 import { describe, expect, it } from "vitest";
 import { RadioGroupField } from "./RadioGroupField";
 
@@ -13,9 +13,9 @@ describe("RadioGroupField", () => {
   it("renders radio group with correct label", () => {
     const testLabel = "Select an option";
 
-    render(
+    renderWithFormProvider(
       <RadioGroupField
-        name="test-radio"
+        name="pronouns"
         label={testLabel}
         options={mockOptions}
       />,
@@ -26,9 +26,9 @@ describe("RadioGroupField", () => {
   });
 
   it("renders all radio options", () => {
-    render(
+    renderWithFormProvider(
       <RadioGroupField
-        name="test-radio"
+        name="pronouns"
         label="Test Label"
         options={mockOptions}
       />,
@@ -41,9 +41,9 @@ describe("RadioGroupField", () => {
   });
 
   it("displays guidance for radio groups", () => {
-    render(
+    renderWithFormProvider(
       <RadioGroupField
-        name="test-radio"
+        name="pronouns"
         label="Test Label"
         options={mockOptions}
       />,
@@ -54,9 +54,9 @@ describe("RadioGroupField", () => {
   });
 
   it("allows selecting a radio option", async () => {
-    render(
+    renderWithFormProvider(
       <RadioGroupField
-        name="test-radio"
+        name="pronouns"
         label="Test Label"
         options={mockOptions}
       />,
@@ -72,12 +72,8 @@ describe("RadioGroupField", () => {
   });
 
   it("supports optional children", () => {
-    render(
-      <RadioGroupField
-        name="test-radio"
-        label="Test Label"
-        options={mockOptions}
-      >
+    renderWithFormProvider(
+      <RadioGroupField name="pronouns" label="Test Label" options={mockOptions}>
         <div data-testid="child-component">Additional Info</div>
       </RadioGroupField>,
     );

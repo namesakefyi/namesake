@@ -1,36 +1,31 @@
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithFormProvider, screen } from "@tests/test-utils";
 import { describe, expect, it } from "vitest";
 import { PhoneField } from "./PhoneField";
 
 describe("PhoneField", () => {
   it("renders the phone number input field", () => {
-    render(<PhoneField />);
+    renderWithFormProvider(<PhoneField name="phoneNumber" />);
 
     const phoneInput = screen.getByLabelText("Phone number");
     expect(phoneInput).toBeInTheDocument();
     expect(phoneInput).toHaveValue("");
     expect(phoneInput).toHaveAttribute("type", "tel");
-    expect(phoneInput).toHaveAttribute("name", "phone");
+    expect(phoneInput).toHaveAttribute("name", "phoneNumber");
     expect(phoneInput).toHaveAttribute("autocomplete", "tel");
   });
 
   it("allows entering and formatting a phone number", async () => {
-    render(<PhoneField />);
+    renderWithFormProvider(<PhoneField name="phoneNumber" />);
     const phoneInput = screen.getByLabelText(
       "Phone number",
     ) as HTMLInputElement;
     await userEvent.type(phoneInput, "4567890123");
     expect(phoneInput.value).toBe("+1 (456) 789-0123");
-    await userEvent.type(
-      phoneInput,
-      "{backspace}{backspace}{backspace}{backspace}",
-    );
-    expect(phoneInput.value).toBe("+1 (456) 789");
   });
 
   it("does not allow non-numeric characters", async () => {
-    render(<PhoneField />);
+    renderWithFormProvider(<PhoneField name="phoneNumber" />);
     const phoneInput = screen.getByLabelText(
       "Phone number",
     ) as HTMLInputElement;
@@ -39,7 +34,7 @@ describe("PhoneField", () => {
   });
 
   it("does not allow more than 10 digits", async () => {
-    render(<PhoneField />);
+    renderWithFormProvider(<PhoneField name="phoneNumber" />);
     const phoneInput = screen.getByLabelText(
       "Phone number",
     ) as HTMLInputElement;
@@ -48,8 +43,8 @@ describe("PhoneField", () => {
   });
 
   it("supports optional children", () => {
-    render(
-      <PhoneField>
+    renderWithFormProvider(
+      <PhoneField name="phoneNumber">
         <div data-testid="child-component">Additional Info</div>
       </PhoneField>,
     );

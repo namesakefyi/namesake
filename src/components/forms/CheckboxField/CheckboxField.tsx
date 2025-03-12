@@ -1,11 +1,15 @@
 import { Checkbox, type CheckboxProps } from "@/components/common";
+import type { UserFormDataField } from "@convex/constants";
+import { Controller } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
 export interface CheckboxFieldProps extends CheckboxProps {
   children?: React.ReactNode;
-  name: string;
+  name: UserFormDataField;
   label: string;
   className?: string;
+  defaultValue?: boolean;
 }
 
 export function CheckboxField({
@@ -13,10 +17,34 @@ export function CheckboxField({
   label,
   className,
   children,
+  defaultValue,
+  ...props
 }: CheckboxFieldProps) {
+  const { control, setValue } = useFormContext();
+
   return (
-    <div className={twMerge("flex flex-col gap-4 w-fit", className)}>
-      <Checkbox name={name} size="large" label={label} card />
+    <div className={twMerge("flex flex-col gap-4", className)}>
+      <Controller
+        control={control}
+        name={name}
+        defaultValue={defaultValue ?? false}
+        render={({ field, fieldState: { invalid, error } }) => (
+          <Checkbox
+            {...field}
+            size="large"
+            label={label}
+            card
+            isSelected={field.value}
+            onChange={(isSelected) => {
+              setValue(name, isSelected);
+              field.onChange(isSelected);
+            }}
+            isInvalid={invalid}
+            errorMessage={error?.message}
+            {...props}
+          />
+        )}
+      />
       {children}
     </div>
   );

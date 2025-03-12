@@ -1,19 +1,19 @@
 import { COMMON_PRONOUNS } from "@convex/constants";
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithFormProvider, screen } from "@tests/test-utils";
 import { describe, expect, it } from "vitest";
 import { PronounSelectField } from "./PronounSelectField";
 
 describe("PronounSelectField", () => {
   it("renders pronoun select field", () => {
-    render(<PronounSelectField />);
+    renderWithFormProvider(<PronounSelectField />);
 
     const pronounsLabel = screen.getByText("Pronouns");
     expect(pronounsLabel).toBeInTheDocument();
   });
 
   it("renders all common pronouns", () => {
-    render(<PronounSelectField />);
+    renderWithFormProvider(<PronounSelectField />);
 
     for (const pronoun of COMMON_PRONOUNS) {
       const pronounTag = screen.getByText(pronoun);
@@ -22,14 +22,14 @@ describe("PronounSelectField", () => {
   });
 
   it("renders 'other pronouns' option", () => {
-    render(<PronounSelectField />);
+    renderWithFormProvider(<PronounSelectField />);
 
     const otherPronounsTag = screen.getByText("other pronouns");
     expect(otherPronounsTag).toBeInTheDocument();
   });
 
   it("allows multiple pronoun selection", async () => {
-    render(<PronounSelectField />);
+    renderWithFormProvider(<PronounSelectField />);
 
     const theyThemTag = screen.getByRole("row", {
       name: "they/them/theirs",
@@ -44,7 +44,7 @@ describe("PronounSelectField", () => {
   });
 
   it("shows text field when 'other pronouns' is selected", async () => {
-    render(<PronounSelectField />);
+    renderWithFormProvider(<PronounSelectField />);
 
     const otherPronounsTag = screen.getByText("other pronouns");
     await userEvent.click(otherPronounsTag);
@@ -54,12 +54,13 @@ describe("PronounSelectField", () => {
   });
 
   it("allows entering custom pronouns", async () => {
-    render(<PronounSelectField />);
+    renderWithFormProvider(<PronounSelectField />);
 
     const otherPronounsTag = screen.getByText("other pronouns");
     await userEvent.click(otherPronounsTag);
 
     const otherPronounsInput = screen.getByLabelText("List other pronouns");
+    expect(otherPronounsInput).toHaveAttribute("name", "otherPronouns");
     await userEvent.type(otherPronounsInput, "ze/zir/zirs");
 
     expect(otherPronounsInput).toHaveValue("ze/zir/zirs");

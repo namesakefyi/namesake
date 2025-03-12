@@ -1,11 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { renderWithFormProvider, screen } from "@tests/test-utils";
 import languageNameMap from "language-name-map/map";
 import { describe, expect, it } from "vitest";
 import { LanguageSelectField } from "./LanguageSelectField";
 
 describe("LanguageSelectField", () => {
   it("renders language select field", () => {
-    render(<LanguageSelectField />);
+    renderWithFormProvider(<LanguageSelectField name="language" />);
 
     const languageSelect = screen.getByLabelText("Language");
     expect(languageSelect).toBeInTheDocument();
@@ -13,7 +13,7 @@ describe("LanguageSelectField", () => {
   });
 
   it("renders languages sorted by English name", async () => {
-    render(<LanguageSelectField />);
+    renderWithFormProvider(<LanguageSelectField name="language" />);
 
     const languageOptions = screen.getAllByRole("option", {
       // Non-empty options
@@ -34,8 +34,8 @@ describe("LanguageSelectField", () => {
   });
 
   it("supports optional children", () => {
-    render(
-      <LanguageSelectField>
+    renderWithFormProvider(
+      <LanguageSelectField name="language">
         <div data-testid="child-component">Additional Info</div>
       </LanguageSelectField>,
     );

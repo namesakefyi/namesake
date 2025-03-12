@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithFormProvider, screen } from "@tests/test-utils";
 import { describe, expect, it } from "vitest";
 import { CheckboxGroupField } from "./CheckboxGroupField";
 
@@ -13,9 +13,9 @@ describe("CheckboxGroupField", () => {
   it("renders checkbox group with correct label", () => {
     const testLabel = "Select an option";
 
-    render(
+    renderWithFormProvider(
       <CheckboxGroupField
-        name="test-checkbox"
+        name="reasonForChangingName"
         label={testLabel}
         options={mockOptions}
       />,
@@ -26,9 +26,9 @@ describe("CheckboxGroupField", () => {
   });
 
   it("renders all checkbox options", () => {
-    render(
+    renderWithFormProvider(
       <CheckboxGroupField
-        name="test-checkbox"
+        name="reasonForChangingName"
         label="Test Label"
         options={mockOptions}
       />,
@@ -41,9 +41,9 @@ describe("CheckboxGroupField", () => {
   });
 
   it("displays guidance for checkbox groups", () => {
-    render(
+    renderWithFormProvider(
       <CheckboxGroupField
-        name="test-checkbox"
+        name="reasonForChangingName"
         label="Test Label"
         options={mockOptions}
       />,
@@ -54,9 +54,9 @@ describe("CheckboxGroupField", () => {
   });
 
   it("allows selecting a checkbox option", async () => {
-    render(
+    renderWithFormProvider(
       <CheckboxGroupField
-        name="test-checkbox"
+        name="reasonForChangingName"
         label="Test Label"
         options={mockOptions}
       />,
@@ -72,9 +72,9 @@ describe("CheckboxGroupField", () => {
   });
 
   it("supports optional children", () => {
-    render(
+    renderWithFormProvider(
       <CheckboxGroupField
-        name="test-checkbox"
+        name="reasonForChangingName"
         label="Test Label"
         options={mockOptions}
       >

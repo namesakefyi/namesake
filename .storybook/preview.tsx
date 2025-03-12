@@ -1,7 +1,9 @@
 import { withThemeByClassName } from "@storybook/addon-themes";
 import type { Preview } from "@storybook/react";
+import { FormProvider, useForm } from "react-hook-form";
 
 import "../src/styles/index.css";
+import React from "react";
 
 const preview: Preview = {
   parameters: {
@@ -25,6 +27,15 @@ const preview: Preview = {
       },
       defaultTheme: "light",
     }),
+    (Story) => {
+      const form = useForm();
+
+      return (
+        <FormProvider {...form}>
+          <Story />
+        </FormProvider>
+      );
+    },
   ],
 };
 

@@ -1,22 +1,27 @@
-import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
+import { renderWithFormProvider, screen } from "@tests/test-utils";
 import { describe, expect, it } from "vitest";
 import { LongTextField } from "./LongTextField";
 
 describe("LongTextField", () => {
   it("renders long text field", () => {
-    render(<LongTextField label="Custom field" name="customField" />);
+    renderWithFormProvider(
+      <LongTextField
+        label="Reason for changing name"
+        name="reasonForChangingName"
+      />,
+    );
 
-    const customField = screen.getByLabelText("Custom field");
+    const customField = screen.getByLabelText("Reason for changing name");
 
     expect(customField).toBeInTheDocument();
   });
 
   it("supports optional description", () => {
-    render(
+    renderWithFormProvider(
       <LongTextField
-        label="Custom field"
-        name="customField"
+        label="Reason for changing name"
+        name="reasonForChangingName"
         description="A custom description"
       />,
     );
@@ -26,16 +31,24 @@ describe("LongTextField", () => {
   });
 
   it("allows entering text", async () => {
-    render(<LongTextField label="Custom field" name="customField" />);
+    renderWithFormProvider(
+      <LongTextField
+        label="Reason for changing name"
+        name="reasonForChangingName"
+      />,
+    );
 
-    const customField = screen.getByLabelText("Custom field");
+    const customField = screen.getByLabelText("Reason for changing name");
     await userEvent.type(customField, "Hello, world!");
     expect(customField).toHaveValue("Hello, world!");
   });
 
   it("supports optional children", () => {
-    render(
-      <LongTextField label="Custom field" name="customField">
+    renderWithFormProvider(
+      <LongTextField
+        label="Reason for changing name"
+        name="reasonForChangingName"
+      >
         <div data-testid="child-component">Additional Info</div>
       </LongTextField>,
     );
