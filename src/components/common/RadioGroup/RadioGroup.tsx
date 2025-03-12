@@ -34,7 +34,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
         )}
       >
         <Label size={size}>{label}</Label>
-        <div className="flex group-orientation-vertical:flex-col gap-2 group-orientation-horizontal:gap-4 group-orientation-horizontal:flex-wrap">
+        <div className="flex flex-col gap-2 group-orientation-horizontal:gap-4 group-orientation-horizontal:flex-wrap">
           {children}
         </div>
         {description && <FieldDescription>{description}</FieldDescription>}

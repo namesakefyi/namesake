@@ -1,7 +1,5 @@
-import { TextField } from "@/components/common";
 import type { UserFormDataField } from "@convex/constants";
-import { useFormContext } from "react-hook-form";
-import { Controller } from "react-hook-form";
+import { ShortTextField } from "../ShortTextField/ShortTextField";
 
 type NameType = "newName" | "oldName";
 
@@ -11,8 +9,6 @@ export interface NameFieldProps {
 }
 
 export function NameField({ children, type }: NameFieldProps) {
-  const { control } = useFormContext();
-
   const names: Record<
     NameType,
     {
@@ -36,50 +32,20 @@ export function NameField({ children, type }: NameFieldProps) {
   return (
     <div className="@container flex flex-col gap-4">
       <div className="grid grid-cols-1 @lg:grid-cols-3 gap-4">
-        <Controller
-          control={control}
+        <ShortTextField
+          label="First or given name"
           name={names[type].first}
-          defaultValue={""}
-          render={({ field, fieldState: { invalid, error } }) => (
-            <TextField
-              {...field}
-              label="First name"
-              autoComplete="given-name"
-              size="large"
-              isInvalid={invalid}
-              errorMessage={error?.message}
-            />
-          )}
+          autoComplete="given-name"
         />
-        <Controller
-          control={control}
+        <ShortTextField
+          label="Middle name"
           name={names[type].middle}
-          defaultValue={""}
-          render={({ field, fieldState: { invalid, error } }) => (
-            <TextField
-              {...field}
-              label="Middle name"
-              autoComplete="additional-name"
-              size="large"
-              isInvalid={invalid}
-              errorMessage={error?.message}
-            />
-          )}
+          autoComplete="additional-name"
         />
-        <Controller
-          control={control}
+        <ShortTextField
+          label="Last or family name"
           name={names[type].last}
-          defaultValue={""}
-          render={({ field, fieldState: { invalid, error } }) => (
-            <TextField
-              {...field}
-              label="Last name"
-              autoComplete="family-name"
-              size="large"
-              isInvalid={invalid}
-              errorMessage={error?.message}
-            />
-          )}
+          autoComplete="family-name"
         />
       </div>
       {children}

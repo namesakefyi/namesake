@@ -18,6 +18,7 @@ export const Example = (args: MemorableDateFieldProps) => (
 );
 
 Example.args = {
+  name: "dateOfBirth",
   label: "Birthdate",
   children: (
     <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
