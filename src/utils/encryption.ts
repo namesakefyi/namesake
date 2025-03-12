@@ -24,7 +24,7 @@ export async function encryptData(
   const combined = new Uint8Array(iv.length + encryptedData.byteLength);
   combined.set(iv);
   combined.set(new Uint8Array(encryptedData), iv.length);
-  return arrayBufferToBase64(combined);
+  return arrayBufferToBase64(combined.buffer);
 }
 
 export async function decryptData(
