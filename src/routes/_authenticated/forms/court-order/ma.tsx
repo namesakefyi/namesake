@@ -60,6 +60,7 @@ function RouteComponent() {
   });
 
   const handleSubmit = (data: FormData) => {
+    // TODO: Encrypt and save data
     console.log(data);
   };
 
