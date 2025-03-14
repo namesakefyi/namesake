@@ -4,9 +4,9 @@ import { Outlet, createFileRoute } from "@tanstack/react-router";
 import {
   Bug,
   CircleUser,
-  Database,
   DatabaseZap,
   FileClock,
+  FileLock2,
   MessageCircleQuestion,
   Snail,
 } from "lucide-react";
@@ -24,8 +24,8 @@ function SettingsRoute() {
             <NavItem icon={CircleUser} href={{ to: "/settings/account" }}>
               Account
             </NavItem>
-            <NavItem icon={Database} href={{ to: "/settings/data" }}>
-              Data
+            <NavItem icon={FileLock2} href={{ to: "/settings/responses" }}>
+              Form Responses
             </NavItem>
           </NavGroup>
           <NavGroup label="Help">

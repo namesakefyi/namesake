@@ -150,7 +150,7 @@ const users = defineTable({
 /**
  * A unique piece of user data that has been entered through filling a form.
  */
-const userFormData = defineTable({
+const userFormResponses = defineTable({
   /** The user who owns the data. */
   userId: v.id("users"),
   /** The name of the field, e.g. "firstName" or "isMinor". */
@@ -211,7 +211,7 @@ export default defineSchema({
   questSteps,
   questFaqs,
   users,
-  userFormData,
+  userFormResponses,
   userSettings,
   userQuests,
 });
