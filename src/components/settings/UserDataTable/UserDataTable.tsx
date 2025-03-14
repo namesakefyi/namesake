@@ -3,41 +3,36 @@ import {
   Banner,
   Button,
   Empty,
+  Form,
+  ListBox,
+  ListBoxItem,
   Modal,
   ModalFooter,
   ModalHeader,
-  Skeleton,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
+  TextField,
 } from "@/components/common";
 import {
   decryptData,
+  encryptData,
   getEncryptionKey,
   initializeEncryption,
 } from "@/utils/encryption";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
-import { AlertTriangle, Database } from "lucide-react";
+import { AlertTriangle, Database, LoaderCircle } from "lucide-react";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
-import type { Selection } from "react-aria-components";
+import { type Selection, Text } from "react-aria-components";
 import { toast } from "sonner";
 
-interface UserDataTableRowProps {
+interface UserDataItemProps {
   initialData: { id: Id<"userFormData">; field: string; value: string };
 }
 
-// Placeholder for allowing users to view and edit their form data
-// TODO: Replace this with a more robust implementation that manages draft state better.
-export function UserDataTableRow({ initialData }: UserDataTableRowProps) {
+export function UserDataItem({ initialData }: UserDataItemProps) {
   const [decryptedValue, setDecryptedValue] = useState<string>();
   const [encryptionKey, setEncryptionKey] = useState<CryptoKey | null>(null);
-
   const [didError, setDidError] = useState(false);
 
   useEffect(() => {
@@ -70,91 +65,107 @@ export function UserDataTableRow({ initialData }: UserDataTableRowProps) {
     loadEncryptionKey();
   }, [initialData.value]);
 
-  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
+  return (
+    <ListBoxItem
+      id={initialData.id}
+      textValue={initialData.field}
+      className="flex flex-col gap-1 items-start"
+    >
+      <Text slot="label">{initialData.field}</Text>
+      {encryptionKey && (
+        <Text slot="description">
+          {didError ? (
+            <Badge variant="danger" icon={AlertTriangle}>
+              Error
+            </Badge>
+          ) : (
+            <span className="opacity-70 font-mono text-sm">
+              {decryptedValue}
+            </span>
+          )}
+        </Text>
+      )}
+    </ListBoxItem>
+  );
+}
 
-  //   if (!encryptionKey || !decryptedValue) {
-  //     console.error("No encryption key or decrypted value available");
-  //     return;
-  //   }
+function UserDataForm() {
+  const [field, setField] = useState("");
+  const [value, setValue] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [encryptionKey, setEncryptionKey] = useState<CryptoKey | null>(null);
 
-  //   try {
-  //     setIsSaving(true);
+  const save = useMutation(api.userFormData.set);
 
-  //     // Encrypt the value before saving
-  //     const encryptedValue = await encryptData(decryptedValue, encryptionKey);
-  //     await save({ field, value: encryptedValue });
-  //   } finally {
-  //     setIsSaving(false);
-  //   }
-  // };
+  useEffect(() => {
+    const loadEncryptionKey = async () => {
+      try {
+        const key = await getEncryptionKey();
+        setEncryptionKey(key);
 
-  if (encryptionKey === null) {
-    return (
-      <TableRow id={initialData.id}>
-        <TableCell>
-          <Skeleton className="w-full h-4" />
-        </TableCell>
-        <TableCell>
-          <Skeleton className="w-full h-4" />
-        </TableCell>
-      </TableRow>
-    );
-  }
+        if (!key) {
+          return;
+        }
+      } catch (error: any) {
+        posthog.captureException(error);
+      }
+    };
+
+    loadEncryptionKey();
+  }, []);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!encryptionKey) {
+      console.error("No encryption key available");
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+
+      // Encrypt the value before saving
+      const encryptedValue = await encryptData(value, encryptionKey);
+      await save({ field, value: encryptedValue });
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
-    <TableRow id={initialData.id}>
-      <TableCell textValue={initialData.field}>{initialData.field}</TableCell>
-      <TableCell>
-        {didError ? (
-          <Badge variant="danger" icon={AlertTriangle}>
-            Error
-          </Badge>
-        ) : (
-          decryptedValue
-        )}
-      </TableCell>
-    </TableRow>
+    <Form onSubmit={handleSubmit}>
+      <div className="flex gap-2 items-end">
+        <TextField
+          label="Field"
+          name="field"
+          value={field}
+          onChange={setField}
+        />
+        <TextField
+          label="Value"
+          name="value"
+          value={value}
+          onChange={setValue}
+        />
+        <Button
+          type="submit"
+          variant="secondary"
+          className="w-fit"
+          isDisabled={field === "" || value === "" || isSaving}
+        >
+          {isSaving ? (
+            <>
+              <LoaderCircle className="w-4 h-4 animate-spin mr-2" />
+              Saving...
+            </>
+          ) : (
+            "Save"
+          )}
+        </Button>
+      </div>
+    </Form>
   );
-
-  // return (
-  //   <Form onSubmit={handleSubmit}>
-  //     <div className="flex gap-2 items-end">
-  //       <TextField
-  //         label="Field"
-  //         name="field"
-  //         value={field}
-  //         onChange={setField}
-  //         placeholder="Enter field name"
-  //         isDisabled={isExistingField}
-  //       />
-  //       <TextField
-  //         label="Value"
-  //         name="value"
-  //         value={decryptedValue}
-  //         onChange={setDecryptedValue}
-  //         placeholder="Enter field value"
-  //       />
-  //       <Button
-  //         type="submit"
-  //         variant="secondary"
-  //         className="w-fit"
-  //         isDisabled={
-  //           field === "" || decryptedValue === "" || isSaving || isDirty
-  //         }
-  //       >
-  //         {isSaving ? (
-  //           <>
-  //             <LoaderCircle className="w-4 h-4 animate-spin mr-2" />
-  //             Saving...
-  //           </>
-  //         ) : (
-  //           "Save"
-  //         )}
-  //       </Button>
-  //     </div>
-  //   </Form>
-  // );
 }
 
 // Placeholder for allowing users to view and edit their form data
@@ -187,11 +198,6 @@ export function UserDataTable() {
       : `${selectedRows.size} ${selectedRows.size === 1 ? "item" : "items"}`
   }`;
 
-  const columns = [
-    { name: "Field", id: "field", isRowHeader: true },
-    { name: "Value", id: "value" },
-  ];
-
   const rows = userData?.map((data) => ({
     id: data._id,
     field: data.field,
@@ -221,39 +227,43 @@ export function UserDataTable() {
     }
   };
 
+  if (!rows || rows.length === 0) {
+    return (
+      <>
+        <Empty
+          title="No data"
+          subtitle="Form responses will appear here."
+          icon={Database}
+        />
+        <UserDataForm />
+      </>
+    );
+  }
+
   return (
     <>
       <div className="mt-4 flex flex-col gap-4">
-        <div className="flex gap-2 items-center justify-end">
-          <Button
-            variant="destructive"
-            className="w-fit mt-4"
-            isDisabled={!hasSelectedRows}
-            onPress={() => setIsDeleteModalOpen(true)}
-          >
-            {deleteLabel}
-          </Button>
-        </div>
-        <Table
+        <ListBox
           selectionMode="multiple"
           aria-label="All encrypted user data"
           selectedKeys={selectedRows}
           onSelectionChange={setSelectedRows}
+          items={rows}
         >
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn key={column.id} isRowHeader={column.isRowHeader}>
-                {column.name}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody
-            items={rows}
-            renderEmptyState={() => <Empty title="No data" icon={Database} />}
-          >
-            {(item) => <UserDataTableRow key={item.id} initialData={item} />}
-          </TableBody>
-        </Table>
+          {(item) => <UserDataItem key={item.id} initialData={item} />}
+        </ListBox>
+        {hasSelectedRows && (
+          <div className="flex gap-2 items-center justify-end">
+            <Button
+              variant={hasSelectedRows ? "destructive" : "secondary"}
+              className="w-fit"
+              isDisabled={!hasSelectedRows}
+              onPress={() => setIsDeleteModalOpen(true)}
+            >
+              {deleteLabel}
+            </Button>
+          </div>
+        )}
       </div>
       <Modal isOpen={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
         <ModalHeader title={`${deleteLabel}?`} />
@@ -290,6 +300,7 @@ export function UserDataTable() {
           </Button>
         </ModalFooter>
       </Modal>
+      <UserDataForm />
     </>
   );
 }
