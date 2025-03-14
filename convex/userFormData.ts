@@ -51,3 +51,28 @@ export const set = userMutation({
     });
   },
 });
+
+export const deleteAll = userMutation({
+  args: {},
+  handler: async (ctx, _args) => {
+    const userData = await ctx.db
+      .query("userFormData")
+      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
+      .collect();
+
+    for (const data of userData) {
+      await ctx.db.delete(data._id);
+    }
+  },
+});
+
+export const deleteByIds = userMutation({
+  args: {
+    userFormDataIds: v.array(v.id("userFormData")),
+  },
+  handler: async (ctx, args) => {
+    for (const id of args.userFormDataIds) {
+      await ctx.db.delete(id);
+    }
+  },
+});

@@ -1,6 +1,6 @@
 import { PageHeader } from "@/components/app";
 import { Banner } from "@/components/common";
-import { UserDataForms } from "@/components/settings";
+import { UserDataTable } from "@/components/settings";
 import { createFileRoute } from "@tanstack/react-router";
 import { Lock } from "lucide-react";
 
@@ -15,7 +15,7 @@ function DataRoute() {
       <Banner variant="success" icon={Lock}>
         Data shown here is end-to-end encrypted. Only you can access it.
       </Banner>
-      <UserDataForms />
+      <UserDataTable />
     </>
   );
 }

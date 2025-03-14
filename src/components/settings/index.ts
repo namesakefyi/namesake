@@ -7,4 +7,4 @@ export * from "./EditResidenceSetting/EditResidenceSetting";
 export * from "./EditThemeSetting/EditThemeSetting";
 export * from "./SettingsGroup/SettingsGroup";
 export * from "./SettingsItem/SettingsItem";
-export * from "./UserDataForms/UserDataForms";
+export * from "./UserDataTable/UserDataTable";
