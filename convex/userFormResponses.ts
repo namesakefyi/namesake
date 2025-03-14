@@ -5,7 +5,7 @@ export const list = userQuery({
   args: {},
   handler: async (ctx, _args) => {
     const userData = await ctx.db
-      .query("userFormData")
+      .query("userFormResponses")
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .collect();
     return userData;
@@ -16,7 +16,7 @@ export const get = userQuery({
   args: {},
   handler: async (ctx, _args) => {
     const userData = await ctx.db
-      .query("userFormData")
+      .query("userFormResponses")
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .first();
 
@@ -32,7 +32,7 @@ export const set = userMutation({
   handler: async (ctx, args) => {
     // If data already exists, update it
     const existingData = await ctx.db
-      .query("userFormData")
+      .query("userFormResponses")
       .withIndex("userIdAndField", (q) =>
         q.eq("userId", ctx.userId).eq("field", args.field),
       )
@@ -44,7 +44,7 @@ export const set = userMutation({
     }
 
     // Otherwise, insert new data
-    await ctx.db.insert("userFormData", {
+    await ctx.db.insert("userFormResponses", {
       userId: ctx.userId,
       field: args.field,
       value: args.value,
@@ -56,7 +56,7 @@ export const deleteAll = userMutation({
   args: {},
   handler: async (ctx, _args) => {
     const userData = await ctx.db
-      .query("userFormData")
+      .query("userFormResponses")
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
       .collect();
 
@@ -68,10 +68,10 @@ export const deleteAll = userMutation({
 
 export const deleteByIds = userMutation({
   args: {
-    userFormDataIds: v.array(v.id("userFormData")),
+    userFormResponseIds: v.array(v.id("userFormResponses")),
   },
   handler: async (ctx, args) => {
-    for (const id of args.userFormDataIds) {
+    for (const id of args.userFormResponseIds) {
       await ctx.db.delete(id);
     }
   },
