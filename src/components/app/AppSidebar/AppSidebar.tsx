@@ -47,11 +47,9 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
           <MenuTrigger>
             <Button
               aria-label="User settings"
-              variant="ghost"
+              variant="icon"
               icon={CircleUser}
-            >
-              <span className="truncate max-w-[16ch]">{user?.name}</span>
-            </Button>
+            />
             <Menu placement="top start">
               {isAdmin && (
                 <MenuItem icon={GlobeLock} href={{ to: "/admin" }}>
