@@ -5,7 +5,6 @@ import {
   MenuSection,
   MenuSeparator,
   MenuTrigger,
-  Popover,
   SubmenuTrigger,
 } from "@/components/common";
 import type { Meta } from "@storybook/react";
@@ -64,32 +63,26 @@ export const Submenu = (args: any) => (
       <MenuItem id="new">New…</MenuItem>
       <SubmenuTrigger>
         <MenuItem id="open">Open</MenuItem>
-        <Popover title="Open in">
-          <Menu>
-            <MenuItem id="open-new">Open in New Window</MenuItem>
-            <MenuItem id="open-current">Open in Current Window</MenuItem>
-          </Menu>
-        </Popover>
+        <Menu>
+          <MenuItem id="open-new">Open in New Window</MenuItem>
+          <MenuItem id="open-current">Open in Current Window</MenuItem>
+        </Menu>
       </SubmenuTrigger>
       <MenuSeparator />
       <MenuItem id="print">Print…</MenuItem>
       <SubmenuTrigger>
         <MenuItem id="share">Share</MenuItem>
-        <Popover title="Share">
-          <Menu>
-            <MenuItem id="sms">SMS</MenuItem>
-            <MenuItem id="twitter">Twitter</MenuItem>
-            <SubmenuTrigger>
-              <MenuItem id="email">Email</MenuItem>
-              <Popover title="Email">
-                <Menu>
-                  <MenuItem id="work">Work</MenuItem>
-                  <MenuItem id="personal">Personal</MenuItem>
-                </Menu>
-              </Popover>
-            </SubmenuTrigger>
-          </Menu>
-        </Popover>
+        <Menu>
+          <MenuItem id="sms">SMS</MenuItem>
+          <MenuItem id="twitter">Twitter</MenuItem>
+          <SubmenuTrigger>
+            <MenuItem id="email">Email</MenuItem>
+            <Menu>
+              <MenuItem id="work">Work</MenuItem>
+              <MenuItem id="personal">Personal</MenuItem>
+            </Menu>
+          </SubmenuTrigger>
+        </Menu>
       </SubmenuTrigger>
     </Menu>
   </MenuTrigger>
