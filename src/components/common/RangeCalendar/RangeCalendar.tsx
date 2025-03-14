@@ -24,7 +24,7 @@ const cell = tv({
       none: "group-hover:bg-gray-3 dark:group-hover:bg-graydark-3 group-pressed:bg-gray-2 dark:group-pressed:bg-gray-6",
       middle: [
         "group-hover:bg-purple-4 dark:group-hover:bg-purpledark-4 forced-colors:group-hover:bg-[Highlight]",
-        "group-invalid:group-hover:bg-red-4 dark:group-invalid:group-hover:bg-reddark-4 forced-colors:group-invalid:group-hover:bg-[Mark]",
+        "group-hover:group-invalid:bg-red-4 dark:group-hover:group-invalid:bg-reddark-4 forced-colors:group-hover:group-invalid:bg-[Mark]",
       ],
       cap: "bg-purple-9 dark:bg-purpledark-9 group-invalid:bg-red-9 dark:group-invalid:bg-reddark-9 forced-colors:bg-[Highlight] forced-colors:group-invalid:bg-[Mark] text-white forced-colors:text-[HighlightText]",
     },

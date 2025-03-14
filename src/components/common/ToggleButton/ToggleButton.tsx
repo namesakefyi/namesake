@@ -20,7 +20,7 @@ const styles = tv({
   variants: {
     isSelected: {
       false: "bg-transparent text-gray-dim hover:text-gray-normal",
-      true: "bg-white dark:bg-graydark-3 text-gray-normal shadow-sm border border-gray-dim",
+      true: "bg-white dark:bg-graydark-3 text-gray-normal shadow-xs border border-gray-dim",
     },
     isDisabled: buttonStyles.variants.isDisabled,
     size: {

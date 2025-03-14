@@ -64,13 +64,13 @@ const radioStyles = tv({
   variants: {
     isSelected: {
       false: "border-gray-dim",
-      true: "border-[7px] dark:bg-white border-purple-9 dark:border-purpledark-9 forced-colors:!border-[Highlight] group-pressed:border-purple-10 dark:group-pressed:border-purpledark-10",
+      true: "border-[7px] dark:bg-white border-purple-9 dark:border-purpledark-9 forced-colors:border-[Highlight]! group-pressed:border-purple-10 dark:group-pressed:border-purpledark-10",
     },
     isInvalid: {
-      true: "border-red-9 dark:border-reddark-9 group-pressed:border-red-11 dark:group-pressed:border-reddark-11 forced-colors:!border-[Mark]",
+      true: "border-red-9 dark:border-reddark-9 group-pressed:border-red-11 dark:group-pressed:border-reddark-11 forced-colors:border-[Mark]!",
     },
     isDisabled: {
-      true: "border-gray-2 dark:border-gray-8 cursor-default forced-colors:!border-[GrayText]",
+      true: "border-gray-2 dark:border-gray-8 cursor-default forced-colors:border-[GrayText]!",
     },
     size: {
       medium: "size-5",

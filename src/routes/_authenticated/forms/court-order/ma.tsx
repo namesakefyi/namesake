@@ -51,7 +51,7 @@ function RouteComponent() {
         description="The court uses this to communicate with you about your status."
         className="@container"
       >
-        <div className="grid grid-cols-1 @lg:grid-cols-[auto_1fr] @lg:grid- gap-4">
+        <div className="grid grid-cols-1 @-lg:grid-cols-[auto_1fr] @lg:grid- gap-4">
           <PhoneField />
           <EmailField />
         </div>

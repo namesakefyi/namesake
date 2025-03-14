@@ -1,93 +1,123 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+/* TODO: Alias gray to slate */
+@import "tailwindcss-radix-colors/dist/gray.css";
+@import "tailwindcss-radix-colors/dist/graya.css";
+@import "tailwindcss-radix-colors/dist/slate.css";
+@import "tailwindcss-radix-colors/dist/slatea.css";
+@import "tailwindcss-radix-colors/dist/red.css";
+@import "tailwindcss-radix-colors/dist/reda.css";
+@import "tailwindcss-radix-colors/dist/purple.css";
+@import "tailwindcss-radix-colors/dist/purplea.css";
+@import "tailwindcss-radix-colors/dist/blue.css";
+@import "tailwindcss-radix-colors/dist/bluea.css";
+@import "tailwindcss-radix-colors/dist/green.css";
+@import "tailwindcss-radix-colors/dist/greena.css";
+@import "tailwindcss-radix-colors/dist/amber.css";
+@import "tailwindcss-radix-colors/dist/ambera.css";
+@import "tailwindcss-radix-colors/dist/whitea.css";
+@import "tailwindcss-radix-colors/dist/blacka.css";
+@import "tw-animate-css";
 
-@layer components {
-  .app-padding {
-    @apply px-6 lg:px-8;
+@plugin "tailwindcss-react-aria-components";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@utility app-padding {
+  @apply px-6 lg:px-8;
+}
+
+@utility h-header {
+  @apply h-16 lg:h-20;
+}
+
+@utility prose {
+  @apply text-base lg:text-lg;
+
+  a {
+    @apply underline underline-offset-2 hover:decoration-inherit;
   }
 
-  .h-header {
-    @apply h-16 lg:h-20;
+  *:not(li) + * {
+    margin-block-start: 1em;
   }
 
-  .prose {
-    @apply text-base lg:text-lg;
+  h2 {
+    @apply text-2xl font-medium;
+    @apply pb-2;
+    @apply border-b border-gray-5 dark:border-graydark-5;
+  }
 
-    a {
-      @apply underline underline-offset-2 hover:decoration-inherit;
-    }
+  h3 {
+    @apply text-xl font-medium;
+  }
 
-    *:not(li) + * {
-      margin-block-start: 1em;
-    }
+  blockquote {
+    @apply border-l-2 border-gray-5 dark:border-graydark-5 pl-4;
+  }
 
-    h2 {
-      @apply text-2xl font-medium;
-      @apply pb-2;
-      @apply border-b border-gray-dim;
-    }
+  li {
+    margin-block: 0;
+    padding-inline-start: 1.5em;
+    position: relative;
+  }
 
-    h3 {
-      @apply text-xl font-medium;
-    }
+  ul,
+  ol {
+    list-style: none;
+  }
 
-    blockquote {
-      @apply border-l-2 border-gray-dim pl-4;
-    }
-
-    li {
-      margin-block: 0;
-      padding-inline-start: 1.5em;
-      position: relative;
-    }
-
-    ul,
-    ol {
-      list-style: none;
-    }
-
-    li {
-      &::before {
-        position: absolute;
-        left: 0;
-        @apply tabular-nums text-gray-dim;
-      }
-    }
-
-    ul > li::before {
-      content: "•";
-      margin-inline-start: 0.25em;
-      scale: 1.3;
-      translate: 0 -0.05em;
-    }
-
-    ol {
-      counter-reset: list;
-    }
-
-    ol > li::before {
-      counter-increment: list;
-      content: counter(list) ".";
-      text-align: right;
-      width: 1.5em;
-      margin-inline-start: -0.5em;
-    }
-
-    ol ol > li::before {
-      content: counter(list, lower-alpha) ".";
-    }
-
-    ul ul,
-    ul ol,
-    ol ul,
-    ol ol {
-      margin-block: 0;
+  li {
+    &::before {
+      position: absolute;
+      left: 0;
+      @apply tabular-nums text-gray-11 dark:text-graydark-11;
     }
   }
 
-  .tiptap p.is-editor-empty:first-child::before {
-    @apply text-gray-dim;
+  ul > li::before {
+    content: "•";
+    margin-inline-start: 0.25em;
+    scale: 1.3;
+    translate: 0 -0.05em;
+  }
+
+  ol {
+    counter-reset: list;
+  }
+
+  ol > li::before {
+    counter-increment: list;
+    content: counter(list) ".";
+    text-align: right;
+    width: 1.5em;
+    margin-inline-start: -0.5em;
+  }
+
+  ol ol > li::before {
+    content: counter(list, lower-alpha) ".";
+  }
+
+  ul ul,
+  ul ol,
+  ol ul,
+  ol ol {
+    margin-block: 0;
+  }
+}
+
+@utility tiptap {
+  & p.is-editor-empty:first-child::before {
+    @apply text-gray-11 dark:text-graydark-11;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
+}
+
+@utility is-editor-empty {
+  .tiptap &p:first-child::before {
+    @apply text-gray-11 dark:text-graydark-11;
     content: attr(data-placeholder);
     float: left;
     height: 0;

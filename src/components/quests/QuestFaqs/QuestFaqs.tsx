@@ -55,7 +55,7 @@ const EditFaqForm = ({ faq, onSubmit, onCancel }: EditFaqFormProps) => {
   return (
     <Form
       onSubmit={handleSubmit}
-      className="border border-gray-dim rounded-xl shadow p-4 mb-6 gap-2 w-full"
+      className="border border-gray-dim rounded-xl shadow-sm p-4 mb-6 gap-2 w-full"
     >
       <TextField
         value={question}

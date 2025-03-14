@@ -9,7 +9,7 @@ export interface HiddenTextProps {
 
 const styles = tv({
   extend: focusRing,
-  base: "inline relative rounded-sm",
+  base: "inline relative rounded-xs",
   variants: {
     isRevealed: {
       true: "cursor-text select-text",
@@ -19,7 +19,7 @@ const styles = tv({
 });
 
 const contentStyles = tv({
-  base: "transition-colors rounded-sm",
+  base: "transition-colors rounded-xs",
   variants: {
     isRevealed: {
       true: "bg-transparent",

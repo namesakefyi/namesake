@@ -12,8 +12,8 @@ const badge = tv({
   base: "px-1 font-medium tabular-nums text-center inline-flex justify-center gap-1 items-center shrink-0 bg-graya-3 dark:bg-graydarka-3 text-gray-dim",
   variants: {
     size: {
-      xs: "text-[10px] rounded h-4 px-1 min-w-4 leading-none",
-      sm: "text-xs rounded h-5 min-w-5",
+      xs: "text-[10px] rounded-sm h-4 px-1 min-w-4 leading-none",
+      sm: "text-xs rounded-sm h-5 min-w-5",
       lg: "text-sm rounded-md px-1.5 h-6 min-w-6 gap-1.5",
     },
     variant: {

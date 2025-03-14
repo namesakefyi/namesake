@@ -14,7 +14,7 @@ export interface LinkProps extends AriaLinkProps {
 
 const linkStyles = tv({
   extend: focusRing,
-  base: "underline disabled:no-underline disabled:cursor-default forced-colors:disabled:text-[GrayText] transition rounded",
+  base: "underline disabled:no-underline disabled:cursor-default forced-colors:disabled:text-[GrayText] transition rounded-sm",
   variants: {
     variant: {
       primary: "text-blue-9 dark:text-bluedark-9",

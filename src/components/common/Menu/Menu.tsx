@@ -70,7 +70,7 @@ export function MenuItem({ className, icon: Icon, ...props }: MenuItemProps) {
               </span>
             )}
             {Icon && <Icon aria-hidden className="w-4 h-4" />}
-            <span className="flex items-center flex-1 gap-2 font-normal truncate group-selected:font-semibold">
+            <span className="flex items-center flex-1 gap-2 font-medium truncate">
               {children}
             </span>
             {props.target === "_blank" && (

@@ -15,9 +15,8 @@ const track = tv({
   base: "flex h-5 w-9 px-px items-center shrink-0 cursor-pointer rounded-full transition duration-2 ease-in-out border border-transparent",
   variants: {
     isSelected: {
-      false:
-        "bg-gray-4 group-pressed:bg-gray-5 dark:bg-graydark-4 dark:group-pressed:bg-graydark-5",
-      true: "bg-green-9 forced-colors:!bg-[Highlight] group-pressed:bg-green-10 dark:bg-greendark-9 dark:group-pressed:bg-greendark-10",
+      false: "bg-gray-4 dark:bg-graydark-4",
+      true: "bg-green-9 forced-colors:bg-[Highlight]! dark:bg-greendark-9",
     },
     isDisabled: {
       true: "bg-gray-2 dark:bg-graydark-2 forced-colors:group-selected:!bg-[GrayText] forced-colors:border-[GrayText]",
@@ -26,7 +25,7 @@ const track = tv({
 });
 
 const handle = tv({
-  base: "h-4 w-4 transform rounded-full bg-white outline outline-1 -outline-offset-1 outline-transparent shadow transition duration-2 ease-in-out",
+  base: "h-4 w-4 transform rounded-full bg-white outline-1 -outline-offset-1 outline-transparent shadow-sm transition duration-2 ease-in-out",
   variants: {
     isSelected: {
       false: "translate-x-0",

@@ -39,7 +39,7 @@ const columnStyles = tv({
 
 const resizerStyles = tv({
   extend: focusRing,
-  base: "w-px px-[8px] translate-x-[8px] box-content py-1 h-6 bg-clip-content bg-gray-3 dark:bg-graydark-3 forced-colors:bg-[ButtonBorder] cursor-col-resize rounded resizing:bg-blue-9 forced-colors:resizing:bg-[Highlight] resizing:w-[2px] resizing:pl-[7px] -outline-offset-2",
+  base: "w-px px-[8px] translate-x-[8px] box-content py-1 h-6 bg-clip-content bg-gray-3 dark:bg-graydark-3 forced-colors:bg-[ButtonBorder] cursor-col-resize rounded-sm resizing:bg-blue-9 forced-colors:resizing:bg-[Highlight] resizing:w-[2px] resizing:pl-[7px] -outline-offset-2",
 });
 
 export function TableColumn(props: ColumnProps) {
@@ -48,7 +48,7 @@ export function TableColumn(props: ColumnProps) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "[&:hover]:z-20 [&:focus-within]:z-20 text-start text-sm font-semibold text-gray-dim cursor-default border-b border-gray-dim",
+        "[&:hover]:z-20 focus-within:z-20 text-start text-sm font-semibold text-gray-dim cursor-default border-b border-gray-dim",
       )}
     >
       {composeRenderProps(
@@ -140,7 +140,7 @@ export function TableRow<T extends object>({
 
 const cellStyles = tv({
   extend: focusRing,
-  base: "border-b border-gray-dim group-last/row:border-b-0 group-selected/row:border-purple-dim [:has(+[data-selected])_&]:border-purple-dim p-2 truncate -outline-offset-2",
+  base: "border-b border-gray-dim group-last/row:border-b-0 group-selected/row:border-purple-dim in-[:has(+[data-selected])]:border-purple-dim p-2 truncate -outline-offset-2",
 });
 
 export function TableCell(props: CellProps) {
