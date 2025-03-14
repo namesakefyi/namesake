@@ -7,7 +7,6 @@ import {
   MenuItem,
   MenuSeparator,
   MenuTrigger,
-  Popover,
   SubmenuTrigger,
 } from "@/components/common";
 import { useTheme } from "@/utils/useTheme";
@@ -69,20 +68,18 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
                     {THEMES[theme as Theme].label}
                   </span>
                 </MenuItem>
-                <Popover title="Select a theme">
-                  <Menu
-                    disallowEmptySelection
-                    selectionMode="single"
-                    selectedKeys={themeSelection}
-                    onSelectionChange={setTheme}
-                  >
-                    {Object.entries(THEMES).map(([theme, details]) => (
-                      <MenuItem key={theme} id={theme} icon={details.icon}>
-                        {details.label}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                </Popover>
+                <Menu
+                  disallowEmptySelection
+                  selectionMode="single"
+                  selectedKeys={themeSelection}
+                  onSelectionChange={setTheme}
+                >
+                  {Object.entries(THEMES).map(([theme, details]) => (
+                    <MenuItem key={theme} id={theme} icon={details.icon}>
+                      {details.label}
+                    </MenuItem>
+                  ))}
+                </Menu>
               </SubmenuTrigger>
               <MenuSeparator />
               <MenuItem icon={LogOut} onAction={handleSignOut}>
