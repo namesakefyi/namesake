@@ -174,14 +174,14 @@ export const CATEGORIES: Record<Category, GroupDetails> = {
     icon: Gavel,
     isCore: true,
   },
-  stateId: {
-    label: "State ID",
-    icon: IdCard,
-    isCore: true,
-  },
   socialSecurity: {
     label: "Social Security",
     icon: ShieldCheck,
+    isCore: true,
+  },
+  stateId: {
+    label: "State ID",
+    icon: IdCard,
     isCore: true,
   },
   passport: {
