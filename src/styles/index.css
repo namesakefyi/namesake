@@ -20,6 +20,7 @@
 @import "tailwindcss-radix-colors/dist/ambera.css";
 @import "tailwindcss-radix-colors/dist/whitea.css";
 @import "tailwindcss-radix-colors/dist/blacka.css";
+
 @import "tw-animate-css";
 
 @plugin "tailwindcss-react-aria-components";
