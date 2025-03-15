@@ -53,21 +53,21 @@ const radioItemStyles = tv({
       large: "gap-3",
     },
     card: {
-      true: "border border-gray-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-graya-2 dark:hover:bg-graydarka-2 selected:bg-purplea-3 dark:selected:bg-purpledarka-3 selected:border-purple-dim",
+      true: "border border-gray-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-graya-2 dark:hover:bg-graydarka-2 selected:bg-purplea-3 dark:selected:bg-purpledarka-3 selected:border-purple-6 dark:selected:border-purpledark-6",
     },
   },
 });
 
 const radioStyles = tv({
   extend: focusRing,
-  base: "rounded-full border bg-white dark:bg-graydark-1 transition-all cursor-pointer",
+  base: "rounded-full border bg-white dark:bg-graydark-1 transition-all ease-out duration-150 cursor-pointer",
   variants: {
     isSelected: {
       false: "border-gray-dim",
-      true: "border-[7px] dark:bg-white border-purple-9 dark:border-purpledark-9 forced-colors:border-[Highlight]! group-pressed:border-purple-10 dark:group-pressed:border-purpledark-10",
+      true: "border-[7px] dark:bg-white border-purple-9 dark:border-purpledark-9 forced-colors:border-[Highlight]",
     },
     isInvalid: {
-      true: "border-red-9 dark:border-reddark-9 group-pressed:border-red-11 dark:group-pressed:border-reddark-11 forced-colors:border-[Mark]!",
+      true: "border-red-9 dark:border-reddark-9  forced-colors:border-[Mark]!",
     },
     isDisabled: {
       true: "border-gray-2 dark:border-gray-8 cursor-default forced-colors:border-[GrayText]!",
