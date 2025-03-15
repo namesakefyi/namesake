@@ -45,7 +45,7 @@ export function DateRangePicker<T extends DateValue>({
             <DateInput slot="start" className="px-3 py-2" />
             <span
               aria-hidden="true"
-              className="text-gray-10 dark:text-gray-2 forced-colors:text-[ButtonText] group-disabled:text-gray-2 dark:group-disabled:text-gray-6 forced-colors:group-disabled:text-[GrayText]"
+              className="text-gray-dim forced-colors:text-[ButtonText] group-disabled:text-gray-2 dark:group-disabled:text-gray-6 forced-colors:group-disabled:text-[GrayText]"
             >
               –
             </span>
@@ -59,7 +59,7 @@ export function DateRangePicker<T extends DateValue>({
           </FieldGroup>
           {description && <FieldDescription>{description}</FieldDescription>}
           <FieldError>{errorMessage}</FieldError>
-          <Popover title="Select a date range">
+          <Popover title="Select a date range" className="p-3">
             <RangeCalendar />
           </Popover>
         </>

@@ -22,7 +22,7 @@ const cellStyles = tv({
   variants: {
     isSelected: {
       false:
-        "text-gray-12 dark:text-gray-2 hover:bg-gray-1 dark:hover:bg-gray-8 pressed:bg-gray-2 dark:pressed:bg-gray-6",
+        "text-gray-12 dark:text-gray-2 hover:bg-gray-3 dark:hover:bg-graydark-3 pressed:bg-gray-3 dark:pressed:bg-graydark-3",
       true: "bg-blue-9 invalid:bg-red-9 text-white forced-colors:bg-[Highlight] forced-colors:invalid:bg-[Mark] forced-colors:text-[HighlightText]",
     },
     isDisabled: {

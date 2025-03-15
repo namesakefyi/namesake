@@ -98,7 +98,7 @@ export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
         <AriaColumn
           width={40}
           minWidth={40}
-          className="text-start text-sm font-semibold cursor-default p-2"
+          className="text-start text-sm font-semibold cursor-default p-2 border-b border-gray-dim"
         >
           {selectionMode === "multiple" && <Checkbox slot="selection" />}
         </AriaColumn>
