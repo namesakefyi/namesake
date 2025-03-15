@@ -26,6 +26,8 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@config "../../tailwind.config.ts";
+
 @utility app-padding {
   @apply px-6 lg:px-8;
 }
