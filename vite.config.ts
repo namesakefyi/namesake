@@ -1,9 +1,7 @@
+import tailwindcss from "@tailwindcss/vite";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react-swc";
-import autoprefixer from "autoprefixer";
-import cssnano from "cssnano";
 import webpackStatsPlugin from "rollup-plugin-webpack-stats";
-import tailwindcss from "tailwindcss";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { configDefaults, coverageConfigDefaults } from "vitest/config";
@@ -25,14 +23,10 @@ export default defineConfig({
     tsconfigPaths(),
     react(),
     webpackStatsPlugin(),
+    tailwindcss(),
   ],
   define: {
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
-  },
-  css: {
-    postcss: {
-      plugins: [autoprefixer(), tailwindcss(), cssnano()],
-    },
   },
   test: {
     globals: true,

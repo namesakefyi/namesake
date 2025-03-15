@@ -30,7 +30,7 @@ const disclosureTriggerStyles = tv({
 });
 
 const disclosurePanelStyles = tv({
-  base: "transition-opacity duration-800 opacity-0 group-data-[expanded]:opacity-100 group-data-[expanded]:pb-4",
+  base: "transition-opacity duration-800 opacity-0 group-data-expanded:opacity-100 group-data-expanded:pb-4",
 });
 
 export function Disclosure({
@@ -58,7 +58,7 @@ export function Disclosure({
             className={twMerge(
               "group-hover:bg-graya-3 dark:group-hover:bg-graydarka-3 group-hover:text-gray-normal rounded-full size-8 p-1.5 shrink-0 ml-2",
               "transition-transform opacity-60",
-              "group-data-[expanded]:rotate-180",
+              "group-data-expanded:rotate-180",
             )}
           />
         </AriaButton>

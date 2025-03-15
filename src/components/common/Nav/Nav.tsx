@@ -17,7 +17,7 @@ const navItemStyles = tv({
   base: "rounded-md no-underline px-2 -mx-2 flex border border-transparent items-center text-sm lg:text-base hover:bg-gray-3 dark:hover:bg-graydark-3 aria-current:font-semibold aria-current:text-gray-normal",
   variants: {
     isActive: {
-      true: "bg-gray-3 hover:bg-gray-3 dark:bg-graydark-3 dark:hover:bg-graydark-3",
+      true: "bg-gray-3 hover:bg-gray-3 dark:bg-graydark-3 dark:hover:bg-graydark-3 text-gray-normal",
     },
     size: {
       medium: "h-8 lg:h-9 gap-1.5",
@@ -37,7 +37,8 @@ const iconStyles = tv({
     },
     size: {
       medium: "size-5",
-      large: "bg-graya-3 dark:bg-graydarka-3 rounded size-8 p-1 stroke-[1.5px]",
+      large:
+        "bg-graya-3 dark:bg-graydarka-3 rounded-sm size-8 p-1 stroke-[1.5px]",
     },
   },
   compoundVariants: [
@@ -108,7 +109,7 @@ export const NavGroup = ({
   icon: Icon,
 }: NavGroupProps) => {
   return (
-    <div className="flex flex-col gap-0.5 [&:not(:first-child)]:mt-4">
+    <div className="flex flex-col gap-0.5 not-first:mt-4">
       <Header className="text-sm h-8 font-medium text-gray-dim border-b border-gray-4 dark:border-graydark-4 flex justify-start items-center gap-1.5">
         {Icon && <Icon size={20} className="size-4" />}
         {label}

@@ -15,7 +15,7 @@ export const DocumentCard = ({
   const fileTitle = code ? `${code} ${title}` : title;
 
   return (
-    <div className="flex flex-col w-48 h-60 shrink-0 p-4 bg-white shadow-md rounded">
+    <div className="flex flex-col w-48 h-60 shrink-0 p-4 bg-white shadow-md rounded-sm">
       {code && <p className="text-gray-11 text-sm mb-1">{code}</p>}
       <header className="font-medium text-pretty leading-tight text-gray-12">
         {title}

@@ -50,6 +50,7 @@ export function ListBoxItem(props: ListBoxItemProps) {
   const textValue =
     props.textValue ||
     (typeof props.children === "string" ? props.children : undefined);
+
   return (
     <AriaListBoxItem {...props} textValue={textValue} className={itemStyles}>
       {composeRenderProps(props.children, (children) => (
@@ -63,7 +64,7 @@ export function ListBoxItem(props: ListBoxItemProps) {
 }
 
 export const dropdownItemStyles = tv({
-  base: "group flex items-center gap-1.5 cursor-pointer select-none py-2 px-2.5 pr-3 rounded-lg outline outline-0 text-sm forced-color-adjust-none",
+  base: "group flex items-center gap-3 cursor-pointer select-none py-2 px-2.5 pr-3 rounded-lg outline outline-0 text-sm forced-color-adjust-none",
   variants: {
     isDisabled: {
       false: "text-gray-normal",
@@ -94,12 +95,14 @@ export function DropdownItem(props: ListBoxItemProps) {
     >
       {composeRenderProps(props.children, (children, { isSelected }) => (
         <>
-          <span className="flex items-center flex-1 gap-2 font-normal truncate group-selected:font-semibold">
+          <span className="flex items-center flex-1 gap-2 font-normal truncate">
             {children}
           </span>
-          <span className="flex items-center w-5">
-            {isSelected && <Check className="w-4 h-4" />}
-          </span>
+          {isSelected && (
+            <span className="flex items-center size-4">
+              <Check className="size-4" />
+            </span>
+          )}
         </>
       ))}
     </AriaListBoxItem>
