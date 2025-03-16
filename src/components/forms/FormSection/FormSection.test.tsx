@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { FormSection, FormSubSection } from "./FormSection";
+import { FormSection, FormSubsection } from "./FormSection";
 
 describe("FormSection", () => {
   const formSection = {
@@ -58,9 +58,9 @@ describe("FormSection", () => {
   });
 });
 
-describe("FormSubSection", () => {
+describe("FormSubsection", () => {
   it("renders title", () => {
-    render(<FormSubSection title="What is your legal name?" />);
+    render(<FormSubsection title="What is your legal name?" />);
 
     const titleElement = screen.getByText("What is your legal name?");
     expect(titleElement).toBeInTheDocument();
@@ -68,7 +68,7 @@ describe("FormSubSection", () => {
   });
 
   it("does not render title when not provided", () => {
-    render(<FormSubSection title={undefined} />);
+    render(<FormSubsection title={undefined} />);
 
     const titleElement = screen.queryByText("What is your legal name?");
     expect(titleElement).toBeNull();
@@ -76,16 +76,16 @@ describe("FormSubSection", () => {
 
   it("renders children", () => {
     render(
-      <FormSubSection title="What is your legal name?">
+      <FormSubsection title="What is your legal name?">
         <div>Test content</div>
-      </FormSubSection>,
+      </FormSubsection>,
     );
     expect(screen.getByText("Test content")).toBeInTheDocument();
   });
 
   it("does not render when not visible", () => {
     render(
-      <FormSubSection title="What is your legal name?" isVisible={false} />,
+      <FormSubsection title="What is your legal name?" isVisible={false} />,
     );
 
     const titleElement = screen.queryByText("What is your legal name?");

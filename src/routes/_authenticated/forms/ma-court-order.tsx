@@ -5,7 +5,7 @@ import {
   EmailField,
   FormContainer,
   FormSection,
-  FormSubSection,
+  FormSubsection,
   LanguageSelectField,
   LongTextField,
   MemorableDateField,
@@ -117,12 +117,12 @@ function RouteComponent() {
             />
           </>
         )}
-        <FormSubSection
+        <FormSubsection
           title="What is your mailing address?"
           isVisible={form.watch("isMailingAddressDifferentFromResidence")}
         >
           <AddressField type="mailing" />
-        </FormSubSection>
+        </FormSubsection>
       </FormSection>
       <FormSection title="Have you legally changed your name before?">
         <YesNoField
@@ -132,12 +132,12 @@ function RouteComponent() {
           yesLabel="Yes, I've changed my name"
           noLabel="No, I've never changed my name"
         />
-        <FormSubSection
+        <FormSubsection
           title="Please list all past legal names."
           isVisible={form.watch("hasPreviousNameChange")}
         >
           <LongTextField name="previousLegalNames" label="Past legal names" />
-        </FormSubSection>
+        </FormSubsection>
       </FormSection>
       <FormSection
         title="If there is a hearing for your name change, do you need an interpreter?"
@@ -150,9 +150,9 @@ function RouteComponent() {
           yesLabel="Yes, I need an interpreter"
           noLabel="No, I don't need an interpreter"
         />
-        <FormSubSection isVisible={form.watch("isInterpreterNeeded")}>
+        <FormSubsection isVisible={form.watch("isInterpreterNeeded")}>
           <LanguageSelectField name="language" />
-        </FormSubSection>
+        </FormSubsection>
       </FormSection>
       <FormSection title="Do you want to share your pronouns with the court staff?">
         <YesNoField
@@ -160,9 +160,9 @@ function RouteComponent() {
           label="Share my pronouns with the court staff?"
           labelHidden
         />
-        <FormSubSection isVisible={form.watch("isOkayToSharePronouns")}>
+        <FormSubsection isVisible={form.watch("isOkayToSharePronouns")}>
           <PronounSelectField />
-        </FormSubSection>
+        </FormSubsection>
       </FormSection>
       <FormSection
         title="Do you want your original documents returned afterwards?"

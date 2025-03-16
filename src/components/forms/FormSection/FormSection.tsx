@@ -71,7 +71,7 @@ export function FormSection({
         className,
       )}
       // TODO: React-hook-form is supposed to prevent disabled fields from being submitted
-      // but it's not working for some reason
+      // but it's not working for some reason. Address in #428
       disabled={!isVisible}
     >
       <FormHeader title={title} description={description} />
@@ -80,19 +80,19 @@ export function FormSection({
   );
 }
 
-interface FormSubSectionProps {
+interface FormSubsectionProps {
   title?: string;
   children?: React.ReactNode;
   className?: string;
   isVisible?: boolean;
 }
 
-export function FormSubSection({
+export function FormSubsection({
   title,
   children,
   className,
   isVisible = true,
-}: FormSubSectionProps) {
+}: FormSubsectionProps) {
   if (!isVisible) return null;
 
   return (
