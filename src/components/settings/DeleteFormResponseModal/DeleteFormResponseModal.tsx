@@ -7,6 +7,7 @@ import {
 } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
+import { ALL } from "@convex/constants";
 import { useMutation } from "convex/react";
 import posthog from "posthog-js";
 import { useState } from "react";
@@ -44,7 +45,7 @@ export function DeleteFormResponseModal({
     try {
       setIsDeleting(true);
 
-      if (selectedRows === "all") {
+      if (selectedRows === ALL) {
         await deleteAll();
       } else {
         await deleteByIds({
@@ -69,7 +70,7 @@ export function DeleteFormResponseModal({
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalHeader title={`Delete ${responseCountLabel}?`} />
       {error && <Banner variant="danger">{error}</Banner>}
-      {selectedRows !== "all" && (
+      {selectedRows !== ALL && (
         <>
           <p>The following responses will be deleted:</p>
           <ul className="list-disc list-inside text-sm leading-6 text-gray-dim">

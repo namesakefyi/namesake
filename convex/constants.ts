@@ -336,3 +336,5 @@ export const COMMON_PRONOUNS = [
   "she/her/hers",
   "he/him/his",
 ];
+
+export const ALL = "all";

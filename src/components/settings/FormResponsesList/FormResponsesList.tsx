@@ -16,6 +16,7 @@ import {
 } from "@/utils/encryption";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
+import { ALL } from "@convex/constants";
 import { useMutation, useQuery } from "convex/react";
 import { AlertTriangle, FileLock2 } from "lucide-react";
 import posthog from "posthog-js";
@@ -156,7 +157,7 @@ export function getResponseCountLabel({
   totalCount,
 }: ResponseCountLabelProps) {
   const hasSelectedAll =
-    selectedRows === "all" || selectedRows.size === totalCount;
+    selectedRows === ALL || selectedRows.size === totalCount;
 
   return `${
     hasSelectedAll
@@ -181,8 +182,8 @@ export function FormResponsesList({ rows }: FormResponsesListProps) {
   const userRole = useQuery(api.users.getCurrentRole);
 
   const hasSelectedAll =
-    selectedRows === "all" || selectedRows.size === rows?.length;
-  const hasSelectedRows = selectedRows === "all" || selectedRows.size > 0;
+    selectedRows === ALL || selectedRows.size === rows?.length;
+  const hasSelectedRows = selectedRows === ALL || selectedRows.size > 0;
   const deleteLabel = `Delete ${getResponseCountLabel({
     selectedRows,
     totalCount: rows?.length ?? 0,
@@ -191,7 +192,7 @@ export function FormResponsesList({ rows }: FormResponsesListProps) {
   const shouldShowControls = rows && rows.length > 0;
 
   const handleSelectAll = () =>
-    hasSelectedAll ? setSelectedRows(new Set()) : setSelectedRows("all");
+    hasSelectedAll ? setSelectedRows(new Set()) : setSelectedRows(ALL);
 
   return (
     <div className="flex flex-col gap-4">

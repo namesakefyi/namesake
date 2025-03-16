@@ -1,5 +1,6 @@
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
+import { ALL } from "@convex/constants";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useMutation } from "convex/react";
@@ -80,7 +81,7 @@ describe("DeleteFormResponseModal", () => {
         isOpen={true}
         onOpenChange={mockOnOpenChange}
         onDelete={mockOnDelete}
-        selectedRows="all"
+        selectedRows={ALL}
         rows={mockRows}
       />,
     );
@@ -118,7 +119,7 @@ describe("DeleteFormResponseModal", () => {
         isOpen={true}
         onOpenChange={mockOnOpenChange}
         onDelete={mockOnDelete}
-        selectedRows="all"
+        selectedRows={ALL}
         rows={mockRows}
       />,
     );

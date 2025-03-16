@@ -1,5 +1,5 @@
 import { Tag, TagGroup, TextField } from "@/components/common";
-import { COMMON_PRONOUNS } from "@convex/constants";
+import { ALL, COMMON_PRONOUNS } from "@convex/constants";
 import { useState } from "react";
 import type { Selection } from "react-aria-components";
 
@@ -22,7 +22,7 @@ export function PronounSelectField() {
         ))}
         <Tag id="other">other pronouns</Tag>
       </TagGroup>
-      {(selected === "all" || selected.has("other")) && (
+      {(selected === ALL || selected.has("other")) && (
         <TextField
           label="List other pronouns"
           name="otherPronouns"
