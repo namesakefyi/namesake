@@ -33,7 +33,7 @@ export function DeleteFormResponseModal({
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const deleteAll = useMutation(api.userFormResponses.deleteAll);
+  const deleteAll = useMutation(api.userFormResponses.deleteAllForCurrentUser);
   const deleteByIds = useMutation(api.userFormResponses.deleteByIds);
 
   const responseCountLabel = getResponseCountLabel({

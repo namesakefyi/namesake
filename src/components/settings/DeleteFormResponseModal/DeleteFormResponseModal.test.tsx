@@ -10,7 +10,9 @@ import { DeleteFormResponseModal } from "./DeleteFormResponseModal";
 vi.mock("@convex/_generated/api", () => ({
   api: {
     userFormResponses: {
-      deleteAll: { _name: "userFormResponses:deleteAll" },
+      deleteAllForCurrentUser: {
+        _name: "userFormResponses:deleteAllForCurrentUser",
+      },
       deleteByIds: { _name: "userFormResponses:deleteByIds" },
     },
   },
@@ -46,7 +48,8 @@ describe("DeleteFormResponseModal", () => {
     // Mock useMutation
     (useMutation as unknown as ReturnType<typeof vi.fn>).mockImplementation(
       (mutation: any) => {
-        if (mutation === api.userFormResponses.deleteAll) return mockDeleteAll;
+        if (mutation === api.userFormResponses.deleteAllForCurrentUser)
+          return mockDeleteAll;
         if (mutation === api.userFormResponses.deleteByIds)
           return mockDeleteByIds;
         return vi.fn();

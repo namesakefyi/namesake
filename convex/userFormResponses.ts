@@ -52,7 +52,7 @@ export const set = userMutation({
   },
 });
 
-export const deleteAll = userMutation({
+export const deleteAllForCurrentUser = userMutation({
   args: {},
   handler: async (ctx, _args) => {
     const userData = await ctx.db
