@@ -37,6 +37,7 @@ export function AddressField({ children, type }: AddressFieldProps) {
     },
   };
 
+  // Input mask: enforce ZIP code format of 12345-1234
   const maskitoOptions: MaskitoOptions = {
     mask: [/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/],
   };
