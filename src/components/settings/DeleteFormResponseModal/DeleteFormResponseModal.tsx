@@ -12,7 +12,7 @@ import posthog from "posthog-js";
 import { useState } from "react";
 import type { Selection } from "react-aria-components";
 import { toast } from "sonner";
-import { getDeleteLabel } from "../FormResponsesList/FormResponsesList";
+import { getResponseCountLabel } from "../FormResponsesList/FormResponsesList";
 
 interface DeleteFormResponseModalProps {
   isOpen: boolean;
@@ -35,7 +35,7 @@ export function DeleteFormResponseModal({
   const deleteAll = useMutation(api.userFormResponses.deleteAll);
   const deleteByIds = useMutation(api.userFormResponses.deleteByIds);
 
-  const deleteLabel = getDeleteLabel({
+  const responseCountLabel = getResponseCountLabel({
     selectedRows,
     totalCount: rows?.length ?? 0,
   });
@@ -56,7 +56,7 @@ export function DeleteFormResponseModal({
 
       onOpenChange(false);
       onDelete();
-      toast.success("Data deleted");
+      toast.success(`${responseCountLabel} deleted`);
     } catch (error: any) {
       setError(error.message);
       posthog.captureException(error);
@@ -67,11 +67,11 @@ export function DeleteFormResponseModal({
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <ModalHeader title={`${deleteLabel}?`} />
+      <ModalHeader title={`Delete ${responseCountLabel}?`} />
       {error && <Banner variant="danger">{error}</Banner>}
       {selectedRows !== "all" && (
         <>
-          <p>The following data will be deleted:</p>
+          <p>The following responses will be deleted:</p>
           <ul className="list-disc list-inside text-sm leading-6 text-gray-dim">
             {Array.from(selectedRows).map((row) => (
               <li key={row}>{rows?.find((r) => r.id === row)?.field}</li>
@@ -79,7 +79,7 @@ export function DeleteFormResponseModal({
           </ul>
         </>
       )}
-      <Banner variant="warning">This action cannot be undone.</Banner>
+      <Banner variant="warning">This cannot be undone.</Banner>
       <ModalFooter>
         <Button
           variant="secondary"
@@ -93,7 +93,7 @@ export function DeleteFormResponseModal({
           onPress={handleDelete}
           isDisabled={isDeleting}
         >
-          {isDeleting ? "Deleting…" : deleteLabel}
+          {isDeleting ? "Deleting…" : `Delete ${responseCountLabel}`}
         </Button>
       </ModalFooter>
     </Modal>

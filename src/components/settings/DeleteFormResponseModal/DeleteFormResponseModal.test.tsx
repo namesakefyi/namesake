@@ -66,14 +66,12 @@ describe("DeleteFormResponseModal", () => {
       />,
     );
 
-    expect(screen.getByText("Delete 1 item?")).toBeInTheDocument();
+    expect(screen.getByText("Delete 1 response?")).toBeInTheDocument();
     expect(
-      screen.getByText("The following data will be deleted:"),
+      screen.getByText("The following responses will be deleted:"),
     ).toBeInTheDocument();
     expect(screen.getByText("firstName")).toBeInTheDocument();
-    expect(
-      screen.getByText("This action cannot be undone."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("This cannot be undone.")).toBeInTheDocument();
   });
 
   it("renders the modal with correct title when deleting all items", () => {
@@ -87,13 +85,11 @@ describe("DeleteFormResponseModal", () => {
       />,
     );
 
-    expect(screen.getByText("Delete all data?")).toBeInTheDocument();
+    expect(screen.getByText("Delete all responses?")).toBeInTheDocument();
     expect(
-      screen.queryByText("The following data will be deleted:"),
+      screen.queryByText("The following responses will be deleted:"),
     ).not.toBeInTheDocument();
-    expect(
-      screen.getByText("This action cannot be undone."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("This cannot be undone.")).toBeInTheDocument();
   });
 
   it("lists all selected items to be deleted", () => {
@@ -128,7 +124,7 @@ describe("DeleteFormResponseModal", () => {
     );
 
     const deleteButton = screen.getByRole("button", {
-      name: "Delete all data",
+      name: "Delete all responses",
     });
     await user.click(deleteButton);
 
@@ -156,7 +152,9 @@ describe("DeleteFormResponseModal", () => {
       />,
     );
 
-    const deleteButton = screen.getByRole("button", { name: "Delete 2 items" });
+    const deleteButton = screen.getByRole("button", {
+      name: "Delete 2 responses",
+    });
     await user.click(deleteButton);
 
     // Wait longer and be more specific with the expectation
@@ -188,7 +186,7 @@ describe("DeleteFormResponseModal", () => {
       />,
     );
 
-    await user.click(screen.getByRole("button", { name: "Delete 1 item" }));
+    await user.click(screen.getByRole("button", { name: "Delete 1 response" }));
 
     await waitFor(
       () => {

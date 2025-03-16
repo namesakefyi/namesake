@@ -145,7 +145,7 @@ describe("FormResponsesList", () => {
     await user.click(getByRole("option", { name: "firstName" }));
     await waitFor(() => {
       expect(
-        getByRole("button", { name: "Delete 1 item" }),
+        getByRole("button", { name: "Delete 1 response" }),
       ).toBeInTheDocument();
     });
 
@@ -153,7 +153,7 @@ describe("FormResponsesList", () => {
     await user.click(getByRole("option", { name: "middleName" }));
     await waitFor(() => {
       expect(
-        getByRole("button", { name: "Delete 2 items" }),
+        getByRole("button", { name: "Delete 2 responses" }),
       ).toBeInTheDocument();
     });
 
@@ -161,7 +161,7 @@ describe("FormResponsesList", () => {
     await user.click(getByRole("button", { name: "Select all" }));
     await waitFor(() => {
       expect(
-        getByRole("button", { name: "Delete all data" }),
+        getByRole("button", { name: "Delete all responses" }),
       ).toBeInTheDocument();
     });
 
@@ -187,7 +187,7 @@ describe("FormResponsesList", () => {
     await user.click(firstItem);
 
     // Click delete button
-    const deleteButton = getByRole("button", { name: "Delete 1 item" });
+    const deleteButton = getByRole("button", { name: "Delete 1 response" });
     await user.click(deleteButton);
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();

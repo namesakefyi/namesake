@@ -146,19 +146,22 @@ function AddFormResponse() {
   );
 }
 
-interface DeleteLabelProps {
+interface ResponseCountLabelProps {
   selectedRows: Selection;
   totalCount: number;
 }
 
-export function getDeleteLabel({ selectedRows, totalCount }: DeleteLabelProps) {
+export function getResponseCountLabel({
+  selectedRows,
+  totalCount,
+}: ResponseCountLabelProps) {
   const hasSelectedAll =
     selectedRows === "all" || selectedRows.size === totalCount;
 
-  return `Delete ${
+  return `${
     hasSelectedAll
-      ? "all data"
-      : `${selectedRows.size} ${selectedRows.size === 1 ? "item" : "items"}`
+      ? "all responses"
+      : `${selectedRows.size} ${selectedRows.size === 1 ? "response" : "responses"}`
   }`;
 }
 
@@ -180,10 +183,10 @@ export function FormResponsesList({ rows }: FormResponsesListProps) {
   const hasSelectedAll =
     selectedRows === "all" || selectedRows.size === rows?.length;
   const hasSelectedRows = selectedRows === "all" || selectedRows.size > 0;
-  const deleteLabel = getDeleteLabel({
+  const deleteLabel = `Delete ${getResponseCountLabel({
     selectedRows,
     totalCount: rows?.length ?? 0,
-  });
+  })}`;
 
   const shouldShowControls = rows && rows.length > 0;
 
