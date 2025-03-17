@@ -6,6 +6,7 @@ import {
   Label,
 } from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
+import { forwardRef } from "react";
 import {
   TextField as AriaTextField,
   type TextFieldProps as AriaTextFieldProps,
@@ -19,31 +20,27 @@ export interface TextAreaProps extends AriaTextFieldProps {
   size?: "medium" | "large";
 }
 
-export function TextArea({
-  label,
-  description,
-  errorMessage,
-  size,
-  ...props
-}: TextAreaProps) {
-  return (
-    <AriaTextField
-      {...props}
-      className={composeTailwindRenderProps(
-        props.className,
-        "flex flex-col gap-1.5",
-      )}
-    >
-      {(renderProps) => (
-        <>
-          {label && <Label size={size}>{label}</Label>}
-          <FieldGroup {...renderProps} size={size}>
-            <InputTextArea size={size} />
-          </FieldGroup>
-          {description && <FieldDescription>{description}</FieldDescription>}
-          <FieldError>{errorMessage}</FieldError>
-        </>
-      )}
-    </AriaTextField>
-  );
-}
+export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
+  function TextArea({ label, description, errorMessage, size, ...props }, ref) {
+    return (
+      <AriaTextField
+        {...props}
+        className={composeTailwindRenderProps(
+          props.className,
+          "flex flex-col gap-1.5",
+        )}
+      >
+        {(renderProps) => (
+          <>
+            {label && <Label size={size}>{label}</Label>}
+            <FieldGroup {...renderProps} size={size}>
+              <InputTextArea ref={ref} size={size} />
+            </FieldGroup>
+            {description && <FieldDescription>{description}</FieldDescription>}
+            <FieldError>{errorMessage}</FieldError>
+          </>
+        )}
+      </AriaTextField>
+    );
+  },
+);

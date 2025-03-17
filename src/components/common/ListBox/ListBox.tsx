@@ -87,6 +87,7 @@ export function DropdownItem(props: ListBoxItemProps) {
   const textValue =
     props.textValue ||
     (typeof props.children === "string" ? props.children : undefined);
+
   return (
     <AriaListBoxItem
       {...props}
