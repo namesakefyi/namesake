@@ -29,6 +29,9 @@ vi.mock("@/utils/useTheme", () => ({
 vi.mock("@tanstack/react-router", () => ({
   useRouter: () => ({
     navigate: vi.fn(),
+    history: {
+      go: vi.fn(),
+    },
   }),
 }));
 
