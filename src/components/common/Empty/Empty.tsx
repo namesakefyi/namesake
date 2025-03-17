@@ -40,7 +40,7 @@ export function Empty({
         className="text-gray-8 dark:text-graydark-8 shrink-0 stroke-[1.5px]"
       />
       <Heading className="font-semibold text-xl">{title}</Heading>
-      {subtitle && <p className="text-gray-dim -mt-3">{subtitle}</p>}
+      {subtitle && <p className="text-gray-dim -mt-4">{subtitle}</p>}
       <div className="flex gap-2">
         {button && <Button {...button} />}
         {link && <Link {...link} />}

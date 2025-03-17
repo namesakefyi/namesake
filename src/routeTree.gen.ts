@@ -20,7 +20,7 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSettingsIndexImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedAdminIndexImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/_home/index'
-import { Route as AuthenticatedSettingsDataImport } from './routes/_authenticated/settings/data'
+import { Route as AuthenticatedSettingsResponsesImport } from './routes/_authenticated/settings/responses'
 import { Route as AuthenticatedSettingsAccountImport } from './routes/_authenticated/settings/account'
 import { Route as AuthenticatedAdminQuestsIndexImport } from './routes/_authenticated/admin/quests.index'
 import { Route as AuthenticatedAdminEarlyAccessIndexImport } from './routes/_authenticated/admin/early-access.index'
@@ -89,11 +89,12 @@ const AuthenticatedHomeIndexRoute = AuthenticatedHomeIndexImport.update({
   getParentRoute: () => AuthenticatedHomeRoute,
 } as any)
 
-const AuthenticatedSettingsDataRoute = AuthenticatedSettingsDataImport.update({
-  id: '/data',
-  path: '/data',
-  getParentRoute: () => AuthenticatedSettingsRouteRoute,
-} as any)
+const AuthenticatedSettingsResponsesRoute =
+  AuthenticatedSettingsResponsesImport.update({
+    id: '/responses',
+    path: '/responses',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
+  } as any)
 
 const AuthenticatedSettingsAccountRoute =
   AuthenticatedSettingsAccountImport.update({
@@ -218,11 +219,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsAccountImport
       parentRoute: typeof AuthenticatedSettingsRouteImport
     }
-    '/_authenticated/settings/data': {
-      id: '/_authenticated/settings/data'
-      path: '/data'
-      fullPath: '/settings/data'
-      preLoaderRoute: typeof AuthenticatedSettingsDataImport
+    '/_authenticated/settings/responses': {
+      id: '/_authenticated/settings/responses'
+      path: '/responses'
+      fullPath: '/settings/responses'
+      preLoaderRoute: typeof AuthenticatedSettingsResponsesImport
       parentRoute: typeof AuthenticatedSettingsRouteImport
     }
     '/_authenticated/_home/': {
@@ -341,14 +342,14 @@ const AuthenticatedAdminRouteRouteWithChildren =
 
 interface AuthenticatedSettingsRouteRouteChildren {
   AuthenticatedSettingsAccountRoute: typeof AuthenticatedSettingsAccountRoute
-  AuthenticatedSettingsDataRoute: typeof AuthenticatedSettingsDataRoute
+  AuthenticatedSettingsResponsesRoute: typeof AuthenticatedSettingsResponsesRoute
   AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
 }
 
 const AuthenticatedSettingsRouteRouteChildren: AuthenticatedSettingsRouteRouteChildren =
   {
     AuthenticatedSettingsAccountRoute: AuthenticatedSettingsAccountRoute,
-    AuthenticatedSettingsDataRoute: AuthenticatedSettingsDataRoute,
+    AuthenticatedSettingsResponsesRoute: AuthenticatedSettingsResponsesRoute,
     AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
   }
 
@@ -413,7 +414,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/signin': typeof UnauthenticatedSigninRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
-  '/settings/data': typeof AuthenticatedSettingsDataRoute
+  '/settings/responses': typeof AuthenticatedSettingsResponsesRoute
   '/': typeof AuthenticatedHomeIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
@@ -432,7 +433,7 @@ export interface FileRoutesByTo {
   '': typeof UnauthenticatedRouteWithChildren
   '/signin': typeof UnauthenticatedSigninRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
-  '/settings/data': typeof AuthenticatedSettingsDataRoute
+  '/settings/responses': typeof AuthenticatedSettingsResponsesRoute
   '/': typeof AuthenticatedHomeIndexRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
@@ -456,7 +457,7 @@ export interface FileRoutesById {
   '/_authenticated/_home': typeof AuthenticatedHomeRouteWithChildren
   '/_unauthenticated/signin': typeof UnauthenticatedSigninRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
-  '/_authenticated/settings/data': typeof AuthenticatedSettingsDataRoute
+  '/_authenticated/settings/responses': typeof AuthenticatedSettingsResponsesRoute
   '/_authenticated/_home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
@@ -479,7 +480,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/signin'
     | '/settings/account'
-    | '/settings/data'
+    | '/settings/responses'
     | '/'
     | '/admin/'
     | '/settings/'
@@ -497,7 +498,7 @@ export interface FileRouteTypes {
     | ''
     | '/signin'
     | '/settings/account'
-    | '/settings/data'
+    | '/settings/responses'
     | '/'
     | '/admin'
     | '/settings'
@@ -519,7 +520,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_home'
     | '/_unauthenticated/signin'
     | '/_authenticated/settings/account'
-    | '/_authenticated/settings/data'
+    | '/_authenticated/settings/responses'
     | '/_authenticated/_home/'
     | '/_authenticated/admin/'
     | '/_authenticated/settings/'
@@ -590,7 +591,7 @@ export const routeTree = rootRoute
       "parent": "/_authenticated",
       "children": [
         "/_authenticated/settings/account",
-        "/_authenticated/settings/data",
+        "/_authenticated/settings/responses",
         "/_authenticated/settings/"
       ]
     },
@@ -613,8 +614,8 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/settings/account.tsx",
       "parent": "/_authenticated/settings"
     },
-    "/_authenticated/settings/data": {
-      "filePath": "_authenticated/settings/data.tsx",
+    "/_authenticated/settings/responses": {
+      "filePath": "_authenticated/settings/responses.tsx",
       "parent": "/_authenticated/settings"
     },
     "/_authenticated/_home/": {

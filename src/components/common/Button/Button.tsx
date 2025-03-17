@@ -28,7 +28,8 @@ export const buttonStyles = tv({
         "bg-purple-solid text-white border-purple-10 dark:border-purpledark-10 shadow-sm",
       secondary:
         "bg-white dark:bg-graydark-3 hover:bg-white dark:hover:bg-graydark-4 hover:border-gray-7 dark:hover:border-graydark-7 text-gray-normal shadow-sm",
-      destructive: "bg-red-solid",
+      destructive:
+        "bg-red-solid text-white border-red-11 dark:border-reddark-10 shadow-sm",
       icon: "bg-transparent hover:bg-graya-3 dark:hover:bg-graydarka-3 text-gray-dim hover:text-gray-normal border-0 flex shrink-0 items-center justify-center rounded-full",
       ghost:
         "bg-transparent hover:bg-graya-3 dark:hover:bg-graydarka-3 text-gray-dim hover:text-gray-normal border-0",
@@ -40,7 +41,7 @@ export const buttonStyles = tv({
     },
     isDisabled: {
       false: "cursor-pointer",
-      true: "cursor-default text-gray-dim opacity-50 forced-colors:text-[GrayText]",
+      true: "cursor-default opacity-40",
     },
   },
   compoundVariants: [
