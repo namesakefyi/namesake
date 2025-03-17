@@ -1,9 +1,9 @@
 import { convexTest } from "convex-test";
 import { describe, expect, it, vi } from "vitest";
-import { api } from "./_generated/api";
+import { api } from "../_generated/api";
+import schema from "../schema";
+import { modules } from "../test.setup";
 import { createOrUpdateUser } from "./auth";
-import schema from "./schema";
-import { modules } from "./test.setup";
 
 describe("auth", () => {
   describe("createOrUpdateUser", () => {

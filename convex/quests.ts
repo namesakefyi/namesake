@@ -6,7 +6,8 @@ import {
   DEFAULT_TIME_REQUIRED,
   type Jurisdiction,
 } from "./constants";
-import { generateQuestSlug, userMutation, userQuery } from "./helpers";
+import { userMutation, userQuery } from "./helpers";
+import * as Quests from "./model/quests";
 import { create as createQuestFaq } from "./questFaqs";
 import { category, jurisdiction, timeRequiredUnit } from "./validators";
 
@@ -124,7 +125,7 @@ export const create = userMutation({
     category: v.optional(category),
   },
   handler: async (ctx, args) => {
-    const slug = generateQuestSlug(
+    const slug = Quests.generateQuestSlug(
       args.title,
       args.category as Category,
       args.jurisdiction as Jurisdiction,

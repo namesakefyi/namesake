@@ -6,6 +6,7 @@ import { query } from "./_generated/server";
 import type { Role } from "./constants";
 import { DUPLICATE_EMAIL, INVALID_EMAIL } from "./errors";
 import { userMutation } from "./helpers";
+import * as Users from "./model/users";
 import { birthplace, jurisdiction } from "./validators";
 
 export const getAll = query({
@@ -45,11 +46,8 @@ export const getCurrentRole = query({
 
 export const getByEmail = query({
   args: { email: v.string() },
-  handler: async (ctx, args) => {
-    return await ctx.db
-      .query("users")
-      .withIndex("email", (q) => q.eq("email", args.email))
-      .first();
+  handler: async (ctx, { email }) => {
+    return await Users.getByEmail(ctx, { email });
   },
 });
 
