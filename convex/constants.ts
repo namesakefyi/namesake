@@ -340,3 +340,40 @@ export const COMMON_PRONOUNS = [
 // Used for React-Aria's Selection.
 // https://react-spectrum.adobe.com/react-aria/selection.html#select-all
 export const ALL = "all";
+
+export const USER_FORM_DATA_FIELDS = {
+  oldFirstName: "Old first name",
+  oldMiddleName: "Old middle name",
+  oldLastName: "Old last name",
+  newFirstName: "New first name",
+  newMiddleName: "New middle name",
+  newLastName: "New last name",
+  reasonForChangingName: "Reason for changing name",
+  phoneNumber: "Phone number",
+  email: "Email",
+  dateOfBirth: "Date of birth",
+  isCurrentlyUnhoused: "Currently unhoused",
+  residenceStreetAddress: "Residence street address",
+  residenceCity: "Residence city",
+  residenceState: "Residence state",
+  residenceZipCode: "Residence zip code",
+  isMailingAddressDifferentFromResidence:
+    "Mailing address different from residence",
+  mailingStreetAddress: "Mailing street address",
+  mailingCity: "Mailing city",
+  mailingState: "Mailing state",
+  mailingZipCode: "Mailing zip code",
+  hasPreviousNameChange: "Has previous name change",
+  previousLegalNames: "Previous legal names",
+  isInterpreterNeeded: "Interpreter needed",
+  language: "Language",
+  isOkayToSharePronouns: "Okay to share pronouns",
+  pronouns: "Pronouns",
+  otherPronouns: "Other pronouns",
+  shouldReturnOriginalDocuments: "Return original documents",
+  shouldWaivePublicationRequirement: "Waive publication requirement",
+  shouldImpoundCourtRecords: "Impound court records",
+  shouldApplyForFeeWaiver: "Apply for a fee waiver",
+} as const;
+
+export type UserFormDataField = keyof typeof USER_FORM_DATA_FIELDS;

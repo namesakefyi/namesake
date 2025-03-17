@@ -17,9 +17,8 @@ export function FormContainer({ children }: FormContainerProps) {
   const { history } = useRouter();
 
   return (
-    <main className="h-screen w-screen fixed overflow-y-scroll snap-y snap-proximity">
-      <Container className="w-[720px]">{children}</Container>
-      {/* Intentionally placed *after* content to prioritize tab order */}
+    <main className="bg-gray-2 dark:bg-graydark-1">
+      <Container className="w-[720px] py-12">{children}</Container>
       <TooltipTrigger>
         <Button
           className="fixed top-4 left-4 z-10"

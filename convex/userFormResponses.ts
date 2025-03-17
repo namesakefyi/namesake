@@ -24,6 +24,22 @@ export const get = userQuery({
   },
 });
 
+export const getByFieldName = userQuery({
+  args: {
+    field: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userData = await ctx.db
+      .query("userFormResponses")
+      .withIndex("userIdAndField", (q) =>
+        q.eq("userId", ctx.userId).eq("field", args.field),
+      )
+      .first();
+
+    return userData?.value;
+  },
+});
+
 export const set = userMutation({
   args: {
     field: v.string(),

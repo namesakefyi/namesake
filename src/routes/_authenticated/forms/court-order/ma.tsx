@@ -1,12 +1,14 @@
-import { Banner } from "@/components/common";
+import { Banner, Button, Form } from "@/components/common";
 import {
   AddressField,
   CheckboxField,
   EmailField,
   FormContainer,
   FormSection,
+  FormSubSection,
   LanguageSelectField,
   LongTextField,
+  MemorableDateField,
   NameField,
   PhoneField,
   PronounSelectField,
@@ -14,117 +16,224 @@ import {
 import { YesNoField } from "@/components/forms/YesNoField/YesNoField";
 import { createFileRoute } from "@tanstack/react-router";
 import { Lock } from "lucide-react";
-
+import { FormProvider, useForm } from "react-hook-form";
 export const Route = createFileRoute("/_authenticated/forms/court-order/ma")({
   component: RouteComponent,
 });
 
+type FormData = {
+  newFirstName: string;
+  newMiddleName: string;
+  newLastName: string;
+  oldFirstName: string;
+  oldMiddleName: string;
+  oldLastName: string;
+  reasonForChangingName: string;
+  phoneNumber: string;
+  email: string;
+  dateOfBirth: string;
+  isCurrentlyUnhoused: boolean;
+  residenceStreetAddress: string;
+  residenceCity: string;
+  residenceState: string;
+  residenceZipCode: string;
+  isMailingAddressDifferentFromResidence: boolean;
+  mailingStreetAddress: string;
+  mailingCity: string;
+  mailingState: string;
+  mailingZipCode: string;
+  hasPreviousNameChange: boolean;
+  previousLegalNames: string;
+  isInterpreterNeeded: boolean;
+  language: string;
+  isOkayToSharePronouns: boolean;
+  pronouns: string[];
+  shouldReturnOriginalDocuments: boolean;
+  shouldWaivePublicationRequirement: boolean;
+  shouldImpoundCourtRecords: boolean;
+  shouldApplyForFeeWaiver: boolean;
+};
+
 function RouteComponent() {
+  const form = useForm<FormData>({
+    mode: "onBlur",
+  });
+
+  const handleSubmit = (data: FormData) => {
+    console.log(data);
+  };
+
   return (
-    <FormContainer>
-      <FormSection
-        title="Let's get started."
-        description="The questions below are used to fill out the necessary forms to file your name change."
-      >
-        <Banner variant="info" icon={Lock} size="large">
-          Namesake takes your privacy seriously. All responses are end-to-end
-          encrypted. That means no one—not even Namesake!—can see your answers.
-        </Banner>
-      </FormSection>
-      <FormSection
-        title="What is your new name?"
-        description="This is the name you're making official! Type it exactly as you want it to appear."
-      >
-        <NameField />
-      </FormSection>
-      <FormSection
-        title="What is your current legal name?"
-        description="This is the name you're leaving behind. Type it exactly as it appears on your ID."
-      >
-        <NameField />
-      </FormSection>
-      <FormSection title="What is the reason you're changing your name?">
-        <LongTextField name="reason" label="Reason for name change" />
-      </FormSection>
-      <FormSection
-        title="What is your contact information?"
-        description="The court uses this to communicate with you about your status."
-        className="@container"
-      >
-        <div className="grid grid-cols-1 @lg:grid-cols-[auto_1fr] @lg:grid- gap-4">
-          <PhoneField />
-          <EmailField />
-        </div>
-      </FormSection>
-      <FormSection title="Are you currently unhoused or without permanent housing?">
-        <YesNoField
-          name="unhoused"
-          label="Are you currently unhoused or without permanent housing?"
-          noLabel="No, I have a Massachusetts residential address"
-          labelHidden
-        />
-      </FormSection>
-      <FormSection
-        title="What is your residential address?"
-        description="You must reside in the same county where you file your name change. We'll help you find where to file."
-      >
-        {/* TODO: Make Massachusetts state always selected */}
-        <AddressField />
-        <CheckboxField
-          name="differentMailingAddress"
-          label="I use a different mailing address"
-        />
-      </FormSection>
-      {/* TODO: Make conditional */}
-      <FormSection title="What is your mailing address?">
-        <AddressField />
-      </FormSection>
-      <FormSection title="Have you legally changed your name before?">
-        <YesNoField
-          name="nameChangeBefore"
-          label="Have you ever changed your name before?"
-          labelHidden
-          yesLabel="Yes, I've changed my name"
-          noLabel="No, I've never changed my name"
-        />
-      </FormSection>
-      <FormSection title="Please list all past legal names.">
-        <LongTextField name="pastNames" label="Past legal names" />
-      </FormSection>
-      <FormSection
-        title="If there is a hearing for your name change, do you need an interpreter?"
-        description="In most cases, a hearing is not required."
-      >
-        <YesNoField
-          name="interpreter"
-          label="If there is a hearing for your name change, do you need an interpreter?"
-          labelHidden
-          yesLabel="I need an interpreter"
-          noLabel="I don't need an interpreter"
-        />
-        {/* TODO: Make conditional */}
-        <LanguageSelectField />
-      </FormSection>
-      <FormSection title="Do you want to share your pronouns with the court staff?">
-        <YesNoField
-          name="sharePronouns"
-          label="Share my pronouns with the court staff?"
-          labelHidden
-        />
-        <PronounSelectField />
-      </FormSection>
-      <FormSection
-        title="Do you want your original documents returned afterwards?"
-        description="The court will return your birth certificate and any other documents you provided."
-      >
-        <YesNoField
-          name="returnMyDocuments"
-          label="Return original documents?"
-          labelHidden
-          yesLabel="Yes, return my documents"
-          noLabel="No, I don't need my documents returned"
-        />
-      </FormSection>
-    </FormContainer>
+    <FormProvider {...form}>
+      <FormContainer>
+        <Form onSubmit={form.handleSubmit(handleSubmit)}>
+          <FormSection
+            title="Let's get started."
+            description="The questions below are used to fill out the necessary forms to file your name change."
+          >
+            <Banner variant="info" icon={Lock} size="large">
+              Namesake takes your privacy seriously. All responses are
+              end-to-end encrypted. That means no one—not even Namesake—can see
+              your answers.
+            </Banner>
+          </FormSection>
+          <FormSection
+            title="What is your new name?"
+            description="This is the name you're making official! Type it exactly as you want it to appear."
+          >
+            <NameField type="newName" />
+          </FormSection>
+          <FormSection
+            title="What is your current legal name?"
+            description="This is the name you're leaving behind. Type it exactly as it appears on your ID."
+          >
+            <NameField type="oldName" />
+          </FormSection>
+          <FormSection title="What is the reason you're changing your name?">
+            <LongTextField
+              name="reasonForChangingName"
+              label="Reason for name change"
+            />
+          </FormSection>
+          <FormSection
+            title="What is your contact information?"
+            description="The court uses this to communicate with you about your status."
+            className="@container"
+          >
+            <div className="grid grid-cols-1 @lg:grid-cols-[auto_1fr] @lg:grid- gap-4">
+              <PhoneField name="phoneNumber" />
+              <EmailField name="email" />
+            </div>
+          </FormSection>
+          <FormSection title="What is your date of birth?">
+            <MemorableDateField name="dateOfBirth" label="Date of birth" />
+          </FormSection>
+          <FormSection
+            title="What is your residential address?"
+            description="You must reside in the same county where you file your name change. We'll help you find where to file."
+          >
+            <CheckboxField
+              name="isCurrentlyUnhoused"
+              label="I am currently unhoused or without permanent housing"
+            />
+            {!form.watch("isCurrentlyUnhoused") && (
+              <>
+                <AddressField type="residence" />
+                <CheckboxField
+                  name="isMailingAddressDifferentFromResidence"
+                  label="I use a different mailing address"
+                />
+              </>
+            )}
+            <FormSubSection
+              title="What is your mailing address?"
+              isVisible={form.watch("isMailingAddressDifferentFromResidence")}
+            >
+              <AddressField type="mailing" />
+            </FormSubSection>
+          </FormSection>
+          <FormSection title="Have you legally changed your name before?">
+            <YesNoField
+              name="hasPreviousNameChange"
+              label="Have you ever changed your name before?"
+              labelHidden
+              yesLabel="Yes, I've changed my name"
+              noLabel="No, I've never changed my name"
+            />
+            <FormSubSection
+              title="Please list all past legal names."
+              isVisible={form.watch("hasPreviousNameChange")}
+            >
+              <LongTextField
+                name="previousLegalNames"
+                label="Past legal names"
+              />
+            </FormSubSection>
+          </FormSection>
+          <FormSection
+            title="If there is a hearing for your name change, do you need an interpreter?"
+            description="In most cases, a hearing is not required."
+          >
+            <YesNoField
+              name="isInterpreterNeeded"
+              label="If there is a hearing for your name change, do you need an interpreter?"
+              labelHidden
+              yesLabel="Yes, I need an interpreter"
+              noLabel="No, I don't need an interpreter"
+            />
+            <FormSubSection isVisible={form.watch("isInterpreterNeeded")}>
+              <LanguageSelectField name="language" />
+            </FormSubSection>
+          </FormSection>
+          <FormSection title="Do you want to share your pronouns with the court staff?">
+            <YesNoField
+              name="isOkayToSharePronouns"
+              label="Share my pronouns with the court staff?"
+              labelHidden
+            />
+            <FormSubSection isVisible={form.watch("isOkayToSharePronouns")}>
+              <PronounSelectField />
+            </FormSubSection>
+          </FormSection>
+          <FormSection
+            title="Do you want your original documents returned afterwards?"
+            description="The court will return your birth certificate and any other documents you provided."
+          >
+            <YesNoField
+              name="shouldReturnOriginalDocuments"
+              label="Return original documents?"
+              labelHidden
+              yesLabel="Yes, return my documents"
+              noLabel="No, I don't need my documents returned"
+            />
+            {form.watch("shouldReturnOriginalDocuments") === false && (
+              <Banner variant="warning" size="large">
+                We strongly recommend getting your original documents back from
+                the court.
+              </Banner>
+            )}
+          </FormSection>
+          <FormSection
+            title="Would you like to waive the newspaper publication requirement?"
+            description="The legal name change process requires publication in a newspaper. However, we can help you file a motion to waive this requirement."
+          >
+            <YesNoField
+              name="shouldWaivePublicationRequirement"
+              label="Waive the publication requirement?"
+              labelHidden
+              yesLabel="Yes, apply to waive the publication requirement"
+              noLabel="No, I will publish my name change in a newspaper"
+            />
+          </FormSection>
+          <FormSection
+            title="Would you like to impound your case?"
+            description="All court actions are public record by default. However, you can apply to impound your case to keep it private."
+          >
+            <YesNoField
+              name="shouldImpoundCourtRecords"
+              label="Impound my case?"
+              labelHidden
+              yesLabel="Yes, apply to impound my case and keep my name change private"
+              noLabel="No, it's okay for my case to be public"
+            />
+          </FormSection>
+          <FormSection
+            title="Do you need to apply for a fee waiver?"
+            description="If you are unable to pay the filing fee, you can file an affidavit of indigency—a document proving that you are unable to pay. You will need to provide proof of income."
+          >
+            <YesNoField
+              name="shouldApplyForFeeWaiver"
+              label="Apply for a fee waiver?"
+              labelHidden
+              yesLabel="Yes, I am unable to pay the filing fees"
+              noLabel="No, I can pay the filing fee"
+            />
+          </FormSection>
+          <Button type="submit" size="large" variant="primary">
+            Submit
+          </Button>
+        </Form>
+      </FormContainer>
+    </FormProvider>
   );
 }

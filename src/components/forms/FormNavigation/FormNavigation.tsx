@@ -78,37 +78,11 @@ export function FormNavigation() {
   }, [formSections, router]);
 
   return (
-    <nav className="fixed right-4 top-4 flex gap-2">
-      <TooltipTrigger>
-        <Link
-          href={{ to: ".", hash: activeSection?.previous?.hash }}
-          routerOptions={{ replace: true }}
-          button={{ variant: "icon" }}
-          className="flex-1"
-          aria-label="Previous question"
-          isDisabled={!activeSection?.previous}
-        >
-          <ArrowUp className="size-5" />
-        </Link>
-        <Tooltip>Previous question</Tooltip>
-      </TooltipTrigger>
-      <TooltipTrigger>
-        <Link
-          href={{ to: ".", hash: activeSection?.next?.hash }}
-          routerOptions={{ replace: true }}
-          button={{ variant: "icon" }}
-          className="flex-1"
-          aria-label="Next question"
-          isDisabled={!activeSection?.next}
-        >
-          <ArrowDown className="size-5" />
-        </Link>
-        <Tooltip>Next question</Tooltip>
-      </TooltipTrigger>
+    <nav className="fixed right-4 top-4 flex flex-col gap-2">
       <MenuTrigger>
         <TooltipTrigger>
           <Button variant="icon" icon={MenuIcon} aria-label="All questions" />
-          <Tooltip>All questions</Tooltip>
+          <Tooltip placement="left">All questions</Tooltip>
         </TooltipTrigger>
         <Menu>
           {formSections.map(({ hash, title }) => (
@@ -122,6 +96,32 @@ export function FormNavigation() {
           ))}
         </Menu>
       </MenuTrigger>
+      <TooltipTrigger>
+        <Link
+          href={{ to: ".", hash: activeSection?.previous?.hash }}
+          routerOptions={{ replace: true }}
+          button={{ variant: "icon" }}
+          className="flex-1"
+          aria-label="Previous question"
+          isDisabled={!activeSection?.previous}
+        >
+          <ArrowUp className="size-5" />
+        </Link>
+        <Tooltip placement="left">Previous question</Tooltip>
+      </TooltipTrigger>
+      <TooltipTrigger>
+        <Link
+          href={{ to: ".", hash: activeSection?.next?.hash }}
+          routerOptions={{ replace: true }}
+          button={{ variant: "icon" }}
+          className="flex-1"
+          aria-label="Next question"
+          isDisabled={!activeSection?.next}
+        >
+          <ArrowDown className="size-5" />
+        </Link>
+        <Tooltip placement="left">Next question</Tooltip>
+      </TooltipTrigger>
     </nav>
   );
 }
