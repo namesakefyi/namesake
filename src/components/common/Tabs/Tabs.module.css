@@ -15,7 +15,7 @@
 
 .tab-list::after {
   /* Tailwind's `after:transition` class is not working for me :/ */
-  transition: translate 0.2s ease;
+  transition: translate 0.2s ease-out;
 }
 
 .tab-list[data-orientation="horizontal"]::after {
