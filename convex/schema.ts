@@ -57,7 +57,7 @@ const quests = defineTable({
   /** Questions related to the quest. */
   faqs: v.optional(v.array(v.id("questFaqs"))),
   /** Time in ms since epoch when the quest was last updated. */
-  updatedAt: v.optional(v.number()),
+  updatedAt: v.number(),
   /** The user who last updated the quest. */
   updatedBy: v.optional(v.id("users")),
 })
@@ -150,7 +150,7 @@ const users = defineTable({
 /**
  * A unique piece of user data that has been entered through filling a form.
  */
-const userFormData = defineTable({
+const userFormResponses = defineTable({
   /** The user who owns the data. */
   userId: v.id("users"),
   /** The name of the field, e.g. "firstName" or "isMinor". */
@@ -183,6 +183,8 @@ const userQuests = defineTable({
   status: status,
   /** Time in ms since epoch when the user marked the quest as complete. */
   completedAt: v.optional(v.number()),
+  /** Time in ms since epoch when the user started the quest. */
+  startedAt: v.optional(v.number()),
 })
   .index("userId", ["userId"])
   .index("questId", ["questId"]);
@@ -209,7 +211,7 @@ export default defineSchema({
   questSteps,
   questFaqs,
   users,
-  userFormData,
+  userFormResponses,
   userSettings,
   userQuests,
 });

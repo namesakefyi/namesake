@@ -2,7 +2,8 @@
   "recommendations": [
     "biomejs.biome",
     "bradlc.vscode-tailwindcss",
-    "phoenisx.cssvar"
+    "phoenisx.cssvar",
+    "tomoki1207.pdf"
   ],
   "unwantedRecommendations": ["dbaeumer.vscode-eslint"]
 }

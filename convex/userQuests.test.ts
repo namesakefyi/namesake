@@ -1,10 +1,22 @@
 import { convexTest } from "convex-test";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { vi } from "vitest";
 import { api } from "./_generated/api";
 import schema from "./schema";
 import { modules } from "./test.setup";
 
+const UPDATE_TIMESTAMP = Date.now();
+
 describe("userQuests", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(UPDATE_TIMESTAMP);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   describe("getAll", () => {
     it("should return all user quests", async () => {
       const t = convexTest(schema, modules);
@@ -26,6 +38,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
         });
 
         const quest2Id = await ctx.db.insert("quests", {
@@ -34,6 +47,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
         });
 
         // Create user quests
@@ -76,6 +90,7 @@ describe("userQuests", () => {
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
           deletedAt: Date.now(),
+          updatedAt: UPDATE_TIMESTAMP,
         });
 
         await ctx.db.insert("userQuests", {
@@ -110,6 +125,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
         });
 
         await ctx.db.insert("userQuests", {
@@ -144,6 +160,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 
@@ -177,6 +194,7 @@ describe("userQuests", () => {
           category: "education",
           jurisdiction: "MA",
           creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 
@@ -187,7 +205,33 @@ describe("userQuests", () => {
     });
 
     it("should throw if quest already exists", async () => {
-      // ADD
+      const t = convexTest(schema, modules);
+
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "test@example.com",
+          role: "user",
+        });
+      });
+
+      const asUser = t.withIdentity({ subject: userId });
+
+      const questId = await t.run(async (ctx) => {
+        return await ctx.db.insert("quests", {
+          title: "Test Quest",
+          slug: "test-quest",
+          category: "Test Category",
+          jurisdiction: "Test Jurisdiction",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+      });
+
+      await asUser.mutation(api.userQuests.create, { questId });
+
+      await expect(
+        asUser.mutation(api.userQuests.create, { questId }),
+      ).rejects.toThrow("Quest already exists for user");
     });
   });
 
@@ -211,6 +255,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 
@@ -244,6 +289,7 @@ describe("userQuests", () => {
           category: "education",
           jurisdiction: "MA",
           creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 
@@ -257,7 +303,7 @@ describe("userQuests", () => {
       ).rejects.toThrow("Invalid status");
     });
 
-    it("should add completedAt when status changed to complete", async () => {
+    it("should properly manage timestamps through status transitions", async () => {
       const t = convexTest(schema, modules);
 
       const userId = await t.run(async (ctx) => {
@@ -276,29 +322,41 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 
       await asUser.mutation(api.userQuests.create, { questId });
 
-      const userQuest = await asUser.query(api.userQuests.getByQuestId, {
+      // Initial state check
+      let userQuest = await asUser.query(api.userQuests.getByQuestId, {
         questId,
       });
-
       expect(userQuest?.status).toBe("notStarted");
+      expect(userQuest?.startedAt).toBeUndefined();
       expect(userQuest?.completedAt).toBeUndefined();
 
+      // Transition to inProgress
+      await asUser.mutation(api.userQuests.setStatus, {
+        questId,
+        status: "inProgress",
+      });
+
+      userQuest = await asUser.query(api.userQuests.getByQuestId, { questId });
+      expect(userQuest?.status).toBe("inProgress");
+      expect(userQuest?.startedAt).toBe(UPDATE_TIMESTAMP);
+      expect(userQuest?.completedAt).toBeUndefined();
+
+      // Transition to complete
       await asUser.mutation(api.userQuests.setStatus, {
         questId,
         status: "complete",
       });
 
-      const updatedUserQuest = await asUser.query(api.userQuests.getByQuestId, {
-        questId,
-      });
-
-      expect(updatedUserQuest?.status).toBe("complete");
-      expect(updatedUserQuest?.completedAt).toBeTypeOf("number"); // Unix timestamp
+      userQuest = await asUser.query(api.userQuests.getByQuestId, { questId });
+      expect(userQuest?.status).toBe("complete");
+      expect(userQuest?.startedAt).toBe(UPDATE_TIMESTAMP); // startedAt should be preserved
+      expect(userQuest?.completedAt).toBe(UPDATE_TIMESTAMP);
     });
 
     it("should remove completedAt when status changed away from complete", async () => {
@@ -320,6 +378,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 
@@ -371,6 +430,7 @@ describe("userQuests", () => {
           category: "Test Category",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
         });
       });
 
@@ -408,6 +468,7 @@ describe("userQuests", () => {
           category: "education",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
         });
 
         const quest2Id = await ctx.db.insert("quests", {
@@ -416,6 +477,7 @@ describe("userQuests", () => {
           category: "housing",
           jurisdiction: "Test Jurisdiction",
           creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
         });
 
         await ctx.db.insert("userQuests", {

@@ -3,6 +3,7 @@ import { vi } from "vitest";
 
 // Mock the convex mutation hook
 vi.mock("convex/react", () => ({
+  useQuery: vi.fn(),
   useMutation: vi.fn(),
 }));
 
@@ -23,3 +24,23 @@ vi.mock("@convex-dev/auth/react", () => ({
 vi.mock("@/utils/useTheme", () => ({
   useTheme: vi.fn(),
 }));
+
+// Mock the useRouter hook
+vi.mock("@tanstack/react-router", () => ({
+  useRouter: () => ({
+    navigate: vi.fn(),
+    history: {
+      go: vi.fn(),
+    },
+  }),
+}));
+
+// Add type for mocked IntersectionObserver
+declare global {
+  interface Window {
+    IntersectionObserver: ReturnType<typeof vi.fn>;
+  }
+}
+
+// Update the mock assignment
+window.IntersectionObserver = vi.fn() as any;

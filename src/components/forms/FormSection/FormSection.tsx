@@ -13,16 +13,29 @@ interface FormHeaderProps {
 function FormHeader({ title, description }: FormHeaderProps) {
   return (
     <header className="flex flex-col gap-2">
-      <Heading className="text-4xl font-medium text-gray-normal text-pretty">
+      <Heading
+        className="text-3xl font-medium text-gray-normal text-pretty"
+        data-section-title
+      >
         {smartquotes(title)}
       </Heading>
       {description && (
-        <p className="text-xl text-gray-dim text-pretty">
+        <p className="text-lg text-gray-dim text-pretty">
           {smartquotes(description)}
         </p>
       )}
     </header>
   );
+}
+
+function getQuestionId(question: string) {
+  let sanitizedQuestion = question;
+  // Remove trailing punctuation
+  sanitizedQuestion = sanitizedQuestion.replace(/[^\w\s]/g, "");
+  // Remove apostrophes
+  sanitizedQuestion = sanitizedQuestion.replace(/'/g, "");
+
+  return encodeURIComponent(sanitizedQuestion.toLowerCase().replace(/ /g, "-"));
 }
 
 export interface FormSectionProps extends FormHeaderProps {
@@ -31,6 +44,12 @@ export interface FormSectionProps extends FormHeaderProps {
 
   /** Optional styles for the container. */
   className?: string;
+
+  /**
+   * Whether the section is visible.
+   * @default true
+   */
+  isVisible?: boolean;
 }
 
 export function FormSection({
@@ -38,16 +57,58 @@ export function FormSection({
   description,
   children,
   className,
+  isVisible = true,
 }: FormSectionProps) {
+  if (!isVisible) return null;
+
   return (
-    <section
+    <fieldset
+      id={getQuestionId(title)}
+      data-form-section
+      data-testid="form-section"
       className={twMerge(
-        "flex flex-col gap-8 p-8 justify-center h-screen snap-center",
+        "flex flex-col gap-8 p-8 pb-9 justify-center outline outline-1 outline-graya-3 dark:outline-graydarka-3 shadow-sm dark:shadow-md rounded-2xl bg-white dark:bg-graydark-2",
         className,
       )}
+      // TODO: React-hook-form is supposed to prevent disabled fields from being submitted
+      // but it's not working for some reason. Address in #428
+      disabled={!isVisible}
     >
       <FormHeader title={title} description={description} />
       {children}
-    </section>
+    </fieldset>
+  );
+}
+
+interface FormSubsectionProps {
+  title?: string;
+  children?: React.ReactNode;
+  className?: string;
+  isVisible?: boolean;
+}
+
+export function FormSubsection({
+  title,
+  children,
+  className,
+  isVisible = true,
+}: FormSubsectionProps) {
+  if (!isVisible) return null;
+
+  return (
+    <fieldset
+      className={twMerge(
+        "flex flex-col gap-8 -mx-8 px-8 pt-8 border-t border-graya-3 dark:border-graydarka-3 justify-center",
+        className,
+      )}
+      disabled={!isVisible}
+    >
+      {title && (
+        <Heading className="text-2xl font-medium text-gray-normal text-pretty">
+          {smartquotes(title)}
+        </Heading>
+      )}
+      {children}
+    </fieldset>
   );
 }

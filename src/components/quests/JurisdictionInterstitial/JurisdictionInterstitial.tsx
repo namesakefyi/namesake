@@ -8,6 +8,7 @@ import {
 } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import {
+  ALL,
   BIRTHPLACES,
   CATEGORIES,
   JURISDICTIONS,
@@ -32,7 +33,7 @@ export const JurisdictionInterstitial = ({
   const [error, setError] = useState<string>();
 
   const selection =
-    selected !== "all" ? selected.values().next().value?.toString() : undefined;
+    selected !== ALL ? selected.values().next().value?.toString() : undefined;
 
   const updateResidence = useMutation(api.users.setResidence);
   const updateBirthplace = useMutation(api.users.setBirthplace);

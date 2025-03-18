@@ -38,15 +38,15 @@ function IndexRoute() {
         label: CATEGORIES.courtOrder.label,
         icon: CATEGORIES.courtOrder.icon,
       },
-      stateId: {
-        to: "state-id",
-        label: CATEGORIES.stateId.label,
-        icon: CATEGORIES.stateId.icon,
-      },
       socialSecurity: {
         to: "social-security",
         label: CATEGORIES.socialSecurity.label,
         icon: CATEGORIES.socialSecurity.icon,
+      },
+      stateId: {
+        to: "state-id",
+        label: CATEGORIES.stateId.label,
+        icon: CATEGORIES.stateId.icon,
       },
       passport: {
         to: "passport",

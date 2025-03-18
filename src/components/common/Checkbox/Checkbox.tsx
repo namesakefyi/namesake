@@ -101,6 +101,7 @@ export interface CheckboxProps extends AriaCheckboxProps {
   label?: string;
   description?: string;
   size?: "medium" | "large";
+  errorMessage?: string | ((validation: ValidationResult) => string);
   card?: boolean;
 }
 
@@ -109,6 +110,7 @@ export function Checkbox({
   description,
   size,
   card,
+  errorMessage,
   className,
   ...props
 }: CheckboxProps) {
@@ -143,6 +145,7 @@ export function Checkbox({
       {description && (
         <FieldDescription className="ml-8">{description}</FieldDescription>
       )}
+      <FieldError>{errorMessage}</FieldError>
     </div>
   );
 }

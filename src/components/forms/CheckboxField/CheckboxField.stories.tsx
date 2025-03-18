@@ -15,6 +15,7 @@ export const Example = (args: CheckboxFieldProps) => (
 );
 
 Example.args = {
+  name: "shouldReturnOriginalDocuments",
   label: "I would like my documents returned",
   children: (
     <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">

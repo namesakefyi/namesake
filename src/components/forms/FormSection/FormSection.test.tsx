@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { FormSection } from "./FormSection";
+import { FormSection, FormSubsection } from "./FormSection";
 
 describe("FormSection", () => {
   const formSection = {
@@ -13,7 +13,7 @@ describe("FormSection", () => {
 
     const titleElement = screen.getByText(formSection.title);
     expect(titleElement).toBeInTheDocument();
-    expect(titleElement).toHaveClass("text-4xl");
+    expect(titleElement).toHaveClass("text-3xl");
     expect(titleElement).toHaveClass("font-medium");
     expect(titleElement).toHaveClass("text-gray-normal");
   });
@@ -23,7 +23,7 @@ describe("FormSection", () => {
 
     const descriptionElement = screen.getByText(formSection.description);
     expect(descriptionElement).toBeInTheDocument();
-    expect(descriptionElement).toHaveClass("text-xl");
+    expect(descriptionElement).toHaveClass("text-lg");
     expect(descriptionElement).toHaveClass("text-gray-dim");
   });
 
@@ -35,5 +35,60 @@ describe("FormSection", () => {
 
     const descriptionQuery = screen.queryByRole("paragraph");
     expect(descriptionQuery).toBeNull();
+  });
+
+  it("formats the question title as id and omits punctuation", () => {
+    render(<FormSection {...formSection} title="What is your legal name?" />);
+    const section = screen.getByTestId("form-section");
+    expect(section).toHaveAttribute("id", "what-is-your-legal-name");
+  });
+
+  it("omits apostrophes from the id", () => {
+    render(
+      <FormSection
+        {...formSection}
+        title="What is the reason you're changing your name?"
+      />,
+    );
+    const section = screen.getByTestId("form-section");
+    expect(section).toHaveAttribute(
+      "id",
+      "what-is-the-reason-youre-changing-your-name",
+    );
+  });
+});
+
+describe("FormSubsection", () => {
+  it("renders title", () => {
+    render(<FormSubsection title="What is your legal name?" />);
+
+    const titleElement = screen.getByText("What is your legal name?");
+    expect(titleElement).toBeInTheDocument();
+    expect(titleElement).toHaveClass("text-2xl");
+  });
+
+  it("does not render title when not provided", () => {
+    render(<FormSubsection title={undefined} />);
+
+    const titleElement = screen.queryByText("What is your legal name?");
+    expect(titleElement).toBeNull();
+  });
+
+  it("renders children", () => {
+    render(
+      <FormSubsection title="What is your legal name?">
+        <div>Test content</div>
+      </FormSubsection>,
+    );
+    expect(screen.getByText("Test content")).toBeInTheDocument();
+  });
+
+  it("does not render when not visible", () => {
+    render(
+      <FormSubsection title="What is your legal name?" isVisible={false} />,
+    );
+
+    const titleElement = screen.queryByText("What is your legal name?");
+    expect(titleElement).toBeNull();
   });
 });

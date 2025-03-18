@@ -1,15 +1,15 @@
-import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { renderWithFormProvider, screen } from "@tests/test-utils";
 import { describe, expect, it } from "vitest";
 import { NameField } from "./NameField";
 
 describe("NameField", () => {
   it("renders all name input fields", () => {
-    render(<NameField />);
+    renderWithFormProvider(<NameField type="newName" />);
 
-    const firstNameInput = screen.getByLabelText("First name");
+    const firstNameInput = screen.getByLabelText("First or given name");
     const middleNameInput = screen.getByLabelText("Middle name");
-    const lastNameInput = screen.getByLabelText("Last name");
+    const lastNameInput = screen.getByLabelText("Last or family name");
 
     expect(firstNameInput).toBeInTheDocument();
     expect(middleNameInput).toBeInTheDocument();
@@ -17,11 +17,11 @@ describe("NameField", () => {
   });
 
   it("has correct autocomplete attributes", () => {
-    render(<NameField />);
+    renderWithFormProvider(<NameField type="newName" />);
 
-    const firstNameInput = screen.getByLabelText("First name");
+    const firstNameInput = screen.getByLabelText("First or given name");
     const middleNameInput = screen.getByLabelText("Middle name");
-    const lastNameInput = screen.getByLabelText("Last name");
+    const lastNameInput = screen.getByLabelText("Last or family name");
 
     expect(firstNameInput).toHaveAttribute("autocomplete", "given-name");
     expect(middleNameInput).toHaveAttribute("autocomplete", "additional-name");
@@ -29,13 +29,16 @@ describe("NameField", () => {
   });
 
   it("allows entering text in all name fields", async () => {
-    render(<NameField />);
+    renderWithFormProvider(<NameField type="newName" />);
 
-    const firstNameInput: HTMLInputElement =
-      screen.getByLabelText("First name");
+    const firstNameInput: HTMLInputElement = screen.getByLabelText(
+      "First or given name",
+    );
     const middleNameInput: HTMLInputElement =
       screen.getByLabelText("Middle name");
-    const lastNameInput: HTMLInputElement = screen.getByLabelText("Last name");
+    const lastNameInput: HTMLInputElement = screen.getByLabelText(
+      "Last or family name",
+    );
 
     await userEvent.type(firstNameInput, "John");
     await userEvent.type(middleNameInput, "Michael");
@@ -47,8 +50,8 @@ describe("NameField", () => {
   });
 
   it("supports optional children", () => {
-    render(
-      <NameField>
+    renderWithFormProvider(
+      <NameField type="newName">
         <div data-testid="child-component">Additional Info</div>
       </NameField>,
     );
