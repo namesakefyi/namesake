@@ -1,16 +1,19 @@
 import { focusRing } from "@/components/utils";
+import { useContext } from "react";
 import {
   Tab as AriaTab,
   TabList as AriaTabList,
   TabPanel as AriaTabPanel,
   Tabs as AriaTabs,
   type TabListProps,
+  TabListStateContext,
   type TabPanelProps,
   type TabProps,
   type TabsProps,
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import styles from "./Tabs.module.css";
 
 const tabsStyles = tv({
   base: "flex gap-4",
@@ -34,7 +37,7 @@ export function Tabs(props: TabsProps) {
 }
 
 const tabListStyles = tv({
-  base: "grid bg-gray-3 dark:bg-gray-1 rounded-lg p-1",
+  base: "grid bg-gray-3 dark:bg-gray-1 rounded-lg p-1 relative isolate after:absolute after:inset-0 after:bg-white dark:after:bg-gray-3 after:-z-10 after:rounded-md after:shadow-sm",
   variants: {
     orientation: {
       horizontal: "grid-flow-col auto-cols-fr",
@@ -44,23 +47,37 @@ const tabListStyles = tv({
 });
 
 export function TabList<T extends object>(props: TabListProps<T>) {
+  const state = useContext(TabListStateContext);
+
+  const tabList = state?.collection;
+  const activeTab = state?.selectedKey ?? "";
+
+  const count = tabList?.size ?? 1;
+  const active = tabList?.getItem(activeTab)?.index ?? 0;
+
   return (
     <AriaTabList
       {...props}
-      className={composeRenderProps(props.className, (className, renderProps) =>
-        tabListStyles({ ...renderProps, className }),
+      className={composeRenderProps(
+        `${props.className} ${styles["tab-list"]}`,
+        (className, renderProps) =>
+          tabListStyles({ ...renderProps, className }),
       )}
+      style={{
+        ["--count" as string]: count,
+        ["--active" as string]: active,
+      }}
     />
   );
 }
 
 const tabProps = tv({
   extend: focusRing,
-  base: "flex items-center justify-center cursor-pointer rounded-md px-4 py-2 text-sm transition forced-color-adjust-none",
+  base: "flex items-center justify-center cursor-pointer rounded-md px-4 py-2 text-sm text-center transition forced-color-adjust-none",
   variants: {
     isSelected: {
       false: "text-gray-dim hover:text-gray-normal",
-      true: "bg-element shadow-xs forced-colors:text-[HighlightText] forced-colors:bg-[Highlight]",
+      true: "forced-colors:text-[HighlightText] forced-colors:bg-[Highlight]",
     },
     isDisabled: {
       true: "opacity-50 cursor-default forced-colors:text-[GrayText] selected:text-gray-3 forced-colors:selected:text-[HighlightText] selected:bg-gray-2 forced-colors:selected:bg-[GrayText]",
