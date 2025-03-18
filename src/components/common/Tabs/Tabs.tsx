@@ -73,7 +73,7 @@ export function TabList<T extends object>(props: TabListProps<T>) {
 
 const tabProps = tv({
   extend: focusRing,
-  base: "flex items-center justify-center cursor-pointer px-4 py-2 text-sm transition forced-color-adjust-none",
+  base: "flex items-center justify-center cursor-pointer rounded-md px-4 py-2 text-sm transition forced-color-adjust-none",
   variants: {
     isSelected: {
       false: "text-gray-dim hover:text-gray-normal",
