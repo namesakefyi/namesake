@@ -21,12 +21,11 @@ const cellStyles = tv({
   base: "w-9 h-9 text-sm cursor-default rounded-full flex items-center justify-center forced-color-adjust-none",
   variants: {
     isSelected: {
-      false:
-        "text-gray-12 dark:text-gray-2 hover:bg-gray-3 dark:hover:bg-graydark-3 pressed:bg-gray-3 dark:pressed:bg-graydark-3",
+      false: "text-gray-12 hover:bg-gray-3 pressed:bg-gray-3",
       true: "bg-blue-9 invalid:bg-red-9 text-white forced-colors:bg-[Highlight] forced-colors:invalid:bg-[Mark] forced-colors:text-[HighlightText]",
     },
     isDisabled: {
-      true: "text-gray-3 dark:text-gray-6 forced-colors:text-[GrayText]",
+      true: "text-gray-9 forced-colors:text-[GrayText]",
     },
   },
 });
@@ -82,7 +81,7 @@ export function CalendarGridHeader() {
   return (
     <AriaCalendarGridHeader>
       {(day) => (
-        <CalendarHeaderCell className="text-xs text-gray-9 dark:text-graydark-9 font-semibold">
+        <CalendarHeaderCell className="text-xs text-gray-9 font-semibold">
           {day}
         </CalendarHeaderCell>
       )}

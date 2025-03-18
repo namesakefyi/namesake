@@ -1,43 +1,20 @@
 @import "tailwindcss";
-/* TODO: Alias gray to slate */
-@import "tailwindcss-radix-colors/dist/gray.css";
-@import "tailwindcss-radix-colors/dist/graya.css";
-@import "tailwindcss-radix-colors/dist/slate.css";
-@import "tailwindcss-radix-colors/dist/slatea.css";
-@import "tailwindcss-radix-colors/dist/red.css";
-@import "tailwindcss-radix-colors/dist/reda.css";
-@import "tailwindcss-radix-colors/dist/purple.css";
-@import "tailwindcss-radix-colors/dist/purplea.css";
-@import "tailwindcss-radix-colors/dist/blue.css";
-@import "tailwindcss-radix-colors/dist/bluea.css";
-@import "tailwindcss-radix-colors/dist/green.css";
-@import "tailwindcss-radix-colors/dist/greena.css";
-@import "tailwindcss-radix-colors/dist/grass.css";
-@import "tailwindcss-radix-colors/dist/grassa.css";
-@import "tailwindcss-radix-colors/dist/orange.css";
-@import "tailwindcss-radix-colors/dist/orangea.css";
-@import "tailwindcss-radix-colors/dist/amber.css";
-@import "tailwindcss-radix-colors/dist/ambera.css";
-@import "tailwindcss-radix-colors/dist/whitea.css";
-@import "tailwindcss-radix-colors/dist/blacka.css";
-
 @import "tw-animate-css";
+@import "./colors.css";
 
 @plugin "tailwindcss-react-aria-components";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@config "../../tailwind.config.ts";
-
-@utility app-padding {
+.app-padding {
   @apply px-6 lg:px-8;
 }
 
-@utility h-header {
+.h-header {
   @apply h-16 lg:h-20;
 }
 
-@utility prose {
+.prose {
   @apply text-base lg:text-lg;
 
   a {
@@ -51,7 +28,7 @@
   h2 {
     @apply text-2xl font-medium;
     @apply pb-2;
-    @apply border-b border-gray-5 dark:border-graydark-5;
+    @apply border-b border-gray-5
   }
 
   h3 {
@@ -59,7 +36,7 @@
   }
 
   blockquote {
-    @apply border-l-2 border-gray-5 dark:border-graydark-5 pl-4;
+    @apply border-l-2 border-gray-5 pl-4;
   }
 
   li {
@@ -77,7 +54,7 @@
     &::before {
       position: absolute;
       left: 0;
-      @apply tabular-nums text-gray-11 dark:text-graydark-11;
+      @apply tabular-nums text-gray-11;
     }
   }
 
@@ -112,9 +89,9 @@
   }
 }
 
-@utility tiptap {
+.tiptap {
   & p.is-editor-empty:first-child::before {
-    @apply text-gray-11 dark:text-graydark-11;
+    @apply text-gray-11;
     content: attr(data-placeholder);
     float: left;
     height: 0;
@@ -122,9 +99,9 @@
   }
 }
 
-@utility is-editor-empty {
+.is-editor-empty {
   .tiptap &p:first-child::before {
-    @apply text-gray-11 dark:text-graydark-11;
+    @apply text-gray-11;
     content: attr(data-placeholder);
     float: left;
     height: 0;
@@ -147,7 +124,7 @@
 body {
   color-scheme: dark light;
   -webkit-font-smoothing: antialiased;
-  @apply bg-gray-1 dark:bg-graydark-2;
+  @apply bg-gray-1 dark:bg-gray-2 text-gray-12;
 }
 
 body,
@@ -160,7 +137,7 @@ body,
 }
 
 .dark ::selection {
-  @apply bg-purpledark-5 text-graydark-12;
+  @apply bg-purple-5 text-gray-12;
 }
 
 .svc-full-creator {

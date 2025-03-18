@@ -31,6 +31,9 @@ importers:
       '@maskito/react':
         specifier: ^3.3.0
         version: 3.3.0(@maskito/core@3.3.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/colors':
+        specifier: ^3.0.0
+        version: 3.0.0
       '@tailwindcss/vite':
         specifier: ^4.0.14
         version: 4.0.14(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)(yaml@2.7.0))
@@ -284,9 +287,6 @@ importers:
       tailwind-merge:
         specifier: ^2.6.0
         version: 2.6.0
-      tailwindcss-radix-colors:
-        specifier: ^2.0.0
-        version: 2.0.0(tailwindcss@4.0.14)
       tailwindcss-react-aria-components:
         specifier: ^2.0.0
         version: 2.0.0(tailwindcss@4.0.14)
@@ -1224,6 +1224,9 @@ packages:
 
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
+
+  '@radix-ui/colors@3.0.0':
+    resolution: {integrity: sha512-FUOsGBkHrYJwCSEtWRCIfQbZG7q1e6DgxCIOe1SUQzDe/7rXXeA47s8yCn6fuTNQAj1Zq4oTFi9Yjp3wzElcxg==}
 
   '@react-aria/autocomplete@3.0.0-beta.0':
     resolution: {integrity: sha512-8uqLicU2QlAtXspqIPbG2H2dqndFOnEwOf1bfmqI+9EjIBjQTQKbd4YBle++ZdhSTLKTOK6DM3ZkzfsoNk5DsQ==}
@@ -4643,11 +4646,6 @@ packages:
     peerDependencies:
       tailwindcss: '*'
 
-  tailwindcss-radix-colors@2.0.0:
-    resolution: {integrity: sha512-5Nmk674Xm+ZD8Tv6C3i0ujs2AMLazXtIp4qzNd2yDzcTjZsNMtmv9BuSOLTRzzJE+5U7zbmPPkASAZ2zB2Tafw==}
-    peerDependencies:
-      tailwindcss: '>=4.0.0'
-
   tailwindcss-react-aria-components@2.0.0:
     resolution: {integrity: sha512-l8YdpXX//qx0Mz2bW3YKLjboTQxR3zLrFhlHniAIn+mTwVM1yvT0Jp7Pn3eFrqi+qtOMmcJzXaF2rsKezSr0SQ==}
     peerDependencies:
@@ -5875,6 +5873,8 @@ snapshots:
   '@polka/url@1.0.0-next.28': {}
 
   '@popperjs/core@2.11.8': {}
+
+  '@radix-ui/colors@3.0.0': {}
 
   '@react-aria/autocomplete@3.0.0-beta.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
@@ -9966,10 +9966,6 @@ snapshots:
   tailwind-variants@1.0.0(tailwindcss@4.0.14):
     dependencies:
       tailwind-merge: 3.0.2
-      tailwindcss: 4.0.14
-
-  tailwindcss-radix-colors@2.0.0(tailwindcss@4.0.14):
-    dependencies:
       tailwindcss: 4.0.14
 
   tailwindcss-react-aria-components@2.0.0(tailwindcss@4.0.14):

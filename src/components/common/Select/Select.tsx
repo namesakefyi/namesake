@@ -57,7 +57,7 @@ export function Select<T extends object>({
             "size-4 text-gray-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText] shrink-0",
         }}
       >
-        <SelectValue className="flex-1 text-gray-normal placeholder-shown:font-normal placeholder-shown:text-gray-9 dark:placeholder-shown:text-graydark-9" />
+        <SelectValue className="flex-1 text-gray-normal placeholder-shown:font-normal placeholder-shown:text-gray-9" />
       </Button>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>

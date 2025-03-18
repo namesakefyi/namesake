@@ -53,24 +53,24 @@ const radioItemStyles = tv({
       large: "gap-3",
     },
     card: {
-      true: "border border-gray-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-graya-2 dark:hover:bg-graydarka-2 selected:bg-purplea-3 dark:selected:bg-purpledarka-3 selected:border-purple-6 dark:selected:border-purpledark-6",
+      true: "border border-gray-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-gray-a2 selected:bg-purple-a3 selected:border-purple-6",
     },
   },
 });
 
 const radioStyles = tv({
   extend: focusRing,
-  base: "rounded-full border bg-white dark:bg-graydark-1 transition-all ease-out duration-150 cursor-pointer",
+  base: "rounded-full border bg-app transition-all ease-out duration-150 cursor-pointer",
   variants: {
     isSelected: {
       false: "border-gray-dim",
-      true: "border-[7px] dark:bg-white border-purple-9 dark:border-purpledark-9 forced-colors:border-[Highlight]",
+      true: "bg-white border-[6px] border-purple-9 forced-colors:border-[Highlight]",
     },
     isInvalid: {
-      true: "border-red-9 dark:border-reddark-9  forced-colors:border-[Mark]!",
+      true: "border-red-9 forced-colors:border-[Mark]!",
     },
     isDisabled: {
-      true: "border-gray-2 dark:border-gray-8 cursor-default forced-colors:border-[GrayText]!",
+      true: "border-gray-2 cursor-default forced-colors:border-[GrayText]!",
     },
     size: {
       medium: "size-5",
@@ -80,6 +80,13 @@ const radioStyles = tv({
   defaultVariants: {
     size: "medium",
   },
+  compoundVariants: [
+    {
+      isSelected: true,
+      size: "large",
+      className: "border-[7px]",
+    },
+  ],
 });
 
 export interface RadioProps extends AriaRadioProps {

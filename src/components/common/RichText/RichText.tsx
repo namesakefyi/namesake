@@ -108,7 +108,7 @@ export function RichText({
       />
       <BubbleMenu
         editor={editor}
-        className="bg-gray-1 dark:bg-graydark-2 border border-gray-dim p-1.5 gap-px rounded-xl shadow-md flex items-center data-[state=visible]:opacity-100 data-[state=hidden]:opacity-0 transition-opacity *:border-none"
+        className="bg-app border border-gray-dim p-1.5 gap-px rounded-xl shadow-md flex items-center data-[state=visible]:opacity-100 data-[state=hidden]:opacity-0 transition-opacity *:border-none"
       >
         <ToggleButton
           onPress={() => editor.chain().focus().toggleBold().run()}

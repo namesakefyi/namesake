@@ -16,11 +16,11 @@ export interface ToggleButtonProps extends AriaToggleButtonProps {
 
 const styles = tv({
   extend: focusRing,
-  base: "px-3.5 [&:has(svg:only-child)]:px-2 text-sm text-center font-medium transition rounded-lg border border-transparent",
+  base: "px-3.5 [&:has(svg:only-child)]:px-2 text-sm text-center font-medium transition rounded-lg border border-transparent relative isolate",
   variants: {
     isSelected: {
       false: "bg-transparent text-gray-dim hover:text-gray-normal",
-      true: "bg-white dark:bg-graydark-3 text-gray-normal shadow-xs border border-gray-dim",
+      true: "bg-app text-gray-normal shadow-xs border border-gray-dim",
     },
     isDisabled: buttonStyles.variants.isDisabled,
     size: {

@@ -54,23 +54,23 @@ export function DateField<T extends DateValue>({
 }
 
 const segmentStyles = tv({
-  base: "inline p-0.5 type-literal:px-0 rounded-sm outline outline-0 forced-color-adjust-none caret-transparent text-gray-normal forced-colors:text-[ButtonText]",
+  base: "inline px-0.5 type-literal:px-1 rounded-sm outline-0 forced-color-adjust-none caret-transparent text-gray-normal forced-colors:text-[ButtonText]",
   variants: {
     isPlaceholder: {
-      true: "text-gray-9 dark:text-graydark-9",
+      true: "text-gray-9",
     },
     isDisabled: {
-      true: "text-gray-2 dark:text-gray-6 forced-colors:text-[GrayText]",
+      true: "text-gray-2 forced-colors:text-[GrayText]",
     },
     isFocused: {
-      true: "bg-purple-9 text-white dark:text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
+      true: "bg-purple-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
     },
   },
 });
 
 const dateFieldStyles = tv({
   extend: focusRing,
-  base: "w-[12.5ch] tabular-nums group flex items-center overflow-hidden",
+  base: "w-[15ch] tabular-nums group flex items-center overflow-hidden",
   variants: {
     size: {
       medium: "px-3 h-10",
