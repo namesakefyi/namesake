@@ -32,8 +32,8 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
   };
 
   return (
-    <div className="w-72 lg:w-80 xl:w-[22rem] flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto bg-app border-r border-gray-dim">
-      <div className="app-padding h-header flex gap-2 items-center shrink-0 sticky top-0 bg-app z-20">
+    <div className="w-72 lg:w-80 xl:w-[22rem] flex flex-col shrink-0 sticky top-0 h-screen overflow-y-auto bg-sidebar border-r border-gray-a4">
+      <div className="app-padding h-header flex gap-2 items-center shrink-0 sticky top-0 bg-sidebar z-20">
         <Link href={{ to: "/" }} className="p-1 -m-1">
           <Logo className="h-5 lg:h-[1.35rem]" />
         </Link>
@@ -42,7 +42,7 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
         </Badge>
       </div>
       <div className="app-padding flex-1">{children}</div>
-      <div className="app-padding h-header -ml-3 shrink-0 flex items-center sticky bottom-0 bg-app">
+      <div className="app-padding h-header -ml-3 shrink-0 flex items-center sticky bottom-0 bg-sidebar">
         <Authenticated>
           <MenuTrigger>
             <Button

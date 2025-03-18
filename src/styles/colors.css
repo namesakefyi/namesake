@@ -448,6 +448,10 @@
     @apply bg-gray-1 dark:bg-gray-2;
   }
 
+  .bg-sidebar {
+    @apply bg-white dark:bg-gray-1;
+  }
+
   .bg-element {
     @apply bg-white dark:bg-gray-3;
   }
