@@ -10,21 +10,25 @@
 
 import type * as auth from "../auth.js";
 import type * as constants from "../constants.js";
-import type * as documents from "../documents.js";
 import type * as earlyAccessCodes from "../earlyAccessCodes.js";
 import type * as errors from "../errors.js";
 import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
 import type * as migrations from "../migrations.js";
-import type * as model_auth from "../model/auth.js";
-import type * as model_quests from "../model/quests.js";
-import type * as model_users from "../model/users.js";
+import type * as model_authModel from "../model/authModel.js";
+import type * as model_earlyAccessCodesModel from "../model/earlyAccessCodesModel.js";
+import type * as model_questFaqsModel from "../model/questFaqsModel.js";
+import type * as model_questsModel from "../model/questsModel.js";
+import type * as model_userFormResponsesModel from "../model/userFormResponsesModel.js";
+import type * as model_userQuestsModel from "../model/userQuestsModel.js";
+import type * as model_userSettingsModel from "../model/userSettingsModel.js";
+import type * as model_usersModel from "../model/usersModel.js";
 import type * as passwordReset from "../passwordReset.js";
 import type * as questFaqs from "../questFaqs.js";
 import type * as questSteps from "../questSteps.js";
 import type * as quests from "../quests.js";
 import type * as seed from "../seed.js";
-import type * as userFormData from "../userFormData.js";
+import type * as userFormResponses from "../userFormResponses.js";
 import type * as userQuests from "../userQuests.js";
 import type * as userSettings from "../userSettings.js";
 import type * as users from "../users.js";
@@ -35,6 +39,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+
 /**
  * A utility for referencing Convex functions in your app's API.
  *
@@ -46,21 +51,25 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   constants: typeof constants;
-  documents: typeof documents;
   earlyAccessCodes: typeof earlyAccessCodes;
   errors: typeof errors;
   helpers: typeof helpers;
   http: typeof http;
   migrations: typeof migrations;
-  "model/auth": typeof model_auth;
-  "model/quests": typeof model_quests;
-  "model/users": typeof model_users;
+  "model/authModel": typeof model_authModel;
+  "model/earlyAccessCodesModel": typeof model_earlyAccessCodesModel;
+  "model/questFaqsModel": typeof model_questFaqsModel;
+  "model/questsModel": typeof model_questsModel;
+  "model/userFormResponsesModel": typeof model_userFormResponsesModel;
+  "model/userQuestsModel": typeof model_userQuestsModel;
+  "model/userSettingsModel": typeof model_userSettingsModel;
+  "model/usersModel": typeof model_usersModel;
   passwordReset: typeof passwordReset;
   questFaqs: typeof questFaqs;
   questSteps: typeof questSteps;
   quests: typeof quests;
   seed: typeof seed;
-  userFormData: typeof userFormData;
+  userFormResponses: typeof userFormResponses;
   userQuests: typeof userQuests;
   userSettings: typeof userSettings;
   users: typeof users;

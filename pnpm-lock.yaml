@@ -18,10 +18,10 @@ importers:
         version: 0.38.0
       '@convex-dev/auth':
         specifier: ^0.0.80
-        version: 0.0.80(@auth/core@0.38.0)(convex@1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
+        version: 0.0.80(@auth/core@0.38.0)(convex@1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
       '@convex-dev/migrations':
         specifier: ^0.2.5
-        version: 0.2.5(convex@1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+        version: 0.2.5(convex@1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
       '@faker-js/faker':
         specifier: ^9.6.0
         version: 9.6.0
@@ -101,11 +101,11 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
       convex:
-        specifier: ^1.19.5
-        version: 1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^1.21.0
+        version: 1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       convex-helpers:
         specifier: ^0.1.71
-        version: 0.1.71(convex@1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(zod@3.24.2)
+        version: 0.1.71(convex@1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(zod@3.24.2)
       language-name-map:
         specifier: ^0.3.0
         version: 0.3.0
@@ -256,7 +256,7 @@ importers:
         version: 2.2.11(axe-core@4.10.2)
       convex-test:
         specifier: ^0.0.36
-        version: 0.0.36(convex@1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+        version: 0.0.36(convex@1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
       cssnano:
         specifier: ^7.0.6
         version: 7.0.6(postcss@8.5.3)
@@ -2823,8 +2823,8 @@ packages:
     peerDependencies:
       convex: ^1.16.4
 
-  convex@1.19.5:
-    resolution: {integrity: sha512-adlDyUz+jgpJiTD+M/JwaDaUI6gGnDfeGsz3GdAk3yGTy5Usz8ftwVml5yIxu7IGxS9ZQbZlEIDXwMtz4rDQ+A==}
+  convex@1.21.0:
+    resolution: {integrity: sha512-+peYmXSWsnnyASKI302RIlsf07gv6uHAOduBwDFLBjNZciO+kOVjQcskJwhTeNbAV59glL+tf7kvDh8PEnhmCw==}
     engines: {node: '>=18.0.0', npm: '>=7.0.0'}
     hasBin: true
     peerDependencies:
@@ -5646,11 +5646,11 @@ snapshots:
       human-id: 4.1.1
       prettier: 2.8.8
 
-  '@convex-dev/auth@0.0.80(@auth/core@0.38.0)(convex@1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)':
+  '@convex-dev/auth@0.0.80(@auth/core@0.38.0)(convex@1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@auth/core': 0.38.0
       arctic: 1.9.2
-      convex: 1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      convex: 1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       cookie: 1.0.2
       jose: 5.9.6
       jwt-decode: 4.0.0
@@ -5662,9 +5662,9 @@ snapshots:
     optionalDependencies:
       react: 19.0.0
 
-  '@convex-dev/migrations@0.2.5(convex@1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
+  '@convex-dev/migrations@0.2.5(convex@1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
     dependencies:
-      convex: 1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      convex: 1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
   '@csstools/color-helpers@5.0.1': {}
 
@@ -8164,20 +8164,20 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  convex-helpers@0.1.71(convex@1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(zod@3.24.2):
+  convex-helpers@0.1.71(convex@1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(zod@3.24.2):
     dependencies:
-      convex: 1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      convex: 1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
     optionalDependencies:
       react: 19.0.0
       zod: 3.24.2
 
-  convex-test@0.0.36(convex@1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)):
+  convex-test@0.0.36(convex@1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)):
     dependencies:
-      convex: 1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      convex: 1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
-  convex@1.19.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  convex@1.21.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
-      esbuild: 0.25.0
+      esbuild: 0.25.1
       jwt-decode: 3.1.2
       prettier: 3.4.2
     optionalDependencies:

@@ -8,7 +8,7 @@ import { UserDataForm } from "../UserDataForm/UserDataForm";
 
 // Placeholder for allowing users to view and edit their form data
 export function UserDataForms() {
-  const userData = useQuery(api.userFormData.list);
+  const userData = useQuery(api.userFormResponses.list);
   const [formData, setFormData] = useState<{ field: string; value: string }[]>(
     userData?.map((data) => ({ field: data.field, value: data.value })) ?? [],
   );

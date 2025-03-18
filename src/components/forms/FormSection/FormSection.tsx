@@ -1,4 +1,4 @@
-import { smartquotes } from "@/helpers/smartquotes";
+import { smartquotes } from "@/utils/smartquotes";
 import { Heading } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 

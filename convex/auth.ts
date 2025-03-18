@@ -1,6 +1,6 @@
 import { Password } from "@convex-dev/auth/providers/Password";
 import { convexAuth } from "@convex-dev/auth/server";
-import { createOrUpdateUser } from "./model/auth";
+import { createOrUpdateUser } from "./model/authModel";
 import { ResendOTPPasswordReset } from "./passwordReset";
 
 export const { auth, signIn, signOut, store } = convexAuth({

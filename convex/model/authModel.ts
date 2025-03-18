@@ -1,5 +1,5 @@
 import type { MutationCtx } from "../_generated/server";
-import * as Users from "./users";
+import * as Users from "./usersModel";
 
 export async function createOrUpdateUser(ctx: MutationCtx, args: any) {
   // Handle merging updated fields into existing user

@@ -22,7 +22,7 @@ export function UserDataForm({ initialData }: UserDataFormProps) {
     field === initialData.field && decryptedValue === initialDecryptedValue;
   const [didError, setDidError] = useState(false);
 
-  const save = useMutation(api.userFormData.set);
+  const save = useMutation(api.userFormResponses.set);
 
   useEffect(() => {
     const loadEncryptionKey = async () => {

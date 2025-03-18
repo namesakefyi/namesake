@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { generateQuestSlug } from "./quests";
+import { generateQuestSlug } from "./questsModel";
 
-describe("quests", () => {
+describe("questsModel", () => {
   describe("generateQuestSlug", () => {
     it("should generate a slug from the title for non-core categories", () => {
       const slug = generateQuestSlug("Capital Bank INC", "finance", "MA");

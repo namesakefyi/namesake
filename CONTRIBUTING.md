@@ -72,7 +72,8 @@ Now that the development app is running, let's get familiar with what's inside.
 ## Project structure
 
 ```shell
-▸ 📂 convex         # Backend queries, mutations, and schema definitions
+▾ 📂 convex         # Backend queries, mutations, and schema definitions
+  ▸ 📂 model        # Internal functions which are used in Convex queries
 ▸ 📂 public         # Images, favicons, and other unprocessed assets
 ▾ 📂 src            # Frontend application
   ▾ 📂 components   # Shared components
@@ -81,6 +82,7 @@ Now that the development app is running, let's get familiar with what's inside.
     ▸ 📂 quests     # Feature-specific quest components
   ▸ 📂 routes       # File-based routing using TanStack Router
   ▸ 📂 styles       # Global CSS (not much here; most of it's in Tailwind!)
+  ▸ 📂 utils        # Helper functions and custom React hooks
     📄 main.tsx     # Base of the project including common Providers
 ▸ 📂 tests          # End-to-end Playwright tests
 ```
