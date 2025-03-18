@@ -22,3 +22,23 @@ export const set = userMutation({
     });
   },
 });
+
+export const deleteAllForCurrentUser = userMutation({
+  args: {},
+  handler: async (ctx, _args) => {
+    return await UserFormResponses.deleteAllForUser(ctx, {
+      userId: ctx.userId,
+    });
+  },
+});
+
+export const deleteByIds = userMutation({
+  args: {
+    userFormResponseIds: v.array(v.id("userFormResponses")),
+  },
+  handler: async (ctx, args) => {
+    return await UserFormResponses.deleteByIds(ctx, {
+      userFormResponseIds: args.userFormResponseIds,
+    });
+  },
+});

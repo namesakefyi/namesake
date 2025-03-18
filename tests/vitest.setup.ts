@@ -3,6 +3,7 @@ import { vi } from "vitest";
 
 // Mock the convex mutation hook
 vi.mock("convex/react", () => ({
+  useQuery: vi.fn(),
   useMutation: vi.fn(),
 }));
 
@@ -28,6 +29,9 @@ vi.mock("@/utils/useTheme", () => ({
 vi.mock("@tanstack/react-router", () => ({
   useRouter: () => ({
     navigate: vi.fn(),
+    history: {
+      go: vi.fn(),
+    },
   }),
 }));
 

@@ -1,3 +1,8 @@
+import posthog from "posthog-js";
+import { useState } from "react";
+
+import { useEffect } from "react";
+
 // Constants
 const DB_NAME = "namesake-encryption";
 const STORE_NAME = "encryption-keys";
@@ -24,7 +29,7 @@ export async function encryptData(
   const combined = new Uint8Array(iv.length + encryptedData.byteLength);
   combined.set(iv);
   combined.set(new Uint8Array(encryptedData), iv.length);
-  return arrayBufferToBase64(combined);
+  return arrayBufferToBase64(combined.buffer);
 }
 
 export async function decryptData(
@@ -57,6 +62,29 @@ export async function getEncryptionKey(): Promise<CryptoKey | null> {
   const serializedDEK = await retrieveDEK();
   if (!serializedDEK) return null;
   return await deserializeDEK(serializedDEK);
+}
+
+export function useEncryptionKey(): CryptoKey | null {
+  const [encryptionKey, setEncryptionKey] = useState<CryptoKey | null>(null);
+
+  useEffect(() => {
+    const loadEncryptionKey = async () => {
+      try {
+        const key = await getEncryptionKey();
+        setEncryptionKey(key);
+
+        if (!key) {
+          return;
+        }
+      } catch (error: any) {
+        posthog.captureException(error);
+      }
+    };
+
+    loadEncryptionKey();
+  }, []);
+
+  return encryptionKey;
 }
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {

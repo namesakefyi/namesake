@@ -28,7 +28,7 @@ const bannerStyles = tv({
     },
     size: {
       medium: "gap-2 p-2.5 px-3 pr-4 text-sm",
-      large: "gap-3 p-3 text-base",
+      large: "gap-3 p-3 px-4 text-base",
     },
   },
   defaultVariants: {
@@ -41,14 +41,19 @@ const iconStyles = tv({
   base: "text-gray-9 dark:text-graydark-9 shrink-0",
   variants: {
     variant: {
-      info: "text-blue-10 dark:text-bluedark-10",
-      success: "text-green-10 dark:text-greendark-10",
-      danger: "text-red-10 dark:text-reddark-10",
-      warning: "text-amber-10 dark:text-amberdark-10",
+      info: "text-blue-11 dark:text-bluedark-10",
+      success: "text-green-11 dark:text-greendark-10",
+      danger: "text-red-11 dark:text-reddark-10",
+      warning: "text-amber-11 dark:text-amberdark-10",
+    },
+    size: {
+      medium: "size-5",
+      large: "size-5 mt-0.5",
     },
   },
   defaultVariants: {
     variant: undefined,
+    size: "medium",
   },
 });
 
@@ -70,7 +75,7 @@ export function Banner({ children, icon: Icon, size, variant }: BannerProps) {
 
   return (
     <div role="alert" className={bannerStyles({ variant, size })}>
-      <Icon size={20} className={iconStyles({ variant })} />
+      <Icon className={iconStyles({ variant, size })} />
       {children}
     </div>
   );

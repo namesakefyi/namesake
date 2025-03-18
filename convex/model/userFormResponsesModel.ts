@@ -37,3 +37,23 @@ export async function setResponseForUser(
     value,
   });
 }
+
+export async function deleteByIds(
+  ctx: MutationCtx,
+  { userFormResponseIds }: { userFormResponseIds: Id<"userFormResponses">[] },
+) {
+  for (const id of userFormResponseIds) {
+    await ctx.db.delete(id);
+  }
+}
+
+export async function deleteAllForUser(
+  ctx: MutationCtx,
+  { userId }: { userId: Id<"users"> },
+) {
+  const userData = await getAllForUser(ctx, { userId });
+
+  for (const data of userData) {
+    await ctx.db.delete(data._id);
+  }
+}

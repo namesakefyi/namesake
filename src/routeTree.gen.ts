@@ -20,8 +20,9 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSettingsIndexImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedAdminIndexImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/_home/index'
-import { Route as AuthenticatedSettingsDataImport } from './routes/_authenticated/settings/data'
+import { Route as AuthenticatedSettingsResponsesImport } from './routes/_authenticated/settings/responses'
 import { Route as AuthenticatedSettingsAccountImport } from './routes/_authenticated/settings/account'
+import { Route as AuthenticatedFormsMaCourtOrderImport } from './routes/_authenticated/forms/ma-court-order'
 import { Route as AuthenticatedAdminQuestsIndexImport } from './routes/_authenticated/admin/quests.index'
 import { Route as AuthenticatedAdminEarlyAccessIndexImport } from './routes/_authenticated/admin/early-access.index'
 import { Route as AuthenticatedHomeStateIdIndexImport } from './routes/_authenticated/_home/state-id.index'
@@ -87,17 +88,25 @@ const AuthenticatedHomeIndexRoute = AuthenticatedHomeIndexImport.update({
   getParentRoute: () => AuthenticatedHomeRoute,
 } as any)
 
-const AuthenticatedSettingsDataRoute = AuthenticatedSettingsDataImport.update({
-  id: '/data',
-  path: '/data',
-  getParentRoute: () => AuthenticatedSettingsRouteRoute,
-} as any)
+const AuthenticatedSettingsResponsesRoute =
+  AuthenticatedSettingsResponsesImport.update({
+    id: '/responses',
+    path: '/responses',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
+  } as any)
 
 const AuthenticatedSettingsAccountRoute =
   AuthenticatedSettingsAccountImport.update({
     id: '/account',
     path: '/account',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
+  } as any)
+
+const AuthenticatedFormsMaCourtOrderRoute =
+  AuthenticatedFormsMaCourtOrderImport.update({
+    id: '/forms/ma-court-order',
+    path: '/forms/ma-court-order',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 const AuthenticatedAdminQuestsIndexRoute =
@@ -195,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnauthenticatedSigninImport
       parentRoute: typeof UnauthenticatedImport
     }
+    '/_authenticated/forms/ma-court-order': {
+      id: '/_authenticated/forms/ma-court-order'
+      path: '/forms/ma-court-order'
+      fullPath: '/forms/ma-court-order'
+      preLoaderRoute: typeof AuthenticatedFormsMaCourtOrderImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/settings/account': {
       id: '/_authenticated/settings/account'
       path: '/account'
@@ -202,11 +218,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsAccountImport
       parentRoute: typeof AuthenticatedSettingsRouteImport
     }
-    '/_authenticated/settings/data': {
-      id: '/_authenticated/settings/data'
-      path: '/data'
-      fullPath: '/settings/data'
-      preLoaderRoute: typeof AuthenticatedSettingsDataImport
+    '/_authenticated/settings/responses': {
+      id: '/_authenticated/settings/responses'
+      path: '/responses'
+      fullPath: '/settings/responses'
+      preLoaderRoute: typeof AuthenticatedSettingsResponsesImport
       parentRoute: typeof AuthenticatedSettingsRouteImport
     }
     '/_authenticated/_home/': {
@@ -305,14 +321,14 @@ const AuthenticatedAdminRouteRouteWithChildren =
 
 interface AuthenticatedSettingsRouteRouteChildren {
   AuthenticatedSettingsAccountRoute: typeof AuthenticatedSettingsAccountRoute
-  AuthenticatedSettingsDataRoute: typeof AuthenticatedSettingsDataRoute
+  AuthenticatedSettingsResponsesRoute: typeof AuthenticatedSettingsResponsesRoute
   AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
 }
 
 const AuthenticatedSettingsRouteRouteChildren: AuthenticatedSettingsRouteRouteChildren =
   {
     AuthenticatedSettingsAccountRoute: AuthenticatedSettingsAccountRoute,
-    AuthenticatedSettingsDataRoute: AuthenticatedSettingsDataRoute,
+    AuthenticatedSettingsResponsesRoute: AuthenticatedSettingsResponsesRoute,
     AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
   }
 
@@ -345,14 +361,14 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRouteWithChildren
-  AuthenticatedFormsCourtOrderMaRoute: typeof AuthenticatedFormsCourtOrderMaRoute
+  AuthenticatedFormsMaCourtOrderRoute: typeof AuthenticatedFormsMaCourtOrderRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedHomeRoute: AuthenticatedHomeRouteWithChildren,
-  AuthenticatedFormsCourtOrderMaRoute: AuthenticatedFormsCourtOrderMaRoute,
+  AuthenticatedFormsMaCourtOrderRoute: AuthenticatedFormsMaCourtOrderRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -376,8 +392,9 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/signin': typeof UnauthenticatedSigninRoute
+  '/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
-  '/settings/data': typeof AuthenticatedSettingsDataRoute
+  '/settings/responses': typeof AuthenticatedSettingsResponsesRoute
   '/': typeof AuthenticatedHomeIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
@@ -393,8 +410,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '': typeof UnauthenticatedRouteWithChildren
   '/signin': typeof UnauthenticatedSigninRoute
+  '/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
-  '/settings/data': typeof AuthenticatedSettingsDataRoute
+  '/settings/responses': typeof AuthenticatedSettingsResponsesRoute
   '/': typeof AuthenticatedHomeIndexRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
@@ -415,8 +433,9 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/_authenticated/_home': typeof AuthenticatedHomeRouteWithChildren
   '/_unauthenticated/signin': typeof UnauthenticatedSigninRoute
+  '/_authenticated/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
-  '/_authenticated/settings/data': typeof AuthenticatedSettingsDataRoute
+  '/_authenticated/settings/responses': typeof AuthenticatedSettingsResponsesRoute
   '/_authenticated/_home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
@@ -436,8 +455,9 @@ export interface FileRouteTypes {
     | '/admin'
     | '/settings'
     | '/signin'
+    | '/forms/ma-court-order'
     | '/settings/account'
-    | '/settings/data'
+    | '/settings/responses'
     | '/'
     | '/admin/'
     | '/settings/'
@@ -452,8 +472,9 @@ export interface FileRouteTypes {
   to:
     | ''
     | '/signin'
+    | '/forms/ma-court-order'
     | '/settings/account'
-    | '/settings/data'
+    | '/settings/responses'
     | '/'
     | '/admin'
     | '/settings'
@@ -472,8 +493,9 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/_home'
     | '/_unauthenticated/signin'
+    | '/_authenticated/forms/ma-court-order'
     | '/_authenticated/settings/account'
-    | '/_authenticated/settings/data'
+    | '/_authenticated/settings/responses'
     | '/_authenticated/_home/'
     | '/_authenticated/admin/'
     | '/_authenticated/settings/'
@@ -517,7 +539,7 @@ export const routeTree = rootRoute
         "/_authenticated/admin",
         "/_authenticated/settings",
         "/_authenticated/_home",
-        "/_authenticated/forms/court-order/ma"
+        "/_authenticated/forms/ma-court-order"
       ]
     },
     "/_unauthenticated": {
@@ -540,7 +562,7 @@ export const routeTree = rootRoute
       "parent": "/_authenticated",
       "children": [
         "/_authenticated/settings/account",
-        "/_authenticated/settings/data",
+        "/_authenticated/settings/responses",
         "/_authenticated/settings/"
       ]
     },
@@ -559,12 +581,16 @@ export const routeTree = rootRoute
       "filePath": "_unauthenticated/signin.tsx",
       "parent": "/_unauthenticated"
     },
+    "/_authenticated/forms/ma-court-order": {
+      "filePath": "_authenticated/forms/ma-court-order.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/settings/account": {
       "filePath": "_authenticated/settings/account.tsx",
       "parent": "/_authenticated/settings"
     },
-    "/_authenticated/settings/data": {
-      "filePath": "_authenticated/settings/data.tsx",
+    "/_authenticated/settings/responses": {
+      "filePath": "_authenticated/settings/responses.tsx",
       "parent": "/_authenticated/settings"
     },
     "/_authenticated/_home/": {

@@ -74,11 +74,12 @@ Now that the development app is running, let's get familiar with what's inside.
 ```shell
 ▾ 📂 convex         # Backend queries, mutations, and schema definitions
   ▸ 📂 model        # Internal functions which are used in Convex queries
-▸ 📂 public         # Images, favicons, and other unprocessed assets
+▸ 📂 public         # Images, favicons, PDFs, and other unprocessed assets
 ▾ 📂 src            # Frontend application
   ▾ 📂 components   # Shared components
     ▸ 📂 app        # App-related global components (logos, sidebar, etc.)
     ▸ 📂 common     # Design system components from React Aria
+    ▸ 📂 forms      # Input components used within forms
     ▸ 📂 quests     # Feature-specific quest components
   ▸ 📂 routes       # File-based routing using TanStack Router
   ▸ 📂 styles       # Global CSS (not much here; most of it's in Tailwind!)
