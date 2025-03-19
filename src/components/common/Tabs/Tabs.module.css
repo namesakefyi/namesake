@@ -14,7 +14,7 @@
 }
 
 .tab-list::after {
-  transition: translate 0.15s ease-out;
+  transition: translate 0.15s ease;
 }
 
 .tab-list[data-orientation="horizontal"]::after {

@@ -178,3 +178,19 @@ body,
     transition-timing-function: cubic-bezier(0.54, 1.5, 0.38, 1.11);
   }
 }
+
+@keyframes animate-focus-ring-in {
+  from {
+    outline-color: transparent;
+    outline-width: 16px;
+  }
+
+  to {
+    outline-color: var(--color-purple-a9);
+    outline-width: 3px;
+  }
+}
+
+.animate-focus-ring-in {
+  animation: animate-focus-ring-in 300ms ease forwards;
+}
