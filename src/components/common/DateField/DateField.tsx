@@ -39,10 +39,10 @@ export function DateField<T extends DateValue>({
         "flex flex-col gap-1",
       )}
     >
-      {(renderProps) => (
+      {({ isDisabled, isInvalid }) => (
         <>
           {label && <Label size={size}>{label}</Label>}
-          <FieldGroup {...renderProps} size={size}>
+          <FieldGroup isDisabled={isDisabled} isInvalid={isInvalid} size={size}>
             <DateInput size={size} />
           </FieldGroup>
           {description && <FieldDescription>{description}</FieldDescription>}

@@ -38,10 +38,14 @@ export function DatePicker<T extends DateValue>({
         "group flex flex-col gap-1",
       )}
     >
-      {(renderProps) => (
+      {({ isDisabled, isInvalid }) => (
         <>
           {label && <Label>{label}</Label>}
-          <FieldGroup {...renderProps} className="min-w-[208px] w-auto">
+          <FieldGroup
+            isDisabled={isDisabled}
+            isInvalid={isInvalid}
+            className="min-w-[208px] w-auto"
+          >
             <DateInput className="flex-1 min-w-[150px] px-3 py-2" />
             <Button
               variant="icon"
