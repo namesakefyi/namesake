@@ -43,7 +43,7 @@ export function FormContainer({
     <main>
       <FormProvider {...form}>
         <Container className="w-[720px] py-16">
-          <Form onSubmit={onSubmit}>
+          <Form onSubmit={onSubmit} autoComplete="on">
             <header className="flex flex-col gap-6 mb-8">
               <Heading className="text-5xl font-medium text-pretty">
                 {title}

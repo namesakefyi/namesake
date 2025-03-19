@@ -38,9 +38,7 @@ export function FormResponseItem({ initialData }: FormResponseItemProps) {
         const key = await getEncryptionKey();
         setEncryptionKey(key);
 
-        if (!key) {
-          return;
-        }
+        if (!key) return;
 
         if (initialData.value) {
           try {
