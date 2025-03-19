@@ -9,7 +9,7 @@ import {
 import { FormNavigation } from "@/components/forms";
 import { smartquotes } from "@/helpers/smartquotes";
 import { useRouter } from "@tanstack/react-router";
-import { ArrowLeft, Lock } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { Heading } from "react-aria-components";
 import { FormProvider, type UseFormReturn } from "react-hook-form";
 
@@ -53,7 +53,7 @@ export function FormContainer({
                   {smartquotes(description)}
                 </p>
               )}
-              <Banner variant="info" icon={Lock} size="large">
+              <Banner variant="success" icon={ShieldCheck} size="large">
                 Namesake takes your privacy seriously. All responses are
                 end-to-end encrypted. That means no one—not even Namesake—can
                 see your answers.
