@@ -70,8 +70,6 @@ export function FormSection({
         "flex flex-col gap-8 p-8 pb-9 justify-center outline outline-1 outline-graya-3 dark:outline-graydarka-3 shadow-sm dark:shadow-md rounded-2xl bg-white dark:bg-graydark-2",
         className,
       )}
-      // TODO: React-hook-form is supposed to prevent disabled fields from being submitted
-      // but it's not working for some reason. Address in #428
       disabled={!isVisible}
     >
       <FormHeader title={title} description={description} />
