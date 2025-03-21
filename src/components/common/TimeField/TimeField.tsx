@@ -34,10 +34,10 @@ export function TimeField<T extends TimeValue>({
         "flex flex-col gap-1",
       )}
     >
-      {(renderProps) => (
+      {({ isDisabled, isInvalid }) => (
         <>
           {label && <Label>{label}</Label>}
-          <FieldGroup {...renderProps}>
+          <FieldGroup isDisabled={isDisabled} isInvalid={isInvalid}>
             <DateInput />
           </FieldGroup>
           {description && <FieldDescription>{description}</FieldDescription>}

@@ -4,6 +4,7 @@ import {
   Slider as AriaSlider,
   type SliderProps as AriaSliderProps,
   SliderOutput,
+  type SliderRenderProps,
   SliderThumb,
   SliderTrack,
 } from "react-aria-components";
@@ -17,21 +18,21 @@ const trackStyles = tv({
       vertical: "h-full w-[6px] ml-[50%] -translate-x-[50%]",
     },
     isDisabled: {
-      false: "bg-gray-3 dark:bg-gray-5 forced-colors:bg-[ButtonBorder]",
-      true: "bg-gray-1 dark:bg-gray-11 forced-colors:bg-[GrayText]",
+      false: "bg-gray-5 forced-colors:bg-[ButtonBorder]",
+      true: "bg-gray-1 forced-colors:bg-[GrayText]",
     },
   },
 });
 
 const thumbStyles = tv({
   extend: focusRing,
-  base: "w-6 h-6 group-orientation-horizontal:mt-6 group-orientation-vertical:ml-3 rounded-full bg-gray-50 dark:bg-gray-12 border-2 border-gray-9 dark:border-gray-3",
+  base: "w-6 h-6 group-orientation-horizontal:mt-6 group-orientation-vertical:ml-3 rounded-full bg-purple-9 shadow-sm",
   variants: {
     isDragging: {
-      true: "bg-gray-9 dark:bg-gray-3 forced-colors:bg-[ButtonBorder]",
+      true: "bg-purple-10 forced-colors:bg-[ButtonBorder]",
     },
     isDisabled: {
-      true: "border-gray-3 dark:border-gray-8 forced-colors:border-[GrayText]",
+      true: "border-gray-3 forced-colors:border-[GrayText]",
     },
   },
 });
@@ -46,6 +47,17 @@ export function Slider<T extends number | number[]>({
   thumbLabels,
   ...props
 }: SliderProps<T>) {
+  const getThumbTrackFillStyle = (state: SliderRenderProps["state"]) => {
+    if (state.values.length === 2) {
+      return {
+        left: `${state.getThumbPercent(0) * 100}%`,
+        width: `${(state.getThumbPercent(1) - state.getThumbPercent(0)) * 100}%`,
+      };
+    }
+
+    return { width: `${state.getThumbPercent(0) * 100}%` };
+  };
+
   return (
     <AriaSlider
       {...props}
@@ -55,7 +67,7 @@ export function Slider<T extends number | number[]>({
       )}
     >
       <Label>{label}</Label>
-      <SliderOutput className="text-sm text-gray-4 dark:text-gray-4 font-medium orientation-vertical:hidden">
+      <SliderOutput className="text-sm text-gray-4 font-medium orientation-vertical:hidden">
         {({ state }) =>
           state.values.map((_, i) => state.getThumbValueLabel(i)).join(" – ")
         }
@@ -64,6 +76,10 @@ export function Slider<T extends number | number[]>({
         {({ state, ...renderProps }) => (
           <>
             <div className={trackStyles(renderProps)} />
+            <div
+              className="absolute h-[6px] top-[50%] translate-y-[-50%] rounded-full bg-purple-6"
+              style={getThumbTrackFillStyle(state)}
+            />
             {state.values.map((_, i) => (
               <SliderThumb
                 key={thumbLabels?.[i]}

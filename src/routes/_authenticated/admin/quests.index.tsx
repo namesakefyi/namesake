@@ -165,7 +165,7 @@ const QuestTableRow = ({
           <div>{quest.title}</div>
           {quest.jurisdiction && <Badge>{quest.jurisdiction}</Badge>}
           {quest.deletedAt && (
-            <span className="text-red-9 dark:text-reddark-9" slot="description">
+            <span className="text-red-9" slot="description">
               {`deleted ${new Date(quest.deletedAt).toLocaleString()}`}
             </span>
           )}

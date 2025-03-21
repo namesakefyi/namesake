@@ -20,7 +20,7 @@ export const Step = ({
   return (
     <li
       className={twMerge(
-        "relative pl-12 pb-8 last:pb-0 before:text-gray-dim before:size-8 before:rounded-full before:bg-gray-3 dark:before:bg-graydark-3 before:flex before:text-xl before:items-center before:justify-center before:content-[counter(steps)] before:[counter-increment:steps] before:absolute before:left-0 after:w-[2px] after:h-[calc(100%-2rem)] after:bg-gray-3 dark:after:bg-graydark-3 after:absolute after:bottom-0 after:left-[calc(1rem-1px)] after:last:invisible flex flex-col",
+        "relative pl-12 pb-8 last:pb-0 before:text-gray-dim before:size-8 before:rounded-full before:bg-gray-3 before:flex before:text-xl before:items-center before:justify-center before:content-[counter(steps)] before:[counter-increment:steps] before:absolute before:left-0 after:w-[2px] after:h-[calc(100%-2rem)] after:bg-gray-3 after:absolute after:bottom-0 after:left-[calc(1rem-1px)] last:after:invisible flex flex-col",
         className,
       )}
     >

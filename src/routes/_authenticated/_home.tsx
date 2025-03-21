@@ -73,7 +73,7 @@ function IndexRoute() {
                   <span className="text-gray-normal text-base font-medium mr-0.5 leading-none">
                     {completedQuests}
                   </span>{" "}
-                  <span className="text-gray-8 dark:text-graydark-8">/</span>{" "}
+                  <span className="text-gray-8">/</span>{" "}
                   <span className="text-gray-dim">{userQuests} complete</span>
                 </span>
               }

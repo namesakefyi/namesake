@@ -38,14 +38,18 @@ export function DateRangePicker<T extends DateValue>({
         "group flex flex-col gap-1",
       )}
     >
-      {(renderProps) => (
+      {({ isDisabled, isInvalid }) => (
         <>
           {label && <Label>{label}</Label>}
-          <FieldGroup {...renderProps} className="min-w-[208px] w-auto">
+          <FieldGroup
+            isDisabled={isDisabled}
+            isInvalid={isInvalid}
+            className="min-w-[208px] w-auto"
+          >
             <DateInput slot="start" className="px-3 py-2" />
             <span
               aria-hidden="true"
-              className="text-gray-10 dark:text-gray-2 forced-colors:text-[ButtonText] group-disabled:text-gray-2 group-disabled:dark:text-gray-6 group-disabled:forced-colors:text-[GrayText]"
+              className="text-gray-dim forced-colors:text-[ButtonText] group-disabled:text-gray-2 forced-colors:group-disabled:text-[GrayText]"
             >
               –
             </span>
@@ -59,7 +63,7 @@ export function DateRangePicker<T extends DateValue>({
           </FieldGroup>
           {description && <FieldDescription>{description}</FieldDescription>}
           <FieldError>{errorMessage}</FieldError>
-          <Popover title="Select a date range">
+          <Popover title="Select a date range" className="p-3">
             <RangeCalendar />
           </Popover>
         </>

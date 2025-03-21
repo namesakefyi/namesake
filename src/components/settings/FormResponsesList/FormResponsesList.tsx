@@ -8,11 +8,25 @@ import {
 import { DeleteFormResponseModal } from "@/components/settings";
 import { decryptData, getEncryptionKey } from "@/utils/encryption";
 import type { Id } from "@convex/_generated/dataModel";
-import { ALL } from "@convex/constants";
+import {
+  ALL,
+  USER_FORM_DATA_FIELDS,
+  type UserFormDataField,
+} from "@convex/constants";
 import { AlertTriangle, FileLock2 } from "lucide-react";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { type Selection, Text } from "react-aria-components";
+
+/**
+ * Get the readable field label for a given field.
+ * If the field is not in the USER_FORM_DATA_FIELDS object, return the field as-is.
+ * @param field - The field to get the readable label for.
+ * @returns The readable label for the field.
+ */
+export const getReadableFieldLabel = (field: UserFormDataField | string) => {
+  return USER_FORM_DATA_FIELDS[field as UserFormDataField] ?? field;
+};
 
 interface FormResponseItemProps {
   initialData: { id: Id<"userFormResponses">; field: string; value: string };

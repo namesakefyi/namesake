@@ -63,7 +63,7 @@ export function FieldError(props: FieldErrorProps) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "text-sm text-red-9 dark:text-reddark-9 forced-colors:text-[Mark]",
+        "text-sm text-red-9 forced-colors:text-[Mark]",
       )}
     />
   );
@@ -72,14 +72,14 @@ export function FieldError(props: FieldErrorProps) {
 export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false: "ring-gray-6 dark:ring-graydark-6",
-      true: "ring-gray-7 dark:ring-graydark-7",
+      false: "ring-gray-6",
+      true: "ring-gray-7",
     },
     isInvalid: {
-      true: "ring-red-9 dark:ring-reddark-9",
+      true: "ring-red-9",
     },
     isDisabled: {
-      true: "ring-gray-4 dark:ring-graydark-4",
+      true: "ring-gray-4",
     },
   },
 });
@@ -87,21 +87,21 @@ export const fieldBorderStyles = tv({
 export const innerBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false: "border-gray-6 dark:border-graydark-6",
-      true: "border-gray-7 dark:border-graydark-7",
+      false: "border-gray-6",
+      true: "border-gray-7",
     },
     isInvalid: {
-      true: "border-red-9 dark:border-reddark-9",
+      true: "border-red-9",
     },
     isDisabled: {
-      true: "border-gray-4 dark:border-graydark-4",
+      true: "border-gray-4",
     },
   },
 });
 
 const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "border-none text-sm ring-inset ring-1 group flex items-center bg-gray-subtle forced-colors:bg-[Field] rounded-lg overflow-hidden",
+  base: "border-none text-sm ring-inset ring-1 group flex items-center bg-element forced-colors:bg-[Field] rounded-lg overflow-hidden",
   variants: {
     ...fieldBorderStyles.variants,
     size: {
