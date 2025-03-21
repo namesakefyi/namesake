@@ -38,10 +38,10 @@ export function NumberField({
         "group flex flex-col gap-1.5",
       )}
     >
-      {(renderProps) => (
+      {({ isDisabled, isInvalid }) => (
         <>
           {label && <Label>{label}</Label>}
-          <FieldGroup {...renderProps}>
+          <FieldGroup isDisabled={isDisabled} isInvalid={isInvalid}>
             {(renderProps) => (
               <>
                 {prefix && (

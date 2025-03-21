@@ -56,10 +56,14 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         )}
         type={type === "password" && isPasswordVisible ? "text" : type}
       >
-        {(renderProps) => (
+        {({ isDisabled, isInvalid }) => (
           <>
             {label && <Label size={size}>{label}</Label>}
-            <FieldGroup {...renderProps} size={size}>
+            <FieldGroup
+              isDisabled={isDisabled}
+              isInvalid={isInvalid}
+              size={size}
+            >
               {prefix}
               <Input
                 className={twMerge(
