@@ -1,6 +1,4 @@
 import {
-  DropdownSection,
-  type DropdownSectionProps,
   Popover,
   type PopoverProps,
   dropdownItemStyles,
@@ -16,8 +14,12 @@ import {
   MenuItem as AriaMenuItem,
   type MenuItemProps as AriaMenuItemProps,
   type MenuProps as AriaMenuProps,
+  MenuSection as AriaMenuSection,
+  type MenuSectionProps as AriaMenuSectionProps,
   MenuTrigger as AriaMenuTrigger,
   SubmenuTrigger as AriaSubmenuTrigger,
+  Collection,
+  Header,
   type MenuTriggerProps,
   Separator,
   type SeparatorProps,
@@ -70,14 +72,11 @@ export function MenuItem({ className, icon: Icon, ...props }: MenuItemProps) {
               </span>
             )}
             {Icon && <Icon aria-hidden className="w-4 h-4" />}
-            <span className="flex items-center flex-1 gap-2 font-normal truncate group-selected:font-semibold">
+            <span className="flex items-center flex-1 gap-2 font-normal truncate">
               {children}
             </span>
             {props.target === "_blank" && (
-              <ExternalLink
-                aria-hidden
-                className="size-4 ml-1 text-gray-8 dark:text-graydark-8"
-              />
+              <ExternalLink aria-hidden className="size-4 ml-1 text-gray-8" />
             )}
             {hasSubmenu && (
               <ChevronRight aria-hidden className="size-4 ml-auto -mr-1" />
@@ -95,8 +94,20 @@ export function MenuSeparator(props: SeparatorProps) {
   );
 }
 
-export function MenuSection<T extends object>(props: DropdownSectionProps<T>) {
-  return <DropdownSection {...props} />;
+export interface MenuSectionProps<T> extends AriaMenuSectionProps<T> {
+  title?: string;
+  items?: any;
+}
+
+export function MenuSection<T extends object>(props: MenuSectionProps<T>) {
+  return (
+    <AriaMenuSection>
+      <Header className="text-sm font-semibold text-gray-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-element border-b border-gray-dim [&+*]:mt-1">
+        {props.title}
+      </Header>
+      <Collection items={props.items}>{props.children}</Collection>
+    </AriaMenuSection>
+  );
 }
 
 export function SubmenuTrigger(props: SubmenuTriggerProps) {

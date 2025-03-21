@@ -1,7 +1,7 @@
 import { AppContent, AppSidebar } from "@/components/app";
 import { Nav, NavGroup, NavItem } from "@/components/common";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import { FileText, FlaskConical, Milestone } from "lucide-react";
+import { FlaskConical, Milestone } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: ({ context }) => {
@@ -26,9 +26,6 @@ function AdminRoute() {
           <NavGroup label="Content">
             <NavItem icon={Milestone} href={{ to: "/admin/quests" }}>
               Quests
-            </NavItem>
-            <NavItem icon={FileText} href={{ to: "/admin/documents" }}>
-              Documents
             </NavItem>
             <NavItem icon={FlaskConical} href={{ to: "/admin/early-access" }}>
               Early Access

@@ -21,6 +21,7 @@ export function EmailField({
         control={control}
         name={name}
         defaultValue={defaultValue ?? ""}
+        shouldUnregister={true}
         render={({ field, fieldState: { invalid, error } }) => (
           <TextField
             {...field}

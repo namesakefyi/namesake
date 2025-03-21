@@ -15,16 +15,13 @@ export interface BannerProps {
 }
 
 const bannerStyles = tv({
-  base: "flex items-start w-full rounded-lg bg-gray-3 dark:bg-graydark-3 text-gray-dim",
+  base: "flex items-start w-full rounded-lg bg-gray-3 text-gray-dim",
   variants: {
     variant: {
-      info: "bg-blue-3 dark:bg-bluedark-3 text-blue-normal [&_a]:text-blue-normal",
-      success:
-        "bg-green-3 dark:bg-greendark-3 text-green-normal [&_a]:text-green-normal",
-      danger:
-        "bg-red-3 dark:bg-reddark-3 text-red-normal [&_a]:text-red-normal",
-      warning:
-        "bg-amber-3 dark:bg-amberdark-3 text-amber-normal [&_a]:text-amber-normal",
+      info: "bg-blue-3 text-blue-normal [&_a]:text-blue-normal",
+      success: "bg-green-3 text-green-normal [&_a]:text-green-normal",
+      danger: "bg-red-3 text-red-normal [&_a]:text-red-normal",
+      warning: "bg-amber-3 text-amber-normal [&_a]:text-amber-normal",
     },
     size: {
       medium: "gap-2 p-2.5 px-3 pr-4 text-sm",
@@ -38,13 +35,13 @@ const bannerStyles = tv({
 });
 
 const iconStyles = tv({
-  base: "text-gray-9 dark:text-graydark-9 shrink-0",
+  base: "text-gray-9 shrink-0",
   variants: {
     variant: {
-      info: "text-blue-11 dark:text-bluedark-10",
-      success: "text-green-11 dark:text-greendark-10",
-      danger: "text-red-11 dark:text-reddark-10",
-      warning: "text-amber-11 dark:text-amberdark-10",
+      info: "text-blue-11",
+      success: "text-green-11",
+      danger: "text-red-11",
+      warning: "text-amber-11",
     },
     size: {
       medium: "size-5",

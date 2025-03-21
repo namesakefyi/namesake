@@ -27,6 +27,7 @@ export function MemorableDateField<T extends DateValue>({
         control={control}
         name={name}
         defaultValue={defaultValue ?? null}
+        shouldUnregister={true}
         render={({
           field: { onChange, ...field },
           fieldState: { invalid, error },

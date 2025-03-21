@@ -1,32 +1,25 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
+import type { Theme } from "./constants";
 import { userMutation } from "./helpers";
+import * as UserSettings from "./model/userSettingsModel";
 import { theme } from "./validators";
 
 export const getByUserId = query({
   args: { userId: v.id("users") },
   handler: async (ctx, args) => {
-    const userSettings = await ctx.db
-      .query("userSettings")
-      .withIndex("userId", (q) => q.eq("userId", args.userId))
-      .first();
-
-    if (!userSettings) throw new Error("User settings not found");
-
-    return userSettings;
+    return await UserSettings.getSettingsForUser(ctx, {
+      userId: args.userId,
+    });
   },
 });
 
 export const setTheme = userMutation({
   args: { theme: theme },
   handler: async (ctx, args) => {
-    const userSettings = await ctx.db
-      .query("userSettings")
-      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-      .first();
-
-    if (!userSettings) throw new Error("User settings not found");
-
-    await ctx.db.patch(userSettings._id, { theme: args.theme });
+    return await UserSettings.setThemeForUser(ctx, {
+      userId: ctx.userId,
+      theme: args.theme as Theme,
+    });
   },
 });

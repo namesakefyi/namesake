@@ -3,7 +3,6 @@ import { Empty } from "@/components/common";
 import {
   QuestCosts,
   QuestDetails,
-  QuestDocuments,
   QuestFaqs,
   QuestPageHeader,
   QuestReferences,
@@ -71,7 +70,6 @@ function QuestDetailRoute() {
         </QuestDetails>
         <QuestSteps quest={quest} editable={isEditing} />
         <QuestFaqs quest={quest} editable={isEditing} />
-        <QuestDocuments quest={quest} editable={isEditing} />
         <QuestReferences quest={quest} editable={isEditing} />
       </div>
       <QuestPageFooter quest={quest} userQuest={userQuest} />

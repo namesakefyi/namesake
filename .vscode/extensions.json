@@ -3,7 +3,8 @@
     "biomejs.biome",
     "bradlc.vscode-tailwindcss",
     "phoenisx.cssvar",
-    "tomoki1207.pdf"
+    "tomoki1207.pdf",
+    "csstools.postcss"
   ],
   "unwantedRecommendations": ["dbaeumer.vscode-eslint"]
 }

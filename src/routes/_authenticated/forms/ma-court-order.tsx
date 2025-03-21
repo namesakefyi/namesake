@@ -14,6 +14,7 @@ import {
   PronounSelectField,
   YesNoField,
 } from "@/components/forms";
+import { useFormEncryptAndSubmit } from "@/utils/useFormEncryptAndSubmit";
 import { createFileRoute } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 export const Route = createFileRoute("/_authenticated/forms/ma-court-order")({
@@ -57,17 +58,13 @@ function RouteComponent() {
   const form = useForm<FormData>({
     mode: "onBlur",
   });
-
-  const handleSubmit = (data: FormData) => {
-    // TODO: Encrypt and save data
-    console.log(data);
-  };
+  const { onSubmit, isSubmitting } = useFormEncryptAndSubmit<FormData>(form);
 
   return (
     <FormContainer
       title="Massachusetts Court Order"
       form={form}
-      onSubmit={form.handleSubmit(handleSubmit)}
+      onSubmit={onSubmit}
     >
       <FormSection
         title="What is your new name?"
@@ -218,8 +215,13 @@ function RouteComponent() {
           noLabel="No, I can pay the filing fee"
         />
       </FormSection>
-      <Button type="submit" size="large" variant="primary">
-        Submit
+      <Button
+        type="submit"
+        size="large"
+        variant="primary"
+        isDisabled={isSubmitting}
+      >
+        {isSubmitting ? "Submitting…" : "Submit"}
       </Button>
     </FormContainer>
   );

@@ -35,10 +35,7 @@ export function Empty({
         className,
       )}
     >
-      <Icon
-        size={40}
-        className="text-gray-8 dark:text-graydark-8 shrink-0 stroke-[1.5px]"
-      />
+      <Icon size={40} className="text-gray-8 shrink-0 stroke-[1.5px]" />
       <Heading className="font-semibold text-xl">{title}</Heading>
       {subtitle && <p className="text-gray-dim -mt-4">{subtitle}</p>}
       <div className="flex gap-2">

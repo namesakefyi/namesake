@@ -1,11 +1,11 @@
 import { convexTest } from "convex-test";
 import { describe, expect, it, vi } from "vitest";
-import { api } from "./_generated/api";
-import { createOrUpdateUser } from "./auth";
-import schema from "./schema";
-import { modules } from "./test.setup";
+import { api } from "../_generated/api";
+import schema from "../schema";
+import { modules } from "../test.setup";
+import { createOrUpdateUser } from "./authModel";
 
-describe("auth", () => {
+describe("authModel", () => {
   describe("createOrUpdateUser", () => {
     it("should return existing user if id already exists", async () => {
       const t = convexTest(schema, modules);

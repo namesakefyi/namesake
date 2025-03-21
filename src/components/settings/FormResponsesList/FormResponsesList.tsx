@@ -2,26 +2,31 @@ import {
   Badge,
   Button,
   Empty,
-  Form,
   ListBox,
   ListBoxItem,
-  TextField,
 } from "@/components/common";
 import { DeleteFormResponseModal } from "@/components/settings";
-import {
-  decryptData,
-  encryptData,
-  getEncryptionKey,
-  useEncryptionKey,
-} from "@/utils/encryption";
-import { api } from "@convex/_generated/api";
+import { decryptData, getEncryptionKey } from "@/utils/encryption";
 import type { Id } from "@convex/_generated/dataModel";
-import { ALL } from "@convex/constants";
-import { useMutation, useQuery } from "convex/react";
+import {
+  ALL,
+  USER_FORM_DATA_FIELDS,
+  type UserFormDataField,
+} from "@convex/constants";
 import { AlertTriangle, FileLock2 } from "lucide-react";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { type Selection, Text } from "react-aria-components";
+
+/**
+ * Get the readable field label for a given field.
+ * If the field is not in the USER_FORM_DATA_FIELDS object, return the field as-is.
+ * @param field - The field to get the readable label for.
+ * @returns The readable label for the field.
+ */
+export const getReadableFieldLabel = (field: UserFormDataField | string) => {
+  return USER_FORM_DATA_FIELDS[field as UserFormDataField] ?? field;
+};
 
 interface FormResponseItemProps {
   initialData: { id: Id<"userFormResponses">; field: string; value: string };
@@ -38,9 +43,7 @@ export function FormResponseItem({ initialData }: FormResponseItemProps) {
         const key = await getEncryptionKey();
         setEncryptionKey(key);
 
-        if (!key) {
-          return;
-        }
+        if (!key) return;
 
         if (initialData.value) {
           try {
@@ -86,67 +89,6 @@ export function FormResponseItem({ initialData }: FormResponseItemProps) {
   );
 }
 
-// This is only used for testing, and as an example of submitting encrypted data.
-// TODO: Remove when actual form data is being saved and encrypted.
-function AddFormResponse() {
-  const [field, setField] = useState("");
-  const [value, setValue] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
-  const encryptionKey = useEncryptionKey();
-
-  const save = useMutation(api.userFormResponses.set);
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!encryptionKey) {
-      console.error("No encryption key available");
-      return;
-    }
-
-    try {
-      setIsSaving(true);
-
-      // Encrypt the value before saving
-      const encryptedValue = await encryptData(value, encryptionKey);
-      await save({ field, value: encryptedValue });
-      setField("");
-      setValue("");
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  return (
-    <Form
-      onSubmit={handleSubmit}
-      className="border border-gray-dim rounded-lg p-4 flex-row gap-2 items-end"
-    >
-      <TextField
-        label="Field"
-        name="field"
-        value={field}
-        onChange={setField}
-        className="flex-1"
-      />
-      <TextField
-        label="Value"
-        name="value"
-        value={value}
-        onChange={setValue}
-        className="flex-1"
-      />
-      <Button
-        type="submit"
-        variant="secondary"
-        isDisabled={field === "" || value === "" || isSaving}
-      >
-        {isSaving ? "Saving..." : "Add response"}
-      </Button>
-    </Form>
-  );
-}
-
 interface ResponseCountLabelProps {
   selectedRows: Selection;
   totalCount: number;
@@ -179,7 +121,6 @@ interface FormResponsesListProps {
 export function FormResponsesList({ rows }: FormResponsesListProps) {
   const [selectedRows, setSelectedRows] = useState<Selection>(new Set());
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const userRole = useQuery(api.users.getCurrentRole);
 
   const hasSelectedAll =
     selectedRows === ALL || selectedRows.size === rows?.length;
@@ -195,9 +136,9 @@ export function FormResponsesList({ rows }: FormResponsesListProps) {
     hasSelectedAll ? setSelectedRows(new Set()) : setSelectedRows(ALL);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col pb-8">
       {shouldShowControls && (
-        <div className="flex gap-2 items-center justify-between">
+        <div className="flex gap-2 pb-4 items-center justify-between bg-gray-1 dark:bg-graydark-2 sticky sticky-top-header z-10">
           <Button variant="secondary" size="small" onPress={handleSelectAll}>
             {hasSelectedAll ? "Deselect all" : "Select all"}
           </Button>
@@ -236,7 +177,6 @@ export function FormResponsesList({ rows }: FormResponsesListProps) {
         selectedRows={selectedRows}
         rows={rows}
       />
-      {userRole === "admin" && <AddFormResponse />}
     </div>
   );
 }

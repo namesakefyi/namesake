@@ -57,7 +57,7 @@ const checkboxStyles = tv({
       large: "gap-3",
     },
     card: {
-      true: "border border-gray-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-graya-2 dark:hover:bg-graydarka-2 selected:bg-purplea-3 dark:selected:bg-purpledarka-3 selected:border-purple-dim",
+      true: "border border-gray-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-gray-a2 selected:bg-purple-a3 selected:border-purple-6",
       false: "w-max",
     },
   },
@@ -68,17 +68,17 @@ const checkboxStyles = tv({
 
 const boxStyles = tv({
   extend: focusRing,
-  base: "size-6 flex-shrink-0 rounded flex items-center justify-center border transition",
+  base: "size-6 shrink-0 rounded-sm flex items-center justify-center border transition",
   variants: {
     isSelected: {
-      false: "bg-white dark:bg-graydark-1 border-gray-dim",
-      true: "bg-purple-9 dark:bg-purpledark-9 border-transparent",
+      false: "bg-element border-gray-dim",
+      true: "bg-purple-9 border-transparent",
     },
     isInvalid: {
-      true: "text-red-9 dark:text-reddark-9",
+      true: "text-red-9",
     },
     isDisabled: {
-      true: "text-gray-7 dark:text-graydark-7",
+      true: "text-gray-7",
     },
     size: {
       medium: "size-5",
@@ -88,7 +88,7 @@ const boxStyles = tv({
 });
 
 const iconStyles = tv({
-  base: "text-white group-disabled:text-gray-4 dark:group-disabled:text-gray-9",
+  base: "text-white group-disabled:text-gray-4",
   variants: {
     size: {
       medium: "size-4",

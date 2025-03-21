@@ -1,4 +1,4 @@
-import { smartquotes } from "@/helpers/smartquotes";
+import { smartquotes } from "@/utils/smartquotes";
 import { Heading } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 
@@ -67,11 +67,9 @@ export function FormSection({
       data-form-section
       data-testid="form-section"
       className={twMerge(
-        "flex flex-col gap-8 p-8 pb-9 justify-center outline outline-1 outline-graya-3 dark:outline-graydarka-3 shadow-sm dark:shadow-md rounded-2xl bg-white dark:bg-graydark-2",
+        "flex flex-col gap-8 p-8 pb-9 justify-center outline-1 outline-gray-a3 shadow-sm dark:shadow-md rounded-2xl bg-app",
         className,
       )}
-      // TODO: React-hook-form is supposed to prevent disabled fields from being submitted
-      // but it's not working for some reason. Address in #428
       disabled={!isVisible}
     >
       <FormHeader title={title} description={description} />
@@ -98,7 +96,7 @@ export function FormSubsection({
   return (
     <fieldset
       className={twMerge(
-        "flex flex-col gap-8 -mx-8 px-8 pt-8 border-t border-graya-3 dark:border-graydarka-3 justify-center",
+        "flex flex-col gap-8 -mx-8 px-8 pt-8 border-t border-gray-a3 justify-center",
         className,
       )}
       disabled={!isVisible}

@@ -30,10 +30,14 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           "flex flex-col gap-1.5",
         )}
       >
-        {(renderProps) => (
+        {({ isDisabled, isInvalid }) => (
           <>
             {label && <Label size={size}>{label}</Label>}
-            <FieldGroup {...renderProps} size={size}>
+            <FieldGroup
+              isDisabled={isDisabled}
+              isInvalid={isInvalid}
+              size={size}
+            >
               <InputTextArea ref={ref} size={size} />
             </FieldGroup>
             {description && <FieldDescription>{description}</FieldDescription>}

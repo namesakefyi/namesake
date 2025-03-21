@@ -27,14 +27,14 @@ export const buttonStyles = tv({
   variants: {
     variant: {
       primary:
-        "bg-purple-solid text-white border-purple-10 dark:border-purpledark-10 shadow-sm",
+        "bg-purple-9 hover:bg-purple-10 text-white border-purple-10 shadow-xs",
       secondary:
-        "bg-white dark:bg-graydark-3 hover:bg-white dark:hover:bg-graydark-4 hover:border-gray-7 dark:hover:border-graydark-7 text-gray-normal shadow-sm",
+        "bg-white dark:bg-gray-3 dark:hover:bg-gray-4 hover:border-gray-normal text-gray-normal shadow-sm",
       destructive:
-        "bg-red-solid text-white border-red-11 dark:border-reddark-10 shadow-sm",
-      icon: "bg-transparent hover:bg-graya-3 dark:hover:bg-graydarka-3 text-gray-dim hover:text-gray-normal border-0 flex shrink-0 items-center justify-center rounded-full",
+        "bg-red-9 text-white border-red-11 shadow-sm hover:bg-red-10",
+      icon: "bg-transparent hover:bg-gray-a3 text-gray-dim hover:text-gray-normal border-0 flex shrink-0 items-center justify-center rounded-full",
       ghost:
-        "bg-transparent hover:bg-graya-3 dark:hover:bg-graydarka-3 text-gray-dim hover:text-gray-normal border-0",
+        "bg-transparent hover:bg-gray-a3 text-gray-dim hover:text-gray-normal border-0",
     },
     size: {
       small: "h-8 px-2",
