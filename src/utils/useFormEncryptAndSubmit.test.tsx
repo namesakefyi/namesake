@@ -46,7 +46,7 @@ describe("useFormEncryptAndSubmit", () => {
   it("successfully submits and encrypts form data", async () => {
     const defaultValues = {
       name: "Sylvia Rivera",
-      email: "syvia@example.com",
+      email: "sylvia@example.com",
     };
 
     const form = useForm({ defaultValues });
