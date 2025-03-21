@@ -37,6 +37,7 @@ export function CheckboxGroupField({
         control={control}
         name={name}
         defaultValue={[]}
+        shouldUnregister={true}
         render={({ field, fieldState: { error, invalid } }) => (
           <CheckboxGroup
             {...field}
