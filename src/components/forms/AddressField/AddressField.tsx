@@ -49,6 +49,7 @@ export function AddressField({ children, type }: AddressFieldProps) {
           control={control}
           name={names[type].street}
           defaultValue={""}
+          shouldUnregister={true}
           render={({ field, fieldState: { invalid, error } }) => (
             <TextField
               {...field}
@@ -66,6 +67,7 @@ export function AddressField({ children, type }: AddressFieldProps) {
           control={control}
           name={names[type].city}
           defaultValue={""}
+          shouldUnregister={true}
           render={({ field, fieldState: { invalid, error } }) => (
             <TextField
               {...field}
@@ -83,6 +85,7 @@ export function AddressField({ children, type }: AddressFieldProps) {
           control={control}
           name={names[type].state}
           defaultValue={""}
+          shouldUnregister={true}
           render={({ field, fieldState: { invalid, error } }) => (
             <Select
               {...field}
@@ -110,6 +113,7 @@ export function AddressField({ children, type }: AddressFieldProps) {
           control={control}
           name={names[type].zip}
           defaultValue={""}
+          shouldUnregister={true}
           render={({ field, fieldState: { invalid, error } }) => (
             <TextField
               {...field}

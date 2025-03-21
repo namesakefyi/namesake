@@ -35,6 +35,13 @@ vi.mock("@tanstack/react-router", () => ({
   }),
 }));
 
+// Mock posthog
+vi.mock("posthog-js", () => ({
+  default: {
+    captureException: vi.fn(),
+  },
+}));
+
 // Add type for mocked IntersectionObserver
 declare global {
   interface Window {

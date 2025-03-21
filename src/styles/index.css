@@ -191,6 +191,10 @@ body,
   }
 }
 
+.sticky-top-header {
+  @apply sticky top-16 lg:top-20;
+}
+
 .animate-focus-ring-in {
   animation: animate-focus-ring-in 300ms ease forwards;
 }

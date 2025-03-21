@@ -49,6 +49,7 @@ export function YesNoField({
         control={control}
         name={name}
         defaultValue={defaultValue ?? null}
+        shouldUnregister={true}
         render={({ field, fieldState: { invalid, error } }) => (
           <RadioGroup
             {...field}
