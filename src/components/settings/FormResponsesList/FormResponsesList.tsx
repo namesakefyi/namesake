@@ -144,7 +144,7 @@ function AddFormResponse() {
       className="border border-gray-dim rounded-lg p-4 flex-row gap-2 items-end"
     >
       <Select
-        label="Field"
+        label="Question"
         name="field"
         className="flex-1"
         items={Object.entries(USER_FORM_DATA_FIELDS).map(([key, label]) => ({
