@@ -5,7 +5,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@/components/common";
-import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
+import { capitalize } from "@/utils/capitalize";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { ALL } from "@convex/constants";
@@ -58,7 +58,7 @@ export function DeleteFormResponseModal({
 
       onOpenChange(false);
       onDelete();
-      toast.success(`${capitalizeFirstLetter(responseCountLabel)} deleted`);
+      toast.success(`${capitalize(responseCountLabel)} deleted`);
     } catch (error: any) {
       setError(error.message);
       posthog.captureException(error);
