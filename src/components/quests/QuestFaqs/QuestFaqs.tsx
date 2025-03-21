@@ -82,8 +82,8 @@ const EditFaqForm = ({ faq, onSubmit, onCancel }: EditFaqFormProps) => {
         >
           Cancel
         </Button>
-        <Button type="submit" variant="primary" isDisabled={isSubmitting}>
-          {isSubmitting ? "Saving..." : "Save"}
+        <Button type="submit" variant="primary" isSubmitting={isSubmitting}>
+          Save
         </Button>
       </div>
     </Form>

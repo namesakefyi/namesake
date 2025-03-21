@@ -32,3 +32,19 @@ export const Destructive = {
     variant: "destructive",
   },
 };
+
+export const Submitting = {
+  args: {
+    variant: "primary",
+    isSubmitting: true,
+    children: "Saving...",
+  },
+};
+
+export const Disabled = {
+  args: {
+    variant: "primary",
+    isDisabled: true,
+    children: "Cannot click",
+  },
+};

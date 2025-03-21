@@ -52,6 +52,7 @@ const NewQuestModal = ({
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<Category | null>(null);
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const clearForm = () => {
@@ -62,20 +63,32 @@ const NewQuestModal = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { questId, slug } = await create({
-      title,
-      category: category ?? undefined,
-      jurisdiction: jurisdiction ?? undefined,
-    });
 
-    if (questId) {
-      toast(`Created quest: ${title}`);
-      clearForm();
-      onSubmit();
-      navigate({
-        to: "/$questSlug",
-        params: { questSlug: slug },
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    try {
+      const { questId, slug } = await create({
+        title,
+        category: category ?? undefined,
+        jurisdiction: jurisdiction ?? undefined,
       });
+
+      if (questId) {
+        toast(`Created quest: ${title}`);
+        clearForm();
+        onSubmit();
+        navigate({
+          to: "/$questSlug",
+          params: { questSlug: slug },
+        });
+      }
+    } catch (error) {
+      toast.error("Failed to create quest");
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -122,10 +135,14 @@ const NewQuestModal = ({
           ))}
         </Select>
         <ModalFooter>
-          <Button type="button" onPress={() => onOpenChange(false)}>
+          <Button
+            type="button"
+            onPress={() => onOpenChange(false)}
+            isSubmitting={isSubmitting}
+          >
             Cancel
           </Button>
-          <Button type="submit" variant="primary">
+          <Button type="submit" variant="primary" isSubmitting={isSubmitting}>
             Create Quest
           </Button>
         </ModalFooter>

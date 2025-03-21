@@ -1,6 +1,7 @@
 import type { FieldSize } from "@/components/common";
 import { focusRing } from "@/components/utils";
 import type { LucideIcon, LucideProps } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,
@@ -17,6 +18,7 @@ export interface ButtonProps extends AriaButtonProps {
   endIconProps?: LucideProps;
   variant?: "primary" | "secondary" | "destructive" | "icon" | "ghost";
   size?: FieldSize;
+  isSubmitting?: boolean;
 }
 
 export const buttonStyles = tv({
@@ -71,11 +73,21 @@ export function Button({
   endIconProps,
   className,
   children,
+  isSubmitting,
+  isDisabled,
   ...props
 }: ButtonProps) {
+  const iconSize = size === "large" ? 20 : 16;
+  const iconStrokeWidth = size === "large" ? 2.5 : 2;
+  const sharedIconProps = {
+    size: iconSize,
+    strokeWidth: iconStrokeWidth,
+  };
+
   return (
     <AriaButton
       {...props}
+      isDisabled={isSubmitting || isDisabled}
       className={composeRenderProps(className, (className, renderProps) =>
         buttonStyles({
           ...renderProps,
@@ -85,21 +97,19 @@ export function Button({
         }),
       )}
     >
-      {Icon && (
-        <Icon
-          size={size === "large" ? 20 : 16}
-          strokeWidth={size === "large" ? 2.5 : 2}
-          className="shrink-0"
-          {...iconProps}
-        />
-      )}
-      {children}
-      {EndIcon && (
-        <EndIcon
-          size={size === "large" ? 20 : 16}
-          strokeWidth={size === "large" ? 2.5 : 2}
-          {...endIconProps}
-        />
+      {isSubmitting ? (
+        <>
+          <Loader2 {...sharedIconProps} className="animate-spin" />
+          {children}
+        </>
+      ) : (
+        <>
+          {Icon && (
+            <Icon {...sharedIconProps} className="shrink-0" {...iconProps} />
+          )}
+          {children}
+          {EndIcon && <EndIcon {...sharedIconProps} {...endIconProps} />}
+        </>
       )}
     </AriaButton>
   );
