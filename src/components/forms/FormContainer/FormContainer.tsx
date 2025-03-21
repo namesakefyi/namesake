@@ -7,7 +7,7 @@ import {
   TooltipTrigger,
 } from "@/components/common";
 import { FormNavigation } from "@/components/forms";
-import { smartquotes } from "@/helpers/smartquotes";
+import { smartquotes } from "@/utils/smartquotes";
 import { useRouter } from "@tanstack/react-router";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { Heading } from "react-aria-components";

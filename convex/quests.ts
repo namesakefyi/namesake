@@ -1,67 +1,51 @@
 import { v } from "convex/values";
-import type { Doc, Id } from "./_generated/dataModel";
-import { type MutationCtx, query } from "./_generated/server";
+import { query } from "./_generated/server";
 import {
   type Category,
   DEFAULT_TIME_REQUIRED,
   type Jurisdiction,
 } from "./constants";
-import { generateQuestSlug, userMutation, userQuery } from "./helpers";
-import { create as createQuestFaq } from "./questFaqs";
+import { userMutation, userQuery } from "./helpers";
+import * as Quests from "./model/questsModel";
 import { category, jurisdiction, timeRequiredUnit } from "./validators";
 
 export const count = query({
   args: {},
   handler: async (ctx) => {
-    const quests = await ctx.db.query("quests").collect();
-    return quests.length;
+    return await Quests.count(ctx);
   },
 });
 
 export const getAll = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("quests").collect();
+    return await Quests.getAll(ctx);
   },
 });
 
 export const getAllInCategory = query({
-  args: { category: v.string() },
+  args: { category },
   handler: async (ctx, args) => {
-    return await ctx.db
-      .query("quests")
-      .withIndex("category", (q) => q.eq("category", args.category))
-      .collect();
+    return await Quests.getAllInCategory(ctx, {
+      category: args.category as Category,
+    });
   },
 });
 
 export const getAllActive = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db
-      .query("quests")
-      .filter((q) => q.eq(q.field("deletedAt"), undefined))
-      .collect();
+    return await Quests.getAllActive(ctx);
   },
 });
 
 export const getWithUserQuest = userQuery({
   args: { slug: v.string() },
   handler: async (ctx, args) => {
-    const quest = await ctx.db
-      .query("quests")
-      .withIndex("slug", (q) => q.eq("slug", args.slug))
-      .first();
-
-    if (!quest) return { quest: null, userQuest: null };
-
-    const userQuest = await ctx.db
-      .query("userQuests")
-      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-      .filter((q) => q.eq(q.field("questId"), quest._id))
-      .first();
-
-    return { quest, userQuest };
+    return await Quests.getWithUserQuest(ctx, {
+      slug: args.slug,
+      userId: ctx.userId,
+    });
   },
 });
 
@@ -75,14 +59,10 @@ export const getByCategoryAndJurisdiction = query({
     jurisdiction: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    if (!args.jurisdiction) return null;
-
-    return await ctx.db
-      .query("quests")
-      .withIndex("categoryAndJurisdiction", (q) =>
-        q.eq("category", args.category).eq("jurisdiction", args.jurisdiction),
-      )
-      .first();
+    return await Quests.getByCategoryAndJurisdiction(ctx, {
+      category: args.category,
+      jurisdiction: args.jurisdiction,
+    });
   },
 });
 
@@ -96,24 +76,14 @@ export const getById = query({
 export const getByFaqId = query({
   args: { questFaqId: v.id("questFaqs") },
   handler: async (ctx, args) => {
-    for await (const quest of ctx.db.query("quests")) {
-      if (quest.faqs?.includes(args.questFaqId)) {
-        return quest;
-      }
-    }
+    return await Quests.getByFaqId(ctx, args);
   },
 });
 
 export const getBySlug = query({
   args: { slug: v.string() },
   handler: async (ctx, args) => {
-    const quest = await ctx.db
-      .query("quests")
-      .withIndex("slug", (q) => q.eq("slug", args.slug))
-      .first();
-
-    if (!quest) return null;
-    return quest;
+    return await Quests.getBySlug(ctx, args);
   },
 });
 
@@ -124,7 +94,7 @@ export const create = userMutation({
     category: v.optional(category),
   },
   handler: async (ctx, args) => {
-    const slug = generateQuestSlug(
+    const slug = Quests.generateQuestSlug(
       args.title,
       args.category as Category,
       args.jurisdiction as Jurisdiction,
@@ -155,30 +125,17 @@ export const create = userMutation({
   },
 });
 
-async function updateQuest(
-  ctx: MutationCtx,
-  questId: Id<"quests">,
-  userId: Id<"users">,
-  update: Partial<Doc<"quests">>,
-) {
-  return ctx.db.patch(questId, {
-    ...update,
-    updatedAt: Date.now(),
-    updatedBy: userId,
-  });
-}
-
 export const setTitle = userMutation({
   args: { questId: v.id("quests"), title: v.string() },
   handler: async (ctx, args) => {
-    await updateQuest(ctx, args.questId, ctx.userId, { title: args.title });
+    await Quests.update(ctx, args.questId, ctx.userId, { title: args.title });
   },
 });
 
 export const setJurisdiction = userMutation({
   args: { questId: v.id("quests"), jurisdiction: v.optional(jurisdiction) },
   handler: async (ctx, args) => {
-    await updateQuest(ctx, args.questId, ctx.userId, {
+    await Quests.update(ctx, args.questId, ctx.userId, {
       jurisdiction: args.jurisdiction,
     });
   },
@@ -187,7 +144,7 @@ export const setJurisdiction = userMutation({
 export const setCategory = userMutation({
   args: { questId: v.id("quests"), category: v.optional(category) },
   handler: async (ctx, args) => {
-    await updateQuest(ctx, args.questId, ctx.userId, {
+    await Quests.update(ctx, args.questId, ctx.userId, {
       category: args.category,
     });
   },
@@ -196,18 +153,21 @@ export const setCategory = userMutation({
 export const setUrls = userMutation({
   args: { questId: v.id("quests"), urls: v.optional(v.array(v.string())) },
   handler: async (ctx, args) => {
-    await updateQuest(ctx, args.questId, ctx.userId, { urls: args.urls });
+    return await Quests.updateUrls(ctx, {
+      questId: args.questId,
+      userId: ctx.userId,
+      urls: args.urls,
+    });
   },
 });
 
 export const addUrl = userMutation({
   args: { questId: v.id("quests"), url: v.string() },
   handler: async (ctx, args) => {
-    const quest = await ctx.db.get(args.questId);
-    if (!quest) throw new Error("Quest not found");
-    const existingUrls = quest.urls || [];
-    await updateQuest(ctx, args.questId, ctx.userId, {
-      urls: [...existingUrls, args.url],
+    return await Quests.addUrl(ctx, {
+      questId: args.questId,
+      userId: ctx.userId,
+      url: args.url,
     });
   },
 });
@@ -215,11 +175,10 @@ export const addUrl = userMutation({
 export const deleteUrl = userMutation({
   args: { questId: v.id("quests"), url: v.string() },
   handler: async (ctx, args) => {
-    const quest = await ctx.db.get(args.questId);
-    if (!quest) throw new Error("Quest not found");
-    const existingUrls = quest.urls || [];
-    await updateQuest(ctx, args.questId, ctx.userId, {
-      urls: existingUrls.filter((u) => u !== args.url),
+    return await Quests.deleteUrl(ctx, {
+      questId: args.questId,
+      userId: ctx.userId,
+      url: args.url,
     });
   },
 });
@@ -232,7 +191,11 @@ export const setCosts = userMutation({
     ),
   },
   handler: async (ctx, args) => {
-    await updateQuest(ctx, args.questId, ctx.userId, { costs: args.costs });
+    return await Quests.setCosts(ctx, {
+      questId: args.questId,
+      userId: ctx.userId,
+      costs: args.costs,
+    });
   },
 });
 
@@ -249,7 +212,9 @@ export const setTimeRequired = userMutation({
     ),
   },
   handler: async (ctx, args) => {
-    await updateQuest(ctx, args.questId, ctx.userId, {
+    return await Quests.setTimeRequired(ctx, {
+      questId: args.questId,
+      userId: ctx.userId,
       timeRequired: args.timeRequired,
     });
   },
@@ -262,18 +227,11 @@ export const addStep = userMutation({
     content: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const quest = await ctx.db.get(args.questId);
-    if (!quest) throw new Error("Quest not found");
-
-    const newStep = await ctx.db.insert("questSteps", {
+    return await Quests.addStep(ctx, {
       questId: args.questId,
+      userId: ctx.userId,
       title: args.title,
       content: args.content,
-    });
-
-    const existingSteps = quest.steps || [];
-    await updateQuest(ctx, args.questId, ctx.userId, {
-      steps: [...existingSteps, newStep],
     });
   },
 });
@@ -281,34 +239,22 @@ export const addStep = userMutation({
 export const deleteStep = userMutation({
   args: { questId: v.id("quests"), stepId: v.id("questSteps") },
   handler: async (ctx, args) => {
-    const step = await ctx.db.get(args.stepId);
-    if (!step) throw new Error("Step not found");
-
-    const quest = await ctx.db.get(args.questId);
-    if (!quest) throw new Error("Quest not found");
-
-    const updatedSteps = quest.steps?.filter(
-      (stepId) => stepId !== args.stepId,
-    );
-    await updateQuest(ctx, args.questId, ctx.userId, { steps: updatedSteps });
-    await ctx.db.delete(args.stepId);
+    return await Quests.deleteStep(ctx, {
+      questId: args.questId,
+      userId: ctx.userId,
+      stepId: args.stepId,
+    });
   },
 });
 
 export const addFaq = userMutation({
   args: { questId: v.id("quests"), question: v.string(), answer: v.string() },
   handler: async (ctx, args) => {
-    const quest = await ctx.db.get(args.questId);
-    if (!quest) throw new Error("Quest not found");
-
-    const questFaqId = await createQuestFaq(ctx, {
+    return await Quests.addFaq(ctx, {
+      questId: args.questId,
+      userId: ctx.userId,
       question: args.question,
       answer: args.answer,
-    });
-
-    const existingFaqs = quest.faqs || [];
-    await updateQuest(ctx, args.questId, ctx.userId, {
-      faqs: [...existingFaqs, questFaqId],
     });
   },
 });
@@ -319,12 +265,10 @@ export const addFaqId = userMutation({
     questFaqId: v.id("questFaqs"),
   },
   handler: async (ctx, args) => {
-    const quest = await ctx.db.get(args.questId);
-    if (!quest) throw new Error("Quest not found");
-
-    const existingFaqs = quest.faqs || [];
-    await updateQuest(ctx, args.questId, ctx.userId, {
-      faqs: [...existingFaqs, args.questFaqId],
+    return await Quests.addFaqId(ctx, {
+      questId: args.questId,
+      userId: ctx.userId,
+      questFaqId: args.questFaqId,
     });
   },
 });
@@ -332,39 +276,35 @@ export const addFaqId = userMutation({
 export const deleteFaq = userMutation({
   args: { questId: v.id("quests"), questFaqId: v.id("questFaqs") },
   handler: async (ctx, args) => {
-    const quest = await ctx.db.get(args.questId);
-    if (!quest) throw new Error("Quest not found");
-
-    const updatedFaqs = quest.faqs?.filter((id) => id !== args.questFaqId);
-    await updateQuest(ctx, args.questId, ctx.userId, { faqs: updatedFaqs });
+    return await Quests.deleteFaq(ctx, {
+      questId: args.questId,
+      userId: ctx.userId,
+      questFaqId: args.questFaqId,
+    });
   },
 });
 
 export const softDelete = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
-    await updateQuest(ctx, args.questId, ctx.userId, { deletedAt: Date.now() });
+    await Quests.update(ctx, args.questId, ctx.userId, {
+      deletedAt: Date.now(),
+    });
   },
 });
 
 export const undoSoftDelete = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
-    await updateQuest(ctx, args.questId, ctx.userId, { deletedAt: undefined });
+    await Quests.update(ctx, args.questId, ctx.userId, {
+      deletedAt: undefined,
+    });
   },
 });
 
 export const deleteForever = userMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
-    // Delete userQuests
-    const userQuests = await ctx.db
-      .query("userQuests")
-      .withIndex("questId", (q) => q.eq("questId", args.questId))
-      .collect();
-    for (const userQuest of userQuests) await ctx.db.delete(userQuest._id);
-
-    // Delete the quest
-    await ctx.db.delete(args.questId);
+    return await Quests.deleteForever(ctx, { questId: args.questId });
   },
 });

@@ -66,7 +66,7 @@
     "@zxcvbn-ts/core": "^3.0.4",
     "@zxcvbn-ts/language-common": "^3.0.4",
     "@zxcvbn-ts/language-en": "^3.0.2",
-    "convex": "^1.19.5",
+    "convex": "^1.21.0",
     "convex-helpers": "^0.1.71",
     "language-name-map": "^0.3.0",
     "lucide-react": "^0.479.0",

@@ -1,5 +1,5 @@
 import { Radio, RadioGroup, type RadioGroupProps } from "@/components/common";
-import { smartquotes } from "@/helpers/smartquotes";
+import { smartquotes } from "@/utils/smartquotes";
 import type { UserFormDataField } from "@convex/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
