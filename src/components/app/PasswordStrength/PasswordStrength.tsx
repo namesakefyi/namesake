@@ -22,36 +22,36 @@ export const strengthConfig: Record<number, StrengthConfig> = {
   0: {
     label: "Weak!",
     color: {
-      text: "text-red-9 dark:text-reddark-9",
+      text: "text-red-9",
       bg: "bg-transparent",
     },
   },
   1: {
     label: "Weak",
     color: {
-      text: "text-orange-9 dark:text-orangedark-9",
-      bg: "bg-orange-9 dark:bg-orangedark-9",
+      text: "text-orange-9",
+      bg: "bg-orange-9",
     },
   },
   2: {
     label: "Okay",
     color: {
-      text: "text-gray-normal dark:text-amberdark-9",
-      bg: "bg-amber-9 dark:bg-amberdark-9",
+      text: "text-amber-normal",
+      bg: "bg-amber-9",
     },
   },
   3: {
     label: "Good",
     color: {
-      text: "text-grass-9 dark:text-grassdark-9",
-      bg: "bg-grass-9 dark:bg-grassdark-9",
+      text: "text-grass-9",
+      bg: "bg-grass-9",
     },
   },
   4: {
     label: "Great",
     color: {
-      text: "text-green-10 dark:text-greendark-10",
-      bg: "bg-green-9 dark:bg-greendark-9",
+      text: "text-green-10",
+      bg: "bg-green-9",
     },
   },
 };
@@ -90,7 +90,7 @@ export function PasswordStrength({ value, ...props }: MeterProps) {
     >
       {({ percentage }) => (
         <>
-          <div className="w-full min-w-64 h-1 rounded-full bg-gray-4 dark:bg-graydark-4 outline outline-1 -outline-offset-1 outline-transparent relative overflow-hidden">
+          <div className="w-full min-w-64 h-1 rounded-full bg-gray-4 outline-1 -outline-offset-1 outline-transparent relative overflow-hidden">
             <div
               className={`absolute top-0 left-0 h-full w-full rounded-full ${strengthConfig[value].color.bg} transition-all duration-300 forced-colors:bg-[Highlight]`}
               style={{ translate: `-${100 - percentage}%` }}

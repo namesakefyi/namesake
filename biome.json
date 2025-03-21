@@ -31,14 +31,11 @@
     "enabled": true
   },
   "css": {
-    "parser": {
-      "cssModules": true
-    },
     "formatter": {
-      "enabled": true
+      "enabled": false
     },
     "linter": {
-      "enabled": true
+      "enabled": false
     }
   }
 }

@@ -45,9 +45,7 @@ export function NumberField({
             {(renderProps) => (
               <>
                 {prefix && (
-                  <span className="text-gray-9 dark:text-graydark-9 ml-2 -mr-2">
-                    {prefix}
-                  </span>
+                  <span className="text-gray-9 ml-2 -mr-2">{prefix}</span>
                 )}
                 <Input />
                 <div
@@ -84,7 +82,7 @@ function StepperButton(props: ButtonProps) {
   return (
     <Button
       {...props}
-      className="p-0.5 cursor-pointer text-gray-dim group-disabled:text-gray-2 dark:text-gray-4 dark:pressed:bg-gray-11 dark:group-disabled:text-gray-6 forced-colors:group-disabled:text-[GrayText]"
+      className="p-0.5 cursor-pointer text-gray-dim group-disabled:text-gray-2 forced-colors:group-disabled:text-[GrayText]"
     />
   );
 }

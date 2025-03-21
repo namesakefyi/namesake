@@ -7,8 +7,8 @@ import {
   Collection,
   Header,
   type ListBoxItemProps,
-  MenuSection,
-  type MenuSectionProps,
+  ListBoxSection,
+  type SectionProps,
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
@@ -38,7 +38,7 @@ export const itemStyles = tv({
   variants: {
     isSelected: {
       false: "text-gray-normal -outline-offset-2",
-      true: "bg-purple-9 dark:bg-purpledark-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white dark:outline-white forced-colors:outline-[HighlightText]",
+      true: "bg-purple-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white forced-colors:outline-[HighlightText]",
     },
     isDisabled: {
       true: "text-gray-dim opacity-50 cursor-default forced-colors:text-[GrayText]",
@@ -64,23 +64,19 @@ export function ListBoxItem(props: ListBoxItemProps) {
 }
 
 export const dropdownItemStyles = tv({
-  base: "group flex items-center gap-1.5 cursor-pointer select-none py-2 px-2.5 pr-3 rounded-lg outline outline-0 text-sm forced-color-adjust-none",
+  base: "group flex items-center gap-3 cursor-pointer select-none py-2 px-2.5 pr-3 rounded-lg outline-0 text-sm forced-color-adjust-none",
   variants: {
     isDisabled: {
       false: "text-gray-normal",
       true: "text-gray-dim opacity-50 forced-colors:text-[GrayText] cursor-default",
     },
     isFocused: {
-      true: "bg-gray-3 dark:bg-graydark-3 text-gray-normal forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
+      true: "bg-gray-a3 text-gray-normal forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
+    },
+    isOpen: {
+      true: "bg-gray-3",
     },
   },
-  compoundVariants: [
-    {
-      isFocused: false,
-      isOpen: true,
-      className: "bg-gray-subtle",
-    },
-  ],
 });
 
 export function DropdownItem(props: ListBoxItemProps) {
@@ -96,19 +92,21 @@ export function DropdownItem(props: ListBoxItemProps) {
     >
       {composeRenderProps(props.children, (children, { isSelected }) => (
         <>
-          <span className="flex items-center flex-1 gap-2 font-normal truncate group-selected:font-semibold">
+          <span className="flex items-center flex-1 gap-2 font-normal truncate">
             {children}
           </span>
-          <span className="flex items-center w-5">
-            {isSelected && <Check className="w-4 h-4" />}
-          </span>
+          {isSelected && (
+            <span className="flex items-center size-4">
+              <Check className="size-4" />
+            </span>
+          )}
         </>
       ))}
     </AriaListBoxItem>
   );
 }
 
-export interface DropdownSectionProps<T> extends MenuSectionProps<T> {
+export interface DropdownSectionProps<T> extends SectionProps<T> {
   title?: string;
 }
 
@@ -116,11 +114,11 @@ export function DropdownSection<T extends object>(
   props: DropdownSectionProps<T>,
 ) {
   return (
-    <MenuSection>
-      <Header className="text-sm font-semibold text-gray-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-gray-subtle border-b border-gray-dim [&+*]:mt-1">
+    <ListBoxSection>
+      <Header className="text-sm font-semibold text-gray-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-element border-b border-gray-dim [&+*]:mt-1">
         {props.title}
       </Header>
       <Collection items={props.items}>{props.children}</Collection>
-    </MenuSection>
+    </ListBoxSection>
   );
 }

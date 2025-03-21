@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Check, Clock, Star } from "lucide-react";
 
 const meta = {
-  title: "Common/IconText",
   component: IconText,
   parameters: {
     layout: "centered",
