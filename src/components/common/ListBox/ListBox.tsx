@@ -7,8 +7,8 @@ import {
   Collection,
   Header,
   type ListBoxItemProps,
-  MenuSection,
-  type MenuSectionProps,
+  ListBoxSection,
+  type SectionProps,
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
@@ -106,7 +106,7 @@ export function DropdownItem(props: ListBoxItemProps) {
   );
 }
 
-export interface DropdownSectionProps<T> extends MenuSectionProps<T> {
+export interface DropdownSectionProps<T> extends SectionProps<T> {
   title?: string;
 }
 
@@ -114,11 +114,11 @@ export function DropdownSection<T extends object>(
   props: DropdownSectionProps<T>,
 ) {
   return (
-    <MenuSection>
+    <ListBoxSection>
       <Header className="text-sm font-semibold text-gray-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-element border-b border-gray-dim [&+*]:mt-1">
         {props.title}
       </Header>
       <Collection items={props.items}>{props.children}</Collection>
-    </MenuSection>
+    </ListBoxSection>
   );
 }
