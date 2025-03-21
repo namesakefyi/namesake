@@ -172,7 +172,7 @@ function AddFormResponse() {
         variant="secondary"
         isDisabled={!field || value === "" || isSaving}
       >
-        {isSaving ? "Saving..." : "Add response"}
+        {isSaving ? "Saving..." : "Save"}
       </Button>
     </Form>
   );
