@@ -1,7 +1,6 @@
 import type { FieldSize } from "@/components/common";
 import { focusRing } from "@/components/utils";
 import type { LucideIcon, LucideProps } from "lucide-react";
-import { Loader2 } from "lucide-react";
 import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,
@@ -43,7 +42,11 @@ export const buttonStyles = tv({
     },
     isDisabled: {
       false: "cursor-pointer",
-      true: "cursor-default opacity-40",
+      true: "cursor-default",
+    },
+    isSubmitting: {
+      true: "animate-pulse",
+      false: "",
     },
   },
   compoundVariants: [
@@ -56,6 +59,11 @@ export const buttonStyles = tv({
       variant: "icon",
       size: "medium",
       className: "w-10 h-10 p-2",
+    },
+    {
+      isDisabled: true,
+      isSubmitting: false,
+      className: "opacity-40",
     },
   ],
   defaultVariants: {
@@ -94,23 +102,17 @@ export function Button({
           variant,
           size,
           className,
+          isSubmitting,
         }),
       )}
     >
-      {isSubmitting ? (
-        <>
-          <Loader2 {...sharedIconProps} className="animate-spin" />
-          {children}
-        </>
-      ) : (
-        <>
-          {Icon && (
-            <Icon {...sharedIconProps} className="shrink-0" {...iconProps} />
-          )}
-          {children}
-          {EndIcon && <EndIcon {...sharedIconProps} {...endIconProps} />}
-        </>
-      )}
+      <>
+        {Icon && (
+          <Icon {...sharedIconProps} className="shrink-0" {...iconProps} />
+        )}
+        {children}
+        {EndIcon && <EndIcon {...sharedIconProps} {...endIconProps} />}
+      </>
     </AriaButton>
   );
 }
