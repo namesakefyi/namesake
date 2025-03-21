@@ -62,7 +62,7 @@ describe("useFormEncryptAndSubmit", () => {
       mockEncryptionKey,
     );
     expect(encryptData).toHaveBeenCalledWith(
-      "syvia@example.com",
+      "sylvia@example.com",
       mockEncryptionKey,
     );
 
