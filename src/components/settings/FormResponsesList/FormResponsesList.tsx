@@ -161,7 +161,7 @@ function AddFormResponse() {
         )}
       </Select>
       <TextField
-        label="Value"
+        label="Response"
         name="value"
         value={value}
         onChange={setValue}
