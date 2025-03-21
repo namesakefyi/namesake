@@ -29,7 +29,6 @@ import { Route as AuthenticatedHomeStateIdIndexImport } from './routes/_authenti
 import { Route as AuthenticatedHomeCourtOrderIndexImport } from './routes/_authenticated/_home/court-order.index'
 import { Route as AuthenticatedHomeBirthCertificateIndexImport } from './routes/_authenticated/_home/birth-certificate.index'
 import { Route as AuthenticatedHomeQuestSlugIndexImport } from './routes/_authenticated/_home/$questSlug.index'
-import { Route as AuthenticatedFormsCourtOrderMaImport } from './routes/_authenticated/forms/court-order/ma'
 
 // Create/Update Routes
 
@@ -151,13 +150,6 @@ const AuthenticatedHomeQuestSlugIndexRoute =
     getParentRoute: () => AuthenticatedHomeRoute,
   } as any)
 
-const AuthenticatedFormsCourtOrderMaRoute =
-  AuthenticatedFormsCourtOrderMaImport.update({
-    id: '/forms/court-order/ma',
-    path: '/forms/court-order/ma',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -245,13 +237,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/settings/'
       preLoaderRoute: typeof AuthenticatedSettingsIndexImport
       parentRoute: typeof AuthenticatedSettingsRouteImport
-    }
-    '/_authenticated/forms/court-order/ma': {
-      id: '/_authenticated/forms/court-order/ma'
-      path: '/forms/court-order/ma'
-      fullPath: '/forms/court-order/ma'
-      preLoaderRoute: typeof AuthenticatedFormsCourtOrderMaImport
-      parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/_home/$questSlug/': {
       id: '/_authenticated/_home/$questSlug/'
@@ -398,7 +383,6 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedHomeIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
-  '/forms/court-order/ma': typeof AuthenticatedFormsCourtOrderMaRoute
   '/$questSlug': typeof AuthenticatedHomeQuestSlugIndexRoute
   '/birth-certificate': typeof AuthenticatedHomeBirthCertificateIndexRoute
   '/court-order': typeof AuthenticatedHomeCourtOrderIndexRoute
@@ -416,7 +400,6 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedHomeIndexRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
-  '/forms/court-order/ma': typeof AuthenticatedFormsCourtOrderMaRoute
   '/$questSlug': typeof AuthenticatedHomeQuestSlugIndexRoute
   '/birth-certificate': typeof AuthenticatedHomeBirthCertificateIndexRoute
   '/court-order': typeof AuthenticatedHomeCourtOrderIndexRoute
@@ -439,7 +422,6 @@ export interface FileRoutesById {
   '/_authenticated/_home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
-  '/_authenticated/forms/court-order/ma': typeof AuthenticatedFormsCourtOrderMaRoute
   '/_authenticated/_home/$questSlug/': typeof AuthenticatedHomeQuestSlugIndexRoute
   '/_authenticated/_home/birth-certificate/': typeof AuthenticatedHomeBirthCertificateIndexRoute
   '/_authenticated/_home/court-order/': typeof AuthenticatedHomeCourtOrderIndexRoute
@@ -461,7 +443,6 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/'
     | '/settings/'
-    | '/forms/court-order/ma'
     | '/$questSlug'
     | '/birth-certificate'
     | '/court-order'
@@ -478,7 +459,6 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/settings'
-    | '/forms/court-order/ma'
     | '/$questSlug'
     | '/birth-certificate'
     | '/court-order'
@@ -499,7 +479,6 @@ export interface FileRouteTypes {
     | '/_authenticated/_home/'
     | '/_authenticated/admin/'
     | '/_authenticated/settings/'
-    | '/_authenticated/forms/court-order/ma'
     | '/_authenticated/_home/$questSlug/'
     | '/_authenticated/_home/birth-certificate/'
     | '/_authenticated/_home/court-order/'
@@ -604,10 +583,6 @@ export const routeTree = rootRoute
     "/_authenticated/settings/": {
       "filePath": "_authenticated/settings/index.tsx",
       "parent": "/_authenticated/settings"
-    },
-    "/_authenticated/forms/court-order/ma": {
-      "filePath": "_authenticated/forms/court-order/ma.tsx",
-      "parent": "/_authenticated"
     },
     "/_authenticated/_home/$questSlug/": {
       "filePath": "_authenticated/_home/$questSlug.index.tsx",

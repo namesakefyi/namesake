@@ -32,7 +32,7 @@ const itemStyles = tv({
   variants: {
     isSelected: {
       false: "",
-      true: "bg-purple-3 dark:bg-purpledark-3 z-20",
+      true: "bg-purple-3 z-20",
     },
     isDisabled: {
       true: "opacity-50 cursor-default forced-colors:text-[GrayText] z-10",

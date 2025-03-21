@@ -93,8 +93,9 @@ export function RichText({
     base: "w-full",
     variants: {
       editable: {
-        true: "px-3.5 py-3 [&_.tiptap]:outline-none",
-        false: "ring-0 rounded-none bg-transparent focus-within:!outline-none",
+        true: "px-3.5 py-3 [&_.tiptap]:outline-hidden",
+        false:
+          "ring-0 rounded-none bg-transparent focus-within:outline-hidden!",
       },
     },
   });
@@ -107,7 +108,7 @@ export function RichText({
       />
       <BubbleMenu
         editor={editor}
-        className="bg-gray-1 dark:bg-graydark-2 border border-gray-dim p-1.5 gap-px rounded-xl shadow-md flex items-center data-[state=visible]:opacity-100 data-[state=hidden]:opacity-0 transition-opacity *:border-none"
+        className="bg-app border border-gray-dim p-1.5 gap-px rounded-xl shadow-md flex items-center data-[state=visible]:opacity-100 data-[state=hidden]:opacity-0 transition-opacity *:border-none"
       >
         <ToggleButton
           onPress={() => editor.chain().focus().toggleBold().run()}
