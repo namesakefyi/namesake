@@ -4,7 +4,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useMutation, useQuery } from "convex/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { FormResponsesList } from "./FormResponsesList";
+import { FormResponsesList, getReadableFieldLabel } from "./FormResponsesList";
 
 // Mock encryption utilities
 vi.mock("@/utils/encryption", () => ({
@@ -191,5 +191,15 @@ describe("FormResponsesList", () => {
     await user.click(deleteButton);
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+});
+
+describe("getReadableFieldLabel", () => {
+  it("returns the correct label for a field", () => {
+    expect(getReadableFieldLabel("newFirstName")).toBe("New first name");
+  });
+
+  it("returns the field as-is if it's not in the USER_FORM_DATA_FIELDS object", () => {
+    expect(getReadableFieldLabel("nonExistentField")).toBe("nonExistentField");
   });
 });
