@@ -4,6 +4,7 @@ import {
   Slider as AriaSlider,
   type SliderProps as AriaSliderProps,
   SliderOutput,
+  type SliderRenderProps,
   SliderThumb,
   SliderTrack,
 } from "react-aria-components";
@@ -46,6 +47,17 @@ export function Slider<T extends number | number[]>({
   thumbLabels,
   ...props
 }: SliderProps<T>) {
+  const getThumbTrackFillStyle = (state: SliderRenderProps["state"]) => {
+    if (state.values.length === 2) {
+      return {
+        left: `${state.getThumbPercent(0) * 100}%`,
+        width: `${(state.getThumbPercent(1) - state.getThumbPercent(0)) * 100}%`,
+      };
+    }
+
+    return { width: `${state.getThumbPercent(0) * 100}%` };
+  };
+
   return (
     <AriaSlider
       {...props}
@@ -64,6 +76,10 @@ export function Slider<T extends number | number[]>({
         {({ state, ...renderProps }) => (
           <>
             <div className={trackStyles(renderProps)} />
+            <div
+              className="absolute h-[6px] top-[50%] translate-y-[-50%] rounded-full bg-purple-6"
+              style={getThumbTrackFillStyle(state)}
+            />
             {state.values.map((_, i) => (
               <SliderThumb
                 key={thumbLabels?.[i]}
