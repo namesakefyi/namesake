@@ -1,5 +1,24 @@
 # namesake
 
+## 0.21.0
+
+### Minor Changes
+
+- 8c9e04c: Update form page design and validate form responses
+- 376da9c: Show the quest completion date in the footer
+- 011570b: Upgrade to Tailwind v4
+- 2be3a05: Save and encrypt all form submissions
+- 980fba1: Allow deleting user data from within settings
+- 2cdb562: Add spoiler component for hiding and showing text such as old names
+
+### Patch Changes
+
+- 615ce5e: Display form response values in a Select element instead of a text input
+- 9921164: Fix React console errors about invalid props
+- dc38141: Fix theme switcher submenu
+- f18cb1b: Reorder Social Security before State ID
+- ac248e0: Add animation to tab indicator
+
 ## 0.20.0
 
 ### Minor Changes
