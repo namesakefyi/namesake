@@ -15,7 +15,6 @@ describe("JurisdictionInterstitial", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Simple mock returns instead of chaining
     (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
       mockNavigate,
     );

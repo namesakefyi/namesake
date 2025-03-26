@@ -3,7 +3,6 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { QuestPageFooter } from "./QuestPageFooter";
 
-// Mock TimeAgo component since it handles date formatting
 vi.mock("@/components/common/TimeAgo/TimeAgo", () => ({
   TimeAgo: ({ date }: { date: Date }) => (
     <span>mock_time_ago_{date.toISOString()}</span>
