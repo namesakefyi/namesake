@@ -35,6 +35,7 @@ vi.mock("@tanstack/react-router", () => ({
       go: vi.fn(),
     },
   }),
+  useSearch: vi.fn(),
 }));
 
 // Mock posthog
