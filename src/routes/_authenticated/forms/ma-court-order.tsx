@@ -152,7 +152,7 @@ function RouteComponent() {
           yesLabel="Yes, I need an interpreter"
           noLabel="No, I don't need an interpreter"
         />
-        <FormSubsection isVisible={form.watch("isInterpreterNeeded")}>
+        <FormSubsection isVisible={form.watch("isInterpreterNeeded") === true}>
           <LanguageSelectField name="language" />
         </FormSubsection>
       </FormSection>

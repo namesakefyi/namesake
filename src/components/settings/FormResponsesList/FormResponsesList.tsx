@@ -51,7 +51,7 @@ export function FormResponseItem({
             </Badge>
           ) : (
             <span className="opacity-70 font-mono text-sm">
-              {decryptedValue}
+              {decryptedValue.toString()}
             </span>
           )}
         </Text>
