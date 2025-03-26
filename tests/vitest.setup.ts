@@ -12,6 +12,7 @@ vi.mock("sonner", () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -27,6 +28,7 @@ vi.mock("@/utils/useTheme", () => ({
 
 // Mock the useRouter hook
 vi.mock("@tanstack/react-router", () => ({
+  useNavigate: vi.fn(),
   useRouter: () => ({
     navigate: vi.fn(),
     history: {
