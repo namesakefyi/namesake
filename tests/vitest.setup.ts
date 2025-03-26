@@ -1,13 +1,12 @@
 import "@testing-library/jest-dom/vitest";
 import { vi } from "vitest";
 
-// Mock the convex mutation hook
 vi.mock("convex/react", () => ({
   useQuery: vi.fn(),
   useMutation: vi.fn(),
+  Authenticated: ({ children }: { children: React.ReactNode }) => children,
 }));
 
-// Mock toast notifications
 vi.mock("sonner", () => ({
   toast: {
     success: vi.fn(),
@@ -16,17 +15,14 @@ vi.mock("sonner", () => ({
   },
 }));
 
-// Mock the auth hook
 vi.mock("@convex-dev/auth/react", () => ({
   useAuthActions: vi.fn(),
 }));
 
-// Mock the useTheme hook
 vi.mock("@/utils/useTheme", () => ({
   useTheme: vi.fn(),
 }));
 
-// Mock the useRouter hook
 vi.mock("@tanstack/react-router", () => ({
   useNavigate: vi.fn(),
   useRouter: () => ({
@@ -35,7 +31,6 @@ vi.mock("@tanstack/react-router", () => ({
       go: vi.fn(),
     },
   }),
-  useSearch: vi.fn(),
 }));
 
 // Mock posthog
