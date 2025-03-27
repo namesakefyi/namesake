@@ -3,5 +3,5 @@ export const joinNames = (first?: string, middle?: string, last?: string) => {
 };
 
 export const joinPronouns = (pronouns?: string, otherPronouns?: string) => {
-  return [pronouns, otherPronouns].filter(Boolean).join(" ");
+  return [pronouns, otherPronouns].filter(Boolean).join(", ");
 };
