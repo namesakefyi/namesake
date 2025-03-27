@@ -1,6 +1,6 @@
+import petitionToChangeNameOfAdult from "@/forms/ma/cjp27-petition-to-change-name-of-adult";
 import { fillPdf } from "@/utils/pdf";
 import { createFileRoute } from "@tanstack/react-router";
-import petitionToChangeNameOfAdult from "public/forms/ma/cjp27-petition-to-change-name-of-adult";
 import { useEffect, useRef } from "react";
 
 export const Route = createFileRoute("/_authenticated/documents/")({
@@ -34,12 +34,20 @@ function RouteComponent() {
         mailingZipCode: "12345",
         dateOfBirth: "1990-01-01",
         hasPreviousNameChange: true,
+        previousNameFrom: "My Old Name",
+        previousNameTo: "My Other Old Name",
+        previousNameReason: "I wanted to change my name",
         shouldReturnOriginalDocuments: true,
+        hasUsedOtherNameOrAlias: true,
+        otherNamesOrAliases: "Nickname 1, Nickname 2",
         reasonForChangingName: "I want to change my name",
-        isInterpreterNeeded: false,
+        isInterpreterNeeded: true,
         language: "English",
         isOkayToSharePronouns: true,
         pronouns: "She/Her",
+        otherPronouns: "They/Them",
+        birthplaceCity: "Anytown",
+        birthplaceState: "CA",
       },
     });
 

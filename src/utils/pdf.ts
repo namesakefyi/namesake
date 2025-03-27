@@ -1,5 +1,5 @@
+import { PDFDocument } from "@cantoo/pdf-lib";
 import type { Jurisdiction, UserFormDataField } from "@convex/constants";
-import { PDFDocument } from "pdf-lib";
 
 type UserFormData = {
   [K in UserFormDataField]: string | boolean | undefined;
@@ -14,8 +14,7 @@ type FieldTransformer<T extends Partial<UserFormData>> = (data: T) => PDFFields;
  */
 export interface PDFDefinition<T extends Partial<UserFormData>> {
   /**
-   * The path to the PDF file, assuming the root of `/public`.
-   * @example "/forms/ma/cjp27-petition-to-change-name-of-adult.pdf"
+   * The path to the PDF file, imported as a module.
    */
   pdfPath: string;
 
@@ -58,6 +57,27 @@ export interface PDFDefinition<T extends Partial<UserFormData>> {
 }
 
 /**
+ * Fetch a PDF file from the /src/forms.
+ */
+export const fetchPdf = async (path: string) => {
+  const response = await fetch(path);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch PDF from "${path}": ${response.statusText}`,
+    );
+  }
+
+  const contentType = response.headers.get("content-type");
+  if (!contentType?.includes("application/pdf")) {
+    throw new Error(
+      `Invalid content type for "${path}": Expected PDF but got ${contentType}`,
+    );
+  }
+
+  return response.arrayBuffer();
+};
+
+/**
  * Fill out a PDF form with the given user data.
  * @returns A URL to the filled PDF.
  */
@@ -68,28 +88,11 @@ export async function fillPdf<T extends Partial<UserFormData>>({
   pdf: PDFDefinition<T>;
   userData: T;
 }): Promise<Uint8Array> {
-  // Get all computed fields for the PDF
-  const pdfFields = pdf.fields(userData);
-
   try {
+    const pdfFields = pdf.fields(userData);
+
     // Fetch the PDF with form fields
-    const formUrl = pdf.pdfPath;
-    const response = await fetch(formUrl);
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch PDF from "${formUrl}": ${response.statusText}`,
-      );
-    }
-
-    const contentType = response.headers.get("content-type");
-    if (!contentType?.includes("application/pdf")) {
-      throw new Error(
-        `Invalid content type for "${formUrl}": Expected PDF but got ${contentType}`,
-      );
-    }
-
-    const formPdfBytes = await response.arrayBuffer();
+    const formPdfBytes = await fetchPdf(pdf.pdfPath);
 
     // Load a PDF with form fields
     const pdfDoc = await PDFDocument.load(formPdfBytes);
@@ -111,7 +114,28 @@ export async function fillPdf<T extends Partial<UserFormData>>({
     // Serialize the PDFDocument to bytes
     return await pdfDoc.save();
   } catch (error) {
-    console.error("Error in fillPdf:", error);
+    console.error(error);
+    throw error;
+  }
+}
+
+/**
+ * This is a helper function that returns the form object from a filled PDF.
+ * Useful for testing.
+ */
+export async function getPdfForm<T extends Partial<UserFormData>>({
+  pdf,
+  userData,
+}: {
+  pdf: PDFDefinition<T>;
+  userData: T;
+}) {
+  try {
+    const pdfBytes = await fillPdf({ pdf, userData });
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+    return pdfDoc.getForm();
+  } catch (error) {
+    console.error(error);
     throw error;
   }
 }

@@ -331,11 +331,7 @@ export const DEFAULT_TIME_REQUIRED: TimeRequired = {
   unit: "minutes",
 };
 
-export const COMMON_PRONOUNS = [
-  "they/them/theirs",
-  "she/her/hers",
-  "he/him/his",
-];
+export const COMMON_PRONOUNS = ["they/them", "she/her", "he/him"];
 
 // Used for React-Aria's Selection.
 // https://react-spectrum.adobe.com/react-aria/selection.html#select-all
@@ -351,6 +347,8 @@ export const USER_FORM_DATA_FIELDS = {
   reasonForChangingName: "Reason for changing name",
   phoneNumber: "Phone number",
   email: "Email",
+  birthplaceCity: "Birthplace city",
+  birthplaceState: "Birthplace state",
   dateOfBirth: "Date of birth",
   isCurrentlyUnhoused: "Currently unhoused?",
   residenceStreetAddress: "Residence street address",
@@ -364,7 +362,11 @@ export const USER_FORM_DATA_FIELDS = {
   mailingState: "Mailing state",
   mailingZipCode: "Mailing zip code",
   hasPreviousNameChange: "Has previous name change?",
-  previousLegalNames: "Previous legal names",
+  previousNameFrom: "Previous name from",
+  previousNameTo: "Previous name to",
+  previousNameReason: "Previous name reason",
+  hasUsedOtherNameOrAlias: "Has used other name or alias?",
+  otherNamesOrAliases: "Other names or aliases",
   isInterpreterNeeded: "Interpreter needed?",
   language: "Language",
   isOkayToSharePronouns: "Okay to share pronouns?",
