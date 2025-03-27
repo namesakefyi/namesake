@@ -376,6 +376,7 @@ export const USER_FORM_DATA_FIELDS = {
   shouldWaivePublicationRequirement: "Waive publication requirement?",
   shouldImpoundCourtRecords: "Impound court records?",
   shouldApplyForFeeWaiver: "Apply for a fee waiver?",
+  mothersMaidenName: "Mother's maiden name",
 } as const;
 
 export type UserFormDataField = keyof typeof USER_FORM_DATA_FIELDS;

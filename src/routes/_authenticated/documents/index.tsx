@@ -1,4 +1,4 @@
-import petitionToChangeNameOfAdult from "@/forms/ma/cjp27-petition-to-change-name-of-adult";
+import coriAndWmsReleaseRequest from "@/forms/ma/cjp34-cori-and-wms-release-request";
 import { fillPdf } from "@/utils/pdf";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
@@ -13,41 +13,15 @@ function RouteComponent() {
   // For example only
   const displayPdf = async () => {
     const pdfBytes = await fillPdf({
-      pdf: petitionToChangeNameOfAdult,
+      pdf: coriAndWmsReleaseRequest,
       userData: {
-        newFirstName: "Eva",
-        newMiddleName: "K",
-        newLastName: "Decker",
+        county: "Suffolk", // TODO: Add county helper
         oldFirstName: "Eva",
         oldMiddleName: "K",
         oldLastName: "Decker",
-        residenceStreetAddress: "123 Main St",
-        residenceCity: "Anytown",
-        residenceState: "CA",
-        residenceZipCode: "12345",
-        email: "eva@example.com",
-        phoneNumber: "123-456-7890",
-        isMailingAddressDifferentFromResidence: false,
-        mailingStreetAddress: "123 Main St",
-        mailingCity: "Anytown",
-        mailingState: "CA",
-        mailingZipCode: "12345",
         dateOfBirth: "1990-01-01",
-        hasPreviousNameChange: true,
-        previousNameFrom: "My Old Name",
-        previousNameTo: "My Other Old Name",
-        previousNameReason: "I wanted to change my name",
-        shouldReturnOriginalDocuments: true,
-        hasUsedOtherNameOrAlias: true,
+        mothersMaidenName: "Smith",
         otherNamesOrAliases: "Nickname 1, Nickname 2",
-        reasonForChangingName: "I want to change my name",
-        isInterpreterNeeded: true,
-        language: "English",
-        isOkayToSharePronouns: true,
-        pronouns: "She/Her",
-        otherPronouns: "They/Them",
-        birthplaceCity: "Anytown",
-        birthplaceState: "CA",
       },
     });
 
