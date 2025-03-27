@@ -71,7 +71,7 @@ qpdf inout.pdf --json | jq '.acroform.fields'
 
 3. You should get a list that looks like this. We're interested in the `"fullname"` field. The value of this field (in this example, `"CityTown_3"`) is the key we'll use to map our values to the PDF.
 
-```json
+```jsonc
 {
     "alternativename": "City/Town",
     "annotation": {
