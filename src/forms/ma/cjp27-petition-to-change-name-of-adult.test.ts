@@ -171,6 +171,6 @@ describe("CJP27 Petition to Change Name of Adult", () => {
     });
 
     expect(form.getCheckBox("isOkayToSharePronouns").isChecked()).toBe(true);
-    expect(form.getTextField("pronouns").getText()).toBe("She/Her Ze/Zir");
+    expect(form.getTextField("pronouns").getText()).toBe("She/Her, Ze/Zir");
   });
 });
