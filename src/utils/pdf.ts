@@ -40,6 +40,14 @@ export interface PDFDefinition<T extends Partial<UserFormData>> {
 
   /**
    * A function that transforms the user data into a set of fields for the PDF.
+   *
+   * PDF field names may be in a variety of formats, from camelCase
+   * to snake_case to a "Plain String" label. It's recommended to
+   * rename fields into a consistent format matching our own schema
+   * for ease of readability and testing.
+   *
+   * @url https://github.com/namesakefyi/namesake/tree/main/src/forms/README.md
+   *
    * @example
    * ```ts
    * fields: (data: {
@@ -47,9 +55,9 @@ export interface PDFDefinition<T extends Partial<UserFormData>> {
    *   newMiddleName: string;
    *   newLastName: string;
    * }) => ({
-   *   "First name": data.newFirstName,
-   *   "Middle name": data.newMiddleName,
-   *   "Last name": data.newLastName,
+   *   firstNameField: data.newFirstName,
+   *   middle_name_field: data.newMiddleName,
+   *   "Last Name Field": data.newLastName,
    * })
    * ```
    */

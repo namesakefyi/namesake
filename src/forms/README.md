@@ -40,14 +40,17 @@ export default definePdf({
     oldLastName: string;
     // ... Additional user form data
   }) => ({
-    // Fields should return an object that maps field names from the PDF
-    // form to the appropriate user data. These names from the PDF are
-    // often inconsistent or strange. Examples: "Language_Checkbox",
-    // "another_name_yes", "First Name". For more about finding PDF field
-    // names, see "Extracting Field Names from PDFs" below.
-    "First Name": data.oldFirstName,
-    "Middle Name": data.oldMiddleName,
-    "Last Name": data.newLastName,
+    // The object returns maps a key containing the name of the
+    // field as defined within the PDF to the name of the item
+    // passed in through `data`.
+
+    // PDF field names may be in a variety of formats, from camelCase
+    // to snake_case to a "Plain String" label. It's recommended to
+    // rename fields into a consistent format matching our own schema
+    // for ease of readability and testing. See more on this below.
+    firstNameField: data.oldFirstName,
+    middle_name_field: data.oldMiddleName,
+    "Last Name Field": data.newLastName,
     
     // ... Additional field mappings
   });
