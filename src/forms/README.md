@@ -17,41 +17,29 @@ Each `.pdf` file should be accompanied by a `.ts` definition of the same name co
 ```ts
 // cjp27-petition-to-change-name-of-adult.ts
 import { definePdf } from "@/utils/pdf";
+import pdf from "./cjp27-petition-to-change-name-of-adult.pdf";
 
 export default definePdf({
-  // Add the title of the form
+  // Add title, optional code and jurisdiction, and
+  // pass in the path to the pdf file
   title: "Petition to Change Name of Adult",
-
-  // Add the form code, if one exists
   code: "CJP 27",
-
-  // Add a path to the pdf (from /public)
-  pdfPath: "/forms/ma/cjp27-petition-to-change-name-of-adult.pdf",
-
-  // Add the two-letter state abbreviation (if applicable for form)
   jurisdiction: "MA",
+  pdfPath: pdf,
 
-  // Add the field schema. Fields takes in a `data` object
-  // which should contain basic types and use names defined
-  // in the global USER_FORM_DATA_FIELDS const.
+  // Add the field schema. Keys in the `data`
+  // object should all be from USER_FORM_DATA_FIELDS.
   fields: (data: {
     oldFirstName: string;
     oldMiddleName: string;
     oldLastName: string;
     // ... Additional user form data
   }) => ({
-    // The object returns maps a key containing the name of the
-    // field as defined within the PDF to the name of the item
-    // passed in through `data`.
-
-    // PDF field names may be in a variety of formats, from camelCase
-    // to snake_case to a "Plain String" label. It's recommended to
-    // rename fields into a consistent format matching our own schema
-    // for ease of readability and testing. See more on this below.
+    // The keys in the return object are the names
+    // of the fields (as defined in the PDF).
     firstNameField: data.oldFirstName,
     middle_name_field: data.oldMiddleName,
     "Last Name Field": data.newLastName,
-    
     // ... Additional field mappings
   });
 });
