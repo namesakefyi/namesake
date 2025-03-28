@@ -17,6 +17,7 @@ import {
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
+import styles from "./Field.module.css";
 
 export type FieldSize = "small" | "medium" | "large";
 
@@ -123,8 +124,10 @@ export function FieldGroup({ size, ...props }: GroupProps) {
   return (
     <Group
       {...props}
-      className={composeRenderProps(props.className, (className, renderProps) =>
-        fieldGroupStyles({ ...renderProps, size, className }),
+      className={composeRenderProps(
+        `${props.className} ${styles["field-group"]}`,
+        (className, renderProps) =>
+          fieldGroupStyles({ ...renderProps, size, className }),
       )}
     />
   );
