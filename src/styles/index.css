@@ -28,7 +28,7 @@
   h2 {
     @apply text-2xl font-medium;
     @apply pb-2;
-    @apply border-b border-gray-5
+    @apply border-b border-gray-5;
   }
 
   h3 {
@@ -197,4 +197,8 @@ body,
 
 .animate-focus-ring-in {
   animation: animate-focus-ring-in 300ms ease forwards;
+
+  &:has(button[data-focus-visible]) {
+    animation: none;
+  }
 }
