@@ -17,7 +17,6 @@ import {
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
-import styles from "./Field.module.css";
 
 export type FieldSize = "small" | "medium" | "large";
 
@@ -102,7 +101,7 @@ export const innerBorderStyles = tv({
 
 const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "border-none text-sm ring-inset ring-1 group flex items-center bg-element forced-colors:bg-[Field] rounded-lg overflow-hidden",
+  base: "border-none text-sm ring-inset ring-1 group flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
   variants: {
     ...fieldBorderStyles.variants,
     size: {
@@ -124,10 +123,8 @@ export function FieldGroup({ size, ...props }: GroupProps) {
   return (
     <Group
       {...props}
-      className={composeRenderProps(
-        `${props.className} ${styles["field-group"]}`,
-        (className, renderProps) =>
-          fieldGroupStyles({ ...renderProps, size, className }),
+      className={composeRenderProps(props.className, (className, renderProps) =>
+        fieldGroupStyles({ ...renderProps, size, className }),
       )}
     />
   );

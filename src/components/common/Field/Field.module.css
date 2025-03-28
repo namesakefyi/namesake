@@ -1,3 +1,0 @@
-.field-group:has(button[data-focus-visible]) {
-  outline: none;
-}
