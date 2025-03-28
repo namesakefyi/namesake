@@ -20,7 +20,7 @@ Default.args = {
 export const Circle = (args: any) => <SkeletonCircle {...args} />;
 
 Circle.args = {
-  className: "w-10 h-10 rounded-full",
+  className: "w-10 h-10",
 };
 
 export const Text = (args: any) => <SkeletonText {...args} />;
