@@ -9,6 +9,18 @@ export const list = userQuery({
   },
 });
 
+export const getByFields = userQuery({
+  args: {
+    fields: v.array(v.string()),
+  },
+  handler: async (ctx, args) => {
+    return await UserFormResponses.getByFieldsForUser(ctx, {
+      userId: ctx.userId,
+      fields: args.fields,
+    });
+  },
+});
+
 export const set = userMutation({
   args: {
     field: v.string(),

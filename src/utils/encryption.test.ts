@@ -1,9 +1,12 @@
+import { renderHook } from "@testing-library/react";
+import posthog from "posthog-js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   decryptData,
   encryptData,
   getEncryptionKey,
   initializeEncryption,
+  useDecrypt,
 } from "./encryption";
 
 interface MockIDBRequest {
@@ -66,7 +69,20 @@ describe("encryption", () => {
   };
 
   beforeEach(() => {
+    vi.clearAllMocks();
     storeData.clear();
+
+    // Remove the global mock and use local mocks
+    vi.unmock("@/utils/encryption");
+
+    // Mock specific functions while keeping useDecrypt implementation
+    vi.spyOn(window.crypto.subtle, "decrypt").mockImplementation(async () => {
+      return new TextEncoder().encode(JSON.stringify("decrypted"));
+    });
+
+    vi.spyOn(window.crypto.subtle, "encrypt").mockImplementation(async () => {
+      return new Uint8Array([...new Uint8Array(12), ...new Uint8Array(16)]);
+    });
 
     const mockSubtle = {
       generateKey: vi.fn().mockImplementation(async () => ({
@@ -163,12 +179,18 @@ describe("encryption", () => {
   });
 
   describe("encryption/decryption", () => {
-    it("should encrypt and decrypt data", async () => {
+    it("should encrypt and decrypt data with JSON handling", async () => {
       await initializeEncryption();
       const key = await getEncryptionKey();
       if (!key) throw new Error("Key should exist");
 
-      const data = "test data";
+      const data = {
+        string: "test data",
+        number: 123,
+        boolean: true,
+        array: [1, 2, 3],
+        nested: { foo: "bar" },
+      };
       const encrypted = await encryptData(data, key);
       expect(encrypted).toBeDefined();
       expect(typeof encrypted).toBe("string");
@@ -178,47 +200,54 @@ describe("encryption", () => {
 
       const mockCrypto = window.crypto as any;
       mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
-        new TextEncoder().encode(data),
+        new TextEncoder().encode(JSON.stringify(data)),
       );
 
       const decrypted = await decryptData(encrypted, key);
-      expect(decrypted).toBe(data);
+      expect(decrypted).toEqual(data);
     });
 
-    it("should handle empty strings", async () => {
+    it("should handle empty values", async () => {
       await initializeEncryption();
       const key = await getEncryptionKey();
       if (!key) throw new Error("Key should exist");
 
-      const data = "";
+      const testCases = ["", null, [], {}, false];
+
+      for (const data of testCases) {
+        const encrypted = await encryptData(data, key);
+        expect(() => atob(encrypted)).not.toThrow();
+
+        const mockCrypto = window.crypto as any;
+        mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
+          new TextEncoder().encode(JSON.stringify(data)),
+        );
+
+        const decrypted = await decryptData(encrypted, key);
+        expect(decrypted).toEqual(data);
+      }
+    });
+
+    it("should handle special characters in JSON strings", async () => {
+      await initializeEncryption();
+      const key = await getEncryptionKey();
+      if (!key) throw new Error("Key should exist");
+
+      const data = {
+        special: "!@#$%^&*()_+-=[]{}|;:,.<>?`~'\"\\",
+        emoji: "🎉👋🏽🌈",
+        multiline: "line1\nline2\r\nline3",
+      };
       const encrypted = await encryptData(data, key);
       expect(() => atob(encrypted)).not.toThrow();
 
       const mockCrypto = window.crypto as any;
       mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
-        new TextEncoder().encode(data),
+        new TextEncoder().encode(JSON.stringify(data)),
       );
 
       const decrypted = await decryptData(encrypted, key);
-      expect(decrypted).toBe(data);
-    });
-
-    it("should handle special characters", async () => {
-      await initializeEncryption();
-      const key = await getEncryptionKey();
-      if (!key) throw new Error("Key should exist");
-
-      const data = "!@#$%^&*()_+-=[]{}|;:,.<>?`~'\"\\";
-      const encrypted = await encryptData(data, key);
-      expect(() => atob(encrypted)).not.toThrow();
-
-      const mockCrypto = window.crypto as any;
-      mockCrypto.subtle.decrypt.mockImplementationOnce(async () =>
-        new TextEncoder().encode(data),
-      );
-
-      const decrypted = await decryptData(encrypted, key);
-      expect(decrypted).toBe(data);
+      expect(decrypted).toEqual(data);
     });
   });
 
@@ -251,6 +280,93 @@ describe("encryption", () => {
 
       // Use valid base64 but invalid encrypted data
       await expect(decryptData("AAAA", key)).rejects.toThrow();
+    });
+  });
+
+  describe("useDecrypt", () => {
+    beforeEach(() => {
+      // Mock the functions directly
+      vi.spyOn(window.crypto.subtle, "decrypt").mockImplementation(async () => {
+        return new TextEncoder().encode(JSON.stringify("decrypted"));
+      });
+    });
+
+    it("should decrypt a single value", async () => {
+      const encryptedValue = "encrypted1";
+      storeData.set("device-dek", mockDEK);
+
+      const { result } = renderHook(() => useDecrypt(encryptedValue));
+
+      await vi.waitFor(() => {
+        expect(result.current.decryptedValue).toBe("decrypted");
+      });
+      expect(result.current.error).toBe(false);
+    });
+
+    it("should decrypt multiple values", async () => {
+      const encryptedValues = ["encrypted1", "encrypted2"];
+      storeData.set("device-dek", mockDEK);
+
+      const { result } = renderHook(() => useDecrypt(encryptedValues));
+
+      await vi.waitFor(() => {
+        expect(result.current.decryptedValues).toEqual([
+          "decrypted",
+          "decrypted",
+        ]);
+      });
+      expect(result.current.error).toBe(false);
+    });
+
+    it("should handle undefined input", () => {
+      const { result } = renderHook(() => useDecrypt(undefined));
+      expect(result.current.decryptedValue).toBeUndefined();
+      expect(result.current.error).toBe(false);
+    });
+
+    it("should handle decryption errors", async () => {
+      const encryptedValue = "encrypted1";
+      storeData.set("device-dek", mockDEK);
+
+      vi.spyOn(window.crypto.subtle, "decrypt").mockRejectedValueOnce(
+        new Error("Decryption failed"),
+      );
+
+      const { result } = renderHook(() => useDecrypt(encryptedValue));
+
+      await vi.waitFor(() => {
+        expect(result.current.error).toBe(true);
+      });
+      expect(posthog.captureException).toHaveBeenCalled();
+    });
+
+    it("should handle missing encryption key", async () => {
+      const encryptedValue = "encrypted1";
+      // Don't set mockDEK in store, so key will be null
+
+      const { result } = renderHook(() => useDecrypt(encryptedValue));
+
+      expect(result.current.decryptedValue).toBeUndefined();
+    });
+
+    it("should update when encrypted values change", async () => {
+      const initialValue = "encrypted1";
+      const updatedValue = "encrypted2";
+      storeData.set("device-dek", mockDEK);
+
+      const { result, rerender } = renderHook((props) => useDecrypt(props), {
+        initialProps: initialValue,
+      });
+
+      await vi.waitFor(() => {
+        expect(result.current.decryptedValue).toBe("decrypted");
+      });
+
+      rerender(updatedValue);
+
+      await vi.waitFor(() => {
+        expect(result.current.decryptedValue).toBe("decrypted");
+      });
     });
   });
 });

@@ -8,6 +8,7 @@ import { api } from "@convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { ShieldCheck } from "lucide-react";
+
 export const Route = createFileRoute("/_authenticated/settings/responses")({
   component: FormResponsesRoute,
 });

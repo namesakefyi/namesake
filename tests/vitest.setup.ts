@@ -42,6 +42,13 @@ vi.mock("posthog-js", () => ({
   },
 }));
 
+// Mock encryption functions
+vi.mock("@/utils/encryption", () => ({
+  useEncryptionKey: vi.fn(),
+  encryptData: vi.fn(),
+  decryptData: vi.fn(),
+}));
+
 // Add type for mocked IntersectionObserver
 declare global {
   interface Window {
