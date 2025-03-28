@@ -145,11 +145,11 @@ export const EditQuestTimeRequiredModal = ({
             type="button"
             variant="secondary"
             onPress={handleCancel}
-            isDisabled={isSubmitting}
+            isSubmitting={isSubmitting}
           >
             Cancel
           </Button>
-          <Button type="submit" variant="primary" isDisabled={isSubmitting}>
+          <Button type="submit" variant="primary" isSubmitting={isSubmitting}>
             Save
           </Button>
         </div>

@@ -219,7 +219,7 @@ function RouteComponent() {
         type="submit"
         size="large"
         variant="primary"
-        isDisabled={isSubmitting}
+        isSubmitting={isSubmitting}
       >
         {isSubmitting ? "Submitting…" : "Submit"}
       </Button>
