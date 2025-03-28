@@ -1,5 +1,11 @@
 # namesake
 
+## 0.21.1
+
+### Patch Changes
+
+- 9914faa: Fix duplicate focus rings
+
 ## 0.21.0
 
 ### Minor Changes
