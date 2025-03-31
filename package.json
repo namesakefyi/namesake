@@ -131,7 +131,7 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss-react-aria-components": "^2.0.0",
     "typescript": "^5.8.2",
-    "vite": "^6.2.3",
+    "vite": "^6.2.4",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.9"
   },
