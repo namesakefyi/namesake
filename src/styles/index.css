@@ -28,7 +28,7 @@
   h2 {
     @apply text-2xl font-medium;
     @apply pb-2;
-    @apply border-b border-gray-5
+    @apply border-b border-gray-5;
   }
 
   h3 {
