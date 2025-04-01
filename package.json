@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@auth/core": "0.38.0",
-    "@convex-dev/auth": "^0.0.80",
+    "@convex-dev/auth": "^0.0.81",
     "@convex-dev/migrations": "^0.2.5",
     "@faker-js/faker": "^9.6.0",
     "@maskito/core": "^3.5.0",
@@ -66,7 +66,7 @@
     "@zxcvbn-ts/core": "^3.0.4",
     "@zxcvbn-ts/language-common": "^3.0.4",
     "@zxcvbn-ts/language-en": "^3.0.2",
-    "convex": "^1.21.0",
+    "convex": "^1.22.0",
     "convex-helpers": "^0.1.76",
     "language-name-map": "^0.3.0",
     "lucide-react": "^0.486.0",
