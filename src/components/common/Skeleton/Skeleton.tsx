@@ -4,7 +4,7 @@ const skeletonStyles = tv({
   base: "w-full h-full relative animate-fade-in before:inset-0 before:absolute before:bg-gray-a4 before:rounded-sm before:animate-pulse",
   variants: {
     type: {
-      circle: "rounded-full",
+      circle: "before:rounded-full",
       text: "h-4",
     },
   },
