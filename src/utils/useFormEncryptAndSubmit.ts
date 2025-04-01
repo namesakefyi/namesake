@@ -8,7 +8,7 @@ import { encryptData } from "./encryption";
 import { useEncryptionKey } from "./encryption";
 
 export function useFormEncryptAndSubmit<T extends FieldValues>(
-  form: UseFormReturn<T, any, undefined>,
+  form: UseFormReturn<T, any>,
 ) {
   const encryptionKey = useEncryptionKey();
   const [isSubmitting, setIsSubmitting] = useState(false);
