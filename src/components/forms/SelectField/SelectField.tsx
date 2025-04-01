@@ -1,7 +1,7 @@
 import { Select, SelectItem } from "@/components/common";
+import { smartquotes } from "@/utils/smartquotes";
 import type { UserFormDataField } from "@convex/constants";
-import { useFormContext } from "react-hook-form";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 export interface SelectFieldProps {
   label: string;
@@ -36,7 +36,7 @@ export function SelectField({
         render={({ field, fieldState: { invalid, error } }) => (
           <Select
             {...field}
-            label={label}
+            label={smartquotes(label)}
             size="large"
             placeholder={placeholder}
             className="w-fit"

@@ -1,4 +1,5 @@
 import { TextField, type TextFieldProps } from "@/components/common";
+import { smartquotes } from "@/utils/smartquotes";
 import type { UserFormDataField } from "@convex/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -27,7 +28,7 @@ export function ShortTextField({
         render={({ field, fieldState: { invalid, error } }) => (
           <TextField
             {...field}
-            label={label}
+            label={smartquotes(label)}
             size="large"
             isInvalid={invalid}
             errorMessage={error?.message}
