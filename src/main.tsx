@@ -49,7 +49,7 @@ const NotFoundComponent = () => (
   </div>
 );
 
-const router = createRouter({
+export const router = createRouter({
   routeTree,
   context: {
     convex: undefined!,
