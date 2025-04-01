@@ -73,6 +73,7 @@ export function useEncryptionKey(): CryptoKey | null {
         setEncryptionKey(key);
 
         if (!key) {
+          await initializeEncryption();
           return;
         }
       } catch (error: any) {

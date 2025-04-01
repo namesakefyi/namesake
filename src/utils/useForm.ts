@@ -56,12 +56,11 @@ export function useForm<TFieldValues extends FieldValues = FieldValues>(
   }, [encryptedResponses, encryptionKey, isSubmitting]);
 
   const onSubmit = form.handleSubmit(async (data) => {
-    if (!encryptionKey) {
-      console.error("No encryption key available");
-      return;
-    }
-
     try {
+      if (!encryptionKey) {
+        throw new Error("No encryption key available.");
+      }
+
       setIsSubmitting(true);
 
       const entries = Object.entries(data).filter(
@@ -76,7 +75,11 @@ export function useForm<TFieldValues extends FieldValues = FieldValues>(
       toast.success("Form submitted!");
     } catch (error) {
       posthog.captureException(error);
-      toast.error("An error occurred during submission. Please try again.");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "An error occurred during submission. Please try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }

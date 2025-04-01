@@ -1,8 +1,6 @@
 import { Button } from "@/components/common";
-import { initializeEncryption } from "@/utils/encryption";
 import { api } from "@convex/_generated/api";
 import { useQuery } from "convex/react";
-import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { UserDataForm } from "../UserDataForm/UserDataForm";
 
@@ -18,18 +16,6 @@ export function UserDataForms() {
       userData?.map((data) => ({ field: data.field, value: data.value })) ?? [],
     );
   }, [userData]);
-
-  useEffect(() => {
-    const setupEncryption = async () => {
-      try {
-        await initializeEncryption();
-      } catch (error: any) {
-        posthog.captureException(error);
-      }
-    };
-
-    setupEncryption();
-  }, []);
 
   // Check if we already have an empty form
   const hasEmptyForm = formData.some((data) => data.field === "");
