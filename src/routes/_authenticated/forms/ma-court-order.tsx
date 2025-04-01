@@ -108,7 +108,7 @@ function RouteComponent() {
           name="isCurrentlyUnhoused"
           label="I am currently unhoused or without permanent housing"
         />
-        {!form.watch("isCurrentlyUnhoused") && (
+        {!form.watch("isCurrentlyUnhoused") === true && (
           <>
             <AddressField type="residence" />
             <CheckboxField

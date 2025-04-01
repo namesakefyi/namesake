@@ -475,11 +475,8 @@ export const USER_FORM_DATA_FIELDS: Record<string, FieldDefinition> = {
 
 export type UserFormDataField = keyof typeof USER_FORM_DATA_FIELDS;
 
-export type FieldType<K extends UserFormDataField> =
-  (typeof USER_FORM_DATA_FIELDS)[K]["type"] extends "boolean"
-    ? boolean
-    : (typeof USER_FORM_DATA_FIELDS)[K]["type"] extends "string[]"
-      ? string[]
-      : (typeof USER_FORM_DATA_FIELDS)[K]["type"] extends "string"
-        ? string
-        : any;
+export type FieldType<K extends UserFormDataField> = {
+  boolean: boolean;
+  "string[]": string[];
+  string: string;
+}[(typeof USER_FORM_DATA_FIELDS)[K]["type"]];

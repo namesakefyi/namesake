@@ -223,14 +223,11 @@ export function useDecrypt(
   }, [encryptedValue, encryptionKey]);
 
   if (Array.isArray(encryptedValue)) {
-    return {
-      decryptedValues,
-      error,
-    } as MultipleDecryptResult;
+    return { decryptedValues, error };
   }
 
   return {
     decryptedValue: decryptedValues?.[0],
     error,
-  } as SingleDecryptResult;
+  };
 }
