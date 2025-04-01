@@ -12,10 +12,16 @@ import {
   NameField,
   PhoneField,
   PronounSelectField,
+  SelectField,
+  ShortTextField,
   YesNoField,
 } from "@/components/forms";
 import { useForm } from "@/utils/useForm";
-import type { FieldType, UserFormDataField } from "@convex/constants";
+import {
+  type FieldType,
+  JURISDICTIONS,
+  type UserFormDataField,
+} from "@convex/constants";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/forms/ma-court-order")({
@@ -92,9 +98,23 @@ function RouteComponent() {
         description="The court uses this to communicate with you about your status."
         className="@container"
       >
-        <div className="grid grid-cols-1 @lg:grid-cols-[auto_1fr] @lg:grid- gap-4">
+        <div className="grid grid-cols-1 @lg:grid-cols-[auto_1fr] gap-4">
           <PhoneField name="phoneNumber" />
           <EmailField name="email" />
+        </div>
+      </FormSection>
+      <FormSection title="Where were you born?">
+        <div className="grid grid-cols-[1fr_auto] gap-4">
+          <ShortTextField name="birthplaceCity" label="City" />
+          <SelectField
+            name="birthplaceState"
+            label="State"
+            placeholder="Select a state"
+            options={Object.entries(JURISDICTIONS).map(([value, label]) => ({
+              label,
+              value,
+            }))}
+          />
         </div>
       </FormSection>
       <FormSection title="What is your date of birth?">
@@ -135,10 +155,35 @@ function RouteComponent() {
           noLabel="No, I've never changed my name"
         />
         <FormSubsection
-          title="Please list all past legal names."
+          title="Please list your past legal name."
           isVisible={form.watch("hasPreviousNameChange") === true}
         >
-          <LongTextField name="previousLegalNames" label="Past legal names" />
+          <div className="grid grid-cols-2 gap-4">
+            <ShortTextField name="previousNameFrom" label="From" />
+            <ShortTextField name="previousNameTo" label="To" />
+          </div>
+          <LongTextField name="previousNameReason" label="Reason for change" />
+        </FormSubsection>
+      </FormSection>
+      <FormSection
+        title="Have you ever used any other name or alias?"
+        description="This includes any names that you have used over a long period of time but did not change legally. This does not include nicknames or other names you've used for short periods of time."
+      >
+        <YesNoField
+          name="hasUsedOtherNameOrAlias"
+          label="Have you ever used any other name or alias?"
+          labelHidden
+          yesLabel="Yes, I've used other names"
+          noLabel="No, there are no other major names I've used"
+        />
+        <FormSubsection
+          title="Please list all names you haven't previously listed."
+          isVisible={form.watch("hasUsedOtherNameOrAlias") === true}
+        >
+          <LongTextField
+            name="otherNamesOrAliases"
+            label="Other names or aliases"
+          />
         </FormSubsection>
       </FormSection>
       <FormSection
@@ -221,6 +266,12 @@ function RouteComponent() {
           yesLabel="Yes, I am unable to pay the filing fees"
           noLabel="No, I can pay the filing fee"
         />
+      </FormSection>
+      <FormSection
+        title="What is your mother's maiden name?"
+        description="The court requests this information in order to look up past court records and verify your identity. The maiden name is the last name or family name of your mother or guardian before marriage."
+      >
+        <ShortTextField name="mothersMaidenName" label="Mother's maiden name" />
       </FormSection>
       <Button
         type="submit"

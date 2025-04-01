@@ -1,4 +1,5 @@
 import { TextArea, type TextAreaProps } from "@/components/common";
+import { smartquotes } from "@/utils/smartquotes";
 import type { UserFormDataField } from "@convex/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -27,7 +28,7 @@ export function LongTextField({
         render={({ field, fieldState: { invalid, error } }) => (
           <TextArea
             {...field}
-            label={label}
+            label={smartquotes(label)}
             size="large"
             isRequired
             validationBehavior="aria"

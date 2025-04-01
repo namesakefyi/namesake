@@ -18,6 +18,7 @@ import { Route as AuthenticatedHomeImport } from './routes/_authenticated/_home'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedSettingsIndexImport } from './routes/_authenticated/settings/index'
+import { Route as AuthenticatedDocumentsIndexImport } from './routes/_authenticated/documents/index'
 import { Route as AuthenticatedAdminIndexImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/_home/index'
 import { Route as AuthenticatedSettingsResponsesImport } from './routes/_authenticated/settings/responses'
@@ -74,6 +75,13 @@ const AuthenticatedSettingsIndexRoute = AuthenticatedSettingsIndexImport.update(
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any,
 )
+
+const AuthenticatedDocumentsIndexRoute =
+  AuthenticatedDocumentsIndexImport.update({
+    id: '/documents/',
+    path: '/documents/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexImport.update({
   id: '/',
@@ -231,6 +239,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexImport
       parentRoute: typeof AuthenticatedAdminRouteImport
     }
+    '/_authenticated/documents/': {
+      id: '/_authenticated/documents/'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof AuthenticatedDocumentsIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/settings/': {
       id: '/_authenticated/settings/'
       path: '/'
@@ -347,6 +362,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRouteWithChildren
   AuthenticatedFormsMaCourtOrderRoute: typeof AuthenticatedFormsMaCourtOrderRoute
+  AuthenticatedDocumentsIndexRoute: typeof AuthenticatedDocumentsIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -354,6 +370,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedHomeRoute: AuthenticatedHomeRouteWithChildren,
   AuthenticatedFormsMaCourtOrderRoute: AuthenticatedFormsMaCourtOrderRoute,
+  AuthenticatedDocumentsIndexRoute: AuthenticatedDocumentsIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -382,6 +399,7 @@ export interface FileRoutesByFullPath {
   '/settings/responses': typeof AuthenticatedSettingsResponsesRoute
   '/': typeof AuthenticatedHomeIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/documents': typeof AuthenticatedDocumentsIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/$questSlug': typeof AuthenticatedHomeQuestSlugIndexRoute
   '/birth-certificate': typeof AuthenticatedHomeBirthCertificateIndexRoute
@@ -399,6 +417,7 @@ export interface FileRoutesByTo {
   '/settings/responses': typeof AuthenticatedSettingsResponsesRoute
   '/': typeof AuthenticatedHomeIndexRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/documents': typeof AuthenticatedDocumentsIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
   '/$questSlug': typeof AuthenticatedHomeQuestSlugIndexRoute
   '/birth-certificate': typeof AuthenticatedHomeBirthCertificateIndexRoute
@@ -421,6 +440,7 @@ export interface FileRoutesById {
   '/_authenticated/settings/responses': typeof AuthenticatedSettingsResponsesRoute
   '/_authenticated/_home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/documents/': typeof AuthenticatedDocumentsIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/_home/$questSlug/': typeof AuthenticatedHomeQuestSlugIndexRoute
   '/_authenticated/_home/birth-certificate/': typeof AuthenticatedHomeBirthCertificateIndexRoute
@@ -442,6 +462,7 @@ export interface FileRouteTypes {
     | '/settings/responses'
     | '/'
     | '/admin/'
+    | '/documents'
     | '/settings/'
     | '/$questSlug'
     | '/birth-certificate'
@@ -458,6 +479,7 @@ export interface FileRouteTypes {
     | '/settings/responses'
     | '/'
     | '/admin'
+    | '/documents'
     | '/settings'
     | '/$questSlug'
     | '/birth-certificate'
@@ -478,6 +500,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/responses'
     | '/_authenticated/_home/'
     | '/_authenticated/admin/'
+    | '/_authenticated/documents/'
     | '/_authenticated/settings/'
     | '/_authenticated/_home/$questSlug/'
     | '/_authenticated/_home/birth-certificate/'
@@ -518,7 +541,8 @@ export const routeTree = rootRoute
         "/_authenticated/admin",
         "/_authenticated/settings",
         "/_authenticated/_home",
-        "/_authenticated/forms/ma-court-order"
+        "/_authenticated/forms/ma-court-order",
+        "/_authenticated/documents/"
       ]
     },
     "/_unauthenticated": {
@@ -579,6 +603,10 @@ export const routeTree = rootRoute
     "/_authenticated/admin/": {
       "filePath": "_authenticated/admin/index.tsx",
       "parent": "/_authenticated/admin"
+    },
+    "/_authenticated/documents/": {
+      "filePath": "_authenticated/documents/index.tsx",
+      "parent": "/_authenticated"
     },
     "/_authenticated/settings/": {
       "filePath": "_authenticated/settings/index.tsx",

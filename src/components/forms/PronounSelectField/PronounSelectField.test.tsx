@@ -31,10 +31,8 @@ describe("PronounSelectField", () => {
   it("allows multiple pronoun selection", async () => {
     renderWithFormProvider(<PronounSelectField />);
 
-    const theyThemTag = screen.getByRole("row", {
-      name: "they/them/theirs",
-    });
-    const sheHerTag = screen.getByRole("row", { name: "she/her/hers" });
+    const theyThemTag = screen.getByRole("row", { name: "they/them" });
+    const sheHerTag = screen.getByRole("row", { name: "she/her" });
 
     await userEvent.click(theyThemTag);
     await userEvent.click(sheHerTag);
@@ -61,8 +59,8 @@ describe("PronounSelectField", () => {
 
     const otherPronounsInput = screen.getByLabelText("List other pronouns");
     expect(otherPronounsInput).toHaveAttribute("name", "otherPronouns");
-    await userEvent.type(otherPronounsInput, "ze/zir/zirs");
+    await userEvent.type(otherPronounsInput, "ze/zir");
 
-    expect(otherPronounsInput).toHaveValue("ze/zir/zirs");
+    expect(otherPronounsInput).toHaveValue("ze/zir");
   });
 });

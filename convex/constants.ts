@@ -331,11 +331,7 @@ export const DEFAULT_TIME_REQUIRED: TimeRequired = {
   unit: "minutes",
 };
 
-export const COMMON_PRONOUNS = [
-  "they/them/theirs",
-  "she/her/hers",
-  "he/him/his",
-];
+export const COMMON_PRONOUNS = ["they/them", "she/her", "he/him"];
 
 // Used for React-Aria's Selection.
 // https://react-spectrum.adobe.com/react-aria/selection.html#select-all
@@ -470,6 +466,10 @@ export const USER_FORM_DATA_FIELDS: Record<string, FieldDefinition> = {
   shouldApplyForFeeWaiver: {
     label: "Apply for a fee waiver?",
     type: "boolean",
+  },
+  mothersMaidenName: {
+    label: "Mother's maiden name",
+    type: "string",
   },
 } as const;
 

@@ -1,21 +1,29 @@
-import { TextField, type TextFieldProps } from "@/components/common";
+import { Select, SelectItem } from "@/components/common";
 import { smartquotes } from "@/utils/smartquotes";
 import type { UserFormDataField } from "@convex/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
-export interface ShortTextFieldProps extends Omit<TextFieldProps, "size"> {
+export interface SelectFieldProps {
   label: string;
   name: UserFormDataField;
+  placeholder?: string;
   children?: React.ReactNode;
+  defaultValue?: string;
+  options: {
+    label: string;
+    value: string;
+  }[];
 }
 
-export function ShortTextField({
+export function SelectField({
   label,
   name,
+  placeholder,
   children,
   defaultValue,
+  options,
   ...props
-}: ShortTextFieldProps) {
+}: SelectFieldProps) {
   const { control } = useFormContext();
 
   return (
@@ -23,17 +31,29 @@ export function ShortTextField({
       <Controller
         control={control}
         name={name}
-        defaultValue={defaultValue ?? ""}
+        defaultValue={defaultValue ?? null}
         shouldUnregister={true}
         render={({ field, fieldState: { invalid, error } }) => (
-          <TextField
+          <Select
             {...field}
             label={smartquotes(label)}
             size="large"
+            placeholder={placeholder}
+            className="w-fit"
+            selectedKey={field.value}
+            onSelectionChange={(key) => {
+              field.onChange(key);
+            }}
             isInvalid={invalid}
             errorMessage={error?.message}
             {...props}
-          />
+          >
+            {options.map(({ label, value }) => (
+              <SelectItem key={value} id={value} textValue={label}>
+                {label}
+              </SelectItem>
+            ))}
+          </Select>
         )}
       />
       {children}
