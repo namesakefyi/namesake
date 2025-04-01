@@ -1,5 +1,16 @@
 # namesake
 
+## 0.22.0
+
+### Minor Changes
+
+- 2607812: Map form responses to PDFs
+- 9497bf5: Pre-fill form values when existing responses exist for a user
+
+### Patch Changes
+
+- 9914faa: Fix duplicate focus rings
+
 ## 0.21.0
 
 ### Minor Changes
