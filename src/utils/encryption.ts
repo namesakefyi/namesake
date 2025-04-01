@@ -14,12 +14,10 @@ const IV_LENGTH = 12;
  * Data Encryption Key (DEK): Used to encrypt/decrypt data
  */
 
-export async function encryptData(
-  data: string,
-  dek: CryptoKey,
-): Promise<string> {
+export async function encryptData(data: any, dek: CryptoKey): Promise<string> {
   const iv = window.crypto.getRandomValues(new Uint8Array(IV_LENGTH));
-  const encodedData = new TextEncoder().encode(data);
+  const stringifiedData = JSON.stringify(data);
+  const encodedData = new TextEncoder().encode(stringifiedData);
   const encryptedData = await window.crypto.subtle.encrypt(
     { name: "AES-GCM", iv },
     dek,
@@ -46,7 +44,8 @@ export async function decryptData(
     dek,
     data,
   );
-  return new TextDecoder().decode(decryptedData);
+  const decryptedString = new TextDecoder().decode(decryptedData);
+  return JSON.parse(decryptedString);
 }
 
 export async function initializeEncryption(): Promise<void> {
@@ -74,6 +73,7 @@ export function useEncryptionKey(): CryptoKey | null {
         setEncryptionKey(key);
 
         if (!key) {
+          await initializeEncryption();
           return;
         }
       } catch (error: any) {
@@ -162,4 +162,72 @@ async function retrieveDEK(): Promise<string | null> {
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
   });
+}
+
+type SingleDecryptResult = {
+  decryptedValue: string | undefined;
+  decryptedValues?: never;
+  error: boolean;
+};
+
+type MultipleDecryptResult = {
+  decryptedValue?: never;
+  decryptedValues: string[] | undefined;
+  error: boolean;
+};
+
+type DecryptResult = SingleDecryptResult | MultipleDecryptResult;
+
+/**
+ * Decrypts a single or multiple encrypted values.
+ * @param encryptedValue - The encrypted value to decrypt.
+ * @returns The decrypted value or values.
+ */
+export function useDecrypt(
+  encryptedValue: string | string[] | undefined,
+): DecryptResult {
+  const encryptionKey = useEncryptionKey();
+  const [decryptedValues, setDecryptedValues] = useState<
+    string[] | undefined
+  >();
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (!encryptedValue || !encryptionKey) {
+      setDecryptedValues(undefined);
+      return;
+    }
+
+    const values = Array.isArray(encryptedValue)
+      ? encryptedValue
+      : [encryptedValue];
+
+    Promise.all(
+      values.map(async (value) => {
+        try {
+          return await decryptData(value, encryptionKey);
+        } catch (error) {
+          posthog.captureException(error);
+          setError(true);
+          return null;
+        }
+      }),
+    ).then((results) => {
+      const validResults = results.filter(
+        (result): result is string => result !== null,
+      );
+      if (validResults.length) {
+        setDecryptedValues(validResults);
+      }
+    });
+  }, [encryptedValue, encryptionKey]);
+
+  if (Array.isArray(encryptedValue)) {
+    return { decryptedValues, error };
+  }
+
+  return {
+    decryptedValue: decryptedValues?.[0],
+    error,
+  };
 }

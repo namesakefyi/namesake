@@ -3,38 +3,37 @@ import fs from "node:fs";
 import path from "node:path";
 import { afterEach, beforeEach, vi } from "vitest";
 
-// Mock the convex mutation hook
 vi.mock("convex/react", () => ({
   useQuery: vi.fn(),
   useMutation: vi.fn(),
+  Authenticated: ({ children }: { children: React.ReactNode }) => children,
 }));
 
-// Mock toast notifications
 vi.mock("sonner", () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
-// Mock the auth hook
 vi.mock("@convex-dev/auth/react", () => ({
   useAuthActions: vi.fn(),
 }));
 
-// Mock the useTheme hook
 vi.mock("@/utils/useTheme", () => ({
   useTheme: vi.fn(),
 }));
 
-// Mock the useRouter hook
 vi.mock("@tanstack/react-router", () => ({
+  useNavigate: vi.fn(),
   useRouter: () => ({
     navigate: vi.fn(),
     history: {
       go: vi.fn(),
     },
   }),
+  useSearch: vi.fn(),
 }));
 
 // Mock posthog
@@ -42,6 +41,13 @@ vi.mock("posthog-js", () => ({
   default: {
     captureException: vi.fn(),
   },
+}));
+
+// Mock encryption functions
+vi.mock("@/utils/encryption", () => ({
+  useEncryptionKey: vi.fn(),
+  encryptData: vi.fn(),
+  decryptData: vi.fn(),
 }));
 
 // Add type for mocked IntersectionObserver

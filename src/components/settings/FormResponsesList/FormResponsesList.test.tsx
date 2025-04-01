@@ -9,6 +9,10 @@ import { FormResponsesList, getReadableFieldLabel } from "./FormResponsesList";
 // Mock encryption utilities
 vi.mock("@/utils/encryption", () => ({
   useEncryptionKey: vi.fn(),
+  useDecrypt: vi.fn().mockReturnValue({
+    decryptedValue: "decrypted_value",
+    error: false,
+  }),
 }));
 
 describe("FormResponsesList", () => {

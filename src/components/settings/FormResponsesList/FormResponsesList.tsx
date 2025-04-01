@@ -6,7 +6,7 @@ import {
   ListBoxItem,
 } from "@/components/common";
 import { DeleteFormResponseModal } from "@/components/settings";
-import { decryptData, getEncryptionKey } from "@/utils/encryption";
+import { useDecrypt } from "@/utils/encryption";
 import type { Id } from "@convex/_generated/dataModel";
 import {
   ALL,
@@ -14,8 +14,7 @@ import {
   type UserFormDataField,
 } from "@convex/constants";
 import { AlertTriangle, FileLock2 } from "lucide-react";
-import posthog from "posthog-js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { type Selection, Text } from "react-aria-components";
 
 /**
@@ -25,62 +24,34 @@ import { type Selection, Text } from "react-aria-components";
  * @returns The readable label for the field.
  */
 export const getReadableFieldLabel = (field: UserFormDataField | string) => {
-  return USER_FORM_DATA_FIELDS[field as UserFormDataField] ?? field;
+  return USER_FORM_DATA_FIELDS[field as UserFormDataField]?.label ?? field;
 };
 
 interface FormResponseItemProps {
   initialData: { id: Id<"userFormResponses">; field: string; value: string };
 }
 
-export function FormResponseItem({ initialData }: FormResponseItemProps) {
-  const [decryptedValue, setDecryptedValue] = useState<string>();
-  const [encryptionKey, setEncryptionKey] = useState<CryptoKey | null>(null);
-  const [didError, setDidError] = useState(false);
-
-  useEffect(() => {
-    const loadEncryptionKey = async () => {
-      try {
-        const key = await getEncryptionKey();
-        setEncryptionKey(key);
-
-        if (!key) return;
-
-        if (initialData.value) {
-          try {
-            const decryptedValue = await decryptData(initialData.value, key);
-            setDecryptedValue(decryptedValue);
-          } catch (error: any) {
-            posthog.captureException(error);
-            setDidError(true);
-          }
-        } else {
-          setDecryptedValue("");
-        }
-      } catch (error: any) {
-        posthog.captureException(error);
-        setDidError(true);
-      }
-    };
-
-    loadEncryptionKey();
-  }, [initialData.value]);
+export function FormResponseItem({
+  initialData: { id, field, value },
+}: FormResponseItemProps) {
+  const { decryptedValue, error } = useDecrypt(value);
 
   return (
     <ListBoxItem
-      id={initialData.id}
-      textValue={initialData.field}
+      id={id}
+      textValue={field}
       className="flex flex-col gap-1 items-start"
     >
-      <Text slot="label">{initialData.field}</Text>
-      {encryptionKey && (
+      <Text slot="label">{field}</Text>
+      {decryptedValue && (
         <Text slot="description">
-          {didError ? (
+          {error ? (
             <Badge variant="danger" icon={AlertTriangle}>
               Error
             </Badge>
           ) : (
             <span className="opacity-70 font-mono text-sm">
-              {decryptedValue}
+              {decryptedValue.toString()}
             </span>
           )}
         </Text>
@@ -138,7 +109,7 @@ export function FormResponsesList({ rows }: FormResponsesListProps) {
   return (
     <div className="flex flex-col pb-8">
       {shouldShowControls && (
-        <div className="flex gap-2 pb-4 items-center justify-between bg-gray-1 dark:bg-graydark-2 sticky sticky-top-header z-10">
+        <div className="flex gap-2 pb-4 items-center justify-between bg-app sticky sticky-top-header z-10">
           <Button variant="secondary" size="small" onPress={handleSelectAll}>
             {hasSelectedAll ? "Deselect all" : "Select all"}
           </Button>

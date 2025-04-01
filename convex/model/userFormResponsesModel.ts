@@ -13,6 +13,26 @@ export async function getAllForUser(
   return userData;
 }
 
+export async function getByFieldsForUser(
+  ctx: QueryCtx,
+  { userId, fields }: { userId: Id<"users">; fields: string[] },
+) {
+  if (!fields) return [];
+
+  const userFormResponses = await Promise.all(
+    fields.map(async (field) => {
+      const userFormResponse = await ctx.db
+        .query("userFormResponses")
+        .withIndex("userIdAndField", (q) =>
+          q.eq("userId", userId).eq("field", field),
+        )
+        .first();
+      return userFormResponse;
+    }),
+  );
+  return userFormResponses.filter((response) => response !== null);
+}
+
 export async function setResponseForUser(
   ctx: MutationCtx,
   { userId, field, value }: { userId: Id<"users">; field: string; value: any },
