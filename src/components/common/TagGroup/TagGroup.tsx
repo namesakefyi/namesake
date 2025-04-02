@@ -77,7 +77,7 @@ export function TagGroup<T extends object>({
   ...props
 }: TagGroupProps<T>) {
   return (
-    <SizeContext.Provider value={size}>
+    <SizeContext value={size}>
       <AriaTagGroup {...props} className={tagGroupStyles({ className })}>
         <Label size={size}>{label}</Label>
         <TagList
@@ -94,7 +94,7 @@ export function TagGroup<T extends object>({
           </Text>
         )}
       </AriaTagGroup>
-    </SizeContext.Provider>
+    </SizeContext>
   );
 }
 
