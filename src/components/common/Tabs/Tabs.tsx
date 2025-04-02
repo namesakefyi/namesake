@@ -1,5 +1,5 @@
 import { focusRing } from "@/components/utils";
-import { useContext } from "react";
+import { use } from "react";
 import {
   Tab as AriaTab,
   TabList as AriaTabList,
@@ -47,7 +47,7 @@ const tabListStyles = tv({
 });
 
 export function TabList<T extends object>(props: TabListProps<T>) {
-  const state = useContext(TabListStateContext);
+  const state = use(TabListStateContext);
 
   const tabList = state?.collection;
   const activeTab = state?.selectedKey ?? "";

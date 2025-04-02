@@ -1,7 +1,7 @@
 import { Button, FieldDescription, Label } from "@/components/common";
 import { focusRing } from "@/components/utils";
 import { X } from "lucide-react";
-import { createContext, useContext } from "react";
+import { createContext, use } from "react";
 import {
   Tag as AriaTag,
   TagGroup as AriaTagGroup,
@@ -104,7 +104,7 @@ const removeButtonStyles = tv({
 });
 
 export function Tag({ children, ...props }: TagProps) {
-  const size = useContext(SizeContext);
+  const size = use(SizeContext);
   const textValue = typeof children === "string" ? children : undefined;
 
   return (

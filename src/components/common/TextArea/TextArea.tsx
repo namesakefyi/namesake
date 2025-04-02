@@ -6,7 +6,7 @@ import {
   Label,
 } from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
-import { forwardRef } from "react";
+import type { Ref } from "react";
 import {
   TextField as AriaTextField,
   type TextFieldProps as AriaTextFieldProps,
@@ -18,33 +18,35 @@ export interface TextAreaProps extends AriaTextFieldProps {
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);
   size?: "medium" | "large";
+  ref?: Ref<HTMLTextAreaElement>;
 }
 
-export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  function TextArea({ label, description, errorMessage, size, ...props }, ref) {
-    return (
-      <AriaTextField
-        {...props}
-        className={composeTailwindRenderProps(
-          props.className,
-          "flex flex-col gap-1.5",
-        )}
-      >
-        {({ isDisabled, isInvalid }) => (
-          <>
-            {label && <Label size={size}>{label}</Label>}
-            <FieldGroup
-              isDisabled={isDisabled}
-              isInvalid={isInvalid}
-              size={size}
-            >
-              <InputTextArea ref={ref} size={size} />
-            </FieldGroup>
-            {description && <FieldDescription>{description}</FieldDescription>}
-            <FieldError>{errorMessage}</FieldError>
-          </>
-        )}
-      </AriaTextField>
-    );
-  },
-);
+export function TextArea({
+  ref,
+  label,
+  description,
+  errorMessage,
+  size,
+  ...props
+}: TextAreaProps) {
+  return (
+    <AriaTextField
+      {...props}
+      className={composeTailwindRenderProps(
+        props.className,
+        "flex flex-col gap-1.5",
+      )}
+    >
+      {({ isDisabled, isInvalid }) => (
+        <>
+          {label && <Label size={size}>{label}</Label>}
+          <FieldGroup isDisabled={isDisabled} isInvalid={isInvalid} size={size}>
+            <InputTextArea ref={ref} size={size} />
+          </FieldGroup>
+          {description && <FieldDescription>{description}</FieldDescription>}
+          <FieldError>{errorMessage}</FieldError>
+        </>
+      )}
+    </AriaTextField>
+  );
+}

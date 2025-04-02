@@ -1,7 +1,6 @@
 import { FieldDescription, FieldError, Label } from "@/components/common";
 import { composeTailwindRenderProps, focusRing } from "@/components/utils";
-import type { ReactNode } from "react";
-import { forwardRef } from "react";
+import type { ReactNode, Ref } from "react";
 import {
   Radio as AriaRadio,
   RadioGroup as AriaRadioGroup,
@@ -17,32 +16,37 @@ export interface RadioGroupProps extends Omit<AriaRadioGroupProps, "children"> {
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);
   size?: "medium" | "large";
+  ref?: Ref<HTMLDivElement>;
 }
 
-export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
-  (
-    { className, label, children, description, errorMessage, size, ...props },
-    ref,
-  ) => {
-    return (
-      <AriaRadioGroup
-        {...props}
-        ref={ref}
-        className={composeTailwindRenderProps(
-          className,
-          "group flex flex-col gap-2",
-        )}
-      >
-        <Label size={size}>{label}</Label>
-        <div className="flex flex-col gap-2 group-orientation-horizontal:gap-4 group-orientation-horizontal:flex-wrap">
-          {children}
-        </div>
-        {description && <FieldDescription>{description}</FieldDescription>}
-        <FieldError>{errorMessage}</FieldError>
-      </AriaRadioGroup>
-    );
-  },
-);
+export function RadioGroup({
+  ref,
+  className,
+  label,
+  children,
+  description,
+  errorMessage,
+  size,
+  ...props
+}: RadioGroupProps) {
+  return (
+    <AriaRadioGroup
+      {...props}
+      ref={ref}
+      className={composeTailwindRenderProps(
+        className,
+        "group flex flex-col gap-2",
+      )}
+    >
+      <Label size={size}>{label}</Label>
+      <div className="flex flex-col gap-2 group-orientation-horizontal:gap-4 group-orientation-horizontal:flex-wrap">
+        {children}
+      </div>
+      {description && <FieldDescription>{description}</FieldDescription>}
+      <FieldError>{errorMessage}</FieldError>
+    </AriaRadioGroup>
+  );
+}
 
 const radioItemStyles = tv({
   extend: focusRing,
@@ -92,29 +96,34 @@ const radioStyles = tv({
 export interface RadioProps extends AriaRadioProps {
   size?: "medium" | "large";
   card?: boolean;
+  ref?: Ref<HTMLLabelElement>;
 }
 
-export const Radio = forwardRef<HTMLLabelElement, RadioProps>(
-  ({ className, size = "medium", card = false, ...props }, ref) => {
-    return (
-      <AriaRadio
-        {...props}
-        ref={ref}
-        className={composeTailwindRenderProps(
-          className,
-          radioItemStyles({ size, card }),
-        )}
-      >
-        {(renderProps) => (
-          <>
-            <div className={radioStyles({ ...renderProps, size })} />
-            {/* Types workaround: https://github.com/adobe/react-spectrum/issues/7434 */}
-            {typeof props.children === "function"
-              ? props.children(renderProps)
-              : props.children}
-          </>
-        )}
-      </AriaRadio>
-    );
-  },
-);
+export function Radio({
+  ref,
+  size = "medium",
+  card = false,
+  className,
+  ...props
+}: RadioProps) {
+  return (
+    <AriaRadio
+      {...props}
+      ref={ref}
+      className={composeTailwindRenderProps(
+        className,
+        radioItemStyles({ size, card }),
+      )}
+    >
+      {(renderProps) => (
+        <>
+          <div className={radioStyles({ ...renderProps, size })} />
+          {/* Types workaround: https://github.com/adobe/react-spectrum/issues/7434 */}
+          {typeof props.children === "function"
+            ? props.children(renderProps)
+            : props.children}
+        </>
+      )}
+    </AriaRadio>
+  );
+}
