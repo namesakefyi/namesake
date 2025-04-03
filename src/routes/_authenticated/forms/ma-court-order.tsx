@@ -104,7 +104,7 @@ function RouteComponent() {
         </div>
       </FormSection>
       <FormSection title="Where were you born?">
-        <div className="grid grid-cols-[1fr_auto] gap-4">
+        <div className="flex flex-wrap gap-4">
           <ShortTextField name="birthplaceCity" label="City" />
           <SelectField
             name="birthplaceState"
@@ -263,7 +263,7 @@ function RouteComponent() {
           name="shouldApplyForFeeWaiver"
           label="Apply for a fee waiver?"
           labelHidden
-          yesLabel="I am unable to pay the filing fees and can provide proof of income"
+          yesLabel="Help me waive filing fees; I can provide proof of income"
           noLabel="I will pay the filing fee"
         />
       </FormSection>
