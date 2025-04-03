@@ -263,8 +263,8 @@ function RouteComponent() {
           name="shouldApplyForFeeWaiver"
           label="Apply for a fee waiver?"
           labelHidden
-          yesLabel="Yes, I am unable to pay the filing fees"
-          noLabel="No, I can pay the filing fee"
+          yesLabel="I am unable to pay the filing fees and can provide proof of income"
+          noLabel="I will pay the filing fee"
         />
       </FormSection>
       <FormSection
