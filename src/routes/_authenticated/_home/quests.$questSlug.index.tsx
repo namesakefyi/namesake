@@ -12,23 +12,21 @@ import { QuestBasics } from "@/components/quests/QuestBasics/QuestBasics";
 import { QuestPageFooter } from "@/components/quests/QuestPageFooter/QuestPageFooter";
 import { api } from "@convex/_generated/api";
 import { JURISDICTIONS } from "@convex/constants";
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { rootRouteId } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { Milestone } from "lucide-react";
 
 type QuestSearch = {
   edit?: true | undefined;
 };
 
-export const Route = createFileRoute("/_authenticated/_home/$questSlug/")({
+export const Route = createFileRoute(
+  "/_authenticated/_home/quests/$questSlug/",
+)({
   component: QuestDetailRoute,
   loader: async ({ params: { questSlug }, context: { convex } }) => {
     const questData = await convex.query(api.quests.getWithUserQuest, {
       slug: questSlug,
     });
-    if (questData.quest === null) {
-      throw notFound({ routeId: rootRouteId });
-    }
     return { questData };
   },
   validateSearch: (search: Record<string, unknown>): QuestSearch => {
@@ -39,13 +37,20 @@ export const Route = createFileRoute("/_authenticated/_home/$questSlug/")({
 });
 
 function QuestDetailRoute() {
+  const router = useRouter();
   const { edit: isEditing } = Route.useSearch();
   const { questData } = Route.useLoaderData();
 
   // TODO: Improve loading state to prevent flash of empty
   if (questData === undefined) return;
   if (questData.quest === null)
-    return <Empty title="Quest not found" icon={Milestone} />;
+    return (
+      <Empty
+        title="Quest not found"
+        icon={Milestone}
+        button={{ children: "Go back", onPress: () => router.history.go(-1) }}
+      />
+    );
 
   const quest = questData.quest;
   const userQuest = questData.userQuest;

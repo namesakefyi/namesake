@@ -15,7 +15,7 @@ export const SettingsItem = ({
     <div className="self-start">
       <Heading className="text-base -mt-px">{label}</Heading>
       {description && (
-        <p className="text-xs text-gray-dim text-balance mt-0.5">
+        <p className="text-xs text-gray-dim text-pretty mt-0.5 max-w-[40ch]">
           {description}
         </p>
       )}

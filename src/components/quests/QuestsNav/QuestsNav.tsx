@@ -88,7 +88,7 @@ export const QuestsNav = () => {
               <NavItem
                 key={userQuest._id}
                 href={{
-                  to: "/$questSlug",
+                  to: "/quests/$questSlug",
                   params: { questSlug: userQuest.slug },
                 }}
                 icon={config.icon}
@@ -110,7 +110,10 @@ export const QuestsNav = () => {
           return (
             <NavItem
               key={category}
-              href={{ to: "/$questSlug", params: { questSlug: config.to } }}
+              href={{
+                to: "/quests/$questSlug",
+                params: { questSlug: config.to },
+              }}
               icon={config.icon}
               size="large"
               className="border border-dashed border-gray-dim"
@@ -132,7 +135,7 @@ export const QuestsNav = () => {
                   <NavItem
                     key={quest._id}
                     href={{
-                      to: "/$questSlug",
+                      to: "/quests/$questSlug",
                       params: { questSlug: quest.slug },
                     }}
                     size="large"

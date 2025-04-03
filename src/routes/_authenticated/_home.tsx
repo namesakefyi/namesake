@@ -1,4 +1,9 @@
-import { AppContent, AppSidebar } from "@/components/app";
+import {
+  AppContent,
+  AppSidebar,
+  AppSidebarFooter,
+  AppSidebarHeader,
+} from "@/components/app";
 import { QuestsNav } from "@/components/quests";
 import { useIsMobile } from "@/utils/useIsMobile";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
@@ -13,7 +18,7 @@ function IndexRoute() {
   return (
     <div className="flex">
       {!isMobile && (
-        <AppSidebar>
+        <AppSidebar header={<AppSidebarHeader />} footer={<AppSidebarFooter />}>
           <QuestsNav />
         </AppSidebar>
       )}

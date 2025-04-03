@@ -7,7 +7,7 @@ export const Route = createFileRoute(
   beforeLoad: async ({ context: { birthplace } }) => {
     if (birthplace) {
       throw redirect({
-        to: "/$questSlug",
+        to: "/quests/$questSlug",
         params: {
           questSlug: `birth-certificate-${birthplace.toLowerCase()}`,
         },

@@ -5,7 +5,7 @@ export const Route = createFileRoute("/_authenticated/_home/court-order/")({
   beforeLoad: async ({ context: { residence } }) => {
     if (residence) {
       throw redirect({
-        to: "/$questSlug",
+        to: "/quests/$questSlug",
         params: {
           questSlug: `court-order-${residence.toLowerCase()}`,
         },

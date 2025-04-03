@@ -73,7 +73,7 @@ const NewQuestModal = ({
       clearForm();
       onSubmit();
       navigate({
-        to: "/$questSlug",
+        to: "/quests/$questSlug",
         params: { questSlug: slug },
       });
     }
@@ -158,7 +158,7 @@ const QuestTableRow = ({
     <TableRow
       key={quest._id}
       className="flex gap-2 items-center"
-      href={{ to: "/$questSlug", params: { questSlug: quest.slug } }}
+      href={{ to: "/quests/$questSlug", params: { questSlug: quest.slug } }}
     >
       <TableCell>
         <div className="flex items-center gap-2">

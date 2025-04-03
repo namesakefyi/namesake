@@ -14,7 +14,7 @@ interface NavItemProps extends LinkProps {
 
 const navItemStyles = tv({
   extend: focusRing,
-  base: "rounded-md no-underline px-2 -mx-2 flex border border-transparent items-center text-base md:text-sm lg:text-base hover:bg-gray-3 hover:text-gray-normal aria-current:font-semibold aria-current:text-gray-normal",
+  base: "rounded-md no-underline px-2 -mx-2 flex border border-transparent items-center text-base md:text-sm lg:text-base hover:bg-gray-3 hover:text-gray-12 aria-current:font-semibold aria-current:text-gray-normal",
   variants: {
     isActive: {
       true: "bg-gray-3 hover:bg-gray-3 text-gray-normal",
