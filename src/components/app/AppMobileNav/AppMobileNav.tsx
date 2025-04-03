@@ -25,7 +25,14 @@ const AppMobileNavItem = ({
   ...props
 }: AppMobileNavItemProps) => {
   const matchRoute = useMatchRoute();
-  const isActive = Boolean(matchRoute({ ...props.href, fuzzy: true }));
+
+  const isActive =
+    label === "Home"
+      ? Boolean(
+          matchRoute({ to: "/", fuzzy: true }) ||
+            matchRoute({ to: "/quests/$questSlug", fuzzy: true }),
+        )
+      : Boolean(matchRoute({ ...props.href, fuzzy: true }));
 
   return (
     <Link {...props} className={navItemStyles({ isActive })}>
