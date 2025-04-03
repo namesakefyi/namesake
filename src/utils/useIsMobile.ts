@@ -1,20 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const MOBILE_WIDTH = 800;
+const MOBILE_BREAKPOINT = 800;
 
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(
-    window.matchMedia(`(width <= ${MOBILE_WIDTH}px)`).matches,
-  );
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.matchMedia(`(width <= ${MOBILE_WIDTH}px)`).matches);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
+  const query = window.matchMedia(`(width <= ${MOBILE_BREAKPOINT}px)`);
+  const [isMobile, setIsMobile] = useState(query.matches);
+  query.onchange = () => setIsMobile(query.matches);
   return isMobile;
 }
