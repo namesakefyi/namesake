@@ -26,7 +26,6 @@ describe("EditThemeSetting", () => {
   it("renders component correctly with correct initial theme", () => {
     render(<EditThemeSetting />);
     expect(screen.getByText("Theme")).toBeInTheDocument();
-    expect(screen.getByText("Adjust your display.")).toBeInTheDocument();
     for (const theme of Object.values(THEMES)) {
       expect(screen.getByText(theme.label)).toBeInTheDocument();
     }
