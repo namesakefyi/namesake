@@ -9,7 +9,7 @@ export const AppSidebarFooter = () => {
 
   return (
     <Authenticated>
-      <div className="flex items-center gap-2 justify-between w-full px-4">
+      <div className="flex items-center gap-1 justify-end w-full px-4">
         <TooltipTrigger>
           <Link
             button={{ variant: "icon" }}
