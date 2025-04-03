@@ -25,6 +25,7 @@ function FormResponsesRoute() {
     <>
       <PageHeader
         title="Form Responses"
+        mobileBackLink={{ to: "/settings" }}
         badge={
           <Badge variant="success" icon={ShieldCheck}>
             Encrypted

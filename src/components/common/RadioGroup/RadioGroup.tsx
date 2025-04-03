@@ -64,7 +64,7 @@ const radioItemStyles = tv({
 
 const radioStyles = tv({
   extend: focusRing,
-  base: "rounded-full border bg-app transition-all ease-out duration-150 cursor-pointer",
+  base: "rounded-full border bg-app transition-all ease-out duration-150 cursor-pointer shrink-0",
   variants: {
     isSelected: {
       false: "border-gray-dim",

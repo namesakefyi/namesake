@@ -1,9 +1,22 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { AdminNav } from "@/components/admin";
+import { PageHeader } from "@/components/app";
+import { useIsMobile } from "@/utils/useIsMobile";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
-  beforeLoad: () => {
-    throw redirect({
-      to: "/admin/quests",
-    });
-  },
+  component: AdminIndexRoute,
 });
+
+function AdminIndexRoute() {
+  const navigate = useNavigate();
+  const isMobile = useIsMobile();
+
+  if (!isMobile) navigate({ to: "/admin/quests" });
+
+  return (
+    <>
+      <PageHeader title="Admin" mobileBackLink={{ to: "/" }} />
+      <AdminNav />
+    </>
+  );
+}
