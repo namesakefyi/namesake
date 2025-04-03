@@ -15,10 +15,7 @@ function SettingsIndexRoute() {
 
   return (
     <>
-      <PageHeader
-        title="Settings"
-        backLink={isMobile ? { to: "/" } : undefined}
-      />
+      <PageHeader title="Settings" mobileBackLink={{ to: "/" }} />
       <SettingsNav />
     </>
   );

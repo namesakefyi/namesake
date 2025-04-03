@@ -7,7 +7,7 @@ export const EditThemeSetting = () => {
   const { themeSelection, setTheme } = useTheme();
 
   return (
-    <SettingsItem label="Theme" description="Adjust your display.">
+    <SettingsItem label="Theme">
       <ToggleButtonGroup
         selectionMode="single"
         disallowEmptySelection

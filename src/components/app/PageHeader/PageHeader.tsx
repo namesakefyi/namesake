@@ -1,22 +1,33 @@
 import { Link, type LinkProps } from "@/components/common";
+import { useIsMobile } from "@/utils/useIsMobile";
 import { ArrowLeft } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 
 export interface PageHeaderProps {
+  /** The title of the page. */
   title: string;
-  backLink?: LinkProps["href"];
+  /** An arrow button which only displays on mobile devices. */
+  mobileBackLink?: LinkProps["href"];
+  /** A badge which displays inline to the right of the title. */
   badge?: React.ReactNode;
+  /**
+   * Additional content to display to the right of the title.
+   * Often used for buttons.
+   */
   children?: React.ReactNode;
+  /** Additional classes to apply to the header. */
   className?: string;
 }
 
 export const PageHeader = ({
   title,
-  backLink,
+  mobileBackLink,
   badge,
   children,
   className,
 }: PageHeaderProps) => {
+  const isMobile = useIsMobile();
+
   return (
     <header
       className={twMerge(
@@ -26,9 +37,9 @@ export const PageHeader = ({
     >
       <div className="flex flex-col gap-1">
         <div className="flex gap-2 items-center">
-          {backLink && (
+          {isMobile && mobileBackLink && (
             <Link
-              href={backLink}
+              href={mobileBackLink}
               button={{ variant: "icon" }}
               className="-ml-2"
             >

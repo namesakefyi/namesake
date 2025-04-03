@@ -5,6 +5,7 @@ import {
   DatabaseZap,
   FileClock,
   FileLock2,
+  LogOut,
   MessageCircleQuestion,
   Snail,
 } from "lucide-react";
@@ -12,7 +13,7 @@ import {
 export const SettingsNav = () => {
   return (
     <Nav>
-      <NavGroup label="Settings">
+      <NavGroup>
         <NavItem icon={CircleUser} href={{ to: "/settings/account" }}>
           Account
         </NavItem>
@@ -20,14 +21,14 @@ export const SettingsNav = () => {
           Form Responses
         </NavItem>
       </NavGroup>
-      <NavGroup label="Help">
+      <NavGroup>
         <NavItem
           icon={Snail}
           href="https://namesake.fyi"
           target="_blank"
           rel="noreferrer"
         >
-          About Namesake
+          About
         </NavItem>
         <NavItem
           icon={FileClock}
@@ -35,7 +36,7 @@ export const SettingsNav = () => {
           target="_blank"
           rel="noreferrer"
         >
-          View Changelog (v{APP_VERSION})
+          Changelog (v{APP_VERSION})
         </NavItem>
         <NavItem
           href="https://github.com/namesakefyi/namesake/issues/new/choose"
@@ -62,7 +63,7 @@ export const SettingsNav = () => {
           Discord Community
         </NavItem>
       </NavGroup>
-      <NavGroup label="Legal">
+      <NavGroup>
         <NavItem
           href="https://namesake.fyi/terms"
           target="_blank"
@@ -76,6 +77,11 @@ export const SettingsNav = () => {
           rel="noreferrer"
         >
           Privacy Policy
+        </NavItem>
+      </NavGroup>
+      <NavGroup>
+        <NavItem href={{ to: "/signout" }} icon={LogOut}>
+          Sign out
         </NavItem>
       </NavGroup>
     </Nav>

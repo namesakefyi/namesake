@@ -1,8 +1,7 @@
-import { Badge, Link, type LinkProps } from "@/components/common";
+import { Link, type LinkProps } from "@/components/common";
 import { focusRing } from "@/components/utils";
 import { useMatchRoute } from "@tanstack/react-router";
 import { ExternalLink, type LucideIcon } from "lucide-react";
-import { Header } from "react-aria-components";
 import { tv } from "tailwind-variants";
 
 interface NavItemProps extends LinkProps {
@@ -62,7 +61,7 @@ export const NavItem = ({
   const matchRoute = useMatchRoute();
   let current: boolean | undefined;
 
-  if (typeof props.href === "string") {
+  if (typeof props.href === "string" || !props.href) {
     // Link is external, so we can't match it
     current = false;
   } else {
@@ -92,29 +91,12 @@ export const NavItem = ({
 };
 
 interface NavGroupProps {
-  label: string;
   children: React.ReactNode;
-  count?: number;
-  icon?: LucideIcon;
 }
 
-export const NavGroup = ({
-  label,
-  children,
-  count,
-  icon: Icon,
-}: NavGroupProps) => {
+export const NavGroup = ({ children }: NavGroupProps) => {
   return (
-    <div className="flex flex-col gap-0.5 not-first:mt-4">
-      <Header className="text-sm h-8 font-medium text-gray-dim border-b border-gray-4 flex justify-start items-center gap-1.5">
-        {Icon && <Icon size={20} className="size-4" />}
-        {label}
-        {count && (
-          <Badge size="xs" className="rounded-full">
-            {count}
-          </Badge>
-        )}
-      </Header>
+    <div className="flex flex-col gap-0.5 pt-2 mt-2 border-t border-gray-dim first:mt-0 first:border-0 first:pt-0">
       {children}
     </div>
   );

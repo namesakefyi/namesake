@@ -219,7 +219,7 @@ function QuestsRoute() {
 
   return (
     <>
-      <PageHeader title="Quests">
+      <PageHeader title="Quests" mobileBackLink={{ to: "/admin" }}>
         <Button
           onPress={() => setIsNewQuestModalOpen(true)}
           icon={Plus}

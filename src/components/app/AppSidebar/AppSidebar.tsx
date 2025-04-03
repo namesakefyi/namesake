@@ -14,7 +14,7 @@ export const AppSidebar = ({ header, children, footer }: AppSidebarProps) => {
       )}
       <div className="app-padding flex-1">{children}</div>
       {footer && (
-        <div className="app-padding h-header -ml-3 shrink-0 flex items-center sticky bottom-0 bg-sidebar">
+        <div className="h-header shrink-0 flex items-center sticky bottom-0 bg-sidebar">
           {footer}
         </div>
       )}

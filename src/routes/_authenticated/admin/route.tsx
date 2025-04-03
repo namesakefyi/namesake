@@ -1,7 +1,7 @@
+import { AdminNav } from "@/components/admin";
 import { AppContent, AppSidebar, AppSidebarHeader } from "@/components/app";
-import { Nav, NavGroup, NavItem } from "@/components/common";
+import { useIsMobile } from "@/utils/useIsMobile";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import { FlaskConical, Milestone } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: ({ context }) => {
@@ -19,20 +19,15 @@ export const Route = createFileRoute("/_authenticated/admin")({
 });
 
 function AdminRoute() {
+  const isMobile = useIsMobile();
+
   return (
     <div className="flex">
-      <AppSidebar header={<AppSidebarHeader />}>
-        <Nav>
-          <NavGroup label="Content">
-            <NavItem icon={Milestone} href={{ to: "/admin/quests" }}>
-              Quests
-            </NavItem>
-            <NavItem icon={FlaskConical} href={{ to: "/admin/early-access" }}>
-              Early Access
-            </NavItem>
-          </NavGroup>
-        </Nav>
-      </AppSidebar>
+      {!isMobile && (
+        <AppSidebar header={<AppSidebarHeader />}>
+          <AdminNav />
+        </AppSidebar>
+      )}
       <AppContent>
         <Outlet />
       </AppContent>

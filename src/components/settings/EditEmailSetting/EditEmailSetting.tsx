@@ -46,10 +46,7 @@ export const EditEmailSetting = ({ user }: EditEmailSettingProps) => {
   };
 
   return (
-    <SettingsItem
-      label="Email address"
-      description="What email would you like to use for Namesake?"
-    >
+    <SettingsItem label="Email">
       {!isEditing ? (
         <Button onPress={() => setIsEditing(true)}>
           <span className="truncate max-w-[24ch]">

@@ -130,7 +130,7 @@ export const QuestsNav = () => {
             const { label } = CATEGORIES[group as keyof typeof CATEGORIES];
 
             return (
-              <NavGroup key={label} label={label}>
+              <NavGroup key={label}>
                 {quests.map((quest) => (
                   <NavItem
                     key={quest._id}

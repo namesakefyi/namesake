@@ -1,6 +1,8 @@
 import { Link, type LinkProps } from "@/components/common";
+import { api } from "@convex/_generated/api";
 import { type ToOptions, useMatchRoute } from "@tanstack/react-router";
-import { Home, Settings } from "lucide-react";
+import { useQuery } from "convex/react";
+import { GlobeLock, Home, Settings } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
@@ -43,14 +45,24 @@ const AppMobileNavItem = ({
 };
 
 export const AppMobileNav = () => {
+  const user = useQuery(api.users.getCurrent);
+  const isAdmin = user?.role === "admin";
+
   return (
-    <div className="w-full shrink-0 bg-element border-t border-gray-a4 grid grid-cols-2 gap-1 p-2 items-center sticky bottom-0 mt-auto shadow-2xl">
+    <div className="w-full shrink-0 bg-element border-t border-gray-a4 flex *:flex-1 *:shrink-0 gap-1 p-2 items-center sticky bottom-0 mt-auto shadow-2xl">
       <AppMobileNavItem icon={Home} label="Home" href={{ to: "/" }} />
       <AppMobileNavItem
         icon={Settings}
         label="Settings"
         href={{ to: "/settings" }}
       />
+      {isAdmin && (
+        <AppMobileNavItem
+          icon={GlobeLock}
+          label="Admin"
+          href={{ to: "/admin" }}
+        />
+      )}
     </div>
   );
 };

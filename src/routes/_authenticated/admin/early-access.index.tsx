@@ -96,7 +96,7 @@ function EarlyAccessRoute() {
 
   return (
     <div>
-      <PageHeader title="Early Access Codes">
+      <PageHeader title="Early Access Codes" mobileBackLink={{ to: "/admin" }}>
         <Button
           onPress={handleGenerateCode}
           icon={Plus}
