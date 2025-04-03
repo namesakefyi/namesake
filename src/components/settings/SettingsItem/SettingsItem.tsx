@@ -11,7 +11,7 @@ export const SettingsItem = ({
   description,
   children,
 }: SettingsItemProps) => (
-  <div className="flex justify-between items-center gap-8 p-4">
+  <div className="flex flex-wrap justify-between items-center gap-x-4 gap-y-3 p-4">
     <div className="self-start">
       <Heading className="text-base -mt-px">{label}</Heading>
       {description && (

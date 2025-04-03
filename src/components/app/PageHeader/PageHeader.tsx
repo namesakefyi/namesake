@@ -1,9 +1,10 @@
-import type { LucideIcon } from "lucide-react";
+import { Link, type LinkProps } from "@/components/common";
+import { ArrowLeft } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 
 export interface PageHeaderProps {
   title: string;
-  icon?: LucideIcon;
+  backLink?: LinkProps["href"];
   badge?: React.ReactNode;
   children?: React.ReactNode;
   className?: string;
@@ -11,7 +12,7 @@ export interface PageHeaderProps {
 
 export const PageHeader = ({
   title,
-  icon: Icon,
+  backLink,
   badge,
   children,
   className,
@@ -25,8 +26,16 @@ export const PageHeader = ({
     >
       <div className="flex flex-col gap-1">
         <div className="flex gap-2 items-center">
-          {Icon && <Icon className="text-gray-dim" />}
-          <h1 className="text-lg lg:text-2xl font-medium whitespace-nowrap">
+          {backLink && (
+            <Link
+              href={backLink}
+              button={{ variant: "icon" }}
+              className="-ml-2"
+            >
+              <ArrowLeft className="size-5" />
+            </Link>
+          )}
+          <h1 className="text-xl lg:text-2xl font-medium whitespace-nowrap">
             {title}
           </h1>
           {badge}

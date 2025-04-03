@@ -1,4 +1,3 @@
-import { AppContent } from "@/components/app";
 import { JurisdictionInterstitial } from "@/components/quests";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
@@ -17,9 +16,5 @@ export const Route = createFileRoute("/_authenticated/_home/state-id/")({
 });
 
 function RouteComponent() {
-  return (
-    <AppContent>
-      <JurisdictionInterstitial type="stateId" />
-    </AppContent>
-  );
+  return <JurisdictionInterstitial type="stateId" />;
 }

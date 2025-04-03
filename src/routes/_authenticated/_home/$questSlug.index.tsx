@@ -1,4 +1,3 @@
-import { AppContent } from "@/components/app";
 import { Empty } from "@/components/common";
 import {
   QuestCosts,
@@ -60,7 +59,7 @@ function QuestDetailRoute() {
   }
 
   return (
-    <AppContent>
+    <>
       <QuestPageHeader quest={quest} userQuest={userQuest} badge={badge} />
       <div className="flex flex-col gap-6 pb-12">
         <QuestBasics quest={quest} editable={isEditing} />
@@ -73,6 +72,6 @@ function QuestDetailRoute() {
         <QuestReferences quest={quest} editable={isEditing} />
       </div>
       <QuestPageFooter quest={quest} userQuest={userQuest} />
-    </AppContent>
+    </>
   );
 }

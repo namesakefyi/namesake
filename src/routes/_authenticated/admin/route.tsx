@@ -1,4 +1,4 @@
-import { AppContent, AppSidebar } from "@/components/app";
+import { AppContent, AppSidebar, AppSidebarHeader } from "@/components/app";
 import { Nav, NavGroup, NavItem } from "@/components/common";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import { FlaskConical, Milestone } from "lucide-react";
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminRoute() {
   return (
     <div className="flex">
-      <AppSidebar>
+      <AppSidebar header={<AppSidebarHeader />}>
         <Nav>
           <NavGroup label="Content">
             <NavItem icon={Milestone} href={{ to: "/admin/quests" }}>

@@ -4,6 +4,7 @@ import {
   FormResponsesList,
   getReadableFieldLabel,
 } from "@/components/settings";
+import { useIsMobile } from "@/utils/useIsMobile";
 import { api } from "@convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/_authenticated/settings/responses")({
 
 function FormResponsesRoute() {
   const userData = useQuery(api.userFormResponses.list);
+  const isMobile = useIsMobile();
   const rows = userData?.map((data) => ({
     id: data._id,
     field: getReadableFieldLabel(data.field),
@@ -25,6 +27,7 @@ function FormResponsesRoute() {
     <>
       <PageHeader
         title="Form Responses"
+        backLink={isMobile ? { to: "/settings" } : undefined}
         badge={
           <Badge variant="success" icon={ShieldCheck}>
             Encrypted
