@@ -21,10 +21,10 @@ importers:
         version: 2.3.2
       '@convex-dev/auth':
         specifier: ^0.0.81
-        version: 0.0.81(@auth/core@0.38.0)(convex@1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+        version: 0.0.81(@auth/core@0.38.0)(convex@1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       '@convex-dev/migrations':
         specifier: ^0.2.5
-        version: 0.2.5(convex@1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
+        version: 0.2.5(convex@1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@faker-js/faker':
         specifier: ^9.6.0
         version: 9.6.0
@@ -107,11 +107,11 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
       convex:
-        specifier: ^1.22.0
-        version: 1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: ^1.23.0
+        version: 1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       convex-helpers:
-        specifier: ^0.1.76
-        version: 0.1.76(convex@1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(zod@3.24.2)
+        specifier: ^0.1.77
+        version: 0.1.77(convex@1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(zod@3.24.2)
       language-name-map:
         specifier: ^0.3.0
         version: 0.3.0
@@ -262,7 +262,7 @@ importers:
         version: 2.2.11(axe-core@4.10.2)
       convex-test:
         specifier: ^0.0.36
-        version: 0.0.36(convex@1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
+        version: 0.0.36(convex@1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       globals:
         specifier: ^16.0.0
         version: 16.0.0
@@ -3228,8 +3228,8 @@ packages:
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
-  convex-helpers@0.1.76:
-    resolution: {integrity: sha512-JGMAlC4DRRcibhdsdIm6FQ4kTEwAAMmYqu7aIFjcpxoxcCP1VEZ49YenYBYZUWpTa5BTxnRcd/TRmynsnhkktw==}
+  convex-helpers@0.1.77:
+    resolution: {integrity: sha512-+XXzSET5r41LOIIb0dTJcWvr41X/WmEmdaUuK6Oz71s33c/iG+WTCoMzuWexGYNY1wRTg6m8MQa0BJDfdGHESw==}
     hasBin: true
     peerDependencies:
       convex: ^1.13.0
@@ -3249,8 +3249,8 @@ packages:
     peerDependencies:
       convex: ^1.16.4
 
-  convex@1.22.0:
-    resolution: {integrity: sha512-zHDagTUO8SftALBX7MsE90aZ+CpPEV3xkRgmZReN4k3KnM1R6q4qPReY5yUFpKPUwlmSeIXLKtivz4XEaBvj+g==}
+  convex@1.23.0:
+    resolution: {integrity: sha512-Mz2GpCrw3wXR+TWQgUjQPLkZ5ZhnSSJbvZ/+GUdBY4yMwPpoPw5T6DszAFUB2o1SKyhmyes1iYGijueNsZb/Xw==}
     engines: {node: '>=18.0.0', npm: '>=7.0.0'}
     hasBin: true
     peerDependencies:
@@ -4648,8 +4648,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  prettier@3.5.1:
-    resolution: {integrity: sha512-hPpFQvHwL3Qv5AdRvBFMhnKo4tYxp0ReXiPn2bxkiohEX6mBeBwEpBSQTkD458RaaDKQMYSp4hX4UtfUTA5wDw==}
+  prettier@3.5.2:
+    resolution: {integrity: sha512-lc6npv5PH7hVqozBR7lkBNOGXV9vMwROAPlumdBkX0wTbbzPu/U1hk5yL8p2pt4Xoc+2mkT8t/sow2YrV/M5qg==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -5959,11 +5959,11 @@ snapshots:
       human-id: 4.1.1
       prettier: 2.8.8
 
-  '@convex-dev/auth@0.0.81(@auth/core@0.38.0)(convex@1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)':
+  '@convex-dev/auth@0.0.81(@auth/core@0.38.0)(convex@1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@auth/core': 0.38.0
       arctic: 1.9.2
-      convex: 1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      convex: 1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       cookie: 1.0.2
       cspell: 8.18.1
       is-network-error: 1.1.0
@@ -5977,9 +5977,9 @@ snapshots:
     optionalDependencies:
       react: 19.1.0
 
-  '@convex-dev/migrations@0.2.5(convex@1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))':
+  '@convex-dev/migrations@0.2.5(convex@1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))':
     dependencies:
-      convex: 1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      convex: 1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
   '@cspell/cspell-bundled-dicts@8.18.1':
     dependencies:
@@ -8827,22 +8827,22 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  convex-helpers@0.1.76(convex@1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(zod@3.24.2):
+  convex-helpers@0.1.77(convex@1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(zod@3.24.2):
     dependencies:
-      convex: 1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      convex: 1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
     optionalDependencies:
       react: 19.1.0
       zod: 3.24.2
 
-  convex-test@0.0.36(convex@1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)):
+  convex-test@0.0.36(convex@1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)):
     dependencies:
-      convex: 1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      convex: 1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
-  convex@1.22.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  convex@1.23.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       esbuild: 0.25.1
       jwt-decode: 4.0.0
-      prettier: 3.5.1
+      prettier: 3.5.2
     optionalDependencies:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
@@ -10319,7 +10319,7 @@ snapshots:
 
   prettier@3.4.2: {}
 
-  prettier@3.5.1: {}
+  prettier@3.5.2: {}
 
   prettier@3.5.3: {}
 
