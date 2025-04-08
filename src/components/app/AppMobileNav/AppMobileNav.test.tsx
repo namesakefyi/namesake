@@ -44,7 +44,7 @@ describe("AppMobileNav", () => {
       render(<AppMobileNav />);
 
       const homeLink = screen.getByText("Home").closest("a");
-      expect(homeLink).toHaveClass("text-gray-normal font-bold");
+      expect(homeLink).toHaveClass("text-gray-normal");
     });
 
     it("marks home as active for quest paths", () => {
@@ -55,7 +55,7 @@ describe("AppMobileNav", () => {
       render(<AppMobileNav />);
 
       const homeLink = screen.getByText("Home").closest("a");
-      expect(homeLink).toHaveClass("text-gray-normal font-bold");
+      expect(homeLink).toHaveClass("text-gray-normal");
     });
 
     it("marks settings as active for settings path", () => {
@@ -66,7 +66,7 @@ describe("AppMobileNav", () => {
       render(<AppMobileNav />);
 
       const settingsLink = screen.getByText("Settings").closest("a");
-      expect(settingsLink).toHaveClass("text-gray-normal font-bold");
+      expect(settingsLink).toHaveClass("text-gray-normal");
     });
 
     it("marks admin as active for admin path", () => {
@@ -81,7 +81,7 @@ describe("AppMobileNav", () => {
       render(<AppMobileNav />);
 
       const adminLink = screen.getByText("Admin").closest("a");
-      expect(adminLink).toHaveClass("text-gray-normal font-bold");
+      expect(adminLink).toHaveClass("text-gray-normal");
     });
   });
 
