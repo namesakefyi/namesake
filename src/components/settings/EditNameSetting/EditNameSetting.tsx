@@ -71,7 +71,7 @@ export const EditNameSetting = ({ user }: EditNameSettingProps) => {
           <div className="flex gap-1 justify-end">
             <Button
               size="small"
-              isDisabled={isSubmitting}
+              isSubmitting={isSubmitting}
               onPress={handleCancel}
             >
               Cancel
@@ -79,7 +79,7 @@ export const EditNameSetting = ({ user }: EditNameSettingProps) => {
             <Button
               type="submit"
               variant="primary"
-              isDisabled={isSubmitting}
+              isSubmitting={isSubmitting}
               size="small"
             >
               Save

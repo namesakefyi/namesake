@@ -135,7 +135,7 @@ export const JurisdictionInterstitial = ({
             </ListBoxItem>
           ))}
         </ListBox>
-        <Button type="submit" variant="primary" isDisabled={isSubmitting}>
+        <Button type="submit" variant="primary" isSubmitting={isSubmitting}>
           Continue
         </Button>
       </Form>

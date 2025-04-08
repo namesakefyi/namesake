@@ -139,7 +139,7 @@ const SignIn = () => {
             onChange={setPassword}
             isDisabled={isSubmitting}
           />
-          <Button type="submit" isDisabled={isSubmitting} variant="primary">
+          <Button type="submit" isSubmitting={isSubmitting} variant="primary">
             {isSubmitting ? "Signing in..." : "Sign in"}
           </Button>
         </Form>
@@ -161,7 +161,7 @@ const SignIn = () => {
               minLength={32}
               maxLength={32}
             />
-            <Button type="submit" variant="primary" isDisabled={isSubmitting}>
+            <Button type="submit" variant="primary" isSubmitting={isSubmitting}>
               Continue
             </Button>
           </Form>
@@ -188,7 +188,7 @@ const SignIn = () => {
             {password && passwordState && (
               <PasswordStrength value={passwordState.score} className="-mt-4" />
             )}
-            <Button type="submit" isDisabled={isSubmitting} variant="primary">
+            <Button type="submit" isSubmitting={isSubmitting} variant="primary">
               {isSubmitting ? "Registering..." : "Register"}
             </Button>
             <p className="text-sm text-gray-dim text-center text-balance">
@@ -278,7 +278,7 @@ const ForgotPassword = ({
         value={email}
         onChange={setEmail}
       />
-      <Button type="submit" variant="primary" isDisabled={isSubmitting}>
+      <Button type="submit" variant="primary" isSubmitting={isSubmitting}>
         Send code
       </Button>
     </Form>
@@ -340,7 +340,7 @@ const ForgotPassword = ({
       {passwordState && (
         <PasswordStrength value={passwordState.score} className="-mt-2" />
       )}
-      <Button type="submit" variant="primary" isDisabled={isSubmitting}>
+      <Button type="submit" variant="primary" isSubmitting={isSubmitting}>
         Reset password
       </Button>
     </Form>
