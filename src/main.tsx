@@ -40,7 +40,7 @@ const NotFoundComponent = () => (
       }}
       link={{
         children: "Go home",
-        href: { to: "/" },
+        href: "/",
         button: {
           variant: "secondary",
         },

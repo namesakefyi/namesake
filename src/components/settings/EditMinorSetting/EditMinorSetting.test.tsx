@@ -22,9 +22,7 @@ describe("EditMinorSetting", () => {
 
     expect(screen.getByText("Under 18")).toBeInTheDocument();
     expect(
-      screen.getByText(
-        "Are you under 18 years old or applying on behalf of someone who is?",
-      ),
+      screen.getByText("Are you applying as a minor?"),
     ).toBeInTheDocument();
     expect(screen.getByRole("switch", { name: "Is minor" })).not.toBeChecked();
   });

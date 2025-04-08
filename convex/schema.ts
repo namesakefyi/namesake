@@ -52,7 +52,7 @@ const quests = defineTable({
   urls: v.optional(v.array(v.string())),
   /** Time in ms since epoch when the quest was deleted. */
   deletedAt: v.optional(v.number()),
-  /** Steps in the quest */
+  /** Steps in the quest. */
   steps: v.optional(v.array(v.id("questSteps"))),
   /** Questions related to the quest. */
   faqs: v.optional(v.array(v.id("questFaqs"))),

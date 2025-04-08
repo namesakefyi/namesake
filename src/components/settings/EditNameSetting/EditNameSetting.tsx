@@ -1,4 +1,11 @@
-import { Banner, Button, Form, TextField } from "@/components/common";
+import {
+  Banner,
+  Button,
+  DialogTrigger,
+  Form,
+  Popover,
+  TextField,
+} from "@/components/common";
 import { SettingsItem } from "@/components/settings";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
@@ -48,46 +55,52 @@ export const EditNameSetting = ({ user }: EditNameSettingProps) => {
       label="Display name"
       description="How should Namesake refer to you? This can be different from your legal name."
     >
-      {!isEditing ? (
+      <DialogTrigger>
         <Button onPress={() => setIsEditing(true)}>
           <span className="truncate max-w-[24ch]">
             {user?.name ?? "Set name"}
           </span>
         </Button>
-      ) : (
-        <Form onSubmit={handleSubmit} className="gap-2">
-          <TextField
-            aria-label="Name"
-            name="name"
-            value={name}
-            onChange={(value) => {
-              setName(value);
-              setError(undefined);
-            }}
-            className="w-full"
-            isRequired
-            autoFocus
-          />
-          <div className="flex gap-1 justify-end">
-            <Button
-              size="small"
-              isDisabled={isSubmitting}
-              onPress={handleCancel}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              isDisabled={isSubmitting}
-              size="small"
-            >
-              Save
-            </Button>
-          </div>
-          {error && <Banner variant="danger">{error}</Banner>}
-        </Form>
-      )}
+        <Popover
+          title="Edit name"
+          className="p-2"
+          placement="bottom end"
+          isOpen={isEditing}
+        >
+          <Form onSubmit={handleSubmit} className="gap-2">
+            <TextField
+              aria-label="Name"
+              name="name"
+              value={name}
+              onChange={(value) => {
+                setName(value);
+                setError(undefined);
+              }}
+              className="w-full"
+              isRequired
+              autoFocus
+            />
+            <div className="flex gap-1 justify-end">
+              <Button
+                size="small"
+                isDisabled={isSubmitting}
+                onPress={handleCancel}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                isDisabled={isSubmitting}
+                size="small"
+              >
+                Save
+              </Button>
+            </div>
+            {error && <Banner variant="danger">{error}</Banner>}
+          </Form>
+        </Popover>
+      </DialogTrigger>
     </SettingsItem>
   );
 };

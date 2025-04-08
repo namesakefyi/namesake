@@ -65,7 +65,7 @@ describe("JurisdictionInterstitial", () => {
 
     expect(mockSetResidence).toHaveBeenCalledWith({ residence: "CA" });
     expect(mockNavigate).toHaveBeenCalledWith({
-      to: "/$questSlug",
+      to: "/quests/$questSlug",
       params: { questSlug: "test-quest" },
     });
   });

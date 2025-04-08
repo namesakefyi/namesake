@@ -7,11 +7,16 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 .app-padding {
-  @apply px-6 lg:px-8;
+  @apply px-4 md:px-6 lg:px-8;
 }
 
 .h-header {
   @apply h-16 lg:h-20;
+}
+
+.h-mobile-nav {
+  height: calc(56px + env(safe-area-inset-bottom));
+  padding-bottom: max(env(safe-area-inset-bottom), 0.25rem);
 }
 
 .prose {

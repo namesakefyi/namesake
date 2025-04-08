@@ -66,10 +66,7 @@ export function FormSection({
       id={getQuestionId(title)}
       data-form-section
       data-testid="form-section"
-      className={twMerge(
-        "flex flex-col gap-8 p-8 pb-9 justify-center outline-1 outline-gray-a3 shadow-sm dark:shadow-md rounded-2xl bg-app",
-        className,
-      )}
+      className={twMerge("flex flex-col gap-8 py-12 justify-center", className)}
       disabled={!isVisible}
     >
       <FormHeader title={title} description={description} />
@@ -96,7 +93,7 @@ export function FormSubsection({
   return (
     <fieldset
       className={twMerge(
-        "flex flex-col gap-8 -mx-8 px-8 pt-8 border-t border-gray-a3 justify-center",
+        "flex flex-col gap-8 pl-6 py-2 border-l-3 border-gray-a3 justify-center",
         className,
       )}
       disabled={!isVisible}
