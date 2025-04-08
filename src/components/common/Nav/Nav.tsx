@@ -106,7 +106,7 @@ export const NavItem = ({
         <ExternalLink aria-hidden className="size-4 text-gray-8" />
       )}
       {displayChevron && (
-        <ChevronRight aria-hidden className="size-5 text-gray-8" />
+        <ChevronRight aria-hidden className="size-5 -mr-0.5 text-gray-8" />
       )}
     </Link>
   );

@@ -13,11 +13,20 @@ interface AppMobileNavItemProps extends Omit<LinkProps, "href"> {
 }
 
 const navItemStyles = tv({
-  base: "flex flex-col items-center h-12 gap-0.5 justify-center no-underline text-xs text-gray-dim hover:text-gray-normal leading-none rounded-md py-1 px-2 transition-colors",
+  base: "font-medium flex flex-col items-center h-12 gap-0.5 justify-center no-underline text-xs text-gray-dim hover:text-gray-normal leading-none rounded-md py-1 px-2 transition-colors",
   variants: {
     isActive: {
-      false: "text-gray-dim font-medium",
-      true: "text-gray-normal font-bold",
+      false: "text-gray-dim",
+      true: "text-gray-normal",
+    },
+  },
+});
+
+const iconStyles = tv({
+  variants: {
+    isActive: {
+      false: "text-gray-8 stroke-[1.5px]",
+      true: "text-gray-11 stroke-2",
     },
   },
 });
@@ -39,7 +48,7 @@ const AppMobileNavItem = ({
 
   return (
     <Link {...props} className={navItemStyles({ isActive })}>
-      <Icon className="opacity-80" />
+      <Icon className={iconStyles({ isActive })} />
       {label}
     </Link>
   );
