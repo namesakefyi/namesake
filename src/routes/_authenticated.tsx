@@ -2,6 +2,7 @@ import { AppMobileNav } from "@/components/app";
 import { useIsMobile } from "@/utils/useIsMobile";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import { Authenticated } from "convex/react";
+import { tv } from "tailwind-variants";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ context }) => {
@@ -14,9 +15,17 @@ export const Route = createFileRoute("/_authenticated")({
 function AuthenticatedRoute() {
   const isMobile = useIsMobile();
 
+  const styles = tv({
+    variants: {
+      isMobile: {
+        true: "min-h-dvh pb-14",
+      },
+    },
+  });
+
   return (
     <Authenticated>
-      <main className="grid grid-rows-[1fr_auto] h-screen min-h-0">
+      <main className={styles({ isMobile })}>
         <Outlet />
         {isMobile && <AppMobileNav />}
       </main>

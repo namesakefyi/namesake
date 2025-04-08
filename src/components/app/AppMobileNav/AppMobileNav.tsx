@@ -16,6 +16,7 @@ const navItemStyles = tv({
   base: "flex flex-col items-center h-12 gap-0.5 justify-center no-underline text-xs text-gray-dim hover:text-gray-normal leading-none rounded-md py-1 px-2 transition-colors",
   variants: {
     isActive: {
+      false: "text-gray-dim font-medium",
       true: "text-gray-normal font-bold",
     },
   },
@@ -49,7 +50,7 @@ export const AppMobileNav = () => {
   const isAdmin = user?.role === "admin";
 
   return (
-    <div className="w-full shrink-0 bg-element border-t border-gray-a4 flex *:flex-1 *:shrink-0 gap-1 p-2 items-center sticky bottom-0 mt-auto shadow-2xl">
+    <div className="w-full shrink-0 bg-element border-t border-gray-a4 flex *:flex-1 *:shrink-0 gap-1 h-mobile-nav p-1 items-center fixed bottom-0 shadow-2xl">
       <AppMobileNavItem icon={Home} label="Home" href={{ to: "/" }} />
       <AppMobileNavItem
         icon={Settings}

@@ -19,7 +19,7 @@ const navItemStyles = tv({
       true: "bg-gray-3 hover:bg-gray-3 text-gray-normal",
     },
     size: {
-      medium: "h-10 md:h-8 lg:h-9 gap-1.5",
+      medium: "h-9 md:h-8 lg:h-9 gap-1.5",
       large: "h-12 gap-2",
     },
   },
@@ -107,5 +107,5 @@ interface NavProps {
 }
 
 export const Nav = ({ children }: NavProps) => {
-  return <nav className="flex flex-col gap-0.5">{children}</nav>;
+  return <nav className="flex flex-col gap-0.5 pb-4">{children}</nav>;
 };

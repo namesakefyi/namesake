@@ -15,7 +15,7 @@ function AdminIndexRoute() {
 
   return (
     <>
-      <PageHeader title="Admin" mobileBackLink={{ to: "/" }} />
+      <PageHeader title="Admin" />
       <AdminNav />
     </>
   );
