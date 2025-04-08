@@ -25,7 +25,7 @@ const navItemStyles = tv({
 const iconStyles = tv({
   variants: {
     isActive: {
-      false: "text-gray-8 stroke-[1.5px]",
+      false: "text-gray-9 stroke-[1.5px]",
       true: "text-gray-11 stroke-2",
     },
   },
