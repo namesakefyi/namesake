@@ -16,9 +16,10 @@ function AuthenticatedRoute() {
   const isMobile = useIsMobile();
 
   const styles = tv({
+    base: "min-h-dvh flex flex-col *:flex-1",
     variants: {
       isMobile: {
-        true: "min-h-dvh pb-14",
+        true: "pb-14",
       },
     },
   });
