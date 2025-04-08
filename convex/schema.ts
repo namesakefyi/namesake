@@ -52,8 +52,13 @@ const quests = defineTable({
   urls: v.optional(v.array(v.string())),
   /** Time in ms since epoch when the quest was deleted. */
   deletedAt: v.optional(v.number()),
-  /** Steps in the quest */
+  /**
+   * Steps in the quest
+   * @deprecated Use `content` instead.
+   */
   steps: v.optional(v.array(v.id("questSteps"))),
+  /** Rich text comprising the contents of the quest, stored as Tiptap JSON. */
+  content: v.optional(v.string()),
   /** Questions related to the quest. */
   faqs: v.optional(v.array(v.id("questFaqs"))),
   /** Time in ms since epoch when the quest was last updated. */
