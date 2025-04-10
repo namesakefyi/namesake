@@ -150,6 +150,15 @@ export const setCategory = userMutation({
   },
 });
 
+export const setContent = userMutation({
+  args: { questId: v.id("quests"), content: v.string() },
+  handler: async (ctx, args) => {
+    await Quests.update(ctx, args.questId, ctx.userId, {
+      content: args.content,
+    });
+  },
+});
+
 export const setUrls = userMutation({
   args: { questId: v.id("quests"), urls: v.optional(v.array(v.string())) },
   handler: async (ctx, args) => {

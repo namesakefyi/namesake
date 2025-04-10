@@ -1,11 +1,11 @@
 import { Empty } from "@/components/common";
 import {
+  QuestContent,
   QuestCosts,
   QuestDetails,
   QuestFaqs,
   QuestPageHeader,
   QuestReferences,
-  QuestSteps,
   QuestTimeRequired,
 } from "@/components/quests";
 import { QuestBasics } from "@/components/quests/QuestBasics/QuestBasics";
@@ -13,6 +13,7 @@ import { QuestPageFooter } from "@/components/quests/QuestPageFooter/QuestPageFo
 import { api } from "@convex/_generated/api";
 import { JURISDICTIONS } from "@convex/constants";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { useQuery } from "convex/react";
 import { Milestone } from "lucide-react";
 
 type QuestSearch = {
@@ -23,12 +24,6 @@ export const Route = createFileRoute(
   "/_authenticated/_home/quests/$questSlug/",
 )({
   component: QuestDetailRoute,
-  loader: async ({ params: { questSlug }, context: { convex } }) => {
-    const questData = await convex.query(api.quests.getWithUserQuest, {
-      slug: questSlug,
-    });
-    return { questData };
-  },
   validateSearch: (search: Record<string, unknown>): QuestSearch => {
     return {
       edit: search.edit === true ? true : undefined,
@@ -38,8 +33,12 @@ export const Route = createFileRoute(
 
 function QuestDetailRoute() {
   const router = useRouter();
+  const { questSlug } = Route.useParams();
   const { edit: isEditing } = Route.useSearch();
-  const { questData } = Route.useLoaderData();
+
+  const questData = useQuery(api.quests.getWithUserQuest, {
+    slug: questSlug,
+  });
 
   // TODO: Improve loading state to prevent flash of empty
   if (questData === undefined) return;
@@ -72,7 +71,7 @@ function QuestDetailRoute() {
           <QuestCosts quest={quest} editable={isEditing} />
           <QuestTimeRequired quest={quest} editable={isEditing} />
         </QuestDetails>
-        <QuestSteps quest={quest} editable={isEditing} />
+        <QuestContent quest={quest} editable={isEditing} />
         <QuestFaqs quest={quest} editable={isEditing} />
         <QuestReferences quest={quest} editable={isEditing} />
       </div>

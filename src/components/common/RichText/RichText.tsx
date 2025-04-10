@@ -1,5 +1,4 @@
-import { FieldGroup, Separator, ToggleButton } from "@/components/common";
-import { ReadingScore } from "@/components/quests";
+import { FieldGroup } from "@/components/common";
 import Blockquote from "@tiptap/extension-blockquote";
 import Bold from "@tiptap/extension-bold";
 import BulletList from "@tiptap/extension-bullet-list";
@@ -15,33 +14,32 @@ import Paragraph from "@tiptap/extension-paragraph";
 import Placeholder from "@tiptap/extension-placeholder";
 import Text from "@tiptap/extension-text";
 import Typography from "@tiptap/extension-typography";
-import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import {
-  Bold as BoldIcon,
-  Italic as ItalicIcon,
-  List,
-  ListOrdered,
-} from "lucide-react";
+  EditorContent,
+  type EditorContentProps,
+  type EditorEvents,
+  useEditor,
+} from "@tiptap/react";
 import { useEffect } from "react";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
+import { EditorToolbar } from "./EditorToolbar";
+import { StepContent, StepItem, StepTitle, Steps } from "./extensions";
 
-export interface RichTextProps {
+export interface RichTextProps
+  extends Omit<EditorContentProps, "onChange" | "editor"> {
   className?: string;
-  showReadingScore?: boolean;
   initialContent?: string;
-  onChange?: (content: string) => void;
+  onUpdate?: (props: EditorEvents["update"]) => void;
   editable?: boolean;
-  placeholder?: string;
 }
 
 export function RichText({
   className,
-  showReadingScore = false,
   initialContent,
-  onChange,
+  onUpdate,
   editable = true,
-  placeholder = "Write something...",
+  ...props
 }: RichTextProps) {
   const editor = useEditor({
     extensions: [
@@ -53,7 +51,19 @@ export function RichText({
       Typography,
       History,
       Placeholder.configure({
-        placeholder,
+        includeChildren: true,
+        showOnlyCurrent: false,
+        placeholder: ({ node }) => {
+          if (node.type.name === "stepTitle") {
+            return "Step title";
+          }
+
+          if (node.type.name === "stepContent") {
+            return "Step instructions";
+          }
+
+          return "Write something…";
+        },
       }),
 
       // Basic formatting
@@ -65,18 +75,31 @@ export function RichText({
       }),
 
       Blockquote,
+      ListKeymap.configure({
+        listTypes: [
+          {
+            itemName: "listItem",
+            wrapperNames: ["bulletList", "orderedList"],
+          },
+          {
+            itemName: "stepItem",
+            wrapperNames: ["steps"],
+          },
+        ],
+      }),
       BulletList,
       ListItem,
-      ListKeymap,
       OrderedList,
+
+      // Steps
+      Steps,
+      StepItem,
+      StepTitle,
+      StepContent,
     ],
     content: initialContent,
     editable,
-    onUpdate: ({ editor }) => {
-      if (onChange) {
-        onChange(editor.getHTML());
-      }
-    },
+    onUpdate,
   });
 
   useEffect(() => {
@@ -90,7 +113,7 @@ export function RichText({
   }
 
   const styles = tv({
-    base: "w-full",
+    base: "w-full flex-col",
     variants: {
       editable: {
         true: "px-3.5 py-3 [&_.tiptap]:outline-hidden",
@@ -102,53 +125,12 @@ export function RichText({
 
   return (
     <FieldGroup className={styles({ editable })}>
+      {editable && <EditorToolbar editor={editor} />}
       <EditorContent
         editor={editor}
         className={twMerge("w-full prose", className)}
+        {...props}
       />
-      <BubbleMenu
-        editor={editor}
-        className="bg-app border border-gray-dim p-1.5 gap-px rounded-xl shadow-md flex items-center data-[state=visible]:opacity-100 data-[state=hidden]:opacity-0 transition-opacity *:border-none"
-      >
-        <ToggleButton
-          onPress={() => editor.chain().focus().toggleBold().run()}
-          isDisabled={!editor.can().chain().focus().toggleBold().run()}
-          isSelected={editor.isActive("bold")}
-          icon={BoldIcon}
-          aria-label="Toggle bold text"
-          size="small"
-        />
-        <ToggleButton
-          onPress={() => editor.chain().focus().toggleItalic().run()}
-          isDisabled={!editor.can().chain().focus().toggleItalic().run()}
-          isSelected={editor.isActive("italic")}
-          icon={ItalicIcon}
-          aria-label="Toggle italic text"
-          size="small"
-        />
-        <Separator orientation="vertical" />
-        <ToggleButton
-          onPress={() => editor.chain().focus().toggleBulletList().run()}
-          isDisabled={!editor.can().chain().focus().toggleBulletList().run()}
-          isSelected={editor.isActive("bulletList")}
-          icon={List}
-          aria-label="Toggle bulleted list"
-          size="small"
-        />
-        <ToggleButton
-          onPress={() => editor.chain().focus().toggleOrderedList().run()}
-          isDisabled={!editor.can().chain().focus().toggleOrderedList().run()}
-          isSelected={editor.isActive("orderedList")}
-          icon={ListOrdered}
-          aria-label="Toggle numbered list"
-          size="small"
-        />
-      </BubbleMenu>
-      {showReadingScore && (
-        <div className="border-t border-gray-dim">
-          <ReadingScore text={editor.state.doc.textContent} />
-        </div>
-      )}
     </FieldGroup>
   );
 }

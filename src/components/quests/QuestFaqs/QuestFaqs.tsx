@@ -69,7 +69,9 @@ const EditFaqForm = ({ faq, onSubmit, onCancel }: EditFaqFormProps) => {
       />
       <RichText
         initialContent={answer}
-        onChange={setAnswer}
+        onUpdate={(props) => {
+          setAnswer(props.editor.getHTML());
+        }}
         className="flex-1"
         placeholder="Write an answer..."
       />
