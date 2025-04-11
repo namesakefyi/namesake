@@ -2,4 +2,4 @@
 "namesake": patch
 ---
 
-Add loading indicators to buttons during form submission to improve user experience
+Add loading indicators to buttons during form submission
