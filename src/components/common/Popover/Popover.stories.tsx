@@ -4,9 +4,6 @@ import { CircleHelp } from "lucide-react";
 
 const meta: Meta<typeof Popover> = {
   component: Popover,
-  args: {
-    title: "Help",
-  },
 };
 
 export default meta;

@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
 describe("Menu", () => {
-  it("renders Menu with accessible title", async () => {
+  it("renders Menu", async () => {
     render(
       <DialogTrigger>
         <Button>Open Menu</Button>
@@ -22,10 +22,8 @@ describe("Menu", () => {
     const menu = await screen.findByRole("menu");
     expect(menu).toBeInTheDocument();
 
-    // Renders the accessible title
-    const title = await screen.findByRole("dialog", {
-      name: "Select an option",
-    });
-    expect(title).toBeInTheDocument();
+    // Renders the menu popover
+    const popover = await screen.findByRole("dialog");
+    expect(popover).toBeInTheDocument();
   });
 });
