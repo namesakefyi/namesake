@@ -27,6 +27,7 @@ export interface ComboBoxProps<T extends object>
   description?: string | null;
   errorMessage?: string | ((validation: ValidationResult) => string);
   children: React.ReactNode | ((item: T) => React.ReactNode);
+  placeholder?: string;
 }
 
 export function ComboBox<T extends object>({
@@ -35,6 +36,7 @@ export function ComboBox<T extends object>({
   errorMessage,
   children,
   items,
+  placeholder,
   ...props
 }: ComboBoxProps<T>) {
   return (
@@ -49,7 +51,7 @@ export function ComboBox<T extends object>({
         <>
           <Label>{label}</Label>
           <FieldGroup {...renderProps}>
-            <Input />
+            <Input placeholder={placeholder} />
             <Button
               variant="icon"
               className="w-7 h-7 p-0 mr-1 outline-offset-0"
