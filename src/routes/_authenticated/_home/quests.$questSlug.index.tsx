@@ -12,7 +12,7 @@ import { QuestBasics } from "@/components/quests/QuestBasics/QuestBasics";
 import { QuestPageFooter } from "@/components/quests/QuestPageFooter/QuestPageFooter";
 import { api } from "@convex/_generated/api";
 import { JURISDICTIONS } from "@convex/constants";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Milestone } from "lucide-react";
 
 type QuestSearch = {
@@ -37,7 +37,6 @@ export const Route = createFileRoute(
 });
 
 function QuestDetailRoute() {
-  const router = useRouter();
   const { edit: isEditing } = Route.useSearch();
   const { questData } = Route.useLoaderData();
 
@@ -48,7 +47,11 @@ function QuestDetailRoute() {
       <Empty
         title="Quest not found"
         icon={Milestone}
-        button={{ children: "Go back", onPress: () => router.history.go(-1) }}
+        link={{
+          children: "Go home",
+          href: { to: "/" },
+          button: { variant: "secondary" },
+        }}
       />
     );
 
