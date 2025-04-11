@@ -1,4 +1,5 @@
 import {
+  Badge,
   Button,
   DialogTrigger,
   Form,
@@ -14,11 +15,11 @@ import {
   type NodeViewProps,
   NodeViewWrapper,
 } from "@tiptap/react";
-import { LinkIcon } from "lucide-react";
+import { AlertTriangle, LinkIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function ButtonComponent({ editor, node }: NodeViewProps) {
-  const [url, setUrl] = useState<string>(node.attrs.href);
+  const [url, setUrl] = useState<string | null>(node.attrs.href);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSave = () => {
@@ -48,8 +49,15 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
           <TooltipTrigger>
             <Link onPress={() => setIsOpen(true)} {...sharedLinkProps}>
               <NodeViewContent />
+              {!node.attrs.href && (
+                <Badge icon={AlertTriangle} variant="warning">
+                  No URL
+                </Badge>
+              )}
             </Link>
-            <Tooltip>{url.length > 0 ? url : "Click to add URL"}</Tooltip>
+            <Tooltip>
+              {url && url.length > 0 ? url : "Click to add URL"}
+            </Tooltip>
           </TooltipTrigger>
           <Popover
             title="Edit link"
@@ -62,7 +70,7 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
                   aria-label="URL"
                   autoFocus
                   type="url"
-                  value={url}
+                  value={url ?? ""}
                   onChange={setUrl}
                   className="flex-1"
                   prefix={

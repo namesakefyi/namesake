@@ -89,17 +89,31 @@ export const Button = Node.create<ButtonOptions>({
           );
           if (!button) return false;
 
-          return chain()
-            .setNode("paragraph", {
-              content: [
-                {
-                  type: "text",
-                  text: button.node.textContent,
-                },
-              ],
+          const range = {
+            from: button.start,
+            to: button.start + button.node.content.size,
+          };
+          const beforeButton = button.start - 1;
+          const hasLink =
+            button.node.attrs.href && button.node.attrs.href !== "";
+
+          chain()
+            .deleteNode("button")
+            .insertContentAt(beforeButton, {
+              type: "text",
+              text: button.node.textContent,
             })
-            .setMark("link", { href: button.node.attrs.href })
             .run();
+
+          if (hasLink) {
+            chain()
+              .setTextSelection(range)
+              .extendMarkRange("link")
+              .setLink({ href: button.node.attrs.href })
+              .run();
+          }
+
+          return true;
         },
 
       toggleButton:

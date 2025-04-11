@@ -130,7 +130,7 @@ export const EditorToolbar = ({ editor, extensions }: EditorToolbarProps) => {
           />
           <EditorToggleButton
             icon={Heading2}
-            label="Small heading"
+            label="Subheading"
             onPress={() =>
               editor.chain().focus().toggleHeading({ level: 3 }).run()
             }
@@ -189,7 +189,7 @@ export const EditorToolbar = ({ editor, extensions }: EditorToolbarProps) => {
           <Separator orientation="vertical" />
           <EditorToggleButton
             icon={ListOrdered}
-            label="Numbered List"
+            label="Numbered list"
             onPress={() => editor.chain().focus().toggleOrderedList().run()}
             isDisabled={!editor.can().chain().focus().toggleOrderedList().run()}
             isSelected={editor.isActive("orderedList")}
@@ -209,14 +209,14 @@ export const EditorToolbar = ({ editor, extensions }: EditorToolbarProps) => {
           <Separator orientation="vertical" />
           <EditorToggleButton
             icon={Milestone}
-            label="Guided steps"
+            label="Steps"
             onPress={() => editor.chain().focus().toggleSteps().run()}
             isDisabled={!editor.can().chain().focus().toggleSteps().run()}
             isSelected={editor.isActive("steps")}
           />
           <EditorToggleButton
             icon={MousePointerClick}
-            label="Link button"
+            label="Button"
             onPress={() => editor.chain().focus().toggleButton().run()}
             isDisabled={!editor.can().chain().focus().toggleButton().run()}
             isSelected={editor.isActive("button")}

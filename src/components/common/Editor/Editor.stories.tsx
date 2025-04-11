@@ -15,7 +15,25 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    initialContent: "Hello, girls!",
+    initialContent: `
+      <h2>This is a heading (insert with ##)</h2>
+      <p>This is a paragraph. Text can be marked <strong>bold</strong> or <em>italic</em>.</p>
+      <p>You can also <a href="https://www.mass.gov/">link to other pages</a>.</p>
+      <blockquote>
+        <p>This is a blockquote. Insert with >.</p>
+      </blockquote>
+      <h3>This is a subheading (insert with ###)</h3>
+      <ul>
+        <li>This is</li>
+        <li>an <strong>unordered</strong></li>
+        <li>list</li>
+      </ul>
+      <ol>
+        <li>This is</li>
+        <li>an <strong>ordered</strong></li>
+        <li>list</li>
+      </ol>  
+    `,
   },
 };
 
@@ -47,7 +65,7 @@ export const WithSteps: Story = {
   },
 };
 
-export const Simplified: Story = {
+export const FewerControls: Story = {
   args: {
     extensions: ["basic"],
     initialContent:
@@ -57,8 +75,10 @@ export const Simplified: Story = {
 
 export const WithButton: Story = {
   args: {
-    initialContent: `
+    initialContent: `<p>Buttons can be included to draw attention to important links.</p>
       <a href="https://www.mass.gov/" data-type="button">Go to Mass.gov</a>
+      <p>When first inserted, buttons will not have an href. Click the button to add one.</p>
+      <a href="" data-type="button">Click here</a>
     `,
   },
 };
