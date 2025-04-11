@@ -10,7 +10,6 @@ export const StepTitle = Node.create<StepTitleOptions>({
   content: "text*",
   marks: "italic",
   defining: true,
-  isolating: true,
   selectable: false,
 
   parseHTML() {
@@ -75,6 +74,38 @@ export const StepTitle = Node.create<StepTitleOptions>({
               .focus(posBeforeSteps)
               .run();
           }
+
+          const isLastStep =
+            stepItem.pos + stepItem.node.content.size + 1 ===
+            steps.pos + steps.node.content.size;
+          const isLastStepEmpty = stepItem.node.textContent.trim() === "";
+
+          // If we're at the end of the last step and the step is empty,
+          // delete the step and then insert a paragraph below steps
+          if (isLastStep && isLastStepEmpty) {
+            editor.chain().deleteStep().run();
+
+            // We have to find the steps node again to recalculate the position
+            const steps = findParentNode((node) => node.type.name === "steps")(
+              editor.state.selection,
+            );
+            if (!steps) return false;
+
+            const posAfterSteps = steps.pos + steps.node.nodeSize;
+            return (
+              editor
+                .chain()
+                .insertContentAt(posAfterSteps, {
+                  type: "paragraph",
+                })
+                // +2 for end token of steps + start token of new paragraph
+                .focus(posAfterSteps + 2)
+                .run()
+            );
+          }
+
+          // TODO: There's a way to not have to calculate this logic, I'm sure of it
+          // Research "isolation" in Tiptap
 
           const endOfTitle = stepTitle.start + stepTitle.node.content.size;
           // +2 for end token of title + start token of content

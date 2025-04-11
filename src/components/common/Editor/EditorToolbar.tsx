@@ -1,13 +1,21 @@
 import type { Editor } from "@tiptap/react";
 import {
   BoldIcon,
+  Heading,
+  Heading2,
   ItalicIcon,
+  Link,
   List,
   ListOrdered,
   type LucideIcon,
   Milestone,
   MousePointerClick,
+  Redo,
+  TextQuote,
+  Undo,
+  Unlink,
 } from "lucide-react";
+import { useCallback, useEffect } from "react";
 import {
   Separator,
   ToggleButton,
@@ -18,13 +26,11 @@ import {
 } from "..";
 
 type EditorToggleButtonProps = {
-  editor: Editor;
   icon: LucideIcon;
   label: string;
-} & ToggleButtonProps;
+} & Omit<ToggleButtonProps, "icon" | "size">;
 
 const EditorToggleButton = ({
-  editor,
   icon,
   label,
   onPress,
@@ -41,13 +47,86 @@ const EditorToggleButton = ({
 export const EditorToolbar = ({ editor }: { editor: Editor }) => {
   if (!editor) return null;
 
+  const setLink = useCallback(() => {
+    const previousUrl = editor.getAttributes("link").href;
+    const url = window.prompt("URL", previousUrl);
+    // TODO: Use custom dialog
+
+    // cancelled
+    if (url === null) {
+      return;
+    }
+
+    // empty
+    if (url === "") {
+      editor.chain().focus().extendMarkRange("link").unsetLink().run();
+      return;
+    }
+
+    // update link
+    try {
+      editor
+        .chain()
+        .focus()
+        .extendMarkRange("link")
+        .setLink({ href: url })
+        .run();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [editor]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setLink();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [setLink]);
+
   return (
     <Toolbar
       orientation="horizontal"
       className="p-3 border-b border-gray-dim sticky bg-gray-3 rounded-t-lg top-0 z-10"
     >
       <EditorToggleButton
-        editor={editor}
+        icon={Undo}
+        label="Undo"
+        onPress={() => editor.chain().focus().undo().run()}
+        isDisabled={!editor.can().chain().focus().undo().run()}
+        isSelected={false}
+      />
+      <EditorToggleButton
+        icon={Redo}
+        label="Redo"
+        onPress={() => editor.chain().focus().redo().run()}
+        isDisabled={!editor.can().chain().focus().redo().run()}
+        isSelected={false}
+      />
+      <Separator orientation="vertical" />
+      <EditorToggleButton
+        icon={Heading}
+        label="Heading"
+        onPress={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        isDisabled={
+          !editor.can().chain().focus().toggleHeading({ level: 2 }).run()
+        }
+        isSelected={editor.isActive("heading", { level: 2 })}
+      />
+      <EditorToggleButton
+        icon={Heading2}
+        label="Small heading"
+        onPress={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        isDisabled={
+          !editor.can().chain().focus().toggleHeading({ level: 3 }).run()
+        }
+        isSelected={editor.isActive("heading", { level: 3 })}
+      />
+      <EditorToggleButton
         icon={BoldIcon}
         label="Bold"
         onPress={() => editor.chain().focus().toggleBold().run()}
@@ -55,46 +134,63 @@ export const EditorToolbar = ({ editor }: { editor: Editor }) => {
         isSelected={editor.isActive("bold")}
       />
       <EditorToggleButton
-        editor={editor}
         icon={ItalicIcon}
         label="Italic"
         onPress={() => editor.chain().focus().toggleItalic().run()}
         isDisabled={!editor.can().chain().focus().toggleItalic().run()}
         isSelected={editor.isActive("italic")}
       />
-      <Separator orientation="vertical" />
-      <ToggleButton
-        onPress={() => editor.chain().focus().toggleBulletList().run()}
-        isDisabled={!editor.can().chain().focus().toggleBulletList().run()}
-        isSelected={editor.isActive("bulletList")}
-        icon={List}
-        aria-label="Toggle bulleted list"
-        size="small"
+      <EditorToggleButton
+        icon={TextQuote}
+        label="Quote"
+        onPress={() => editor.chain().focus().toggleBlockquote().run()}
+        isDisabled={!editor.can().chain().focus().toggleBlockquote().run()}
+        isSelected={editor.isActive("blockquote")}
       />
-      <ToggleButton
+      <Separator orientation="vertical" />
+      <EditorToggleButton
+        icon={Link}
+        label="Link"
+        onPress={setLink}
+        isDisabled={!editor.can().chain().focus().setLink({ href: "" }).run()}
+        isSelected={editor.isActive("link")}
+      />
+      <EditorToggleButton
+        icon={Unlink}
+        label="Unlink"
+        onPress={() => editor.chain().focus().unsetLink().run()}
+        isDisabled={!editor.can().chain().focus().unsetLink().run()}
+        isSelected={false}
+      />
+      <Separator orientation="vertical" />
+      <EditorToggleButton
+        icon={ListOrdered}
+        label="Numbered List"
         onPress={() => editor.chain().focus().toggleOrderedList().run()}
         isDisabled={!editor.can().chain().focus().toggleOrderedList().run()}
         isSelected={editor.isActive("orderedList")}
-        icon={ListOrdered}
-        aria-label="Toggle numbered list"
-        size="small"
+      />
+      <EditorToggleButton
+        icon={List}
+        label="Unordered list"
+        onPress={() => editor.chain().focus().toggleBulletList().run()}
+        isDisabled={!editor.can().chain().focus().toggleBulletList().run()}
+        isSelected={editor.isActive("bulletList")}
       />
       <Separator orientation="vertical" />
-      <ToggleButton
+      <EditorToggleButton
+        icon={Milestone}
+        label="Guided steps"
         onPress={() => editor.chain().focus().toggleSteps().run()}
         isDisabled={!editor.can().chain().focus().toggleSteps().run()}
         isSelected={editor.isActive("steps")}
-        icon={Milestone}
-        aria-label="Toggle steps"
-        size="small"
       />
-      <ToggleButton
+      <EditorToggleButton
+        icon={MousePointerClick}
+        label="Link button"
         onPress={() => editor.chain().focus().toggleButton().run()}
         isDisabled={!editor.can().chain().focus().toggleButton().run()}
         isSelected={editor.isActive("button")}
-        icon={MousePointerClick}
-        aria-label="Toggle button"
-        size="small"
       />
     </Toolbar>
   );

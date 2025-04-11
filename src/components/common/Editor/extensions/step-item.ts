@@ -25,7 +25,6 @@ export const StepItem = Node.create<StepItemOptions>({
   group: "listItem",
   content: "stepTitle stepContent",
   defining: true,
-  isolating: true,
   draggable: false,
 
   addOptions() {

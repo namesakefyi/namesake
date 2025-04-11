@@ -19,7 +19,6 @@ export const Steps = Node.create<StepsOptions>({
   group: "block list",
   content: "stepItem+",
   defining: true,
-  isolating: true,
   priority: 500,
 
   addOptions() {

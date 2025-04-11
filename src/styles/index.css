@@ -34,7 +34,7 @@
     h2 {
       @apply text-2xl font-medium;
       @apply pb-2;
-      @apply border-b border-gray-5;
+      @apply border-b border-gray-6;
     }
 
     h3 {
@@ -42,7 +42,7 @@
     }
 
     blockquote {
-      @apply border-l-2 border-gray-5 pl-4;
+      @apply border-l-2 border-gray-9 pl-4;
     }
 
     li {

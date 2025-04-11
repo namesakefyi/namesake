@@ -9,7 +9,6 @@ export const StepContent = Node.create<StepContentOptions>({
   name: "stepContent",
   content: "block+",
   defining: true,
-  isolating: true,
   selectable: false,
 
   parseHTML() {

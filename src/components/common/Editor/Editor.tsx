@@ -3,7 +3,9 @@ import Blockquote from "@tiptap/extension-blockquote";
 import Bold from "@tiptap/extension-bold";
 import BulletList from "@tiptap/extension-bullet-list";
 import Document from "@tiptap/extension-document";
+import Gapcursor from "@tiptap/extension-gapcursor";
 import HardBreak from "@tiptap/extension-hard-break";
+import Heading from "@tiptap/extension-heading";
 import History from "@tiptap/extension-history";
 import Italic from "@tiptap/extension-italic";
 import Link from "@tiptap/extension-link";
@@ -49,6 +51,7 @@ export function Editor({
       HardBreak,
       Typography,
       History,
+      Gapcursor,
       Placeholder.configure({
         includeChildren: true,
         showOnlyCurrent: false,
@@ -73,6 +76,9 @@ export function Editor({
         defaultProtocol: "https",
       }),
 
+      Heading.configure({
+        levels: [2, 3],
+      }),
       Blockquote,
       ListKeymap.configure({
         listTypes: [
@@ -127,7 +133,7 @@ export function Editor({
     base: "w-full prose",
     variants: {
       editable: {
-        true: "p-4",
+        true: "p-5",
       },
     },
   });
