@@ -11,6 +11,7 @@ export * from "./QuestSection/QuestSection";
 export * from "./QuestSteps/QuestSteps";
 export * from "./QuestTimeRequired/QuestTimeRequired";
 export * from "./QuestUsageCount/QuestUsageCount";
+export * from "./QuestsNav/QuestsNav";
 export * from "./ReadingScore/ReadingScore";
 export * from "./StatGroup/StatGroup";
 export * from "./StatusSelect/StatusSelect";

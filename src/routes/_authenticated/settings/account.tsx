@@ -22,7 +22,7 @@ function SettingsAccountRoute() {
 
   return (
     <>
-      <PageHeader title="Account" />
+      <PageHeader title="Account" mobileBackLink={{ to: "/settings" }} />
       {user === undefined ? (
         "Loading..."
       ) : user === null ? (

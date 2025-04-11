@@ -64,7 +64,7 @@ export const JurisdictionInterstitial = ({
       if (findQuest?._id) {
         await addQuest({ questId: findQuest._id });
         navigate({
-          to: "/$questSlug",
+          to: "/quests/$questSlug",
           params: { questSlug: findQuest.slug },
         });
       } else {
