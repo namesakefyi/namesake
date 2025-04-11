@@ -24,7 +24,7 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "..";
-import type { ExtensionGroup } from "./extensions";
+import type { ExtensionGroup } from "./extensions/constants";
 
 type EditorToggleButtonProps = {
   icon: LucideIcon;
@@ -39,7 +39,13 @@ const EditorToggleButton = ({
 }: EditorToggleButtonProps) => {
   return (
     <TooltipTrigger>
-      <ToggleButton onPress={onPress} icon={icon} size="small" {...props} />
+      <ToggleButton
+        aria-label={label}
+        onPress={onPress}
+        icon={icon}
+        size="small"
+        {...props}
+      />
       <Tooltip placement="top">{label}</Tooltip>
     </TooltipTrigger>
   );

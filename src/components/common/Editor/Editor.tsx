@@ -13,7 +13,7 @@ import {
   EXTENSION_GROUPS,
   type ExtensionGroup,
   REQUIRED_EXTENSIONS,
-} from "./extensions";
+} from "./extensions/constants";
 
 export interface EditorProps
   extends Omit<EditorContentProps, "onChange" | "editor" | "placeholder"> {
