@@ -34,7 +34,7 @@ export default defineConfig({
       {
         extends: true,
         test: {
-          name: "convex",
+          name: "backend",
           include: ["convex/**/*.test.ts"],
           environment: "edge-runtime",
         },
@@ -42,7 +42,7 @@ export default defineConfig({
       {
         extends: true,
         test: {
-          name: "components",
+          name: "frontend",
           include: ["src/**/*.test.{ts,tsx}"],
           environment: "jsdom",
         },

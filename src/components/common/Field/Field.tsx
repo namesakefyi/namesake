@@ -1,5 +1,5 @@
 import { composeTailwindRenderProps, focusRing } from "@/components/utils";
-import { forwardRef } from "react";
+import type { Ref } from "react";
 import {
   FieldError as AriaFieldError,
   type GroupProps as AriaGroupProps,
@@ -101,7 +101,7 @@ export const innerBorderStyles = tv({
 
 const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "border-none text-sm ring-inset ring-1 group flex items-center bg-element forced-colors:bg-[Field] rounded-lg overflow-hidden",
+  base: "border-none text-sm ring-inset ring-1 group flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
   variants: {
     ...fieldBorderStyles.variants,
     size: {
@@ -132,6 +132,7 @@ export function FieldGroup({ size, ...props }: GroupProps) {
 
 interface InputProps extends Omit<AriaInputProps, "size"> {
   size?: FieldSize;
+  ref?: Ref<HTMLInputElement>;
 }
 
 export const inputStyles = tv({
@@ -148,10 +149,7 @@ export const inputStyles = tv({
   },
 });
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { size, ...props },
-  ref,
-) {
+export function Input({ ref, size, ...props }: InputProps) {
   return (
     <AriaInput
       {...props}
@@ -161,10 +159,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       )}
     />
   );
-});
+}
 
 export const inputTextAreaStyles = tv({
-  base: "flex-1 min-w-0 leading-snug outline outline-0 bg-transparent text-gray-normal disabled:text-gray-dim",
+  base: "flex-1 min-w-0 leading-snug outline-0 bg-transparent text-gray-normal disabled:text-gray-dim",
   variants: {
     size: {
       small: "px-2 py-1",
@@ -179,12 +177,10 @@ export const inputTextAreaStyles = tv({
 
 interface InputTextAreaProps extends Omit<AriaTextAreaProps, "size"> {
   size?: FieldSize;
+  ref?: Ref<HTMLTextAreaElement>;
 }
 
-export const InputTextArea = forwardRef<
-  HTMLTextAreaElement,
-  InputTextAreaProps
->(function InputTextArea({ size, ...props }, ref) {
+export function InputTextArea({ ref, size, ...props }: InputTextAreaProps) {
   return (
     <AriaTextArea
       {...props}
@@ -194,4 +190,4 @@ export const InputTextArea = forwardRef<
       )}
     />
   );
-});
+}

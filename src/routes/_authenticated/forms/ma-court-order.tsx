@@ -12,53 +12,62 @@ import {
   NameField,
   PhoneField,
   PronounSelectField,
+  SelectField,
+  ShortTextField,
   YesNoField,
 } from "@/components/forms";
-import { useFormEncryptAndSubmit } from "@/utils/useFormEncryptAndSubmit";
+import { useForm } from "@/utils/useForm";
+import {
+  type FieldType,
+  JURISDICTIONS,
+  type UserFormDataField,
+} from "@convex/constants";
 import { createFileRoute } from "@tanstack/react-router";
-import { useForm } from "react-hook-form";
+
 export const Route = createFileRoute("/_authenticated/forms/ma-court-order")({
   component: RouteComponent,
 });
 
+const FORM_FIELDS: UserFormDataField[] = [
+  "newFirstName",
+  "newMiddleName",
+  "newLastName",
+  "oldFirstName",
+  "oldMiddleName",
+  "oldLastName",
+  "reasonForChangingName",
+  "phoneNumber",
+  "email",
+  "dateOfBirth",
+  "isCurrentlyUnhoused",
+  "residenceStreetAddress",
+  "residenceCity",
+  "residenceState",
+  "residenceZipCode",
+  "isMailingAddressDifferentFromResidence",
+  "mailingStreetAddress",
+  "mailingCity",
+  "mailingState",
+  "mailingZipCode",
+  "hasPreviousNameChange",
+  "previousLegalNames",
+  "isInterpreterNeeded",
+  "language",
+  "isOkayToSharePronouns",
+  "pronouns",
+  "otherPronouns",
+  "shouldReturnOriginalDocuments",
+  "shouldWaivePublicationRequirement",
+  "shouldImpoundCourtRecords",
+  "shouldApplyForFeeWaiver",
+] as const;
+
 type FormData = {
-  newFirstName: string;
-  newMiddleName: string;
-  newLastName: string;
-  oldFirstName: string;
-  oldMiddleName: string;
-  oldLastName: string;
-  reasonForChangingName: string;
-  phoneNumber: string;
-  email: string;
-  dateOfBirth: string;
-  isCurrentlyUnhoused: boolean;
-  residenceStreetAddress: string;
-  residenceCity: string;
-  residenceState: string;
-  residenceZipCode: string;
-  isMailingAddressDifferentFromResidence: boolean;
-  mailingStreetAddress: string;
-  mailingCity: string;
-  mailingState: string;
-  mailingZipCode: string;
-  hasPreviousNameChange: boolean;
-  previousLegalNames: string;
-  isInterpreterNeeded: boolean;
-  language: string;
-  isOkayToSharePronouns: boolean;
-  pronouns: string[];
-  shouldReturnOriginalDocuments: boolean;
-  shouldWaivePublicationRequirement: boolean;
-  shouldImpoundCourtRecords: boolean;
-  shouldApplyForFeeWaiver: boolean;
+  [K in UserFormDataField]: FieldType<K>;
 };
 
 function RouteComponent() {
-  const form = useForm<FormData>({
-    mode: "onBlur",
-  });
-  const { onSubmit, isSubmitting } = useFormEncryptAndSubmit<FormData>(form);
+  const { onSubmit, isSubmitting, ...form } = useForm<FormData>(FORM_FIELDS);
 
   return (
     <FormContainer
@@ -89,9 +98,23 @@ function RouteComponent() {
         description="The court uses this to communicate with you about your status."
         className="@container"
       >
-        <div className="grid grid-cols-1 @lg:grid-cols-[auto_1fr] @lg:grid- gap-4">
+        <div className="grid grid-cols-1 @lg:grid-cols-[auto_1fr] gap-4">
           <PhoneField name="phoneNumber" />
           <EmailField name="email" />
+        </div>
+      </FormSection>
+      <FormSection title="Where were you born?">
+        <div className="grid grid-cols-[1fr_auto] gap-4">
+          <ShortTextField name="birthplaceCity" label="City" />
+          <SelectField
+            name="birthplaceState"
+            label="State"
+            placeholder="Select a state"
+            options={Object.entries(JURISDICTIONS).map(([value, label]) => ({
+              label,
+              value,
+            }))}
+          />
         </div>
       </FormSection>
       <FormSection title="What is your date of birth?">
@@ -105,7 +128,7 @@ function RouteComponent() {
           name="isCurrentlyUnhoused"
           label="I am currently unhoused or without permanent housing"
         />
-        {!form.watch("isCurrentlyUnhoused") && (
+        {!form.watch("isCurrentlyUnhoused") === true && (
           <>
             <AddressField type="residence" />
             <CheckboxField
@@ -116,7 +139,9 @@ function RouteComponent() {
         )}
         <FormSubsection
           title="What is your mailing address?"
-          isVisible={form.watch("isMailingAddressDifferentFromResidence")}
+          isVisible={
+            form.watch("isMailingAddressDifferentFromResidence") === true
+          }
         >
           <AddressField type="mailing" />
         </FormSubsection>
@@ -130,10 +155,35 @@ function RouteComponent() {
           noLabel="No, I've never changed my name"
         />
         <FormSubsection
-          title="Please list all past legal names."
-          isVisible={form.watch("hasPreviousNameChange")}
+          title="Please list your past legal name."
+          isVisible={form.watch("hasPreviousNameChange") === true}
         >
-          <LongTextField name="previousLegalNames" label="Past legal names" />
+          <div className="grid grid-cols-2 gap-4">
+            <ShortTextField name="previousNameFrom" label="From" />
+            <ShortTextField name="previousNameTo" label="To" />
+          </div>
+          <LongTextField name="previousNameReason" label="Reason for change" />
+        </FormSubsection>
+      </FormSection>
+      <FormSection
+        title="Have you ever used any other name or alias?"
+        description="This includes any names that you have used over a long period of time but did not change legally. This does not include nicknames or other names you've used for short periods of time."
+      >
+        <YesNoField
+          name="hasUsedOtherNameOrAlias"
+          label="Have you ever used any other name or alias?"
+          labelHidden
+          yesLabel="Yes, I've used other names"
+          noLabel="No, there are no other major names I've used"
+        />
+        <FormSubsection
+          title="Please list all names you haven't previously listed."
+          isVisible={form.watch("hasUsedOtherNameOrAlias") === true}
+        >
+          <LongTextField
+            name="otherNamesOrAliases"
+            label="Other names or aliases"
+          />
         </FormSubsection>
       </FormSection>
       <FormSection
@@ -147,7 +197,7 @@ function RouteComponent() {
           yesLabel="Yes, I need an interpreter"
           noLabel="No, I don't need an interpreter"
         />
-        <FormSubsection isVisible={form.watch("isInterpreterNeeded")}>
+        <FormSubsection isVisible={form.watch("isInterpreterNeeded") === true}>
           <LanguageSelectField name="language" />
         </FormSubsection>
       </FormSection>
@@ -157,7 +207,9 @@ function RouteComponent() {
           label="Share my pronouns with the court staff?"
           labelHidden
         />
-        <FormSubsection isVisible={form.watch("isOkayToSharePronouns")}>
+        <FormSubsection
+          isVisible={form.watch("isOkayToSharePronouns") === true}
+        >
           <PronounSelectField />
         </FormSubsection>
       </FormSection>
@@ -214,6 +266,12 @@ function RouteComponent() {
           yesLabel="Yes, I am unable to pay the filing fees"
           noLabel="No, I can pay the filing fee"
         />
+      </FormSection>
+      <FormSection
+        title="What is your mother's maiden name?"
+        description="The court requests this information in order to look up past court records and verify your identity. The maiden name is the last name or family name of your mother or guardian before marriage."
+      >
+        <ShortTextField name="mothersMaidenName" label="Mother's maiden name" />
       </FormSection>
       <Button
         type="submit"

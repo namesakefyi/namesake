@@ -11,7 +11,8 @@ import {
 } from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
 import { Eye, EyeOff } from "lucide-react";
-import { forwardRef, useState } from "react";
+import type { Ref } from "react";
+import { useState } from "react";
 import {
   TextField as AriaTextField,
   type TextFieldProps as AriaTextFieldProps,
@@ -27,76 +28,69 @@ export interface TextFieldProps extends AriaTextFieldProps {
   errorMessage?: string | ((validation: ValidationResult) => string);
   size?: FieldSize;
   placeholder?: string;
+  ref?: Ref<HTMLInputElement>;
 }
 
-export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
-  function TextField(
-    {
-      label,
-      description,
-      prefix,
-      suffix,
-      errorMessage,
-      type,
-      size = "medium",
-      placeholder,
-      ...props
-    },
-    ref,
-  ) {
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+export function TextField({
+  ref,
+  label,
+  description,
+  prefix,
+  suffix,
+  errorMessage,
+  type,
+  size = "medium",
+  placeholder,
+  ...props
+}: TextFieldProps) {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    return (
-      <AriaTextField
-        {...props}
-        ref={ref}
-        className={composeTailwindRenderProps(
-          props.className,
-          "flex flex-col gap-1.5",
-        )}
-        type={type === "password" && isPasswordVisible ? "text" : type}
-      >
-        {({ isDisabled, isInvalid }) => (
-          <>
-            {label && <Label size={size}>{label}</Label>}
-            <FieldGroup
-              isDisabled={isDisabled}
-              isInvalid={isInvalid}
-              size={size}
-            >
-              {prefix}
-              <Input
-                className={twMerge(
-                  type === "password" && "font-mono",
-                  type === "tel" && "tabular-nums",
-                )}
-                size={size}
-                placeholder={placeholder}
-              />
-              {suffix}
-              {type === "password" && (
-                <TooltipTrigger>
-                  <Button
-                    variant="icon"
-                    aria-label={
-                      isPasswordVisible ? "Hide password" : "Show password"
-                    }
-                    onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                    size="small"
-                    icon={isPasswordVisible ? Eye : EyeOff}
-                    className="mr-1"
-                  />
-                  <Tooltip>
-                    {isPasswordVisible ? "Hide password" : "Show password"}
-                  </Tooltip>
-                </TooltipTrigger>
+  return (
+    <AriaTextField
+      {...props}
+      ref={ref}
+      className={composeTailwindRenderProps(
+        props.className,
+        "flex flex-col gap-1.5",
+      )}
+      type={type === "password" && isPasswordVisible ? "text" : type}
+    >
+      {({ isDisabled, isInvalid }) => (
+        <>
+          {label && <Label size={size}>{label}</Label>}
+          <FieldGroup isDisabled={isDisabled} isInvalid={isInvalid} size={size}>
+            {prefix}
+            <Input
+              className={twMerge(
+                type === "password" && "font-mono",
+                type === "tel" && "tabular-nums",
               )}
-            </FieldGroup>
-            {description && <FieldDescription>{description}</FieldDescription>}
-            <FieldError>{errorMessage}</FieldError>
-          </>
-        )}
-      </AriaTextField>
-    );
-  },
-);
+              size={size}
+              placeholder={placeholder}
+            />
+            {suffix}
+            {type === "password" && (
+              <TooltipTrigger>
+                <Button
+                  variant="icon"
+                  aria-label={
+                    isPasswordVisible ? "Hide password" : "Show password"
+                  }
+                  onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                  size="small"
+                  icon={isPasswordVisible ? Eye : EyeOff}
+                  className="mr-1"
+                />
+                <Tooltip>
+                  {isPasswordVisible ? "Hide password" : "Show password"}
+                </Tooltip>
+              </TooltipTrigger>
+            )}
+          </FieldGroup>
+          {description && <FieldDescription>{description}</FieldDescription>}
+          <FieldError>{errorMessage}</FieldError>
+        </>
+      )}
+    </AriaTextField>
+  );
+}

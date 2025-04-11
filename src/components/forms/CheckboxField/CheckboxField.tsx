@@ -1,7 +1,7 @@
 import { Checkbox, type CheckboxProps } from "@/components/common";
+import { smartquotes } from "@/utils/smartquotes";
 import type { UserFormDataField } from "@convex/constants";
-import { Controller } from "react-hook-form";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
 export interface CheckboxFieldProps extends CheckboxProps {
@@ -33,7 +33,7 @@ export function CheckboxField({
           <Checkbox
             {...field}
             size="large"
-            label={label}
+            label={smartquotes(label)}
             card
             isSelected={field.value}
             onChange={(isSelected) => {

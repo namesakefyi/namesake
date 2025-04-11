@@ -14,5 +14,18 @@ updates:
     schedule:
       interval: "weekly"
     groups:
+      convex:
+        patterns: ["@convex-dev/**", "convex", "convex*"]
+        update-types: ["patch", "minor"]
+      storybook:
+        patterns: ["@storybook/**", "storybook", "storybook*"]
+        update-types: ["patch", "minor"]
+      tiptap:
+        patterns: ["@tiptap/**", "tiptap", "tiptap*"]
+        update-types: ["patch", "minor"]
+      vite-vitest:
+        patterns: ["@vitejs/**", "@vitest/**", "vite", "vite*"]
+        update-types: ["patch", "minor"]
+      # All other patch or minor updates
       patch-minor:
         update-types: ["patch", "minor"]

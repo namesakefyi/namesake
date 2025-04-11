@@ -4,9 +4,9 @@ import {
   type CheckboxGroupProps,
   type CheckboxProps,
 } from "@/components/common";
+import { smartquotes } from "@/utils/smartquotes";
 import type { UserFormDataField } from "@convex/constants";
-import { useFormContext } from "react-hook-form";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 interface CheckboxOption extends CheckboxProps {
   label: string;
@@ -41,7 +41,7 @@ export function CheckboxGroupField({
         render={({ field, fieldState: { error, invalid } }) => (
           <CheckboxGroup
             {...field}
-            label={!labelHidden ? label : undefined}
+            label={!labelHidden ? smartquotes(label) : undefined}
             aria-label={label}
             size="large"
             isInvalid={invalid}

@@ -4,6 +4,7 @@ import {
   type RadioGroupProps,
   type RadioProps,
 } from "@/components/common";
+import { smartquotes } from "@/utils/smartquotes";
 import type { UserFormDataField } from "@convex/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -37,7 +38,7 @@ export function RadioGroupField({
         render={({ field, fieldState: { invalid, error } }) => (
           <RadioGroup
             {...field}
-            label={label}
+            label={smartquotes(label)}
             size="large"
             isInvalid={invalid}
             errorMessage={error?.message}
