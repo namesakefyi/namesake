@@ -11,6 +11,7 @@ export default {
   },
   args: {
     isDisabled: false,
+    isSubmitting: false,
     children: "Button",
   },
 };
