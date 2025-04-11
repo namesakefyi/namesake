@@ -40,7 +40,7 @@ export function Menu<T extends object>(props: MenuProps<T>) {
     <Popover placement={props.placement} className="min-w-[150px]">
       <AriaMenu
         {...props}
-        className="p-1 outline-0 max-h-[inherit] overflow-auto [clip-path:inset(0_0_0_0_round_.75rem)]"
+        className="p-1 outline-none max-h-[inherit] overflow-auto [clip-path:inset(0_0_0_0_round_.75rem)]"
       />
     </Popover>
   );
