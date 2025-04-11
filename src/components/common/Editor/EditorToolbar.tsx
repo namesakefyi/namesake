@@ -62,20 +62,16 @@ export const EditorToolbar = ({ editor, extensions }: EditorToolbarProps) => {
   const setLink = useCallback(() => {
     const previousUrl = editor.getAttributes("link").href;
     const url = window.prompt("URL", previousUrl);
-    // TODO: Use custom dialog
 
-    // cancelled
     if (url === null) {
       return;
     }
 
-    // empty
     if (url === "") {
       editor.chain().focus().extendMarkRange("link").unsetLink().run();
       return;
     }
 
-    // update link
     try {
       editor
         .chain()
