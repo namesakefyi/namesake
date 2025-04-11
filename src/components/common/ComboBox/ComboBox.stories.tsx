@@ -12,6 +12,7 @@ const meta: Meta<typeof ComboBox> = {
 
   args: {
     label: "Ice cream flavor",
+    placeholder: "Select a flavor",
   },
 };
 
