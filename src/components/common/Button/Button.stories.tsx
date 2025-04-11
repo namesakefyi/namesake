@@ -11,6 +11,7 @@ export default {
   },
   args: {
     isDisabled: false,
+    isSubmitting: false,
     children: "Button",
   },
 };
@@ -30,5 +31,21 @@ export const Secondary = {
 export const Destructive = {
   args: {
     variant: "destructive",
+  },
+};
+
+export const Submitting = {
+  args: {
+    variant: "primary",
+    isSubmitting: true,
+    children: "Saving...",
+  },
+};
+
+export const Disabled = {
+  args: {
+    variant: "primary",
+    isDisabled: true,
+    children: "Cannot click",
   },
 };

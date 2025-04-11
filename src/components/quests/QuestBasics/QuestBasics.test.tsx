@@ -72,7 +72,7 @@ describe("QuestBasics", () => {
 
   it("disables save button when title hasn't changed", () => {
     render(<QuestBasics quest={mockQuest} editable />);
-    expect(screen.getByText("Save")).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Save" })).toBeDisabled();
   });
 
   it("handles jurisdiction changes", async () => {
