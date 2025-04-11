@@ -1,16 +1,11 @@
-import {
-  Button,
-  Form,
-  RichText,
-  type RichTextProps,
-} from "@/components/common";
+import { Button, Editor, type EditorProps, Form } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-interface QuestContentProps extends RichTextProps {
+interface QuestContentProps extends EditorProps {
   quest: Doc<"quests">;
   editable?: boolean;
 }
@@ -38,7 +33,7 @@ export function QuestContent({ quest, editable, ...props }: QuestContentProps) {
 
   return editable ? (
     <Form onSubmit={handleSubmit}>
-      <RichText
+      <Editor
         initialContent={content}
         onUpdate={(props) => setContent(props.editor.getHTML())}
         {...props}
@@ -53,6 +48,6 @@ export function QuestContent({ quest, editable, ...props }: QuestContentProps) {
       </Button>
     </Form>
   ) : (
-    <RichText initialContent={quest.content} editable={false} {...props} />
+    <Editor initialContent={quest.content} editable={false} {...props} />
   );
 }

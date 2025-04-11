@@ -1,12 +1,12 @@
 import {
   Button,
   Disclosure,
+  Editor,
   Empty,
   Form,
   Menu,
   MenuItem,
   MenuTrigger,
-  RichText,
   TextField,
 } from "@/components/common";
 import { api } from "@convex/_generated/api";
@@ -67,7 +67,7 @@ const EditFaqForm = ({ faq, onSubmit, onCancel }: EditFaqFormProps) => {
         autoFocus
         placeholder="Write a question..."
       />
-      <RichText
+      <Editor
         initialContent={answer}
         onUpdate={(props) => {
           setAnswer(props.editor.getHTML());
@@ -158,7 +158,7 @@ const QuestFaq = ({ questId, faq, editable }: QuestFaqProps) => {
           }
         >
           <div className="border-l border-gray-dim pl-4">
-            <RichText initialContent={faq.answer} editable={false} />
+            <Editor initialContent={faq.answer} editable={false} />
           </div>
         </Disclosure>
       )}

@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { RichText } from "./RichText";
+import { Editor } from "./Editor";
 
 const meta = {
-  component: RichText,
+  component: Editor,
   parameters: {
     layout: "padded",
   },
-} satisfies Meta<typeof RichText>;
+} satisfies Meta<typeof Editor>;
 
 export default meta;
 

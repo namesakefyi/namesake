@@ -5,7 +5,6 @@ import {
   QuestDetails,
   QuestFaqs,
   QuestPageHeader,
-  QuestReferences,
   QuestTimeRequired,
 } from "@/components/quests";
 import { QuestBasics } from "@/components/quests/QuestBasics/QuestBasics";
@@ -73,7 +72,6 @@ function QuestDetailRoute() {
         </QuestDetails>
         <QuestContent quest={quest} editable={isEditing} />
         <QuestFaqs quest={quest} editable={isEditing} />
-        <QuestReferences quest={quest} editable={isEditing} />
       </div>
       <QuestPageFooter quest={quest} userQuest={userQuest} />
     </>

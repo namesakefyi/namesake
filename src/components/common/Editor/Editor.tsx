@@ -21,12 +21,11 @@ import {
   useEditor,
 } from "@tiptap/react";
 import { useEffect } from "react";
-import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
 import { EditorToolbar } from "./EditorToolbar";
-import { StepContent, StepItem, StepTitle, Steps } from "./extensions";
+import { Button, StepContent, StepItem, StepTitle, Steps } from "./extensions";
 
-export interface RichTextProps
+export interface EditorProps
   extends Omit<EditorContentProps, "onChange" | "editor"> {
   className?: string;
   initialContent?: string;
@@ -34,13 +33,13 @@ export interface RichTextProps
   editable?: boolean;
 }
 
-export function RichText({
+export function Editor({
   className,
   initialContent,
   onUpdate,
   editable = true,
   ...props
-}: RichTextProps) {
+}: EditorProps) {
   const editor = useEditor({
     extensions: [
       // Required
@@ -91,11 +90,12 @@ export function RichText({
       ListItem,
       OrderedList,
 
-      // Steps
+      // Custom
       Steps,
       StepItem,
       StepTitle,
       StepContent,
+      Button,
     ],
     content: initialContent,
     editable,
@@ -112,23 +112,32 @@ export function RichText({
     return null;
   }
 
-  const styles = tv({
+  const wrapperStyles = tv({
     base: "w-full flex-col",
     variants: {
       editable: {
-        true: "px-3.5 py-3 [&_.tiptap]:outline-hidden",
+        true: "[&_.tiptap]:outline-hidden",
         false:
-          "ring-0 rounded-none bg-transparent focus-within:outline-hidden!",
+          "border-none rounded-none bg-transparent focus-within:outline-hidden!",
+      },
+    },
+  });
+
+  const contentStyles = tv({
+    base: "w-full prose",
+    variants: {
+      editable: {
+        true: "p-4",
       },
     },
   });
 
   return (
-    <FieldGroup className={styles({ editable })}>
+    <FieldGroup className={wrapperStyles({ editable })}>
       {editable && <EditorToolbar editor={editor} />}
       <EditorContent
         editor={editor}
-        className={twMerge("w-full prose", className)}
+        className={contentStyles({ className, editable })}
         {...props}
       />
     </FieldGroup>

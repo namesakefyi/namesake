@@ -4,30 +4,63 @@ import {
   ItalicIcon,
   List,
   ListOrdered,
+  type LucideIcon,
   Milestone,
+  MousePointerClick,
 } from "lucide-react";
-import { Separator, ToggleButton } from "..";
+import {
+  Separator,
+  ToggleButton,
+  type ToggleButtonProps,
+  Toolbar,
+  Tooltip,
+  TooltipTrigger,
+} from "..";
+
+type EditorToggleButtonProps = {
+  editor: Editor;
+  icon: LucideIcon;
+  label: string;
+} & ToggleButtonProps;
+
+const EditorToggleButton = ({
+  editor,
+  icon,
+  label,
+  onPress,
+  ...props
+}: EditorToggleButtonProps) => {
+  return (
+    <TooltipTrigger>
+      <ToggleButton onPress={onPress} icon={icon} size="small" {...props} />
+      <Tooltip>{label}</Tooltip>
+    </TooltipTrigger>
+  );
+};
 
 export const EditorToolbar = ({ editor }: { editor: Editor }) => {
   if (!editor) return null;
 
   return (
-    <div className="flex items-center w-full border-b border-gray-dim pb-2 mb-4">
-      <ToggleButton
+    <Toolbar
+      orientation="horizontal"
+      className="p-3 border-b border-gray-dim sticky bg-gray-3 rounded-t-lg top-0 z-10"
+    >
+      <EditorToggleButton
+        editor={editor}
+        icon={BoldIcon}
+        label="Bold"
         onPress={() => editor.chain().focus().toggleBold().run()}
         isDisabled={!editor.can().chain().focus().toggleBold().run()}
         isSelected={editor.isActive("bold")}
-        icon={BoldIcon}
-        aria-label="Toggle bold text"
-        size="small"
       />
-      <ToggleButton
+      <EditorToggleButton
+        editor={editor}
+        icon={ItalicIcon}
+        label="Italic"
         onPress={() => editor.chain().focus().toggleItalic().run()}
         isDisabled={!editor.can().chain().focus().toggleItalic().run()}
         isSelected={editor.isActive("italic")}
-        icon={ItalicIcon}
-        aria-label="Toggle italic text"
-        size="small"
       />
       <Separator orientation="vertical" />
       <ToggleButton
@@ -55,6 +88,14 @@ export const EditorToolbar = ({ editor }: { editor: Editor }) => {
         aria-label="Toggle steps"
         size="small"
       />
-    </div>
+      <ToggleButton
+        onPress={() => editor.chain().focus().toggleButton().run()}
+        isDisabled={!editor.can().chain().focus().toggleButton().run()}
+        isSelected={editor.isActive("button")}
+        icon={MousePointerClick}
+        aria-label="Toggle button"
+        size="small"
+      />
+    </Toolbar>
   );
 };
