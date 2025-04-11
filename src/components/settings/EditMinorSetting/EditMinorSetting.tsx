@@ -12,10 +12,7 @@ export const EditMinorSetting = ({ user }: EditMinorSettingProps) => {
   const updateIsMinor = useMutation(api.users.setCurrentUserIsMinor);
 
   return (
-    <SettingsItem
-      label="Under 18"
-      description="Are you under 18 years old or applying on behalf of someone who is?"
-    >
+    <SettingsItem label="Under 18" description="Are you applying as a minor?">
       <Switch
         name="isMinor"
         isSelected={user.isMinor ?? false}

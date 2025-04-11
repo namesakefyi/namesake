@@ -1,7 +1,6 @@
 import { useTheme } from "@/utils/useTheme";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { useQuery } from "convex/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AppSidebar } from "./AppSidebar";
@@ -27,101 +26,50 @@ describe("AppSidebar", () => {
     });
   });
 
-  it("renders logo and early access badge", () => {
-    render(
-      <AppSidebar>
-        <div>Content</div>
-      </AppSidebar>,
-    );
-
-    expect(screen.getByRole("img", { name: "Namesake" })).toBeInTheDocument();
-    expect(screen.getByText("Early Access")).toBeInTheDocument();
-  });
-
   it("renders children content", () => {
     render(
       <AppSidebar>
-        <div>Test Content</div>
+        <div>Main Content</div>
       </AppSidebar>,
     );
 
-    expect(screen.getByText("Test Content")).toBeInTheDocument();
+    expect(screen.getByText("Main Content")).toBeInTheDocument();
   });
 
-  it("shows admin option in menu for admin users", async () => {
-    const user = userEvent.setup();
-    (useQuery as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      role: "admin",
-    });
-
+  it("renders header when provided", () => {
     render(
-      <AppSidebar>
-        <div>Content</div>
+      <AppSidebar header={<div>Header Content</div>}>
+        <div>Main Content</div>
       </AppSidebar>,
     );
 
-    await user.click(screen.getByRole("button", { name: "User settings" }));
-    expect(screen.getByText("Admin")).toBeInTheDocument();
+    expect(screen.getByText("Header Content")).toBeInTheDocument();
+    expect(screen.getByText("Main Content")).toBeInTheDocument();
   });
 
-  it("does not show admin option for regular users", async () => {
-    const user = userEvent.setup();
+  it("renders footer when provided", () => {
     render(
-      <AppSidebar>
-        <div>Content</div>
+      <AppSidebar footer={<div>Footer Content</div>}>
+        <div>Main Content</div>
       </AppSidebar>,
     );
 
-    await user.click(screen.getByRole("button", { name: "User settings" }));
-    expect(screen.queryByText("Admin")).not.toBeInTheDocument();
+    expect(screen.getByText("Main Content")).toBeInTheDocument();
+    expect(screen.getByText("Footer Content")).toBeInTheDocument();
   });
 
-  it("handles theme changes", async () => {
-    const user = userEvent.setup();
+  it("renders all sections when provided", () => {
     render(
-      <AppSidebar>
-        <div>Content</div>
+      <AppSidebar
+        header={<div>Header Content</div>}
+        footer={<div>Footer Content</div>}
+      >
+        <div>Main Content</div>
       </AppSidebar>,
     );
 
-    await user.click(screen.getByRole("button", { name: "User settings" }));
-    await user.click(screen.getByText("Theme"));
-    await user.click(screen.getByText("Dark"));
-
-    const [[firstArg]] = mockSetTheme.mock.calls;
-    expect(firstArg).toBeInstanceOf(Set);
-    expect([...firstArg]).toEqual(["dark"]);
-  });
-
-  it("shows current theme in menu", async () => {
-    const user = userEvent.setup();
-    (useTheme as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      theme: "dark",
-      themeSelection: new Set(["dark"]),
-      setTheme: mockSetTheme,
-    });
-
-    render(
-      <AppSidebar>
-        <div>Content</div>
-      </AppSidebar>,
-    );
-
-    await user.click(screen.getByRole("button", { name: "User settings" }));
-    expect(screen.getByText("Dark")).toBeInTheDocument();
-  });
-
-  it("handles sign out", async () => {
-    const user = userEvent.setup();
-    render(
-      <AppSidebar>
-        <div>Content</div>
-      </AppSidebar>,
-    );
-
-    await user.click(screen.getByRole("button", { name: "User settings" }));
-    await user.click(screen.getByText("Sign out"));
-
-    expect(mockSignOut).toHaveBeenCalled();
+    expect(screen.getByText("Header Content")).toBeInTheDocument();
+    expect(screen.getByText("Main Content")).toBeInTheDocument();
+    expect(screen.getByText("Footer Content")).toBeInTheDocument();
   });
 });
