@@ -43,7 +43,7 @@ export const buttonStyles = tv({
     },
     isDisabled: {
       false: "cursor-pointer",
-      true: "cursor-default",
+      true: "cursor-default opacity-40",
     },
     isSubmitting: {
       true: "",
@@ -60,11 +60,6 @@ export const buttonStyles = tv({
       variant: "icon",
       size: "medium",
       className: "w-10 h-10 p-2",
-    },
-    {
-      isDisabled: true,
-      isSubmitting: false,
-      className: "opacity-40",
     },
   ],
   defaultVariants: {
