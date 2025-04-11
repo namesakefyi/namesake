@@ -99,16 +99,21 @@ describe("Button", () => {
       expect(button).toBeDisabled();
     });
 
-    it("shows both text and spinner", () => {
+    it("contains the text in the DOM but visually shows only the spinner", () => {
       render(<Button isSubmitting>Submit</Button>);
 
-      expect(screen.getByText("Submit")).toBeInTheDocument();
+      const textElement = screen.getByText("Submit");
+      expect(textElement).toBeInTheDocument();
+      // Text should be visually hidden
+      expect(textElement.closest("span")).toHaveClass("invisible");
+
+      // Spinner should be visible
       expect(
         screen.getByRole("button").querySelector("svg.animate-spin"),
       ).toBeInTheDocument();
     });
 
-    it("replaces icon with spinner when isSubmitting is true", () => {
+    it("overlays spinner over icon when isSubmitting is true", () => {
       // First render with icon but not submitting
       const { rerender } = render(<Button icon={User}>Submit</Button>);
 
@@ -124,10 +129,15 @@ describe("Button", () => {
         </Button>,
       );
 
-      // Should show the loader icon
+      // Should show both the user icon (hidden) and the loader
       icons = screen.getByRole("button").querySelectorAll("svg");
-      expect(icons.length).toBe(1);
-      expect(icons[0]).toHaveClass("animate-spin");
+      expect(icons.length).toBe(2);
+
+      // First icon should be the User icon (now hidden)
+      expect(icons[0].closest("span")).toHaveClass("invisible");
+
+      // Second icon should be the spinner
+      expect(icons[1]).toHaveClass("animate-spin");
     });
 
     it("doesn't trigger click events when submitting", async () => {
