@@ -72,14 +72,14 @@ export function FieldError(props: FieldErrorProps) {
 export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false: "ring-gray-6",
-      true: "ring-gray-7",
+      false: "border-gray-6",
+      true: "border-gray-7",
     },
     isInvalid: {
-      true: "ring-red-9",
+      true: "border-red-9",
     },
     isDisabled: {
-      true: "ring-gray-4",
+      true: "border-gray-4",
     },
   },
 });
@@ -101,7 +101,7 @@ export const innerBorderStyles = tv({
 
 const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "border-none text-sm ring-inset ring-1 group flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
+  base: "border text-sm group flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
   variants: {
     ...fieldBorderStyles.variants,
     size: {
