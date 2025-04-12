@@ -60,12 +60,7 @@ export const EditEmailSetting = ({ user }: EditEmailSettingProps) => {
             {user?.email ?? "Set email"}
           </span>
         </Button>
-        <Popover
-          title="Edit email"
-          className="p-2"
-          placement="bottom end"
-          isOpen={isEditing}
-        >
+        <Popover className="p-2" placement="bottom end" isOpen={isEditing}>
           <Form onSubmit={handleSubmit} className="gap-2">
             <TextField
               aria-label="Email"
