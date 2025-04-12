@@ -93,9 +93,8 @@ export function RichText({
     base: "w-full",
     variants: {
       editable: {
-        true: "px-3.5 py-3 [&_.tiptap]:outline-hidden",
-        false:
-          "ring-0 rounded-none bg-transparent focus-within:outline-hidden!",
+        true: "px-3.5 py-3 [&_.tiptap]:outline-none",
+        false: "ring-0 rounded-none bg-transparent focus-within:outline-none!",
       },
     },
   });

@@ -24,7 +24,7 @@ export function ListBox<T extends object>({
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "outline-0 p-1 border border-gray-dim rounded-lg overflow-y-auto",
+        "outline-none p-1 border border-gray-dim rounded-lg overflow-y-auto",
       )}
     >
       {children}
@@ -64,7 +64,7 @@ export function ListBoxItem(props: ListBoxItemProps) {
 }
 
 export const dropdownItemStyles = tv({
-  base: "group flex items-center gap-3 cursor-pointer select-none py-2 px-2.5 pr-3 rounded-lg outline-0 text-sm forced-color-adjust-none",
+  base: "group flex items-center gap-3 cursor-pointer select-none py-2 px-2.5 pr-3 rounded-lg outline-none text-sm forced-color-adjust-none",
   variants: {
     isDisabled: {
       false: "text-gray-normal",

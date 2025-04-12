@@ -27,6 +27,7 @@ export interface ComboBoxProps<T extends object>
   description?: string | null;
   errorMessage?: string | ((validation: ValidationResult) => string);
   children: React.ReactNode | ((item: T) => React.ReactNode);
+  placeholder?: string;
 }
 
 export function ComboBox<T extends object>({
@@ -35,6 +36,7 @@ export function ComboBox<T extends object>({
   errorMessage,
   children,
   items,
+  placeholder,
   ...props
 }: ComboBoxProps<T>) {
   return (
@@ -49,7 +51,7 @@ export function ComboBox<T extends object>({
         <>
           <Label>{label}</Label>
           <FieldGroup {...renderProps}>
-            <Input />
+            <Input placeholder={placeholder} />
             <Button
               variant="icon"
               className="w-7 h-7 p-0 mr-1 outline-offset-0"
@@ -58,10 +60,10 @@ export function ComboBox<T extends object>({
           </FieldGroup>
           {description && <FieldDescription>{description}</FieldDescription>}
           <FieldError>{errorMessage}</FieldError>
-          <Popover title="Select an option" className="w-(--trigger-width)">
+          <Popover className="w-(--trigger-width)">
             <ListBox
               items={items}
-              className="outline-0 p-1 max-h-[inherit] overflow-auto [clip-path:inset(0_0_0_0_round_.75rem)]"
+              className="outline-none p-1 max-h-[inherit] overflow-auto [clip-path:inset(0_0_0_0_round_.75rem)]"
             >
               {children}
             </ListBox>

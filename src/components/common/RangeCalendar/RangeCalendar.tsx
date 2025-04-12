@@ -47,7 +47,7 @@ export function RangeCalendar<T extends DateValue>({
           {(date) => (
             <CalendarCell
               date={date}
-              className="group w-9 h-9 text-sm outline-0 cursor-default outside-month:text-gray-10 selected:bg-purple-3 selected:text-purple-12 forced-colors:selected:bg-[Highlight] invalid:selected:bg-red-3 forced-colors:invalid:selected:bg-[Mark] [td:first-child_&]:rounded-s-full selection-start:rounded-s-full [td:last-child_&]:rounded-e-full selection-end:rounded-e-full"
+              className="group w-9 h-9 text-sm outline-none cursor-default outside-month:text-gray-10 selected:bg-purple-3 selected:text-purple-12 forced-colors:selected:bg-[Highlight] invalid:selected:bg-red-3 forced-colors:invalid:selected:bg-[Mark] [td:first-child_&]:rounded-s-full selection-start:rounded-s-full [td:last-child_&]:rounded-e-full selection-end:rounded-e-full"
             >
               {({
                 formattedDate,
