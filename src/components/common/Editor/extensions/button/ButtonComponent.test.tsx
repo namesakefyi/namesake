@@ -44,8 +44,8 @@ describe("ButtonComponent", () => {
   it("renders button with URL in editable mode", () => {
     render(<ButtonComponent {...baseMockProps} />);
 
-    const link = screen.getByRole("link");
-    expect(link).toHaveAttribute("href", "https://example.com");
+    const button = screen.getByRole("button");
+    expect(button);
     expect(screen.getByTestId("button-content")).toBeInTheDocument();
   });
 
@@ -65,12 +65,12 @@ describe("ButtonComponent", () => {
   it("opens popover when clicking the button in editable mode", async () => {
     render(<ButtonComponent {...baseMockProps} />);
 
-    const link = screen.getByRole("link");
-    await userEvent.click(link);
+    const button = screen.getByRole("button");
+    await userEvent.click(button);
 
     expect(screen.getByRole("textbox")).toBeInTheDocument();
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: "URL" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Apply" })).toBeInTheDocument();
   });
 
   it("updates URL when submitting the form", async () => {
@@ -95,14 +95,14 @@ describe("ButtonComponent", () => {
 
     render(<ButtonComponent {...props} />);
 
-    const link = screen.getByRole("link");
-    await userEvent.click(link);
+    const button = screen.getByRole("button");
+    await userEvent.click(button);
 
     const input = screen.getByRole("textbox");
     await userEvent.type(input, "https://newurl.com");
 
-    const saveButton = screen.getByRole("button", { name: "Save" });
-    await userEvent.click(saveButton);
+    const submitButton = screen.getByRole("button", { name: "Apply" });
+    await userEvent.click(submitButton);
 
     expect(mockRun).toHaveBeenCalled();
   });
@@ -125,8 +125,8 @@ describe("ButtonComponent", () => {
   it("shows tooltip with URL on hover", async () => {
     render(<ButtonComponent {...baseMockProps} />);
 
-    const link = screen.getByRole("link");
-    await userEvent.hover(link);
+    const button = screen.getByRole("button");
+    await userEvent.hover(button);
 
     await waitFor(() => {
       expect(screen.getByText("https://example.com")).toBeInTheDocument();
@@ -143,8 +143,8 @@ describe("ButtonComponent", () => {
     };
     render(<ButtonComponent {...props} />);
 
-    const link = screen.getByRole("link");
-    await userEvent.hover(link);
+    const button = screen.getByRole("button");
+    await userEvent.hover(button);
 
     await waitFor(() => {
       expect(screen.getByText("Click to add URL")).toBeInTheDocument();

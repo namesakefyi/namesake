@@ -2,7 +2,6 @@ import type { Extensions } from "@tiptap/core";
 import Blockquote from "@tiptap/extension-blockquote";
 import Bold from "@tiptap/extension-bold";
 import BulletList from "@tiptap/extension-bullet-list";
-import Document from "@tiptap/extension-document";
 import Gapcursor from "@tiptap/extension-gapcursor";
 import HardBreak from "@tiptap/extension-hard-break";
 import Heading from "@tiptap/extension-heading";
@@ -17,6 +16,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Text from "@tiptap/extension-text";
 import Typography from "@tiptap/extension-typography";
 import { Button } from "./button";
+import { Document } from "./document";
 import { StepContent, StepItem, StepTitle, Steps } from "./steps";
 
 export const REQUIRED_EXTENSIONS = [

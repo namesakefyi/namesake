@@ -16,7 +16,7 @@ export interface StepsOptions {
 
 export const Steps = Node.create<StepsOptions>({
   name: "steps",
-  group: "block list",
+  group: "steps list",
   content: "stepItem+",
   defining: true,
 
