@@ -1,5 +1,5 @@
 import { FieldGroup } from "@/components/common";
-
+import Document from "@tiptap/extension-document";
 import {
   EditorContent,
   type EditorContentProps,
@@ -14,13 +14,40 @@ import {
   type ExtensionGroup,
   REQUIRED_EXTENSIONS,
 } from "./extensions/constants";
+import { DocumentWithSteps } from "./extensions/document/document";
 
 export interface EditorProps
   extends Omit<EditorContentProps, "onChange" | "editor" | "placeholder"> {
+  /**
+   * Custom styles to apply to the editor.
+   */
   className?: string;
+
+  /**
+   * The initial content of the editor.
+   */
   initialContent?: string;
+
+  /**
+   * Callback function that is called when the editor content is updated.
+   * @param props - The event object.
+   * @example
+   * ```tsx
+   * <Editor
+   *   onUpdate={(props) => {
+   *     setContent(props.editor.getHTML());
+   *   }}
+   * />
+   * ```
+   */
   onUpdate?: (props: EditorEvents["update"]) => void;
+
+  /**
+   * Whether the editor should be editable.
+   * @default true
+   */
   editable?: boolean;
+
   /**
    * Which formatting extensions are available to the editor?
    * @default ["headings", "basic", "lists", "advanced"]
@@ -38,6 +65,7 @@ export function Editor({
 }: EditorProps) {
   const editor = useEditor({
     extensions: [
+      extensions.includes("advanced") ? DocumentWithSteps : Document,
       ...REQUIRED_EXTENSIONS,
       ...extensions.flatMap((group) => EXTENSION_GROUPS[group]),
     ],

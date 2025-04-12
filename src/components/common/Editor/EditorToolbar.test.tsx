@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import type { Editor } from "@tiptap/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { EditorToolbar } from "./EditorToolbar";
@@ -99,36 +99,6 @@ describe("EditorToolbar", () => {
 
     expect(screen.getByRole("button", { name: "Steps" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Button" })).toBeInTheDocument();
-  });
-
-  it("handles link creation when prompt has value", () => {
-    window.prompt = vi.fn().mockReturnValue("https://example.com");
-    render(<EditorToolbar editor={mockEditor} extensions={["basic"]} />);
-
-    const linkButton = screen.getByRole("button", { name: "Link" });
-    fireEvent.click(linkButton);
-
-    expect(window.prompt).toHaveBeenCalledWith("URL", "");
-  });
-
-  it("handles link removal when prompt is empty", () => {
-    window.prompt = vi.fn().mockReturnValue("");
-    render(<EditorToolbar editor={mockEditor} extensions={["basic"]} />);
-
-    const linkButton = screen.getByRole("button", { name: "Link" });
-    fireEvent.click(linkButton);
-
-    expect(window.prompt).toHaveBeenCalledWith("URL", "");
-  });
-
-  it("handles keyboard shortcut for link creation", async () => {
-    window.prompt = vi.fn().mockReturnValue("https://example.com");
-    render(<EditorToolbar editor={mockEditor} extensions={["basic"]} />);
-
-    // Simulate Cmd+K or Ctrl+K
-    fireEvent.keyDown(document, { key: "k", metaKey: true });
-
-    expect(window.prompt).toHaveBeenCalledWith("URL", "");
   });
 
   it("renders all sections when all extensions are enabled", () => {

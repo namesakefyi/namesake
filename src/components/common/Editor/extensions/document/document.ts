@@ -1,4 +1,4 @@
-import { Node } from "@tiptap/core";
+import Document from "@tiptap/extension-document";
 
 /**
  * The default document node which represents the top level node of the editor.
@@ -6,8 +6,6 @@ import { Node } from "@tiptap/core";
  * steps as a "block" type that can be nested within other blocks.
  * @see https://tiptap.dev/api/nodes/document
  */
-export const DocumentWithSteps = Node.create({
-  name: "doc",
-  topNode: true,
+export const DocumentWithSteps = Document.extend({
   content: "(block | steps)+",
 });

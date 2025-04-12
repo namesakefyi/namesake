@@ -4,7 +4,6 @@ import {
   Heading,
   Heading2,
   ItalicIcon,
-  Link,
   List,
   ListOrdered,
   type LucideIcon,
@@ -15,7 +14,6 @@ import {
   Undo,
   Unlink,
 } from "lucide-react";
-import { useCallback, useEffect } from "react";
 import {
   Separator,
   ToggleButton,
@@ -24,6 +22,7 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "..";
+import { EditorLinkButton } from "./EditorLinkButton";
 import type { ExtensionGroup } from "./extensions/constants";
 
 type EditorToggleButtonProps = {
@@ -31,7 +30,7 @@ type EditorToggleButtonProps = {
   label: string;
 } & Omit<ToggleButtonProps, "icon" | "size">;
 
-const EditorToggleButton = ({
+export const EditorToggleButton = ({
   icon,
   label,
   onPress,
@@ -75,43 +74,6 @@ type EditorToolbarProps = {
 
 export const EditorToolbar = ({ editor, extensions }: EditorToolbarProps) => {
   if (!editor) return null;
-
-  const setLink = useCallback(() => {
-    const previousUrl = editor.getAttributes("link").href;
-    const url = window.prompt("URL", previousUrl);
-
-    if (url === null) {
-      return;
-    }
-
-    if (url === "") {
-      editor.chain().focus().extendMarkRange("link").unsetLink().run();
-      return;
-    }
-
-    try {
-      editor
-        .chain()
-        .focus()
-        .extendMarkRange("link")
-        .setLink({ href: url })
-        .run();
-    } catch (error) {
-      console.error(error);
-    }
-  }, [editor]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setLink();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [setLink]);
 
   return (
     <Toolbar
@@ -178,13 +140,7 @@ export const EditorToolbar = ({ editor, extensions }: EditorToolbarProps) => {
           isDisabled={!editor.can().chain().focus().toggleBlockquote().run()}
           isSelected={editor.isActive("blockquote")}
         />
-        <EditorToggleButton
-          icon={Link}
-          label="Link"
-          onPress={setLink}
-          isDisabled={!editor.can().chain().focus().setLink({ href: "" }).run()}
-          isSelected={editor.isActive("link")}
-        />
+        <EditorLinkButton editor={editor} />
         <EditorToggleButton
           icon={Unlink}
           label="Unlink"
