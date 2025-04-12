@@ -5,7 +5,7 @@ import ButtonComponent from "./ButtonComponent";
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     button: {
-      setButton: (href: string) => ReturnType;
+      setButton: (href?: string) => ReturnType;
       unsetButton: () => ReturnType;
       toggleButton: () => ReturnType;
     };
@@ -70,13 +70,26 @@ export const Button = Node.create<ButtonOptions>({
   addCommands() {
     return {
       setButton:
-        (href: string) =>
-        ({ chain }) => {
+        (href?: string) =>
+        ({ chain, state, editor }) => {
+          const { from, to } = state.selection;
+
+          const existingText = state.doc.textBetween(from, to, "");
+          const hasExistingText = existingText.length > 0;
+          const text = hasExistingText ? existingText : "Click here";
+
+          // Does the selection contain a link?
+          const existingLink = editor.isActive("link")
+            ? editor.getAttributes("link").href
+            : "";
+
+          // Insert button
           return chain()
+            .extendMarkRange("link")
             .insertContent({
               type: this.name,
-              attrs: { href },
-              content: [{ type: "text", text: "Click here" }],
+              attrs: { href: href ?? existingLink },
+              content: [{ type: "text", text }],
             })
             .run();
         },
@@ -127,7 +140,7 @@ export const Button = Node.create<ButtonOptions>({
             return chain().unsetButton().run();
           }
 
-          return chain().setButton("").run();
+          return chain().setButton().run();
         },
     };
   },
