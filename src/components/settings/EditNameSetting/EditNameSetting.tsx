@@ -61,12 +61,7 @@ export const EditNameSetting = ({ user }: EditNameSettingProps) => {
             {user?.name ?? "Set name"}
           </span>
         </Button>
-        <Popover
-          title="Edit name"
-          className="p-2"
-          placement="bottom end"
-          isOpen={isEditing}
-        >
+        <Popover className="p-2" placement="bottom end" isOpen={isEditing}>
           <Form onSubmit={handleSubmit} className="gap-2">
             <TextField
               aria-label="Name"
