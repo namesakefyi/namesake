@@ -1,12 +1,12 @@
 import {
   Button,
+  Editor,
   Empty,
   Form,
   Link,
   Menu,
   MenuItem,
   MenuTrigger,
-  RichText,
   TextField,
 } from "@/components/common";
 import { api } from "@convex/_generated/api";
@@ -71,7 +71,12 @@ const QuestStepForm = ({ step, onSave, onCancel }: QuestStepFormProps) => {
           size="large"
           aria-label="Title"
         />
-        <RichText initialContent={content} onChange={setContent} />
+        <Editor
+          initialContent={content}
+          onUpdate={(props) => {
+            setContent(props.editor.getHTML());
+          }}
+        />
         {button && (
           <div className="flex gap-2 items-end">
             <TextField
@@ -165,7 +170,7 @@ export const QuestStep = ({ step, editable = false }: QuestStepProps) => {
 
   return (
     <Step title={step.title} actions={stepActions}>
-      <RichText initialContent={step.content} editable={false} />
+      <Editor initialContent={step.content} editable={false} />
       {step.button && (
         <Link
           href={step.button.url}

@@ -1,7 +1,7 @@
-import { RichText, type RichTextProps } from "@/components/common";
+import { Editor, type EditorProps } from "@/components/common";
 
-interface QuestContentProps extends RichTextProps {}
+interface QuestContentProps extends EditorProps {}
 
 export function QuestContent({ ...props }: QuestContentProps) {
-  return <RichText {...props} />;
+  return <Editor {...props} />;
 }
