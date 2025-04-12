@@ -6,7 +6,7 @@ import { Node } from "@tiptap/core";
  * steps as a "block" type that can be nested within other blocks.
  * @see https://tiptap.dev/api/nodes/document
  */
-export const Document = Node.create({
+export const DocumentWithSteps = Node.create({
   name: "doc",
   topNode: true,
   content: "(block | steps)+",
