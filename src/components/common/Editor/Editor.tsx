@@ -57,12 +57,12 @@ export function Editor({
   }
 
   const wrapperStyles = tv({
-    base: "w-full flex-col",
+    base: "w-full flex-col outline-none",
     variants: {
       editable: {
-        true: "[&_.tiptap]:outline-hidden",
+        true: "[&_.tiptap]:outline-none",
         false:
-          "border-none rounded-none bg-transparent focus-within:outline-hidden!",
+          "border-none rounded-none bg-transparent focus-within:outline-none!",
       },
     },
   });

@@ -1,7 +1,6 @@
 import {
   Badge,
   Button,
-  DialogTrigger,
   Form,
   Link,
   type LinkProps,
@@ -15,12 +14,21 @@ import {
   type NodeViewProps,
   NodeViewWrapper,
 } from "@tiptap/react";
-import { AlertTriangle, LinkIcon } from "lucide-react";
-import { useState } from "react";
+import { LinkIcon, Unlink } from "lucide-react";
+import { useRef, useState } from "react";
+import { useInteractOutside } from "react-aria";
 
 export default function ButtonComponent({ editor, node }: NodeViewProps) {
   const [url, setUrl] = useState<string | null>(node.attrs.href);
   const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useInteractOutside({
+    ref: containerRef,
+    onInteractOutside: () => setIsOpen(false),
+  });
 
   const handleSave = () => {
     editor.chain().focus().updateAttributes("button", { href: url }).run();
@@ -32,8 +40,8 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
     setIsOpen(false);
   };
 
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
+  const handleOpenChange = (isOpen: boolean) => {
+    setIsOpen(isOpen);
   };
 
   const sharedLinkProps: Partial<LinkProps> & { "data-type": "button" } = {
@@ -45,41 +53,56 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
   return (
     <NodeViewWrapper className="not-prose">
       {editor.isEditable ? (
-        <DialogTrigger isOpen={isOpen} onOpenChange={handleOpenChange}>
-          <TooltipTrigger>
-            <Link onPress={() => setIsOpen(true)} {...sharedLinkProps}>
+        <div ref={containerRef}>
+          <TooltipTrigger isDisabled={isOpen}>
+            <Button
+              variant="secondary"
+              size="large"
+              ref={triggerRef}
+              className="cursor-text w-full"
+              onPress={() => setIsOpen(true)}
+            >
               <NodeViewContent />
               {!node.attrs.href && (
-                <Badge icon={AlertTriangle} variant="warning">
+                <Badge icon={Unlink} variant="warning">
                   No URL
                 </Badge>
               )}
-            </Link>
+            </Button>
             <Tooltip>
               {url && url.length > 0 ? url : "Click to add URL"}
             </Tooltip>
           </TooltipTrigger>
-          <Popover className="p-2 w-96 max-w-full" placement="top">
+          <Popover
+            ref={popoverRef}
+            triggerRef={triggerRef}
+            className="p-2 w-80 max-w-full"
+            isNonModal
+            isOpen={isOpen}
+            onOpenChange={handleOpenChange}
+            shouldCloseOnInteractOutside={() => false} // Manually handling
+            UNSTABLE_portalContainer={containerRef.current ?? undefined}
+          >
             <Form onSubmit={handleSubmit}>
               <div className="flex flex-row items-start gap-1 w-full">
                 <TextField
                   aria-label="URL"
-                  autoFocus
                   type="url"
                   value={url ?? ""}
                   onChange={setUrl}
                   className="flex-1"
                   prefix={
-                    <LinkIcon className="size-4 text-gray-9 ml-2.5 -mr-1" />
+                    <LinkIcon className="size-4 text-gray-9 ml-2 -mr-0.5" />
                   }
+                  size="small"
                 />
-                <Button type="submit" variant="primary">
-                  Save
+                <Button type="submit" variant="primary" size="small">
+                  Apply
                 </Button>
               </div>
             </Form>
           </Popover>
-        </DialogTrigger>
+        </div>
       ) : (
         <Link {...sharedLinkProps}>
           <NodeViewContent />
