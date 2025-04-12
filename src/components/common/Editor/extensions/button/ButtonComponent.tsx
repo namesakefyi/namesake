@@ -59,11 +59,7 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
               {url && url.length > 0 ? url : "Click to add URL"}
             </Tooltip>
           </TooltipTrigger>
-          <Popover
-            title="Edit link"
-            className="p-2 w-96 max-w-full"
-            placement="top"
-          >
+          <Popover className="p-2 w-96 max-w-full" placement="top">
             <Form onSubmit={handleSubmit}>
               <div className="flex flex-row items-start gap-1 w-full">
                 <TextField

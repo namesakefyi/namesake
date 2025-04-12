@@ -1,4 +1,3 @@
-import { Dialog } from "@/components/common";
 import type React from "react";
 import {
   Popover as AriaPopover,
@@ -11,8 +10,6 @@ import { tv } from "tailwind-variants";
 
 export interface PopoverProps extends Omit<AriaPopoverProps, "children"> {
   children: React.ReactNode;
-  /** Provide a screen reader title for the popover. */
-  title: string;
 }
 
 const styles = tv({
@@ -27,12 +24,7 @@ const styles = tv({
   },
 });
 
-export function Popover({
-  children,
-  className,
-  title,
-  ...props
-}: PopoverProps) {
+export function Popover({ children, className, ...props }: PopoverProps) {
   const popoverContext = useSlottedContext(PopoverContext)!;
   const isSubmenu = popoverContext?.trigger === "SubmenuTrigger";
   const offset = isSubmenu ? 2 : 8;
@@ -45,7 +37,7 @@ export function Popover({
         styles({ ...renderProps, className }),
       )}
     >
-      <Dialog aria-label={title}>{children}</Dialog>
+      {children}
     </AriaPopover>
   );
 }
