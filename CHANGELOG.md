@@ -1,5 +1,15 @@
 # namesake
 
+## 0.23.0
+
+### Minor Changes
+
+- d0ddd4e: Make app mobile-responsive
+
+### Patch Changes
+
+- 7d89099: Fix popover handling
+
 ## 0.22.0
 
 ### Minor Changes
