@@ -110,21 +110,21 @@ const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
   const root = createRoot(rootElement);
   root.render(
-    <StrictMode>
-      <HelmetProvider>
-        <ConvexAuthProvider client={convex}>
-          <PostHogProvider
-            apiKey={import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_KEY}
-            options={postHogOptions}
-          >
+    <PostHogProvider
+      apiKey={import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_KEY}
+      options={postHogOptions}
+    >
+      <StrictMode>
+        <HelmetProvider>
+          <ConvexAuthProvider client={convex}>
             <ThemeProvider attribute="class" disableTransitionOnChange>
               <LazyMotion strict features={domAnimation}>
                 <InnerApp />
               </LazyMotion>
             </ThemeProvider>
-          </PostHogProvider>
-        </ConvexAuthProvider>
-      </HelmetProvider>
-    </StrictMode>,
+          </ConvexAuthProvider>
+        </HelmetProvider>
+      </StrictMode>
+    </PostHogProvider>,
   );
 }
