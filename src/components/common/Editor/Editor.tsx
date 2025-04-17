@@ -14,7 +14,10 @@ import {
   type ExtensionGroup,
   REQUIRED_EXTENSIONS,
 } from "./extensions/constants";
-import { DocumentWithSteps } from "./extensions/document/document";
+
+const DocumentWithSteps = Document.extend({
+  content: "(block | steps)+",
+});
 
 export interface EditorProps
   extends Omit<EditorContentProps, "onChange" | "editor" | "placeholder"> {

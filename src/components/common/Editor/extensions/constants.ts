@@ -15,8 +15,8 @@ import Paragraph from "@tiptap/extension-paragraph";
 import Placeholder from "@tiptap/extension-placeholder";
 import Text from "@tiptap/extension-text";
 import Typography from "@tiptap/extension-typography";
+import { StepContent, StepItem, StepTitle, Steps } from "tiptap-steps";
 import { Button } from "./button";
-import { StepContent, StepItem, StepTitle, Steps } from "./steps";
 
 export const REQUIRED_EXTENSIONS = [
   Text,
