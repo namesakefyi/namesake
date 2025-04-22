@@ -19,7 +19,11 @@ import { useRef, useState } from "react";
 import { useInteractOutside } from "react-aria";
 
 export default function ButtonComponent({ editor, node }: NodeViewProps) {
-  const [url, setUrl] = useState<string | null>(node.attrs.href);
+  const [url, setUrl] = useState<string | null>(
+    node.attrs.href && node.attrs.href.length > 0
+      ? node.attrs.href
+      : "https://",
+  );
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -62,6 +66,9 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
               className="cursor-text w-full"
               onPress={() => setIsOpen(true)}
             >
+              {!node.textContent && (
+                <span className="text-gray-9">Insert button text</span>
+              )}
               <NodeViewContent />
               {!node.attrs.href && (
                 <Badge icon={Unlink} variant="warning">
@@ -70,7 +77,9 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
               )}
             </Button>
             <Tooltip>
-              {url && url.length > 0 ? url : "Click to add URL"}
+              {url && url.length > 0 && url !== "https://"
+                ? url
+                : "Click to add URL"}
             </Tooltip>
           </TooltipTrigger>
           <Popover

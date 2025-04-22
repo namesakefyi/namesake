@@ -76,7 +76,7 @@ export const Button = Node.create<ButtonOptions>({
 
           const existingText = state.doc.textBetween(from, to, "");
           const hasExistingText = existingText.length > 0;
-          const text = hasExistingText ? existingText : "Click here";
+          const text = hasExistingText ? existingText : undefined;
 
           // Does the selection contain a link?
           const existingLink = editor.isActive("link")
@@ -89,7 +89,7 @@ export const Button = Node.create<ButtonOptions>({
             .insertContent({
               type: this.name,
               attrs: { href: href ?? existingLink },
-              content: [{ type: "text", text }],
+              content: text ? [{ type: "text", text }] : undefined,
             })
             .run();
         },
