@@ -140,7 +140,7 @@ const SignIn = () => {
             isDisabled={isSubmitting}
           />
           <Button type="submit" isSubmitting={isSubmitting} variant="primary">
-            {isSubmitting ? "Signing in..." : "Sign in"}
+            Sign in
           </Button>
         </Form>
       </TabPanel>
@@ -189,7 +189,7 @@ const SignIn = () => {
               <PasswordStrength value={passwordState.score} className="-mt-4" />
             )}
             <Button type="submit" isSubmitting={isSubmitting} variant="primary">
-              {isSubmitting ? "Registering..." : "Register"}
+              Register
             </Button>
             <p className="text-sm text-gray-dim text-center text-balance">
               By registering, you agree to Namesake’s{" "}

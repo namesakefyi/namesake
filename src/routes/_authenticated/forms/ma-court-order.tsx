@@ -279,7 +279,7 @@ function RouteComponent() {
         variant="primary"
         isSubmitting={isSubmitting}
       >
-        {isSubmitting ? "Submitting…" : "Submit"}
+        Submit
       </Button>
     </FormContainer>
   );
