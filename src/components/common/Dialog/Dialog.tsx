@@ -13,7 +13,7 @@ export function Dialog(props: DialogProps) {
     <AriaDialog
       {...props}
       className={twMerge(
-        "outline outline-0 p-0 max-h-[inherit] relative",
+        "outline outline-none p-0 max-h-[inherit] relative",
         props.className,
       )}
     />

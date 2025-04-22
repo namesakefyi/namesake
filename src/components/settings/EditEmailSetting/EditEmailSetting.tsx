@@ -1,4 +1,11 @@
-import { Banner, Button, Form, TextField } from "@/components/common";
+import {
+  Banner,
+  Button,
+  DialogTrigger,
+  Form,
+  Popover,
+  TextField,
+} from "@/components/common";
 import { SettingsItem } from "@/components/settings";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
@@ -46,49 +53,47 @@ export const EditEmailSetting = ({ user }: EditEmailSettingProps) => {
   };
 
   return (
-    <SettingsItem
-      label="Email address"
-      description="What email would you like to use for Namesake?"
-    >
-      {!isEditing ? (
+    <SettingsItem label="Email">
+      <DialogTrigger>
         <Button onPress={() => setIsEditing(true)}>
           <span className="truncate max-w-[24ch]">
             {user?.email ?? "Set email"}
           </span>
         </Button>
-      ) : (
-        <Form onSubmit={handleSubmit} className="gap-2">
-          <TextField
-            aria-label="Email"
-            name="email"
-            type="email"
-            value={email}
-            onChange={(value) => setEmail(value)}
-            className="w-60 max-w-full"
-            isRequired
-            autoFocus
-          />
-          <div className="flex gap-1 justify-end">
-            <Button
-              variant="secondary"
-              isSubmitting={isSubmitting}
-              size="small"
-              onPress={() => setIsEditing(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              size="small"
-              isSubmitting={isSubmitting}
-            >
-              Save
-            </Button>
-          </div>
-          {error && <Banner variant="danger">{error}</Banner>}
-        </Form>
-      )}
+        <Popover className="p-2" placement="bottom end" isOpen={isEditing}>
+          <Form onSubmit={handleSubmit} className="gap-2">
+            <TextField
+              aria-label="Email"
+              name="email"
+              type="email"
+              value={email}
+              onChange={(value) => setEmail(value)}
+              className="w-60 max-w-full"
+              isRequired
+              autoFocus
+            />
+            <div className="flex gap-1 justify-end">
+              <Button
+                variant="secondary"
+                isSubmitting={isSubmitting}
+                size="small"
+                onPress={() => setIsEditing(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                size="small"
+                isSubmitting={isSubmitting}
+              >
+                Save
+              </Button>
+            </div>
+            {error && <Banner variant="danger">{error}</Banner>}
+          </Form>
+        </Popover>
+      </DialogTrigger>
     </SettingsItem>
   );
 };

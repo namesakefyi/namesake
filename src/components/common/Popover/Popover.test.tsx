@@ -8,7 +8,7 @@ describe("Popover", () => {
     render(
       <DialogTrigger>
         <Button>Open</Button>
-        <Popover title="Help" className="max-w-[250px]">
+        <Popover className="max-w-[250px]">
           <p className="text-sm">
             For help accessing your account, please contact support.
           </p>
@@ -23,7 +23,5 @@ describe("Popover", () => {
 
     const popover = await screen.findByRole("dialog");
     expect(popover).toBeInTheDocument();
-
-    expect(popover).toHaveAttribute("aria-label", "Help");
   });
 });

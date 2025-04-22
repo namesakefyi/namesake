@@ -349,8 +349,8 @@ const ForgotPassword = ({
 
 function LoginRoute() {
   return (
-    <div className="flex flex-col w-96 max-w-full mx-auto min-h-dvh items-center justify-center gap-8 px-4 py-12">
-      <Link href="https://namesake.fyi" className="mb-4">
+    <div className="flex flex-col w-96 max-w-full mx-auto min-h-dvh items-center justify-center gap-8 p-4">
+      <Link href="https://namesake.fyi">
         <Logo />
       </Link>
       <AnimateChangeInHeight className="w-full">
