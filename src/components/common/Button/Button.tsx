@@ -45,10 +45,6 @@ export const buttonStyles = tv({
       false: "cursor-pointer",
       true: "cursor-default opacity-40",
     },
-    isSubmitting: {
-      true: "",
-      false: "",
-    },
   },
   compoundVariants: [
     {
@@ -98,7 +94,6 @@ export function Button({
           variant,
           size,
           className,
-          isSubmitting,
         }),
       )}
     >
