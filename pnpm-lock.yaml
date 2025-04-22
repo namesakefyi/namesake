@@ -182,8 +182,8 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
       tiptap-steps:
-        specifier: ^1.0.4
-        version: 1.0.4(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))
+        specifier: ^2.0.0
+        version: 2.0.0(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))
       tw-animate-css:
         specifier: ^1.2.5
         version: 1.2.5
@@ -5237,8 +5237,8 @@ packages:
   tippy.js@6.3.7:
     resolution: {integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==}
 
-  tiptap-steps@1.0.4:
-    resolution: {integrity: sha512-1lHLG+zFKKNkFD0uhdaPE64sXMvSuqC3tVL9FOOyDh2OAzLSocwXkb3WJ79JEwQDB2DssMMLAnHZqcN4RncaXw==}
+  tiptap-steps@2.0.0:
+    resolution: {integrity: sha512-2g3L24oGe/vBAvmOvz7lqs64f+DgZxgzV6e0dDazVVo4IgGCgS63/d3fdNspiIyy67HYxU2yPV4gPsMSJ4S6Rw==}
     peerDependencies:
       '@tiptap/core': ^2.11.7
 
@@ -11089,7 +11089,7 @@ snapshots:
     dependencies:
       '@popperjs/core': 2.11.8
 
-  tiptap-steps@1.0.4(@tiptap/core@2.11.7(@tiptap/pm@2.11.7)):
+  tiptap-steps@2.0.0(@tiptap/core@2.11.7(@tiptap/pm@2.11.7)):
     dependencies:
       '@tiptap/core': 2.11.7(@tiptap/pm@2.11.7)
 
