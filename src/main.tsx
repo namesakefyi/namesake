@@ -14,7 +14,7 @@ import {
 import { ArrowLeft, TriangleAlert } from "lucide-react";
 import { LazyMotion, domAnimation } from "motion/react";
 import { ThemeProvider } from "next-themes";
-import type { PostHogConfig } from "posthog-js";
+import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
@@ -96,7 +96,7 @@ const InnerApp = () => {
   );
 };
 
-const postHogOptions: Partial<PostHogConfig> = {
+posthog.init(import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_KEY, {
   api_host: import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_HOST,
   // Since we're using TanStack Router, we need to track pageviews manually
   capture_pageview: false,
@@ -104,27 +104,24 @@ const postHogOptions: Partial<PostHogConfig> = {
   capture_performance: {
     web_vitals: true,
   },
-};
+});
 
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
   const root = createRoot(rootElement);
   root.render(
     <StrictMode>
-      <HelmetProvider>
-        <ConvexAuthProvider client={convex}>
-          <PostHogProvider
-            apiKey={import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_KEY}
-            options={postHogOptions}
-          >
+      <PostHogProvider client={posthog}>
+        <HelmetProvider>
+          <ConvexAuthProvider client={convex}>
             <ThemeProvider attribute="class" disableTransitionOnChange>
               <LazyMotion strict features={domAnimation}>
                 <InnerApp />
               </LazyMotion>
             </ThemeProvider>
-          </PostHogProvider>
-        </ConvexAuthProvider>
-      </HelmetProvider>
+          </ConvexAuthProvider>
+        </HelmetProvider>
+      </PostHogProvider>
     </StrictMode>,
   );
 }

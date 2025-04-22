@@ -1,7 +1,7 @@
 import { api } from "@convex/_generated/api";
 import type { UserFormDataField } from "@convex/constants";
 import { useMutation, useQuery } from "convex/react";
-import posthog from "posthog-js";
+import { usePostHog } from "posthog-js/react";
 import { useEffect, useMemo, useState } from "react";
 import {
   type FieldValues,
@@ -18,6 +18,7 @@ export function useForm<TFieldValues extends FieldValues = FieldValues>(
   fields: UserFormDataField[],
   options?: Omit<UseFormProps<TFieldValues>, "values" | "defaultValues">,
 ) {
+  const posthog = usePostHog();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const encryptionKey = useEncryptionKey();
 
