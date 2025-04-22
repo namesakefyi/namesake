@@ -23,7 +23,7 @@ export interface ButtonProps extends AriaButtonProps {
 
 export const buttonStyles = tv({
   extend: focusRing,
-  base: "py-2 text-sm font-medium whitespace-nowrap rounded-lg flex gap-1.5 items-center justify-center border border-gray-dim transition-all duration-200 ease-in-out",
+  base: "py-2 text-sm font-medium whitespace-nowrap rounded-lg border border-gray-dim transition-all duration-200 ease-in-out",
   variants: {
     variant: {
       primary:
@@ -102,7 +102,9 @@ export function Button({
         }),
       )}
     >
-      <span className={isSubmitting ? "invisible" : "visible"}>
+      <span
+        className={`flex gap-1.5 items-center justify-center ${isSubmitting ? "invisible" : "visible"}`}
+      >
         {Icon && (
           <Icon {...sharedIconProps} className="shrink-0" {...iconProps} />
         )}
@@ -111,7 +113,7 @@ export function Button({
       </span>
 
       {isSubmitting && (
-        <span className="absolute">
+        <span className="absolute inset-0 flex items-center justify-center">
           <Loader2 {...sharedIconProps} className="shrink-0 animate-spin" />
         </span>
       )}
