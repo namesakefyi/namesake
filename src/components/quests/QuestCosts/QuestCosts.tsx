@@ -1,5 +1,5 @@
 import { Badge, Button, Tooltip, TooltipTrigger } from "@/components/common";
-import { EditQuestCostsModal, StatPopover } from "@/components/quests";
+import { EditQuestCostsModal, StatTooltip } from "@/components/quests";
 import type { Doc } from "@convex/_generated/dataModel";
 import type { Cost } from "@convex/constants";
 import { Pencil } from "lucide-react";
@@ -35,11 +35,11 @@ export const QuestCosts = ({ quest, editable = false }: QuestCostsProps) => {
     <Badge>
       {getTotalCosts(costs)}
       {costs && costs.length > 0 && (
-        <StatPopover tooltip="See cost breakdown">
-          <dl className="grid grid-cols-[1fr_auto]">
+        <StatTooltip>
+          <dl className="grid grid-cols-[1fr_auto] py-1">
             {costs.map(({ cost, description }) => (
               <Fragment key={description}>
-                <dt className="text-gray-dim pr-4">{description}</dt>
+                <dt className="pr-4">{description}</dt>
                 <dd className="text-right tabular-nums">
                   {cost.toLocaleString("en-US", {
                     style: "currency",
@@ -49,14 +49,12 @@ export const QuestCosts = ({ quest, editable = false }: QuestCostsProps) => {
                 </dd>
               </Fragment>
             ))}
-            <dt className="text-gray-dim pr-4 border-t border-gray-dim pt-2 mt-2">
-              Total
-            </dt>
-            <dd className="text-right border-t border-gray-dim pt-2 mt-2">
+            <dt className="pr-4 border-t border-gray-a5 pt-2 mt-2">Total</dt>
+            <dd className="text-right border-t border-gray-a5 pt-2 mt-2">
               {getTotalCosts(costs)}
             </dd>
           </dl>
-        </StatPopover>
+        </StatTooltip>
       )}
       {editable && (
         <>

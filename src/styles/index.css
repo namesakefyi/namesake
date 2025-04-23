@@ -4,6 +4,7 @@
 
 @plugin "tailwindcss-react-aria-components";
 
+@custom-variant light (&:where(.light, .light *, :not(.dark, .dark *)));
 @custom-variant dark (&:where(.dark, .dark *));
 
 .app-padding {
