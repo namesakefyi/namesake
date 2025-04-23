@@ -4,7 +4,6 @@ import {
   QuestDetails,
   QuestFaqs,
   QuestPageHeader,
-  QuestReferences,
   QuestStatusFooter,
   QuestSteps,
   QuestTimeRequired,
@@ -77,7 +76,6 @@ function QuestDetailRoute() {
         </QuestDetails>
         <QuestSteps quest={quest} editable={isEditing} />
         <QuestFaqs quest={quest} editable={isEditing} />
-        <QuestReferences quest={quest} editable={isEditing} />
         {!isEditing && (
           <QuestStatusFooter quest={quest} userQuest={userQuest} />
         )}

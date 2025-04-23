@@ -6,7 +6,6 @@ export * from "./QuestCosts/QuestCosts";
 export * from "./QuestDetails/QuestDetails";
 export * from "./QuestFaqs/QuestFaqs";
 export * from "./QuestPageHeader/QuestPageHeader";
-export * from "./QuestReferences/QuestReferences";
 export * from "./QuestSection/QuestSection";
 export * from "./QuestStatusFooter/QuestStatusFooter";
 export * from "./QuestSteps/QuestSteps";
