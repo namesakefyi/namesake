@@ -80,7 +80,7 @@ export const EditBirthplaceSetting = ({ user }: EditBirthplaceSettingProps) => {
           <div className="flex gap-1 justify-end">
             <Button
               variant="secondary"
-              isDisabled={isSubmitting}
+              isSubmitting={isSubmitting}
               size="small"
               onPress={handleCancel}
             >
@@ -89,7 +89,7 @@ export const EditBirthplaceSetting = ({ user }: EditBirthplaceSettingProps) => {
             <Button
               type="submit"
               variant="primary"
-              isDisabled={isSubmitting}
+              isSubmitting={isSubmitting}
               size="small"
             >
               Save

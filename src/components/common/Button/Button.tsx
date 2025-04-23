@@ -1,6 +1,7 @@
 import type { FieldSize } from "@/components/common";
 import { focusRing } from "@/components/utils";
 import type { LucideIcon, LucideProps } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,
@@ -23,11 +24,12 @@ export interface ButtonProps extends AriaButtonProps {
     | "icon"
     | "ghost";
   size?: FieldSize;
+  isSubmitting?: boolean;
 }
 
 export const buttonStyles = tv({
   extend: focusRing,
-  base: "py-2 text-sm font-medium whitespace-nowrap rounded-lg flex items-center justify-center border border-gray-dim transition",
+  base: "py-2 text-sm font-medium whitespace-nowrap rounded-lg border border-gray-dim transition-all duration-200 ease-in-out flex items-center justify-center",
   variants: {
     variant: {
       primary:
@@ -79,11 +81,21 @@ export function Button({
   endIconProps,
   className,
   children,
+  isSubmitting,
+  isDisabled,
   ...props
 }: ButtonProps) {
+  const iconSize = size === "large" ? 20 : 16;
+  const iconStrokeWidth = size === "large" ? 2.5 : 2;
+  const sharedIconProps = {
+    size: iconSize,
+    strokeWidth: iconStrokeWidth,
+  };
+
   return (
     <AriaButton
       {...props}
+      isDisabled={isSubmitting || isDisabled}
       className={composeRenderProps(className, (className, renderProps) =>
         buttonStyles({
           ...renderProps,
@@ -93,21 +105,20 @@ export function Button({
         }),
       )}
     >
-      {Icon && (
-        <Icon
-          size={size === "large" ? 20 : 16}
-          strokeWidth={size === "large" ? 2.5 : 2}
-          className="shrink-0"
-          {...iconProps}
-        />
-      )}
-      {children}
-      {EndIcon && (
-        <EndIcon
-          size={size === "large" ? 20 : 16}
-          strokeWidth={size === "large" ? 2.5 : 2}
-          {...endIconProps}
-        />
+      <span
+        className={`inline-flex gap-1.5 items-center justify-center ${isSubmitting ? "invisible" : "visible"}`}
+      >
+        {Icon && (
+          <Icon {...sharedIconProps} className="shrink-0" {...iconProps} />
+        )}
+        {children}
+        {EndIcon && <EndIcon {...sharedIconProps} {...endIconProps} />}
+      </span>
+
+      {isSubmitting && (
+        <span className="absolute inset-0 flex items-center justify-center">
+          <Loader2 {...sharedIconProps} className="shrink-0 animate-spin" />
+        </span>
       )}
     </AriaButton>
   );

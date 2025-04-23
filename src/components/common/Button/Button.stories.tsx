@@ -1,4 +1,5 @@
 import { Button } from "@/components/common";
+import { ArrowRight, Plus } from "lucide-react";
 
 export default {
   component: Button,
@@ -11,6 +12,7 @@ export default {
   },
   args: {
     isDisabled: false,
+    isSubmitting: false,
     children: "Button",
   },
 };
@@ -30,5 +32,46 @@ export const Secondary = {
 export const Destructive = {
   args: {
     variant: "destructive",
+  },
+};
+
+export const Submitting = {
+  args: {
+    variant: "primary",
+    isSubmitting: true,
+    children: "Saving...",
+  },
+};
+
+export const Disabled = {
+  args: {
+    variant: "primary",
+    isDisabled: true,
+    children: "Cannot click",
+  },
+};
+
+export const LeadingIcon = {
+  args: {
+    variant: "primary",
+    icon: Plus,
+    children: "Create new",
+  },
+};
+
+export const TrailingIcon = {
+  args: {
+    variant: "primary",
+    endIcon: ArrowRight,
+    children: "Next step",
+  },
+};
+
+export const BothIcons = {
+  args: {
+    variant: "secondary",
+    icon: Plus,
+    endIcon: ArrowRight,
+    children: "Add and continue",
   },
 };
