@@ -1,7 +1,12 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
   "files": {
-    "ignore": ["convex/_generated", "routeTree.gen.ts", "dist", "node_modules"]
+    "ignore": ["convex/_generated", "routeTree.gen.ts"]
   },
   "formatter": {
     "enabled": true,
