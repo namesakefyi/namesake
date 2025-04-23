@@ -71,18 +71,18 @@ type QuestStatusButtonProps = {
 };
 
 const QuestStatusButton = ({ quest, userQuest }: QuestStatusButtonProps) => {
-  const [isAddingQuest, setIsAddingQuest] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const addQuest = useMutation(api.userQuests.create);
   const setStatus = useMutation(api.userQuests.setStatus);
 
   const handleAddQuest = async () => {
     try {
-      setIsAddingQuest(true);
+      setIsSubmitting(true);
       if (quest) await addQuest({ questId: quest._id });
     } catch (err) {
       toast.error("Failed to add quest. Please try again.");
     } finally {
-      setIsAddingQuest(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -97,7 +97,7 @@ const QuestStatusButton = ({ quest, userQuest }: QuestStatusButtonProps) => {
         size="large"
         variant="primary"
         onClick={handleAddQuest}
-        isDisabled={isAddingQuest}
+        isSubmitting={isSubmitting}
       >
         Add to my list
       </Button>
@@ -105,10 +105,17 @@ const QuestStatusButton = ({ quest, userQuest }: QuestStatusButtonProps) => {
   }
 
   const handleChangeStatus = async (status: Status) => {
-    await setStatus({
-      questId: quest._id,
-      status,
-    });
+    try {
+      setIsSubmitting(true);
+      await setStatus({
+        questId: quest._id,
+        status,
+      });
+    } catch (err) {
+      toast.error("Failed to change status. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (userQuest?.status === "complete") {
@@ -123,6 +130,7 @@ const QuestStatusButton = ({ quest, userQuest }: QuestStatusButtonProps) => {
         variant="success"
         icon={STATUS.complete.icon}
         onClick={() => handleChangeStatus("complete")}
+        isSubmitting={isSubmitting}
       >
         Mark as {STATUS.complete.label.toLowerCase()}
       </Button>
@@ -136,6 +144,7 @@ const QuestStatusButton = ({ quest, userQuest }: QuestStatusButtonProps) => {
         size="large"
         variant="secondary"
         onClick={() => handleChangeStatus("inProgress")}
+        isSubmitting={isSubmitting}
       >
         Mark as {STATUS.inProgress.label.toLowerCase()}
       </Button>
