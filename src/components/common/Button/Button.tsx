@@ -15,13 +15,19 @@ export interface ButtonProps extends AriaButtonProps {
   iconProps?: LucideProps;
   endIcon?: LucideIcon;
   endIconProps?: LucideProps;
-  variant?: "primary" | "secondary" | "destructive" | "icon" | "ghost";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "destructive"
+    | "success"
+    | "icon"
+    | "ghost";
   size?: FieldSize;
 }
 
 export const buttonStyles = tv({
   extend: focusRing,
-  base: "py-2 text-sm font-medium whitespace-nowrap rounded-lg flex gap-1.5 items-center justify-center border border-gray-dim transition",
+  base: "py-2 text-sm font-medium whitespace-nowrap rounded-lg flex items-center justify-center border border-gray-dim transition",
   variants: {
     variant: {
       primary:
@@ -30,14 +36,16 @@ export const buttonStyles = tv({
         "bg-white dark:bg-gray-3 dark:hover:bg-gray-4 hover:border-gray-normal text-gray-normal shadow-sm",
       destructive:
         "bg-red-9 text-white border-red-11 shadow-sm hover:bg-red-10",
+      success:
+        "bg-green-9 text-white border-green-11 shadow-sm hover:bg-green-10",
       icon: "bg-transparent hover:bg-gray-a3 text-gray-dim hover:text-gray-normal border-0 flex shrink-0 items-center justify-center rounded-full",
       ghost:
         "bg-transparent hover:bg-gray-a3 text-gray-dim hover:text-gray-normal border-0",
     },
     size: {
-      small: "h-8 px-2",
-      medium: "h-10 px-3",
-      large: "h-12 px-3.5 text-lg",
+      small: "h-8 px-2 gap-1.5",
+      medium: "h-10 px-3 gap-1.5",
+      large: "h-12 px-3.5 gap-2 text-lg",
     },
     isDisabled: {
       false: "cursor-pointer",
