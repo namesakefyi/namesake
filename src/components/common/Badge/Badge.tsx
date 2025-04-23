@@ -1,5 +1,26 @@
 import type { LucideIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
+import { Button, type ButtonProps } from "../Button/Button";
+
+export interface BadgeButtonProps
+  extends Omit<ButtonProps, "variant" | "size"> {
+  label: string;
+  icon?: LucideIcon;
+}
+
+export function BadgeButton({ icon, label, ...props }: BadgeButtonProps) {
+  return (
+    <Button
+      {...props}
+      variant="icon"
+      size="small"
+      className="size-5 -mx-0.5"
+      aria-label={label}
+      icon={icon}
+      iconProps={{ size: 12 }}
+    />
+  );
+}
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;

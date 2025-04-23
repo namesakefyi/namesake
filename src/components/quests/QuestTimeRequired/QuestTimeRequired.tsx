@@ -1,8 +1,13 @@
-import { Badge, Button, Tooltip, TooltipTrigger } from "@/components/common";
-import { EditQuestTimeRequiredModal, StatTooltip } from "@/components/quests";
+import {
+  Badge,
+  BadgeButton,
+  Tooltip,
+  TooltipTrigger,
+} from "@/components/common";
+import { EditQuestTimeRequiredModal } from "@/components/quests";
 import type { Doc } from "@convex/_generated/dataModel";
 import type { TimeRequired } from "@convex/constants";
-import { Pencil } from "lucide-react";
+import { HelpCircle, Pencil } from "lucide-react";
 import { useState } from "react";
 
 type QuestTimeRequiredProps = {
@@ -32,19 +37,20 @@ export const QuestTimeRequired = ({
     <Badge>
       {formattedTime}
       {timeRequired?.description && (
-        <StatTooltip>
-          <p className="text-sm max-w-xs">{timeRequired.description}</p>
-        </StatTooltip>
+        <TooltipTrigger>
+          <BadgeButton label="Details" icon={HelpCircle} />
+          <Tooltip>
+            <p className="text-sm max-w-xs">{timeRequired.description}</p>
+          </Tooltip>
+        </TooltipTrigger>
       )}
       {editable && (
         <>
           <TooltipTrigger>
-            <Button
-              variant="icon"
-              size="small"
+            <BadgeButton
               icon={Pencil}
               onPress={() => setIsEditing(true)}
-              aria-label="Edit time required"
+              label="Edit time required"
             />
             <Tooltip>Edit time required</Tooltip>
           </TooltipTrigger>

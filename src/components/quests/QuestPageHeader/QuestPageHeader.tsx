@@ -1,23 +1,37 @@
 import type { PageHeaderProps } from "@/components/app";
-import { Badge, IconText, Link, TimeAgo } from "@/components/common";
-import { QuestCosts, QuestTimeRequired } from "@/components/quests";
+import {
+  Button,
+  IconText,
+  Link,
+  TimeAgo,
+  Tooltip,
+  TooltipTrigger,
+} from "@/components/common";
+import {
+  EditQuestTitleModal,
+  QuestCategory,
+  QuestCosts,
+  QuestJurisdiction,
+  QuestTimeRequired,
+} from "@/components/quests";
 import { useIsMobile } from "@/utils/useIsMobile";
 import { api } from "@convex/_generated/api";
 import type { Doc, Id } from "@convex/_generated/dataModel";
 import type { Status } from "@convex/constants";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { Authenticated, useMutation, useQuery } from "convex/react";
 import { ArrowLeft, Clock, Pencil } from "lucide-react";
+import { useState } from "react";
 import { Heading } from "react-aria-components";
 import { toast } from "sonner";
 import { StatusSelect } from "../StatusSelect/StatusSelect";
 
 interface QuestPageToolbarProps {
   quest?: Doc<"quests"> | null;
-  isEditing?: boolean;
+  editable?: boolean;
 }
 
-function QuestPageToolbar({ quest, isEditing }: QuestPageToolbarProps) {
+function QuestPageToolbar({ quest, editable }: QuestPageToolbarProps) {
   const user = useQuery(api.users.getCurrent);
   const canEdit = user?.role === "admin";
   const updatedTime = quest?.updatedAt ? (
@@ -32,9 +46,8 @@ function QuestPageToolbar({ quest, isEditing }: QuestPageToolbarProps) {
         <IconText icon={Clock}>Last edited {updatedTime}</IconText>
       </div>
       <Authenticated>
-        {isEditing && (
+        {editable && (
           <div className="flex gap-4 items-center">
-            <IconText icon={Pencil}>Editing</IconText>
             <Link
               button={{ size: "small", variant: "success" }}
               href={{
@@ -45,7 +58,7 @@ function QuestPageToolbar({ quest, isEditing }: QuestPageToolbarProps) {
             </Link>
           </div>
         )}
-        {!isEditing && canEdit && (
+        {!editable && canEdit && (
           <Link
             button={{ size: "small", variant: "ghost" }}
             href={{
@@ -63,22 +76,22 @@ function QuestPageToolbar({ quest, isEditing }: QuestPageToolbarProps) {
 interface QuestPageHeaderProps extends Omit<PageHeaderProps, "title"> {
   quest?: Doc<"quests"> | null;
   userQuest?: Doc<"userQuests"> | null;
+  editable?: boolean;
 }
 
 export function QuestPageHeader({
   quest,
   userQuest,
-  badge,
+  editable,
   children,
 }: QuestPageHeaderProps) {
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const changeStatus = useMutation(api.userQuests.setStatus);
   const deleteForever = useMutation(api.userQuests.deleteForever);
-  const search = useSearch({
-    strict: false,
-  });
-  const isEditing = search.edit;
+
+  if (!quest) return null;
 
   const handleRemoveQuest = (questId: Id<"quests">, title: string) => {
     deleteForever({ questId }).then(() => {
@@ -92,11 +105,12 @@ export function QuestPageHeader({
   };
 
   return (
-    <div className="pt-8 mb-6 flex flex-col gap-2 items-start w-full border-b border-gray-dim">
+    <div className="pt-6 mb-6 flex flex-col gap-2 items-start w-full border-b border-gray-dim">
       <div className="flex gap-1 items-center">
-        {badge && <Badge>{badge}</Badge>}
-        <QuestCosts quest={quest} editable={isEditing} />
-        <QuestTimeRequired quest={quest} editable={isEditing} />
+        <QuestCategory quest={quest} editable={editable} />
+        <QuestJurisdiction quest={quest} editable={editable} />
+        <QuestCosts quest={quest} editable={editable} />
+        <QuestTimeRequired quest={quest} editable={editable} />
       </div>
       <div className="flex gap-2 items-center">
         {isMobile && (
@@ -105,8 +119,26 @@ export function QuestPageHeader({
           </Link>
         )}
         <Heading className="text-4xl font-medium">{quest?.title}</Heading>
+        {editable && (
+          <>
+            <TooltipTrigger>
+              <Button
+                variant="icon"
+                size="small"
+                icon={Pencil}
+                onPress={() => setIsEditingTitle(true)}
+              />
+              <Tooltip placement="bottom">Edit title</Tooltip>
+            </TooltipTrigger>
+            <EditQuestTitleModal
+              quest={quest}
+              open={isEditingTitle}
+              onOpenChange={setIsEditingTitle}
+            />
+          </>
+        )}
         <div className="flex gap-2 items-center -mb-1">
-          {quest && userQuest && !isEditing && (
+          {quest && userQuest && !editable && (
             <StatusSelect
               status={userQuest.status as Status}
               onChange={handleStatusChange}
@@ -116,7 +148,7 @@ export function QuestPageHeader({
           {children}
         </div>
       </div>
-      <QuestPageToolbar quest={quest} isEditing={isEditing} />
+      <QuestPageToolbar quest={quest} editable={editable} />
     </div>
   );
 }

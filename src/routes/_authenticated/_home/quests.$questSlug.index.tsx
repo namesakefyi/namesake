@@ -5,9 +5,7 @@ import {
   QuestStatusFooter,
   QuestSteps,
 } from "@/components/quests";
-import { QuestBasics } from "@/components/quests/QuestBasics/QuestBasics";
 import { api } from "@convex/_generated/api";
-import { JURISDICTIONS } from "@convex/constants";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { Milestone } from "lucide-react";
@@ -53,19 +51,14 @@ function QuestDetailRoute() {
   const quest = questData.quest;
   const userQuest = questData.userQuest;
 
-  let badge = undefined;
-  if (quest.jurisdiction) {
-    badge = JURISDICTIONS[quest.jurisdiction as keyof typeof JURISDICTIONS];
-  }
-  if (quest.category === "passport" || quest.category === "socialSecurity") {
-    badge = "United States";
-  }
-
   return (
     <>
-      <QuestPageHeader quest={quest} userQuest={userQuest} badge={badge} />
+      <QuestPageHeader
+        quest={quest}
+        userQuest={userQuest}
+        editable={isEditing}
+      />
       <div className="flex flex-col gap-6 pb-12">
-        <QuestBasics quest={quest} editable={isEditing} />
         <QuestSteps quest={quest} editable={isEditing} />
         <QuestFaqs quest={quest} editable={isEditing} />
         {!isEditing && (

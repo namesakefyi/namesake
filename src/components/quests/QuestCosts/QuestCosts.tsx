@@ -1,8 +1,13 @@
-import { Badge, Button, Tooltip, TooltipTrigger } from "@/components/common";
-import { EditQuestCostsModal, StatTooltip } from "@/components/quests";
+import {
+  Badge,
+  BadgeButton,
+  Tooltip,
+  TooltipTrigger,
+} from "@/components/common";
+import { EditQuestCostsModal } from "@/components/quests";
 import type { Doc } from "@convex/_generated/dataModel";
 import type { Cost } from "@convex/constants";
-import { Pencil } from "lucide-react";
+import { HelpCircle, Pencil } from "lucide-react";
 import { useState } from "react";
 import { Fragment } from "react/jsx-runtime";
 
@@ -35,36 +40,37 @@ export const QuestCosts = ({ quest, editable = false }: QuestCostsProps) => {
     <Badge>
       {getTotalCosts(costs)}
       {costs && costs.length > 0 && (
-        <StatTooltip>
-          <dl className="grid grid-cols-[1fr_auto] py-1">
-            {costs.map(({ cost, description }) => (
-              <Fragment key={description}>
-                <dt className="pr-4">{description}</dt>
-                <dd className="text-right tabular-nums">
-                  {cost.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                    maximumFractionDigits: 0,
-                  })}
-                </dd>
-              </Fragment>
-            ))}
-            <dt className="pr-4 border-t border-gray-a5 pt-2 mt-2">Total</dt>
-            <dd className="text-right border-t border-gray-a5 pt-2 mt-2">
-              {getTotalCosts(costs)}
-            </dd>
-          </dl>
-        </StatTooltip>
+        <TooltipTrigger>
+          <BadgeButton label="Cost details" icon={HelpCircle} />
+          <Tooltip>
+            <dl className="grid grid-cols-[1fr_auto] py-1">
+              {costs.map(({ cost, description }) => (
+                <Fragment key={description}>
+                  <dt className="pr-4">{description}</dt>
+                  <dd className="text-right tabular-nums">
+                    {cost.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      maximumFractionDigits: 0,
+                    })}
+                  </dd>
+                </Fragment>
+              ))}
+              <dt className="pr-4 border-t border-gray-a5 pt-2 mt-2">Total</dt>
+              <dd className="text-right border-t border-gray-a5 pt-2 mt-2">
+                {getTotalCosts(costs)}
+              </dd>
+            </dl>
+          </Tooltip>
+        </TooltipTrigger>
       )}
       {editable && (
         <>
           <TooltipTrigger>
-            <Button
-              variant="icon"
-              size="small"
+            <BadgeButton
               icon={Pencil}
               onPress={() => setIsEditing(true)}
-              aria-label="Edit costs"
+              label="Edit costs"
             />
             <Tooltip>Edit costs</Tooltip>
           </TooltipTrigger>
