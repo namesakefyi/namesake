@@ -1,5 +1,4 @@
-# Workflow name
-name: Publish Storybook
+name: Storybook
 
 on:
   pull_request:
@@ -14,7 +13,7 @@ permissions:
 
 jobs:
   deploy:
-    name: Deploy Storybook
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
