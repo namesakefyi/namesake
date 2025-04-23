@@ -1,9 +1,5 @@
-import { Button, Tooltip, TooltipTrigger } from "@/components/common";
-import {
-  EditQuestCostsModal,
-  StatGroup,
-  StatPopover,
-} from "@/components/quests";
+import { Badge, Button, Tooltip, TooltipTrigger } from "@/components/common";
+import { EditQuestCostsModal, StatPopover } from "@/components/quests";
 import type { Doc } from "@convex/_generated/dataModel";
 import type { Cost } from "@convex/constants";
 import { Pencil } from "lucide-react";
@@ -11,14 +7,14 @@ import { useState } from "react";
 import { Fragment } from "react/jsx-runtime";
 
 type QuestCostsProps = {
-  quest: Doc<"quests">;
+  quest?: Doc<"quests"> | null;
   editable?: boolean;
 };
 
 export const QuestCosts = ({ quest, editable = false }: QuestCostsProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  if (quest === undefined) return null;
+  if (!quest) return null;
 
   const { costs } = quest;
 
@@ -36,7 +32,8 @@ export const QuestCosts = ({ quest, editable = false }: QuestCostsProps) => {
   };
 
   return (
-    <StatGroup label="Cost" value={getTotalCosts(costs)}>
+    <Badge>
+      {getTotalCosts(costs)}
       {costs && costs.length > 0 && (
         <StatPopover tooltip="See cost breakdown">
           <dl className="grid grid-cols-[1fr_auto]">
@@ -80,6 +77,6 @@ export const QuestCosts = ({ quest, editable = false }: QuestCostsProps) => {
           />
         </>
       )}
-    </StatGroup>
+    </Badge>
   );
 };

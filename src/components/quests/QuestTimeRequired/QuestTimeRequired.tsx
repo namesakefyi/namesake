@@ -1,16 +1,12 @@
-import { Button, Tooltip, TooltipTrigger } from "@/components/common";
-import {
-  EditQuestTimeRequiredModal,
-  StatGroup,
-  StatPopover,
-} from "@/components/quests";
+import { Badge, Button, Tooltip, TooltipTrigger } from "@/components/common";
+import { EditQuestTimeRequiredModal, StatPopover } from "@/components/quests";
 import type { Doc } from "@convex/_generated/dataModel";
 import type { TimeRequired } from "@convex/constants";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 
 type QuestTimeRequiredProps = {
-  quest: Doc<"quests">;
+  quest?: Doc<"quests"> | null;
   editable?: boolean;
 };
 
@@ -20,7 +16,7 @@ export const QuestTimeRequired = ({
 }: QuestTimeRequiredProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  if (quest === undefined) return null;
+  if (!quest) return null;
 
   const { timeRequired } = quest;
 
@@ -33,7 +29,8 @@ export const QuestTimeRequired = ({
   const formattedTime = getFormattedTime(timeRequired as TimeRequired);
 
   return (
-    <StatGroup label="Time" value={formattedTime}>
+    <Badge>
+      {formattedTime}
       {timeRequired?.description && (
         <StatPopover tooltip="See details">
           <p className="text-sm max-w-xs">{timeRequired.description}</p>
@@ -58,6 +55,6 @@ export const QuestTimeRequired = ({
           />
         </>
       )}
-    </StatGroup>
+    </Badge>
   );
 };

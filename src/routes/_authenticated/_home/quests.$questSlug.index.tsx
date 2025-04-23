@@ -1,12 +1,9 @@
 import { Empty } from "@/components/common";
 import {
-  QuestCosts,
-  QuestDetails,
   QuestFaqs,
   QuestPageHeader,
   QuestStatusFooter,
   QuestSteps,
-  QuestTimeRequired,
 } from "@/components/quests";
 import { QuestBasics } from "@/components/quests/QuestBasics/QuestBasics";
 import { api } from "@convex/_generated/api";
@@ -69,11 +66,6 @@ function QuestDetailRoute() {
       <QuestPageHeader quest={quest} userQuest={userQuest} badge={badge} />
       <div className="flex flex-col gap-6 pb-12">
         <QuestBasics quest={quest} editable={isEditing} />
-        {/* TODO: Restyle and condense; place next to tag in page header a la google maps */}
-        <QuestDetails>
-          <QuestCosts quest={quest} editable={isEditing} />
-          <QuestTimeRequired quest={quest} editable={isEditing} />
-        </QuestDetails>
         <QuestSteps quest={quest} editable={isEditing} />
         <QuestFaqs quest={quest} editable={isEditing} />
         {!isEditing && (
