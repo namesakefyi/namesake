@@ -31,7 +31,7 @@ export const PageHeader = ({
   return (
     <header
       className={twMerge(
-        "h-header flex bg-app shrink-0 items-center justify-between gap-6 text-gray-normal sticky top-0 z-20",
+        "h-header app-padding flex bg-app shrink-0 items-center justify-between gap-6 text-gray-normal sticky top-0 z-20",
         className,
       )}
     >
@@ -41,12 +41,12 @@ export const PageHeader = ({
             <Link
               href={mobileBackLink}
               button={{ variant: "icon" }}
-              className="-ml-2"
+              className="-ml-2 -mr-1"
             >
               <ArrowLeft className="size-5" />
             </Link>
           )}
-          <h1 className="text-xl lg:text-2xl font-medium whitespace-nowrap">
+          <h1 className="text-2xl lg:text-3xl font-medium whitespace-nowrap">
             {title}
           </h1>
           {badge}

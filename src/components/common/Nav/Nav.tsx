@@ -126,8 +126,11 @@ export const NavGroup = ({ children }: NavGroupProps) => {
 
 interface NavProps {
   children: React.ReactNode;
+  className?: string;
 }
 
-export const Nav = ({ children }: NavProps) => {
-  return <nav className="flex flex-col gap-0.5 pb-4">{children}</nav>;
+export const Nav = ({ children, className }: NavProps) => {
+  const navStyles = tv({ base: "flex flex-col gap-0.5 pb-4" });
+
+  return <nav className={navStyles({ className })}>{children}</nav>;
 };

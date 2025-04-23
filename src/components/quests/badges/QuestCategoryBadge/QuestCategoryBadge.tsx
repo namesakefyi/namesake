@@ -1,15 +1,21 @@
 import {
+  Badge,
+  BadgeButton,
   Button,
   Form,
   Modal,
   ModalHeader,
   Select,
   SelectItem,
+  Tooltip,
+  TooltipTrigger,
 } from "@/components/common";
+import {} from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { CATEGORIES, type Category } from "@convex/constants";
 import { useMutation } from "convex/react";
+import { Pencil } from "lucide-react";
 import { CircleHelp } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -90,5 +96,46 @@ export const EditQuestCategoryModal = ({
         </div>
       </Form>
     </Modal>
+  );
+};
+
+type QuestCategoryBadgeProps = {
+  quest?: Doc<"quests"> | null;
+  editable?: boolean;
+};
+
+export const QuestCategoryBadge = ({
+  quest,
+  editable = false,
+}: QuestCategoryBadgeProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  if (!quest || !quest.category) return null;
+
+  if (CATEGORIES[quest.category as Category].isCore && !editable) {
+    return null;
+  }
+
+  return (
+    <Badge>
+      {CATEGORIES[quest.category as Category].label}
+      {editable && (
+        <>
+          <TooltipTrigger>
+            <BadgeButton
+              icon={Pencil}
+              onPress={() => setIsEditing(true)}
+              label="Edit category"
+            />
+            <Tooltip>Edit category</Tooltip>
+          </TooltipTrigger>
+          <EditQuestCategoryModal
+            quest={quest}
+            open={isEditing}
+            onOpenChange={setIsEditing}
+          />
+        </>
+      )}
+    </Badge>
   );
 };

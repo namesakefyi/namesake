@@ -14,7 +14,7 @@ export function IconText({ icon: Icon, children, className }: IconTextProps) {
 
   return (
     <span className={styles({ className })}>
-      <Icon className="size-3.5" />
+      <Icon className="size-3.5 shrink-0" />
       <span>{children}</span>
     </span>
   );

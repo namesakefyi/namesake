@@ -1,4 +1,6 @@
 import {
+  Badge,
+  BadgeButton,
   Button,
   Form,
   Modal,
@@ -7,6 +9,8 @@ import {
   Select,
   SelectItem,
   TextField,
+  Tooltip,
+  TooltipTrigger,
 } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
@@ -16,6 +20,7 @@ import {
   type TimeUnit,
 } from "@convex/constants";
 import { useMutation } from "convex/react";
+import { HelpCircle, Pencil } from "lucide-react";
 import { memo, useState } from "react";
 import { toast } from "sonner";
 
@@ -155,5 +160,60 @@ export const EditQuestTimeRequiredModal = ({
         </div>
       </Form>
     </Modal>
+  );
+};
+
+type QuestTimeBadgeProps = {
+  quest?: Doc<"quests"> | null;
+  editable?: boolean;
+};
+
+export const QuestTimeBadge = ({
+  quest,
+  editable = false,
+}: QuestTimeBadgeProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  if (!quest) return null;
+
+  const { timeRequired } = quest;
+
+  const getFormattedTime = (timeRequired: TimeRequired) => {
+    return timeRequired
+      ? `${timeRequired.min}–${timeRequired.max} ${timeRequired.unit}`
+      : "Unknown";
+  };
+
+  const formattedTime = getFormattedTime(timeRequired as TimeRequired);
+
+  return (
+    <Badge>
+      {formattedTime}
+      {timeRequired?.description && (
+        <TooltipTrigger>
+          <BadgeButton label="Details" icon={HelpCircle} />
+          <Tooltip>
+            <p className="text-sm max-w-xs">{timeRequired.description}</p>
+          </Tooltip>
+        </TooltipTrigger>
+      )}
+      {editable && (
+        <>
+          <TooltipTrigger>
+            <BadgeButton
+              icon={Pencil}
+              onPress={() => setIsEditing(true)}
+              label="Edit time required"
+            />
+            <Tooltip>Edit time required</Tooltip>
+          </TooltipTrigger>
+          <EditQuestTimeRequiredModal
+            quest={quest}
+            open={isEditing}
+            onOpenChange={setIsEditing}
+          />
+        </>
+      )}
+    </Badge>
   );
 };

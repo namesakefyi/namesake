@@ -1,4 +1,4 @@
-import { Button, Card, IconText, TimeAgo } from "@/components/common";
+import { Button, IconText, TimeAgo } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import type { Category, Status } from "@convex/constants";
@@ -44,7 +44,7 @@ function CoreQuestIllustration({ category }: { category: CoreCategory }) {
     <img
       src={illustration[category].src}
       alt={illustration[category].alt}
-      className="h-32 absolute -bottom-6 left-8 mix-blend-multiply dark:mix-blend-screen pointer-events-none select-none z-0"
+      className="h-48 absolute top-1/2 -translate-y-1/2 left-8 mix-blend-multiply dark:mix-blend-screen pointer-events-none select-none z-0"
     />
   );
 }
@@ -65,12 +65,12 @@ function QuestCompletedDate({ userQuest }: { userQuest: Doc<"userQuests"> }) {
   );
 }
 
-type QuestStatusButtonProps = {
+type QuestCTAButtonProps = {
   quest: Doc<"quests">;
   userQuest?: Doc<"userQuests"> | null;
 };
 
-const QuestStatusButton = ({ quest, userQuest }: QuestStatusButtonProps) => {
+const QuestCTAButton = ({ quest, userQuest }: QuestCTAButtonProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const addQuest = useMutation(api.userQuests.create);
   const setStatus = useMutation(api.userQuests.setStatus);
@@ -154,17 +154,17 @@ const QuestStatusButton = ({ quest, userQuest }: QuestStatusButtonProps) => {
   return null;
 };
 
-type QuestStatusFooterProps = {
+type QuestCallToActionProps = {
   quest: Doc<"quests">;
   userQuest?: Doc<"userQuests"> | null;
 };
 
-export const QuestStatusFooter = ({
+export const QuestCallToAction = ({
   quest,
   userQuest,
-}: QuestStatusFooterProps) => {
-  const cardStyles = tv({
-    base: "flex flex-col justify-center items-end gap-4 p-6 h-24 relative overflow-hidden transition-colors",
+}: QuestCallToActionProps) => {
+  const containerStyles = tv({
+    base: "flex flex-col justify-center items-end gap-4 app-padding border-t border-gray-dim overflow-hidden h-24 relative transition-colors",
     variants: {
       isComplete: {
         true: "bg-green-3 border-green-5",
@@ -173,15 +173,17 @@ export const QuestStatusFooter = ({
   });
 
   return (
-    <Card
-      className={cardStyles({ isComplete: userQuest?.status === "complete" })}
+    <div
+      className={containerStyles({
+        isComplete: userQuest?.status === "complete",
+      })}
     >
       {quest?.category && CATEGORIES[quest.category as Category].isCore && (
         <CoreQuestIllustration category={quest?.category as CoreCategory} />
       )}
       <div className="relative z-0">
-        <QuestStatusButton quest={quest} userQuest={userQuest} />
+        <QuestCTAButton quest={quest} userQuest={userQuest} />
       </div>
-    </Card>
+    </div>
   );
 };

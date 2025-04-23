@@ -12,7 +12,15 @@
 }
 
 .h-header {
-  @apply h-16 lg:h-20;
+  @apply h-16 lg:h-18;
+}
+
+.sticky-top-header {
+  @apply sticky top-16 lg:top-20;
+}
+
+.min-h-screen-minus-mobile {
+  min-height: calc(100dvh - 56px - env(safe-area-inset-bottom));
 }
 
 .h-mobile-nav {

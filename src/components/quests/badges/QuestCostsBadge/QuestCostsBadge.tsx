@@ -1,4 +1,6 @@
 import {
+  Badge,
+  BadgeButton,
   Button,
   Form,
   Modal,
@@ -6,13 +8,17 @@ import {
   NumberField,
   Switch,
   TextField,
+  Tooltip,
+  TooltipTrigger,
 } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import type { Cost } from "@convex/constants";
 import { useMutation } from "convex/react";
+import { HelpCircle, Pencil } from "lucide-react";
 import { Plus, Trash } from "lucide-react";
 import { memo, useState } from "react";
+import { Fragment } from "react/jsx-runtime";
 import { toast } from "sonner";
 
 type CostInputProps = {
@@ -154,5 +160,82 @@ export const EditQuestCostsModal = ({
         </div>
       </Form>
     </Modal>
+  );
+};
+
+type QuestCostsBadgeProps = {
+  quest?: Doc<"quests"> | null;
+  editable?: boolean;
+};
+
+export const QuestCostsBadge = ({
+  quest,
+  editable = false,
+}: QuestCostsBadgeProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  if (!quest) return null;
+
+  const { costs } = quest;
+
+  const getTotalCosts = (costs?: Cost[]) => {
+    if (!costs || costs.length === 0) return "Free";
+
+    const total = costs.reduce((acc, cost) => acc + cost.cost, 0);
+    return total > 0
+      ? total.toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD",
+          maximumFractionDigits: 0,
+        })
+      : "Free";
+  };
+
+  return (
+    <Badge>
+      {getTotalCosts(costs)}
+      {costs && costs.length > 0 && (
+        <TooltipTrigger>
+          <BadgeButton label="Cost details" icon={HelpCircle} />
+          <Tooltip>
+            <dl className="grid grid-cols-[1fr_auto] py-1">
+              {costs.map(({ cost, description }) => (
+                <Fragment key={description}>
+                  <dt className="pr-4">{description}</dt>
+                  <dd className="text-right tabular-nums">
+                    {cost.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      maximumFractionDigits: 0,
+                    })}
+                  </dd>
+                </Fragment>
+              ))}
+              <dt className="pr-4 border-t border-gray-a5 pt-2 mt-2">Total</dt>
+              <dd className="text-right border-t border-gray-a5 pt-2 mt-2">
+                {getTotalCosts(costs)}
+              </dd>
+            </dl>
+          </Tooltip>
+        </TooltipTrigger>
+      )}
+      {editable && (
+        <>
+          <TooltipTrigger>
+            <BadgeButton
+              icon={Pencil}
+              onPress={() => setIsEditing(true)}
+              label="Edit costs"
+            />
+            <Tooltip>Edit costs</Tooltip>
+          </TooltipTrigger>
+          <EditQuestCostsModal
+            quest={quest}
+            open={isEditing}
+            onOpenChange={setIsEditing}
+          />
+        </>
+      )}
+    </Badge>
   );
 };
