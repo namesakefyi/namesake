@@ -219,5 +219,6 @@ body,
   transition-delay: 0s;
   transition-duration: 2147483647s;
   transition-timing-function: linear;
+  background-color: transparent !important;
   -webkit-text-fill-color: inherit;
 }
