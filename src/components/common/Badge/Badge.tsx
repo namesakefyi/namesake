@@ -52,8 +52,13 @@ const badge = tv({
 });
 
 const icon = tv({
-  base: "w-4 h-4 shrink-0",
+  base: "shrink-0",
   variants: {
+    size: {
+      xs: "size-3",
+      sm: "size-4",
+      lg: "size-4.5",
+    },
     variant: {
       info: "text-blue-dim",
       warning: "text-amber-dim",
@@ -75,7 +80,9 @@ export function Badge({ icon: Icon, className, ...props }: BadgeProps) {
       })}
       data-testid="badge"
     >
-      {Icon && <Icon className={icon({ variant: props.variant })} />}
+      {Icon && (
+        <Icon className={icon({ variant: props.variant, size: props.size })} />
+      )}
       {props.children}
     </div>
   );

@@ -9,7 +9,7 @@ import {
 } from "@/components/common";
 import { STATUS, type Status } from "@convex/constants";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Selection } from "react-aria-components";
 import { tv } from "tailwind-variants";
 
@@ -66,6 +66,10 @@ export function StatusSelect({
   const [selectedStatus, setSelectedStatus] = useState<Selection>(
     new Set([status]),
   );
+
+  useEffect(() => {
+    setSelectedStatus(new Set([status]));
+  }, [status]);
 
   const handleSelectionChange = (status: Selection) => {
     onChange([...status][0] as Status);

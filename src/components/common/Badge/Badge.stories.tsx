@@ -1,8 +1,19 @@
-import { Badge } from "@/components/common";
+import { Badge, BadgeButton } from "@/components/common";
 import type { Meta, StoryObj } from "@storybook/react";
+import { Info } from "lucide-react";
 
 const meta = {
   component: Badge,
+  argTypes: {
+    size: {
+      options: ["xs", "sm", "lg"],
+      control: { type: "radio" },
+    },
+    variant: {
+      options: ["info", "warning", "danger", "waiting", "success"],
+      control: { type: "radio" },
+    },
+  },
 } satisfies Meta<typeof Badge>;
 
 export default meta;
@@ -15,30 +26,20 @@ export const Default: Story = {
   },
 };
 
-export const Info: Story = {
+export const WithIcon: Story = {
   args: {
-    children: "Info",
-    variant: "info",
+    children: "With Icon",
+    icon: Info,
   },
 };
 
-export const Success: Story = {
-  args: {
-    children: "Success",
-    variant: "success",
-  },
-};
+export const WithButton = (args: any) => (
+  <Badge {...args}>
+    {args.children}
+    <BadgeButton label="More info" icon={Info} />
+  </Badge>
+);
 
-export const Warning: Story = {
-  args: {
-    children: "Warning",
-    variant: "warning",
-  },
-};
-
-export const Danger: Story = {
-  args: {
-    children: "Error",
-    variant: "danger",
-  },
+WithButton.args = {
+  children: "With Button",
 };
