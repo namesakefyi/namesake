@@ -215,5 +215,9 @@ body,
 
   /* Set transition delay to the max possible integer in CSS (68.24 years)
   https://stackoverflow.com/questions/37861312/what-is-the-maximum-value-of-a-css-transitions-duration */
-  transition: background-color 0s linear 2147483647s;
+  transition-property: background-color, color;
+  transition-delay: 0s;
+  transition-duration: 2147483647s;
+  transition-timing-function: linear;
+  -webkit-text-fill-color: inherit;
 }
