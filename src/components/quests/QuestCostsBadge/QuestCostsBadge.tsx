@@ -2,10 +2,10 @@ import {
   Badge,
   BadgeButton,
   Button,
+  DialogTrigger,
   Form,
-  Modal,
-  ModalHeader,
   NumberField,
+  Popover,
   Switch,
   TextField,
   Tooltip,
@@ -33,10 +33,10 @@ const CostInput = memo(function CostInput({
   onRemove,
 }: CostInputProps) {
   return (
-    <div className="flex items-start gap-2">
+    <div className="flex items-start gap-2 w-full">
       <NumberField
         aria-label="Cost"
-        className="w-24"
+        className="w-20"
         prefix="$"
         value={cost.cost}
         onChange={(value) =>
@@ -48,7 +48,8 @@ const CostInput = memo(function CostInput({
       />
       <TextField
         aria-label="For"
-        className="flex-1"
+        className="flex-1 min-w-0"
+        placeholder="Description"
         value={cost.description}
         onChange={(value) => onChange({ cost: cost.cost, description: value })}
         isRequired
@@ -65,104 +66,6 @@ const CostInput = memo(function CostInput({
   );
 });
 
-type EditCostsModalProps = {
-  quest: Doc<"quests">;
-  open: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-};
-
-export const EditQuestCostsModal = ({
-  quest,
-  open,
-  onOpenChange,
-}: EditCostsModalProps) => {
-  const [costsInput, setCostsInput] = useState(quest.costs ?? null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const setCosts = useMutation(api.quests.setCosts);
-
-  const handleCancel = () => {
-    setCostsInput(quest.costs ?? null);
-    onOpenChange(false);
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (isSubmitting) return;
-
-    setIsSubmitting(true);
-    setCosts({ costs: costsInput ?? undefined, questId: quest._id })
-      .then(() => {
-        toast.success("Updated costs");
-        onOpenChange(false);
-      })
-      .catch(() => {
-        toast.error("Failed to update costs");
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
-  };
-
-  return (
-    <Modal isOpen={open}>
-      <Form onSubmit={handleSubmit} className="w-full">
-        <ModalHeader title="Edit costs">
-          <Switch
-            isSelected={!costsInput}
-            onChange={(isSelected) =>
-              setCostsInput(isSelected ? null : [{ cost: 0, description: "" }])
-            }
-            className="justify-self-start"
-          >
-            Free
-          </Switch>
-        </ModalHeader>
-
-        {costsInput && (
-          <div className="flex flex-col gap-2 w-full">
-            {costsInput.map((cost, index) => (
-              <CostInput
-                // biome-ignore lint/suspicious/noArrayIndexKey:
-                key={index}
-                cost={cost}
-                onChange={(value) => {
-                  const newCosts = [...costsInput];
-                  newCosts[index] = value;
-                  setCostsInput(newCosts);
-                }}
-                onRemove={() => {
-                  setCostsInput(costsInput.filter((_, i) => i !== index));
-                }}
-              />
-            ))}
-            <Button
-              type="button"
-              onPress={() =>
-                setCostsInput([
-                  ...(costsInput ?? []),
-                  { cost: 0, description: "" },
-                ])
-              }
-              icon={Plus}
-            >
-              Add cost
-            </Button>
-          </div>
-        )}
-        <div className="flex w-full justify-end gap-2">
-          <Button variant="secondary" onPress={handleCancel}>
-            Cancel
-          </Button>
-          <Button type="submit" variant="primary" isSubmitting={isSubmitting}>
-            Save
-          </Button>
-        </div>
-      </Form>
-    </Modal>
-  );
-};
-
 type QuestCostsBadgeProps = {
   quest?: Doc<"quests"> | null;
   editable?: boolean;
@@ -173,8 +76,31 @@ export const QuestCostsBadge = ({
   editable = false,
 }: QuestCostsBadgeProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [costsInput, setCostsInput] = useState(quest?.costs ?? null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const setCosts = useMutation(api.quests.setCosts);
 
   if (!quest) return null;
+
+  const handleCancel = () => {
+    setCostsInput(quest.costs ?? null);
+    setIsEditing(false);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isSubmitting) return;
+
+    try {
+      setIsSubmitting(true);
+      await setCosts({ costs: costsInput ?? undefined, questId: quest._id });
+      setIsEditing(false);
+    } catch (error) {
+      toast.error("Failed to update costs");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const { costs } = quest;
 
@@ -192,12 +118,12 @@ export const QuestCostsBadge = ({
   };
 
   return (
-    <Badge>
+    <Badge size="lg">
       {getTotalCosts(costs)}
       {costs && costs.length > 0 && (
         <TooltipTrigger>
           <BadgeButton label="Cost details" icon={HelpCircle} />
-          <Tooltip>
+          <Tooltip placement="bottom">
             <dl className="grid grid-cols-[1fr_auto] py-1">
               {costs.map(({ cost, description }) => (
                 <Fragment key={description}>
@@ -220,7 +146,7 @@ export const QuestCostsBadge = ({
         </TooltipTrigger>
       )}
       {editable && (
-        <>
+        <DialogTrigger>
           <TooltipTrigger>
             <BadgeButton
               icon={Pencil}
@@ -229,12 +155,66 @@ export const QuestCostsBadge = ({
             />
             <Tooltip>Edit costs</Tooltip>
           </TooltipTrigger>
-          <EditQuestCostsModal
-            quest={quest}
-            open={isEditing}
-            onOpenChange={setIsEditing}
-          />
-        </>
+          <Popover isOpen={isEditing} className="p-4 w-80">
+            <Form onSubmit={handleSubmit} className="w-full">
+              {costsInput && (
+                <div className="flex flex-col gap-2 w-full">
+                  {costsInput.map((cost, index) => (
+                    <CostInput
+                      // biome-ignore lint/suspicious/noArrayIndexKey:
+                      key={index}
+                      cost={cost}
+                      onChange={(value) => {
+                        const newCosts = [...costsInput];
+                        newCosts[index] = value;
+                        setCostsInput(newCosts);
+                      }}
+                      onRemove={() => {
+                        setCostsInput(costsInput.filter((_, i) => i !== index));
+                      }}
+                    />
+                  ))}
+                  <Button
+                    size="small"
+                    onPress={() =>
+                      setCostsInput([
+                        ...(costsInput ?? []),
+                        { cost: 0, description: "" },
+                      ])
+                    }
+                    icon={Plus}
+                  >
+                    Add cost
+                  </Button>
+                </div>
+              )}
+              <div className="flex w-full justify-end gap-2">
+                <Switch
+                  isSelected={!costsInput}
+                  onChange={(isSelected) =>
+                    setCostsInput(
+                      isSelected ? null : [{ cost: 0, description: "" }],
+                    )
+                  }
+                  className="justify-self-start mr-auto"
+                >
+                  Free
+                </Switch>
+                <Button variant="secondary" size="small" onPress={handleCancel}>
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="small"
+                  isSubmitting={isSubmitting}
+                >
+                  Save
+                </Button>
+              </div>
+            </Form>
+          </Popover>
+        </DialogTrigger>
       )}
     </Badge>
   );

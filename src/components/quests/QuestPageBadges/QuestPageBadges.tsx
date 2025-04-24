@@ -3,7 +3,7 @@ import {
   QuestCostsBadge,
   QuestJurisdictionBadge,
   QuestTimeBadge,
-} from "@/components/quests/badges";
+} from "@/components/quests";
 import type { Doc } from "@convex/_generated/dataModel";
 
 interface QuestPageBadgesProps {

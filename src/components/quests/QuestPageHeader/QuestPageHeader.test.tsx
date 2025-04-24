@@ -1,42 +1,61 @@
-import type { Doc } from "@convex/_generated/dataModel";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import type { Doc, Id } from "@convex/_generated/dataModel";
+import { useNavigate } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useMutation, useQuery } from "convex/react";
-import { toast } from "sonner";
+import { useMutation } from "convex/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { QuestPageHeader } from "./QuestPageHeader";
 
-vi.mock("convex/react", () => ({
-  Authenticated: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
-  useMutation: vi.fn(),
-  useQuery: vi.fn().mockReturnValue({ role: "user" }),
-}));
-
 describe("QuestPageHeader", () => {
+  const mockNavigate = vi.fn();
+  const mockSetStatus = vi.fn();
+  const mockDeleteForever = vi.fn();
+
   const mockQuest = {
-    _id: "test_id",
+    _id: "quest123" as Id<"quests">,
     _creationTime: 1234567890,
     title: "Test Quest",
-    category: "courtOrder",
+    creationUser: "user123" as Id<"users">,
+    slug: "test-quest",
+    updatedAt: 1234567890,
+    category: "education",
+    jurisdiction: "CA",
+    costs: [
+      { cost: 100, description: "Application fee" },
+      { cost: 50, description: "Certified copies" },
+    ],
+    timeRequired: {
+      min: 2,
+      max: 4,
+      unit: "weeks",
+      description: "Processing time varies by court",
+    },
   } as Doc<"quests">;
 
-  const mockNavigate = vi.fn();
-  const mockAddQuest = vi.fn();
+  const mockUserQuest = {
+    _id: "userQuest123" as Id<"userQuests">,
+    _creationTime: 1234567890,
+    questId: "quest123" as Id<"quests">,
+    userId: "user123" as Id<"users">,
+    status: "inProgress" as const,
+    updatedAt: 1234567890,
+  } as Doc<"userQuests">;
 
   beforeEach(() => {
     vi.clearAllMocks();
     (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
       mockNavigate,
     );
-    (useMutation as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockAddQuest,
+    (useMutation as unknown as ReturnType<typeof vi.fn>)
+      .mockReturnValueOnce(mockSetStatus) // First call for setStatus
+      .mockReturnValueOnce(mockDeleteForever); // Second call for deleteForever
+  });
+
+  it("returns null when quest is undefined", () => {
+    const { container } = render(
+      <QuestPageHeader quest={undefined} userQuest={mockUserQuest} />,
     );
-    (useSearch as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      edit: false,
-    });
+    expect(container.firstChild).toBeNull();
   });
 
   it("renders quest title", () => {
@@ -44,95 +63,83 @@ describe("QuestPageHeader", () => {
     expect(screen.getByText("Test Quest")).toBeInTheDocument();
   });
 
-  it("renders badge when provided", () => {
-    render(<QuestPageHeader quest={mockQuest} badge="Test Badge" />);
-    expect(screen.getByText("Test Badge")).toBeInTheDocument();
+  it("shows edit title button when editable", () => {
+    render(<QuestPageHeader quest={mockQuest} editable={true} />);
+
+    const editButton = screen.getByRole("button", { name: "Edit title" });
+    expect(editButton).toBeInTheDocument();
   });
 
-  it("shows status select for user quests when not editing", () => {
-    const userQuest = {
-      _id: "user_quest_id",
-      status: "inProgress",
-    } as Doc<"userQuests">;
+  it("hides edit title button when not editable", () => {
+    render(<QuestPageHeader quest={mockQuest} editable={false} />);
 
-    render(<QuestPageHeader quest={mockQuest} userQuest={userQuest} />);
-    expect(screen.getByText("In progress")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Edit title" }),
+    ).not.toBeInTheDocument();
   });
 
-  it("shows 'Add Quest' button when no userQuest exists", () => {
-    render(<QuestPageHeader quest={mockQuest} userQuest={null} />);
-    expect(screen.getByText("Add Quest")).toBeInTheDocument();
+  it("opens edit title modal on button click", async () => {
+    const user = userEvent.setup();
+    render(<QuestPageHeader quest={mockQuest} editable={true} />);
+
+    await user.click(screen.getByRole("button", { name: "Edit title" }));
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByText("Edit title")).toBeInTheDocument();
   });
 
-  it("shows 'Finish editing' link when in edit mode", () => {
-    (useSearch as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      edit: true,
-    });
-    render(<QuestPageHeader quest={mockQuest} />);
-    expect(screen.getByText("Finish editing")).toBeInTheDocument();
-  });
-
-  it("shows core quest illustration for core categories", () => {
-    render(<QuestPageHeader quest={mockQuest} />);
-    const illustration = screen.getByAltText("A gavel with a snail on it");
-    expect(illustration).toBeInTheDocument();
-  });
-
-  it("handles add quest error", async () => {
-    const mockAddQuest = vi.fn().mockRejectedValue(new Error("Failed"));
-    (useMutation as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockAddQuest,
+  it("shows status select for non-editable user quests", () => {
+    render(
+      <QuestPageHeader
+        quest={mockQuest}
+        userQuest={mockUserQuest}
+        editable={false}
+      />,
     );
-    (useSearch as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      edit: false,
-    });
 
-    render(<QuestPageHeader quest={mockQuest} userQuest={null} />);
+    expect(
+      screen.getByRole("button", { name: "In progress" }),
+    ).toBeInTheDocument();
+  });
 
-    const user = userEvent.setup();
-    await user.click(screen.getByText("Add Quest"));
-
-    expect(toast.error).toHaveBeenCalledWith(
-      "Failed to add quest. Please try again.",
+  it("hides status select when editable", () => {
+    render(
+      <QuestPageHeader
+        quest={mockQuest}
+        userQuest={mockUserQuest}
+        editable={true}
+      />,
     );
+
+    expect(
+      screen.queryByRole("button", { name: "In progress" }),
+    ).not.toBeInTheDocument();
   });
 
-  it("shows quest settings menu for authenticated users", async () => {
-    render(<QuestPageHeader quest={mockQuest} />);
+  it("renders badges section", () => {
+    render(<QuestPageHeader quest={mockQuest} editable={true} />);
 
-    const user = userEvent.setup();
-    await user.click(screen.getByLabelText("Quest settings"));
-
-    expect(screen.getByRole("menu")).toBeInTheDocument();
+    // Check if badges are rendered
+    expect(screen.getByText("Education")).toBeInTheDocument();
+    expect(screen.getByText("California")).toBeInTheDocument();
+    expect(screen.getByText("$150")).toBeInTheDocument();
+    expect(screen.getByText("2–4 weeks")).toBeInTheDocument();
   });
 
-  it("shows edit option in menu for admin users", async () => {
-    (useQuery as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      role: "admin",
-    });
-    (useSearch as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      edit: false,
-    });
+  it("renders toolbar section", () => {
+    render(<QuestPageHeader quest={mockQuest} editable={true} />);
 
-    render(<QuestPageHeader quest={mockQuest} />);
-
-    const user = userEvent.setup();
-    await user.click(screen.getByLabelText("Quest settings"));
-
-    expect(screen.getByText("Edit quest")).toBeInTheDocument();
+    // Check if toolbar is rendered
+    expect(screen.getByRole("toolbar")).toBeInTheDocument();
   });
 
-  it("shows remove option in menu for user quests", async () => {
-    const userQuest = {
-      _id: "user_quest_id",
-      status: "inProgress",
-    } as Doc<"userQuests">;
-
-    render(<QuestPageHeader quest={mockQuest} userQuest={userQuest} />);
-
+  it("shows tooltip on edit button focus", async () => {
     const user = userEvent.setup();
-    await user.click(screen.getByLabelText("Quest settings"));
+    render(<QuestPageHeader quest={mockQuest} editable={true} />);
 
-    expect(screen.getByText("Remove quest")).toBeInTheDocument();
+    await user.tab();
+
+    expect(screen.getByRole("tooltip")).toBeInTheDocument();
+    expect(screen.getByText("Edit title")).toBeInTheDocument();
   });
 });

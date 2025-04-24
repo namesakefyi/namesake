@@ -139,7 +139,7 @@ export const QuestsNav = () => {
                       params: { questSlug: quest.slug },
                     }}
                     size="large"
-                    icon={CATEGORIES[quest.category as Category].icon}
+                    icon={CATEGORIES[quest.category as Category]?.icon}
                   >
                     {quest.title}
                     {quest.jurisdiction && (

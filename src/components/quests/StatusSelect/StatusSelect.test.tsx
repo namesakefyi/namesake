@@ -23,6 +23,7 @@ describe("StatusSelect", () => {
   it("changes the current status when clicked", async () => {
     const mockOnChange = vi.fn();
     const mockOnRemove = vi.fn();
+
     render(
       <StatusSelect
         status="inProgress"
@@ -53,10 +54,12 @@ describe("StatusSelect", () => {
 
     const triggerButton = screen.getByRole("button");
     await userEvent.click(triggerButton);
+
     expect(screen.getByRole("menu")).toBeInTheDocument();
     await userEvent.keyboard("[ArrowDown]");
     await userEvent.keyboard("[Enter]");
-    expect(mockOnChange).toHaveBeenCalledWith("complete");
+
+    expect(mockOnChange).toHaveBeenCalledWith("notStarted");
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 });

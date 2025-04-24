@@ -86,14 +86,14 @@ export function StatusSelect({
       >
         <StatusBadge status={status} size="lg" />
       </Button>
-      <Menu
-        placement="bottom end"
-        selectionMode="single"
-        selectedKeys={selectedStatus}
-        disallowEmptySelection
-        onSelectionChange={handleSelectionChange}
-      >
-        <MenuSection title="Status">
+      <Menu placement="bottom end">
+        <MenuSection
+          title="Status"
+          selectionMode="single"
+          selectedKeys={selectedStatus}
+          disallowEmptySelection
+          onSelectionChange={handleSelectionChange}
+        >
           {Object.entries(STATUS).map(([status, details]) => (
             <MenuItem
               key={status}

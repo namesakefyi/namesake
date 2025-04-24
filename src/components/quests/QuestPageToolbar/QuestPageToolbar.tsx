@@ -32,7 +32,7 @@ export const QuestPageToolbar = ({
   });
 
   return (
-    <div className={toolbarStyles({ isEditing })}>
+    <div className={toolbarStyles({ isEditing })} role="toolbar">
       <div className="flex gap-2 items-center">
         {isEditing ? (
           <IconText icon={Pencil} className="text-amber-9">

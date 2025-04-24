@@ -51,6 +51,7 @@ export function QuestPageHeader({
           variant="icon"
           size="small"
           icon={Pencil}
+          aria-label="Edit title"
           onPress={() => setIsEditingTitle(true)}
         />
         <Tooltip placement="right">Edit title</Tooltip>

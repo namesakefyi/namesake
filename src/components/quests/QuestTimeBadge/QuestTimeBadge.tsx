@@ -2,10 +2,10 @@ import {
   Badge,
   BadgeButton,
   Button,
+  DialogTrigger,
   Form,
-  Modal,
-  ModalHeader,
   NumberField,
+  Popover,
   Select,
   SelectItem,
   TextField,
@@ -24,12 +24,6 @@ import { HelpCircle, Pencil } from "lucide-react";
 import { memo, useState } from "react";
 import { toast } from "sonner";
 
-type EditTimeRequiredModalProps = {
-  quest: Doc<"quests">;
-  open: boolean;
-  onOpenChange: (isOpen: boolean) => void;
-};
-
 const TimeRequiredInput = memo(function TimeRequiredInput({
   timeRequired,
   onChange,
@@ -41,10 +35,11 @@ const TimeRequiredInput = memo(function TimeRequiredInput({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-end gap-2">
+      <div className="flex items-start gap-2">
         <NumberField
           label="Est. min time"
           className="w-24"
+          isRequired
           value={timeRequired?.min}
           maxValue={Math.max(timeRequired.max, 60)}
           onChange={(value) =>
@@ -57,6 +52,7 @@ const TimeRequiredInput = memo(function TimeRequiredInput({
         <NumberField
           label="Est. max time"
           className="w-24"
+          isRequired
           value={timeRequired.max}
           minValue={Math.min(timeRequired.min, 1)}
           onChange={(value) =>
@@ -69,6 +65,7 @@ const TimeRequiredInput = memo(function TimeRequiredInput({
         <Select
           label="Unit"
           className="flex-1"
+          isRequired
           selectedKey={timeRequired.unit}
           onSelectionChange={(key) =>
             onChange({
@@ -100,69 +97,6 @@ const TimeRequiredInput = memo(function TimeRequiredInput({
   );
 });
 
-export const EditQuestTimeRequiredModal = ({
-  quest,
-  open,
-  onOpenChange,
-}: EditTimeRequiredModalProps) => {
-  const [timeInput, setTimeInput] = useState<TimeRequired | null>(
-    (quest.timeRequired as TimeRequired) ?? null,
-  );
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const setTimeRequired = useMutation(api.quests.setTimeRequired);
-
-  const handleCancel = () => {
-    setTimeInput((quest.timeRequired as TimeRequired) ?? null);
-    onOpenChange(false);
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (isSubmitting) return;
-
-    setIsSubmitting(true);
-    setTimeRequired({
-      timeRequired: timeInput ?? undefined,
-      questId: quest._id,
-    })
-      .then(() => {
-        toast.success("Updated time required");
-        onOpenChange(false);
-      })
-      .catch(() => {
-        toast.error("Failed to update time required");
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
-  };
-
-  return (
-    <Modal isOpen={open}>
-      <Form onSubmit={handleSubmit} className="w-full">
-        <ModalHeader title="Edit time required" />
-        {timeInput && (
-          <TimeRequiredInput timeRequired={timeInput} onChange={setTimeInput} />
-        )}
-        <div className="flex w-full justify-end gap-2">
-          <Button
-            type="button"
-            variant="secondary"
-            onPress={handleCancel}
-            isSubmitting={isSubmitting}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" variant="primary" isSubmitting={isSubmitting}>
-            Save
-          </Button>
-        </div>
-      </Form>
-    </Modal>
-  );
-};
-
 type QuestTimeBadgeProps = {
   quest?: Doc<"quests"> | null;
   editable?: boolean;
@@ -173,6 +107,36 @@ export const QuestTimeBadge = ({
   editable = false,
 }: QuestTimeBadgeProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [timeInput, setTimeInput] = useState<TimeRequired | null>(
+    (quest?.timeRequired as TimeRequired) ?? null,
+  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const setTimeRequired = useMutation(api.quests.setTimeRequired);
+
+  if (!quest) return null;
+
+  const handleCancel = () => {
+    setTimeInput((quest.timeRequired as TimeRequired) ?? null);
+    setIsEditing(false);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isSubmitting) return;
+
+    try {
+      setIsSubmitting(true);
+      await setTimeRequired({
+        timeRequired: timeInput ?? undefined,
+        questId: quest._id,
+      });
+      setIsEditing(false);
+    } catch (error) {
+      toast.error("Failed to update time required");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (!quest) return null;
 
@@ -187,18 +151,18 @@ export const QuestTimeBadge = ({
   const formattedTime = getFormattedTime(timeRequired as TimeRequired);
 
   return (
-    <Badge>
+    <Badge size="lg">
       {formattedTime}
       {timeRequired?.description && (
         <TooltipTrigger>
           <BadgeButton label="Details" icon={HelpCircle} />
-          <Tooltip>
+          <Tooltip placement="bottom">
             <p className="text-sm max-w-xs">{timeRequired.description}</p>
           </Tooltip>
         </TooltipTrigger>
       )}
       {editable && (
-        <>
+        <DialogTrigger>
           <TooltipTrigger>
             <BadgeButton
               icon={Pencil}
@@ -207,12 +171,30 @@ export const QuestTimeBadge = ({
             />
             <Tooltip>Edit time required</Tooltip>
           </TooltipTrigger>
-          <EditQuestTimeRequiredModal
-            quest={quest}
-            open={isEditing}
-            onOpenChange={setIsEditing}
-          />
-        </>
+          <Popover isOpen={isEditing} className="p-4">
+            <Form onSubmit={handleSubmit} className="w-full">
+              {timeInput && (
+                <TimeRequiredInput
+                  timeRequired={timeInput}
+                  onChange={setTimeInput}
+                />
+              )}
+              <div className="flex w-full justify-end gap-2">
+                <Button variant="secondary" size="small" onPress={handleCancel}>
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="small"
+                  isSubmitting={isSubmitting}
+                >
+                  Save
+                </Button>
+              </div>
+            </Form>
+          </Popover>
+        </DialogTrigger>
       )}
     </Badge>
   );
