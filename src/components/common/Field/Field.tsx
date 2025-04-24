@@ -136,7 +136,7 @@ interface InputProps extends Omit<AriaInputProps, "size"> {
 }
 
 export const inputStyles = tv({
-  base: "flex-1 min-w-0 outline outline-none bg-transparent disable-autofill text-gray-normal disabled:text-gray-dim",
+  base: "flex-1 min-w-0 outline outline-none bg-transparent disable-native-autofill text-gray-normal disabled:text-gray-dim",
   variants: {
     size: {
       small: "px-2 h-8 text-sm",
@@ -162,7 +162,7 @@ export function Input({ ref, size, ...props }: InputProps) {
 }
 
 export const inputTextAreaStyles = tv({
-  base: "flex-1 min-w-0 leading-snug outline-none bg-transparent text-gray-normal disabled:text-gray-dim",
+  base: "flex-1 min-w-0 leading-snug outline-none bg-transparent disable-native-autofill text-gray-normal disabled:text-gray-dim",
   variants: {
     size: {
       small: "px-2 py-1",

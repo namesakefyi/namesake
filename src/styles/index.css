@@ -208,16 +208,8 @@ body,
   }
 }
 
-@keyframes disable-autofill {
-  100% {
-    background-color: transparent;
-    color: inherit;
-    font-size: inherit;
-  }
-}
-
-.disable-autofill:-webkit-autofill,
-.disable-autofill:autofill {
+.disable-native-autofill:-webkit-autofill,
+.disable-native-autofill:autofill {
   /* The background color itself can't be overridden, so we use a hack to disable it.
   https://css-tricks.com/snippets/css/change-autocomplete-styles-webkit-browsers/ */
 
