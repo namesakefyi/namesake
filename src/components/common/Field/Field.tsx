@@ -72,8 +72,8 @@ export function FieldError(props: FieldErrorProps) {
 export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false: "ring-gray-6",
-      true: "ring-gray-7",
+      false: "ring-gray-6 has-autofill:ring-amber-6",
+      true: "ring-gray-7 has-autofill:ring-amber-6",
     },
     isInvalid: {
       true: "ring-red-9",
@@ -87,8 +87,8 @@ export const fieldBorderStyles = tv({
 export const innerBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false: "border-gray-6",
-      true: "border-gray-7",
+      false: "border-gray-6 has-autofill:border-amber-6",
+      true: "border-gray-7 has-autofill:border-amber-6",
     },
     isInvalid: {
       true: "border-red-9",
@@ -101,7 +101,7 @@ export const innerBorderStyles = tv({
 
 const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "border-none text-sm ring-inset ring-1 group flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
+  base: "border-none text-sm has-autofill:bg-amber-a3 ring-inset ring-1 group flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
   variants: {
     ...fieldBorderStyles.variants,
     size: {
@@ -136,7 +136,7 @@ interface InputProps extends Omit<AriaInputProps, "size"> {
 }
 
 export const inputStyles = tv({
-  base: "flex-1 min-w-0 outline outline-none bg-transparent text-gray-normal disabled:text-gray-dim",
+  base: "flex-1 min-w-0 outline outline-none bg-transparent disable-autofill text-gray-normal disabled:text-gray-dim",
   variants: {
     size: {
       small: "px-2 h-8 text-sm",

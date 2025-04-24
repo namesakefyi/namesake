@@ -207,3 +207,21 @@ body,
     animation: none;
   }
 }
+
+@keyframes disable-autofill {
+  100% {
+    background-color: transparent;
+    color: inherit;
+    font-size: inherit;
+  }
+}
+
+.disable-autofill:-webkit-autofill,
+.disable-autofill:autofill {
+  /* The background color itself can't be overridden, so we use a hack to disable it.
+  https://css-tricks.com/snippets/css/change-autocomplete-styles-webkit-browsers/ */
+
+  /* Set transition delay to the max possible integer in CSS (68.24 years)
+  https://stackoverflow.com/questions/37861312/what-is-the-maximum-value-of-a-css-transitions-duration */
+  transition: background-color 0s linear 2147483647s;
+}
