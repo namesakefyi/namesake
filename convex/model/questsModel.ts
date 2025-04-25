@@ -174,63 +174,6 @@ export async function update(
   });
 }
 
-export async function updateUrls(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    urls,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    urls?: string[];
-  },
-) {
-  return await update(ctx, questId, userId, { urls });
-}
-
-export async function addUrl(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    url,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    url: string;
-  },
-) {
-  const quest = await ctx.db.get(questId);
-  if (!quest) throw new Error("Quest not found");
-
-  const existingUrls = quest.urls || [];
-  return await update(ctx, questId, userId, {
-    urls: [...existingUrls, url],
-  });
-}
-
-export async function deleteUrl(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    url,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    url: string;
-  },
-) {
-  const quest = await ctx.db.get(questId);
-  if (!quest) throw new Error("Quest not found");
-
-  const existingUrls = quest.urls || [];
-  return await update(ctx, questId, userId, {
-    urls: existingUrls.filter((u) => u !== url),
-  });
-}
-
 export async function setCosts(
   ctx: MutationCtx,
   {

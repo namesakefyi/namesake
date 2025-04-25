@@ -148,7 +148,7 @@ export const EditQuestCostsModal = ({
           <Button variant="secondary" onPress={handleCancel}>
             Cancel
           </Button>
-          <Button type="submit" variant="primary" isDisabled={isSubmitting}>
+          <Button type="submit" variant="primary" isSubmitting={isSubmitting}>
             Save
           </Button>
         </div>

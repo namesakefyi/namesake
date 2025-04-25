@@ -75,7 +75,7 @@ export const EditEmailSetting = ({ user }: EditEmailSettingProps) => {
             <div className="flex gap-1 justify-end">
               <Button
                 variant="secondary"
-                isDisabled={isSubmitting}
+                isSubmitting={isSubmitting}
                 size="small"
                 onPress={() => setIsEditing(false)}
               >
@@ -85,7 +85,7 @@ export const EditEmailSetting = ({ user }: EditEmailSettingProps) => {
                 type="submit"
                 variant="primary"
                 size="small"
-                isDisabled={isSubmitting}
+                isSubmitting={isSubmitting}
               >
                 Save
               </Button>

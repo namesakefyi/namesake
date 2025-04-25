@@ -16,7 +16,7 @@ import {
   OctagonAlert,
 } from "lucide-react";
 import { useTheme } from "next-themes";
-import posthog from "posthog-js";
+import { usePostHog } from "posthog-js/react";
 import { useEffect } from "react";
 import { RouterProvider } from "react-aria-components";
 import { Toaster } from "sonner";
@@ -30,7 +30,7 @@ declare module "react-aria-components" {
 
 function PostHogPageView() {
   const location = useLocation();
-
+  const posthog = usePostHog();
   // Track pageviews
   useEffect(() => {
     if (posthog) {

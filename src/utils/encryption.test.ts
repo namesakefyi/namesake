@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import posthog from "posthog-js";
+import { usePostHog } from "posthog-js/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   decryptData,
@@ -284,7 +284,14 @@ describe("encryption", () => {
   });
 
   describe("useDecrypt", () => {
+    const mockPosthog = {
+      captureException: vi.fn(),
+    };
+
     beforeEach(() => {
+      // Mock PostHog
+      (usePostHog as ReturnType<typeof vi.fn>).mockReturnValue(mockPosthog);
+
       // Mock the functions directly
       vi.spyOn(window.crypto.subtle, "decrypt").mockImplementation(async () => {
         return new TextEncoder().encode(JSON.stringify("decrypted"));
@@ -337,7 +344,7 @@ describe("encryption", () => {
       await vi.waitFor(() => {
         expect(result.current.error).toBe(true);
       });
-      expect(posthog.captureException).toHaveBeenCalled();
+      expect(mockPosthog.captureException).toHaveBeenCalled();
     });
 
     it("should handle missing encryption key", async () => {

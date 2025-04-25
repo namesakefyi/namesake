@@ -48,8 +48,6 @@ const quests = defineTable({
       description: v.optional(v.string()),
     }),
   ),
-  /** Links to official documentation about changing names for this quest. */
-  urls: v.optional(v.array(v.string())),
   /** Time in ms since epoch when the quest was deleted. */
   deletedAt: v.optional(v.number()),
   /** Rich text comprising the contents of the step, stored as HTML. */

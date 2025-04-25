@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { useMutation, useQuery } from "convex/react";
-import posthog from "posthog-js";
+import { usePostHog } from "posthog-js/react";
 import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { decryptData, encryptData, useEncryptionKey } from "./encryption";
@@ -24,6 +24,9 @@ const mockDecryptedValues = {
 };
 
 describe("useForm", () => {
+  const mockPosthog = {
+    captureException: vi.fn(),
+  };
   const mockSave = vi.fn();
   const mockKey = new Uint8Array() as unknown as CryptoKey;
 
@@ -33,6 +36,9 @@ describe("useForm", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+
+    // Mock PostHog
+    (usePostHog as ReturnType<typeof vi.fn>).mockReturnValue(mockPosthog);
 
     // Mock Convex hooks
     (useQuery as ReturnType<typeof vi.fn>).mockReturnValue(
@@ -95,7 +101,7 @@ describe("useForm", () => {
     await submitForm(result.current, testData);
 
     expect(toast.error).toHaveBeenCalled();
-    expect(posthog.captureException).toHaveBeenCalled();
+    expect(mockPosthog.captureException).toHaveBeenCalled();
   });
 
   it("should handle missing encryption key", async () => {
@@ -106,7 +112,9 @@ describe("useForm", () => {
 
     await submitForm(result.current, testData);
 
-    expect(toast.error).toHaveBeenCalled();
-    expect(posthog.captureException).toHaveBeenCalled();
+    expect(toast.error).toHaveBeenCalledWith("No encryption key available.");
+    expect(mockPosthog.captureException).toHaveBeenCalledWith(
+      expect.any(Error),
+    );
   });
 });
