@@ -150,39 +150,6 @@ export const setCategory = userMutation({
   },
 });
 
-export const setUrls = userMutation({
-  args: { questId: v.id("quests"), urls: v.optional(v.array(v.string())) },
-  handler: async (ctx, args) => {
-    return await Quests.updateUrls(ctx, {
-      questId: args.questId,
-      userId: ctx.userId,
-      urls: args.urls,
-    });
-  },
-});
-
-export const addUrl = userMutation({
-  args: { questId: v.id("quests"), url: v.string() },
-  handler: async (ctx, args) => {
-    return await Quests.addUrl(ctx, {
-      questId: args.questId,
-      userId: ctx.userId,
-      url: args.url,
-    });
-  },
-});
-
-export const deleteUrl = userMutation({
-  args: { questId: v.id("quests"), url: v.string() },
-  handler: async (ctx, args) => {
-    return await Quests.deleteUrl(ctx, {
-      questId: args.questId,
-      userId: ctx.userId,
-      url: args.url,
-    });
-  },
-});
-
 export const setCosts = userMutation({
   args: {
     questId: v.id("quests"),

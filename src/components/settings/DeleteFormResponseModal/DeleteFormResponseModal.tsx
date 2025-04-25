@@ -10,7 +10,7 @@ import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { ALL } from "@convex/constants";
 import { useMutation } from "convex/react";
-import posthog from "posthog-js";
+import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 import type { Selection } from "react-aria-components";
 import { toast } from "sonner";
@@ -31,6 +31,7 @@ export function DeleteFormResponseModal({
   selectedRows,
   rows,
 }: DeleteFormResponseModalProps) {
+  const posthog = usePostHog();
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

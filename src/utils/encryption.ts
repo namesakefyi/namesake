@@ -1,6 +1,5 @@
-import posthog from "posthog-js";
+import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
-
 import { useEffect } from "react";
 
 // Constants
@@ -65,6 +64,7 @@ export async function getEncryptionKey(): Promise<CryptoKey | null> {
 
 export function useEncryptionKey(): CryptoKey | null {
   const [encryptionKey, setEncryptionKey] = useState<CryptoKey | null>(null);
+  const posthog = usePostHog();
 
   useEffect(() => {
     const loadEncryptionKey = async () => {
@@ -191,6 +191,7 @@ export function useDecrypt(
     string[] | undefined
   >();
   const [error, setError] = useState(false);
+  const posthog = usePostHog();
 
   useEffect(() => {
     if (!encryptedValue || !encryptionKey) {

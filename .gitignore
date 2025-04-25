@@ -4,6 +4,7 @@ dist
 dist-ssr
 *.tsbuildinfo
 convex/README.md
+storybook-static
 
 # Logs
 logs

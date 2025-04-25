@@ -2,17 +2,26 @@ import { Select, SelectItem, TextField } from "@/components/common";
 import { JURISDICTIONS, type UserFormDataField } from "@convex/constants";
 import { maskitoTransform } from "@maskito/core";
 import type { MaskitoOptions } from "@maskito/core";
+import { useEffect } from "react";
+import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
+import { usaStatesWithCounties } from "typed-usa-states";
 
 type AddressType = "residence" | "mailing";
 
 export interface AddressFieldProps {
   children?: React.ReactNode;
   type: AddressType;
+  includeCounty?: boolean;
 }
 
-export function AddressField({ children, type }: AddressFieldProps) {
-  const { control } = useFormContext();
+export function AddressField({
+  children,
+  type,
+  includeCounty = false,
+}: AddressFieldProps) {
+  const { control, watch } = useFormContext();
+  const [counties, setCounties] = useState<string[]>([]);
 
   const names: Record<
     AddressType,
@@ -21,6 +30,7 @@ export function AddressField({ children, type }: AddressFieldProps) {
       city: UserFormDataField;
       state: UserFormDataField;
       zip: UserFormDataField;
+      county: UserFormDataField;
     }
   > = {
     residence: {
@@ -28,14 +38,29 @@ export function AddressField({ children, type }: AddressFieldProps) {
       city: "residenceCity",
       state: "residenceState",
       zip: "residenceZipCode",
+      county: "residenceCounty",
     },
     mailing: {
       street: "mailingStreetAddress",
       city: "mailingCity",
       state: "mailingState",
       zip: "mailingZipCode",
+      county: "mailingCounty",
     },
   };
+
+  const selectedState = watch(names[type].state);
+
+  useEffect(() => {
+    if (!includeCounty || !selectedState) setCounties([]);
+
+    const state = usaStatesWithCounties.find(
+      (state) => state.abbreviation === selectedState,
+    );
+    if (state) {
+      setCounties(state.counties ?? []);
+    }
+  }, [includeCounty, selectedState]);
 
   // Input mask: enforce ZIP code format of 12345-1234
   const maskitoOptions: MaskitoOptions = {
@@ -44,7 +69,7 @@ export function AddressField({ children, type }: AddressFieldProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid gap-4 grid-cols-[1fr_auto] [grid-template-areas:'street_street''city_city''state_zip']">
+      <div className="grid gap-4 grid-cols-[1fr_auto] [grid-template-areas:'street_street''city_city''state_zip''county_county']">
         <Controller
           control={control}
           name={names[type].street}
@@ -109,6 +134,35 @@ export function AddressField({ children, type }: AddressFieldProps) {
             </Select>
           )}
         />
+        {includeCounty && counties.length > 0 && (
+          <Controller
+            control={control}
+            name={names[type].county}
+            defaultValue={""}
+            shouldUnregister={true}
+            render={({ field, fieldState: { invalid, error } }) => (
+              <Select
+                {...field}
+                label="County"
+                placeholder="Select county"
+                selectedKey={field.value}
+                onSelectionChange={(key) => {
+                  field.onChange(key);
+                }}
+                className="[grid-area:county]"
+                size="large"
+                isInvalid={invalid}
+                errorMessage={error?.message}
+              >
+                {counties.map((county) => (
+                  <SelectItem key={county} id={county}>
+                    {county}
+                  </SelectItem>
+                ))}
+              </Select>
+            )}
+          />
+        )}
         <Controller
           control={control}
           name={names[type].zip}

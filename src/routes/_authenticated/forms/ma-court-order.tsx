@@ -130,7 +130,7 @@ function RouteComponent() {
         />
         {!form.watch("isCurrentlyUnhoused") === true && (
           <>
-            <AddressField type="residence" />
+            <AddressField type="residence" includeCounty />
             <CheckboxField
               name="isMailingAddressDifferentFromResidence"
               label="I use a different mailing address"
@@ -277,9 +277,9 @@ function RouteComponent() {
         type="submit"
         size="large"
         variant="primary"
-        isDisabled={isSubmitting}
+        isSubmitting={isSubmitting}
       >
-        {isSubmitting ? "Submitting…" : "Submit"}
+        Submit
       </Button>
     </FormContainer>
   );

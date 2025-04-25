@@ -63,7 +63,7 @@ export function FieldError(props: FieldErrorProps) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "text-sm text-red-9 forced-colors:text-[Mark]",
+        "text-sm text-red-9 forced-colors:text-[Mark]"
       )}
     />
   );
@@ -72,8 +72,9 @@ export function FieldError(props: FieldErrorProps) {
 export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false: "border-gray-6",
-      true: "border-gray-7",
+      false:
+        "border-gray-6 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
+      true: "border-gray-7 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
     },
     isInvalid: {
       true: "border-red-9",
@@ -87,8 +88,9 @@ export const fieldBorderStyles = tv({
 export const innerBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false: "border-gray-6",
-      true: "border-gray-7",
+      false:
+        "border-gray-6 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
+      true: "border-gray-7 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
     },
     isInvalid: {
       true: "border-red-9",
@@ -101,7 +103,7 @@ export const innerBorderStyles = tv({
 
 const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "border text-sm group flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
+  base: "border text-sm group has-autofill:bg-amber-a3 dark:has-autofill:bg-purple-a3 flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
   variants: {
     ...fieldBorderStyles.variants,
     size: {
@@ -124,7 +126,7 @@ export function FieldGroup({ size, ...props }: GroupProps) {
     <Group
       {...props}
       className={composeRenderProps(props.className, (className, renderProps) =>
-        fieldGroupStyles({ ...renderProps, size, className }),
+        fieldGroupStyles({ ...renderProps, size, className })
       )}
     />
   );
@@ -136,7 +138,7 @@ interface InputProps extends Omit<AriaInputProps, "size"> {
 }
 
 export const inputStyles = tv({
-  base: "flex-1 min-w-0 outline-none bg-transparent text-gray-normal disabled:text-gray-dim",
+  base: "flex-1 min-w-0 outline outline-none bg-transparent disable-native-autofill text-gray-normal disabled:text-gray-dim",
   variants: {
     size: {
       // Since the input is wrapped in a fieldGroup which has a border, subtract 2px from the
@@ -157,14 +159,14 @@ export function Input({ ref, size, ...props }: InputProps) {
       {...props}
       ref={ref}
       className={composeRenderProps(props.className, (className, renderProps) =>
-        inputStyles({ ...renderProps, size, className }),
+        inputStyles({ ...renderProps, size, className })
       )}
     />
   );
 }
 
 export const inputTextAreaStyles = tv({
-  base: "flex-1 min-w-0 leading-snug outline-none bg-transparent text-gray-normal disabled:text-gray-dim",
+  base: "flex-1 min-w-0 leading-snug outline-none bg-transparent disable-native-autofill text-gray-normal disabled:text-gray-dim",
   variants: {
     size: {
       small: "px-2 py-1",
@@ -188,7 +190,7 @@ export function InputTextArea({ ref, size, ...props }: InputTextAreaProps) {
       {...props}
       ref={ref}
       className={composeRenderProps(props.className, (className, renderProps) =>
-        inputTextAreaStyles({ ...renderProps, size, className }),
+        inputTextAreaStyles({ ...renderProps, size, className })
       )}
     />
   );

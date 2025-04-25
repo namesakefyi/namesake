@@ -38,10 +38,10 @@ vi.mock("@tanstack/react-router", () => ({
 }));
 
 // Mock posthog
-vi.mock("posthog-js", () => ({
-  default: {
+vi.mock("posthog-js/react", () => ({
+  usePostHog: vi.fn(() => ({
     captureException: vi.fn(),
-  },
+  })),
 }));
 
 // Mock encryption functions
