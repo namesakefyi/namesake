@@ -1,8 +1,8 @@
 import type { FieldSize } from "@/components/common";
 import { focusRing } from "@/components/utils";
 import type { LucideIcon, LucideProps } from "lucide-react";
-import { Loader2 } from "lucide-react";
 import type { Ref } from "react";
+import { Loader2 } from "lucide-react";
 import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,
@@ -98,7 +98,7 @@ export function Button({
           variant,
           size,
           className,
-        }),
+        })
       )}
     >
       <span
