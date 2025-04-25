@@ -1,5 +1,11 @@
 # namesake
 
+## 0.25.1
+
+### Patch Changes
+
+- e8edd2f: Fix visual bugs with nav headers, quest steps, and other small things
+
 ## 0.25.0
 
 ### Minor Changes
