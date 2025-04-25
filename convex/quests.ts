@@ -187,33 +187,6 @@ export const setTimeRequired = userMutation({
   },
 });
 
-export const addStep = userMutation({
-  args: {
-    questId: v.id("quests"),
-    title: v.string(),
-    content: v.optional(v.string()),
-  },
-  handler: async (ctx, args) => {
-    return await Quests.addStep(ctx, {
-      questId: args.questId,
-      userId: ctx.userId,
-      title: args.title,
-      content: args.content,
-    });
-  },
-});
-
-export const deleteStep = userMutation({
-  args: { questId: v.id("quests"), stepId: v.id("questSteps") },
-  handler: async (ctx, args) => {
-    return await Quests.deleteStep(ctx, {
-      questId: args.questId,
-      userId: ctx.userId,
-      stepId: args.stepId,
-    });
-  },
-});
-
 export const addFaq = userMutation({
   args: { questId: v.id("quests"), question: v.string(), answer: v.string() },
   handler: async (ctx, args) => {

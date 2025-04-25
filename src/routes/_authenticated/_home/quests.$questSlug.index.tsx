@@ -1,10 +1,10 @@
 import { Empty } from "@/components/common";
 import {
+  QuestContent,
   QuestCosts,
   QuestDetails,
   QuestFaqs,
   QuestPageHeader,
-  QuestSteps,
   QuestTimeRequired,
 } from "@/components/quests";
 import { QuestBasics } from "@/components/quests/QuestBasics/QuestBasics";
@@ -74,7 +74,7 @@ function QuestDetailRoute() {
           <QuestCosts quest={quest} editable={isEditing} />
           <QuestTimeRequired quest={quest} editable={isEditing} />
         </QuestDetails>
-        <QuestSteps quest={quest} editable={isEditing} />
+        <QuestContent quest={quest} editable={isEditing} />
         <QuestFaqs quest={quest} editable={isEditing} />
       </div>
       <QuestPageFooter quest={quest} userQuest={userQuest} />

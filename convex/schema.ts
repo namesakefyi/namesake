@@ -50,10 +50,8 @@ const quests = defineTable({
   ),
   /** Time in ms since epoch when the quest was deleted. */
   deletedAt: v.optional(v.number()),
-  /** Rich text comprising the contents of the step, stored as HTML. */
+  /** Rich text comprising the contents of the quest, stored as HTML. */
   content: v.optional(v.string()),
-  /** Steps in the quest. */
-  steps: v.optional(v.array(v.id("questSteps"))),
   /** Questions related to the quest. */
   faqs: v.optional(v.array(v.id("questFaqs"))),
   /** Time in ms since epoch when the quest was last updated. */
@@ -67,25 +65,6 @@ const quests = defineTable({
   .index("faqs", ["faqs"])
   .index("updatedAt", ["updatedAt"])
   .index("updatedBy", ["updatedBy"]);
-
-/**
- * A single step within a quest.
- */
-const questSteps = defineTable({
-  /** The quest this step belongs to. */
-  questId: v.id("quests"),
-  /** The title of the step. (e.g. "Get prepared") */
-  title: v.string(),
-  /** Rich text comprising the contents of the step, stored as HTML. */
-  content: v.optional(v.string()),
-  /** An optional call to action for the step. */
-  button: v.optional(
-    v.object({
-      text: v.string(),
-      url: v.string(),
-    }),
-  ),
-}).index("quest", ["questId"]);
 
 /**
  * A frequently asked question and its answer.
@@ -208,7 +187,6 @@ export default defineSchema({
   earlyAccessCodes,
   documents,
   quests,
-  questSteps,
   questFaqs,
   users,
   userFormResponses,

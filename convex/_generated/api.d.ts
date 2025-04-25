@@ -25,7 +25,6 @@ import type * as model_userSettingsModel from "../model/userSettingsModel.js";
 import type * as model_usersModel from "../model/usersModel.js";
 import type * as passwordReset from "../passwordReset.js";
 import type * as questFaqs from "../questFaqs.js";
-import type * as questSteps from "../questSteps.js";
 import type * as quests from "../quests.js";
 import type * as seed from "../seed.js";
 import type * as userFormResponses from "../userFormResponses.js";
@@ -66,7 +65,6 @@ declare const fullApi: ApiFromModules<{
   "model/usersModel": typeof model_usersModel;
   passwordReset: typeof passwordReset;
   questFaqs: typeof questFaqs;
-  questSteps: typeof questSteps;
   quests: typeof quests;
   seed: typeof seed;
   userFormResponses: typeof userFormResponses;
