@@ -1,5 +1,6 @@
 import {
   Button,
+  Link,
   Menu,
   MenuItem,
   MenuTrigger,
@@ -7,7 +8,7 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
-import { useFormSections } from "@/components/forms/FormSection/FormSectionContext";
+import { useFormSections } from "@/utils/useFormSections";
 import { ArrowLeft, MenuIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Heading } from "react-aria-components";
@@ -39,12 +40,9 @@ export function FormNavigation({ title }: FormNavigationProps) {
   return (
     <nav className="sticky bg-app p-2 top-0 flex items-center justify-between gap-2 border-b border-gray-a3">
       <div className="flex gap-2 items-center">
-        <Button
-          variant="icon"
-          icon={ArrowLeft}
-          aria-label="Back"
-          iconProps={{ className: "size-5" }}
-        />
+        <Link button={{ variant: "icon" }} href={{ to: "/" }} aria-label="Back">
+          <ArrowLeft className="size-5" />
+        </Link>
         <Heading className="text-xl text-ellipsis whitespace-nowrap">
           {title}
         </Heading>
@@ -58,20 +56,27 @@ export function FormNavigation({ title }: FormNavigationProps) {
         />
         <MenuTrigger>
           <TooltipTrigger>
-            <Button variant="icon" icon={MenuIcon} aria-label="All questions" />
+            <Button
+              variant="icon"
+              icon={MenuIcon}
+              aria-label="All questions"
+              isDisabled={!sections.length}
+            />
             <Tooltip placement="bottom">All questions</Tooltip>
           </TooltipTrigger>
-          <Menu>
-            {sections.map(({ hash, title }) => (
-              <MenuItem
-                key={hash}
-                href={{ to: ".", hash }}
-                routerOptions={{ replace: true }}
-              >
-                {title}
-              </MenuItem>
-            ))}
-          </Menu>
+          {sections.length > 0 && (
+            <Menu>
+              {sections.map(({ hash, title }) => (
+                <MenuItem
+                  key={hash}
+                  href={{ to: ".", hash }}
+                  routerOptions={{ replace: true }}
+                >
+                  {title}
+                </MenuItem>
+              ))}
+            </Menu>
+          )}
         </MenuTrigger>
       </div>
     </nav>

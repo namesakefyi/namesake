@@ -2,32 +2,6 @@ import { smartquotes } from "@/utils/smartquotes";
 import { Heading } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 
-interface FormHeaderProps {
-  /** The question rendered at the top of the page. */
-  title: string;
-
-  /** An optional description to provide more context. */
-  description?: string;
-}
-
-function FormHeader({ title, description }: FormHeaderProps) {
-  return (
-    <header className="flex flex-col gap-2">
-      <Heading
-        className="text-3xl font-medium text-gray-normal text-pretty"
-        data-section-title
-      >
-        {smartquotes(title)}
-      </Heading>
-      {description && (
-        <p className="text-lg text-gray-dim text-pretty">
-          {smartquotes(description)}
-        </p>
-      )}
-    </header>
-  );
-}
-
 function getQuestionId(question: string) {
   let sanitizedQuestion = question;
   // Remove trailing punctuation
@@ -38,7 +12,13 @@ function getQuestionId(question: string) {
   return encodeURIComponent(sanitizedQuestion.toLowerCase().replace(/ /g, "-"));
 }
 
-export interface FormSectionProps extends FormHeaderProps {
+export interface FormSectionProps {
+  /** The title of the section. */
+  title: string;
+
+  /** The description of the section. */
+  description?: string;
+
   /** The contents of the page. */
   children?: React.ReactNode;
 
@@ -59,7 +39,19 @@ export function FormSection({
       data-testid="form-section"
       className={twMerge("flex flex-col gap-8 py-12 justify-center", className)}
     >
-      <FormHeader title={title} description={description} />
+      <header className="flex flex-col gap-2">
+        <Heading
+          className="text-3xl font-medium text-gray-normal text-pretty"
+          data-section-title
+        >
+          {smartquotes(title)}
+        </Heading>
+        {description && (
+          <p className="text-lg text-gray-dim text-pretty">
+            {smartquotes(description)}
+          </p>
+        )}
+      </header>
       {children}
     </fieldset>
   );

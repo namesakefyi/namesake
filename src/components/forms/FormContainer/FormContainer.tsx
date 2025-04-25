@@ -1,11 +1,10 @@
 import { Banner, Container, Form } from "@/components/common";
-import { FormNavigation } from "@/components/forms";
-import { FormSection } from "@/components/forms/FormSection/FormSection";
+import { FormNavigation, FormSection } from "@/components/forms";
+import { smartquotes } from "@/utils/smartquotes";
 import {
   FormSectionContext,
-  type FormSection as FormSectionType,
-} from "@/components/forms/FormSection/FormSectionContext";
-import { smartquotes } from "@/utils/smartquotes";
+  type FormSectionData,
+} from "@/utils/useFormSections";
 import { ShieldCheck } from "lucide-react";
 import { Children, isValidElement, useMemo } from "react";
 import { Heading } from "react-aria-components";
@@ -44,7 +43,7 @@ export function FormContainer({
 }: FormContainerProps) {
   // Scan children for form sections
   const sections = useMemo(() => {
-    const foundSections: FormSectionType[] = [];
+    const foundSections: FormSectionData[] = [];
 
     Children.forEach(children, (child) => {
       if (isValidElement(child) && child.type === FormSection) {
@@ -63,7 +62,7 @@ export function FormContainer({
 
   return (
     <FormProvider {...form}>
-      <FormSectionContext.Provider value={{ sections }}>
+      <FormSectionContext value={{ sections }}>
         <FormNavigation title={title} />
         <Container className="w-full max-w-[720px] flex-1 py-16 px-6">
           <Form
@@ -89,7 +88,7 @@ export function FormContainer({
             {children}
           </Form>
         </Container>
-      </FormSectionContext.Provider>
+      </FormSectionContext>
     </FormProvider>
   );
 }

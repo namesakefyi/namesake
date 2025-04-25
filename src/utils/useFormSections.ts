@@ -1,12 +1,12 @@
 import { createContext, useContext } from "react";
 
-export interface FormSection {
+export interface FormSectionData {
   hash: string;
   title: string;
 }
 
 interface FormSectionContextType {
-  sections: FormSection[];
+  sections: FormSectionData[];
 }
 
 export const FormSectionContext = createContext<FormSectionContextType>({
