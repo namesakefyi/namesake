@@ -72,14 +72,15 @@ export function FieldError(props: FieldErrorProps) {
 export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false: "ring-gray-6",
-      true: "ring-gray-7",
+      false:
+        "border-gray-6 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
+      true: "border-gray-7 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
     },
     isInvalid: {
-      true: "ring-red-9",
+      true: "border-red-9",
     },
     isDisabled: {
-      true: "ring-gray-4",
+      true: "border-gray-4",
     },
   },
 });
@@ -87,8 +88,9 @@ export const fieldBorderStyles = tv({
 export const innerBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false: "border-gray-6",
-      true: "border-gray-7",
+      false:
+        "border-gray-6 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
+      true: "border-gray-7 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
     },
     isInvalid: {
       true: "border-red-9",
@@ -101,7 +103,7 @@ export const innerBorderStyles = tv({
 
 const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "border-none text-sm ring-inset ring-1 group flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
+  base: "border text-sm group has-autofill:bg-amber-a3 dark:has-autofill:bg-purple-a3 flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
   variants: {
     ...fieldBorderStyles.variants,
     size: {
@@ -136,12 +138,14 @@ interface InputProps extends Omit<AriaInputProps, "size"> {
 }
 
 export const inputStyles = tv({
-  base: "flex-1 min-w-0 outline outline-none bg-transparent text-gray-normal disabled:text-gray-dim",
+  base: "flex-1 min-w-0 outline outline-none bg-transparent disable-native-autofill text-gray-normal disabled:text-gray-dim",
   variants: {
     size: {
-      small: "px-2 h-8 text-sm",
-      medium: "px-3 h-10",
-      large: "px-3.5 h-12 text-lg",
+      // Since the input is wrapped in a fieldGroup which has a border, subtract 2px from the
+      // height so the overall height aligns with buttons, etc.
+      small: "px-2 h-[calc(2rem-2px)] text-sm",
+      medium: "px-3 h-[calc(2.5rem-2px)]",
+      large: "px-3.5 h-[calc(3rem-2px)] text-lg",
     },
   },
   defaultVariants: {
@@ -162,7 +166,7 @@ export function Input({ ref, size, ...props }: InputProps) {
 }
 
 export const inputTextAreaStyles = tv({
-  base: "flex-1 min-w-0 leading-snug outline-none bg-transparent text-gray-normal disabled:text-gray-dim",
+  base: "flex-1 min-w-0 leading-snug outline-none bg-transparent disable-native-autofill text-gray-normal disabled:text-gray-dim",
   variants: {
     size: {
       small: "px-2 py-1",

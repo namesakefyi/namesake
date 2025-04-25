@@ -130,7 +130,7 @@ function RouteComponent() {
         />
         {!form.watch("isCurrentlyUnhoused") === true && (
           <>
-            <AddressField type="residence" />
+            <AddressField type="residence" includeCounty />
             <CheckboxField
               name="isMailingAddressDifferentFromResidence"
               label="I use a different mailing address"

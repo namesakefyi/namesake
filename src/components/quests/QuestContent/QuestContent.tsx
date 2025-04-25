@@ -1,7 +1,13 @@
-import { RichText, type RichTextProps } from "@/components/common";
+import { Editor, type EditorProps } from "@/components/common";
+import type { Doc } from "@convex/_generated/dataModel";
 
-interface QuestContentProps extends RichTextProps {}
+interface QuestContentProps extends EditorProps {
+  quest: Doc<"quests">;
+  editable?: boolean;
+}
 
-export function QuestContent({ ...props }: QuestContentProps) {
-  return <RichText {...props} />;
+export function QuestContent({ quest, editable, ...props }: QuestContentProps) {
+  return (
+    <Editor {...props} initialContent={quest.content} editable={editable} />
+  );
 }

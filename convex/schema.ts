@@ -36,8 +36,8 @@ const quests = defineTable({
       v.object({
         cost: v.number(),
         description: v.string(),
-      }),
-    ),
+      })
+    )
   ),
   /** The estimated time required to complete the quest. */
   timeRequired: v.optional(
@@ -46,7 +46,7 @@ const quests = defineTable({
       max: v.number(),
       unit: timeRequiredUnit,
       description: v.optional(v.string()),
-    }),
+    })
   ),
   /** Time in ms since epoch when the quest was deleted. */
   deletedAt: v.optional(v.number()),

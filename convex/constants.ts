@@ -31,64 +31,18 @@ import {
   Sun,
   Zap,
 } from "lucide-react";
+import { usaStates } from "typed-usa-states";
 
-export const JURISDICTIONS = {
-  AK: "Alaska",
-  AL: "Alabama",
-  AR: "Arkansas",
-  AZ: "Arizona",
-  CA: "California",
-  CO: "Colorado",
-  CT: "Connecticut",
-  DC: "District of Columbia",
-  DE: "Delaware",
-  FL: "Florida",
-  GA: "Georgia",
-  HI: "Hawaii",
-  IA: "Iowa",
-  ID: "Idaho",
-  IL: "Illinois",
-  IN: "Indiana",
-  KS: "Kansas",
-  KY: "Kentucky",
-  LA: "Louisiana",
-  MA: "Massachusetts",
-  MD: "Maryland",
-  ME: "Maine",
-  MI: "Michigan",
-  MN: "Minnesota",
-  MO: "Missouri",
-  MS: "Mississippi",
-  MT: "Montana",
-  NC: "North Carolina",
-  ND: "North Dakota",
-  NE: "Nebraska",
-  NH: "New Hampshire",
-  NJ: "New Jersey",
-  NM: "New Mexico",
-  NV: "Nevada",
-  NY: "New York",
-  OH: "Ohio",
-  OK: "Oklahoma",
-  OR: "Oregon",
-  PA: "Pennsylvania",
-  PR: "Puerto Rico",
-  RI: "Rhode Island",
-  SC: "South Carolina",
-  SD: "South Dakota",
-  TN: "Tennessee",
-  TX: "Texas",
-  UT: "Utah",
-  VA: "Virginia",
-  VT: "Vermont",
-  WA: "Washington",
-  WI: "Wisconsin",
-  WV: "West Virginia",
-  WY: "Wyoming",
-} as const;
+export const JURISDICTIONS = usaStates.reduce(
+  (acc, state) => {
+    acc[state.abbreviation] = state.name;
+    return acc;
+  },
+  {} as Record<string, string>,
+);
 export type Jurisdiction = keyof typeof JURISDICTIONS;
 
-export const BIRTHPLACES = {
+export const BIRTHPLACES: Record<Jurisdiction | "other", string> = {
   ...JURISDICTIONS,
   other: "I was born outside the US",
 };
@@ -395,6 +349,10 @@ export const USER_FORM_DATA_FIELDS: Record<string, FieldDefinition> = {
     label: "Residence city",
     type: "string",
   },
+  residenceCounty: {
+    label: "Residence county",
+    type: "string",
+  },
   residenceState: {
     label: "Residence state",
     type: "string",
@@ -413,6 +371,10 @@ export const USER_FORM_DATA_FIELDS: Record<string, FieldDefinition> = {
   },
   mailingCity: {
     label: "Mailing city",
+    type: "string",
+  },
+  mailingCounty: {
+    label: "Mailing county",
     type: "string",
   },
   mailingState: {

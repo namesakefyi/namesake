@@ -109,4 +109,90 @@ describe("AddressField", () => {
     expect(stateSelect).toHaveAttribute("name", "mailingState");
     expect(zipInput).toHaveAttribute("name", "mailingZipCode");
   });
+
+  it("does not show county selection by default", () => {
+    renderWithFormProvider(<AddressField type="residence" />);
+
+    expect(screen.queryByLabelText("County")).not.toBeInTheDocument();
+  });
+
+  it("shows county selection when includeCounty is true and state is selected", async () => {
+    renderWithFormProvider(<AddressField type="residence" includeCounty />);
+
+    // Initially county should not be visible
+    expect(screen.queryByLabelText("County")).not.toBeInTheDocument();
+
+    // Select California
+    const stateSelect = screen.getByLabelText("State");
+    await userEvent.click(stateSelect);
+    const californiaOption = screen.getByRole("option", {
+      name: JURISDICTIONS.CA,
+    });
+    await userEvent.click(californiaOption);
+
+    // County dropdown should now be visible
+    const countySelect = screen.getByLabelText("County");
+    expect(countySelect).toBeInTheDocument();
+
+    // Should be able to select a county
+    await userEvent.click(countySelect);
+    const losAngelesOption = screen.getByRole("option", {
+      name: "Los Angeles County",
+    });
+    await userEvent.click(losAngelesOption);
+    expect(countySelect).toHaveTextContent("Los Angeles County");
+  });
+
+  it("clears county selection when state changes", async () => {
+    renderWithFormProvider(<AddressField type="residence" includeCounty />);
+
+    // Select New York
+    const stateSelect = screen.getByLabelText("State");
+    await userEvent.click(stateSelect);
+    const newYorkOption = screen.getByRole("option", {
+      name: JURISDICTIONS.NY,
+    });
+    await userEvent.click(newYorkOption);
+
+    // Select New York county
+    const countySelect = screen.getByLabelText("County");
+    await userEvent.click(countySelect);
+    const queensCountyOption = screen.getByRole("option", {
+      name: "Queens County",
+    });
+    await userEvent.click(queensCountyOption);
+
+    // Change state to Massachusetts
+    await userEvent.click(stateSelect);
+    const massachusettsOption = screen.getByRole("option", {
+      name: JURISDICTIONS.MA,
+    });
+    await userEvent.click(massachusettsOption);
+
+    // County should update to Massachusetts counties
+    await userEvent.click(countySelect);
+    expect(
+      screen.queryByRole("option", { name: "Queens County" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: "Suffolk County" }),
+    ).toBeInTheDocument();
+  });
+
+  it("renders the correct name for county field based on address type", async () => {
+    renderWithFormProvider(<AddressField type="residence" includeCounty />);
+
+    // Select New York to show county field
+    const stateSelect = screen.getByLabelText("State");
+    await userEvent.click(stateSelect);
+    const newYorkOption = screen.getByRole("option", {
+      name: JURISDICTIONS.NY,
+    });
+    await userEvent.click(newYorkOption);
+
+    const selectElements = screen.getAllByRole("combobox", {
+      hidden: true,
+    });
+    expect(selectElements[1]).toHaveAttribute("name", "residenceCounty");
+  });
 });

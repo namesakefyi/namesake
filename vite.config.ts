@@ -60,6 +60,7 @@ export default defineConfig({
         "src/routeTree.gen.ts",
         "**/*.stories.tsx",
         "src/components/**/index.ts",
+        "src/components/common/Editor/extensions/**",
       ],
     },
     setupFiles: ["./tests/vitest.setup.ts"],

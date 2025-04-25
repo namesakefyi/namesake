@@ -1,5 +1,6 @@
 import { type ButtonProps, buttonStyles } from "@/components/common";
 import { focusRing } from "@/components/utils";
+import type { Ref } from "react";
 import {
   Link as AriaLink,
   type LinkProps as AriaLinkProps,
@@ -10,6 +11,7 @@ import { tv } from "tailwind-variants";
 export interface LinkProps extends AriaLinkProps {
   variant?: "primary" | "secondary";
   button?: Omit<ButtonProps, "children" | "icon">;
+  ref?: Ref<HTMLAnchorElement>;
 }
 
 const linkStyles = tv({
@@ -26,9 +28,10 @@ const linkStyles = tv({
   },
 });
 
-export function Link({ button, ...props }: LinkProps) {
+export function Link({ button, ref, ...props }: LinkProps) {
   return (
     <AriaLink
+      ref={ref}
       {...props}
       className={composeRenderProps(
         props.className,
