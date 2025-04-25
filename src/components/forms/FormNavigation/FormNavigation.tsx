@@ -1,127 +1,86 @@
-import {
-  Button,
-  Link,
-  Menu,
-  MenuItem,
-  MenuTrigger,
-  Tooltip,
-  TooltipTrigger,
-} from "@/components/common";
-import { useRouter } from "@tanstack/react-router";
-import { ArrowDown, ArrowUp, Menu as MenuIcon } from "lucide-react";
+import { Button, ProgressBar } from "@/components/common";
+import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Heading } from "react-aria-components";
+import { useFormContext } from "react-hook-form";
 
-interface FormSection {
-  hash: string;
+interface FormNavigationProps {
   title: string;
 }
 
-export function FormNavigation() {
-  const [formSections, setFormSections] = useState<FormSection[]>([]);
-  const [activeSection, setActiveSection] = useState<{
-    previous: FormSection | null;
-    current: FormSection | null;
-    next: FormSection | null;
-  } | null>(null);
-  const router = useRouter();
+export function FormNavigation({ title }: FormNavigationProps) {
+  const [progress, setProgress] = useState(0);
+  const { getValues, watch } = useFormContext();
 
   useEffect(() => {
-    const formSections = Array.from(
-      document.querySelectorAll("[data-form-section]"),
-    );
-    setFormSections(
-      formSections.map((section) => ({
-        hash: section.id,
-        title: section.querySelector("[data-section-title]")?.textContent ?? "",
-      })),
-    );
-  }, []);
+    const subscription = watch((values) => {
+      const allValues = values || getValues();
+      const totalFields = Object.keys(allValues).length;
+      const completedFields = Object.entries(allValues).filter(
+        ([_, value]) => value !== null && value !== undefined && value !== "",
+      ).length;
+      setProgress(totalFields > 0 ? (completedFields / totalFields) * 100 : 0);
+    });
 
-  useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          const section = formSections.find(
-            (section) => section.hash === entry.target.id,
-          );
-          if (section) {
-            const index = formSections.findIndex(
-              (s) => s.hash === section.hash,
-            );
-            setActiveSection({
-              previous: formSections[index - 1],
-              current: section,
-              next: formSections[index + 1],
-            });
-            router.navigate({ to: ".", hash: section.hash, replace: true });
-          }
-        }
-      }
-    };
-
-    for (const section of formSections) {
-      const element = document.getElementById(section.hash);
-      if (element) {
-        const observer = new IntersectionObserver(observerCallback, {
-          threshold: 0.5,
-          rootMargin: "-50px 0px -50px 0px",
-        });
-        observer.observe(element);
-        observers.push(observer);
-      }
-    }
-
-    return () => {
-      for (const observer of observers) observer.disconnect();
-    };
-  }, [formSections, router]);
+    // Cleanup subscription
+    return () => subscription.unsubscribe();
+  }, [watch, getValues]);
 
   return (
-    <nav className="fixed right-4 top-4 flex flex-col gap-2">
-      <MenuTrigger>
-        <TooltipTrigger>
-          <Button variant="icon" icon={MenuIcon} aria-label="All questions" />
-          <Tooltip placement="left">All questions</Tooltip>
+    <nav className="sticky bg-app p-2 top-0 flex items-center justify-between gap-2 border-b border-gray-a3">
+      <div className="flex gap-2 items-center">
+        <Button variant="icon" icon={ArrowLeft} aria-label="Back" />
+        <Heading className="text-xl">{title}</Heading>
+      </div>
+      <div className="flex gap-2 items-center">
+        <ProgressBar
+          value={progress}
+          label="Progress"
+          labelHidden
+          className="w-64 mr-3"
+        />
+        {/* <TooltipTrigger>
+          <Link
+            href={{ to: ".", hash: activeSection?.previous?.hash }}
+            routerOptions={{ replace: true }}
+            button={{ variant: "icon" }}
+            aria-label="Previous question"
+            isDisabled={!activeSection?.previous}
+          >
+            <ArrowUp className="size-5" />
+          </Link>
+          <Tooltip placement="bottom">Previous question</Tooltip>
         </TooltipTrigger>
-        <Menu>
-          {formSections.map(({ hash, title }) => (
-            <MenuItem
-              key={hash}
-              href={{ to: ".", hash }}
-              routerOptions={{ replace: true }}
-            >
-              {title}
-            </MenuItem>
-          ))}
-        </Menu>
-      </MenuTrigger>
-      <TooltipTrigger>
-        <Link
-          href={{ to: ".", hash: activeSection?.previous?.hash }}
-          routerOptions={{ replace: true }}
-          button={{ variant: "icon" }}
-          className="flex-1"
-          aria-label="Previous question"
-          isDisabled={!activeSection?.previous}
-        >
-          <ArrowUp className="size-5" />
-        </Link>
-        <Tooltip placement="left">Previous question</Tooltip>
-      </TooltipTrigger>
-      <TooltipTrigger>
-        <Link
-          href={{ to: ".", hash: activeSection?.next?.hash }}
-          routerOptions={{ replace: true }}
-          button={{ variant: "icon" }}
-          className="flex-1"
-          aria-label="Next question"
-          isDisabled={!activeSection?.next}
-        >
-          <ArrowDown className="size-5" />
-        </Link>
-        <Tooltip placement="left">Next question</Tooltip>
-      </TooltipTrigger>
+        <TooltipTrigger>
+          <Link
+            href={{ to: ".", hash: activeSection?.next?.hash }}
+            routerOptions={{ replace: true }}
+            button={{ variant: "icon" }}
+            aria-label="Next question"
+            isDisabled={!activeSection?.next}
+          >
+            <ArrowDown className="size-5" />
+          </Link>
+          <Tooltip placement="bottom">Next question</Tooltip>
+        </TooltipTrigger>
+        <MenuTrigger>
+          <TooltipTrigger>
+            <Button variant="icon" icon={MenuIcon} aria-label="All questions" />
+            <Tooltip placement="bottom">All questions</Tooltip>
+          </TooltipTrigger>
+          <Menu>
+            {formSections.map(({ hash, title }) => (
+              <MenuItem
+                key={hash}
+                href={{ to: ".", hash }}
+                routerOptions={{ replace: true }}
+              >
+                {title}
+              </MenuItem>
+            ))}
+          </Menu>
+        </MenuTrigger> */}
+      </div>
     </nav>
   );
 }

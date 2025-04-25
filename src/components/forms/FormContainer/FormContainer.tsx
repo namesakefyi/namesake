@@ -1,15 +1,7 @@
-import {
-  Banner,
-  Button,
-  Container,
-  Form,
-  Tooltip,
-  TooltipTrigger,
-} from "@/components/common";
+import { Banner, Container, Form } from "@/components/common";
 import { FormNavigation } from "@/components/forms";
 import { smartquotes } from "@/utils/smartquotes";
-import { useRouter } from "@tanstack/react-router";
-import { ArrowLeft, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { Heading } from "react-aria-components";
 import { FormProvider, type UseFormReturn } from "react-hook-form";
 
@@ -37,10 +29,9 @@ export function FormContainer({
   form,
   onSubmit,
 }: FormContainerProps) {
-  const { history } = useRouter();
-
   return (
     <FormProvider {...form}>
+      <FormNavigation title={title} />
       <Container className="w-full max-w-[720px] py-16 px-6">
         <Form
           onSubmit={onSubmit}
@@ -65,20 +56,6 @@ export function FormContainer({
           {children}
         </Form>
       </Container>
-      <TooltipTrigger>
-        <Button
-          className="fixed top-4 left-4 z-10"
-          onPress={() => {
-            history.go(-1);
-          }}
-          aria-label="Save and exit"
-          icon={ArrowLeft}
-          variant="icon"
-          size="large"
-        />
-        <Tooltip placement="right">Save and exit</Tooltip>
-      </TooltipTrigger>
-      <FormNavigation />
     </FormProvider>
   );
 }

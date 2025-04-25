@@ -26,7 +26,7 @@ describe("FormNavigation", () => {
   });
 
   it("renders navigation controls", () => {
-    render(<FormNavigation />);
+    render(<FormNavigation title="Test Form" />);
 
     expect(screen.getByLabelText("Previous question")).toBeInTheDocument();
     expect(screen.getByLabelText("Next question")).toBeInTheDocument();
@@ -36,7 +36,7 @@ describe("FormNavigation", () => {
   });
 
   it("renders all questions in menu popover", async () => {
-    render(<FormNavigation />);
+    render(<FormNavigation title="Test Form" />);
 
     userEvent.click(screen.getByRole("button", { name: "All questions" }));
 
@@ -49,7 +49,7 @@ describe("FormNavigation", () => {
   });
 
   it("disables previous button when at first section", async () => {
-    render(<FormNavigation />);
+    render(<FormNavigation title="Test Form" />);
 
     // Simulate first section being visible
     const observer = window.IntersectionObserver.mock.calls[0][0];
@@ -73,7 +73,7 @@ describe("FormNavigation", () => {
   });
 
   it("disables next button when at last section", async () => {
-    render(<FormNavigation />);
+    render(<FormNavigation title="Test Form" />);
 
     // Simulate last section being visible
     const observer = window.IntersectionObserver.mock.calls[0][0];
