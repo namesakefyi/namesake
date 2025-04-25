@@ -1,5 +1,12 @@
 # namesake
 
+## 0.25.0
+
+### Minor Changes
+
+- bbad47c: Improve navigation within forms
+- dffdf23: Improve display of key information within quest header and simplify editing experience for key quest details
+
 ## 0.24.2
 
 ### Patch Changes
