@@ -11,7 +11,7 @@ function IndexRoute() {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  if (!isMobile) navigate({ to: "/court-order" });
+  if (!isMobile) navigate({ to: "/quests/court-order" });
 
   return (
     <div className="flex flex-col py-7 gap-7 app-padding">

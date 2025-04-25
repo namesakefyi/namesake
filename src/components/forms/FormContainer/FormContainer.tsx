@@ -68,7 +68,7 @@ export function FormContainer({
             className="gap-0 divide-y divide-gray-a3"
           >
             <header className="flex flex-col gap-6 mb-8">
-              <Heading className="text-5xl font-medium text-pretty">
+              <Heading className="text-4xl lg:text-5xl font-medium text-pretty">
                 {title}
               </Heading>
               {description && (

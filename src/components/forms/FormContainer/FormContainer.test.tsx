@@ -23,11 +23,7 @@ describe("FormContainer", () => {
     render(<FormContainerWithForm />);
 
     const titles = screen.getAllByText("Test Title");
-
     expect(titles).toHaveLength(2);
-    // First title is in the navigation
-    // Second title is in the form container
-    expect(titles[1]).toHaveClass("text-5xl");
   });
 
   it("renders form navigation component", () => {

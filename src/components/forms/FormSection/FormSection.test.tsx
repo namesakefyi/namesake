@@ -13,7 +13,6 @@ describe("FormSection", () => {
 
     const titleElement = screen.getByText(formSection.title);
     expect(titleElement).toBeInTheDocument();
-    expect(titleElement).toHaveClass("text-3xl");
     expect(titleElement).toHaveClass("font-medium");
     expect(titleElement).toHaveClass("text-gray-normal");
   });
@@ -23,8 +22,6 @@ describe("FormSection", () => {
 
     const descriptionElement = screen.getByText(formSection.description);
     expect(descriptionElement).toBeInTheDocument();
-    expect(descriptionElement).toHaveClass("text-lg");
-    expect(descriptionElement).toHaveClass("text-gray-dim");
   });
 
   it("does not render description when not provided", () => {

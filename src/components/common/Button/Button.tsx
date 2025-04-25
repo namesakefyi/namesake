@@ -31,7 +31,7 @@ export interface ButtonProps extends AriaButtonProps {
 
 export const buttonStyles = tv({
   extend: focusRing,
-  base: "py-2 text-sm font-medium relative whitespace-nowrap rounded-lg border border-gray-dim transition-all duration-200 ease-in-out flex items-center justify-stretch",
+  base: "py-2 text-sm font-medium relative whitespace-nowrap rounded-lg border border-gray-dim transition-all duration-200 ease-in-out flex items-center justify-center",
   variants: {
     variant: {
       primary:

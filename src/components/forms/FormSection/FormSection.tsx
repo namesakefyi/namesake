@@ -42,13 +42,13 @@ export function FormSection({
     >
       <header className="flex flex-col gap-2">
         <Heading
-          className="text-3xl font-medium text-gray-normal text-pretty"
+          className="text-2xl md:text-3xl font-medium text-gray-normal text-pretty"
           data-section-title
         >
           {smartquotes(title)}
         </Heading>
         {description && (
-          <p className="text-lg text-gray-dim text-pretty">
+          <p className="text-base md:text-lg text-gray-dim text-pretty">
             {smartquotes(description)}
           </p>
         )}

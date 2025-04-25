@@ -1,10 +1,8 @@
 import { Empty } from "@/components/common";
-import { useIsMobile } from "@/utils/useIsMobile";
 import { api } from "@convex/_generated/api";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { Milestone } from "lucide-react";
-import { tv } from "tailwind-variants";
 
 export const Route = createFileRoute("/_authenticated/_home/quests/$questSlug")(
   {
@@ -14,7 +12,6 @@ export const Route = createFileRoute("/_authenticated/_home/quests/$questSlug")(
 
 function RouteComponent() {
   const { questSlug } = Route.useParams();
-  const isMobile = useIsMobile();
 
   const questData = useQuery(api.quests.getWithUserQuest, {
     slug: questSlug,
@@ -35,18 +32,8 @@ function RouteComponent() {
       />
     );
 
-  const containerStyles = tv({
-    base: "flex flex-col",
-    variants: {
-      isMobile: {
-        true: "min-h-screen-minus-mobile",
-        false: "min-h-dvh",
-      },
-    },
-  });
-
   return (
-    <div className={containerStyles({ isMobile })}>
+    <div className="flex flex-col">
       <Outlet />
     </div>
   );

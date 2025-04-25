@@ -110,7 +110,7 @@ export function StatusSelect({
           ))}
         </MenuSection>
         <MenuSection>
-          <MenuItem onAction={handleRemove}>Remove</MenuItem>
+          <MenuItem onAction={handleRemove}>Remove from my list</MenuItem>
         </MenuSection>
       </Menu>
     </MenuTrigger>
