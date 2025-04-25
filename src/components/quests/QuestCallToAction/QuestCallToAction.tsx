@@ -58,7 +58,7 @@ function QuestCompletedDate({ userQuest }: { userQuest: Doc<"userQuests"> }) {
   return (
     <div className="flex flex-col items-end gap-1">
       <Heading className="text-3xl font-medium">Done!</Heading>
-      <IconText icon={Check} className="text-white-a9">
+      <IconText icon={Check} className="text-green-12">
         <TimeAgo date={completedDate} />
       </IconText>
     </div>
@@ -164,10 +164,11 @@ export const QuestCallToAction = ({
   userQuest,
 }: QuestCallToActionProps) => {
   const containerStyles = tv({
-    base: "flex flex-col justify-center items-end gap-4 app-padding border-t border-gray-dim overflow-hidden h-24 relative transition-colors",
+    base: "flex flex-col justify-center items-end gap-4 app-padding rounded-xl border overflow-hidden h-24 relative transition-colors",
     variants: {
       isComplete: {
         true: "bg-green-3 border-green-5",
+        false: "bg-element border-gray-dim",
       },
     },
   });

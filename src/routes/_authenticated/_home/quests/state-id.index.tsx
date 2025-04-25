@@ -1,7 +1,7 @@
 import { JurisdictionInterstitial } from "@/components/quests";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_authenticated/_home/state-id/")({
+export const Route = createFileRoute("/_authenticated/_home/quests/state-id/")({
   beforeLoad: async ({ context: { residence } }) => {
     if (residence) {
       throw redirect({

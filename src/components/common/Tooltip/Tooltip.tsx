@@ -14,7 +14,7 @@ export interface TooltipProps extends Omit<AriaTooltipProps, "children"> {
 }
 
 const styles = tv({
-  base: "group bg-white dark:bg-gray-5 text-gray-12 text-sm rounded-lg drop-shadow-lg will-change-transform px-3 py-1",
+  base: "group bg-white dark:bg-gray-5 text-gray-12 text-sm rounded-lg drop-shadow-md will-change-transform px-3 py-1",
   variants: {
     isEntering: {
       true: "animate-in fade-in placement-bottom:slide-in-from-top-0.5 placement-top:slide-in-from-bottom-0.5 placement-left:slide-in-from-right-0.5 placement-right:slide-in-from-left-0.5 ease-out duration-200",

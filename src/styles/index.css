@@ -19,10 +19,6 @@
   @apply sticky top-16 lg:top-20;
 }
 
-.min-h-screen-minus-mobile {
-  min-height: calc(100dvh - 56px - env(safe-area-inset-bottom));
-}
-
 .h-mobile-nav {
   height: calc(56px + env(safe-area-inset-bottom));
   padding-bottom: max(env(safe-area-inset-bottom), 0.25rem);
@@ -32,7 +28,7 @@
   @apply text-base lg:text-lg;
 
   a:not([data-type="button"]):not(:where(.not-prose *)) {
-    @apply underline underline-offset-2 hover:decoration-inherit;
+    @apply underline underline-offset-2 hover:decoration-inherit decoration-gray-a8;
   }
 
   :where(p, h2, h3, blockquote, ul, ol, img, div) + :where(p, h2, h3, blockquote, ul, ol, img, div):not(:where(.not-prose *)) {
@@ -112,34 +108,35 @@
   }
 
   li[data-type="step-item"]:not(:where(.not-prose *)) {
+    --step-number-size: 32px;
+    --step-number-gap: 12px;
     padding: 0;
     counter-increment: steps;
-    display: grid;
-    column-gap: 1rem;
-    grid-template-columns: 32px 1fr;
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-      "number title"
-      "line content";
+    position: relative;
+    padding-inline-start: calc(var(--step-number-size) + var(--step-number-gap));
     
     &::before {
       all: unset;
-      width: 100%;
+      width: var(--step-number-size);
+      height: var(--step-number-size);
       aspect-ratio: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      grid-area: number;
+      position: absolute;
+      left: 0;
+      top: 0;
       content: counter(steps);
       @apply bg-gray-a4;
     }
     
     &::after {
-      grid-area: line;
+      position: absolute;
+      left: calc(var(--step-number-size) / 2);
+      top: var(--step-number-size);
       width: 2px;
-      height: 100%;
-      margin-inline: auto;
+      bottom: 0;
       @apply bg-gray-a3;
       content: "";
     }
@@ -154,7 +151,6 @@
   }
 
   div[data-type="step-title"]:not(:where(.not-prose *)) {
-    grid-area: title;
     @apply text-2xl font-medium;
     
     &.is-empty::before {
@@ -167,7 +163,6 @@
   }
 
   div[data-type="step-content"] {
-    grid-area: content;
     padding-block-end: 1.5rem;
 
     &.is-empty::before {

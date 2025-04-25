@@ -38,21 +38,19 @@ export function FormNavigation({ title }: FormNavigationProps) {
   }, [watch, getValues]);
 
   return (
-    <nav className="sticky bg-app p-2 top-0 flex items-center justify-between gap-2 border-b border-gray-a3">
-      <div className="flex gap-2 items-center">
+    <nav className="sticky bg-app p-2 top-0 max-w-full flex items-center justify-between gap-3 border-b border-gray-a3">
+      <div className="flex gap-2 items-center min-w-0">
         <Link button={{ variant: "icon" }} href={{ to: "/" }} aria-label="Back">
           <ArrowLeft className="size-5" />
         </Link>
-        <Heading className="text-xl text-ellipsis whitespace-nowrap">
-          {title}
-        </Heading>
+        <Heading className="text-xl truncate min-w-0 flex-1">{title}</Heading>
       </div>
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-1 items-center">
         <ProgressBar
           value={progress}
           label="Progress"
           labelHidden
-          className="w-24 md:w-48 lg:w-64 mr-3"
+          className="w-20 md:w-48 lg:w-64 mr-3"
         />
         <MenuTrigger>
           <TooltipTrigger>
@@ -60,6 +58,7 @@ export function FormNavigation({ title }: FormNavigationProps) {
               variant="icon"
               icon={MenuIcon}
               aria-label="All questions"
+              iconProps={{ className: "size-5" }}
               isDisabled={!sections.length}
             />
             <Tooltip placement="bottom">All questions</Tooltip>

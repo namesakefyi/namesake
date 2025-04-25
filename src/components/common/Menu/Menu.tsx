@@ -37,7 +37,10 @@ export function MenuTrigger(props: MenuTriggerProps) {
 
 export function Menu<T extends object>(props: MenuProps<T>) {
   return (
-    <Popover placement={props.placement} className="min-w-[150px]">
+    <Popover
+      placement={props.placement}
+      className="min-w-[150px] max-w-[calc(100vw-1.5rem)]"
+    >
       <AriaMenu
         {...props}
         className="p-1 outline-none max-h-[inherit] overflow-auto [clip-path:inset(0_0_0_0_round_.75rem)]"
@@ -68,7 +71,7 @@ export function MenuItem({ className, icon: Icon, ...props }: MenuItemProps) {
               </span>
             )}
             {Icon && <Icon aria-hidden className="w-4 h-4" />}
-            <span className="flex items-center flex-1 gap-2 font-normal truncate">
+            <span className="flex-1 gap-2 font-normal truncate min-w-0">
               {children}
             </span>
             {props.target === "_blank" && (

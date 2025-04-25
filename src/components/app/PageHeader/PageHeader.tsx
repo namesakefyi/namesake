@@ -35,7 +35,7 @@ export const PageHeader = ({
         className,
       )}
     >
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 min-w-0">
         <div className="flex gap-2 items-center">
           {isMobile && mobileBackLink && (
             <Link
@@ -46,7 +46,7 @@ export const PageHeader = ({
               <ArrowLeft className="size-5" />
             </Link>
           )}
-          <h1 className="text-2xl lg:text-3xl font-medium whitespace-nowrap">
+          <h1 className="text-xl lg:text-2xl xl:text-3xl truncate font-medium">
             {title}
           </h1>
           {badge}
