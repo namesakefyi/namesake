@@ -26,12 +26,13 @@ export function ProgressBar({
     >
       {({ percentage, valueText, isIndeterminate }) => (
         <>
-          <div className="flex items-baseline justify-between gap-2 -mt-0.5">
-            <Label
-              className={twMerge("text-gray-dim", labelHidden && "sr-only")}
-            >
-              {label}
-            </Label>
+          <div
+            className={twMerge(
+              "flex items-baseline justify-between gap-2 -mt-0.5",
+              labelHidden && "sr-only",
+            )}
+          >
+            <Label className="text-gray-dim">{label}</Label>
             <span className="text-xs text-gray-dim tabular-nums">
               {valueText}
             </span>

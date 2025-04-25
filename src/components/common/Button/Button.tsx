@@ -2,6 +2,7 @@ import type { FieldSize } from "@/components/common";
 import { focusRing } from "@/components/utils";
 import type { LucideIcon, LucideProps } from "lucide-react";
 import { Loader2 } from "lucide-react";
+import type { Ref } from "react";
 import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,
@@ -24,6 +25,7 @@ export interface ButtonProps extends AriaButtonProps {
     | "icon"
     | "ghost";
   size?: FieldSize;
+  ref?: Ref<HTMLButtonElement>;
   isSubmitting?: boolean;
 }
 
@@ -81,6 +83,7 @@ export function Button({
   endIconProps,
   className,
   children,
+  ref,
   isSubmitting,
   isDisabled,
   ...props
@@ -105,6 +108,7 @@ export function Button({
   return (
     <AriaButton
       {...props}
+      ref={ref}
       isDisabled={isSubmitting || isDisabled}
       className={composeRenderProps(className, (className, renderProps) =>
         buttonStyles({

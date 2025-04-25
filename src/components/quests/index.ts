@@ -11,8 +11,6 @@ export * from "./QuestPageHeader/QuestPageHeader";
 export * from "./QuestPageToolbar/QuestPageToolbar";
 export * from "./QuestSection/QuestSection";
 export * from "./QuestsNav/QuestsNav";
-export * from "./QuestSteps/QuestSteps";
 export * from "./QuestTimeBadge/QuestTimeBadge";
 export * from "./ReadingScore/ReadingScore";
 export * from "./StatusSelect/StatusSelect";
-export * from "./Steps/Steps";

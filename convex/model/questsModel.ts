@@ -174,63 +174,6 @@ export async function update(
   });
 }
 
-export async function updateUrls(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    urls,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    urls?: string[];
-  },
-) {
-  return await update(ctx, questId, userId, { urls });
-}
-
-export async function addUrl(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    url,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    url: string;
-  },
-) {
-  const quest = await ctx.db.get(questId);
-  if (!quest) throw new Error("Quest not found");
-
-  const existingUrls = quest.urls || [];
-  return await update(ctx, questId, userId, {
-    urls: [...existingUrls, url],
-  });
-}
-
-export async function deleteUrl(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    url,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    url: string;
-  },
-) {
-  const quest = await ctx.db.get(questId);
-  if (!quest) throw new Error("Quest not found");
-
-  const existingUrls = quest.urls || [];
-  return await update(ctx, questId, userId, {
-    urls: existingUrls.filter((u) => u !== url),
-  });
-}
-
 export async function setCosts(
   ctx: MutationCtx,
   {
@@ -264,58 +207,6 @@ export async function setTimeRequired(
   },
 ) {
   return await update(ctx, questId, userId, { timeRequired });
-}
-
-export async function addStep(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    title,
-    content,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    title: string;
-    content?: string;
-  },
-) {
-  const quest = await ctx.db.get(questId);
-  if (!quest) throw new Error("Quest not found");
-
-  const newStep = await ctx.db.insert("questSteps", {
-    questId,
-    title,
-    content,
-  });
-
-  const existingSteps = quest.steps || [];
-  return await update(ctx, questId, userId, {
-    steps: [...existingSteps, newStep],
-  });
-}
-
-export async function deleteStep(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    stepId,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    stepId: Id<"questSteps">;
-  },
-) {
-  const step = await ctx.db.get(stepId);
-  if (!step) throw new Error("Step not found");
-
-  const quest = await ctx.db.get(questId);
-  if (!quest) throw new Error("Quest not found");
-
-  const updatedSteps = quest.steps?.filter((id) => id !== stepId);
-  await update(ctx, questId, userId, { steps: updatedSteps });
-  await ctx.db.delete(stepId);
 }
 
 export async function addFaq(

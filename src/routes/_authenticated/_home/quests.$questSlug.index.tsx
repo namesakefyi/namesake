@@ -1,9 +1,9 @@
 import { Empty } from "@/components/common";
 import {
   QuestCallToAction,
+  QuestContent,
   QuestFaqs,
   QuestPageHeader,
-  QuestSteps,
 } from "@/components/quests";
 import { useIsMobile } from "@/utils/useIsMobile";
 import { api } from "@convex/_generated/api";
@@ -72,7 +72,7 @@ function QuestDetailRoute() {
         editable={isEditing}
       />
       <div className="flex flex-1 flex-col gap-6 app-padding">
-        <QuestSteps quest={quest} editable={isEditing} />
+        <QuestContent quest={quest} editable={isEditing} />
         <QuestFaqs quest={quest} editable={isEditing} />
       </div>
       {!isEditing && <QuestCallToAction quest={quest} userQuest={userQuest} />}

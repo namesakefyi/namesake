@@ -19,6 +19,7 @@ export default definePdf({
     residenceStreetAddress?: string;
     residenceCity?: string;
     residenceState?: string;
+    residenceCounty?: string;
     residenceZipCode?: string;
     email?: string;
     phoneNumber?: string;
@@ -48,7 +49,7 @@ export default definePdf({
     petitionerLastName: data.oldLastName,
 
     // Division (County)
-    county: "Suffolk", // TODO: https://github.com/namesakefyi/namesake/issues/453
+    county: data.residenceCounty,
 
     // Current legal name
     oldFirstName: data.oldFirstName,

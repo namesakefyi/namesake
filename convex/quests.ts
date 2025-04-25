@@ -150,39 +150,6 @@ export const setCategory = userMutation({
   },
 });
 
-export const setUrls = userMutation({
-  args: { questId: v.id("quests"), urls: v.optional(v.array(v.string())) },
-  handler: async (ctx, args) => {
-    return await Quests.updateUrls(ctx, {
-      questId: args.questId,
-      userId: ctx.userId,
-      urls: args.urls,
-    });
-  },
-});
-
-export const addUrl = userMutation({
-  args: { questId: v.id("quests"), url: v.string() },
-  handler: async (ctx, args) => {
-    return await Quests.addUrl(ctx, {
-      questId: args.questId,
-      userId: ctx.userId,
-      url: args.url,
-    });
-  },
-});
-
-export const deleteUrl = userMutation({
-  args: { questId: v.id("quests"), url: v.string() },
-  handler: async (ctx, args) => {
-    return await Quests.deleteUrl(ctx, {
-      questId: args.questId,
-      userId: ctx.userId,
-      url: args.url,
-    });
-  },
-});
-
 export const setCosts = userMutation({
   args: {
     questId: v.id("quests"),
@@ -220,29 +187,11 @@ export const setTimeRequired = userMutation({
   },
 });
 
-export const addStep = userMutation({
-  args: {
-    questId: v.id("quests"),
-    title: v.string(),
-    content: v.optional(v.string()),
-  },
+export const setContent = userMutation({
+  args: { questId: v.id("quests"), content: v.string() },
   handler: async (ctx, args) => {
-    return await Quests.addStep(ctx, {
-      questId: args.questId,
-      userId: ctx.userId,
-      title: args.title,
+    return await Quests.update(ctx, args.questId, ctx.userId, {
       content: args.content,
-    });
-  },
-});
-
-export const deleteStep = userMutation({
-  args: { questId: v.id("quests"), stepId: v.id("questSteps") },
-  handler: async (ctx, args) => {
-    return await Quests.deleteStep(ctx, {
-      questId: args.questId,
-      userId: ctx.userId,
-      stepId: args.stepId,
     });
   },
 });

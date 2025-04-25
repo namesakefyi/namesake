@@ -1,5 +1,30 @@
 # namesake
 
+## 0.24.2
+
+### Patch Changes
+
+- 34b6519: Add save changes button to editor
+
+## 0.24.1
+
+### Patch Changes
+
+- 1a788d8: Fix quest editor interactions
+
+## 0.24.0
+
+### Minor Changes
+
+- 8c16c07: Improve rich text editor with new features for steps, buttons, and other types of content
+
+### Patch Changes
+
+- 69636db: Fix console warning about Posthog loading more than once
+- 2a78b32: Add support for selecting a county of residence
+- 9d4c63c: Fix autofill form field styles
+- a6824e3: Add loading indicators to buttons during form submission
+
 ## 0.23.0
 
 ### Minor Changes
