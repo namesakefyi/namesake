@@ -31,7 +31,7 @@ function QuestDetailRoute() {
   return (
     <>
       <QuestPageHeader quest={quest} userQuest={userQuest} editable={false} />
-      <div className="flex flex-1 flex-col gap-6 app-padding py-8">
+      <div className="flex flex-1 flex-col gap-6 app-padding py-6">
         <QuestContent quest={quest} editable={false} />
         <QuestFaqs quest={quest} editable={false} />
       </div>
