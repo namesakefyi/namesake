@@ -16,7 +16,10 @@ import idImg from "./id.png";
 import passportImg from "./passport.png";
 import socialSecurityImg from "./social-security.png";
 
-function CoreQuestIllustration({ category }: { category: CoreCategory }) {
+function CoreQuestIllustration({
+  category,
+  isComplete,
+}: { category: CoreCategory; isComplete: boolean }) {
   const illustration: Record<CoreCategory, { alt: string; src: string }> = {
     courtOrder: {
       alt: "A gavel with a snail on it",
@@ -40,11 +43,19 @@ function CoreQuestIllustration({ category }: { category: CoreCategory }) {
     },
   };
 
+  const illustrationStyles = tv({
+    base: "w-48 absolute invisible sm:visible top-1/2 -translate-y-1/2 -left-4 md:left-8 mix-blend-multiply dark:mix-blend-screen pointer-events-none select-none z-0",
+    variants: {
+      isComplete: {
+        true: "visible",
+      },
+    },
+  });
   return (
     <img
       src={illustration[category].src}
       alt={illustration[category].alt}
-      className="w-48 absolute top-1/2 -translate-y-1/2 -left-4 md:left-8 mix-blend-multiply dark:mix-blend-screen pointer-events-none select-none z-0"
+      className={illustrationStyles({ isComplete })}
     />
   );
 }
@@ -164,10 +175,10 @@ export const QuestCallToAction = ({
   userQuest,
 }: QuestCallToActionProps) => {
   const containerStyles = tv({
-    base: "flex flex-col justify-center items-end gap-4 app-padding rounded-xl border overflow-hidden h-24 relative transition-colors",
+    base: "flex flex-col justify-center items-center sm:items-end gap-4 py-4 app-padding rounded-xl border overflow-hidden h-24 relative transition-colors",
     variants: {
       isComplete: {
-        true: "bg-green-3 border-green-5",
+        true: "bg-green-3 border-green-5 items-end",
         false: "bg-element border-gray-dim",
       },
     },
@@ -180,7 +191,10 @@ export const QuestCallToAction = ({
       })}
     >
       {quest?.category && CATEGORIES[quest.category as Category].isCore && (
-        <CoreQuestIllustration category={quest?.category as CoreCategory} />
+        <CoreQuestIllustration
+          category={quest?.category as CoreCategory}
+          isComplete={userQuest?.status === "complete"}
+        />
       )}
       <div className="relative z-0">
         <QuestCTAButton quest={quest} userQuest={userQuest} />
