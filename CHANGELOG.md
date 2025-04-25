@@ -1,5 +1,11 @@
 # namesake
 
+## 0.24.2
+
+### Patch Changes
+
+- 34b6519: Add save changes button to editor
+
 ## 0.24.1
 
 ### Patch Changes
