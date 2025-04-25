@@ -103,14 +103,14 @@ export function StatusSelect({
               key={status}
               id={status}
               aria-label={details.label}
-              className="h-9"
+              className="h-9 justify-start"
             >
               <StatusBadge status={status as Status} size="lg" />
             </MenuItem>
           ))}
         </MenuSection>
         <MenuSection>
-          <MenuItem onAction={handleRemove}>Remove</MenuItem>
+          <MenuItem onAction={handleRemove}>Remove from my list</MenuItem>
         </MenuSection>
       </Menu>
     </MenuTrigger>
