@@ -6,11 +6,11 @@ import {
 import { tv } from "tailwind-variants";
 
 const styles = tv({
-  base: "flex gap-2",
+  base: "flex gap-1",
   variants: {
     orientation: {
-      horizontal: "flex-row items-center",
-      vertical: "flex-col items-start",
+      horizontal: "w-full flex-row items-center justify-start overflow-x-auto",
+      vertical: "flex-col items-start overflow-y-auto",
     },
   },
 });

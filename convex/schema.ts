@@ -50,6 +50,8 @@ const quests = defineTable({
   ),
   /** Time in ms since epoch when the quest was deleted. */
   deletedAt: v.optional(v.number()),
+  /** Rich text comprising the contents of the step, stored as HTML. */
+  content: v.optional(v.string()),
   /** Steps in the quest. */
   steps: v.optional(v.array(v.id("questSteps"))),
   /** Questions related to the quest. */
