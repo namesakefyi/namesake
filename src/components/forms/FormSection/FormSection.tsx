@@ -1,16 +1,7 @@
+import { getFormQuestionHash } from "@/utils/getFormQuestionHash";
 import { smartquotes } from "@/utils/smartquotes";
 import { Heading } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
-
-function getQuestionId(question: string) {
-  let sanitizedQuestion = question;
-  // Remove trailing punctuation
-  sanitizedQuestion = sanitizedQuestion.replace(/[^\w\s]/g, "");
-  // Remove apostrophes
-  sanitizedQuestion = sanitizedQuestion.replace(/'/g, "");
-
-  return encodeURIComponent(sanitizedQuestion.toLowerCase().replace(/ /g, "-"));
-}
 
 export interface FormSectionProps {
   /** The title of the section. */
@@ -34,7 +25,7 @@ export function FormSection({
 }: FormSectionProps) {
   return (
     <fieldset
-      id={getQuestionId(title)}
+      id={getFormQuestionHash(title)}
       data-form-section
       data-testid="form-section"
       className={twMerge("flex flex-col gap-8 py-12 justify-center", className)}

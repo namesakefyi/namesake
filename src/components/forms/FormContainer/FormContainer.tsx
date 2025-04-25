@@ -1,5 +1,6 @@
 import { Banner, Container, Form } from "@/components/common";
 import { FormNavigation, FormSection } from "@/components/forms";
+import { getFormQuestionHash } from "@/utils/getFormQuestionHash";
 import { smartquotes } from "@/utils/smartquotes";
 import {
   FormSectionContext,
@@ -48,11 +49,7 @@ export function FormContainer({
     Children.forEach(children, (child) => {
       if (isValidElement(child) && child.type === FormSection) {
         const props = child.props as FormSectionProps;
-        const hash = props.title
-          .toLowerCase()
-          .replace(/[^\w\s]/g, "")
-          .replace(/'/g, "")
-          .replace(/ /g, "-");
+        const hash = getFormQuestionHash(props.title);
         foundSections.push({ hash, title: props.title });
       }
     });
