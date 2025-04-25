@@ -1,19 +1,29 @@
-import { getFormQuestionHash } from "@/utils/getFormQuestionHash";
+import { getFormSectionId } from "@/utils/getFormSectionId";
 import { smartquotes } from "@/utils/smartquotes";
 import { Heading } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 
 export interface FormSectionProps {
-  /** The title of the section. */
+  /**
+   * The question title.
+   * @example "What is your current legal name?"
+   */
   title: string;
 
-  /** The description of the section. */
+  /**
+   * An optional description to provide more context.
+   * @example "This is the name you're leaving behind. Type it exactly as it appears on your ID."
+   */
   description?: string;
 
-  /** The contents of the page. */
+  /**
+   * The form fields to render.
+   */
   children?: React.ReactNode;
 
-  /** Optional styles for the container. */
+  /**
+   * Optional styles for the container.
+   */
   className?: string;
 }
 
@@ -25,7 +35,7 @@ export function FormSection({
 }: FormSectionProps) {
   return (
     <fieldset
-      id={getFormQuestionHash(title)}
+      id={getFormSectionId(title)}
       data-form-section
       data-testid="form-section"
       className={twMerge("flex flex-col gap-8 py-12 justify-center", className)}
