@@ -1,5 +1,14 @@
-import { Button, ProgressBar } from "@/components/common";
-import { ArrowLeft } from "lucide-react";
+import {
+  Button,
+  Menu,
+  MenuItem,
+  MenuTrigger,
+  ProgressBar,
+  Tooltip,
+  TooltipTrigger,
+} from "@/components/common";
+import { useFormSections } from "@/components/forms/FormSection/FormSectionContext";
+import { ArrowLeft, MenuIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Heading } from "react-aria-components";
 import { useFormContext } from "react-hook-form";
@@ -9,9 +18,11 @@ interface FormNavigationProps {
 }
 
 export function FormNavigation({ title }: FormNavigationProps) {
+  const { sections } = useFormSections();
   const [progress, setProgress] = useState(0);
   const { getValues, watch } = useFormContext();
 
+  // Watch form values for progress
   useEffect(() => {
     const subscription = watch((values) => {
       const allValues = values || getValues();
@@ -22,54 +33,36 @@ export function FormNavigation({ title }: FormNavigationProps) {
       setProgress(totalFields > 0 ? (completedFields / totalFields) * 100 : 0);
     });
 
-    // Cleanup subscription
     return () => subscription.unsubscribe();
   }, [watch, getValues]);
 
   return (
     <nav className="sticky bg-app p-2 top-0 flex items-center justify-between gap-2 border-b border-gray-a3">
       <div className="flex gap-2 items-center">
-        <Button variant="icon" icon={ArrowLeft} aria-label="Back" />
-        <Heading className="text-xl">{title}</Heading>
+        <Button
+          variant="icon"
+          icon={ArrowLeft}
+          aria-label="Back"
+          iconProps={{ className: "size-5" }}
+        />
+        <Heading className="text-xl text-ellipsis whitespace-nowrap">
+          {title}
+        </Heading>
       </div>
       <div className="flex gap-2 items-center">
         <ProgressBar
           value={progress}
           label="Progress"
           labelHidden
-          className="w-64 mr-3"
+          className="w-24 md:w-48 lg:w-64 mr-3"
         />
-        {/* <TooltipTrigger>
-          <Link
-            href={{ to: ".", hash: activeSection?.previous?.hash }}
-            routerOptions={{ replace: true }}
-            button={{ variant: "icon" }}
-            aria-label="Previous question"
-            isDisabled={!activeSection?.previous}
-          >
-            <ArrowUp className="size-5" />
-          </Link>
-          <Tooltip placement="bottom">Previous question</Tooltip>
-        </TooltipTrigger>
-        <TooltipTrigger>
-          <Link
-            href={{ to: ".", hash: activeSection?.next?.hash }}
-            routerOptions={{ replace: true }}
-            button={{ variant: "icon" }}
-            aria-label="Next question"
-            isDisabled={!activeSection?.next}
-          >
-            <ArrowDown className="size-5" />
-          </Link>
-          <Tooltip placement="bottom">Next question</Tooltip>
-        </TooltipTrigger>
         <MenuTrigger>
           <TooltipTrigger>
             <Button variant="icon" icon={MenuIcon} aria-label="All questions" />
             <Tooltip placement="bottom">All questions</Tooltip>
           </TooltipTrigger>
           <Menu>
-            {formSections.map(({ hash, title }) => (
+            {sections.map(({ hash, title }) => (
               <MenuItem
                 key={hash}
                 href={{ to: ".", hash }}
@@ -79,7 +72,7 @@ export function FormNavigation({ title }: FormNavigationProps) {
               </MenuItem>
             ))}
           </Menu>
-        </MenuTrigger> */}
+        </MenuTrigger>
       </div>
     </nav>
   );

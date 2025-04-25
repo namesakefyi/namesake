@@ -126,6 +126,10 @@
   }
 }
 
+html {
+  scroll-padding-block-start: 48px;
+}
+
 body {
   color-scheme: dark light;
   -webkit-font-smoothing: antialiased;

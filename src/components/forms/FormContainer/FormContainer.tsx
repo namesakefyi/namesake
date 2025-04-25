@@ -1,7 +1,13 @@
 import { Banner, Container, Form } from "@/components/common";
 import { FormNavigation } from "@/components/forms";
+import { FormSection } from "@/components/forms/FormSection/FormSection";
+import {
+  FormSectionContext,
+  type FormSection as FormSectionType,
+} from "@/components/forms/FormSection/FormSectionContext";
 import { smartquotes } from "@/utils/smartquotes";
 import { ShieldCheck } from "lucide-react";
+import { Children, isValidElement, useMemo } from "react";
 import { Heading } from "react-aria-components";
 import { FormProvider, type UseFormReturn } from "react-hook-form";
 
@@ -22,6 +28,13 @@ export interface FormContainerProps {
   onSubmit: React.FormEventHandler<HTMLFormElement>;
 }
 
+interface FormSectionProps {
+  title: string;
+  description?: string;
+  children?: React.ReactNode;
+  className?: string;
+}
+
 export function FormContainer({
   title,
   description,
@@ -29,33 +42,54 @@ export function FormContainer({
   form,
   onSubmit,
 }: FormContainerProps) {
+  // Scan children for form sections
+  const sections = useMemo(() => {
+    const foundSections: FormSectionType[] = [];
+
+    Children.forEach(children, (child) => {
+      if (isValidElement(child) && child.type === FormSection) {
+        const props = child.props as FormSectionProps;
+        const hash = props.title
+          .toLowerCase()
+          .replace(/[^\w\s]/g, "")
+          .replace(/'/g, "")
+          .replace(/ /g, "-");
+        foundSections.push({ hash, title: props.title });
+      }
+    });
+
+    return foundSections;
+  }, [children]);
+
   return (
     <FormProvider {...form}>
-      <FormNavigation title={title} />
-      <Container className="w-full max-w-[720px] py-16 px-6">
-        <Form
-          onSubmit={onSubmit}
-          autoComplete="on"
-          className="gap-0 divide-y divide-gray-a3"
-        >
-          <header className="flex flex-col gap-6 mb-8">
-            <Heading className="text-5xl font-medium text-pretty">
-              {title}
-            </Heading>
-            {description && (
-              <p className="text-sm text-gray-dim">
-                {smartquotes(description)}
-              </p>
-            )}
-            <Banner variant="success" icon={ShieldCheck} size="large">
-              Namesake takes your privacy seriously. All responses are
-              end-to-end encrypted. That means no one—not even Namesake—can see
-              your answers.
-            </Banner>
-          </header>
-          {children}
-        </Form>
-      </Container>
+      <FormSectionContext.Provider value={{ sections }}>
+        <FormNavigation title={title} />
+        <Container className="w-full max-w-[720px] flex-1 py-16 px-6">
+          <Form
+            onSubmit={onSubmit}
+            autoComplete="on"
+            className="gap-0 divide-y divide-gray-a3"
+          >
+            <header className="flex flex-col gap-6 mb-8">
+              <Heading className="text-5xl font-medium text-pretty">
+                {title}
+              </Heading>
+              {description && (
+                <p className="text-sm text-gray-dim">
+                  {smartquotes(description)}
+                </p>
+              )}
+              <Banner variant="success" icon={ShieldCheck} size="large">
+                Namesake takes your privacy seriously. All responses are
+                end-to-end encrypted. That means no one—not even Namesake—can
+                see your answers.
+              </Banner>
+            </header>
+            {children}
+          </Form>
+        </Container>
+      </FormSectionContext.Provider>
     </FormProvider>
   );
 }

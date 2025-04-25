@@ -44,12 +44,6 @@ export interface FormSectionProps extends FormHeaderProps {
 
   /** Optional styles for the container. */
   className?: string;
-
-  /**
-   * Whether the section is visible.
-   * @default true
-   */
-  isVisible?: boolean;
 }
 
 export function FormSection({
@@ -57,17 +51,13 @@ export function FormSection({
   description,
   children,
   className,
-  isVisible = true,
 }: FormSectionProps) {
-  if (!isVisible) return null;
-
   return (
     <fieldset
       id={getQuestionId(title)}
       data-form-section
       data-testid="form-section"
       className={twMerge("flex flex-col gap-8 py-12 justify-center", className)}
-      disabled={!isVisible}
     >
       <FormHeader title={title} description={description} />
       {children}
