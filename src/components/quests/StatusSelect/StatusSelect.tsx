@@ -9,7 +9,7 @@ import {
 } from "@/components/common";
 import { STATUS, type Status } from "@convex/constants";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Selection } from "react-aria-components";
 import { tv } from "tailwind-variants";
 
@@ -55,16 +55,29 @@ export function StatusBadge({
 interface StatusSelectProps {
   status: Status;
   onChange: (status: Status) => void;
+  onRemove: () => void;
 }
 
-export function StatusSelect({ status, onChange }: StatusSelectProps) {
+export function StatusSelect({
+  status,
+  onChange,
+  onRemove,
+}: StatusSelectProps) {
   const [selectedStatus, setSelectedStatus] = useState<Selection>(
     new Set([status]),
   );
 
+  useEffect(() => {
+    setSelectedStatus(new Set([status]));
+  }, [status]);
+
   const handleSelectionChange = (status: Selection) => {
     onChange([...status][0] as Status);
     setSelectedStatus(status);
+  };
+
+  const handleRemove = () => {
+    onRemove();
   };
 
   return (
@@ -77,14 +90,14 @@ export function StatusSelect({ status, onChange }: StatusSelectProps) {
       >
         <StatusBadge status={status} size="lg" />
       </Button>
-      <Menu
-        placement="bottom end"
-        selectionMode="single"
-        selectedKeys={selectedStatus}
-        disallowEmptySelection
-        onSelectionChange={handleSelectionChange}
-      >
-        <MenuSection title="Status">
+      <Menu placement="bottom end">
+        <MenuSection
+          title="Status"
+          selectionMode="single"
+          selectedKeys={selectedStatus}
+          disallowEmptySelection
+          onSelectionChange={handleSelectionChange}
+        >
           {Object.entries(STATUS).map(([status, details]) => (
             <MenuItem
               key={status}
@@ -95,6 +108,9 @@ export function StatusSelect({ status, onChange }: StatusSelectProps) {
               <StatusBadge status={status as Status} size="lg" />
             </MenuItem>
           ))}
+        </MenuSection>
+        <MenuSection>
+          <MenuItem onAction={handleRemove}>Remove</MenuItem>
         </MenuSection>
       </Menu>
     </MenuTrigger>

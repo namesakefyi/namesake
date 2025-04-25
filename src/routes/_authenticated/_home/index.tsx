@@ -14,7 +14,7 @@ function IndexRoute() {
   if (!isMobile) navigate({ to: "/court-order" });
 
   return (
-    <div className="flex flex-col py-7 gap-7">
+    <div className="flex flex-col py-7 gap-7 app-padding">
       <AppSidebarHeader />
       <QuestsNav />
     </div>

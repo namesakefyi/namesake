@@ -12,7 +12,7 @@ import {
   Snail,
 } from "lucide-react";
 
-export const SettingsNav = () => {
+export const SettingsNav = ({ className }: { className?: string }) => {
   const { signOut } = useAuthActions();
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ export const SettingsNav = () => {
   };
 
   return (
-    <Nav>
+    <Nav className={className}>
       <NavGroup>
         <NavItem icon={CircleUser} href={{ to: "/settings/account" }}>
           Account

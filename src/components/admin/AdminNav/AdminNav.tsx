@@ -1,9 +1,9 @@
 import { Nav, NavGroup, NavItem } from "@/components/common";
 import { FlaskConical, Milestone } from "lucide-react";
 
-export const AdminNav = () => {
+export const AdminNav = ({ className }: { className?: string }) => {
   return (
-    <Nav>
+    <Nav className={className}>
       <NavGroup>
         <NavItem icon={Milestone} href={{ to: "/admin/quests" }}>
           Quests

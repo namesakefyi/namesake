@@ -97,7 +97,7 @@ export interface MenuSectionProps<T> extends AriaMenuSectionProps<T> {
 
 export function MenuSection<T extends object>(props: MenuSectionProps<T>) {
   return (
-    <AriaMenuSection>
+    <AriaMenuSection {...props}>
       <Header className="text-sm font-semibold text-gray-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-element border-b border-gray-dim [&+*]:mt-1">
         {props.title}
       </Header>

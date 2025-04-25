@@ -4,6 +4,7 @@ import {
   Link,
   type LinkProps,
 } from "@/components/common";
+import { smartquotes } from "@/utils/smartquotes";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Heading } from "react-aria-components";
@@ -36,8 +37,10 @@ export function Empty({
       )}
     >
       <Icon size={40} className="text-gray-8 shrink-0 stroke-[1.5px]" />
-      <Heading className="font-semibold text-xl">{title}</Heading>
-      {subtitle && <p className="text-gray-dim -mt-4">{subtitle}</p>}
+      <Heading className="font-semibold text-xl">{smartquotes(title)}</Heading>
+      {subtitle && (
+        <p className="text-gray-dim -mt-4">{smartquotes(subtitle)}</p>
+      )}
       <div className="flex gap-2">
         {button && <Button {...button} />}
         {link && <Link {...link} />}

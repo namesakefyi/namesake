@@ -17,7 +17,13 @@ export interface ButtonProps extends AriaButtonProps {
   iconProps?: LucideProps;
   endIcon?: LucideIcon;
   endIconProps?: LucideProps;
-  variant?: "primary" | "secondary" | "destructive" | "icon" | "ghost";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "destructive"
+    | "success"
+    | "icon"
+    | "ghost";
   size?: FieldSize;
   ref?: Ref<HTMLButtonElement>;
   isSubmitting?: boolean;
@@ -25,7 +31,7 @@ export interface ButtonProps extends AriaButtonProps {
 
 export const buttonStyles = tv({
   extend: focusRing,
-  base: "py-2 text-sm font-medium whitespace-nowrap rounded-lg border border-gray-dim transition-all duration-200 ease-in-out flex items-center justify-center",
+  base: "py-2 text-sm font-medium relative whitespace-nowrap rounded-lg border border-gray-dim transition-all duration-200 ease-in-out flex items-center justify-stretch",
   variants: {
     variant: {
       primary:
@@ -34,14 +40,16 @@ export const buttonStyles = tv({
         "bg-white dark:bg-gray-3 dark:hover:bg-gray-4 hover:border-gray-normal text-gray-normal shadow-sm",
       destructive:
         "bg-red-9 text-white border-red-11 shadow-sm hover:bg-red-10",
+      success:
+        "bg-green-9 text-white border-green-11 shadow-sm hover:bg-green-10",
       icon: "bg-transparent hover:bg-gray-a3 text-gray-dim hover:text-gray-normal border-0 flex shrink-0 items-center justify-center rounded-full",
       ghost:
         "bg-transparent hover:bg-gray-a3 text-gray-dim hover:text-gray-normal border-0",
     },
     size: {
-      small: "h-8 px-2",
-      medium: "h-10 px-3",
-      large: "h-12 px-3.5 text-lg",
+      small: "h-8 px-2 gap-1.5",
+      medium: "h-10 px-3 gap-1.5",
+      large: "h-12 px-3.5 gap-2 text-lg",
     },
     isDisabled: {
       false: "cursor-pointer",
@@ -87,6 +95,16 @@ export function Button({
     strokeWidth: iconStrokeWidth,
   };
 
+  const innerContentStyles = tv({
+    base: "inline-flex gap-1.5 items-center justify-center w-full",
+    variants: {
+      isSubmitting: {
+        true: "invisible",
+        false: "visible",
+      },
+    },
+  });
+
   return (
     <AriaButton
       {...props}
@@ -101,16 +119,13 @@ export function Button({
         }),
       )}
     >
-      <span
-        className={`inline-flex gap-1.5 items-center justify-center ${isSubmitting ? "invisible" : "visible"}`}
-      >
+      <span className={innerContentStyles({ isSubmitting })}>
         {Icon && (
           <Icon {...sharedIconProps} className="shrink-0" {...iconProps} />
         )}
         {children}
         {EndIcon && <EndIcon {...sharedIconProps} {...endIconProps} />}
       </span>
-
       {isSubmitting && (
         <span className="absolute inset-0 flex items-center justify-center">
           <Loader2 {...sharedIconProps} className="shrink-0 animate-spin" />

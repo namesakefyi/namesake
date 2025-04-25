@@ -4,6 +4,7 @@
 
 @plugin "tailwindcss-react-aria-components";
 
+@custom-variant light (&:where(.light, .light *, :not(.dark, .dark *)));
 @custom-variant dark (&:where(.dark, .dark *));
 
 .app-padding {
@@ -11,7 +12,15 @@
 }
 
 .h-header {
-  @apply h-16 lg:h-20;
+  @apply h-16 lg:h-18;
+}
+
+.sticky-top-header {
+  @apply sticky top-16 lg:top-20;
+}
+
+.min-h-screen-minus-mobile {
+  min-height: calc(100dvh - 56px - env(safe-area-inset-bottom));
 }
 
 .h-mobile-nav {
