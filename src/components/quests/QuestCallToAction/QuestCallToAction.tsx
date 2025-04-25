@@ -44,7 +44,7 @@ function CoreQuestIllustration({ category }: { category: CoreCategory }) {
     <img
       src={illustration[category].src}
       alt={illustration[category].alt}
-      className="h-48 absolute top-1/2 -translate-y-1/2 left-8 mix-blend-multiply dark:mix-blend-screen pointer-events-none select-none z-0"
+      className="w-48 absolute top-1/2 -translate-y-1/2 -left-4 md:left-8 mix-blend-multiply dark:mix-blend-screen pointer-events-none select-none z-0"
     />
   );
 }

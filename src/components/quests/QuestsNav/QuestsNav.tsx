@@ -58,7 +58,7 @@ export const QuestsNav = () => {
       {userQuests > 0 && (
         <div className="flex items-center">
           <ProgressBar
-            label="Quest progress"
+            label="Progress"
             value={completedQuests}
             maxValue={userQuests}
             valueLabel={
@@ -70,7 +70,6 @@ export const QuestsNav = () => {
                 <span className="text-gray-dim">{userQuests} complete</span>
               </span>
             }
-            labelHidden
           />
         </div>
       )}

@@ -22,7 +22,7 @@ type NavItemProps = NavItemBaseProps & (NavLinkProps | NavButtonProps);
 
 const navItemStyles = tv({
   extend: focusRing,
-  base: "rounded-md gap-2 no-underline px-2 -mx-2 flex border border-transparent items-center text-base md:text-sm lg:text-base hover:bg-gray-3 hover:text-gray-12 aria-current:font-semibold aria-current:text-gray-normal cursor-pointer",
+  base: "rounded-md gap-2 no-underline px-2 -mx-2 flex border border-transparent items-center text-base md:text-sm lg:text-base hover:bg-gray-3 text-gray-normal aria-current:font-semibold aria-current:text-gray-normal cursor-pointer",
   variants: {
     isActive: {
       true: "bg-gray-3 hover:bg-gray-3 text-gray-normal",

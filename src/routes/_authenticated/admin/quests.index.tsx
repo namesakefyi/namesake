@@ -245,38 +245,40 @@ function QuestsRoute() {
           New Quest
         </Button>
       </PageHeader>
-      <Table aria-label="Quests">
-        <TableHeader>
-          <TableColumn isRowHeader>Quest</TableColumn>
-          <TableColumn>Category</TableColumn>
-          <TableColumn>Used By</TableColumn>
-          <TableColumn>Created</TableColumn>
-          <TableColumn>Updated</TableColumn>
-          <TableColumn />
-        </TableHeader>
-        <TableBody
-          items={quests}
-          renderEmptyState={() => (
-            <Empty
-              title="No quests"
-              icon={Milestone}
-              button={{
-                children: "New Quest",
-                onPress: () => setIsNewQuestModalOpen(true),
-              }}
-            />
-          )}
-        >
-          {quests?.map((quest) => (
-            <QuestTableRow key={quest._id} quest={quest} />
-          ))}
-        </TableBody>
-      </Table>
-      <NewQuestModal
-        isOpen={isNewQuestModalOpen}
-        onOpenChange={setIsNewQuestModalOpen}
-        onSubmit={() => setIsNewQuestModalOpen(false)}
-      />
+      <div className="app-padding">
+        <Table aria-label="Quests">
+          <TableHeader>
+            <TableColumn isRowHeader>Quest</TableColumn>
+            <TableColumn>Category</TableColumn>
+            <TableColumn>Used By</TableColumn>
+            <TableColumn>Created</TableColumn>
+            <TableColumn>Updated</TableColumn>
+            <TableColumn />
+          </TableHeader>
+          <TableBody
+            items={quests}
+            renderEmptyState={() => (
+              <Empty
+                title="No quests"
+                icon={Milestone}
+                button={{
+                  children: "New Quest",
+                  onPress: () => setIsNewQuestModalOpen(true),
+                }}
+              />
+            )}
+          >
+            {quests?.map((quest) => (
+              <QuestTableRow key={quest._id} quest={quest} />
+            ))}
+          </TableBody>
+        </Table>
+        <NewQuestModal
+          isOpen={isNewQuestModalOpen}
+          onOpenChange={setIsNewQuestModalOpen}
+          onSubmit={() => setIsNewQuestModalOpen(false)}
+        />
+      </div>
     </>
   );
 }
