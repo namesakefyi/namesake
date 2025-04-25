@@ -52,7 +52,7 @@ const badge = tv({
 });
 
 const icon = tv({
-  base: "shrink-0",
+  base: "shrink-0 size-4",
   variants: {
     size: {
       xs: "size-3",

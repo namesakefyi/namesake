@@ -1,7 +1,14 @@
-import { Button, Editor, type EditorProps, Form } from "@/components/common";
+import {
+  Button,
+  Editor,
+  type EditorProps,
+  Empty,
+  Form,
+} from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
+import { Milestone } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -35,6 +42,10 @@ export function QuestContent({
       setIsSubmitting(false);
     }
   };
+
+  if (!content && !editable) {
+    return <Empty title="There's not much here" icon={Milestone} />;
+  }
 
   return (
     <div className="flex flex-col gap-3">

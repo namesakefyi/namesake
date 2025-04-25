@@ -1,5 +1,5 @@
 import { PageHeader, type PageHeaderProps } from "@/components/app";
-import { Button, Tooltip, TooltipTrigger } from "@/components/common";
+import { Button, Link, Tooltip, TooltipTrigger } from "@/components/common";
 import {
   EditQuestTitleModal,
   QuestPageBadges,
@@ -78,7 +78,19 @@ export function QuestPageHeader({
             onRemove={() => handleRemoveQuest(quest._id, quest.title)}
           />
         )}
-        {}
+        {editable && (
+          <div className="flex gap-4 items-center">
+            <Link
+              button={{ variant: "secondary" }}
+              href={{
+                to: "/quests/$questSlug",
+                params: { questSlug: quest?.slug },
+              }}
+            >
+              Finish editing
+            </Link>
+          </div>
+        )}
       </PageHeader>
       <QuestPageBadges quest={quest} editable={editable} />
       <QuestPageToolbar quest={quest} isEditing={editable} />

@@ -3,7 +3,6 @@ import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { Authenticated, useQuery } from "convex/react";
 import { Clock, Pencil } from "lucide-react";
-import { tv } from "tailwind-variants";
 
 interface QuestPageToolbarProps {
   quest?: Doc<"quests"> | null;
@@ -22,44 +21,21 @@ export const QuestPageToolbar = ({
     "some time ago"
   );
 
-  const toolbarStyles = tv({
-    base: "flex app-padding items-center justify-between h-12 pb-2 w-full overflow-x-auto border-b border-gray-dim",
-    variants: {
-      isEditing: {
-        true: "bg-app sticky-top-header z-20",
-      },
-    },
-  });
+  if (isEditing) return null;
 
   return (
-    <div className={toolbarStyles({ isEditing })} role="toolbar">
-      <div className="flex gap-2 items-center">
-        {isEditing ? (
-          <IconText icon={Pencil} className="text-amber-9">
-            Editing
-          </IconText>
-        ) : (
-          <IconText icon={Clock}>Last edited {updatedTime}</IconText>
-        )}
-      </div>
+    <div
+      className="flex app-padding items-center justify-between h-12 pb-2 w-full overflow-x-auto border-b border-gray-dim"
+      role="toolbar"
+    >
+      <IconText icon={Clock}>Last edited {updatedTime}</IconText>
       <Authenticated>
-        {isEditing && (
-          <div className="flex gap-4 items-center">
-            <Link
-              button={{ size: "small", variant: "success" }}
-              href={{
-                search: { edit: undefined },
-              }}
-            >
-              Save changes
-            </Link>
-          </div>
-        )}
         {!isEditing && canEdit && (
           <Link
             button={{ size: "small", variant: "ghost" }}
             href={{
-              search: { edit: true },
+              to: "/quests/$questSlug/edit",
+              params: { questSlug: quest?.slug },
             }}
           >
             <Pencil className="size-3.5" /> Edit

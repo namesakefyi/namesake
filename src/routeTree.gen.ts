@@ -30,7 +30,9 @@ import { Route as AuthenticatedAdminEarlyAccessIndexImport } from './routes/_aut
 import { Route as AuthenticatedHomeStateIdIndexImport } from './routes/_authenticated/_home/state-id.index'
 import { Route as AuthenticatedHomeCourtOrderIndexImport } from './routes/_authenticated/_home/court-order.index'
 import { Route as AuthenticatedHomeBirthCertificateIndexImport } from './routes/_authenticated/_home/birth-certificate.index'
-import { Route as AuthenticatedHomeQuestsQuestSlugIndexImport } from './routes/_authenticated/_home/quests.$questSlug.index'
+import { Route as AuthenticatedHomeQuestsQuestSlugRouteImport } from './routes/_authenticated/_home/quests.$questSlug/route'
+import { Route as AuthenticatedHomeQuestsQuestSlugIndexImport } from './routes/_authenticated/_home/quests.$questSlug/index'
+import { Route as AuthenticatedHomeQuestsQuestSlugEditImport } from './routes/_authenticated/_home/quests.$questSlug/edit'
 
 // Create/Update Routes
 
@@ -158,11 +160,25 @@ const AuthenticatedHomeBirthCertificateIndexRoute =
     getParentRoute: () => AuthenticatedHomeRoute,
   } as any)
 
+const AuthenticatedHomeQuestsQuestSlugRouteRoute =
+  AuthenticatedHomeQuestsQuestSlugRouteImport.update({
+    id: '/quests/$questSlug',
+    path: '/quests/$questSlug',
+    getParentRoute: () => AuthenticatedHomeRoute,
+  } as any)
+
 const AuthenticatedHomeQuestsQuestSlugIndexRoute =
   AuthenticatedHomeQuestsQuestSlugIndexImport.update({
-    id: '/quests/$questSlug/',
-    path: '/quests/$questSlug/',
-    getParentRoute: () => AuthenticatedHomeRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedHomeQuestsQuestSlugRouteRoute,
+  } as any)
+
+const AuthenticatedHomeQuestsQuestSlugEditRoute =
+  AuthenticatedHomeQuestsQuestSlugEditImport.update({
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => AuthenticatedHomeQuestsQuestSlugRouteRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -267,6 +283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsIndexImport
       parentRoute: typeof AuthenticatedSettingsRouteImport
     }
+    '/_authenticated/_home/quests/$questSlug': {
+      id: '/_authenticated/_home/quests/$questSlug'
+      path: '/quests/$questSlug'
+      fullPath: '/quests/$questSlug'
+      preLoaderRoute: typeof AuthenticatedHomeQuestsQuestSlugRouteImport
+      parentRoute: typeof AuthenticatedHomeImport
+    }
     '/_authenticated/_home/birth-certificate/': {
       id: '/_authenticated/_home/birth-certificate/'
       path: '/birth-certificate'
@@ -302,12 +325,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminQuestsIndexImport
       parentRoute: typeof AuthenticatedAdminRouteImport
     }
+    '/_authenticated/_home/quests/$questSlug/edit': {
+      id: '/_authenticated/_home/quests/$questSlug/edit'
+      path: '/edit'
+      fullPath: '/quests/$questSlug/edit'
+      preLoaderRoute: typeof AuthenticatedHomeQuestsQuestSlugEditImport
+      parentRoute: typeof AuthenticatedHomeQuestsQuestSlugRouteImport
+    }
     '/_authenticated/_home/quests/$questSlug/': {
       id: '/_authenticated/_home/quests/$questSlug/'
-      path: '/quests/$questSlug'
-      fullPath: '/quests/$questSlug'
+      path: '/'
+      fullPath: '/quests/$questSlug/'
       preLoaderRoute: typeof AuthenticatedHomeQuestsQuestSlugIndexImport
-      parentRoute: typeof AuthenticatedHomeImport
+      parentRoute: typeof AuthenticatedHomeQuestsQuestSlugRouteImport
     }
   }
 }
@@ -351,22 +381,40 @@ const AuthenticatedSettingsRouteRouteWithChildren =
     AuthenticatedSettingsRouteRouteChildren,
   )
 
+interface AuthenticatedHomeQuestsQuestSlugRouteRouteChildren {
+  AuthenticatedHomeQuestsQuestSlugEditRoute: typeof AuthenticatedHomeQuestsQuestSlugEditRoute
+  AuthenticatedHomeQuestsQuestSlugIndexRoute: typeof AuthenticatedHomeQuestsQuestSlugIndexRoute
+}
+
+const AuthenticatedHomeQuestsQuestSlugRouteRouteChildren: AuthenticatedHomeQuestsQuestSlugRouteRouteChildren =
+  {
+    AuthenticatedHomeQuestsQuestSlugEditRoute:
+      AuthenticatedHomeQuestsQuestSlugEditRoute,
+    AuthenticatedHomeQuestsQuestSlugIndexRoute:
+      AuthenticatedHomeQuestsQuestSlugIndexRoute,
+  }
+
+const AuthenticatedHomeQuestsQuestSlugRouteRouteWithChildren =
+  AuthenticatedHomeQuestsQuestSlugRouteRoute._addFileChildren(
+    AuthenticatedHomeQuestsQuestSlugRouteRouteChildren,
+  )
+
 interface AuthenticatedHomeRouteChildren {
   AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
+  AuthenticatedHomeQuestsQuestSlugRouteRoute: typeof AuthenticatedHomeQuestsQuestSlugRouteRouteWithChildren
   AuthenticatedHomeBirthCertificateIndexRoute: typeof AuthenticatedHomeBirthCertificateIndexRoute
   AuthenticatedHomeCourtOrderIndexRoute: typeof AuthenticatedHomeCourtOrderIndexRoute
   AuthenticatedHomeStateIdIndexRoute: typeof AuthenticatedHomeStateIdIndexRoute
-  AuthenticatedHomeQuestsQuestSlugIndexRoute: typeof AuthenticatedHomeQuestsQuestSlugIndexRoute
 }
 
 const AuthenticatedHomeRouteChildren: AuthenticatedHomeRouteChildren = {
   AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
+  AuthenticatedHomeQuestsQuestSlugRouteRoute:
+    AuthenticatedHomeQuestsQuestSlugRouteRouteWithChildren,
   AuthenticatedHomeBirthCertificateIndexRoute:
     AuthenticatedHomeBirthCertificateIndexRoute,
   AuthenticatedHomeCourtOrderIndexRoute: AuthenticatedHomeCourtOrderIndexRoute,
   AuthenticatedHomeStateIdIndexRoute: AuthenticatedHomeStateIdIndexRoute,
-  AuthenticatedHomeQuestsQuestSlugIndexRoute:
-    AuthenticatedHomeQuestsQuestSlugIndexRoute,
 }
 
 const AuthenticatedHomeRouteWithChildren =
@@ -419,12 +467,14 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/documents': typeof AuthenticatedDocumentsIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
+  '/quests/$questSlug': typeof AuthenticatedHomeQuestsQuestSlugRouteRouteWithChildren
   '/birth-certificate': typeof AuthenticatedHomeBirthCertificateIndexRoute
   '/court-order': typeof AuthenticatedHomeCourtOrderIndexRoute
   '/state-id': typeof AuthenticatedHomeStateIdIndexRoute
   '/admin/early-access': typeof AuthenticatedAdminEarlyAccessIndexRoute
   '/admin/quests': typeof AuthenticatedAdminQuestsIndexRoute
-  '/quests/$questSlug': typeof AuthenticatedHomeQuestsQuestSlugIndexRoute
+  '/quests/$questSlug/edit': typeof AuthenticatedHomeQuestsQuestSlugEditRoute
+  '/quests/$questSlug/': typeof AuthenticatedHomeQuestsQuestSlugIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -443,6 +493,7 @@ export interface FileRoutesByTo {
   '/state-id': typeof AuthenticatedHomeStateIdIndexRoute
   '/admin/early-access': typeof AuthenticatedAdminEarlyAccessIndexRoute
   '/admin/quests': typeof AuthenticatedAdminQuestsIndexRoute
+  '/quests/$questSlug/edit': typeof AuthenticatedHomeQuestsQuestSlugEditRoute
   '/quests/$questSlug': typeof AuthenticatedHomeQuestsQuestSlugIndexRoute
 }
 
@@ -462,11 +513,13 @@ export interface FileRoutesById {
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/documents/': typeof AuthenticatedDocumentsIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
+  '/_authenticated/_home/quests/$questSlug': typeof AuthenticatedHomeQuestsQuestSlugRouteRouteWithChildren
   '/_authenticated/_home/birth-certificate/': typeof AuthenticatedHomeBirthCertificateIndexRoute
   '/_authenticated/_home/court-order/': typeof AuthenticatedHomeCourtOrderIndexRoute
   '/_authenticated/_home/state-id/': typeof AuthenticatedHomeStateIdIndexRoute
   '/_authenticated/admin/early-access/': typeof AuthenticatedAdminEarlyAccessIndexRoute
   '/_authenticated/admin/quests/': typeof AuthenticatedAdminQuestsIndexRoute
+  '/_authenticated/_home/quests/$questSlug/edit': typeof AuthenticatedHomeQuestsQuestSlugEditRoute
   '/_authenticated/_home/quests/$questSlug/': typeof AuthenticatedHomeQuestsQuestSlugIndexRoute
 }
 
@@ -485,12 +538,14 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/documents'
     | '/settings/'
+    | '/quests/$questSlug'
     | '/birth-certificate'
     | '/court-order'
     | '/state-id'
     | '/admin/early-access'
     | '/admin/quests'
-    | '/quests/$questSlug'
+    | '/quests/$questSlug/edit'
+    | '/quests/$questSlug/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
@@ -508,6 +563,7 @@ export interface FileRouteTypes {
     | '/state-id'
     | '/admin/early-access'
     | '/admin/quests'
+    | '/quests/$questSlug/edit'
     | '/quests/$questSlug'
   id:
     | '__root__'
@@ -525,11 +581,13 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/'
     | '/_authenticated/documents/'
     | '/_authenticated/settings/'
+    | '/_authenticated/_home/quests/$questSlug'
     | '/_authenticated/_home/birth-certificate/'
     | '/_authenticated/_home/court-order/'
     | '/_authenticated/_home/state-id/'
     | '/_authenticated/admin/early-access/'
     | '/_authenticated/admin/quests/'
+    | '/_authenticated/_home/quests/$questSlug/edit'
     | '/_authenticated/_home/quests/$questSlug/'
   fileRoutesById: FileRoutesById
 }
@@ -598,10 +656,10 @@ export const routeTree = rootRoute
       "parent": "/_authenticated",
       "children": [
         "/_authenticated/_home/",
+        "/_authenticated/_home/quests/$questSlug",
         "/_authenticated/_home/birth-certificate/",
         "/_authenticated/_home/court-order/",
-        "/_authenticated/_home/state-id/",
-        "/_authenticated/_home/quests/$questSlug/"
+        "/_authenticated/_home/state-id/"
       ]
     },
     "/_authenticated/signout": {
@@ -640,6 +698,14 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/settings/index.tsx",
       "parent": "/_authenticated/settings"
     },
+    "/_authenticated/_home/quests/$questSlug": {
+      "filePath": "_authenticated/_home/quests.$questSlug/route.tsx",
+      "parent": "/_authenticated/_home",
+      "children": [
+        "/_authenticated/_home/quests/$questSlug/edit",
+        "/_authenticated/_home/quests/$questSlug/"
+      ]
+    },
     "/_authenticated/_home/birth-certificate/": {
       "filePath": "_authenticated/_home/birth-certificate.index.tsx",
       "parent": "/_authenticated/_home"
@@ -660,9 +726,13 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/admin/quests.index.tsx",
       "parent": "/_authenticated/admin"
     },
+    "/_authenticated/_home/quests/$questSlug/edit": {
+      "filePath": "_authenticated/_home/quests.$questSlug/edit.tsx",
+      "parent": "/_authenticated/_home/quests/$questSlug"
+    },
     "/_authenticated/_home/quests/$questSlug/": {
-      "filePath": "_authenticated/_home/quests.$questSlug.index.tsx",
-      "parent": "/_authenticated/_home"
+      "filePath": "_authenticated/_home/quests.$questSlug/index.tsx",
+      "parent": "/_authenticated/_home/quests/$questSlug"
     }
   }
 }
