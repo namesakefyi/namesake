@@ -63,7 +63,7 @@ export function FieldError(props: FieldErrorProps) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "text-sm text-red-9 forced-colors:text-[Mark]"
+        "text-sm text-red-9 forced-colors:text-[Mark]",
       )}
     />
   );
@@ -126,7 +126,7 @@ export function FieldGroup({ size, ...props }: GroupProps) {
     <Group
       {...props}
       className={composeRenderProps(props.className, (className, renderProps) =>
-        fieldGroupStyles({ ...renderProps, size, className })
+        fieldGroupStyles({ ...renderProps, size, className }),
       )}
     />
   );
@@ -159,7 +159,7 @@ export function Input({ ref, size, ...props }: InputProps) {
       {...props}
       ref={ref}
       className={composeRenderProps(props.className, (className, renderProps) =>
-        inputStyles({ ...renderProps, size, className })
+        inputStyles({ ...renderProps, size, className }),
       )}
     />
   );
@@ -190,7 +190,7 @@ export function InputTextArea({ ref, size, ...props }: InputTextAreaProps) {
       {...props}
       ref={ref}
       className={composeRenderProps(props.className, (className, renderProps) =>
-        inputTextAreaStyles({ ...renderProps, size, className })
+        inputTextAreaStyles({ ...renderProps, size, className }),
       )}
     />
   );
