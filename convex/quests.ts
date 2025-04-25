@@ -187,6 +187,15 @@ export const setTimeRequired = userMutation({
   },
 });
 
+export const setContent = userMutation({
+  args: { questId: v.id("quests"), content: v.string() },
+  handler: async (ctx, args) => {
+    return await Quests.update(ctx, args.questId, ctx.userId, {
+      content: args.content,
+    });
+  },
+});
+
 export const addFaq = userMutation({
   args: { questId: v.id("quests"), question: v.string(), answer: v.string() },
   handler: async (ctx, args) => {
