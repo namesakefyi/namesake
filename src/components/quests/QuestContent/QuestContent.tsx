@@ -6,7 +6,11 @@ interface QuestContentProps extends EditorProps {
   editable?: boolean;
 }
 
-export function QuestContent({ quest, editable, ...props }: QuestContentProps) {
+export function QuestContent({
+  quest,
+  editable = false,
+  ...props
+}: QuestContentProps) {
   return (
     <Editor {...props} initialContent={quest.content} editable={editable} />
   );
