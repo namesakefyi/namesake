@@ -1,15 +1,13 @@
-import {
-  Banner,
-  Button,
-  Container,
-  Form,
-  Tooltip,
-  TooltipTrigger,
-} from "@/components/common";
-import { FormNavigation } from "@/components/forms";
+import { Banner, Container, Form } from "@/components/common";
+import { FormNavigation, FormSection } from "@/components/forms";
+import { getFormSectionId } from "@/utils/getFormSectionId";
 import { smartquotes } from "@/utils/smartquotes";
-import { useRouter } from "@tanstack/react-router";
-import { ArrowLeft, ShieldCheck } from "lucide-react";
+import {
+  FormSectionContext,
+  type FormSectionData,
+} from "@/utils/useFormSections";
+import { ShieldCheck } from "lucide-react";
+import { Children, isValidElement, useMemo } from "react";
 import { Heading } from "react-aria-components";
 import { FormProvider, type UseFormReturn } from "react-hook-form";
 
@@ -30,6 +28,13 @@ export interface FormContainerProps {
   onSubmit: React.FormEventHandler<HTMLFormElement>;
 }
 
+interface FormSectionProps {
+  title: string;
+  description?: string;
+  children?: React.ReactNode;
+  className?: string;
+}
+
 export function FormContainer({
   title,
   description,
@@ -37,48 +42,50 @@ export function FormContainer({
   form,
   onSubmit,
 }: FormContainerProps) {
-  const { history } = useRouter();
+  // Scan children for form sections
+  const sections = useMemo(() => {
+    const foundSections: FormSectionData[] = [];
+
+    Children.forEach(children, (child) => {
+      if (isValidElement(child) && child.type === FormSection) {
+        const props = child.props as FormSectionProps;
+        const hash = getFormSectionId(props.title);
+        foundSections.push({ hash, title: props.title });
+      }
+    });
+
+    return foundSections;
+  }, [children]);
 
   return (
     <FormProvider {...form}>
-      <Container className="w-full max-w-[720px] py-16 px-6">
-        <Form
-          onSubmit={onSubmit}
-          autoComplete="on"
-          className="gap-0 divide-y divide-gray-a3"
-        >
-          <header className="flex flex-col gap-6 mb-8">
-            <Heading className="text-5xl font-medium text-pretty">
-              {title}
-            </Heading>
-            {description && (
-              <p className="text-sm text-gray-dim">
-                {smartquotes(description)}
-              </p>
-            )}
-            <Banner variant="success" icon={ShieldCheck} size="large">
-              Namesake takes your privacy seriously. All responses are
-              end-to-end encrypted. That means no one—not even Namesake—can see
-              your answers.
-            </Banner>
-          </header>
-          {children}
-        </Form>
-      </Container>
-      <TooltipTrigger>
-        <Button
-          className="fixed top-4 left-4 z-10"
-          onPress={() => {
-            history.go(-1);
-          }}
-          aria-label="Save and exit"
-          icon={ArrowLeft}
-          variant="icon"
-          size="large"
-        />
-        <Tooltip placement="right">Save and exit</Tooltip>
-      </TooltipTrigger>
-      <FormNavigation />
+      <FormSectionContext value={{ sections }}>
+        <FormNavigation title={title} />
+        <Container className="w-full max-w-[720px] flex-1 py-16 px-6">
+          <Form
+            onSubmit={onSubmit}
+            autoComplete="on"
+            className="gap-0 divide-y divide-gray-a3"
+          >
+            <header className="flex flex-col gap-6 mb-8">
+              <Heading className="text-5xl font-medium text-pretty">
+                {title}
+              </Heading>
+              {description && (
+                <p className="text-sm text-gray-dim">
+                  {smartquotes(description)}
+                </p>
+              )}
+              <Banner variant="success" icon={ShieldCheck} size="large">
+                Namesake takes your privacy seriously. All responses are
+                end-to-end encrypted. That means no one—not even Namesake—can
+                see your answers.
+              </Banner>
+            </header>
+            {children}
+          </Form>
+        </Container>
+      </FormSectionContext>
     </FormProvider>
   );
 }

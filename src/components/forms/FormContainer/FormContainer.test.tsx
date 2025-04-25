@@ -22,27 +22,17 @@ describe("FormContainer", () => {
   it("renders title", () => {
     render(<FormContainerWithForm />);
 
-    const title = screen.getByText("Test Title");
+    const titles = screen.getAllByText("Test Title");
 
-    expect(title).toBeInTheDocument();
-    expect(title).toHaveClass("text-5xl");
-  });
-
-  it("renders back button", async () => {
-    render(<FormContainerWithForm />);
-
-    const backButton = screen.getByLabelText("Save and exit");
-    expect(backButton).toBeInTheDocument();
+    expect(titles).toHaveLength(2);
+    // First title is in the navigation
+    // Second title is in the form container
+    expect(titles[1]).toHaveClass("text-5xl");
   });
 
   it("renders form navigation component", () => {
     render(<FormContainerWithForm />);
 
-    // Check for navigation controls that FormNavigation renders
-    expect(screen.getByLabelText("Previous question")).toBeInTheDocument();
-    expect(screen.getByLabelText("Next question")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "All questions" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("navigation")).toBeInTheDocument();
   });
 });

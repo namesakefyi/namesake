@@ -193,6 +193,10 @@
   }
 }
 
+html {
+  scroll-padding-block-start: 3rem;
+}
+
 body {
   color-scheme: dark light;
   -webkit-font-smoothing: antialiased;
