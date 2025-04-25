@@ -20,3 +20,11 @@ Example.args = {
     </div>
   ),
 };
+
+export const IncludeCounty = (args: AddressFieldProps) => (
+  <AddressField {...args} includeCounty />
+);
+
+IncludeCounty.args = {
+  type: "residence",
+};

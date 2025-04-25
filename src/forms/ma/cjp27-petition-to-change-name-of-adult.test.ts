@@ -15,6 +15,7 @@ describe("CJP27 Petition to Change Name of Adult", () => {
     residenceStreetAddress: "123 Main St",
     residenceCity: "Cambridge",
     residenceState: "MA",
+    residenceCounty: "Suffolk",
     residenceZipCode: "02139",
     isMailingAddressDifferentFromResidence: true,
     mailingStreetAddress: "456 Post St",
@@ -33,6 +34,9 @@ describe("CJP27 Petition to Change Name of Adult", () => {
       pdf: petitionToChangeNameOfAdult,
       userData: testData,
     });
+
+    // Division (County)
+    expect(form.getTextField("county").getText()).toBe("Suffolk");
 
     // Verify fields
     expect(form.getTextField("newFirstName").getText()).toBe("Eva");
