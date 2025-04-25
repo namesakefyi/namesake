@@ -1,5 +1,11 @@
 # namesake
 
+## 0.24.1
+
+### Patch Changes
+
+- 1a788d8: Fix quest editor interactions
+
 ## 0.24.0
 
 ### Minor Changes
