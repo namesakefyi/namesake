@@ -103,7 +103,7 @@ export function StatusSelect({
               key={status}
               id={status}
               aria-label={details.label}
-              className="h-9 justify-start"
+              className="h-9"
             >
               <StatusBadge status={status as Status} size="lg" />
             </MenuItem>
