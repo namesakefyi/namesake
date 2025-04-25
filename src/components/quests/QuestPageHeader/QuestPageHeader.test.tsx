@@ -127,7 +127,7 @@ describe("QuestPageHeader", () => {
   });
 
   it("renders toolbar section", () => {
-    render(<QuestPageHeader quest={mockQuest} editable={true} />);
+    render(<QuestPageHeader quest={mockQuest} editable={false} />);
 
     // Check if toolbar is rendered
     expect(screen.getByRole("toolbar")).toBeInTheDocument();
