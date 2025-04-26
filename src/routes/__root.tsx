@@ -7,7 +7,7 @@ import {
   useLocation,
   useRouter,
 } from "@tanstack/react-router";
-import type { ConvexAuthState, ConvexReactClient } from "convex/react";
+import type { ConvexReactClient } from "convex/react";
 import {
   AlertTriangle,
   Check,
@@ -46,7 +46,6 @@ function PostHogPageView() {
 interface RouterContext {
   convex: ConvexReactClient;
   title: string;
-  auth: Promise<ConvexAuthState>;
   role: Role;
   residence: Jurisdiction;
   birthplace: Jurisdiction;
