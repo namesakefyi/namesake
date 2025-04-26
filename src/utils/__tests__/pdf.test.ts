@@ -1,6 +1,6 @@
 import { PDFDocument } from "@cantoo/pdf-lib";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { definePdf, downloadPdf, fetchPdf, fillPdf, getPdfForm } from "./pdf";
+import { definePdf, downloadPdf, fetchPdf, fillPdf, getPdfForm } from "../pdf";
 
 describe("PDF utilities", () => {
   const testPdfDefinition = definePdf({
@@ -132,11 +132,7 @@ describe("PDF utilities", () => {
         pdfPath: "public/forms/test-form.pdf",
         jurisdiction: "MA",
         code: "TEST-1",
-        fields: (data: {
-          newFirstName: string;
-          oldFirstName: string;
-          shouldReturnOriginalDocuments: boolean;
-        }) => ({
+        fields: (data) => ({
           newFirstName: data.newFirstName,
           oldFirstName: data.oldFirstName,
           shouldReturnOriginalDocuments: data.shouldReturnOriginalDocuments,

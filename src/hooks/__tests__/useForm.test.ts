@@ -1,27 +1,33 @@
+import type { FieldName } from "@/constants";
+import { useEncryptionKey } from "@/hooks/useEncryptionKey";
+import { decryptData, encryptData } from "@/utils/encryption";
 import { renderHook, waitFor } from "@testing-library/react";
 import { useMutation, useQuery } from "convex/react";
 import { usePostHog } from "posthog-js/react";
 import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { decryptData, encryptData, useEncryptionKey } from "./encryption";
-import { useForm } from "./useForm";
+import { useForm } from "../useForm";
 
 // Mock the form fields
-const mockFields = ["firstName", "lastName", "email"];
+const mockFields: FieldName[] = ["newFirstName", "newLastName", "email"];
 
 // Mock the encrypted responses
 const mockEncryptedResponses = [
-  { field: "firstName", value: "encrypted_first_name" },
-  { field: "lastName", value: "encrypted_last_name" },
+  { field: "newFirstName", value: "encrypted_new_first_name" },
+  { field: "newLastName", value: "encrypted_new_last_name" },
   { field: "email", value: "encrypted_email" },
 ];
 
 // Mock the decrypted values
 const mockDecryptedValues = {
-  firstName: "John",
-  lastName: "Doe",
+  newFirstName: "John",
+  newLastName: "Doe",
   email: "john@example.com",
 };
+
+vi.mock("@/hooks/useEncryptionKey", () => ({
+  useEncryptionKey: vi.fn(),
+}));
 
 describe("useForm", () => {
   const mockPosthog = {
@@ -79,8 +85,8 @@ describe("useForm", () => {
   it("should handle form submission", async () => {
     const { result } = renderHook(() => useForm(mockFields));
     const testData = {
-      firstName: "Jane",
-      lastName: "Smith",
+      newFirstName: "Jane",
+      newLastName: "Smith",
       email: "jane@example.com",
     };
 
@@ -96,7 +102,7 @@ describe("useForm", () => {
     mockSave.mockRejectedValueOnce(mockError);
 
     const { result } = renderHook(() => useForm(mockFields));
-    const testData = { firstName: "Jane" };
+    const testData = { newFirstName: "Jane" };
 
     await submitForm(result.current, testData);
 

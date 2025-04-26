@@ -1,4 +1,4 @@
-import type { Status } from "@convex/constants";
+import type { Status } from "@/constants";
 import type { Meta } from "@storybook/react";
 import { StatusSelect } from "./StatusSelect";
 

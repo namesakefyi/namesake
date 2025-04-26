@@ -1,9 +1,9 @@
 import "./styles/index.css";
 import { Logo } from "@/components/app";
 import { Empty } from "@/components/common";
+import type { Jurisdiction, Role } from "@/constants";
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
-import type { Jurisdiction, Role } from "@convex/constants";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { ConvexReactClient, useQuery } from "convex/react";
 import { ArrowLeft, CircleAlert, TriangleAlert } from "lucide-react";

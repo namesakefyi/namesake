@@ -1,6 +1,6 @@
 import { PageHeader } from "@/components/app";
 import { SettingsNav } from "@/components/settings";
-import { useIsMobile } from "@/utils/useIsMobile";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/settings/")({

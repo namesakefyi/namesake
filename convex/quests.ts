@@ -1,10 +1,10 @@
 import { v } from "convex/values";
-import { query } from "./_generated/server";
 import {
   type Category,
   DEFAULT_TIME_REQUIRED,
   type Jurisdiction,
-} from "./constants";
+} from "../src/constants";
+import { query } from "./_generated/server";
 import { userMutation, userQuery } from "./helpers";
 import * as Quests from "./model/questsModel";
 import { category, jurisdiction, timeRequiredUnit } from "./validators";

@@ -26,7 +26,7 @@ const mockSections = [
 ];
 
 // Mock useFormSections
-vi.mock("@/utils/useFormSections", () => ({
+vi.mock("@/hooks/useFormSections", () => ({
   useFormSections: vi.fn(() => ({
     sections: mockSections,
   })),

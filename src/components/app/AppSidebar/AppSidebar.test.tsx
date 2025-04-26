@@ -1,4 +1,4 @@
-import { useTheme } from "@/utils/useTheme";
+import { useTheme } from "@/hooks/useTheme";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { render, screen } from "@testing-library/react";
 import { useQuery } from "convex/react";

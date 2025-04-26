@@ -7,7 +7,7 @@ import {
   MenuSection,
   MenuTrigger,
 } from "@/components/common";
-import { STATUS, type Status } from "@convex/constants";
+import { STATUS, type Status } from "@/constants";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { Selection } from "react-aria-components";

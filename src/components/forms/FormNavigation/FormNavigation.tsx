@@ -8,7 +8,7 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
-import { useFormSections } from "@/utils/useFormSections";
+import { useFormSections } from "@/hooks/useFormSections";
 import { ArrowLeft, MenuIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Heading } from "react-aria-components";

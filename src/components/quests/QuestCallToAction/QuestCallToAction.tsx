@@ -1,9 +1,9 @@
 import { Button, IconText, TimeAgo } from "@/components/common";
+import type { Category, Status } from "@/constants";
+import { CATEGORIES, STATUS } from "@/constants";
+import type { CoreCategory } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
-import type { Category, Status } from "@convex/constants";
-import { CATEGORIES, STATUS } from "@convex/constants";
-import type { CoreCategory } from "@convex/constants";
 import { useMutation } from "convex/react";
 import { Check } from "lucide-react";
 import { useState } from "react";

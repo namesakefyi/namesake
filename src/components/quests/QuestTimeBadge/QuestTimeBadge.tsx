@@ -12,13 +12,9 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
+import { TIME_UNITS, type TimeRequired, type TimeUnit } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
-import {
-  TIME_UNITS,
-  type TimeRequired,
-  type TimeUnit,
-} from "@convex/constants";
 import { useMutation } from "convex/react";
 import { HelpCircle, Pencil } from "lucide-react";
 import { memo, useState } from "react";

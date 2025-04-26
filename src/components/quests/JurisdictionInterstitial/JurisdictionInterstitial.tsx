@@ -6,14 +6,14 @@ import {
   ListBox,
   ListBoxItem,
 } from "@/components/common";
-import { api } from "@convex/_generated/api";
 import {
   ALL,
   BIRTHPLACES,
   CATEGORIES,
   JURISDICTIONS,
   type Jurisdiction,
-} from "@convex/constants";
+} from "@/constants";
+import { api } from "@convex/_generated/api";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";

@@ -16,19 +16,15 @@ import {
   ShortTextField,
   YesNoField,
 } from "@/components/forms";
-import { useForm } from "@/utils/useForm";
-import {
-  type FieldType,
-  JURISDICTIONS,
-  type UserFormDataField,
-} from "@convex/constants";
+import { type FieldName, type FieldType, JURISDICTIONS } from "@/constants";
+import { useForm } from "@/hooks/useForm";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/forms/ma-court-order")({
   component: RouteComponent,
 });
 
-const FORM_FIELDS: UserFormDataField[] = [
+const FORM_FIELDS: FieldName[] = [
   "newFirstName",
   "newMiddleName",
   "newLastName",
@@ -63,7 +59,7 @@ const FORM_FIELDS: UserFormDataField[] = [
 ] as const;
 
 type FormData = {
-  [K in UserFormDataField]: FieldType<K>;
+  [K in (typeof FORM_FIELDS)[number]]: FieldType<K>;
 };
 
 function RouteComponent() {

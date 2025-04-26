@@ -1,10 +1,10 @@
-import type { Doc, Id } from "../_generated/dataModel";
-import type { MutationCtx, QueryCtx } from "../_generated/server";
 import {
   type Category,
   DEFAULT_TIME_REQUIRED,
   type Jurisdiction,
-} from "../constants";
+} from "../../src/constants";
+import type { Doc, Id } from "../_generated/dataModel";
+import type { MutationCtx, QueryCtx } from "../_generated/server";
 import * as QuestFaqs from "./questFaqsModel";
 
 export function generateQuestSlug(

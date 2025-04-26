@@ -1,6 +1,6 @@
+import { ALL } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { ALL } from "@convex/constants";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useMutation } from "convex/react";

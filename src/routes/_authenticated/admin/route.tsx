@@ -1,6 +1,6 @@
 import { AdminNav } from "@/components/admin";
 import { AppContent, AppSidebar, AppSidebarHeader } from "@/components/app";
-import { useIsMobile } from "@/utils/useIsMobile";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin")({

@@ -1,6 +1,6 @@
 import { AppContent, AppSidebar, AppSidebarHeader } from "@/components/app";
 import { SettingsNav } from "@/components/settings";
-import { useIsMobile } from "@/utils/useIsMobile";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/settings")({

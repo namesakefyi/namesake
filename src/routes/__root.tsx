@@ -1,4 +1,4 @@
-import type { Jurisdiction, Role } from "@convex/constants";
+import type { Jurisdiction, Role } from "@/constants";
 import {
   type NavigateOptions,
   Outlet,

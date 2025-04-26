@@ -4,8 +4,8 @@ import {
   type RadioGroupProps,
   type RadioProps,
 } from "@/components/common";
+import type { FieldName } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
-import type { UserFormDataField } from "@convex/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface RadioOption extends RadioProps {
@@ -15,7 +15,7 @@ interface RadioOption extends RadioProps {
 
 export interface RadioGroupFieldProps extends RadioGroupProps {
   children?: React.ReactNode;
-  name: UserFormDataField;
+  name: FieldName;
   label: string;
   options: RadioOption[];
 }

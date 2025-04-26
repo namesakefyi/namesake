@@ -6,9 +6,9 @@ import {
   QuestPageToolbar,
   StatusSelect,
 } from "@/components/quests";
+import type { Status } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc, Id } from "@convex/_generated/dataModel";
-import type { Status } from "@convex/constants";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation } from "convex/react";
 import { Pencil } from "lucide-react";
@@ -28,10 +28,23 @@ export function QuestPageHeader({
 }: QuestPageHeaderProps) {
   const navigate = useNavigate();
   const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const changeStatus = useMutation(api.userQuests.setStatus);
   const deleteForever = useMutation(api.userQuests.deleteForever);
+  const addQuest = useMutation(api.userQuests.create);
 
   if (!quest) return null;
+
+  const handleAddQuest = async () => {
+    try {
+      setIsSubmitting(true);
+      if (quest) await addQuest({ questId: quest._id });
+    } catch (err) {
+      toast.error("Failed to add quest. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleRemoveQuest = (questId: Id<"quests">, title: string) => {
     deleteForever({ questId }).then(() => {
@@ -78,10 +91,19 @@ export function QuestPageHeader({
             onRemove={() => handleRemoveQuest(quest._id, quest.title)}
           />
         )}
+        {!userQuest && !editable && (
+          <Button
+            onClick={handleAddQuest}
+            size="small"
+            isSubmitting={isSubmitting}
+          >
+            Add to my list
+          </Button>
+        )}
         {editable && (
           <div className="flex gap-4 items-center">
             <Link
-              button={{ variant: "secondary" }}
+              button={{ variant: "secondary", size: "small" }}
               href={{
                 to: "/quests/$questSlug",
                 params: { questSlug: quest?.slug },

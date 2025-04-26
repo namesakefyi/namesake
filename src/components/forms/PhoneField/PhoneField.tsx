@@ -1,10 +1,10 @@
 import { TextField, type TextFieldProps } from "@/components/common";
-import type { UserFormDataField } from "@convex/constants";
+import type { FieldName } from "@/constants";
 import { type MaskitoOptions, maskitoTransform } from "@maskito/core";
 import { Controller, useFormContext } from "react-hook-form";
 
 export interface PhoneFieldProps extends Omit<TextFieldProps, "size"> {
-  name: UserFormDataField;
+  name: FieldName;
   children?: React.ReactNode;
 }
 

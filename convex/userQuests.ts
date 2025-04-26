@@ -1,6 +1,6 @@
 import { v } from "convex/values";
+import type { Status } from "../src/constants";
 import { query } from "./_generated/server";
-import type { Status } from "./constants";
 import { userMutation, userQuery } from "./helpers";
 import * as UserQuests from "./model/userQuestsModel";
 import { status } from "./validators";

@@ -1,10 +1,10 @@
 import { convexTest } from "convex-test";
 import type { TestConvex } from "convex-test";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { api } from "./_generated/api";
-import type { Id } from "./_generated/dataModel";
-import schema from "./schema";
-import { modules } from "./test.setup";
+import { api } from "../_generated/api";
+import type { Id } from "../_generated/dataModel";
+import schema from "../schema";
+import { modules } from "../test.setup";
 
 const expectQuestUpdated = async (
   t: TestConvex<typeof schema>,

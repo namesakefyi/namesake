@@ -7,9 +7,9 @@ import {
   TextField,
 } from "@/components/common";
 import { SettingsItem } from "@/components/settings";
+import { DUPLICATE_EMAIL, INVALID_EMAIL } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
-import { DUPLICATE_EMAIL, INVALID_EMAIL } from "@convex/errors";
 import { useMutation } from "convex/react";
 import { ConvexError } from "convex/values";
 import { useState } from "react";

@@ -7,9 +7,9 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
+import { CATEGORIES, type Category } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
-import { CATEGORIES, type Category } from "@convex/constants";
 import { useMutation } from "convex/react";
 import { CircleHelp, Pencil } from "lucide-react";
 import { useState } from "react";

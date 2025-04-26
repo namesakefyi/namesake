@@ -6,13 +6,9 @@ import {
   ListBoxItem,
 } from "@/components/common";
 import { DeleteFormResponseModal } from "@/components/settings";
-import { useDecrypt } from "@/utils/encryption";
+import { ALL, FIELD_DEFS, type FieldName } from "@/constants";
+import { useDecrypt } from "@/hooks/useDecrypt";
 import type { Id } from "@convex/_generated/dataModel";
-import {
-  ALL,
-  USER_FORM_DATA_FIELDS,
-  type UserFormDataField,
-} from "@convex/constants";
 import { AlertTriangle, FileLock2 } from "lucide-react";
 import { useState } from "react";
 import { type Selection, Text } from "react-aria-components";
@@ -23,8 +19,8 @@ import { type Selection, Text } from "react-aria-components";
  * @param field - The field to get the readable label for.
  * @returns The readable label for the field.
  */
-export const getReadableFieldLabel = (field: UserFormDataField | string) => {
-  return USER_FORM_DATA_FIELDS[field as UserFormDataField]?.label ?? field;
+export const getReadableFieldLabel = (field: FieldName) => {
+  return FIELD_DEFS.find((f) => f.name === field)?.label ?? field;
 };
 
 interface FormResponseItemProps {

@@ -1,12 +1,12 @@
 import { Checkbox, type CheckboxProps } from "@/components/common";
+import type { FieldName } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
-import type { UserFormDataField } from "@convex/constants";
 import { Controller, useFormContext } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
 export interface CheckboxFieldProps extends CheckboxProps {
   children?: React.ReactNode;
-  name: UserFormDataField;
+  name: FieldName;
   label: string;
   className?: string;
   defaultValue?: boolean;

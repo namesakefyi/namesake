@@ -7,7 +7,7 @@ import {
   STATUS,
   THEMES,
   TIME_UNITS,
-} from "./constants";
+} from "../src/constants";
 
 export const jurisdiction = v.union(
   ...Object.keys(JURISDICTIONS).map((jurisdiction) => v.literal(jurisdiction)),

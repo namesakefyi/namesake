@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { generateQuestSlug } from "./questsModel";
+import { generateQuestSlug } from "../questsModel";
 
 describe("questsModel", () => {
   describe("generateQuestSlug", () => {

@@ -4,8 +4,8 @@ import {
   type CheckboxGroupProps,
   type CheckboxProps,
 } from "@/components/common";
+import type { FieldName } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
-import type { UserFormDataField } from "@convex/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface CheckboxOption extends CheckboxProps {
@@ -15,7 +15,7 @@ interface CheckboxOption extends CheckboxProps {
 
 export interface CheckboxGroupFieldProps extends CheckboxGroupProps {
   children?: React.ReactNode;
-  name: UserFormDataField;
+  name: FieldName;
   label: string;
   labelHidden?: boolean;
   options: CheckboxOption[];

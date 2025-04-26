@@ -1,11 +1,11 @@
 import { TextField, type TextFieldProps } from "@/components/common";
+import type { FieldName } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
-import type { UserFormDataField } from "@convex/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
 export interface ShortTextFieldProps extends Omit<TextFieldProps, "size"> {
   label: string;
-  name: UserFormDataField;
+  name: FieldName;
   children?: React.ReactNode;
 }
 

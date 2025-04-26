@@ -1,4 +1,4 @@
-import { useEncryptionKey } from "@/utils/encryption";
+import { useEncryptionKey } from "@/hooks/useEncryptionKey";
 import type { Id } from "@convex/_generated/dataModel";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -7,8 +7,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { FormResponsesList, getReadableFieldLabel } from "./FormResponsesList";
 
 // Mock encryption utilities
-vi.mock("@/utils/encryption", () => ({
+vi.mock("@/hooks/useEncryptionKey", () => ({
   useEncryptionKey: vi.fn(),
+}));
+
+vi.mock("@/hooks/useDecrypt", () => ({
   useDecrypt: vi.fn().mockReturnValue({
     decryptedValue: "decrypted_value",
     error: false,
@@ -204,6 +207,8 @@ describe("getReadableFieldLabel", () => {
   });
 
   it("returns the field as-is if it's not in the USER_FORM_DATA_FIELDS object", () => {
-    expect(getReadableFieldLabel("nonExistentField")).toBe("nonExistentField");
+    expect(getReadableFieldLabel("nonExistentField" as any)).toBe(
+      "nonExistentField",
+    );
   });
 });

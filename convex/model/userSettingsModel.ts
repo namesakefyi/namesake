@@ -1,6 +1,6 @@
+import type { Theme } from "../../src/constants";
 import type { Id } from "../_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
-import type { Theme } from "../constants";
 
 export async function getSettingsForUser(
   ctx: QueryCtx,

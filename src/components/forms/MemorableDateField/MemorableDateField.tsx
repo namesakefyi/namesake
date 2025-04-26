@@ -1,5 +1,5 @@
 import { DateField, type DateFieldProps } from "@/components/common";
-import type { UserFormDataField } from "@convex/constants";
+import type { FieldName } from "@/constants";
 import { useState } from "react";
 import type { DateValue } from "react-aria-components";
 import { Controller, useFormContext } from "react-hook-form";
@@ -7,7 +7,7 @@ import { Controller, useFormContext } from "react-hook-form";
 export interface MemorableDateFieldProps<T extends DateValue = DateValue>
   extends DateFieldProps<T> {
   label: string;
-  name: UserFormDataField;
+  name: FieldName;
   children?: React.ReactNode;
 }
 

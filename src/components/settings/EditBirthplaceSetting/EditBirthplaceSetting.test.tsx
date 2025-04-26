@@ -1,5 +1,5 @@
+import { JURISDICTIONS } from "@/constants";
 import type { Doc, Id } from "@convex/_generated/dataModel";
-import { JURISDICTIONS } from "@convex/constants";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useMutation } from "convex/react";

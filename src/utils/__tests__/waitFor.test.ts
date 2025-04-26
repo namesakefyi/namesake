@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { waitFor } from "./waitFor";
+import { waitFor } from "../waitFor";
 
 describe("waitFor", () => {
   beforeEach(() => {

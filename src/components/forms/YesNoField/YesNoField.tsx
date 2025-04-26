@@ -1,6 +1,6 @@
 import { Radio, RadioGroup, type RadioGroupProps } from "@/components/common";
+import type { FieldName } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
-import type { UserFormDataField } from "@convex/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
 /**
@@ -25,7 +25,7 @@ export const getBooleanValueFromYesNoString = (value: string) => {
 
 export interface YesNoFieldProps extends RadioGroupProps {
   children?: React.ReactNode;
-  name: UserFormDataField;
+  name: FieldName;
   label: string;
   labelHidden?: boolean;
   yesLabel?: string;

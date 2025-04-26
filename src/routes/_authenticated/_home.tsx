@@ -5,7 +5,7 @@ import {
   AppSidebarHeader,
 } from "@/components/app";
 import { QuestsNav } from "@/components/quests";
-import { useIsMobile } from "@/utils/useIsMobile";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_home")({

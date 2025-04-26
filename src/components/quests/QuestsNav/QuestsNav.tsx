@@ -6,13 +6,13 @@ import {
   ProgressBar,
 } from "@/components/common";
 import { StatusBadge } from "@/components/quests";
-import { api } from "@convex/_generated/api";
 import {
   CATEGORIES,
   type Category,
   type CoreCategory,
   type Status,
-} from "@convex/constants";
+} from "@/constants";
+import { api } from "@convex/_generated/api";
 import { useQuery } from "convex/react";
 import type { LucideIcon } from "lucide-react";
 
