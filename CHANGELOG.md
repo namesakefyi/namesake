@@ -1,5 +1,12 @@
 # namesake
 
+## 0.25.3
+
+### Patch Changes
+
+- dd10168: Improve repository organization and enforce field name type checking
+- fb4c533: Improve error boundary handling and prevent the entire app from crashing if one component fails
+
 ## 0.25.2
 
 ### Patch Changes
