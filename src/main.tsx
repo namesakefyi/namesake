@@ -6,11 +6,11 @@ import { api } from "@convex/_generated/api";
 import type { Jurisdiction, Role } from "@convex/constants";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { ConvexReactClient, useQuery } from "convex/react";
-import { ArrowLeft, TriangleAlert } from "lucide-react";
+import { ArrowLeft, CircleAlert, TriangleAlert } from "lucide-react";
 import { LazyMotion, domAnimation } from "motion/react";
 import { ThemeProvider } from "next-themes";
 import { posthog } from "posthog-js";
-import { PostHogProvider } from "posthog-js/react";
+import { PostHogErrorBoundary, PostHogProvider } from "posthog-js/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
@@ -88,6 +88,15 @@ posthog.init(import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_KEY, {
   },
 });
 
+const fallback = () => (
+  <Empty
+    title="Something went wrong"
+    subtitle="We’ve been notified of the issue. Refresh the page to try again."
+    icon={CircleAlert}
+    className="min-h-dvh"
+  />
+);
+
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
   const root = createRoot(rootElement);
@@ -98,7 +107,9 @@ if (!rootElement.innerHTML) {
           <ConvexAuthProvider client={convex}>
             <ThemeProvider attribute="class" disableTransitionOnChange>
               <LazyMotion strict features={domAnimation}>
-                <InnerApp />
+                <PostHogErrorBoundary fallback={fallback}>
+                  <InnerApp />
+                </PostHogErrorBoundary>
               </LazyMotion>
             </ThemeProvider>
           </ConvexAuthProvider>
