@@ -1,5 +1,11 @@
 # namesake
 
+## 0.25.2
+
+### Patch Changes
+
+- fd59698: Fix signin and signout redirects
+
 ## 0.25.1
 
 ### Patch Changes
