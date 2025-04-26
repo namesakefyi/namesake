@@ -81,9 +81,12 @@ Now that the development app is running, let's get familiar with what's inside.
     ▸ 📂 common     # Design system components from React Aria
     ▸ 📂 forms      # Input components used within forms
     ▸ 📂 quests     # Feature-specific quest components
+  ▸ 📂 constants    # Shared app-wide constants
+  ▸ 📂 forms        # Schema definitions for all PDF forms
+  ▸ 📂 hooks        # Custom React hooks  
   ▸ 📂 routes       # File-based routing using TanStack Router
   ▸ 📂 styles       # Global CSS (not much here; most of it's in Tailwind!)
-  ▸ 📂 utils        # Helper functions and custom React hooks
+  ▸ 📂 utils        # Helper functions and other utilities
     📄 main.tsx     # Base of the project including common Providers
 ▸ 📂 tests          # End-to-end Playwright tests
 ```

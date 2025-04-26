@@ -1,5 +1,5 @@
 import { Select, SelectItem, TextField } from "@/components/common";
-import { JURISDICTIONS, type UserFormDataField } from "@convex/constants";
+import { JURISDICTIONS, type UserFormDataField } from "@/constants";
 import { maskitoTransform } from "@maskito/core";
 import type { MaskitoOptions } from "@maskito/core";
 import { useEffect } from "react";

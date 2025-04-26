@@ -1,18 +1,14 @@
-import { usePostHog } from "posthog-js/react";
-import { useState } from "react";
-import { useEffect } from "react";
-
-// Constants
-const DB_NAME = "namesake-encryption";
-const STORE_NAME = "encryption-keys";
-const DEK_KEY = "device-dek";
-const IV_LENGTH = 12;
+import {
+  DB_NAME,
+  DEK_KEY,
+  IV_LENGTH,
+  STORE_NAME,
+} from "@/constants/encryption";
 
 /**
  * Encryption module using AES-GCM with a single key:
  * Data Encryption Key (DEK): Used to encrypt/decrypt data
  */
-
 export async function encryptData(data: any, dek: CryptoKey): Promise<string> {
   const iv = window.crypto.getRandomValues(new Uint8Array(IV_LENGTH));
   const stringifiedData = JSON.stringify(data);
@@ -60,31 +56,6 @@ export async function getEncryptionKey(): Promise<CryptoKey | null> {
   const serializedDEK = await retrieveDEK();
   if (!serializedDEK) return null;
   return await deserializeDEK(serializedDEK);
-}
-
-export function useEncryptionKey(): CryptoKey | null {
-  const [encryptionKey, setEncryptionKey] = useState<CryptoKey | null>(null);
-  const posthog = usePostHog();
-
-  useEffect(() => {
-    const loadEncryptionKey = async () => {
-      try {
-        const key = await getEncryptionKey();
-        setEncryptionKey(key);
-
-        if (!key) {
-          await initializeEncryption();
-          return;
-        }
-      } catch (error: any) {
-        posthog.captureException(error);
-      }
-    };
-
-    loadEncryptionKey();
-  }, []);
-
-  return encryptionKey;
 }
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
@@ -162,73 +133,4 @@ async function retrieveDEK(): Promise<string | null> {
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
   });
-}
-
-type SingleDecryptResult = {
-  decryptedValue: string | undefined;
-  decryptedValues?: never;
-  error: boolean;
-};
-
-type MultipleDecryptResult = {
-  decryptedValue?: never;
-  decryptedValues: string[] | undefined;
-  error: boolean;
-};
-
-type DecryptResult = SingleDecryptResult | MultipleDecryptResult;
-
-/**
- * Decrypts a single or multiple encrypted values.
- * @param encryptedValue - The encrypted value to decrypt.
- * @returns The decrypted value or values.
- */
-export function useDecrypt(
-  encryptedValue: string | string[] | undefined,
-): DecryptResult {
-  const encryptionKey = useEncryptionKey();
-  const [decryptedValues, setDecryptedValues] = useState<
-    string[] | undefined
-  >();
-  const [error, setError] = useState(false);
-  const posthog = usePostHog();
-
-  useEffect(() => {
-    if (!encryptedValue || !encryptionKey) {
-      setDecryptedValues(undefined);
-      return;
-    }
-
-    const values = Array.isArray(encryptedValue)
-      ? encryptedValue
-      : [encryptedValue];
-
-    Promise.all(
-      values.map(async (value) => {
-        try {
-          return await decryptData(value, encryptionKey);
-        } catch (error) {
-          posthog.captureException(error);
-          setError(true);
-          return null;
-        }
-      }),
-    ).then((results) => {
-      const validResults = results.filter(
-        (result): result is string => result !== null,
-      );
-      if (validResults.length) {
-        setDecryptedValues(validResults);
-      }
-    });
-  }, [encryptedValue, encryptionKey]);
-
-  if (Array.isArray(encryptedValue)) {
-    return { decryptedValues, error };
-  }
-
-  return {
-    decryptedValue: decryptedValues?.[0],
-    error,
-  };
 }

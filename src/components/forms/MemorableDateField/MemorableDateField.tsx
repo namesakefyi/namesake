@@ -1,5 +1,5 @@
 import { DateField, type DateFieldProps } from "@/components/common";
-import type { UserFormDataField } from "@convex/constants";
+import type { UserFormDataField } from "@/constants";
 import { useState } from "react";
 import type { DateValue } from "react-aria-components";
 import { Controller, useFormContext } from "react-hook-form";

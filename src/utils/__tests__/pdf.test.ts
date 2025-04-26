@@ -1,6 +1,6 @@
 import { PDFDocument } from "@cantoo/pdf-lib";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { definePdf, downloadPdf, fetchPdf, fillPdf, getPdfForm } from "./pdf";
+import { definePdf, downloadPdf, fetchPdf, fillPdf, getPdfForm } from "../pdf";
 
 describe("PDF utilities", () => {
   const testPdfDefinition = definePdf({

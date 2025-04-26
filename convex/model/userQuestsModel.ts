@@ -1,6 +1,6 @@
+import { type Category, STATUS, type Status } from "../../src/constants";
 import type { Id } from "../_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
-import { type Category, STATUS, type Status } from "../constants";
 
 export async function getAllForUser(
   ctx: QueryCtx,

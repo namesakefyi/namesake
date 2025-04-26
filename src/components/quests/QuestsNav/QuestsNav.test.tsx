@@ -1,4 +1,4 @@
-import { CATEGORIES } from "@convex/constants";
+import { CATEGORIES } from "@/constants";
 import { useMatchRoute } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import { useQuery } from "convex/react";

@@ -1,6 +1,6 @@
 import { v } from "convex/values";
+import type { Theme } from "../src/constants";
 import { query } from "./_generated/server";
-import type { Theme } from "./constants";
 import { userMutation } from "./helpers";
 import * as UserSettings from "./model/userSettingsModel";
 import { theme } from "./validators";

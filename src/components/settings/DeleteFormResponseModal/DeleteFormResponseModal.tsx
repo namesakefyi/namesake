@@ -5,10 +5,10 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@/components/common";
+import { ALL } from "@/constants";
 import { capitalize } from "@/utils/capitalize";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { ALL } from "@convex/constants";
 import { useMutation } from "convex/react";
 import { usePostHog } from "posthog-js/react";
 import { useState } from "react";

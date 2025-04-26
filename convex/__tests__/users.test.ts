@@ -1,9 +1,9 @@
 import { convexTest } from "convex-test";
 import { describe, expect, it } from "vitest";
-import { api } from "./_generated/api";
-import { DUPLICATE_EMAIL, INVALID_EMAIL } from "./errors";
-import schema from "./schema";
-import { modules } from "./test.setup";
+import { DUPLICATE_EMAIL, INVALID_EMAIL } from "../../src/constants/errors";
+import { api } from "../_generated/api";
+import schema from "../schema";
+import { modules } from "../test.setup";
 
 describe("users", () => {
   describe("getAll", () => {

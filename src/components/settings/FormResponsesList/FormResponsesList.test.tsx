@@ -1,4 +1,4 @@
-import { useEncryptionKey } from "@/utils/encryption";
+import { useEncryptionKey } from "@/hooks/useEncryptionKey";
 import type { Id } from "@convex/_generated/dataModel";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -7,8 +7,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { FormResponsesList, getReadableFieldLabel } from "./FormResponsesList";
 
 // Mock encryption utilities
-vi.mock("@/utils/encryption", () => ({
+vi.mock("@/hooks/useEncryptionKey", () => ({
   useEncryptionKey: vi.fn(),
+}));
+
+vi.mock("@/hooks/useDecrypt", () => ({
   useDecrypt: vi.fn().mockReturnValue({
     decryptedValue: "decrypted_value",
     error: false,

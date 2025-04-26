@@ -1,7 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
+import type { Birthplace, Jurisdiction, Role } from "../src/constants";
 import { query } from "./_generated/server";
-import type { Birthplace, Jurisdiction, Role } from "./constants";
 import { userMutation } from "./helpers";
 import * as Users from "./model/usersModel";
 import { birthplace, jurisdiction } from "./validators";

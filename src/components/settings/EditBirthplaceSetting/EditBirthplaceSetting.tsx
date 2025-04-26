@@ -1,8 +1,8 @@
 import { Banner, Button, Form, Select, SelectItem } from "@/components/common";
 import { SettingsItem } from "@/components/settings";
+import { BIRTHPLACES, type Birthplace } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
-import { BIRTHPLACES, type Birthplace } from "@convex/constants";
 import { useMutation } from "convex/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";

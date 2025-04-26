@@ -21,14 +21,14 @@ import {
   TableRow,
   TextField,
 } from "@/components/common";
-import { api } from "@convex/_generated/api";
-import type { DataModel } from "@convex/_generated/dataModel";
 import {
   CATEGORIES,
   type Category,
   JURISDICTIONS,
   type Jurisdiction,
-} from "@convex/constants";
+} from "@/constants";
+import { api } from "@convex/_generated/api";
+import type { DataModel } from "@convex/_generated/dataModel";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { CircleHelp, Ellipsis, Milestone, Plus } from "lucide-react";

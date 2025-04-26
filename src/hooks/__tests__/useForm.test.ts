@@ -1,10 +1,11 @@
+import { useEncryptionKey } from "@/hooks/useEncryptionKey";
+import { decryptData, encryptData } from "@/utils/encryption";
 import { renderHook, waitFor } from "@testing-library/react";
 import { useMutation, useQuery } from "convex/react";
 import { usePostHog } from "posthog-js/react";
 import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { decryptData, encryptData, useEncryptionKey } from "./encryption";
-import { useForm } from "./useForm";
+import { useForm } from "../useForm";
 
 // Mock the form fields
 const mockFields = ["firstName", "lastName", "email"];
@@ -22,6 +23,10 @@ const mockDecryptedValues = {
   lastName: "Doe",
   email: "john@example.com",
 };
+
+vi.mock("@/hooks/useEncryptionKey", () => ({
+  useEncryptionKey: vi.fn(),
+}));
 
 describe("useForm", () => {
   const mockPosthog = {

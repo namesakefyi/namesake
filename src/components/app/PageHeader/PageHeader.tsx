@@ -1,5 +1,5 @@
 import { Link, type LinkProps } from "@/components/common";
-import { useIsMobile } from "@/utils/useIsMobile";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { ArrowLeft } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 

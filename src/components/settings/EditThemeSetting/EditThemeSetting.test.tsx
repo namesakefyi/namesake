@@ -1,5 +1,5 @@
-import { useTheme } from "@/utils/useTheme";
-import { THEMES } from "@convex/constants";
+import { THEMES } from "@/constants";
+import { useTheme } from "@/hooks/useTheme";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";

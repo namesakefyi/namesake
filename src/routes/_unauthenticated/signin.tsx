@@ -14,7 +14,7 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
-import { usePasswordStrength } from "@/utils/usePasswordStrength";
+import { usePasswordStrength } from "@/hooks/usePasswordStrength";
 import { waitFor } from "@/utils/waitFor";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";

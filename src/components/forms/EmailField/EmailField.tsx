@@ -1,5 +1,5 @@
 import { TextField, type TextFieldProps } from "@/components/common";
-import type { UserFormDataField } from "@convex/constants";
+import type { UserFormDataField } from "@/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
 export interface EmailFieldProps extends Omit<TextFieldProps, "size"> {

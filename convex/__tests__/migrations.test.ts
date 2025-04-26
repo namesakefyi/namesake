@@ -1,13 +1,13 @@
 import { convexTest } from "convex-test";
 import { beforeEach, describe, expect, it } from "vitest";
-import migrationsSchema from "../node_modules/@convex-dev/migrations/src/component/schema";
-import { internal } from "./_generated/api";
-import { migrations } from "./migrations";
-import schema from "./schema";
-import { modules } from "./test.setup";
+import migrationsSchema from "../../node_modules/@convex-dev/migrations/src/component/schema";
+import { internal } from "../_generated/api";
+import { migrations } from "../migrations";
+import schema from "../schema";
+import { modules } from "../test.setup";
 
 const migrationsModules = import.meta.glob(
-  "../node_modules/@convex-dev/migrations/src/component/**/*.ts",
+  "../../node_modules/@convex-dev/migrations/src/component/**/*.ts",
 );
 
 // Tests inspired by https://github.com/get-convex/aggregate/blob/main/example/convex/aggregate.test.ts.

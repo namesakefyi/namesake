@@ -1,8 +1,8 @@
 import { convexTest } from "convex-test";
 import { describe, expect, it } from "vitest";
-import { api } from "./_generated/api";
-import schema from "./schema";
-import { modules } from "./test.setup";
+import { api } from "../_generated/api";
+import schema from "../schema";
+import { modules } from "../test.setup";
 
 describe("earlyAccessCodes", () => {
   it("creates an early access code", async () => {

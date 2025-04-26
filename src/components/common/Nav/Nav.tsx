@@ -1,6 +1,6 @@
 import { Link, type LinkProps } from "@/components/common";
 import { focusRing } from "@/components/utils";
-import { useIsMobile } from "@/utils/useIsMobile";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useMatchRoute } from "@tanstack/react-router";
 import { ChevronRight, ExternalLink, type LucideIcon } from "lucide-react";
 import { tv } from "tailwind-variants";

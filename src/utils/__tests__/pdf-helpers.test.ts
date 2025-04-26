@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { joinNames, joinPronouns } from "./pdf-helpers";
+import { joinNames, joinPronouns } from "../pdf-helpers";
 
 describe("PDF helpers", () => {
   describe("joinNames", () => {

@@ -6,9 +6,9 @@ import {
   QuestPageToolbar,
   StatusSelect,
 } from "@/components/quests";
+import type { Status } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc, Id } from "@convex/_generated/dataModel";
-import type { Status } from "@convex/constants";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation } from "convex/react";
 import { Pencil } from "lucide-react";

@@ -4,8 +4,8 @@ import {
   type RadioGroupProps,
   type RadioProps,
 } from "@/components/common";
+import type { UserFormDataField } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
-import type { UserFormDataField } from "@convex/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface RadioOption extends RadioProps {

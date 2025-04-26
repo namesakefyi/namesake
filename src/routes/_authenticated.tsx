@@ -1,5 +1,5 @@
 import { AppMobileNav } from "@/components/app";
-import { useIsMobile } from "@/utils/useIsMobile";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { Navigate, Outlet, createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { tv } from "tailwind-variants";

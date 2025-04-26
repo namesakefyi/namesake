@@ -1,10 +1,10 @@
-import { useIsMobile } from "@/utils/useIsMobile";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PageHeader } from "./PageHeader";
 
 // Mock the useIsMobile hook
-vi.mock("@/utils/useIsMobile");
+vi.mock("@/hooks/useIsMobile");
 
 describe("PageHeader", () => {
   beforeEach(() => {

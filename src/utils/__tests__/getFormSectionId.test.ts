@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getFormSectionId } from "./getFormSectionId";
+import { getFormSectionId } from "../getFormSectionId";
 
 describe("getFormSectionId", () => {
   it("converts a basic question to a valid id", () => {

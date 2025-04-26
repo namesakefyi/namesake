@@ -1,8 +1,8 @@
 import { Banner, Button, Form, Select, SelectItem } from "@/components/common";
 import { SettingsItem } from "@/components/settings";
+import { JURISDICTIONS, type Jurisdiction } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
-import { JURISDICTIONS, type Jurisdiction } from "@convex/constants";
 import { useMutation } from "convex/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";

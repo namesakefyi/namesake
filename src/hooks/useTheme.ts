@@ -1,5 +1,5 @@
+import type { Theme } from "@/constants";
 import { api } from "@convex/_generated/api";
-import type { Theme } from "@convex/constants";
 import { useMutation } from "convex/react";
 import { useTheme as useNextTheme } from "next-themes";
 import type { Selection } from "react-aria-components";

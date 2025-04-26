@@ -1,4 +1,4 @@
-import type { UserFormDataField } from "@convex/constants";
+import type { UserFormDataField } from "@/constants";
 import { ShortTextField } from "../ShortTextField/ShortTextField";
 
 type NameType = "newName" | "oldName";

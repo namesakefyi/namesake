@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { smartquotes } from "./smartquotes";
+import { smartquotes } from "../smartquotes";
 
 describe("smartquotes", () => {
   it("should convert straight single quotes to smart quotes", () => {

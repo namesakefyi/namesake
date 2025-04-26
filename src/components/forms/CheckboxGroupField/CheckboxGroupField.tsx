@@ -4,8 +4,8 @@ import {
   type CheckboxGroupProps,
   type CheckboxProps,
 } from "@/components/common";
+import type { UserFormDataField } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
-import type { UserFormDataField } from "@convex/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface CheckboxOption extends CheckboxProps {

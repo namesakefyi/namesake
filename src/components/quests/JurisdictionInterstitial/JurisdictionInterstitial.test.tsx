@@ -1,4 +1,4 @@
-import { BIRTHPLACES, JURISDICTIONS } from "@convex/constants";
+import { BIRTHPLACES, JURISDICTIONS } from "@/constants";
 import { useNavigate } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

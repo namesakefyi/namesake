@@ -1,5 +1,5 @@
 import { Select, SelectItem } from "@/components/common";
-import type { UserFormDataField } from "@convex/constants";
+import type { UserFormDataField } from "@/constants";
 import languageNameMap from "language-name-map/map";
 import { Text } from "react-aria-components";
 import { useFormContext } from "react-hook-form";

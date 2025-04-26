@@ -7,14 +7,14 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
-import { api } from "@convex/_generated/api";
-import type { Doc } from "@convex/_generated/dataModel";
 import {
   ALL,
   type Category,
   JURISDICTIONS,
   type Jurisdiction,
-} from "@convex/constants";
+} from "@/constants";
+import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
 import { Pencil } from "lucide-react";
 import { useState } from "react";

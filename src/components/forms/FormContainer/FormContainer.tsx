@@ -1,11 +1,11 @@
 import { Banner, Container, Form } from "@/components/common";
 import { FormNavigation, FormSection } from "@/components/forms";
-import { getFormSectionId } from "@/utils/getFormSectionId";
-import { smartquotes } from "@/utils/smartquotes";
 import {
   FormSectionContext,
   type FormSectionData,
-} from "@/utils/useFormSections";
+} from "@/hooks/useFormSections";
+import { getFormSectionId } from "@/utils/getFormSectionId";
+import { smartquotes } from "@/utils/smartquotes";
 import { ShieldCheck } from "lucide-react";
 import { Children, isValidElement, useMemo } from "react";
 import { Heading } from "react-aria-components";

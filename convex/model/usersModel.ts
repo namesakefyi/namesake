@@ -1,9 +1,9 @@
 import { ConvexError } from "convex/values";
 import { z } from "zod";
+import type { Birthplace, Jurisdiction } from "../../src/constants";
+import { DUPLICATE_EMAIL, INVALID_EMAIL } from "../../src/constants/errors";
 import type { Id } from "../_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
-import type { Birthplace, Jurisdiction } from "../constants";
-import { DUPLICATE_EMAIL, INVALID_EMAIL } from "../errors";
 
 export function getAll(ctx: QueryCtx) {
   return ctx.db.query("users").collect();

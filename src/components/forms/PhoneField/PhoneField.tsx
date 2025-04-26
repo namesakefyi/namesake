@@ -1,5 +1,5 @@
 import { TextField, type TextFieldProps } from "@/components/common";
-import type { UserFormDataField } from "@convex/constants";
+import type { UserFormDataField } from "@/constants";
 import { type MaskitoOptions, maskitoTransform } from "@maskito/core";
 import { Controller, useFormContext } from "react-hook-form";
 

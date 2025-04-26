@@ -11,9 +11,9 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
+import type { Cost } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
-import type { Cost } from "@convex/constants";
 import { useMutation } from "convex/react";
 import { HelpCircle, Pencil } from "lucide-react";
 import { Plus, Trash } from "lucide-react";

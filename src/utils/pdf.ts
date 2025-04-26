@@ -1,5 +1,5 @@
+import type { Jurisdiction, UserFormDataField } from "@/constants";
 import { PDFDocument } from "@cantoo/pdf-lib";
-import type { Jurisdiction, UserFormDataField } from "@convex/constants";
 
 type UserFormData = {
   [K in UserFormDataField]: string | boolean | undefined;

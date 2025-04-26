@@ -1,6 +1,6 @@
 import { TextField, type TextFieldProps } from "@/components/common";
+import type { UserFormDataField } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
-import type { UserFormDataField } from "@convex/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
 export interface ShortTextFieldProps extends Omit<TextFieldProps, "size"> {

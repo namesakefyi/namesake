@@ -1,4 +1,4 @@
-import { JURISDICTIONS } from "@convex/constants";
+import { JURISDICTIONS } from "@/constants";
 import userEvent from "@testing-library/user-event";
 import { renderWithFormProvider, screen } from "@tests/test-utils";
 import { describe, expect, it } from "vitest";

@@ -1,5 +1,7 @@
+import type { UserFormDataField } from "@/constants";
+import { useEncryptionKey } from "@/hooks/useEncryptionKey";
+import { decryptData, encryptData } from "@/utils/encryption";
 import { api } from "@convex/_generated/api";
-import type { UserFormDataField } from "@convex/constants";
 import { useMutation, useQuery } from "convex/react";
 import { usePostHog } from "posthog-js/react";
 import { useEffect, useMemo, useState } from "react";
@@ -11,8 +13,6 @@ import {
   useForm as useReactHookForm,
 } from "react-hook-form";
 import { toast } from "sonner";
-import { decryptData, useEncryptionKey } from "./encryption";
-import { encryptData } from "./encryption";
 
 export function useForm<TFieldValues extends FieldValues = FieldValues>(
   fields: UserFormDataField[],
