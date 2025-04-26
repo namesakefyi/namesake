@@ -1,9 +1,4 @@
-import {
-  DB_NAME,
-  DEK_KEY,
-  IV_LENGTH,
-  STORE_NAME,
-} from "@/constants/encryption";
+import { DB_NAME, DEK_KEY, IV_LENGTH, STORE_NAME } from "@/constants";
 
 /**
  * Encryption module using AES-GCM with a single key:

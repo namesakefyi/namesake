@@ -1,4 +1,4 @@
-import type { FormData } from "@/constants/forms";
+import type { FormData } from "@/constants";
 import { definePdf } from "@/utils/pdf";
 import { joinPronouns } from "@/utils/pdf-helpers";
 import pdf from "./cjp27-petition-to-change-name-of-adult.pdf";

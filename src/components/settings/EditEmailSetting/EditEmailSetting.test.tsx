@@ -1,4 +1,4 @@
-import { DUPLICATE_EMAIL, INVALID_EMAIL } from "@/constants/errors";
+import { DUPLICATE_EMAIL, INVALID_EMAIL } from "@/constants";
 import type { Doc, Id } from "@convex/_generated/dataModel";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

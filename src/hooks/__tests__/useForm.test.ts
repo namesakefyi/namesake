@@ -1,4 +1,4 @@
-import type { FieldName } from "@/constants/forms";
+import type { FieldName } from "@/constants";
 import { useEncryptionKey } from "@/hooks/useEncryptionKey";
 import { decryptData, encryptData } from "@/utils/encryption";
 import { renderHook, waitFor } from "@testing-library/react";

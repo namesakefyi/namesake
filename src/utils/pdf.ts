@@ -1,5 +1,4 @@
-import type { FormData } from "@/constants/forms";
-import type { Jurisdiction } from "@/constants/quests";
+import type { FormData, Jurisdiction } from "@/constants";
 import { PDFDocument } from "@cantoo/pdf-lib";
 
 type PDFFields = Record<string, string | boolean | undefined>;
