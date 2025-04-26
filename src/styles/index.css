@@ -16,7 +16,7 @@
 }
 
 .sticky-top-header {
-  @apply sticky top-16 lg:top-20;
+  @apply sticky top-16 lg:top-18;
 }
 
 .h-mobile-nav {
@@ -269,10 +269,6 @@ body,
     outline-color: var(--color-purple-a9);
     outline-width: 3px;
   }
-}
-
-.sticky-top-header {
-  @apply sticky top-16 lg:top-20;
 }
 
 .animate-focus-ring-in {
