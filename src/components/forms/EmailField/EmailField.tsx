@@ -1,9 +1,9 @@
 import { TextField, type TextFieldProps } from "@/components/common";
-import type { UserFormDataField } from "@/constants";
+import type { FieldName } from "@/constants";
 import { Controller, useFormContext } from "react-hook-form";
 
 export interface EmailFieldProps extends Omit<TextFieldProps, "size"> {
-  name: UserFormDataField;
+  name: FieldName;
   children?: React.ReactNode;
 }
 

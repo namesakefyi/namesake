@@ -1,5 +1,5 @@
 import { Select, SelectItem, TextField } from "@/components/common";
-import { JURISDICTIONS, type UserFormDataField } from "@/constants";
+import { type FieldName, JURISDICTIONS } from "@/constants";
 import { maskitoTransform } from "@maskito/core";
 import type { MaskitoOptions } from "@maskito/core";
 import { useEffect } from "react";
@@ -26,11 +26,11 @@ export function AddressField({
   const names: Record<
     AddressType,
     {
-      street: UserFormDataField;
-      city: UserFormDataField;
-      state: UserFormDataField;
-      zip: UserFormDataField;
-      county: UserFormDataField;
+      street: FieldName;
+      city: FieldName;
+      state: FieldName;
+      zip: FieldName;
+      county: FieldName;
     }
   > = {
     residence: {

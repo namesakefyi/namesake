@@ -1,11 +1,11 @@
 import { TextArea, type TextAreaProps } from "@/components/common";
-import type { UserFormDataField } from "@/constants";
+import type { FieldName } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
 import { Controller, useFormContext } from "react-hook-form";
 
 export interface LongTextFieldProps extends Omit<TextAreaProps, "size"> {
   label: string;
-  name: UserFormDataField;
+  name: FieldName;
   children?: React.ReactNode;
 }
 

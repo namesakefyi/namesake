@@ -4,6 +4,7 @@ import {
   FormResponsesList,
   getReadableFieldLabel,
 } from "@/components/settings";
+import type { FieldName } from "@/constants";
 import { api } from "@convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
@@ -17,7 +18,7 @@ function FormResponsesRoute() {
   const userData = useQuery(api.userFormResponses.list);
   const rows = userData?.map((data) => ({
     id: data._id,
-    field: getReadableFieldLabel(data.field),
+    field: getReadableFieldLabel(data.field as FieldName),
     value: data.value,
   }));
 

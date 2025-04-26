@@ -1,18 +1,13 @@
-import type { Jurisdiction, UserFormDataField } from "@/constants";
+import type { FormData } from "@/constants/forms";
+import type { Jurisdiction } from "@/constants/quests";
 import { PDFDocument } from "@cantoo/pdf-lib";
 
-type UserFormData = {
-  [K in UserFormDataField]: string | boolean | undefined;
-};
-
 type PDFFields = Record<string, string | boolean | undefined>;
-
-type FieldTransformer<T extends Partial<UserFormData>> = (data: T) => PDFFields;
 
 /**
  * A definition of a PDF form and its fields.
  */
-export interface PDFDefinition<T extends Partial<UserFormData>> {
+export interface PDFDefinition {
   /**
    * The path to the PDF file, imported as a module.
    */
@@ -50,18 +45,14 @@ export interface PDFDefinition<T extends Partial<UserFormData>> {
    *
    * @example
    * ```ts
-   * fields: (data: {
-   *   newFirstName: string;
-   *   newMiddleName: string;
-   *   newLastName: string;
-   * }) => ({
+   * fields: (data) => ({
    *   firstNameField: data.newFirstName,
    *   middle_name_field: data.newMiddleName,
    *   "Last Name Field": data.newLastName,
    * })
    * ```
    */
-  fields: FieldTransformer<T>;
+  fields: (data: Partial<FormData>) => PDFFields;
 }
 
 /**
@@ -89,12 +80,12 @@ export const fetchPdf = async (path: string) => {
  * Fill out a PDF form with the given user data.
  * @returns A URL to the filled PDF.
  */
-export async function fillPdf<T extends Partial<UserFormData>>({
+export async function fillPdf({
   pdf,
   userData,
 }: {
-  pdf: PDFDefinition<T>;
-  userData: T;
+  pdf: PDFDefinition;
+  userData: Partial<FormData>;
 }): Promise<Uint8Array> {
   try {
     const pdfFields = pdf.fields(userData);
@@ -131,12 +122,12 @@ export async function fillPdf<T extends Partial<UserFormData>>({
  * This is a helper function that returns the form object from a filled PDF.
  * Useful for testing.
  */
-export async function getPdfForm<T extends Partial<UserFormData>>({
+export async function getPdfForm({
   pdf,
   userData,
 }: {
-  pdf: PDFDefinition<T>;
-  userData: T;
+  pdf: PDFDefinition;
+  userData: Partial<FormData>;
 }) {
   try {
     const pdfBytes = await fillPdf({ pdf, userData });
@@ -151,12 +142,12 @@ export async function getPdfForm<T extends Partial<UserFormData>>({
 /**
  * Fill out a PDF form and download it.
  */
-export async function downloadPdf<T extends Partial<UserFormData>>({
+export async function downloadPdf({
   pdf,
   userData,
 }: {
-  pdf: PDFDefinition<T>;
-  userData: T;
+  pdf: PDFDefinition;
+  userData: Partial<FormData>;
 }) {
   const pdfBytes = await fillPdf({ pdf, userData });
   if (!pdfBytes) return;
@@ -177,8 +168,6 @@ export async function downloadPdf<T extends Partial<UserFormData>>({
  * Define a PDF form.
  * @returns A PDF definition.
  */
-export function definePdf<T extends Partial<UserFormData>>(
-  definition: PDFDefinition<T>,
-): PDFDefinition<T> {
+export function definePdf(definition: PDFDefinition): PDFDefinition {
   return definition;
 }

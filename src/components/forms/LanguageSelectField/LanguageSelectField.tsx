@@ -1,12 +1,12 @@
 import { Select, SelectItem } from "@/components/common";
-import type { UserFormDataField } from "@/constants";
+import type { FieldName } from "@/constants";
 import languageNameMap from "language-name-map/map";
 import { Text } from "react-aria-components";
 import { useFormContext } from "react-hook-form";
 import { Controller } from "react-hook-form";
 
 export interface LanguageSelectFieldProps {
-  name: UserFormDataField;
+  name: FieldName;
   children?: React.ReactNode;
   defaultValue?: string;
 }

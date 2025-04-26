@@ -1,4 +1,4 @@
-import type { UserFormDataField } from "@/constants";
+import type { FieldName } from "@/constants";
 import { ShortTextField } from "../ShortTextField/ShortTextField";
 
 type NameType = "newName" | "oldName";
@@ -12,9 +12,9 @@ export function NameField({ children, type }: NameFieldProps) {
   const names: Record<
     NameType,
     {
-      first: UserFormDataField;
-      middle: UserFormDataField;
-      last: UserFormDataField;
+      first: FieldName;
+      middle: FieldName;
+      last: FieldName;
     }
   > = {
     newName: {

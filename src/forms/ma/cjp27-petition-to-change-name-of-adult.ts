@@ -1,3 +1,4 @@
+import type { FormData } from "@/constants/forms";
 import { definePdf } from "@/utils/pdf";
 import { joinPronouns } from "@/utils/pdf-helpers";
 import pdf from "./cjp27-petition-to-change-name-of-adult.pdf";
@@ -7,42 +8,7 @@ export default definePdf({
   code: "CJP 27",
   pdfPath: pdf,
   jurisdiction: "MA",
-  fields: (data: {
-    newFirstName?: string;
-    newMiddleName?: string;
-    newLastName?: string;
-    oldFirstName?: string;
-    oldMiddleName?: string;
-    oldLastName?: string;
-    birthplaceCity?: string;
-    birthplaceState?: string;
-    residenceStreetAddress?: string;
-    residenceCity?: string;
-    residenceState?: string;
-    residenceCounty?: string;
-    residenceZipCode?: string;
-    email?: string;
-    phoneNumber?: string;
-    isMailingAddressDifferentFromResidence?: boolean;
-    mailingStreetAddress?: string;
-    mailingCity?: string;
-    mailingState?: string;
-    mailingZipCode?: string;
-    dateOfBirth?: string;
-    hasPreviousNameChange?: boolean;
-    previousNameFrom?: string;
-    previousNameTo?: string;
-    previousNameReason?: string;
-    shouldReturnOriginalDocuments?: boolean;
-    hasUsedOtherNameOrAlias?: boolean;
-    otherNamesOrAliases?: string;
-    reasonForChangingName?: string;
-    isInterpreterNeeded?: boolean;
-    language?: string;
-    isOkayToSharePronouns?: boolean;
-    pronouns?: string;
-    otherPronouns?: string;
-  }) => ({
+  fields: (data: Partial<FormData>) => ({
     // Petitioner
     petitionerFirstName: data.oldFirstName,
     petitionerMiddleName: data.oldMiddleName,

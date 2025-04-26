@@ -1,201 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./colors.css";
+@import "./editor.css";
 
 @plugin "tailwindcss-react-aria-components";
 
-@custom-variant light (&:where(.light, .light *, :not(.dark, .dark *)));
 @custom-variant dark (&:where(.dark, .dark *));
-
-.app-padding {
-  @apply px-4 md:px-6 lg:px-8;
-}
-
-.h-header {
-  @apply h-16 lg:h-18;
-}
-
-.sticky-top-header {
-  @apply sticky top-16 lg:top-18;
-}
-
-.h-mobile-nav {
-  height: calc(56px + env(safe-area-inset-bottom));
-  padding-bottom: max(env(safe-area-inset-bottom), 0.25rem);
-}
-
-.prose {
-  @apply text-base lg:text-lg;
-
-  a:not([data-type="button"]):not(:where(.not-prose *)) {
-    @apply underline underline-offset-2 hover:decoration-inherit decoration-gray-a8;
-  }
-
-  :where(p, h2, h3, blockquote, ul, ol, img, div) + :where(p, h2, h3, blockquote, ul, ol, img, div):not(:where(.not-prose *)) {
-    margin-block-start: 0.75em;
-  }
-
-  h2:not(:where(.not-prose *)) {
-    @apply text-2xl font-medium;
-    @apply pb-2;
-    @apply border-b border-gray-6;
-  }
-
-  h3:not(:where(.not-prose *)) {
-    @apply text-xl font-medium;
-  }
-
-  blockquote:not(:where(.not-prose *)) {
-    @apply border-l-2 border-gray-9 pl-4;
-  }
-
-  li:not(:where(.not-prose *)) {
-    margin-block: 0;
-    padding-inline-start: 1.5em;
-    position: relative;
-  }
-
-  ul:not(:where(.not-prose *)),
-  ol:not(:where(.not-prose *)) {
-    list-style: none;
-  }
-
-  li:not(:where(.not-prose *)) {
-    &::before {
-      position: absolute;
-      left: 0;
-      @apply tabular-nums text-gray-11;
-    }
-  }
-
-  ul > li:not(:where(.not-prose *))::before {
-    content: "•";
-    margin-inline-start: 0.25em;
-    scale: 1.3;
-    translate: 0 -0.05em;
-  }
-
-  ol:not([data-type="steps"]):not(:where(.not-prose *)) {
-    counter-reset: list;
-  }
-
-  ol:not([data-type="steps"]) > li:not(:where(.not-prose *))::before {
-    counter-increment: list;
-    content: counter(list) ".";
-    text-align: right;
-    width: 1.5em;
-    margin-inline-start: -0.5em;
-  }
-
-  ol:not([data-type="steps"]) ol > li:not(:where(.not-prose *))::before {
-    content: counter(list, lower-alpha) ".";
-  }
-
-  ul:not([data-type="steps"]) ul:not(:where(.not-prose *)),
-  ul:not([data-type="steps"]) ol:not(:where(.not-prose *)),
-  ol:not([data-type="steps"]) ul:not(:where(.not-prose *)),
-  ol:not([data-type="steps"]) ol:not(:where(.not-prose *)) {
-    margin-block: 0;
-  }
-
-  ol[data-type="steps"]:not(:where(.not-prose *)) {
-    counter-reset: steps;
-    @apply flex flex-col;
-
-    &:not(:first-child) {
-      @apply mt-6;
-    }
-  }
-
-  li[data-type="step-item"]:not(:where(.not-prose *)) {
-    --step-number-size: 32px;
-    --step-number-gap: 12px;
-    padding: 0;
-    counter-increment: steps;
-    position: relative;
-    padding-inline-start: calc(var(--step-number-size) + var(--step-number-gap));
-    
-    &::before {
-      all: unset;
-      width: var(--step-number-size);
-      height: var(--step-number-size);
-      aspect-ratio: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      position: absolute;
-      left: 0;
-      top: 0;
-      content: counter(steps);
-      @apply bg-gray-a4;
-    }
-    
-    &::after {
-      position: absolute;
-      left: calc(var(--step-number-size) / 2);
-      top: var(--step-number-size);
-      width: 2px;
-      bottom: 0;
-      @apply bg-gray-a3;
-      content: "";
-    }
-    
-    &:last-child::after {
-      @apply invisible;
-    }
-
-    &:last-child div[data-type="step-content"] {
-      padding-bottom: 0.75rem;
-    }
-  }
-
-  div[data-type="step-title"]:not(:where(.not-prose *)) {
-    @apply text-2xl font-medium;
-    
-    &.is-empty::before {
-      content: attr(data-placeholder);
-      @apply text-gray-9;
-      float: left;
-      height: 0;
-      pointer-events: none;
-    }
-  }
-
-  div[data-type="step-content"] {
-    padding-block-end: 1.5rem;
-
-    &.is-empty::before {
-      content: attr(data-placeholder);
-      @apply text-gray-9;
-      float: left;
-      height: 0;
-      pointer-events: none;
-    }
-  }
-}
-
-.tiptap {
-  &.is-empty :not([data-type="step-content"]) p:first-child::before {
-    @apply text-gray-9;
-    content: attr(data-placeholder);
-    float: left;
-    height: 0;
-    pointer-events: none;
-  }
-}
-
-/* Scale up hit targets on high resolution mobile devices. */
-@media (min-resolution: 200dpi) {
-  html {
-    font-size: 18px;
-  }
-
-  .text-sm {
-    /* ensure minimum font size of 16px */
-    font-size: 0.9rem;
-  }
-}
 
 html {
   scroll-padding-block-start: 3rem;
@@ -220,42 +30,32 @@ body,
   @apply bg-purple-5 text-gray-12;
 }
 
-.svc-full-creator {
-  flex: 1;
+.app-padding {
+  @apply px-4 md:px-6 lg:px-8;
 }
 
-.tippy-box {
-  transition: 0.25s ease;
-  transition-property: opacity, transform, scale;
+.h-header {
+  @apply h-14 lg:h-18;
+}
 
-  &[data-state="hidden"] {
-    opacity: 0;
-    scale: 0.96;
+.sticky-top-header {
+  @apply sticky top-14 lg:top-18;
+}
 
-    &[data-placement^="top"] {
-      transform: translateY(10px);
-      transform-origin: bottom;
-    }
+.h-mobile-nav {
+  height: calc(56px + env(safe-area-inset-bottom));
+  padding-bottom: max(env(safe-area-inset-bottom), 0.25rem);
+}
 
-    &[data-placement^="bottom"] {
-      transform: translateY(-10px);
-      transform-origin: top;
-    }
-
-    &[data-placement^="left"] {
-      transform: translateX(10px);
-      transform-origin: right;
-    }
-
-    &[data-placement^="right"] {
-      transform: translateX(-10px);
-      transform-origin: left;
-    }
+/* Scale up hit targets on high resolution mobile devices. */
+@media (min-resolution: 200dpi) {
+  html {
+    font-size: 18px;
   }
 
-  &[data-state="visible"] {
-    opacity: 1;
-    transition-timing-function: cubic-bezier(0.54, 1.5, 0.38, 1.11);
+  .text-sm {
+    /* ensure minimum font size of 16px */
+    font-size: 0.9rem;
   }
 }
 
@@ -279,17 +79,18 @@ body,
   }
 }
 
-.disable-native-autofill:-webkit-autofill,
-.disable-native-autofill:autofill {
-  /* The background color itself can't be overridden, so we use a hack to disable it.
-  https://css-tricks.com/snippets/css/change-autocomplete-styles-webkit-browsers/ */
+@utility disable-native-autofill {
+  &:-webkit-autofill,
+  &:autofill {
+    /* The background color itself can't be overridden, so we use a hack to disable it.
+    https://css-tricks.com/snippets/css/change-autocomplete-styles-webkit-browsers/ */
 
-  /* Set transition delay to the max possible integer in CSS (68.24 years)
-  https://stackoverflow.com/questions/37861312/what-is-the-maximum-value-of-a-css-transitions-duration */
-  transition-property: background-color, color;
-  transition-duration: 0s;
-  transition-delay: 2147483647s;
-  transition-timing-function: linear;
-  background-color: transparent !important;
-  -webkit-text-fill-color: inherit;
+    /* Set transition delay to the max possible integer in CSS (68.24 years)
+    https://stackoverflow.com/questions/37861312/what-is-the-maximum-value-of-a-css-transitions-duration */
+    transition-property: background-color, color;
+    transition-duration: 0s;
+    transition-delay: 2147483647s;
+    background-color: transparent !important;
+    -webkit-text-fill-color: inherit;
+  }
 }

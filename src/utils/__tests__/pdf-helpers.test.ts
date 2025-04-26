@@ -38,11 +38,11 @@ describe("PDF helpers", () => {
 
   describe("joinPronouns", () => {
     it("joins primary and other pronouns when both present", () => {
-      expect(joinPronouns("She/Her", "They/Them")).toBe("She/Her, They/Them");
+      expect(joinPronouns(["She/Her"], "They/Them")).toBe("She/Her, They/Them");
     });
 
     it("returns only primary pronouns when other pronouns undefined", () => {
-      expect(joinPronouns("She/Her", undefined)).toBe("She/Her");
+      expect(joinPronouns(["She/Her"], undefined)).toBe("She/Her");
     });
 
     it("returns only other pronouns when primary pronouns undefined", () => {
@@ -54,11 +54,11 @@ describe("PDF helpers", () => {
     });
 
     it("handles empty strings", () => {
-      expect(joinPronouns("", "")).toBe("");
+      expect(joinPronouns([], "")).toBe("");
     });
 
     it("handles mix of empty string and undefined", () => {
-      expect(joinPronouns("", undefined)).toBe("");
+      expect(joinPronouns([], undefined)).toBe("");
       expect(joinPronouns(undefined, "")).toBe("");
     });
   });

@@ -207,6 +207,8 @@ describe("getReadableFieldLabel", () => {
   });
 
   it("returns the field as-is if it's not in the USER_FORM_DATA_FIELDS object", () => {
-    expect(getReadableFieldLabel("nonExistentField")).toBe("nonExistentField");
+    expect(getReadableFieldLabel("nonExistentField" as any)).toBe(
+      "nonExistentField",
+    );
   });
 });

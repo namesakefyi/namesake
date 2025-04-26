@@ -26,8 +26,8 @@ describe("CJP27 Petition to Change Name of Adult", () => {
     phoneNumber: "555-555-5555",
     dateOfBirth: "1990-01-01",
     hasPreviousNameChange: false,
-    pronouns: "She/Her",
-  } as const;
+    pronouns: ["She/Her"],
+  };
 
   it("maps fields correctly to the PDF", async () => {
     const form = await getPdfForm({
@@ -133,7 +133,7 @@ describe("CJP27 Petition to Change Name of Adult", () => {
     const dataWithPronouns = {
       ...testData,
       isOkayToSharePronouns: true,
-      pronouns: "She/Her",
+      pronouns: ["She/Her"],
     };
 
     const form = await getPdfForm({
@@ -149,7 +149,7 @@ describe("CJP27 Petition to Change Name of Adult", () => {
     const dataWithoutPronouns = {
       ...testData,
       isOkayToSharePronouns: false,
-      pronouns: "She/Her",
+      pronouns: ["She/Her"],
     };
 
     const form = await getPdfForm({
@@ -165,7 +165,7 @@ describe("CJP27 Petition to Change Name of Adult", () => {
     const dataWithOtherPronouns = {
       ...testData,
       isOkayToSharePronouns: true,
-      pronouns: "She/Her",
+      pronouns: ["She/Her"],
       otherPronouns: "Ze/Zir",
     };
 

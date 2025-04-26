@@ -1,4 +1,4 @@
-import type { UserFormDataField } from "@/constants";
+import type { FieldName } from "@/constants/forms";
 import { useEncryptionKey } from "@/hooks/useEncryptionKey";
 import { decryptData, encryptData } from "@/utils/encryption";
 import { api } from "@convex/_generated/api";
@@ -15,7 +15,7 @@ import {
 import { toast } from "sonner";
 
 export function useForm<TFieldValues extends FieldValues = FieldValues>(
-  fields: UserFormDataField[],
+  fields: FieldName[],
   options?: Omit<UseFormProps<TFieldValues>, "values" | "defaultValues">,
 ) {
   const posthog = usePostHog();
