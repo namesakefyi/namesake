@@ -36,7 +36,7 @@ export function Empty({
         className,
       )}
     >
-      <Icon size={40} className="text-gray-8 shrink-0 stroke-[1.5px]" />
+      <Icon size={40} className="text-gray-9 shrink-0 stroke-2" />
       <Heading className="font-semibold text-xl">{smartquotes(title)}</Heading>
       {subtitle && (
         <p className="text-gray-dim -mt-3 text-center">
