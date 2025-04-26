@@ -19,8 +19,13 @@ import { waitFor } from "@/utils/waitFor";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { useMutation, useQuery } from "convex/react";
+import { Navigate, createFileRoute, useNavigate } from "@tanstack/react-router";
+import {
+  Authenticated,
+  Unauthenticated,
+  useMutation,
+  useQuery,
+} from "convex/react";
 import { ConvexError } from "convex/values";
 import { ChevronLeft } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
@@ -29,10 +34,6 @@ import type { Key } from "react-aria";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_unauthenticated/signin")({
-  beforeLoad: async ({ context }) => {
-    const { isAuthenticated, isLoading } = await context.auth;
-    if (!isLoading && isAuthenticated) throw redirect({ to: "/" });
-  },
   component: LoginRoute,
 });
 
@@ -368,20 +369,27 @@ const ForgotPassword = ({
 
 function LoginRoute() {
   return (
-    <div className="flex flex-col w-96 max-w-full mx-auto min-h-dvh items-center justify-center gap-8 p-4">
-      <Link href="https://namesake.fyi">
-        <Logo />
-      </Link>
-      <AnimateChangeInHeight className="w-full">
-        <Card>
-          <SignIn />
-        </Card>
-      </AnimateChangeInHeight>
-      <div className="flex gap-4 justify-center text-sm">
-        <Link href="https://github.com/namesakefyi/namesake/releases">{`v${APP_VERSION}`}</Link>
-        <Link href="https://namesake.fyi/chat">Support</Link>
-        <Link href="https://status.namesake.fyi">Status</Link>
-      </div>
-    </div>
+    <>
+      <Unauthenticated>
+        <div className="flex flex-col w-96 max-w-full mx-auto min-h-dvh items-center justify-center gap-8 p-4">
+          <Link href="https://namesake.fyi">
+            <Logo />
+          </Link>
+          <AnimateChangeInHeight className="w-full">
+            <Card>
+              <SignIn />
+            </Card>
+          </AnimateChangeInHeight>
+          <div className="flex gap-4 justify-center text-sm">
+            <Link href="https://github.com/namesakefyi/namesake/releases">{`v${APP_VERSION}`}</Link>
+            <Link href="https://namesake.fyi/chat">Support</Link>
+            <Link href="https://status.namesake.fyi">Status</Link>
+          </div>
+        </div>
+      </Unauthenticated>
+      <Authenticated>
+        <Navigate to="/" />
+      </Authenticated>
+    </>
   );
 }
