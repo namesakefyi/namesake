@@ -15,14 +15,16 @@ import {
   TooltipTrigger,
 } from "@/components/common";
 import { usePasswordStrength } from "@/utils/usePasswordStrength";
+import { waitFor } from "@/utils/waitFor";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { ConvexError } from "convex/values";
 import { ChevronLeft } from "lucide-react";
-import { useState } from "react";
+import { usePostHog } from "posthog-js/react";
+import { useRef, useState } from "react";
 import type { Key } from "react-aria";
 import { toast } from "sonner";
 
@@ -44,6 +46,10 @@ const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate({ from: "/signin" });
+  const postHog = usePostHog();
+  const isSignedIn = useQuery(api.users.isSignedIn);
+  const isSignedInRef = useRef(isSignedIn);
+  isSignedInRef.current = isSignedIn;
 
   const passwordState = usePasswordStrength(password);
   const redeemCode = useMutation(api.earlyAccessCodes.redeem);
@@ -85,9 +91,12 @@ const SignIn = () => {
         password,
         redirectTo: "/",
       });
+      // Wait for user signin to complete before redirecting
+      await waitFor(() => !!isSignedInRef.current);
       navigate({ to: "/" });
     } catch (error) {
       setError("Couldn't sign in. Check your information and try again.");
+      postHog.captureException(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -223,6 +232,7 @@ const ForgotPassword = ({
 }: { onBack: () => void; defaultEmail?: string }) => {
   const navigate = useNavigate({ from: "/signin" });
   const { signIn } = useAuthActions();
+  const postHog = usePostHog();
   const [code, setCode] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [email, setEmail] = useState<string>(defaultEmail ?? "");
@@ -231,35 +241,76 @@ const ForgotPassword = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const passwordState = usePasswordStrength(newPassword);
+  const isSignedIn = useQuery(api.users.isSignedIn);
+  const isSignedInRef = useRef(isSignedIn);
+  isSignedInRef.current = isSignedIn;
+
+  const handleForgotSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      setIsSubmitting(true);
+
+      await signIn("password", {
+        flow: "reset",
+        email,
+      });
+      setStep({ email });
+      setError(null);
+      setDidSendCode(true);
+    } catch (error) {
+      postHog.captureException(error);
+      if (error instanceof ConvexError) {
+        setError(error.message);
+      } else {
+        setError("Couldn't send code. Is this email correct?");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCodeSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (step === "forgot") return;
+
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      if (passwordState && passwordState.score < 3) {
+        setError(
+          `Please choose a stronger password. ${passwordState.feedback.warning}`,
+        );
+        setIsSubmitting(false);
+        return;
+      }
+      await signIn("password", {
+        flow: "reset-verification",
+        email: step.email,
+        code,
+        newPassword,
+      });
+      // Wait for user signin to complete before redirecting
+      await waitFor(() => !!isSignedInRef.current);
+      navigate({ to: "/" });
+      toast.success("Password reset!");
+    } catch (error) {
+      postHog.captureException(error);
+      setDidSendCode(false);
+      setError("Couldn’t reset password. Try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return step === "forgot" ? (
-    <Form
-      onSubmit={(event) => {
-        event.preventDefault();
-        setIsSubmitting(true);
-
-        signIn("password", {
-          flow: "reset",
-          email,
-        })
-          .then(() => {
-            setStep({ email });
-            setError(null);
-            setDidSendCode(true);
-          })
-          .catch((error) => {
-            console.error(error);
-            if (error instanceof ConvexError) {
-              setError(error.message);
-            } else {
-              setError("Couldn't send code. Is this email correct?");
-            }
-            setIsSubmitting(false);
-          })
-          .finally(() => setIsSubmitting(false));
-      }}
-      className="items-stretch"
-    >
+    <Form onSubmit={handleForgotSubmit} className="items-stretch">
       <header className="flex items-center gap-3">
         <Button
           onPress={onBack}
@@ -283,39 +334,7 @@ const ForgotPassword = ({
       </Button>
     </Form>
   ) : (
-    <Form
-      className="items-stretch"
-      onSubmit={async (event) => {
-        event.preventDefault();
-        setIsSubmitting(true);
-
-        try {
-          if (passwordState && passwordState.score < 3) {
-            setError(
-              `Please choose a stronger password. ${passwordState.feedback.warning}`,
-            );
-            setIsSubmitting(false);
-            return;
-          }
-          const result = await signIn("password", {
-            flow: "reset-verification",
-            redirectTo: "/quests",
-            email: step.email,
-            code,
-            newPassword,
-          });
-          if (result.redirect) {
-            navigate({ to: result.redirect.toString() });
-          }
-          navigate({ to: "/" });
-        } catch (error) {
-          console.error(error);
-          setDidSendCode(false);
-          setError("Couldn’t reset password. Try again.");
-          setIsSubmitting(false);
-        }
-      }}
-    >
+    <Form className="items-stretch" onSubmit={handleCodeSubmit}>
       {didSendCode && (
         <Banner variant="success">
           Code emailed. Paste the code below and enter your new password.

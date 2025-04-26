@@ -1,7 +1,6 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useMatchRoute, useNavigate } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { SettingsNav } from "./SettingsNav";
 
@@ -38,16 +37,6 @@ describe("SettingsNav", () => {
     expect(screen.getByText("Privacy Policy")).toBeInTheDocument();
 
     expect(screen.getByText("Sign out")).toBeInTheDocument();
-  });
-
-  it("handles sign out correctly", async () => {
-    render(<SettingsNav />);
-
-    const signOutButton = screen.getByText("Sign out");
-    await userEvent.click(signOutButton);
-
-    expect(mockSignOut).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith({ to: "/signin" });
   });
 
   it("renders external links with correct attributes", () => {

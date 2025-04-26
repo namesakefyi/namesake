@@ -1,4 +1,4 @@
-import { useAuthActions } from "@convex-dev/auth/react";
+import { useNavigate } from "@tanstack/react-router";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useMutation } from "convex/react";
@@ -7,7 +7,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DeleteAccountSetting } from "./DeleteAccountSetting";
 
 describe("DeleteAccountSetting", () => {
-  const mockSignOut = vi.fn();
+  const mockNavigate = vi.fn();
   const mockDeleteAccount = vi.fn();
 
   beforeEach(() => {
@@ -15,9 +15,9 @@ describe("DeleteAccountSetting", () => {
     (useMutation as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
       mockDeleteAccount,
     );
-    (useAuthActions as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      signOut: mockSignOut,
-    });
+    (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+      mockNavigate,
+    );
   });
 
   it("renders the DeleteAccountSetting component", () => {
@@ -69,7 +69,7 @@ describe("DeleteAccountSetting", () => {
 
     await waitFor(() => {
       expect(mockDeleteAccount).toHaveBeenCalled();
-      expect(mockSignOut).toHaveBeenCalled();
+      expect(mockNavigate).toHaveBeenCalledWith({ to: "/signout" });
       expect(toast.success).toHaveBeenCalledWith("Account deleted.");
     });
   });

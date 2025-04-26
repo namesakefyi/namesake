@@ -8,8 +8,8 @@ import {
   TextField,
 } from "@/components/common";
 import { SettingsItem } from "@/components/settings";
-import { useAuthActions } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
+import { useNavigate } from "@tanstack/react-router";
 import { useMutation } from "convex/react";
 import { Trash } from "lucide-react";
 import { useState } from "react";
@@ -26,7 +26,7 @@ const DeleteAccountModal = ({
   onOpenChange,
   onSubmit,
 }: DeleteAccountModalProps) => {
-  const { signOut } = useAuthActions();
+  const navigate = useNavigate();
   const [value, setValue] = useState("");
   const [error, setError] = useState<string>();
   const [isDeleting, setIsDeleting] = useState(false);
@@ -49,8 +49,8 @@ const DeleteAccountModal = ({
       setIsDeleting(true);
       await deleteAccount();
       clearLocalStorage();
-      signOut();
       onSubmit();
+      navigate({ to: "/signout" });
       toast.success("Account deleted.");
     } catch (err) {
       setError("Failed to delete account. Please try again.");
