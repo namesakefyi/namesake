@@ -1,6 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import fs from "node:fs";
 import path from "node:path";
+import { Component, type ReactNode } from "react";
 import { afterEach, beforeEach, vi } from "vitest";
 
 vi.mock("convex/react", () => ({
@@ -42,6 +43,23 @@ vi.mock("posthog-js/react", () => ({
   usePostHog: vi.fn(() => ({
     captureException: vi.fn(),
   })),
+  PostHogErrorBoundary: class ErrorBoundary extends Component<{
+    children: ReactNode;
+    fallback: (props: { error: Error }) => ReactNode;
+  }> {
+    state = { hasError: false, error: null };
+
+    static getDerivedStateFromError(error: Error) {
+      return { hasError: true, error };
+    }
+
+    render() {
+      if (this.state.hasError) {
+        return this.props.fallback({ error: this.state.error! });
+      }
+      return this.props.children;
+    }
+  },
 }));
 
 // Mock encryption functions

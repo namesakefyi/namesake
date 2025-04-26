@@ -72,4 +72,37 @@ describe("AppSidebar", () => {
     expect(screen.getByText("Main Content")).toBeInTheDocument();
     expect(screen.getByText("Footer Content")).toBeInTheDocument();
   });
+
+  it("renders error fallback when child component throws", () => {
+    vi.spyOn(console, "error").mockImplementation(() => null);
+
+    const ErrorComponent = () => {
+      throw new Error("Test error");
+    };
+
+    render(
+      <AppSidebar>
+        <ErrorComponent />
+      </AppSidebar>,
+    );
+
+    expect(screen.getByText("Something went wrong")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "We’ve been notified of the issue. Refresh the page to try again.",
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("maintains error boundary around content", () => {
+    render(
+      <AppSidebar>
+        <div>Safe Content</div>
+      </AppSidebar>,
+    );
+
+    expect(screen.getByText("Safe Content")).toBeInTheDocument();
+    const error = screen.queryByText("Something went wrong");
+    expect(error).not.toBeInTheDocument();
+  });
 });
