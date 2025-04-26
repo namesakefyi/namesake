@@ -117,11 +117,8 @@ export type FieldType<K extends FieldName> = K extends any
         : never
   : never;
 
-// Helper type to get the type for a given field name
-export type FieldTypeForField<N extends FieldName> = FieldType<N>;
-
 export type FormData = {
-  [K in FieldName]: FieldTypeForField<K>;
+  [K in FieldName]: FieldType<K>;
 };
 
 export const COMMON_PRONOUNS = ["they/them", "she/her", "he/him"];
