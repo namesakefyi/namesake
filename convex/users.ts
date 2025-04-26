@@ -99,3 +99,7 @@ export const deleteCurrentUser = userMutation({
     await Users.deleteUser(ctx, { userId: ctx.userId });
   },
 });
+
+export const isSignedIn = query(async (ctx) => {
+  return !!(await getAuthUserId(ctx));
+});

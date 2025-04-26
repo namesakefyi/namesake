@@ -1,14 +1,10 @@
 import { AppMobileNav } from "@/components/app";
 import { useIsMobile } from "@/utils/useIsMobile";
-import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import { Authenticated } from "convex/react";
+import { Navigate, Outlet, createFileRoute } from "@tanstack/react-router";
+import { Authenticated, Unauthenticated } from "convex/react";
 import { tv } from "tailwind-variants";
 
 export const Route = createFileRoute("/_authenticated")({
-  beforeLoad: async ({ context }) => {
-    const { isAuthenticated, isLoading } = await context.auth;
-    if (!isLoading && !isAuthenticated) throw redirect({ to: "/signin" });
-  },
   component: AuthenticatedRoute,
 });
 
@@ -25,11 +21,16 @@ function AuthenticatedRoute() {
   });
 
   return (
-    <Authenticated>
-      <main className={styles({ isMobile })}>
-        <Outlet />
-        {isMobile && <AppMobileNav />}
-      </main>
-    </Authenticated>
+    <>
+      <Authenticated>
+        <main className={styles({ isMobile })}>
+          <Outlet />
+          {isMobile && <AppMobileNav />}
+        </main>
+      </Authenticated>
+      <Unauthenticated>
+        <Navigate to="/signin" />
+      </Unauthenticated>
+    </>
   );
 }

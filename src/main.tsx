@@ -5,18 +5,13 @@ import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
 import type { Jurisdiction, Role } from "@convex/constants";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
-import {
-  type ConvexAuthState,
-  ConvexReactClient,
-  useConvexAuth,
-  useQuery,
-} from "convex/react";
+import { ConvexReactClient, useQuery } from "convex/react";
 import { ArrowLeft, TriangleAlert } from "lucide-react";
 import { LazyMotion, domAnimation } from "motion/react";
 import { ThemeProvider } from "next-themes";
 import { posthog } from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
-import { StrictMode, useEffect } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import { routeTree } from "./routeTree.gen";
@@ -54,7 +49,6 @@ export const router = createRouter({
   context: {
     convex: undefined!,
     title: undefined!,
-    auth: undefined!,
     role: undefined!,
     residence: undefined!,
     birthplace: undefined!,
@@ -69,29 +63,17 @@ declare module "@tanstack/react-router" {
   }
 }
 
-let resolveAuth: (client: ConvexAuthState) => void;
-const authClient: Promise<ConvexAuthState> = new Promise((resolve) => {
-  resolveAuth = resolve;
-});
-
 const InnerApp = () => {
   const title = "Namesake";
-  const auth = useConvexAuth();
   const user = useQuery(api.users.getCurrent);
   const role = user?.role as Role;
   const residence = user?.residence as Jurisdiction;
   const birthplace = user?.birthplace as Jurisdiction;
 
-  useEffect(() => {
-    if (auth.isLoading) return;
-
-    resolveAuth(auth);
-  }, [auth, auth.isLoading]);
-
   return (
     <RouterProvider
       router={router}
-      context={{ convex, title, auth: authClient, role, residence, birthplace }}
+      context={{ convex, title, role, residence, birthplace }}
     />
   );
 };

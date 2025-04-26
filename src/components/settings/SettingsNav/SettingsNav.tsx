@@ -1,6 +1,4 @@
 import { Nav, NavGroup, NavItem } from "@/components/common";
-import { useAuthActions } from "@convex-dev/auth/react";
-import { useNavigate } from "@tanstack/react-router";
 import {
   Bug,
   CircleUser,
@@ -13,14 +11,6 @@ import {
 } from "lucide-react";
 
 export const SettingsNav = ({ className }: { className?: string }) => {
-  const { signOut } = useAuthActions();
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate({ to: "/signin" });
-  };
-
   return (
     <Nav className={className}>
       <NavGroup>
@@ -90,7 +80,7 @@ export const SettingsNav = ({ className }: { className?: string }) => {
         </NavItem>
       </NavGroup>
       <NavGroup>
-        <NavItem onClick={handleSignOut} icon={LogOut}>
+        <NavItem href={{ to: "/signout" }} icon={LogOut}>
           Sign out
         </NavItem>
       </NavGroup>
