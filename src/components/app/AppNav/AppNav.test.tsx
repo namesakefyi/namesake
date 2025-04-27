@@ -21,9 +21,10 @@ describe("AppNav", () => {
   it("renders home and settings links for regular users", () => {
     render(<AppNav />);
 
-    expect(screen.getByText("Home")).toBeInTheDocument();
-    expect(screen.getByText("Settings")).toBeInTheDocument();
-    expect(screen.queryByText("Admin")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Home")).toBeInTheDocument();
+    expect(screen.getByLabelText("Documents")).toBeInTheDocument();
+    expect(screen.getByLabelText("Settings")).toBeInTheDocument();
+    expect(screen.queryByLabelText("Admin")).not.toBeInTheDocument();
   });
 
   it("includes admin link for admin users", () => {
@@ -32,7 +33,7 @@ describe("AppNav", () => {
     });
 
     render(<AppNav />);
-    expect(screen.getByText("Admin")).toBeInTheDocument();
+    expect(screen.getByLabelText("Admin")).toBeInTheDocument();
   });
 
   describe("handles active state", () => {
@@ -43,7 +44,7 @@ describe("AppNav", () => {
 
       render(<AppNav />);
 
-      const homeLink = screen.getByText("Home").closest("a");
+      const homeLink = screen.getByLabelText("Home").closest("a");
       expect(homeLink).toHaveClass("text-gray-normal");
     });
 
@@ -54,7 +55,7 @@ describe("AppNav", () => {
 
       render(<AppNav />);
 
-      const homeLink = screen.getByText("Home").closest("a");
+      const homeLink = screen.getByLabelText("Home").closest("a");
       expect(homeLink).toHaveClass("text-gray-normal");
     });
 
@@ -65,7 +66,7 @@ describe("AppNav", () => {
 
       render(<AppNav />);
 
-      const settingsLink = screen.getByText("Settings").closest("a");
+      const settingsLink = screen.getByLabelText("Settings").closest("a");
       expect(settingsLink).toHaveClass("text-gray-normal");
     });
 
@@ -80,7 +81,7 @@ describe("AppNav", () => {
 
       render(<AppNav />);
 
-      const adminLink = screen.getByText("Admin").closest("a");
+      const adminLink = screen.getByLabelText("Admin").closest("a");
       expect(adminLink).toHaveClass("text-gray-normal");
     });
   });
@@ -92,8 +93,8 @@ describe("AppNav", () => {
 
     render(<AppNav />);
 
-    expect(screen.getByText("Home")).toBeInTheDocument();
-    expect(screen.getByText("Settings")).toBeInTheDocument();
-    expect(screen.getByText("Admin")).toBeInTheDocument();
+    expect(screen.getByLabelText("Home")).toBeInTheDocument();
+    expect(screen.getByLabelText("Settings")).toBeInTheDocument();
+    expect(screen.getByLabelText("Admin")).toBeInTheDocument();
   });
 });

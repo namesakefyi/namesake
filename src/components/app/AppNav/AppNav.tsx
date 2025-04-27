@@ -60,7 +60,11 @@ const AppNavItem = ({ icon: Icon, label, ...props }: AppNavItemProps) => {
 
   return (
     <TooltipTrigger>
-      <Link {...props} className={navItemStyles({ isActive })}>
+      <Link
+        {...props}
+        className={navItemStyles({ isActive })}
+        aria-label={label}
+      >
         <Icon className={iconStyles({ isActive })} />
       </Link>
       <Tooltip offset={0}>{label}</Tooltip>
