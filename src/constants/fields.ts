@@ -86,6 +86,11 @@ export const FIELD_DEFS = [
     type: "boolean",
   },
   {
+    name: "reasonToWaivePublication",
+    label: "Reason to waive publication",
+    type: "string",
+  },
+  {
     name: "shouldImpoundCourtRecords",
     label: "Impound court records?",
     type: "boolean",

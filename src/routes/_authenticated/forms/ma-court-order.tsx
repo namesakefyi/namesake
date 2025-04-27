@@ -18,7 +18,7 @@ import {
 } from "@/components/forms";
 import { BIRTHPLACES, type FieldName, type FieldType } from "@/constants";
 import affidavitOfIndigency from "@/forms/ma/affidavit-of-indigency";
-import cjd400ProbateAndFamilyCourtMotion from "@/forms/ma/cjd400-probate-and-family-court-motion";
+import cjd400MotionToWaivePublication from "@/forms/ma/cjd400-motion-to-waive-publication";
 import cjp27PetitionToChangeNameOfAdult from "@/forms/ma/cjp27-petition-to-change-name-of-adult";
 import cjp34CoriAndWmsReleaseRequest from "@/forms/ma/cjp34-cori-and-wms-release-request";
 import { downloadMergedPdf } from "@/forms/utils";
@@ -68,6 +68,7 @@ const FORM_FIELDS: FieldName[] = [
   "otherPronouns",
   "shouldReturnOriginalDocuments",
   "shouldWaivePublicationRequirement",
+  "reasonToWaivePublication",
   "shouldImpoundCourtRecords",
   "shouldApplyForFeeWaiver",
   "mothersMaidenName",
@@ -91,7 +92,7 @@ function RouteComponent() {
       ];
 
       if (form.watch("shouldWaivePublicationRequirement") === true) {
-        pdfs.push(cjd400ProbateAndFamilyCourtMotion);
+        pdfs.push(cjd400MotionToWaivePublication);
       }
 
       if (form.watch("shouldApplyForFeeWaiver") === true) {
@@ -287,6 +288,14 @@ function RouteComponent() {
           yesLabel="Yes, apply to waive the publication requirement"
           noLabel="No, I will publish my name change in a newspaper"
         />
+        <FormSubsection
+          isVisible={form.watch("shouldWaivePublicationRequirement") === true}
+        >
+          <LongTextField
+            name="reasonToWaivePublication"
+            label="Reason to waive publication"
+          />
+        </FormSubsection>
       </FormSection>
       <FormSection
         title="Would you like to impound your case?"
@@ -302,7 +311,7 @@ function RouteComponent() {
       </FormSection>
       <FormSection
         title="Do you need to apply for a fee waiver?"
-        description="If you are unable to pay the filing fee, you can file an affidavit of indigency—a document proving that you are unable to pay. You will need to provide proof of income."
+        description="If you are unable to pay the filing fee, you can file an Affidavit of Indigency—a document proving that you are unable to pay. You will need to provide proof of income."
       >
         <YesNoField
           name="shouldApplyForFeeWaiver"
@@ -311,6 +320,23 @@ function RouteComponent() {
           yesLabel="Help me waive filing fees; I can provide proof of income"
           noLabel="I will pay the filing fee"
         />
+        {form.watch("shouldApplyForFeeWaiver") === true && (
+          <Banner variant="info" size="large">
+            Your download will include an Affidavit of Indigency.{" "}
+            <strong>
+              There are additional fields in the download you have to fill out.
+            </strong>{" "}
+            Alternatively, you can{" "}
+            <a
+              href="https://www.masstpc.org/what-we-do/ida-network/ida-financial-assistance/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              request financial assistance through the Massachusetts Transgender
+              Political Coalition.
+            </a>
+          </Banner>
+        )}
       </FormSection>
       <FormSection
         title="What is your mother's maiden name?"

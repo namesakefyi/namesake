@@ -6,7 +6,8 @@ export const PDF_IDS = [
   "affidavit-of-indigency",
   "cjp27-petition-to-change-name-of-adult",
   "cjp34-cori-and-wms-release-request",
-  "cjd400-probate-and-family-court-motion",
+  "cjd400-motion-to-waive-publication",
+  "cjd400-motion-to-impound-records",
 ] as const;
 
 export type PDFId = (typeof PDF_IDS)[number];
