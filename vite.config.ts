@@ -59,9 +59,16 @@ export default defineConfig({
         "convex/_generated/**",
         "src/routeTree.gen.ts",
         "**/*.stories.tsx",
+        "src/routes/**/*",
         "src/components/**/index.ts",
         "src/components/common/Editor/extensions/**",
       ],
+      thresholds: {
+        statements: 80,
+        branches: 80,
+        functions: 70,
+        lines: 80,
+      },
     },
     setupFiles: ["./tests/vitest.setup.ts"],
     server: {
