@@ -12,15 +12,15 @@ export const Route = createFileRoute("/_authenticated/documents/$pdfId")({
 
 function RouteComponent() {
   const { pdfId } = Route.useParams();
-  const pdf = usePDFDetails(pdfId as PDFId);
+  const { data } = usePDFDetails(pdfId as PDFId);
 
-  if (!pdf) {
+  if (!data) {
     return <Empty icon={FileWarning} title="Couldn't find document" />;
   }
 
   const badgeData = [];
-  if (pdf.jurisdiction) badgeData.push(pdf.jurisdiction);
-  if (pdf.code) badgeData.push(pdf.code);
+  if (data.jurisdiction) badgeData.push(data.jurisdiction);
+  if (data.code) badgeData.push(data.code);
 
   const badges = badgeData ? (
     <div className="flex gap-1">
@@ -33,11 +33,11 @@ function RouteComponent() {
   return (
     <div className="flex flex-col h-dvh flex-1">
       <PageHeader
-        title={pdf.title ?? "Unknown Document"}
+        title={data.title ?? "Unknown Document"}
         badge={badges}
         mobileBackLink={{ to: "/documents" }}
       />
-      <DocumentPreview pdf={pdf} />
+      <DocumentPreview pdf={data} />
     </div>
   );
 }

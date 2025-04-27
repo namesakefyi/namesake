@@ -1,9 +1,11 @@
 import { PageHeader } from "@/components/app";
+import { Empty } from "@/components/common";
 import { DocumentsNav } from "@/components/documents";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { api } from "@convex/_generated/api";
 import { Navigate, createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
+import { FileText } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/documents/")({
   component: DocumentsIndexRoute,
@@ -17,6 +19,17 @@ function DocumentsIndexRoute() {
   if (!isMobile && firstId) {
     return (
       <Navigate to="/documents/$pdfId" params={{ pdfId: firstId }} replace />
+    );
+  }
+
+  if (!pdfIds || pdfIds.length === 0) {
+    return (
+      <Empty
+        title="No documents"
+        icon={FileText}
+        subtitle="See your completed documents here after filling out forms."
+        className="h-full"
+      />
     );
   }
 

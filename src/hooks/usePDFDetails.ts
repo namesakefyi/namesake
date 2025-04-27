@@ -3,30 +3,43 @@ import { getPdfDefinition } from "@/forms";
 import { useEffect, useState } from "react";
 
 /**
- * Given an array of PDF IDs, returns an array of objects with PDF details.
- * @param pdfIds - An array of PDF IDs.
+ * Given a PDF ID, returns the PDF details.
+ * @param pdfId - A single PDF ID.
+ * @returns { data, errors }
  */
-export function usePDFDetails(pdfIds: PDFId): PDFDefinition | null;
-export function usePDFDetails(pdfIds: PDFId[]): PDFDefinition[] | null;
-export function usePDFDetails(pdfIds: PDFId | PDFId[]) {
-  const [pdfDetails, setPdfDetails] = useState<
-    PDFDefinition | PDFDefinition[] | null
-  >(null);
+export function usePDFDetails(pdfId: PDFId): {
+  data: PDFDefinition | null;
+  errors: Error[];
+} {
+  const [data, setData] = useState<PDFDefinition | null>(null);
+  const [errors, setErrors] = useState<Error[]>([]);
 
   useEffect(() => {
-    const fetchPdfDefinitions = async () => {
-      if (!pdfIds) return;
-
-      if (Array.isArray(pdfIds)) {
-        const pdfDefinitions = await Promise.all(pdfIds.map(getPdfDefinition));
-        setPdfDetails(pdfDefinitions);
-      } else {
-        const pdfDefinition = await getPdfDefinition(pdfIds);
-        setPdfDetails(pdfDefinition);
+    let cancelled = false;
+    const fetchPdfDefinition = async () => {
+      if (!pdfId) {
+        setData(null);
+        setErrors([]);
+        return;
+      }
+      try {
+        const pdfDefinition = await getPdfDefinition(pdfId);
+        if (!cancelled) {
+          setData(pdfDefinition);
+          setErrors([]);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setData(null);
+          setErrors([err instanceof Error ? err : new Error(String(err))]);
+        }
       }
     };
-    fetchPdfDefinitions();
-  }, [pdfIds]);
+    fetchPdfDefinition();
+    return () => {
+      cancelled = true;
+    };
+  }, [pdfId]);
 
-  return pdfDetails;
+  return { data, errors };
 }

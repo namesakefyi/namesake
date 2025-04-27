@@ -37,6 +37,7 @@ export const DocumentPreview = ({ pdf }: DocumentPreviewProps) => {
       </div>
     );
   }
+
   if (error) {
     return (
       <Empty
