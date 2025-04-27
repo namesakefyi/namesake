@@ -42,6 +42,10 @@ export async function fillPdf({
     // Load a PDF with form fields
     const pdfDoc = await PDFDocument.load(formPdfBytes);
 
+    // Set the title
+    pdfDoc.setTitle(pdf.title);
+    pdfDoc.setAuthor("Filled by Namesake Collaborative");
+
     // Get the form containing all the fields
     const form = pdfDoc.getForm();
 

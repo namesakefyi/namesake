@@ -98,7 +98,7 @@ export const NavItem = ({
       }
       aria-current={current ? "true" : null}
     >
-      <div className="flex flex-1 items-center gap-2">
+      <div className="flex flex-1 items-center gap-2 min-w-0">
         {Icon && <Icon className={iconStyles({ isActive: !!current, size })} />}
         {children}
       </div>

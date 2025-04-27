@@ -8,7 +8,7 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { api } from "@convex/_generated/api";
 import { type ToOptions, useMatchRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
-import { File, GlobeLock, Home, Settings } from "lucide-react";
+import { FileText, GlobeLock, Home, Settings } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
 
@@ -86,7 +86,11 @@ export const AppNav = () => {
   return (
     <div className={styles({ isMobile })}>
       <AppNavItem icon={Home} label="Home" href={{ to: "/" }} />
-      <AppNavItem icon={File} label="Documents" href={{ to: "/documents" }} />
+      <AppNavItem
+        icon={FileText}
+        label="Documents"
+        href={{ to: "/documents" }}
+      />
       <AppNavItem icon={Settings} label="Settings" href={{ to: "/settings" }} />
       {isAdmin && (
         <AppNavItem icon={GlobeLock} label="Admin" href={{ to: "/admin" }} />

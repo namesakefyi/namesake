@@ -90,6 +90,18 @@ describe("PDF utilities", () => {
         form.getCheckBox("shouldReturnOriginalDocuments").isChecked(),
       ).toBe(false);
     });
+
+    it("should set a title and author", async () => {
+      const result = await fillPdf({
+        pdf: testPdfDefinition,
+        userData: {},
+      });
+
+      const pdfDoc = await PDFDocument.load(result);
+
+      expect(pdfDoc.getTitle()).toBe("Test Form");
+      expect(pdfDoc.getAuthor()).toBe("Filled by Namesake Collaborative");
+    });
   });
 
   describe("getPdfForm", () => {

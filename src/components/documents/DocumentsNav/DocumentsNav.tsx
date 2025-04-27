@@ -3,6 +3,7 @@ import type { PDFDefinition } from "@/constants";
 import { getPdfDefinition } from "@/forms";
 import { api } from "@convex/_generated/api";
 import { useQuery } from "convex/react";
+import { FileText } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface DocumentsNavProps {
@@ -30,13 +31,13 @@ export const DocumentsNav = ({ className }: DocumentsNavProps) => {
       {pdfDefinitions?.map((pdf) => (
         <NavItem
           key={pdf.id}
+          icon={FileText}
           href={{
             to: "/documents/$pdfId",
             params: { pdfId: pdf.id },
           }}
-          size="large"
         >
-          {pdf.title}
+          <span className="truncate">{pdf.title}</span>
         </NavItem>
       ))}
     </Nav>

@@ -4,8 +4,7 @@ import pdf from "./cjp34-cori-and-wms-release-request.pdf";
 
 export default definePdf({
   id: "cjp34-cori-and-wms-release-request",
-  title:
-    "Court Activity Record Information and Warrant Management System Release Request Form",
+  title: "Court Activity Record Request Form",
   code: "CJP 34",
   jurisdiction: "MA",
   pdfPath: pdf,
