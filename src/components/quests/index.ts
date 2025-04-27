@@ -12,5 +12,4 @@ export * from "./QuestPageToolbar/QuestPageToolbar";
 export * from "./QuestSection/QuestSection";
 export * from "./QuestsNav/QuestsNav";
 export * from "./QuestTimeBadge/QuestTimeBadge";
-export * from "./ReadingScore/ReadingScore";
 export * from "./StatusSelect/StatusSelect";
