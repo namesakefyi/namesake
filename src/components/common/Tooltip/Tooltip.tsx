@@ -28,8 +28,8 @@ const styles = tv({
 export function Tooltip({ children, ...props }: TooltipProps) {
   return (
     <AriaTooltip
-      {...props}
       offset={10}
+      {...props}
       className={composeRenderProps(props.className, (className, renderProps) =>
         styles({ ...renderProps, className }),
       )}

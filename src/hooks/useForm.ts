@@ -72,8 +72,6 @@ export function useForm<TFieldValues extends FieldValues = FieldValues>(
         const encryptedValue = await encryptData(value, encryptionKey);
         await save({ field, value: encryptedValue });
       }
-
-      toast.success("Form submitted!");
     } catch (error) {
       posthog.captureException(error);
       toast.error(

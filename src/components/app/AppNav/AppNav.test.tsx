@@ -2,9 +2,9 @@ import { useMatchRoute } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import { useQuery } from "convex/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { AppMobileNav } from "./AppMobileNav";
+import { AppNav } from "./AppNav";
 
-describe("AppMobileNav", () => {
+describe("AppNav", () => {
   const mockMatchRoute = vi.fn();
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe("AppMobileNav", () => {
   });
 
   it("renders home and settings links for regular users", () => {
-    render(<AppMobileNav />);
+    render(<AppNav />);
 
     expect(screen.getByText("Home")).toBeInTheDocument();
     expect(screen.getByText("Settings")).toBeInTheDocument();
@@ -31,7 +31,7 @@ describe("AppMobileNav", () => {
       role: "admin",
     });
 
-    render(<AppMobileNav />);
+    render(<AppNav />);
     expect(screen.getByText("Admin")).toBeInTheDocument();
   });
 
@@ -41,7 +41,7 @@ describe("AppMobileNav", () => {
         return options.to === "/" && options.fuzzy;
       });
 
-      render(<AppMobileNav />);
+      render(<AppNav />);
 
       const homeLink = screen.getByText("Home").closest("a");
       expect(homeLink).toHaveClass("text-gray-normal");
@@ -52,7 +52,7 @@ describe("AppMobileNav", () => {
         return options.to === "/quests/$questSlug" && options.fuzzy;
       });
 
-      render(<AppMobileNav />);
+      render(<AppNav />);
 
       const homeLink = screen.getByText("Home").closest("a");
       expect(homeLink).toHaveClass("text-gray-normal");
@@ -63,7 +63,7 @@ describe("AppMobileNav", () => {
         return options.to === "/settings" && options.fuzzy;
       });
 
-      render(<AppMobileNav />);
+      render(<AppNav />);
 
       const settingsLink = screen.getByText("Settings").closest("a");
       expect(settingsLink).toHaveClass("text-gray-normal");
@@ -78,7 +78,7 @@ describe("AppMobileNav", () => {
         return options.to === "/admin" && options.fuzzy;
       });
 
-      render(<AppMobileNav />);
+      render(<AppNav />);
 
       const adminLink = screen.getByText("Admin").closest("a");
       expect(adminLink).toHaveClass("text-gray-normal");
@@ -90,7 +90,7 @@ describe("AppMobileNav", () => {
       role: "admin",
     });
 
-    render(<AppMobileNav />);
+    render(<AppNav />);
 
     expect(screen.getByText("Home")).toBeInTheDocument();
     expect(screen.getByText("Settings")).toBeInTheDocument();

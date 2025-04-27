@@ -16,9 +16,18 @@ import {
   ShortTextField,
   YesNoField,
 } from "@/components/forms";
-import { type FieldName, type FieldType, JURISDICTIONS } from "@/constants";
+import { BIRTHPLACES, type FieldName, type FieldType } from "@/constants";
+import affidavitOfIndigency from "@/forms/ma/affidavit-of-indigency";
+import cjd400ProbateAndFamilyCourtMotion from "@/forms/ma/cjd400-probate-and-family-court-motion";
+import cjp27PetitionToChangeNameOfAdult from "@/forms/ma/cjp27-petition-to-change-name-of-adult";
+import cjp34CoriAndWmsReleaseRequest from "@/forms/ma/cjp34-cori-and-wms-release-request";
+import { downloadMergedPdf } from "@/forms/utils";
 import { useForm } from "@/hooks/useForm";
+import { api } from "@convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
+import { useMutation } from "convex/react";
+import type { FormEvent } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/forms/ma-court-order")({
   component: RouteComponent,
@@ -64,12 +73,46 @@ type FormData = {
 
 function RouteComponent() {
   const { onSubmit, isSubmitting, ...form } = useForm<FormData>(FORM_FIELDS);
+  const saveDocuments = useMutation(api.userDocuments.set);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      const pdfs = [
+        cjp27PetitionToChangeNameOfAdult,
+        cjp34CoriAndWmsReleaseRequest,
+      ];
+
+      if (form.watch("shouldWaivePublicationRequirement") === true) {
+        pdfs.push(cjd400ProbateAndFamilyCourtMotion);
+      }
+
+      if (form.watch("shouldApplyForFeeWaiver") === true) {
+        pdfs.push(affidavitOfIndigency);
+      }
+
+      await downloadMergedPdf({
+        title: "Massachusetts Court Order",
+        pdfs,
+        userData: form.getValues(),
+      });
+
+      // Save form to user documents
+      await saveDocuments({ pdfIds: pdfs.map((pdf) => pdf.id) });
+
+      // Save encrypted responses
+      await onSubmit();
+    } catch (error) {
+      toast.error("An error occurred while submitting the form.");
+    }
+  };
 
   return (
     <FormContainer
       title="Massachusetts Court Order"
       form={form}
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
     >
       <FormSection
         title="What is your new name?"
@@ -106,7 +149,7 @@ function RouteComponent() {
             name="birthplaceState"
             label="State"
             placeholder="Select a state"
-            options={Object.entries(JURISDICTIONS).map(([value, label]) => ({
+            options={Object.entries(BIRTHPLACES).map(([value, label]) => ({
               label,
               value,
             }))}
@@ -275,7 +318,7 @@ function RouteComponent() {
         variant="primary"
         isSubmitting={isSubmitting}
       >
-        Submit
+        Download and Save
       </Button>
     </FormContainer>
   );

@@ -1,7 +1,7 @@
 import {
   AppContent,
+  AppNav,
   AppSidebar,
-  AppSidebarFooter,
   AppSidebarHeader,
 } from "@/components/app";
 import { QuestsNav } from "@/components/quests";
@@ -18,7 +18,7 @@ function IndexRoute() {
   return (
     <div className="flex">
       {!isMobile && (
-        <AppSidebar header={<AppSidebarHeader />} footer={<AppSidebarFooter />}>
+        <AppSidebar header={<AppSidebarHeader />} footer={<AppNav />}>
           <QuestsNav />
         </AppSidebar>
       )}

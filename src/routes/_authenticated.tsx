@@ -1,4 +1,4 @@
-import { AppMobileNav } from "@/components/app";
+import { AppNav } from "@/components/app";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Navigate, Outlet, createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated } from "convex/react";
@@ -25,7 +25,7 @@ function AuthenticatedRoute() {
       <Authenticated>
         <main className={styles({ isMobile })}>
           <Outlet />
-          {isMobile && <AppMobileNav />}
+          {isMobile && <AppNav />}
         </main>
       </Authenticated>
       <Unauthenticated>

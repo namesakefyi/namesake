@@ -1,58 +1,5 @@
-import type { FormData, Jurisdiction } from "@/constants";
+import type { FormData, PDFDefinition } from "@/constants";
 import { PDFDocument } from "@cantoo/pdf-lib";
-
-type PDFFields = Record<string, string | boolean | undefined>;
-
-/**
- * A definition of a PDF form and its fields.
- */
-export interface PDFDefinition {
-  /**
-   * The path to the PDF file, imported as a module.
-   */
-  pdfPath: string;
-
-  /**
-   * The title of the form. Do not include the form code or state.
-   * @example "Petition to Change Name of Adult"
-   */
-  title: string;
-
-  /**
-   * The form code, if one exists.
-   * @optional
-   * @example "CJP 27"
-   */
-  code?: string;
-
-  /**
-   * Two-letter state abbreviation the form is for.
-   * @optional
-   * @example "MA"
-   */
-  jurisdiction?: Jurisdiction;
-
-  /**
-   * A function that transforms the user data into a set of fields for the PDF.
-   *
-   * PDF field names may be in a variety of formats, from camelCase
-   * to snake_case to a "Plain String" label. It's recommended to
-   * rename fields into a consistent format matching our own schema
-   * for ease of readability and testing.
-   *
-   * @url https://github.com/namesakefyi/namesake/tree/main/src/forms/README.md
-   *
-   * @example
-   * ```ts
-   * fields: (data) => ({
-   *   firstNameField: data.newFirstName,
-   *   middle_name_field: data.newMiddleName,
-   *   "Last Name Field": data.newLastName,
-   * })
-   * ```
-   */
-  fields: (data: Partial<FormData>) => PDFFields;
-}
 
 /**
  * Fetch a PDF file from the /src/forms.
@@ -167,6 +114,39 @@ export async function downloadPdf({
  * Define a PDF form.
  * @returns A PDF definition.
  */
-export function definePdf(definition: PDFDefinition): PDFDefinition {
-  return definition;
+export function definePdf(pdf: PDFDefinition): PDFDefinition {
+  return pdf;
+}
+
+export async function downloadMergedPdf({
+  title,
+  pdfs,
+  userData,
+}: { title: string; pdfs: PDFDefinition[]; userData: Partial<FormData> }) {
+  const mergedPdf = await PDFDocument.create();
+
+  for (const pdf of pdfs) {
+    const pdfBytes = await fillPdf({ pdf, userData });
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+
+    const copiedPages = await mergedPdf.copyPages(
+      pdfDoc,
+      pdfDoc.getPageIndices(),
+    );
+    for (const page of copiedPages) {
+      mergedPdf.addPage(page);
+    }
+  }
+
+  const mergedPdfBytes = await mergedPdf.save();
+  const url = URL.createObjectURL(new Blob([mergedPdfBytes]));
+
+  try {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${title}.pdf`;
+    a.click();
+  } catch (error) {
+    console.error(error);
+  }
 }
