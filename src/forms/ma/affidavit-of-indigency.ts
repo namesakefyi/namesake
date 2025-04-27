@@ -18,5 +18,6 @@ export default definePdf({
     residenceStateAndZip: `${data.residenceState} ${data.residenceZipCode}`,
 
     // TODO: Add other fields for affidavit of indigency
+    // TODO: Add tests
   }),
 });

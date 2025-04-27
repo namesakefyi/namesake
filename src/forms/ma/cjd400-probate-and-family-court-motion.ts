@@ -23,9 +23,10 @@ export default definePdf({
     residenceStreetAddress: data.residenceStreetAddress,
     residenceCity: data.residenceCity,
     residenceState: data.residenceState,
-    residenceZipCode: data.residenceZipCode,
+    residenceZip: data.residenceZipCode,
     phoneNumber: data.phoneNumber,
 
     // TODO: Add remaining fields
+    // TODO: Add tests
   }),
 });
