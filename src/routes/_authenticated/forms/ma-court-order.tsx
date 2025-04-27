@@ -44,11 +44,14 @@ const FORM_FIELDS: FieldName[] = [
   "phoneNumber",
   "email",
   "dateOfBirth",
+  "birthplaceCity",
+  "birthplaceState",
   "isCurrentlyUnhoused",
   "residenceStreetAddress",
   "residenceCity",
   "residenceState",
   "residenceZipCode",
+  "residenceCounty",
   "isMailingAddressDifferentFromResidence",
   "mailingStreetAddress",
   "mailingCity",
@@ -56,6 +59,8 @@ const FORM_FIELDS: FieldName[] = [
   "mailingZipCode",
   "hasPreviousNameChange",
   "previousLegalNames",
+  "hasUsedOtherNameOrAlias",
+  "otherNamesOrAliases",
   "isInterpreterNeeded",
   "language",
   "isOkayToSharePronouns",
@@ -65,6 +70,7 @@ const FORM_FIELDS: FieldName[] = [
   "shouldWaivePublicationRequirement",
   "shouldImpoundCourtRecords",
   "shouldApplyForFeeWaiver",
+  "mothersMaidenName",
 ] as const;
 
 type FormData = {
