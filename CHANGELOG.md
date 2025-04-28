@@ -1,5 +1,11 @@
 # namesake
 
+## 0.26.1
+
+### Patch Changes
+
+- ec1d042: Include Motion to Impound in final court order PDF when required, provide guidance for filling out fields
+
 ## 0.26.0
 
 ### Minor Changes
