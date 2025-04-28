@@ -90,11 +90,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Install Playwright
-        run: pnpm exec playwright install --with-deps
-
-      - name: Run Playwright end-to-end tests
-        run: pnpm test:e2e
+      - name: Run Playwright tests
+        uses: docker://mcr.microsoft.com/playwright:v1.34.3-jammy
+        with:
+          args: npx playwright test
 
       - uses: actions/upload-artifact@v4
         if: always()
