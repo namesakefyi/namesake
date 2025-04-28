@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { getPdfForm } from "../../utils";
-import motionToWaivePublication from "../cjd400-motion-to-waive-publication";
+import motionToImpoundRecords from "../cjd400-motion-to-impound";
 
-describe("CJD400 Motion to Waive Publication", () => {
+describe("CJD400 Motion to Impound Records", () => {
   const testData = {
     oldFirstName: "Old",
     oldMiddleName: "M",
@@ -16,35 +16,41 @@ describe("CJD400 Motion to Waive Publication", () => {
     residenceState: "MA",
     residenceZipCode: "02139",
     phoneNumber: "555-555-5555",
-    reasonToWaivePublication: "Personal safety concerns",
+    reasonToImpoundCourtRecords: "Personal safety concerns",
   };
 
   it("maps all fields correctly to the PDF", async () => {
     const form = await getPdfForm({
-      pdf: motionToWaivePublication,
+      pdf: motionToImpoundRecords,
       userData: testData,
+    });
+
+    // Get today's date in MM/DD/YYYY format for comparison
+    const today = new Date().toLocaleDateString("en-US", {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
     });
 
     // Division fields
     expect(form.getTextField("division").getText()).toBe("Suffolk");
     expect(form.getTextField("division2").getText()).toBe("Suffolk");
 
-    // Petitioner name (current legal name)
+    // Petitioner name
     expect(form.getTextField("petitionerName").getText()).toBe("Old M Name");
 
-    // Motion for
+    // Motion for fields
     expect(form.getTextField("motionFor").getText()).toBe(
-      "Waive Publication for Name Change",
+      "Impound Entire Case",
     );
     expect(form.getTextField("motionFor2").getText()).toBe("Old M Name");
+    expect(form.getTextField("motionForPageTwo").getText()).toBe(
+      "Impound Entire Case",
+    );
 
-    // Date (should be today's date in MM/DD/YYYY)
-    const today = new Date().toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    });
+    // Date fields
     expect(form.getTextField("date").getText()).toBe(today);
+    expect(form.getTextField("dated").getText()).toBe(today);
 
     // Current legal name
     expect(form.getTextField("currentLegalName").getText()).toBe("Old M Name");
@@ -70,11 +76,5 @@ describe("CJD400 Motion to Waive Publication", () => {
 
     // Phone number
     expect(form.getTextField("phoneNumber").getText()).toBe("555-555-5555");
-
-    // Additional page two fields
-    expect(form.getTextField("motionForPageTwo").getText()).toBe(
-      "Waive Publication for Name Change",
-    );
-    expect(form.getTextField("dated").getText()).toBe(today);
   });
 });

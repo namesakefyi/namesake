@@ -38,7 +38,7 @@ export function FormNavigation({ title }: FormNavigationProps) {
   }, [watch, getValues]);
 
   return (
-    <nav className="sticky bg-app p-2 top-0 max-w-full flex items-center justify-between gap-3 border-b border-gray-a3">
+    <nav className="sticky bg-app p-2 top-0 max-w-full z-20 flex items-center justify-between gap-3 border-b border-gray-a3">
       <div className="flex gap-2 items-center min-w-0">
         <Link button={{ variant: "icon" }} href={{ to: "/" }} aria-label="Back">
           <ArrowLeft className="size-5" />

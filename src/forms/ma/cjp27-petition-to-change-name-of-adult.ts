@@ -1,5 +1,6 @@
 import { definePdf } from "@/forms/utils";
 import { joinPronouns } from "@/utils/pdf-helpers";
+import languageNameMap from "language-name-map/map";
 import pdf from "./cjp27-petition-to-change-name-of-adult.pdf";
 
 export default definePdf({
@@ -76,7 +77,7 @@ export default definePdf({
     ...(data.isInterpreterNeeded
       ? {
           isInterpreterNeeded: data.isInterpreterNeeded,
-          language: data.language,
+          language: data.language ? languageNameMap[data.language].name : "",
         }
       : {}),
 
