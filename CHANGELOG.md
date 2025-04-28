@@ -1,5 +1,12 @@
 # namesake
 
+## 0.26.0
+
+### Minor Changes
+
+- d30cbca: Download required PDFs after form completion
+- d30cbca: See all your documents and download PDFs in one place
+
 ## 0.25.3
 
 ### Patch Changes
