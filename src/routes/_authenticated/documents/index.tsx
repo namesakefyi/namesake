@@ -24,12 +24,14 @@ function DocumentsIndexRoute() {
 
   if (pdfIds && pdfIds.length === 0) {
     return (
-      <Empty
-        title="No documents"
-        icon={FileText}
-        subtitle="See your completed documents here after filling out forms."
-        className="h-full"
-      />
+      <AppContent>
+        <Empty
+          title="No documents"
+          icon={FileText}
+          subtitle="Your documents will appear here after filling out forms."
+          className="h-full"
+        />
+      </AppContent>
     );
   }
 
