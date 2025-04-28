@@ -29,7 +29,7 @@ describe("CJD400 Motion to Waive Publication", () => {
     expect(form.getTextField("division").getText()).toBe("Suffolk");
     expect(form.getTextField("division2").getText()).toBe("Suffolk");
 
-    // Petitioner name (old and new)
+    // Petitioner name (current legal name)
     expect(form.getTextField("petitionerName").getText()).toBe("Old M Name");
 
     // Motion for
