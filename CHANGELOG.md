@@ -1,5 +1,11 @@
 # namesake
 
+## 0.26.2
+
+### Patch Changes
+
+- d7bb027: Fix display of form titles and include jurisdiction badge alongside name
+
 ## 0.26.1
 
 ### Patch Changes
