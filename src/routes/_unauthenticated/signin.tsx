@@ -31,6 +31,7 @@ import { ChevronLeft } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { useRef, useState } from "react";
 import type { Key } from "react-aria";
+import { Heading } from "react-aria-components";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_unauthenticated/signin")({
@@ -117,6 +118,9 @@ const SignIn = () => {
       </TabList>
       <TabPanel id="signIn">
         <Form onSubmit={handleSubmit} className="items-stretch">
+          <Heading level={1} className="sr-only">
+            Sign in
+          </Heading>
           {error && <Banner variant="danger">{error}</Banner>}
           <TextField
             label="Email"
@@ -155,6 +159,9 @@ const SignIn = () => {
         </Form>
       </TabPanel>
       <TabPanel id="signUp">
+        <Heading level={1} className="sr-only">
+          Register
+        </Heading>
         {import.meta.env.PROD && isCodeRequired ? (
           <Form onSubmit={handleCodeSubmit} className="items-stretch">
             <Banner variant="info">
@@ -320,7 +327,9 @@ const ForgotPassword = ({
           aria-label="Back to sign-in"
           className="-m-2"
         />
-        <h2 className="text-lg font-medium">Reset password</h2>
+        <Heading level={1} className="text-lg font-medium">
+          Reset password
+        </Heading>
       </header>
       {error && <Banner variant="danger">{error}</Banner>}
       <TextField
@@ -371,7 +380,7 @@ function LoginRoute() {
   return (
     <>
       <Unauthenticated>
-        <div className="flex flex-col w-96 max-w-full mx-auto min-h-dvh items-center justify-center gap-8 p-4">
+        <main className="flex flex-col w-96 max-w-full mx-auto min-h-dvh items-center justify-center gap-8 p-4">
           <Link href="https://namesake.fyi">
             <Logo />
           </Link>
@@ -385,7 +394,7 @@ function LoginRoute() {
             <Link href="https://namesake.fyi/chat">Support</Link>
             <Link href="https://status.namesake.fyi">Status</Link>
           </div>
-        </div>
+        </main>
       </Unauthenticated>
       <Authenticated>
         <Navigate to="/" />

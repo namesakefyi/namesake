@@ -4,7 +4,9 @@
     "bradlc.vscode-tailwindcss",
     "phoenisx.cssvar",
     "tomoki1207.pdf",
-    "csstools.postcss"
+    "csstools.postcss",
+    "ms-playwright.playwright",
+    "deque-systems.vscode-axe-linter"
   ],
   "unwantedRecommendations": ["dbaeumer.vscode-eslint"]
 }

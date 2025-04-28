@@ -60,6 +60,7 @@ const StrengthLabel = ({ value }: { value: number }) => (
   <span
     className={`text-sm uppercase font-medium font-mono tracking-wider transition-colors duration-500 ${strengthConfig[value].color.text}`}
     aria-label={strengthConfig[value].label}
+    data-testid="password-strength-label"
   >
     <RandomReveal
       characters={strengthConfig[value].label}
