@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/app";
+import { AppContent, PageHeader } from "@/components/app";
 import { Empty } from "@/components/common";
 import { DocumentsNav } from "@/components/documents";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -34,9 +34,9 @@ function DocumentsIndexRoute() {
   }
 
   return (
-    <>
+    <AppContent>
       <PageHeader title="Documents" />
       <DocumentsNav className="app-padding" />
-    </>
+    </AppContent>
   );
 }

@@ -1,9 +1,4 @@
-import {
-  AppContent,
-  AppNav,
-  AppSidebar,
-  AppSidebarHeader,
-} from "@/components/app";
+import { AppNav, AppSidebar, AppSidebarHeader } from "@/components/app";
 import { DocumentsNav } from "@/components/documents";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
@@ -22,9 +17,7 @@ function DocumentsRoute() {
           <DocumentsNav />
         </AppSidebar>
       )}
-      <AppContent>
-        <Outlet />
-      </AppContent>
+      <Outlet />
     </div>
   );
 }
