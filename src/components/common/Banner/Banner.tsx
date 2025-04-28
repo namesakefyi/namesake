@@ -12,6 +12,7 @@ export interface BannerProps {
   icon?: LucideIcon;
   variant?: "info" | "success" | "danger" | "warning";
   size?: "medium" | "large";
+  className?: string;
 }
 
 const bannerStyles = tv({
@@ -54,7 +55,13 @@ const iconStyles = tv({
   },
 });
 
-export function Banner({ children, icon: Icon, size, variant }: BannerProps) {
+export function Banner({
+  children,
+  icon: Icon,
+  size,
+  variant,
+  className,
+}: BannerProps) {
   const DefaultIcon = () => {
     switch (variant) {
       case "success":
@@ -71,7 +78,7 @@ export function Banner({ children, icon: Icon, size, variant }: BannerProps) {
   Icon = Icon ?? DefaultIcon();
 
   return (
-    <div role="alert" className={bannerStyles({ variant, size })}>
+    <div role="alert" className={bannerStyles({ variant, size, className })}>
       <Icon className={iconStyles({ variant, size })} />
       <div className="[&>_a]:underline">{children}</div>
     </div>
