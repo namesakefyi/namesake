@@ -30,6 +30,17 @@ test.describe("sign in", () => {
     await expect(page).toHaveTitle(/Namesake/);
   });
 
+  test("should error on empty sign in", async ({ page }) => {
+    await page.getByRole("button", { name: "Sign in" }).click();
+    await expect(page.getByRole("textbox", { name: "Email" })).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
+    await expect(
+      page.getByRole("textbox", { name: "Password" }),
+    ).toHaveAttribute("aria-invalid", "true");
+  });
+
   test("should error on invalid sign in", async ({ page }) => {
     await page.getByRole("textbox", { name: "Email" }).fill("invalid@test.com");
     await page.getByRole("textbox", { name: "Password" }).fill("invalid");
