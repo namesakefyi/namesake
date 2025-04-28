@@ -101,7 +101,7 @@ describe("CJP27 Petition to Change Name of Adult", () => {
     const dataWithInterpreter = {
       ...testData,
       isInterpreterNeeded: true,
-      language: "Spanish",
+      language: "es",
     };
 
     const form = await getPdfForm({

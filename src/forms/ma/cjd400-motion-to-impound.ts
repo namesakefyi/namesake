@@ -3,8 +3,8 @@ import { joinNames } from "@/utils/pdf-helpers";
 import pdf from "./cjd400-motion-to-waive-publication.pdf";
 
 export default definePdf({
-  id: "cjd400-motion-to-waive-publication",
-  title: "Motion to Waive Publication",
+  id: "cjd400-motion-to-impound-records",
+  title: "Motion to Impound Records",
   code: "CJD 400",
   jurisdiction: "MA",
   pdfPath: pdf,
@@ -16,7 +16,7 @@ export default definePdf({
       data.oldMiddleName,
       data.oldLastName,
     ),
-    motionFor: "Waive Publication for Name Change",
+    motionFor: "Impound Entire Case",
     motionFor2: joinNames(
       data.oldFirstName,
       data.oldMiddleName,
@@ -33,7 +33,7 @@ export default definePdf({
       data.oldLastName,
     ),
     petitioner: true,
-    request: data.reasonToWaivePublication,
+    request: data.reasonToImpoundCourtRecords,
     printName: joinNames(
       data.oldFirstName,
       data.oldMiddleName,
@@ -44,7 +44,7 @@ export default definePdf({
     residenceState: data.residenceState,
     residenceZip: data.residenceZipCode,
     phoneNumber: data.phoneNumber,
-    motionForPageTwo: "Waive Publication for Name Change",
+    motionForPageTwo: "Impound Entire Case",
     dated: new Date().toLocaleDateString("en-US", {
       month: "2-digit",
       day: "2-digit",

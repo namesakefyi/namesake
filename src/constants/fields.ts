@@ -96,6 +96,11 @@ export const FIELD_DEFS = [
     type: "boolean",
   },
   {
+    name: "reasonToImpoundCourtRecords",
+    label: "Reason to impound court records",
+    type: "string",
+  },
+  {
     name: "shouldApplyForFeeWaiver",
     label: "Apply for a fee waiver?",
     type: "boolean",

@@ -18,6 +18,7 @@ import {
 } from "@/components/forms";
 import { BIRTHPLACES, type FieldName, type FieldType } from "@/constants";
 import affidavitOfIndigency from "@/forms/ma/affidavit-of-indigency";
+import cjd400MotionToImpound from "@/forms/ma/cjd400-motion-to-impound";
 import cjd400MotionToWaivePublication from "@/forms/ma/cjd400-motion-to-waive-publication";
 import cjp27PetitionToChangeNameOfAdult from "@/forms/ma/cjp27-petition-to-change-name-of-adult";
 import cjp34CoriAndWmsReleaseRequest from "@/forms/ma/cjp34-cori-and-wms-release-request";
@@ -93,6 +94,10 @@ function RouteComponent() {
 
       if (form.watch("shouldWaivePublicationRequirement") === true) {
         pdfs.push(cjd400MotionToWaivePublication);
+      }
+
+      if (form.watch("shouldImpoundCourtRecords") === true) {
+        pdfs.push(cjd400MotionToImpound);
       }
 
       if (form.watch("shouldApplyForFeeWaiver") === true) {
@@ -294,7 +299,36 @@ function RouteComponent() {
           <LongTextField
             name="reasonToWaivePublication"
             label="Reason to waive publication"
+            description='Ask for a waiver of publication for your name change and state a "good cause" for it.'
+            inputClassName="min-h-32"
           />
+          <Banner variant="info" size="large">
+            <div className="prose">
+              <p>
+                <strong>What do I write?</strong> The court is looking for a
+                legal basis to exempt you from the newspaper publishing
+                requirement. Recommendations:
+              </p>
+              <ul>
+                <li>
+                  Note how publishing could pose a threat to your privacy or
+                  safety.
+                </li>
+                <li>Be as specific to your personal situation as possible.</li>
+                <li>
+                  Explain that you are not changing your name for an
+                  impermissible reason, such as evasion of debts or criminal
+                  liabilities.
+                </li>
+                <li>
+                  If you are not changing your last name, explicitly mention
+                  that "I am not changing my last name" in the motion. (You can
+                  still file this form if you are changing your name in its
+                  entirety.)
+                </li>
+              </ul>
+            </div>
+          </Banner>
         </FormSubsection>
       </FormSection>
       <FormSection
@@ -308,6 +342,36 @@ function RouteComponent() {
           yesLabel="Yes, apply to impound my case and keep my name change private"
           noLabel="No, it's okay for my case to be public"
         />
+        <FormSubsection
+          isVisible={form.watch("shouldImpoundCourtRecords") === true}
+        >
+          <LongTextField
+            name="reasonToImpoundCourtRecords"
+            label="Reason to impound"
+            description="Explain why you want to keep your case private."
+            inputClassName="min-h-32"
+          />
+          <Banner variant="info" size="large">
+            <div className="prose">
+              <p>
+                <strong>What do I write?</strong> The court is looking for a
+                legal basis to <em>impound</em> (make private) these court
+                records. Recommendations:
+              </p>
+              <ul>
+                <li>
+                  Note how publishing could pose a threat to your privacy or
+                  safety.
+                </li>
+                <li>Be as specific to your personal situation as possible.</li>
+                <li>
+                  Note increased rates of violence toward transgender and gender
+                  non-conforming people.
+                </li>
+              </ul>
+            </div>
+          </Banner>
+        </FormSubsection>
       </FormSection>
       <FormSection
         title="Do you need to apply for a fee waiver?"
