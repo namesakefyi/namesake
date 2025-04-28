@@ -22,7 +22,7 @@ function DocumentsIndexRoute() {
     );
   }
 
-  if (!pdfIds || pdfIds.length === 0) {
+  if (pdfIds && pdfIds.length === 0) {
     return (
       <Empty
         title="No documents"

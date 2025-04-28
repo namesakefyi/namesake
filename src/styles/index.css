@@ -47,6 +47,10 @@ body,
   padding-bottom: max(env(safe-area-inset-bottom), 0.25rem);
 }
 
+.h-full-minus-mobile-nav {
+  height: calc(100dvh - 56px - env(safe-area-inset-bottom));
+}
+
 /* Scale up hit targets on high resolution mobile devices. */
 @media (min-resolution: 200dpi) {
   html {
