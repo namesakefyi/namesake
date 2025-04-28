@@ -3,6 +3,7 @@ import {
   BIRTHPLACES,
   CATEGORIES,
   JURISDICTIONS,
+  PDF_IDS,
   ROLES,
   STATUS,
   THEMES,
@@ -35,4 +36,8 @@ export const category = v.union(
 
 export const timeRequiredUnit = v.union(
   ...Object.keys(TIME_UNITS).map((unit) => v.literal(unit)),
+);
+
+export const pdfId = v.union(
+  ...Object.values(PDF_IDS).map((id) => v.literal(id)),
 );

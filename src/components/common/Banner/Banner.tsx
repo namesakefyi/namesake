@@ -73,7 +73,7 @@ export function Banner({ children, icon: Icon, size, variant }: BannerProps) {
   return (
     <div role="alert" className={bannerStyles({ variant, size })}>
       <Icon className={iconStyles({ variant, size })} />
-      {children}
+      <div className="[&>_a]:underline">{children}</div>
     </div>
   );
 }

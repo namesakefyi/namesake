@@ -94,7 +94,6 @@ describe("useForm", () => {
 
     expect(encryptData).toHaveBeenCalledTimes(3);
     expect(mockSave).toHaveBeenCalledTimes(3);
-    expect(toast.success).toHaveBeenCalledWith("Form submitted!");
   });
 
   it("should handle submission errors", async () => {

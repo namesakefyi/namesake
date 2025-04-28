@@ -1,17 +1,16 @@
 import { PageHeader } from "@/components/app";
 import { SettingsNav } from "@/components/settings";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Navigate, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/settings/")({
   component: SettingsIndexRoute,
 });
 
 function SettingsIndexRoute() {
-  const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  if (!isMobile) navigate({ to: "/settings/account" });
+  if (!isMobile) return <Navigate to="/settings/account" replace />;
 
   return (
     <>

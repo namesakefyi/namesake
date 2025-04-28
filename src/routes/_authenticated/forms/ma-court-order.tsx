@@ -16,9 +16,18 @@ import {
   ShortTextField,
   YesNoField,
 } from "@/components/forms";
-import { type FieldName, type FieldType, JURISDICTIONS } from "@/constants";
+import { BIRTHPLACES, type FieldName, type FieldType } from "@/constants";
+import affidavitOfIndigency from "@/forms/ma/affidavit-of-indigency";
+import cjd400MotionToWaivePublication from "@/forms/ma/cjd400-motion-to-waive-publication";
+import cjp27PetitionToChangeNameOfAdult from "@/forms/ma/cjp27-petition-to-change-name-of-adult";
+import cjp34CoriAndWmsReleaseRequest from "@/forms/ma/cjp34-cori-and-wms-release-request";
+import { downloadMergedPdf } from "@/forms/utils";
 import { useForm } from "@/hooks/useForm";
+import { api } from "@convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
+import { useMutation } from "convex/react";
+import type { FormEvent } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/forms/ma-court-order")({
   component: RouteComponent,
@@ -35,11 +44,14 @@ const FORM_FIELDS: FieldName[] = [
   "phoneNumber",
   "email",
   "dateOfBirth",
+  "birthplaceCity",
+  "birthplaceState",
   "isCurrentlyUnhoused",
   "residenceStreetAddress",
   "residenceCity",
   "residenceState",
   "residenceZipCode",
+  "residenceCounty",
   "isMailingAddressDifferentFromResidence",
   "mailingStreetAddress",
   "mailingCity",
@@ -47,6 +59,8 @@ const FORM_FIELDS: FieldName[] = [
   "mailingZipCode",
   "hasPreviousNameChange",
   "previousLegalNames",
+  "hasUsedOtherNameOrAlias",
+  "otherNamesOrAliases",
   "isInterpreterNeeded",
   "language",
   "isOkayToSharePronouns",
@@ -54,8 +68,10 @@ const FORM_FIELDS: FieldName[] = [
   "otherPronouns",
   "shouldReturnOriginalDocuments",
   "shouldWaivePublicationRequirement",
+  "reasonToWaivePublication",
   "shouldImpoundCourtRecords",
   "shouldApplyForFeeWaiver",
+  "mothersMaidenName",
 ] as const;
 
 type FormData = {
@@ -64,12 +80,46 @@ type FormData = {
 
 function RouteComponent() {
   const { onSubmit, isSubmitting, ...form } = useForm<FormData>(FORM_FIELDS);
+  const saveDocuments = useMutation(api.userDocuments.set);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      const pdfs = [
+        cjp27PetitionToChangeNameOfAdult,
+        cjp34CoriAndWmsReleaseRequest,
+      ];
+
+      if (form.watch("shouldWaivePublicationRequirement") === true) {
+        pdfs.push(cjd400MotionToWaivePublication);
+      }
+
+      if (form.watch("shouldApplyForFeeWaiver") === true) {
+        pdfs.push(affidavitOfIndigency);
+      }
+
+      await downloadMergedPdf({
+        title: "Massachusetts Court Order",
+        pdfs,
+        userData: form.getValues(),
+      });
+
+      // Save form to user documents
+      await saveDocuments({ pdfIds: pdfs.map((pdf) => pdf.id) });
+
+      // Save encrypted responses
+      await onSubmit();
+    } catch (error) {
+      toast.error("An error occurred while submitting the form.");
+    }
+  };
 
   return (
     <FormContainer
       title="Massachusetts Court Order"
       form={form}
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
     >
       <FormSection
         title="What is your new name?"
@@ -106,7 +156,7 @@ function RouteComponent() {
             name="birthplaceState"
             label="State"
             placeholder="Select a state"
-            options={Object.entries(JURISDICTIONS).map(([value, label]) => ({
+            options={Object.entries(BIRTHPLACES).map(([value, label]) => ({
               label,
               value,
             }))}
@@ -238,6 +288,14 @@ function RouteComponent() {
           yesLabel="Yes, apply to waive the publication requirement"
           noLabel="No, I will publish my name change in a newspaper"
         />
+        <FormSubsection
+          isVisible={form.watch("shouldWaivePublicationRequirement") === true}
+        >
+          <LongTextField
+            name="reasonToWaivePublication"
+            label="Reason to waive publication"
+          />
+        </FormSubsection>
       </FormSection>
       <FormSection
         title="Would you like to impound your case?"
@@ -253,7 +311,7 @@ function RouteComponent() {
       </FormSection>
       <FormSection
         title="Do you need to apply for a fee waiver?"
-        description="If you are unable to pay the filing fee, you can file an affidavit of indigency—a document proving that you are unable to pay. You will need to provide proof of income."
+        description="If you are unable to pay the filing fee, you can file an Affidavit of Indigency—a document proving that you are unable to pay. You will need to provide proof of income."
       >
         <YesNoField
           name="shouldApplyForFeeWaiver"
@@ -262,6 +320,23 @@ function RouteComponent() {
           yesLabel="Help me waive filing fees; I can provide proof of income"
           noLabel="I will pay the filing fee"
         />
+        {form.watch("shouldApplyForFeeWaiver") === true && (
+          <Banner variant="info" size="large">
+            Your download will include an Affidavit of Indigency.{" "}
+            <strong>
+              There are additional fields in the download you have to fill out.
+            </strong>{" "}
+            Alternatively, you can{" "}
+            <a
+              href="https://www.masstpc.org/what-we-do/ida-network/ida-financial-assistance/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              request financial assistance through the Massachusetts Transgender
+              Political Coalition.
+            </a>
+          </Banner>
+        )}
       </FormSection>
       <FormSection
         title="What is your mother's maiden name?"
@@ -275,7 +350,7 @@ function RouteComponent() {
         variant="primary"
         isSubmitting={isSubmitting}
       >
-        Submit
+        Download and Save
       </Button>
     </FormContainer>
   );

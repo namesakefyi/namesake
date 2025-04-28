@@ -1,4 +1,9 @@
-import { AppContent, AppSidebar, AppSidebarHeader } from "@/components/app";
+import {
+  AppContent,
+  AppNav,
+  AppSidebar,
+  AppSidebarHeader,
+} from "@/components/app";
 import { SettingsNav } from "@/components/settings";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
@@ -13,7 +18,7 @@ function SettingsRoute() {
   return (
     <div className="flex">
       {!isMobile && (
-        <AppSidebar header={<AppSidebarHeader />}>
+        <AppSidebar header={<AppSidebarHeader />} footer={<AppNav />}>
           <SettingsNav />
         </AppSidebar>
       )}

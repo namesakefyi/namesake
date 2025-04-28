@@ -10,7 +10,7 @@ type AppContentProps = {
 
 export const AppContent = ({ children, className }: AppContentProps) => {
   const styles = tv({
-    base: "flex-1 w-full max-w-[960px] mx-auto",
+    base: "flex-1 w-full min-w-0 max-w-[960px] mx-auto",
   });
 
   const fallback = () => {

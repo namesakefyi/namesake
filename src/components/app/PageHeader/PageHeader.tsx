@@ -46,7 +46,7 @@ export const PageHeader = ({
               <ArrowLeft className="size-5" />
             </Link>
           )}
-          <h1 className="text-xl lg:text-3xl truncate font-medium">{title}</h1>
+          <h1 className="text-xl lg:text-2xl truncate font-medium">{title}</h1>
           {badge}
         </div>
       </div>

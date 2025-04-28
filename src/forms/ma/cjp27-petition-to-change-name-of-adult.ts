@@ -1,14 +1,14 @@
-import type { FormData } from "@/constants";
-import { definePdf } from "@/utils/pdf";
+import { definePdf } from "@/forms/utils";
 import { joinPronouns } from "@/utils/pdf-helpers";
 import pdf from "./cjp27-petition-to-change-name-of-adult.pdf";
 
 export default definePdf({
+  id: "cjp27-petition-to-change-name-of-adult",
   title: "Petition to Change Name of Adult",
   code: "CJP 27",
-  pdfPath: pdf,
   jurisdiction: "MA",
-  fields: (data: Partial<FormData>) => ({
+  pdfPath: pdf,
+  fields: (data) => ({
     // Petitioner
     petitionerFirstName: data.oldFirstName,
     petitionerMiddleName: data.oldMiddleName,

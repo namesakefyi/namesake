@@ -17,6 +17,7 @@ import { Route as UnauthenticatedSigninImport } from './routes/_unauthenticated/
 import { Route as AuthenticatedSignoutImport } from './routes/_authenticated/signout'
 import { Route as AuthenticatedHomeImport } from './routes/_authenticated/_home'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings/route'
+import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents/route'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedSettingsIndexImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedDocumentsIndexImport } from './routes/_authenticated/documents/index'
@@ -25,6 +26,7 @@ import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/_
 import { Route as AuthenticatedSettingsResponsesImport } from './routes/_authenticated/settings/responses'
 import { Route as AuthenticatedSettingsAccountImport } from './routes/_authenticated/settings/account'
 import { Route as AuthenticatedFormsMaCourtOrderImport } from './routes/_authenticated/forms/ma-court-order'
+import { Route as AuthenticatedDocumentsPdfIdImport } from './routes/_authenticated/documents/$pdfId'
 import { Route as AuthenticatedAdminQuestsIndexImport } from './routes/_authenticated/admin/quests.index'
 import { Route as AuthenticatedAdminEarlyAccessIndexImport } from './routes/_authenticated/admin/early-access.index'
 import { Route as AuthenticatedHomeQuestsIndexImport } from './routes/_authenticated/_home/quests/index'
@@ -72,6 +74,13 @@ const AuthenticatedSettingsRouteRoute = AuthenticatedSettingsRouteImport.update(
   } as any,
 )
 
+const AuthenticatedDocumentsRouteRoute =
+  AuthenticatedDocumentsRouteImport.update({
+    id: '/documents',
+    path: '/documents',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -88,9 +97,9 @@ const AuthenticatedSettingsIndexRoute = AuthenticatedSettingsIndexImport.update(
 
 const AuthenticatedDocumentsIndexRoute =
   AuthenticatedDocumentsIndexImport.update({
-    id: '/documents/',
-    path: '/documents/',
-    getParentRoute: () => AuthenticatedRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDocumentsRouteRoute,
   } as any)
 
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexImport.update({
@@ -124,6 +133,13 @@ const AuthenticatedFormsMaCourtOrderRoute =
     id: '/forms/ma-court-order',
     path: '/forms/ma-court-order',
     getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedDocumentsPdfIdRoute =
+  AuthenticatedDocumentsPdfIdImport.update({
+    id: '/$pdfId',
+    path: '/$pdfId',
+    getParentRoute: () => AuthenticatedDocumentsRouteRoute,
   } as any)
 
 const AuthenticatedAdminQuestsIndexRoute =
@@ -214,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/documents': {
+      id: '/_authenticated/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof AuthenticatedDocumentsRouteImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
       path: '/settings'
@@ -241,6 +264,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/signin'
       preLoaderRoute: typeof UnauthenticatedSigninImport
       parentRoute: typeof UnauthenticatedImport
+    }
+    '/_authenticated/documents/$pdfId': {
+      id: '/_authenticated/documents/$pdfId'
+      path: '/$pdfId'
+      fullPath: '/documents/$pdfId'
+      preLoaderRoute: typeof AuthenticatedDocumentsPdfIdImport
+      parentRoute: typeof AuthenticatedDocumentsRouteImport
     }
     '/_authenticated/forms/ma-court-order': {
       id: '/_authenticated/forms/ma-court-order'
@@ -279,10 +309,10 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/documents/': {
       id: '/_authenticated/documents/'
-      path: '/documents'
-      fullPath: '/documents'
+      path: '/'
+      fullPath: '/documents/'
       preLoaderRoute: typeof AuthenticatedDocumentsIndexImport
-      parentRoute: typeof AuthenticatedImport
+      parentRoute: typeof AuthenticatedDocumentsRouteImport
     }
     '/_authenticated/settings/': {
       id: '/_authenticated/settings/'
@@ -378,6 +408,22 @@ const AuthenticatedAdminRouteRouteWithChildren =
     AuthenticatedAdminRouteRouteChildren,
   )
 
+interface AuthenticatedDocumentsRouteRouteChildren {
+  AuthenticatedDocumentsPdfIdRoute: typeof AuthenticatedDocumentsPdfIdRoute
+  AuthenticatedDocumentsIndexRoute: typeof AuthenticatedDocumentsIndexRoute
+}
+
+const AuthenticatedDocumentsRouteRouteChildren: AuthenticatedDocumentsRouteRouteChildren =
+  {
+    AuthenticatedDocumentsPdfIdRoute: AuthenticatedDocumentsPdfIdRoute,
+    AuthenticatedDocumentsIndexRoute: AuthenticatedDocumentsIndexRoute,
+  }
+
+const AuthenticatedDocumentsRouteRouteWithChildren =
+  AuthenticatedDocumentsRouteRoute._addFileChildren(
+    AuthenticatedDocumentsRouteRouteChildren,
+  )
+
 interface AuthenticatedSettingsRouteRouteChildren {
   AuthenticatedSettingsAccountRoute: typeof AuthenticatedSettingsAccountRoute
   AuthenticatedSettingsResponsesRoute: typeof AuthenticatedSettingsResponsesRoute
@@ -441,20 +487,21 @@ const AuthenticatedHomeRouteWithChildren =
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
+  AuthenticatedDocumentsRouteRoute: typeof AuthenticatedDocumentsRouteRouteWithChildren
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRouteWithChildren
   AuthenticatedSignoutRoute: typeof AuthenticatedSignoutRoute
   AuthenticatedFormsMaCourtOrderRoute: typeof AuthenticatedFormsMaCourtOrderRoute
-  AuthenticatedDocumentsIndexRoute: typeof AuthenticatedDocumentsIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
+  AuthenticatedDocumentsRouteRoute:
+    AuthenticatedDocumentsRouteRouteWithChildren,
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedHomeRoute: AuthenticatedHomeRouteWithChildren,
   AuthenticatedSignoutRoute: AuthenticatedSignoutRoute,
   AuthenticatedFormsMaCourtOrderRoute: AuthenticatedFormsMaCourtOrderRoute,
-  AuthenticatedDocumentsIndexRoute: AuthenticatedDocumentsIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -476,15 +523,17 @@ const UnauthenticatedRouteWithChildren = UnauthenticatedRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '': typeof AuthenticatedHomeRouteWithChildren
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/documents': typeof AuthenticatedDocumentsRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/signout': typeof AuthenticatedSignoutRoute
   '/signin': typeof UnauthenticatedSigninRoute
+  '/documents/$pdfId': typeof AuthenticatedDocumentsPdfIdRoute
   '/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/responses': typeof AuthenticatedSettingsResponsesRoute
   '/': typeof AuthenticatedHomeIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
-  '/documents': typeof AuthenticatedDocumentsIndexRoute
+  '/documents/': typeof AuthenticatedDocumentsIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/quests/$questSlug': typeof AuthenticatedHomeQuestsQuestSlugRouteRouteWithChildren
   '/quests': typeof AuthenticatedHomeQuestsIndexRoute
@@ -501,6 +550,7 @@ export interface FileRoutesByTo {
   '': typeof UnauthenticatedRouteWithChildren
   '/signout': typeof AuthenticatedSignoutRoute
   '/signin': typeof UnauthenticatedSigninRoute
+  '/documents/$pdfId': typeof AuthenticatedDocumentsPdfIdRoute
   '/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/responses': typeof AuthenticatedSettingsResponsesRoute
@@ -523,10 +573,12 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_unauthenticated': typeof UnauthenticatedRouteWithChildren
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/_authenticated/documents': typeof AuthenticatedDocumentsRouteRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/_authenticated/_home': typeof AuthenticatedHomeRouteWithChildren
   '/_authenticated/signout': typeof AuthenticatedSignoutRoute
   '/_unauthenticated/signin': typeof UnauthenticatedSigninRoute
+  '/_authenticated/documents/$pdfId': typeof AuthenticatedDocumentsPdfIdRoute
   '/_authenticated/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/responses': typeof AuthenticatedSettingsResponsesRoute
@@ -550,15 +602,17 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/admin'
+    | '/documents'
     | '/settings'
     | '/signout'
     | '/signin'
+    | '/documents/$pdfId'
     | '/forms/ma-court-order'
     | '/settings/account'
     | '/settings/responses'
     | '/'
     | '/admin/'
-    | '/documents'
+    | '/documents/'
     | '/settings/'
     | '/quests/$questSlug'
     | '/quests'
@@ -574,6 +628,7 @@ export interface FileRouteTypes {
     | ''
     | '/signout'
     | '/signin'
+    | '/documents/$pdfId'
     | '/forms/ma-court-order'
     | '/settings/account'
     | '/settings/responses'
@@ -594,10 +649,12 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/_unauthenticated'
     | '/_authenticated/admin'
+    | '/_authenticated/documents'
     | '/_authenticated/settings'
     | '/_authenticated/_home'
     | '/_authenticated/signout'
     | '/_unauthenticated/signin'
+    | '/_authenticated/documents/$pdfId'
     | '/_authenticated/forms/ma-court-order'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/responses'
@@ -645,11 +702,11 @@ export const routeTree = rootRoute
       "filePath": "_authenticated.tsx",
       "children": [
         "/_authenticated/admin",
+        "/_authenticated/documents",
         "/_authenticated/settings",
         "/_authenticated/_home",
         "/_authenticated/signout",
-        "/_authenticated/forms/ma-court-order",
-        "/_authenticated/documents/"
+        "/_authenticated/forms/ma-court-order"
       ]
     },
     "/_unauthenticated": {
@@ -665,6 +722,14 @@ export const routeTree = rootRoute
         "/_authenticated/admin/",
         "/_authenticated/admin/early-access/",
         "/_authenticated/admin/quests/"
+      ]
+    },
+    "/_authenticated/documents": {
+      "filePath": "_authenticated/documents/route.tsx",
+      "parent": "/_authenticated",
+      "children": [
+        "/_authenticated/documents/$pdfId",
+        "/_authenticated/documents/"
       ]
     },
     "/_authenticated/settings": {
@@ -696,6 +761,10 @@ export const routeTree = rootRoute
       "filePath": "_unauthenticated/signin.tsx",
       "parent": "/_unauthenticated"
     },
+    "/_authenticated/documents/$pdfId": {
+      "filePath": "_authenticated/documents/$pdfId.tsx",
+      "parent": "/_authenticated/documents"
+    },
     "/_authenticated/forms/ma-court-order": {
       "filePath": "_authenticated/forms/ma-court-order.tsx",
       "parent": "/_authenticated"
@@ -718,7 +787,7 @@ export const routeTree = rootRoute
     },
     "/_authenticated/documents/": {
       "filePath": "_authenticated/documents/index.tsx",
-      "parent": "/_authenticated"
+      "parent": "/_authenticated/documents"
     },
     "/_authenticated/settings/": {
       "filePath": "_authenticated/settings/index.tsx",

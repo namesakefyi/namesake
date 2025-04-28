@@ -5,6 +5,7 @@ import {
   birthplace,
   category,
   jurisdiction,
+  pdfId,
   role,
   status,
   theme,
@@ -82,24 +83,6 @@ const questFaqs = defineTable({
   .index("author", ["author"])
   .index("updatedAt", ["updatedAt"]);
 
-/**
- * A PDF document that can be filled out by users.
- */
-const documents = defineTable({
-  /** The quest this document belongs to. */
-  questId: v.id("quests"),
-  /** The title of the document. (e.g. "Petition to Change Name of Adult") */
-  title: v.string(),
-  /** The legal code for the document. (e.g. "CJP 27") */
-  code: v.optional(v.string()),
-  /** The user who created the document. */
-  creationUser: v.id("users"),
-  /** The storageId for the PDF file. */
-  file: v.optional(v.id("_storage")),
-  /** Time in ms since epoch when the document was deleted. */
-  deletedAt: v.optional(v.number()),
-}).index("quest", ["questId"]);
-
 // ----------------------------------------------
 // Users
 // ----------------------------------------------
@@ -139,6 +122,18 @@ const userFormResponses = defineTable({
 })
   .index("userId", ["userId"])
   .index("userIdAndField", ["userId", "field"]);
+
+/**
+ * A specific PDF form connected to a user.
+ */
+const userDocuments = defineTable({
+  /** The user who owns the document. */
+  userId: v.id("users"),
+  /** A reference to the PDF ID. */
+  pdfId: pdfId,
+})
+  .index("userId", ["userId"])
+  .index("userIdAndPdfId", ["userId", "pdfId"]);
 
 /**
  * A user's preferences.
@@ -185,10 +180,10 @@ const earlyAccessCodes = defineTable({
 export default defineSchema({
   ...authTables,
   earlyAccessCodes,
-  documents,
   quests,
   questFaqs,
   users,
+  userDocuments,
   userFormResponses,
   userSettings,
   userQuests,

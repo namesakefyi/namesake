@@ -1,10 +1,10 @@
-import { getPdfForm } from "@/utils/pdf";
 import { describe, expect, it } from "vitest";
+import { getPdfForm } from "../../utils";
 import coriAndWmsReleaseRequest from "../cjp34-cori-and-wms-release-request";
 
 describe("CJP34 CORI and WMS Release Request", () => {
   const testData = {
-    county: "Suffolk",
+    residenceCounty: "Suffolk",
     oldFirstName: "Old",
     oldMiddleName: "M",
     oldLastName: "Name",

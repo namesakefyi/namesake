@@ -1,16 +1,20 @@
 import { PDFDocument } from "@cantoo/pdf-lib";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { definePdf, downloadPdf, fetchPdf, fillPdf, getPdfForm } from "../pdf";
+import {
+  definePdf,
+  downloadPdf,
+  fetchPdf,
+  fillPdf,
+  getPdfForm,
+} from "../utils";
 
 describe("PDF utilities", () => {
   const testPdfDefinition = definePdf({
+    id: "test-form" as any,
     title: "Test Form",
+    jurisdiction: "MA",
     pdfPath: "public/forms/test-form.pdf",
-    fields: (data: {
-      newFirstName?: string;
-      oldFirstName?: string;
-      shouldReturnOriginalDocuments?: boolean;
-    }) => ({
+    fields: (data) => ({
       newFirstName: data.newFirstName,
       oldFirstName: data.oldFirstName,
       shouldReturnOriginalDocuments: data.shouldReturnOriginalDocuments,
@@ -86,6 +90,18 @@ describe("PDF utilities", () => {
         form.getCheckBox("shouldReturnOriginalDocuments").isChecked(),
       ).toBe(false);
     });
+
+    it("should set a title and author", async () => {
+      const result = await fillPdf({
+        pdf: testPdfDefinition,
+        userData: {},
+      });
+
+      const pdfDoc = await PDFDocument.load(result);
+
+      expect(pdfDoc.getTitle()).toBe("Test Form");
+      expect(pdfDoc.getAuthor()).toBe("Filled by Namesake Collaborative");
+    });
   });
 
   describe("getPdfForm", () => {
@@ -128,10 +144,10 @@ describe("PDF utilities", () => {
   describe("definePdf", () => {
     it("should create valid PDF definition", () => {
       const definition = definePdf({
-        title: "Test",
-        pdfPath: "public/forms/test-form.pdf",
+        id: "test-form" as any,
+        title: "Test Form",
         jurisdiction: "MA",
-        code: "TEST-1",
+        pdfPath: "public/forms/test-form.pdf",
         fields: (data) => ({
           newFirstName: data.newFirstName,
           oldFirstName: data.oldFirstName,
@@ -140,10 +156,9 @@ describe("PDF utilities", () => {
       });
 
       expect(definition).toMatchObject({
-        title: "Test",
+        id: "test-form",
         pdfPath: "public/forms/test-form.pdf",
-        jurisdiction: "MA",
-        code: "TEST-1",
+        fields: expect.any(Function),
       });
       expect(typeof definition.fields).toBe("function");
     });
@@ -229,7 +244,9 @@ describe("PDF utilities", () => {
       document.createElement = vi.fn().mockReturnValue(mockAnchor);
 
       const customPdf = definePdf({
+        id: "test-form" as any,
         title: "Custom Form Name",
+        jurisdiction: "MA",
         pdfPath: "public/forms/test-form.pdf",
         fields: () => ({}),
       });
