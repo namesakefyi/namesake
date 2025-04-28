@@ -90,6 +90,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      # Use Microsoft Docker image to avoid lengthy Playwright installation
       - name: Run Playwright tests
         uses: docker://mcr.microsoft.com/playwright:v1.34.3-jammy
         with:

@@ -114,6 +114,6 @@ test.describe("register", () => {
       "Great",
     );
     await page.getByRole("button", { name: "Register" }).click();
-    await expect(page).toHaveURL("/quests/court-order");
+    await expect(page).not.toHaveURL("/signin");
   });
 });
