@@ -7,7 +7,7 @@ export const AppSidebarHeader = () => {
       <Link href={{ to: "/" }} className="p-1 -m-1">
         <Logo className="h-5 lg:h-[1.35rem]" />
       </Link>
-      <Badge className="-mb-1" variant="waiting">
+      <Badge className="-mb-1" variant="brand">
         Early Access
       </Badge>
     </div>

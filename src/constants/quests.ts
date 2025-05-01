@@ -181,7 +181,7 @@ export const CATEGORIES: Record<Category, GroupDetails> = {
 export type Status = "notStarted" | "inProgress" | "complete";
 
 interface StatusDetails extends GroupDetails {
-  variant?: "info" | "warning" | "danger" | "waiting" | "success";
+  variant?: "info" | "warning" | "danger" | "brand" | "success";
 }
 
 export const STATUS: Record<Status, StatusDetails> = {
