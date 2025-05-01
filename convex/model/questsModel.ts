@@ -5,7 +5,6 @@ import {
 } from "../../src/constants";
 import type { Doc, Id } from "../_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
-import * as QuestFaqs from "./questFaqsModel";
 
 export function generateQuestSlug(
   title: string,
@@ -102,18 +101,6 @@ export async function getByCategoryAndJurisdiction(
     .first();
 }
 
-export async function getByFaqId(
-  ctx: QueryCtx,
-  { questFaqId }: { questFaqId: Id<"questFaqs"> },
-) {
-  for await (const quest of ctx.db.query("quests")) {
-    if (quest.faqs?.includes(questFaqId)) {
-      return quest;
-    }
-  }
-  return null;
-}
-
 export async function getBySlug(ctx: QueryCtx, { slug }: { slug: string }) {
   return await ctx.db
     .query("quests")
@@ -207,71 +194,6 @@ export async function setTimeRequired(
   },
 ) {
   return await update(ctx, questId, userId, { timeRequired });
-}
-
-export async function addFaq(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    question,
-    answer,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    question: string;
-    answer: string;
-  },
-) {
-  const quest = await ctx.db.get(questId);
-  if (!quest) throw new Error("Quest not found");
-
-  const questFaqId = await QuestFaqs.create(ctx, { userId, question, answer });
-  const existingFaqs = quest.faqs || [];
-
-  return await update(ctx, questId, userId, {
-    faqs: [...existingFaqs, questFaqId],
-  });
-}
-
-export async function addFaqId(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    questFaqId,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    questFaqId: Id<"questFaqs">;
-  },
-) {
-  const quest = await ctx.db.get(questId);
-  if (!quest) throw new Error("Quest not found");
-
-  const existingFaqs = quest.faqs || [];
-  return await update(ctx, questId, userId, {
-    faqs: [...existingFaqs, questFaqId],
-  });
-}
-
-export async function deleteFaq(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    questFaqId,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    questFaqId: Id<"questFaqs">;
-  },
-) {
-  const quest = await ctx.db.get(questId);
-  if (!quest) throw new Error("Quest not found");
-
-  const updatedFaqs = quest.faqs?.filter((id) => id !== questFaqId);
-  return await update(ctx, questId, userId, { faqs: updatedFaqs });
 }
 
 export async function deleteForever(
