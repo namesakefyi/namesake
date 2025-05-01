@@ -1,5 +1,5 @@
 import { definePdf } from "@/forms/utils";
-import { joinNames } from "@/utils/pdf-helpers";
+import { formatDateMMDDYYYY, joinNames } from "@/utils/pdf-helpers";
 import pdf from "./cjp34-cori-and-wms-release-request.pdf";
 
 export default definePdf({
@@ -10,9 +10,14 @@ export default definePdf({
   pdfPath: pdf,
   fields: (data) => ({
     county: data.residenceCounty,
+    caseName: joinNames(
+      data.oldFirstName,
+      data.oldMiddleName,
+      data.oldLastName,
+    ),
     isChangeOfNameProceeding: true, // Constant
     oldName: joinNames(data.oldFirstName, data.oldMiddleName, data.oldLastName),
-    dateOfBirth: data.dateOfBirth,
+    dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
     mothersMaidenName: data.mothersMaidenName,
     otherNamesOrAliases: data.otherNamesOrAliases,
   }),

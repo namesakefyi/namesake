@@ -1,5 +1,5 @@
 import { definePdf } from "@/forms/utils";
-import { joinPronouns } from "@/utils/pdf-helpers";
+import { formatDateMMDDYYYY, joinPronouns } from "@/utils/pdf-helpers";
 import languageNameMap from "language-name-map/map";
 import pdf from "./cjp27-petition-to-change-name-of-adult.pdf";
 
@@ -26,7 +26,7 @@ export default definePdf({
     // I was born in:
     birthplaceCity: data.birthplaceCity,
     birthplaceState: data.birthplaceState,
-    dateOfBirth: data.dateOfBirth,
+    dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
 
     // I currently reside at:
     residenceStreetAddress: data.residenceStreetAddress,

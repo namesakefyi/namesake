@@ -20,9 +20,10 @@ describe("CJP34 CORI and WMS Release Request", () => {
     });
 
     // Verify fields
+    expect(form.getTextField("caseName").getText()).toBe("Old M Name");
     expect(form.getTextField("county").getText()).toBe("Suffolk");
     expect(form.getTextField("oldName").getText()).toBe("Old M Name");
-    expect(form.getTextField("dateOfBirth").getText()).toBe("1990-01-01");
+    expect(form.getTextField("dateOfBirth").getText()).toBe("01/01/1990");
     expect(form.getTextField("mothersMaidenName").getText()).toBe("Smith");
     expect(form.getTextField("otherNamesOrAliases").getText()).toBe(
       "Nickname, Alias",

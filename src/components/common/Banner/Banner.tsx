@@ -3,6 +3,7 @@ import {
   Info,
   type LucideIcon,
   OctagonAlert,
+  ShieldCheck,
   TriangleAlert,
 } from "lucide-react";
 import { tv } from "tailwind-variants";
@@ -10,23 +11,24 @@ import { tv } from "tailwind-variants";
 export interface BannerProps {
   children: React.ReactNode;
   icon?: LucideIcon;
-  variant?: "info" | "success" | "danger" | "warning";
+  variant?: "info" | "success" | "danger" | "warning" | "brand";
   size?: "medium" | "large";
   className?: string;
 }
 
 const bannerStyles = tv({
-  base: "flex items-start w-full rounded-lg bg-gray-3 text-gray-dim",
+  base: "flex items-start w-full rounded-lg bg-gray-3 text-gray-dim prose",
   variants: {
     variant: {
       info: "bg-blue-3 text-blue-normal [&_a]:text-blue-normal",
       success: "bg-green-3 text-green-normal [&_a]:text-green-normal",
       danger: "bg-red-3 text-red-normal [&_a]:text-red-normal",
       warning: "bg-amber-3 text-amber-normal [&_a]:text-amber-normal",
+      brand: "bg-purple-3 text-purple-normal [&_a]:text-purple-normal",
     },
     size: {
-      medium: "gap-2 p-2.5 px-3 pr-4 text-sm",
-      large: "gap-3 p-3 px-4 text-base",
+      medium: "gap-2 p-2.5 px-3 pr-4 !text-sm",
+      large: "gap-3 p-3 px-4 !text-base",
     },
   },
   defaultVariants: {
@@ -43,6 +45,7 @@ const iconStyles = tv({
       success: "text-green-11",
       danger: "text-red-11",
       warning: "text-amber-11",
+      brand: "text-purple-11",
     },
     size: {
       medium: "size-5",
@@ -70,6 +73,8 @@ export function Banner({
         return OctagonAlert;
       case "warning":
         return TriangleAlert;
+      case "brand":
+        return ShieldCheck;
       default:
         return Info;
     }

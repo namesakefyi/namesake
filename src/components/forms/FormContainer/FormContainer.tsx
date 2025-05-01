@@ -85,7 +85,7 @@ export function FormContainer({
                 </p>
               )}
               <Banner
-                variant="success"
+                variant="brand"
                 icon={ShieldCheck}
                 size="large"
                 className="mt-6"

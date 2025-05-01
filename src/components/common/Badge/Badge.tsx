@@ -25,7 +25,7 @@ export function BadgeButton({ icon, label, ...props }: BadgeButtonProps) {
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   size?: "xs" | "sm" | "lg";
-  variant?: "info" | "warning" | "danger" | "waiting" | "success";
+  variant?: "info" | "warning" | "danger" | "brand" | "success";
   icon?: LucideIcon;
 }
 
@@ -41,8 +41,8 @@ const badge = tv({
       info: "bg-blue-a3 text-blue-normal",
       warning: "bg-amber-a3 text-amber-normal",
       danger: "bg-red-a3 text-red-normal",
-      waiting: "bg-purple-a3 text-purple-normal",
       success: "bg-green-a3 text-green-normal",
+      brand: "bg-purple-a3 text-purple-normal",
     },
   },
   defaultVariants: {
@@ -63,8 +63,8 @@ const icon = tv({
       info: "text-blue-dim",
       warning: "text-amber-dim",
       danger: "text-red-dim",
-      waiting: "text-purple-dim",
       success: "text-green-dim",
+      brand: "text-purple-dim",
     },
   },
 });

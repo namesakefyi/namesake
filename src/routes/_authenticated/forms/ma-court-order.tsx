@@ -144,6 +144,23 @@ function RouteComponent() {
           name="reasonForChangingName"
           label="Reason for name change"
         />
+        <Banner variant="info" size="large">
+          <p>
+            <strong>What do I write?</strong> Provide a basic reason—no need to
+            go into detail. Examples:
+          </p>
+          <ul>
+            <li>
+              &ldquo;I want a name which aligns with my gender identity.&rdquo;
+            </li>
+            <li>&ldquo;This is the name everyone knows me by.&rdquo;</li>
+            <li>
+              &ldquo;This is my preferred name and I wish to obtain proper
+              documentation.&rdquo;
+            </li>
+            <li>&ldquo;I am transgender.&rdquo;</li>
+          </ul>
+        </Banner>
       </FormSection>
       <FormSection
         title="What is your contact information?"
@@ -265,10 +282,7 @@ function RouteComponent() {
           <PronounSelectField />
         </FormSubsection>
       </FormSection>
-      <FormSection
-        title="Do you want your original documents returned afterwards?"
-        description="The court will return your birth certificate and any other documents you provided."
-      >
+      <FormSection title="Do you want your original documents returned afterwards?">
         <YesNoField
           name="shouldReturnOriginalDocuments"
           label="Return original documents?"
@@ -304,31 +318,27 @@ function RouteComponent() {
             inputClassName="min-h-32"
           />
           <Banner variant="info" size="large">
-            <div className="prose">
-              <p>
-                <strong>What do I write?</strong> The court is looking for a
-                legal basis to exempt you from the newspaper publishing
-                requirement. Recommendations:
-              </p>
-              <ul>
-                <li>
-                  Note how publishing could pose a threat to your privacy or
-                  safety.
-                </li>
-                <li>Be as specific to your personal situation as possible.</li>
-                <li>
-                  Explain that you are not changing your name for an
-                  impermissible reason, such as evasion of debts or criminal
-                  liabilities.
-                </li>
-                <li>
-                  If you are not changing your last name, explicitly mention
-                  that "I am not changing my last name" in the motion. (You can
-                  still file this form if you are changing your name in its
-                  entirety.)
-                </li>
-              </ul>
-            </div>
+            <p>
+              <strong>What do I write?</strong> The court is looking for a legal
+              basis to exempt you from the newspaper publishing requirement.
+              Recommendations:
+            </p>
+            <ul>
+              <li>
+                Note how publishing could pose a threat to your privacy or
+                safety.
+              </li>
+              <li>Be as specific to your personal situation as possible.</li>
+              <li>
+                Explain that you are not changing your name for an impermissible
+                reason, such as evasion of debts or criminal liabilities.
+              </li>
+              <li>
+                If you are not changing your last name, explicitly mention that
+                "I am not changing my last name" in the motion. (You can still
+                file this form if you are changing your name in its entirety.)
+              </li>
+            </ul>
           </Banner>
         </FormSubsection>
       </FormSection>
@@ -353,24 +363,22 @@ function RouteComponent() {
             inputClassName="min-h-32"
           />
           <Banner variant="info" size="large">
-            <div className="prose">
-              <p>
-                <strong>What do I write?</strong> The court is looking for a
-                legal basis to <em>impound</em> (make private) these court
-                records. Recommendations:
-              </p>
-              <ul>
-                <li>
-                  Note how publishing could pose a threat to your privacy or
-                  safety.
-                </li>
-                <li>Be as specific to your personal situation as possible.</li>
-                <li>
-                  Note increased rates of violence toward transgender and gender
-                  non-conforming people.
-                </li>
-              </ul>
-            </div>
+            <p>
+              <strong>What do I write?</strong> The court is looking for a legal
+              basis to <em>impound</em> (make private) these court records.
+              Recommendations:
+            </p>
+            <ul>
+              <li>
+                Note how publishing could pose a threat to your privacy or
+                safety.
+              </li>
+              <li>Be as specific to your personal situation as possible.</li>
+              <li>
+                Note increased rates of violence toward transgender and gender
+                non-conforming people.
+              </li>
+            </ul>
           </Banner>
         </FormSubsection>
       </FormSection>
@@ -391,7 +399,7 @@ function RouteComponent() {
             <strong>
               There are additional fields in the download you have to fill out.
             </strong>{" "}
-            Alternatively, you can{" "}
+            Additionally, you can{" "}
             <a
               href="https://www.masstpc.org/what-we-do/ida-network/ida-financial-assistance/"
               target="_blank"
@@ -405,7 +413,7 @@ function RouteComponent() {
       </FormSection>
       <FormSection
         title="What is your mother's maiden name?"
-        description="The court requests this information in order to look up past court records and verify your identity. The maiden name is the last name or family name of your mother or guardian before marriage."
+        description="The court requests this information in order to look up past court records and verify your identity. The maiden name is the last name (or family name) of your mother (or guardian) before marriage."
       >
         <ShortTextField name="mothersMaidenName" label="Mother's maiden name" />
       </FormSection>

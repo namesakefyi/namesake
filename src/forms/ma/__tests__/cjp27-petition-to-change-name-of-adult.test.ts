@@ -47,6 +47,7 @@ describe("CJP27 Petition to Change Name of Adult", () => {
     expect(form.getTextField("oldLastName").getText()).toBe("Name");
     expect(form.getTextField("birthplaceCity").getText()).toBe("Boston");
     expect(form.getTextField("birthplaceState").getText()).toBe("MA");
+    expect(form.getTextField("dateOfBirth").getText()).toBe("01/01/1990");
 
     // Address fields
     expect(form.getTextField("residenceStreetAddress").getText()).toBe(

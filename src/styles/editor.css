@@ -38,7 +38,7 @@
     &::before {
       position: absolute;
       left: 0;
-      @apply tabular-nums text-gray-11;
+      @apply tabular-nums opacity-60;
     }
   }
 
