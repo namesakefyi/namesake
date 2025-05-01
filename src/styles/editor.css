@@ -1,5 +1,5 @@
 .prose {
-  @apply text-base;
+  @apply text-base lg:text-lg;
 
   a:not([data-type="button"]):not(:where(.not-prose *)) {
     @apply underline underline-offset-2 hover:decoration-inherit decoration-gray-a8;
@@ -38,7 +38,7 @@
     &::before {
       position: absolute;
       left: 0;
-      @apply tabular-nums text-gray-11;
+      @apply tabular-nums opacity-60;
     }
   }
 

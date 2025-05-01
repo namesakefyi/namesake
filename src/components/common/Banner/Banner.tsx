@@ -17,7 +17,7 @@ export interface BannerProps {
 }
 
 const bannerStyles = tv({
-  base: "flex items-start w-full rounded-lg bg-gray-3 text-gray-dim",
+  base: "flex items-start w-full rounded-lg bg-gray-3 text-gray-dim prose",
   variants: {
     variant: {
       info: "bg-blue-3 text-blue-normal [&_a]:text-blue-normal",
@@ -27,8 +27,8 @@ const bannerStyles = tv({
       brand: "bg-purple-3 text-purple-normal [&_a]:text-purple-normal",
     },
     size: {
-      medium: "gap-2 p-2.5 px-3 pr-4 text-sm",
-      large: "gap-3 p-3 px-4 text-base",
+      medium: "gap-2 p-2.5 px-3 pr-4 !text-sm",
+      large: "gap-3 p-3 px-4 !text-base",
     },
   },
   defaultVariants: {
