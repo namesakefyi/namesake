@@ -8,6 +8,8 @@ import {
   Popover,
   Switch,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
@@ -15,7 +17,7 @@ import type { Cost } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
-import { HelpCircle, Pencil } from "lucide-react";
+import { CircleDollarSign, CircleOff, HelpCircle, Pencil } from "lucide-react";
 import { Plus, Trash } from "lucide-react";
 import { memo, useState } from "react";
 import { Fragment } from "react/jsx-runtime";
@@ -40,7 +42,10 @@ const CostInput = memo(function CostInput({
         prefix="$"
         value={cost.cost}
         onChange={(value) =>
-          onChange({ cost: value, description: cost.description })
+          onChange({
+            ...cost,
+            cost: value,
+          })
         }
         minValue={0}
         maxValue={2000}
@@ -51,17 +56,53 @@ const CostInput = memo(function CostInput({
         className="flex-1 min-w-0"
         placeholder="Description"
         value={cost.description}
-        onChange={(value) => onChange({ cost: cost.cost, description: value })}
+        onChange={(value) =>
+          onChange({
+            ...cost,
+            description: value,
+          })
+        }
         isRequired
         maxLength={32}
       />
-      <Button
-        type="button"
-        variant="secondary"
-        onPress={() => onRemove(cost)}
-        icon={Trash}
-        aria-label="Remove"
-      />
+      <ToggleButtonGroup
+        selectionMode="single"
+        disallowEmptySelection
+        selectedKeys={cost.isRequired ? ["required"] : ["optional"]}
+        onSelectionChange={(keys) =>
+          onChange({
+            ...cost,
+            isRequired: keys.has("required"),
+          })
+        }
+      >
+        <TooltipTrigger>
+          <ToggleButton
+            id="required"
+            icon={CircleDollarSign}
+            aria-label="Required cost"
+          />
+          <Tooltip>Required cost</Tooltip>
+        </TooltipTrigger>
+        <TooltipTrigger>
+          <ToggleButton
+            id="optional"
+            icon={CircleOff}
+            aria-label="Optional cost"
+          />
+          <Tooltip>Optional cost</Tooltip>
+        </TooltipTrigger>
+      </ToggleButtonGroup>
+      <TooltipTrigger>
+        <Button
+          type="button"
+          variant="secondary"
+          onPress={() => onRemove(cost)}
+          icon={Trash}
+          aria-label="Remove"
+        />
+        <Tooltip>Remove cost</Tooltip>
+      </TooltipTrigger>
     </div>
   );
 });
@@ -107,27 +148,49 @@ export const QuestCostsBadge = ({
   const getTotalCosts = (costs?: Cost[]) => {
     if (!costs || costs.length === 0) return "Free";
 
-    const total = costs.reduce((acc, cost) => acc + cost.cost, 0);
-    return total > 0
-      ? total.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-          maximumFractionDigits: 0,
-        })
-      : "Free";
+    const formatCurrency = (amount: number) =>
+      amount.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      });
+
+    const requiredTotal = costs
+      .filter((cost) => cost.isRequired !== false)
+      .reduce((acc, cost) => acc + cost.cost, 0);
+
+    const totalWithOptional = costs.reduce((acc, cost) => acc + cost.cost, 0);
+
+    if (requiredTotal === 0) {
+      return "Free";
+    }
+
+    if (requiredTotal === totalWithOptional) {
+      return formatCurrency(requiredTotal);
+    }
+
+    return `${formatCurrency(requiredTotal)}–${formatCurrency(totalWithOptional)}`;
   };
 
   return (
     <Badge size="lg">
       {getTotalCosts(costs)}
       {costs && costs.length > 0 && (
-        <TooltipTrigger>
-          <BadgeButton label="Cost details" icon={HelpCircle} />
-          <Tooltip placement="bottom">
-            <dl className="grid grid-cols-[1fr_auto] py-1">
-              {costs.map(({ cost, description }) => (
+        <DialogTrigger>
+          <TooltipTrigger>
+            <BadgeButton label="Cost details" icon={HelpCircle} />
+            <Tooltip>See cost details</Tooltip>
+          </TooltipTrigger>
+          <Popover placement="bottom" className="py-3 px-3.5">
+            <dl className="grid grid-cols-[1fr_auto]">
+              {costs.map(({ cost, description, isRequired }) => (
                 <Fragment key={description}>
-                  <dt className="pr-4">{description}</dt>
+                  <dt className="pr-4">
+                    {description}
+                    {!isRequired && (
+                      <span className="text-gray-dim italic"> optional</span>
+                    )}
+                  </dt>
                   <dd className="text-right tabular-nums">
                     {cost.toLocaleString("en-US", {
                       style: "currency",
@@ -142,8 +205,8 @@ export const QuestCostsBadge = ({
                 {getTotalCosts(costs)}
               </dd>
             </dl>
-          </Tooltip>
-        </TooltipTrigger>
+          </Popover>
+        </DialogTrigger>
       )}
       {editable && (
         <DialogTrigger>
@@ -155,7 +218,7 @@ export const QuestCostsBadge = ({
             />
             <Tooltip>Edit costs</Tooltip>
           </TooltipTrigger>
-          <Popover isOpen={isEditing} className="p-4 w-80">
+          <Popover isOpen={isEditing} className="p-4 w-full max-w-md">
             <Form onSubmit={handleSubmit} className="w-full">
               {costsInput && (
                 <div className="flex flex-col gap-2 w-full">
@@ -179,7 +242,7 @@ export const QuestCostsBadge = ({
                     onPress={() =>
                       setCostsInput([
                         ...(costsInput ?? []),
-                        { cost: 0, description: "" },
+                        { cost: 0, description: "", isRequired: true },
                       ])
                     }
                     icon={Plus}
@@ -193,7 +256,9 @@ export const QuestCostsBadge = ({
                   isSelected={!costsInput}
                   onChange={(isSelected) =>
                     setCostsInput(
-                      isSelected ? null : [{ cost: 0, description: "" }],
+                      isSelected
+                        ? null
+                        : [{ cost: 0, description: "", isRequired: true }],
                     )
                   }
                   className="justify-self-start mr-auto"

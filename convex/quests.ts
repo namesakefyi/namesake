@@ -154,7 +154,13 @@ export const setCosts = userMutation({
   args: {
     questId: v.id("quests"),
     costs: v.optional(
-      v.array(v.object({ cost: v.number(), description: v.string() })),
+      v.array(
+        v.object({
+          cost: v.number(),
+          description: v.string(),
+          isRequired: v.optional(v.boolean()),
+        }),
+      ),
     ),
   },
   handler: async (ctx, args) => {

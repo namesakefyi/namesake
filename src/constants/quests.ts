@@ -206,6 +206,7 @@ export const STATUS_ORDER: Status[] = Object.keys(STATUS) as Status[];
 export type Cost = {
   cost: number;
   description: string;
+  isRequired?: boolean;
 };
 
 /**

@@ -15,8 +15,8 @@ describe("QuestCostsBadge", () => {
     slug: "test-quest",
     updatedAt: 1234567890,
     costs: [
-      { cost: 100, description: "Application fee" },
-      { cost: 50, description: "Certified copies" },
+      { cost: 100, description: "Application fee", isRequired: true },
+      { cost: 50, description: "Certified copies", isRequired: true },
     ],
   } as Doc<"quests">;
 
@@ -40,6 +40,21 @@ describe("QuestCostsBadge", () => {
     costs: [
       { cost: 0, description: "Free application" },
       { cost: 0, description: "No filing fee" },
+    ],
+  } as Doc<"quests">;
+
+  const mockQuestWithOptionalCosts = {
+    _id: "quest234" as Id<"quests">,
+    _creationTime: 1234567890,
+    title: "Quest With Optional Costs",
+    creationUser: "user123" as Id<"users">,
+    slug: "quest-with-optional-costs",
+    updatedAt: 1234567890,
+    costs: [
+      { cost: 100, description: "Application fee", isRequired: true },
+      { cost: 50, description: "Certified copies", isRequired: true },
+      { cost: 75, description: "Expedited processing", isRequired: false },
+      { cost: 25, description: "Optional notary", isRequired: false },
     ],
   } as Doc<"quests">;
 
@@ -69,35 +84,44 @@ describe("QuestCostsBadge", () => {
     expect(screen.getByText("Free")).toBeInTheDocument();
   });
 
-  it("formats and displays costs correctly", () => {
+  it("formats and displays costs correctly with only required costs", () => {
     render(<QuestCostsBadge quest={mockQuest} />);
     expect(screen.getByText("$150")).toBeInTheDocument();
   });
 
-  it("shows cost breakdown in tooltip", async () => {
-    const user = userEvent.setup();
-    render(<QuestCostsBadge quest={mockQuest} />);
+  it("formats and displays costs correctly with optional costs", () => {
+    render(<QuestCostsBadge quest={mockQuestWithOptionalCosts} />);
+    expect(screen.getByText("$150–$250")).toBeInTheDocument();
+  });
 
-    await user.tab();
+  it("shows cost breakdown in tooltip with optional costs", async () => {
+    const user = userEvent.setup();
+    render(<QuestCostsBadge quest={mockQuestWithOptionalCosts} />);
+
+    await user.click(screen.getByRole("button", { name: "Cost details" }));
 
     await waitFor(() => {
-      expect(screen.getByRole("tooltip")).toBeInTheDocument();
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
 
     // Check if costs are displayed in description list
     const descriptions = screen.getAllByRole("term");
     const values = screen.getAllByRole("definition");
 
-    expect(descriptions).toHaveLength(3); // 2 items + total
-    expect(values).toHaveLength(3);
+    expect(descriptions).toHaveLength(5); // 4 items + total
+    expect(values).toHaveLength(5);
 
     // Check individual costs
     expect(descriptions[0]).toHaveTextContent("Application fee");
     expect(values[0]).toHaveTextContent("$100");
     expect(descriptions[1]).toHaveTextContent("Certified copies");
     expect(values[1]).toHaveTextContent("$50");
-    expect(descriptions[2]).toHaveTextContent("Total");
-    expect(values[2]).toHaveTextContent("$150");
+    expect(descriptions[2]).toHaveTextContent("Expedited processing");
+    expect(values[2]).toHaveTextContent("$75");
+    expect(descriptions[3]).toHaveTextContent("Optional notary");
+    expect(values[3]).toHaveTextContent("$25");
+    expect(descriptions[4]).toHaveTextContent("Total");
+    expect(values[4]).toHaveTextContent("$150–$250");
   });
 
   it("shows edit button when editable prop is true", async () => {
@@ -201,11 +225,13 @@ describe("QuestCostsBadge", () => {
     expect(descriptionInputs[0].maxLength).toBe(32);
   });
 
-  it("handles successful save", async () => {
+  it("handles successful save with optional costs", async () => {
     const user = userEvent.setup();
     mockSetCosts.mockResolvedValueOnce(undefined);
 
-    render(<QuestCostsBadge quest={mockQuest} editable={true} />);
+    render(
+      <QuestCostsBadge quest={mockQuestWithOptionalCosts} editable={true} />,
+    );
 
     await user.click(screen.getByRole("button", { name: "Edit costs" }));
 
@@ -217,13 +243,15 @@ describe("QuestCostsBadge", () => {
     // Save changes
     await user.click(screen.getByText("Save"));
 
-    // Verify mutation was called
+    // Verify mutation was called with correct isRequired values
     expect(mockSetCosts).toHaveBeenCalledWith({
       costs: [
-        { cost: 200, description: "Application fee" },
-        { cost: 50, description: "Certified copies" },
+        { cost: 200, description: "Application fee", isRequired: true },
+        { cost: 50, description: "Certified copies", isRequired: true },
+        { cost: 75, description: "Expedited processing", isRequired: false },
+        { cost: 25, description: "Optional notary", isRequired: false },
       ],
-      questId: mockQuest._id,
+      questId: mockQuestWithOptionalCosts._id,
     });
 
     // Check if popover was closed
