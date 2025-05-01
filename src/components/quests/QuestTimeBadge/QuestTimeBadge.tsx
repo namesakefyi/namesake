@@ -150,12 +150,15 @@ export const QuestTimeBadge = ({
     <Badge size="lg">
       {formattedTime}
       {timeRequired?.description && (
-        <TooltipTrigger>
-          <BadgeButton label="Details" icon={HelpCircle} />
-          <Tooltip placement="bottom">
+        <DialogTrigger>
+          <TooltipTrigger>
+            <BadgeButton label="Details" icon={HelpCircle} />
+            <Tooltip>See details</Tooltip>
+          </TooltipTrigger>
+          <Popover placement="bottom" className="p-3">
             <p className="text-sm max-w-xs">{timeRequired.description}</p>
-          </Tooltip>
-        </TooltipTrigger>
+          </Popover>
+        </DialogTrigger>
       )}
       {editable && (
         <DialogTrigger>

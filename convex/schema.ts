@@ -37,6 +37,7 @@ const quests = defineTable({
       v.object({
         cost: v.number(),
         description: v.string(),
+        isRequired: v.optional(v.boolean()),
       }),
     ),
   ),

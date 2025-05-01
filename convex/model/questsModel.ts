@@ -170,7 +170,7 @@ export async function setCosts(
   }: {
     questId: Id<"quests">;
     userId: Id<"users">;
-    costs?: Array<{ cost: number; description: string }>;
+    costs?: Array<{ cost: number; description: string; isRequired?: boolean }>;
   },
 ) {
   return await update(ctx, questId, userId, { costs });
