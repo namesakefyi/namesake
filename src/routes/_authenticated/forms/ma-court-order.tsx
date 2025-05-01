@@ -144,6 +144,26 @@ function RouteComponent() {
           name="reasonForChangingName"
           label="Reason for name change"
         />
+        <Banner variant="info" size="large">
+          <div className="prose">
+            <p>
+              <strong>What do I write?</strong> Provide a basic reason—no need
+              to go into detail. Examples:
+            </p>
+            <ul>
+              <li>
+                &ldquo;I want a name which aligns with my gender
+                identity.&rdquo;
+              </li>
+              <li>&ldquo;This is the name everyone knows me by.&rdquo;</li>
+              <li>
+                &ldquo;This is my preferred name and I wish to obtain proper
+                documentation.&rdquo;
+              </li>
+              <li>&ldquo;I am transgender.&rdquo;</li>
+            </ul>
+          </div>
+        </Banner>
       </FormSection>
       <FormSection
         title="What is your contact information?"
@@ -265,10 +285,7 @@ function RouteComponent() {
           <PronounSelectField />
         </FormSubsection>
       </FormSection>
-      <FormSection
-        title="Do you want your original documents returned afterwards?"
-        description="The court will return your birth certificate and any other documents you provided."
-      >
+      <FormSection title="Do you want your original documents returned afterwards?">
         <YesNoField
           name="shouldReturnOriginalDocuments"
           label="Return original documents?"
@@ -391,7 +408,7 @@ function RouteComponent() {
             <strong>
               There are additional fields in the download you have to fill out.
             </strong>{" "}
-            Alternatively, you can{" "}
+            Additionally, you can{" "}
             <a
               href="https://www.masstpc.org/what-we-do/ida-network/ida-financial-assistance/"
               target="_blank"

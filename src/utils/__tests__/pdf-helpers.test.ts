@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { joinNames, joinPronouns } from "../pdf-helpers";
+import { formatDateMMDDYYYY, joinNames, joinPronouns } from "../pdf-helpers";
 
 describe("PDF helpers", () => {
   describe("joinNames", () => {
@@ -60,6 +60,22 @@ describe("PDF helpers", () => {
     it("handles mix of empty string and undefined", () => {
       expect(joinPronouns([], undefined)).toBe("");
       expect(joinPronouns(undefined, "")).toBe("");
+    });
+  });
+
+  describe("formatDateMMDDYYYY", () => {
+    it("formats date correctly", () => {
+      expect(formatDateMMDDYYYY("2021-01-01")).toBe("01/01/2021");
+    });
+
+    it("returns empty string when date is undefined", () => {
+      expect(formatDateMMDDYYYY(undefined)).toBe("");
+    });
+
+    it("handles malformed dates", () => {
+      expect(formatDateMMDDYYYY("invalid-date")).toBe("");
+      expect(formatDateMMDDYYYY("2021-1-1-1")).toBe("");
+      expect(formatDateMMDDYYYY("2021-13-40")).toBe("");
     });
   });
 });

@@ -3,7 +3,6 @@ import {
   Button,
   Form,
   Link,
-  type LinkProps,
   Popover,
   TextField,
   Tooltip,
@@ -46,12 +45,6 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
 
   const handleOpenChange = (isOpen: boolean) => {
     setIsOpen(isOpen);
-  };
-
-  const sharedLinkProps: Partial<LinkProps> & { "data-type": "button" } = {
-    button: { variant: "secondary", size: "large" },
-    href: node.attrs.href,
-    "data-type": "button",
   };
 
   return (
@@ -113,7 +106,11 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
           </Popover>
         </div>
       ) : (
-        <Link {...sharedLinkProps}>
+        <Link
+          button={{ variant: "secondary", size: "large" }}
+          href={node.attrs.href}
+          data-type="button"
+        >
           <NodeViewContent />
         </Link>
       )}
