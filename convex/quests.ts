@@ -73,13 +73,6 @@ export const getById = query({
   },
 });
 
-export const getByFaqId = query({
-  args: { questFaqId: v.id("questFaqs") },
-  handler: async (ctx, args) => {
-    return await Quests.getByFaqId(ctx, args);
-  },
-});
-
 export const getBySlug = query({
   args: { slug: v.string() },
   handler: async (ctx, args) => {
@@ -192,43 +185,6 @@ export const setContent = userMutation({
   handler: async (ctx, args) => {
     return await Quests.update(ctx, args.questId, ctx.userId, {
       content: args.content,
-    });
-  },
-});
-
-export const addFaq = userMutation({
-  args: { questId: v.id("quests"), question: v.string(), answer: v.string() },
-  handler: async (ctx, args) => {
-    return await Quests.addFaq(ctx, {
-      questId: args.questId,
-      userId: ctx.userId,
-      question: args.question,
-      answer: args.answer,
-    });
-  },
-});
-
-export const addFaqId = userMutation({
-  args: {
-    questId: v.id("quests"),
-    questFaqId: v.id("questFaqs"),
-  },
-  handler: async (ctx, args) => {
-    return await Quests.addFaqId(ctx, {
-      questId: args.questId,
-      userId: ctx.userId,
-      questFaqId: args.questFaqId,
-    });
-  },
-});
-
-export const deleteFaq = userMutation({
-  args: { questId: v.id("quests"), questFaqId: v.id("questFaqs") },
-  handler: async (ctx, args) => {
-    return await Quests.deleteFaq(ctx, {
-      questId: args.questId,
-      userId: ctx.userId,
-      questFaqId: args.questFaqId,
     });
   },
 });

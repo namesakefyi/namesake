@@ -1,7 +1,6 @@
 import {
   QuestCallToAction,
   QuestContent,
-  QuestFaqs,
   QuestPageHeader,
 } from "@/components/quests";
 import { api } from "@convex/_generated/api";
@@ -34,7 +33,6 @@ function QuestDetailRoute() {
       <div className="flex flex-1 flex-col gap-6 app-padding py-6">
         <QuestContent quest={quest} editable={false} />
         <QuestCallToAction quest={quest} userQuest={userQuest} />
-        <QuestFaqs quest={quest} editable={false} />
       </div>
     </>
   );

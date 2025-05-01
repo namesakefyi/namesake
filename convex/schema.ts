@@ -53,8 +53,6 @@ const quests = defineTable({
   deletedAt: v.optional(v.number()),
   /** Rich text comprising the contents of the quest, stored as HTML. */
   content: v.optional(v.string()),
-  /** Questions related to the quest. */
-  faqs: v.optional(v.array(v.id("questFaqs"))),
   /** Time in ms since epoch when the quest was last updated. */
   updatedAt: v.number(),
   /** The user who last updated the quest. */
@@ -63,25 +61,8 @@ const quests = defineTable({
   .index("slug", ["slug"])
   .index("category", ["category"])
   .index("categoryAndJurisdiction", ["category", "jurisdiction"])
-  .index("faqs", ["faqs"])
   .index("updatedAt", ["updatedAt"])
   .index("updatedBy", ["updatedBy"]);
-
-/**
- * A frequently asked question and its answer.
- */
-const questFaqs = defineTable({
-  /** A frequently asked question. */
-  question: v.string(),
-  /** The rich text answer to the question, stored as HTML. */
-  answer: v.string(),
-  /** The user who published the FAQ. */
-  author: v.id("users"),
-  /** Date the FAQ was updated, in ms since epoch. */
-  updatedAt: v.number(),
-})
-  .index("author", ["author"])
-  .index("updatedAt", ["updatedAt"]);
 
 // ----------------------------------------------
 // Users
@@ -181,7 +162,6 @@ export default defineSchema({
   ...authTables,
   earlyAccessCodes,
   quests,
-  questFaqs,
   users,
   userDocuments,
   userFormResponses,
