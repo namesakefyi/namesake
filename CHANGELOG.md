@@ -1,5 +1,11 @@
 # namesake
 
+## 0.26.3
+
+### Patch Changes
+
+- 24a1539: Update guidance for listing reason to change name, update other content
+
 ## 0.26.2
 
 ### Patch Changes
