@@ -149,7 +149,7 @@
   }
 
   details {
-    @apply pl-4;
+    --indent: calc(var(--spacing) * 4);
   }
 
   details[open] + details {
@@ -157,9 +157,11 @@
   }
 
   summary {
-    list-style: none;
-    position: relative;
-    font-weight: 600;
+    --summary-inline-padding: 0.3em;
+    @apply rounded-md font-medium relative list-none;
+    inline-size: fit-content;
+    padding-inline: calc(var(--indent) + var(--summary-inline-padding)) calc(var(--summary-inline-padding) * 1.5);
+    margin-inline: calc(var(--summary-inline-padding) * -1);
   }
 
   summary:-webkit-details-marker,
@@ -170,21 +172,37 @@
   summary:before {
     content: "▶︎";
     position: absolute;
-    left: -1.2rem;
+    left: var(--summary-inline-padding);
     scale: 0.65;
     transition: rotate 0.15s ease-out;
+    opacity: 0.5;
   }
 
   details[open] summary:before {
     rotate: 90deg;
   }
 
+  details:not([open]) summary {
+    @apply text-gray-11;
+  }
+
   &:not(:has([contenteditable="true"])) summary {
     cursor: pointer;
+
+    &:hover {
+      @apply bg-gray-a3 text-gray-12;
+      &:before {
+        opacity: 1;
+      }
+    }
   }
 
   &:has([contenteditable="true"]) summary {
     outline: none;
+  }
+
+  div[data-type="disclosure-content"] {
+    padding-inline-start: var(--indent);
   }
 }
 
