@@ -23,6 +23,7 @@ describe("EditorToolbar", () => {
           setLink: () => ({ run: vi.fn() }),
           unsetLink: () => ({ run: vi.fn() }),
         }),
+        toggleDisclosures: () => ({ run: vi.fn() }),
       }),
     }),
     can: () => ({
@@ -40,6 +41,7 @@ describe("EditorToolbar", () => {
           toggleBulletList: () => ({ run: () => true }),
           toggleSteps: () => ({ run: () => true }),
           toggleButton: () => ({ run: () => true }),
+          toggleDisclosures: () => ({ run: () => true }),
         }),
       }),
     }),

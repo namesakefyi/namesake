@@ -22,6 +22,7 @@ vi.mock("@tiptap/react", () => {
         toggleBulletList: () => ({ run: vi.fn() }),
         toggleSteps: () => ({ run: vi.fn() }),
         toggleButton: () => ({ run: vi.fn() }),
+        toggleDisclosures: () => ({ run: vi.fn() }),
       }),
     }),
     can: () => ({
@@ -39,6 +40,7 @@ vi.mock("@tiptap/react", () => {
           toggleBulletList: () => ({ run: () => true }),
           toggleSteps: () => ({ run: () => true }),
           toggleButton: () => ({ run: () => true }),
+          toggleDisclosures: () => ({ run: () => true }),
         }),
       }),
     }),
