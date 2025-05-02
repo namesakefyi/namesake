@@ -5,7 +5,7 @@
     @apply underline underline-offset-2 hover:decoration-inherit decoration-gray-a8;
   }
 
-  :where(p, h2, h3, blockquote, ul, ol, img, div) + :where(p, h2, h3, blockquote, ul, ol, img, div):not(:where(.not-prose *)) {
+  :where(p, h2, h3, blockquote, ul, ol, img, div, aside) + :where(p, h2, h3, blockquote, ul, ol, img, div, aside):not(:where(.not-prose *)) {
     margin-block-start: 0.75em;
   }
 
@@ -146,6 +146,45 @@
       height: 0;
       pointer-events: none;
     }
+  }
+
+  details {
+    @apply pl-4;
+  }
+
+  details[open] + details {
+    margin-block-start: 0.75em;
+  }
+
+  summary {
+    list-style: none;
+    position: relative;
+    font-weight: 600;
+  }
+
+  summary:-webkit-details-marker,
+  summary::marker {
+    display: none;
+  }
+
+  summary:before {
+    content: "▶︎";
+    position: absolute;
+    left: -1.2rem;
+    scale: 0.65;
+    transition: rotate 0.15s ease-out;
+  }
+
+  details[open] summary:before {
+    rotate: 90deg;
+  }
+
+  &:not(:has([contenteditable="true"])) summary {
+    cursor: pointer;
+  }
+
+  &:has([contenteditable="true"]) summary {
+    outline: none;
   }
 }
 

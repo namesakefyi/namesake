@@ -5,6 +5,7 @@ import {
   Heading2,
   ItalicIcon,
   List,
+  ListCollapse,
   ListOrdered,
   type LucideIcon,
   Milestone,
@@ -174,6 +175,13 @@ export const EditorToolbar = ({ editor, extensions }: EditorToolbarProps) => {
             onPress={() => editor.chain().focus().toggleSteps().run()}
             isDisabled={!editor.can().chain().focus().toggleSteps().run()}
             isSelected={editor.isActive("steps")}
+          />
+          <EditorToggleButton
+            icon={ListCollapse}
+            label="Disclosure"
+            onPress={() => editor.chain().focus().toggleDisclosures().run()}
+            isDisabled={!editor.can().chain().focus().toggleDisclosures().run()}
+            isSelected={editor.isActive("disclosures")}
           />
           <EditorToggleButton
             icon={MousePointerClick}
