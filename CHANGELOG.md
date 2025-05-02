@@ -1,5 +1,17 @@
 # namesake
 
+## 0.27.0
+
+### Minor Changes
+
+- 7fe61d0: Integrate quest questions directly into the content instead of separating section
+- 5703bde: Display optional costs within cost breakdown
+- 9f6d86d: Support displaying frequently asked questions as details elements within the content of a quest
+
+### Patch Changes
+
+- 5703bde: Fix cost and time tooltips not displaying on mobile devices
+
 ## 0.26.3
 
 ### Patch Changes
