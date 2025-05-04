@@ -43,7 +43,7 @@
     "@faker-js/faker": "^9.7.0",
     "@maskito/core": "^3.7.2",
     "@maskito/react": "^3.7.2",
-    "@namesake/tiptap-extensions": "^1.0.0",
+    "@namesake/tiptap-extensions": "^2.0.1",
     "@radix-ui/colors": "^3.0.0",
     "@tailwindcss/vite": "^4.1.4",
     "@tanstack/react-router": "^1.117.1",

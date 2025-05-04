@@ -1,13 +1,4 @@
-import {
-  Disclosure,
-  DisclosureContent,
-  DisclosureTitle,
-  Disclosures,
-  StepContent,
-  StepItem,
-  StepTitle,
-  Steps,
-} from "@namesake/tiptap-extensions";
+import { DisclosuresKit, StepsKit } from "@namesake/tiptap-extensions";
 import type { Extensions } from "@tiptap/core";
 import Blockquote from "@tiptap/extension-blockquote";
 import Bold from "@tiptap/extension-bold";
@@ -85,15 +76,5 @@ export const EXTENSION_GROUPS: Record<ExtensionGroup, Extensions> = {
     ListItem,
     OrderedList,
   ],
-  advanced: [
-    Steps,
-    StepItem,
-    StepTitle,
-    StepContent,
-    Disclosure,
-    Disclosures,
-    DisclosureTitle,
-    DisclosureContent,
-    Button,
-  ],
+  advanced: [StepsKit, DisclosuresKit, Button],
 };

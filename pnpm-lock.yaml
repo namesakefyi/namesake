@@ -35,8 +35,8 @@ importers:
         specifier: ^3.7.2
         version: 3.7.2(@maskito/core@3.7.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@namesake/tiptap-extensions':
-        specifier: ^1.0.0
-        version: 1.0.0(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))
+        specifier: ^2.0.1
+        version: 2.0.1(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))
       '@radix-ui/colors':
         specifier: ^3.0.0
         version: 3.0.0
@@ -1394,8 +1394,8 @@ packages:
       react: '>=16.8'
       react-dom: '>=16.8'
 
-  '@namesake/tiptap-extensions@1.0.0':
-    resolution: {integrity: sha512-g+3AoXaNPHHzQi/55A+RjjIqxmtXsmCU+W8qep0ccS15BW1W1eCZQSMDUHWJcL4n6D9dhhZFOAMOah1W2jnsEg==}
+  '@namesake/tiptap-extensions@2.0.1':
+    resolution: {integrity: sha512-zswlycxeDuSsl9K317jed+SOf1kqV7vqOMbKpKwr6uMd1Iyg/mZyMnrrwovEjhhFMMV9QWlIhWClqSOkuLu/WQ==}
     peerDependencies:
       '@tiptap/core': ^2.11.9
 
@@ -6517,7 +6517,7 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@namesake/tiptap-extensions@1.0.0(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))':
+  '@namesake/tiptap-extensions@2.0.1(@tiptap/core@2.11.7(@tiptap/pm@2.11.7))':
     dependencies:
       '@tiptap/core': 2.11.7(@tiptap/pm@2.11.7)
 
