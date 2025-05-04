@@ -1,5 +1,11 @@
 # namesake
 
+## 0.27.1
+
+### Patch Changes
+
+- f225cbb: Fix alignment of disclosures and keep disclosues closed by default when viewing quests
+
 ## 0.27.0
 
 ### Minor Changes
