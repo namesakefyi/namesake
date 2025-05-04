@@ -88,10 +88,6 @@
     counter-increment: steps;
     position: relative;
     padding-inline-start: calc(var(--step-number-size) + var(--step-number-gap));
-
-    @media (width < 800px) {
-      --step-number-gap: 8px;
-    }
     
     &::before {
       all: unset;
@@ -153,20 +149,15 @@
     }
   }
 
-  details {
-    --indent: 1.5em;
-  }
 
   details[open] + details {
     margin-block-start: 0.75em;
   }
 
   summary {
-    --summary-inline-padding: 0.3em;
     @apply rounded-md font-semibold relative list-none;
     inline-size: fit-content;
-    padding-inline: calc(var(--indent) + var(--summary-inline-padding)) calc(var(--summary-inline-padding) * 1.5);
-    margin-inline: calc(var(--summary-inline-padding) * -1);
+    padding-inline-start: 1.5em;
   }
 
   summary:-webkit-details-marker,
@@ -174,14 +165,29 @@
     display: none;
   }
 
+  summary:before,
+  summary:after {
+    position: absolute;
+    left: 0;
+    top: 0.25em;
+    width: 1em;
+    height: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+  }
+
   summary:before {
     content: "▶︎";
-    position: absolute;
-    left: var(--summary-inline-padding);
-    scale: 0.65;
+    scale: 0.75;
     transition: rotate 0.15s ease-out;
     opacity: 0.5;
-    margin-inline-start: 0.05em;
+  }
+
+  summary:after {
+    content: "";
+    @apply rounded-sm;
   }
 
   details[open] summary:before {
@@ -193,12 +199,15 @@
   }
 
   &:not(:has([contenteditable="true"])) summary {
-    cursor: pointer;
+    @apply cursor-pointer;
 
     &:hover {
-      @apply bg-gray-a3 text-gray-12;
+      @apply text-gray-12;
       &:before {
         opacity: 1;
+      }
+      &:after {
+        @apply bg-gray-a4;
       }
     }
   }
@@ -208,7 +217,7 @@
   }
 
   div[data-type="disclosure-content"] {
-    padding-inline-start: var(--indent);
+    padding-inline-start: 1.5em;
   }
 }
 
