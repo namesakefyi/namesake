@@ -79,7 +79,6 @@
     "oslo": "^1.2.1",
     "postcss": "^8.5.3",
     "posthog-js": "^1.239.1",
-    "pretty-bytes": "^6.1.1",
     "react": "^19.1.0",
     "react-aria": "^3.39.0",
     "react-aria-components": "^1.8.0",
