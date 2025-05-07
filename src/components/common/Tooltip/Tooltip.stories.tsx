@@ -1,5 +1,5 @@
 import { Button, Tooltip, TooltipTrigger } from "@/components/common";
-import type { Meta } from "@storybook/react";
+import type { Meta } from "@storybook/react-vite";
 import { Printer, Save } from "lucide-react";
 
 const meta: Meta<typeof Tooltip> = {

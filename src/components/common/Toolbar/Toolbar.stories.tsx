@@ -8,7 +8,7 @@ import {
 import { Bold, Italic, Underline } from "lucide-react";
 import { Group } from "react-aria-components";
 
-import type { Meta } from "@storybook/react";
+import type { Meta } from "@storybook/react-vite";
 
 const meta: Meta<typeof Toolbar> = {
   component: Toolbar,

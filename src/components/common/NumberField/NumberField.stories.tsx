@@ -1,5 +1,5 @@
 import { Button, Form } from "@/components/common";
-import type { Meta } from "@storybook/react";
+import type { Meta } from "@storybook/react-vite";
 import { NumberField } from "./NumberField";
 
 const meta: Meta<typeof NumberField> = {
