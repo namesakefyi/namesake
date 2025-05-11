@@ -13,12 +13,12 @@ export const ResendOTP = Resend({
     const { error } = await resend.emails.send({
       from: "My App <onboarding@resend.dev>",
       to: [email],
-      subject: "Sign in to My App",
+      subject: "Sign in to Namesake",
       text: `Your code is ${token}`,
     });
 
     if (error) {
-      throw new Error(`Failed to send verification email: ${error.message}`);
+      throw new Error("Could not send");
     }
   },
 });
