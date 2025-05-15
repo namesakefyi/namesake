@@ -213,3 +213,12 @@ export async function deleteForever(
   // Delete the quest
   await ctx.db.delete(questId);
 }
+
+export async function search(ctx: QueryCtx, { query }: { query?: string }) {
+  if (!query) return [];
+
+  return await ctx.db
+    .query("quests")
+    .withSearchIndex("search_content", (q) => q.search("content", query))
+    .take(10);
+}

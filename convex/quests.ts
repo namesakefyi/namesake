@@ -219,3 +219,12 @@ export const deleteForever = userMutation({
     return await Quests.deleteForever(ctx, { questId: args.questId });
   },
 });
+
+export const search = query({
+  args: {
+    query: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    return await Quests.search(ctx, { query: args.query });
+  },
+});

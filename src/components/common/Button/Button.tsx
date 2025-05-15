@@ -100,7 +100,7 @@ export function Button({
     variants: {
       isSubmitting: {
         true: "invisible",
-        false: "visible",
+        false: "",
       },
     },
   });

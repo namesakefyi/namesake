@@ -63,7 +63,11 @@ const quests = defineTable({
   .index("category", ["category"])
   .index("categoryAndJurisdiction", ["category", "jurisdiction"])
   .index("updatedAt", ["updatedAt"])
-  .index("updatedBy", ["updatedBy"]);
+  .index("updatedBy", ["updatedBy"])
+  .searchIndex("search_content", {
+    searchField: "content",
+    filterFields: ["category", "jurisdiction"],
+  });
 
 // ----------------------------------------------
 // Users

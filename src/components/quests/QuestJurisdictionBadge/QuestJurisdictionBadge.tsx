@@ -26,11 +26,13 @@ const FEDERAL_CATEGORIES: Category[] = ["passport", "socialSecurity"];
 type QuestJurisdictionBadgeProps = {
   quest?: Doc<"quests"> | null;
   editable?: boolean;
+  short?: boolean;
 };
 
 export const QuestJurisdictionBadge = ({
   quest,
   editable = false,
+  short = false,
 }: QuestJurisdictionBadgeProps) => {
   const [jurisdiction, setJurisdiction] = useState<Selection>(
     new Set(quest?.jurisdiction ? [quest.jurisdiction] : []),
@@ -54,10 +56,15 @@ export const QuestJurisdictionBadge = ({
   };
 
   const isFederal = FEDERAL_CATEGORIES.includes(quest.category as Category);
+  const jurisdictionKey = [...jurisdiction][0] as Jurisdiction;
 
   const jurisdictionLabel = isFederal
-    ? "United States"
-    : JURISDICTIONS[[...jurisdiction][0] as Jurisdiction];
+    ? short
+      ? "US"
+      : "United States"
+    : short
+      ? jurisdictionKey
+      : JURISDICTIONS[jurisdictionKey];
 
   return (
     <Badge size="lg">

@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_authenticated/_home/")({
 function IndexRoute() {
   const isMobile = useIsMobile();
 
-  if (!isMobile) return <Navigate to="/quests/court-order" replace />;
+  if (!isMobile) return <Navigate to="/quests" replace />;
 
   return (
     <div className="flex flex-col py-7 gap-7 app-padding">

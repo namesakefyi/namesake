@@ -12,3 +12,5 @@ export * from "./QuestSection/QuestSection";
 export * from "./QuestsNav/QuestsNav";
 export * from "./QuestTimeBadge/QuestTimeBadge";
 export * from "./StatusSelect/StatusSelect";
+export * from "./QuestCard/QuestCard";
+export * from "./QuestGrid/QuestGrid";
