@@ -1,4 +1,4 @@
-import type { Meta } from "@storybook/react";
+import type { Meta } from "@storybook/react-vite";
 import { PasswordStrength } from "./PasswordStrength";
 
 const meta: Meta<typeof PasswordStrength> = {

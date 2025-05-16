@@ -7,7 +7,7 @@ import {
   MenuTrigger,
   SubmenuTrigger,
 } from "@/components/common";
-import type { Meta } from "@storybook/react";
+import type { Meta } from "@storybook/react-vite";
 import { Ellipsis } from "lucide-react";
 
 const meta: Meta<typeof Menu> = {
