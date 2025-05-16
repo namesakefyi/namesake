@@ -7,5 +7,7 @@ on:
 jobs:
   congrats:
     uses: namesakefyi/congratsbot/.github/workflows/congratsbot.yml@main
+    permissions:
+      contents: read
     secrets:
       DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_CONGRATS }}
