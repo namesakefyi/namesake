@@ -20,8 +20,8 @@ importers:
         specifier: ^2.3.2
         version: 2.3.2
       '@convex-dev/auth':
-        specifier: ^0.0.84
-        version: 0.0.84(@auth/core@0.39.0)(convex@1.24.1(react@19.1.0))(react@19.1.0)
+        specifier: ^0.0.86
+        version: 0.0.86(@auth/core@0.39.0)(convex@1.24.1(react@19.1.0))(react@19.1.0)
       '@convex-dev/migrations':
         specifier: ^0.2.7
         version: 0.2.7(convex@1.24.1(react@19.1.0))
@@ -119,8 +119,8 @@ importers:
         specifier: ^1.24.1
         version: 1.24.1(react@19.1.0)
       convex-helpers:
-        specifier: ^0.1.85
-        version: 0.1.85(convex@1.24.1(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.24.4)
+        specifier: ^0.1.86
+        version: 0.1.86(convex@1.24.1(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.24.4)
       language-name-map:
         specifier: ^0.3.0
         version: 0.3.0
@@ -595,8 +595,8 @@ packages:
   '@changesets/write@0.4.0':
     resolution: {integrity: sha512-CdTLvIOPiCNuH71pyDu3rA+Q0n65cmAbXnwWH84rKGiFumFzkmHNT8KHTMEchcxN+Kl8I54xGUhJ7l3E7X396Q==}
 
-  '@convex-dev/auth@0.0.84':
-    resolution: {integrity: sha512-b8y43YjAx6iM8e9+t+yTsemOGdTy7guX1MUh5561sQXRdQmGH3F6TCPFrx56ltSsMafPpNHjriS/cvx/vOmqqA==}
+  '@convex-dev/auth@0.0.86':
+    resolution: {integrity: sha512-2vgoy2S9cXKZwQBBly8u1QnFjH9Dfpk1w6fEraAhhhKuxh1AzV3QgFshJ2fAcZPvil8nXfzyM9LOXf/8u4pGRw==}
     hasBin: true
     peerDependencies:
       '@auth/core': ^0.37.0
@@ -3015,8 +3015,8 @@ packages:
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
-  convex-helpers@0.1.85:
-    resolution: {integrity: sha512-1DDknxiHychnzhoXbtNpvf1AD2EoDr67gX1EEZsgHeGq+PtQ9rQeiFeI7grss1MN94wL7YfHcIjTOZWJLVOjfw==}
+  convex-helpers@0.1.86:
+    resolution: {integrity: sha512-ZJBrVykJpM2XJhlLTpejTFKDxGooEce6n+g/3BbTfhiBHBJkf97Je+VKMtKFfKS50quzc3lqGrt3XIUlhyyZNQ==}
     hasBin: true
     peerDependencies:
       convex: ^1.13.0
@@ -5534,7 +5534,7 @@ snapshots:
       human-id: 4.1.1
       prettier: 2.8.8
 
-  '@convex-dev/auth@0.0.84(@auth/core@0.39.0)(convex@1.24.1(react@19.1.0))(react@19.1.0)':
+  '@convex-dev/auth@0.0.86(@auth/core@0.39.0)(convex@1.24.1(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@auth/core': 0.39.0
       convex: 1.24.1(react@19.1.0)
@@ -8169,7 +8169,7 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  convex-helpers@0.1.85(convex@1.24.1(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.24.4):
+  convex-helpers@0.1.86(convex@1.24.1(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.24.4):
     dependencies:
       convex: 1.24.1(react@19.1.0)
     optionalDependencies:
