@@ -1,5 +1,5 @@
 import { Badge, BadgeButton } from "@/components/common";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Info } from "lucide-react";
 
 const meta = {
