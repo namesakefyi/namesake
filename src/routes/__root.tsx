@@ -68,9 +68,6 @@ function RootRoute() {
             : { ...path, ...options },
         )
       }
-      useHref={(path) =>
-        typeof path === "string" ? path : router.buildLocation(path).href
-      }
     >
       <Outlet />
       <PostHogPageView />
