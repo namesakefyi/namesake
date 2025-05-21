@@ -1,5 +1,11 @@
 # namesake
 
+## 0.28.1
+
+### Patch Changes
+
+- ce50655: Fix router provider appending link to self
+
 ## 0.28.0
 
 ### Minor Changes
