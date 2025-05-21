@@ -1,5 +1,11 @@
 # namesake
 
+## 0.28.2
+
+### Patch Changes
+
+- 757361c: Revert link change
+
 ## 0.28.1
 
 ### Patch Changes
