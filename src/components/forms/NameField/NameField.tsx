@@ -1,7 +1,12 @@
 import type { FieldName } from "@/constants";
 import { ShortTextField } from "../ShortTextField/ShortTextField";
 
-type NameType = "newName" | "oldName";
+type NameType =
+  | "newName"
+  | "oldName"
+  | "mothersName"
+  | "fathersName"
+  | "previousSocialSecurityCardName";
 
 export interface NameFieldProps {
   children?: React.ReactNode;
@@ -26,6 +31,21 @@ export function NameField({ children, type }: NameFieldProps) {
       first: "oldFirstName",
       middle: "oldMiddleName",
       last: "oldLastName",
+    },
+    mothersName: {
+      first: "mothersFirstName",
+      middle: "mothersMiddleName",
+      last: "mothersLastName",
+    },
+    fathersName: {
+      first: "fathersFirstName",
+      middle: "fathersMiddleName",
+      last: "fathersLastName",
+    },
+    previousSocialSecurityCardName: {
+      first: "previousSocialSecurityCardFirstName",
+      middle: "previousSocialSecurityCardMiddleName",
+      last: "previousSocialSecurityCardLastName",
     },
   };
 
