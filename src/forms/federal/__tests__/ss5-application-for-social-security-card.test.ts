@@ -88,7 +88,9 @@ describe("SS-5 Application for Social Security Card", () => {
 
     // Field 3: Birthplace
     expect(form.getTextField("birthplaceCity").getText()).toBe("Boston");
-    expect(form.getTextField("birthplaceState").getText()).toBe("MA");
+    expect(form.getTextField("birthplaceState").getText()).toBe(
+      "Massachusetts",
+    );
 
     // Field 4: Date of Birth
     expect(form.getTextField("dateOfBirth").getText()).toBe("01/01/1990");
@@ -223,5 +225,22 @@ describe("SS-5 Application for Social Security Card", () => {
     expect(form.getCheckBox("isGuardian").isChecked()).toBe(false);
     expect(form.getCheckBox("isFilingOther").isChecked()).toBe(true);
     expect(form.getTextField("otherSpecify").getText()).toBe("Aunt");
+  });
+
+  it("handles foreign birthplace", async () => {
+    const dataWithForeignBirthplace = {
+      ...testData,
+      birthplaceCity: "Toronto",
+      birthplaceState: "other",
+      birthplaceCountry: "CA",
+    };
+
+    const form = await getPdfForm({
+      pdf: ss5Application,
+      userData: dataWithForeignBirthplace,
+    });
+
+    expect(form.getTextField("birthplaceCity").getText()).toBe("Toronto");
+    expect(form.getTextField("birthplaceState").getText()).toBe("Canada");
   });
 });

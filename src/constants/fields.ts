@@ -15,6 +15,7 @@ export const FIELD_DEFS = [
   { name: "dateOfBirth", label: "Date of birth", type: "string" },
   { name: "birthplaceCity", label: "City of birth", type: "string" },
   { name: "birthplaceState", label: "State of birth", type: "string" },
+  { name: "birthplaceCountry", label: "Country of birth", type: "string" },
   {
     name: "isCurrentlyUnhoused",
     label: "Currently unhoused?",

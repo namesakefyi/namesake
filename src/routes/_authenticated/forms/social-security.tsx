@@ -14,7 +14,12 @@ import {
   ShortTextField,
   YesNoField,
 } from "@/components/forms";
-import { BIRTHPLACES, type FieldName, type FieldType } from "@/constants";
+import {
+  BIRTHPLACES,
+  COUNTRIES,
+  type FieldName,
+  type FieldType,
+} from "@/constants";
 import ss5ApplicationForSocialSecurityCard from "@/forms/federal/ss5-application-for-social-security-card";
 import { downloadMergedPdf } from "@/forms/utils";
 import { useForm } from "@/hooks/useForm";
@@ -38,6 +43,7 @@ const FORM_FIELDS: FieldName[] = [
   "previousLegalNames",
   "birthplaceCity",
   "birthplaceState",
+  "birthplaceCountry",
   "dateOfBirth",
   "citizenshipStatus",
   "isHispanicOrLatino",
@@ -122,7 +128,19 @@ function RouteComponent() {
               value,
             }))}
           />
-          {/* TODO: Add country select */}
+          {form.watch("birthplaceState") === "other" && (
+            <SelectField
+              name="birthplaceCountry"
+              label="Country"
+              placeholder="Select a country"
+              options={Object.entries(COUNTRIES)
+                .filter(([value]) => value !== "US")
+                .map(([value, label]) => ({
+                  label,
+                  value,
+                }))}
+            />
+          )}
         </div>
       </FormSection>
       <FormSection title="What is your date of birth?">
