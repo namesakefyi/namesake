@@ -8,6 +8,7 @@ export const PDF_IDS = [
   "cjp34-cori-and-wms-release-request",
   "cjd400-motion-to-waive-publication",
   "cjd400-motion-to-impound-records",
+  "ss5-application-for-social-security-card",
 ] as const;
 
 export type PDFId = (typeof PDF_IDS)[number];
@@ -37,7 +38,7 @@ export interface PDFDefinition {
    * The jurisdiction of the form.
    * @example "MA"
    */
-  jurisdiction: Jurisdiction;
+  jurisdiction?: Jurisdiction;
 
   /**
    * The path to the PDF file, imported as a module.

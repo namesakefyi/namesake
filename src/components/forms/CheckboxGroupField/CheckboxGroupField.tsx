@@ -42,7 +42,7 @@ export function CheckboxGroupField({
           <CheckboxGroup
             {...field}
             label={!labelHidden ? smartquotes(label) : undefined}
-            aria-label={label}
+            aria-label={labelHidden ? label : undefined}
             size="large"
             isInvalid={invalid}
             errorMessage={error?.message}

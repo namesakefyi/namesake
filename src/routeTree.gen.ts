@@ -25,6 +25,7 @@ import { Route as AuthenticatedAdminIndexImport } from './routes/_authenticated/
 import { Route as AuthenticatedHomeIndexImport } from './routes/_authenticated/_home/index'
 import { Route as AuthenticatedSettingsResponsesImport } from './routes/_authenticated/settings/responses'
 import { Route as AuthenticatedSettingsAccountImport } from './routes/_authenticated/settings/account'
+import { Route as AuthenticatedFormsSocialSecurityImport } from './routes/_authenticated/forms/social-security'
 import { Route as AuthenticatedFormsMaCourtOrderImport } from './routes/_authenticated/forms/ma-court-order'
 import { Route as AuthenticatedDocumentsPdfIdImport } from './routes/_authenticated/documents/$pdfId'
 import { Route as AuthenticatedAdminQuestsIndexImport } from './routes/_authenticated/admin/quests.index'
@@ -126,6 +127,13 @@ const AuthenticatedSettingsAccountRoute =
     id: '/account',
     path: '/account',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
+  } as any)
+
+const AuthenticatedFormsSocialSecurityRoute =
+  AuthenticatedFormsSocialSecurityImport.update({
+    id: '/forms/social-security',
+    path: '/forms/social-security',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 const AuthenticatedFormsMaCourtOrderRoute =
@@ -277,6 +285,13 @@ declare module '@tanstack/react-router' {
       path: '/forms/ma-court-order'
       fullPath: '/forms/ma-court-order'
       preLoaderRoute: typeof AuthenticatedFormsMaCourtOrderImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/forms/social-security': {
+      id: '/_authenticated/forms/social-security'
+      path: '/forms/social-security'
+      fullPath: '/forms/social-security'
+      preLoaderRoute: typeof AuthenticatedFormsSocialSecurityImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/settings/account': {
@@ -492,6 +507,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRouteWithChildren
   AuthenticatedSignoutRoute: typeof AuthenticatedSignoutRoute
   AuthenticatedFormsMaCourtOrderRoute: typeof AuthenticatedFormsMaCourtOrderRoute
+  AuthenticatedFormsSocialSecurityRoute: typeof AuthenticatedFormsSocialSecurityRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -502,6 +518,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedHomeRoute: AuthenticatedHomeRouteWithChildren,
   AuthenticatedSignoutRoute: AuthenticatedSignoutRoute,
   AuthenticatedFormsMaCourtOrderRoute: AuthenticatedFormsMaCourtOrderRoute,
+  AuthenticatedFormsSocialSecurityRoute: AuthenticatedFormsSocialSecurityRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -529,6 +546,7 @@ export interface FileRoutesByFullPath {
   '/signin': typeof UnauthenticatedSigninRoute
   '/documents/$pdfId': typeof AuthenticatedDocumentsPdfIdRoute
   '/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
+  '/forms/social-security': typeof AuthenticatedFormsSocialSecurityRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/responses': typeof AuthenticatedSettingsResponsesRoute
   '/': typeof AuthenticatedHomeIndexRoute
@@ -552,6 +570,7 @@ export interface FileRoutesByTo {
   '/signin': typeof UnauthenticatedSigninRoute
   '/documents/$pdfId': typeof AuthenticatedDocumentsPdfIdRoute
   '/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
+  '/forms/social-security': typeof AuthenticatedFormsSocialSecurityRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/responses': typeof AuthenticatedSettingsResponsesRoute
   '/': typeof AuthenticatedHomeIndexRoute
@@ -580,6 +599,7 @@ export interface FileRoutesById {
   '/_unauthenticated/signin': typeof UnauthenticatedSigninRoute
   '/_authenticated/documents/$pdfId': typeof AuthenticatedDocumentsPdfIdRoute
   '/_authenticated/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
+  '/_authenticated/forms/social-security': typeof AuthenticatedFormsSocialSecurityRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/responses': typeof AuthenticatedSettingsResponsesRoute
   '/_authenticated/_home/': typeof AuthenticatedHomeIndexRoute
@@ -608,6 +628,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/documents/$pdfId'
     | '/forms/ma-court-order'
+    | '/forms/social-security'
     | '/settings/account'
     | '/settings/responses'
     | '/'
@@ -630,6 +651,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/documents/$pdfId'
     | '/forms/ma-court-order'
+    | '/forms/social-security'
     | '/settings/account'
     | '/settings/responses'
     | '/'
@@ -656,6 +678,7 @@ export interface FileRouteTypes {
     | '/_unauthenticated/signin'
     | '/_authenticated/documents/$pdfId'
     | '/_authenticated/forms/ma-court-order'
+    | '/_authenticated/forms/social-security'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/responses'
     | '/_authenticated/_home/'
@@ -706,7 +729,8 @@ export const routeTree = rootRoute
         "/_authenticated/settings",
         "/_authenticated/_home",
         "/_authenticated/signout",
-        "/_authenticated/forms/ma-court-order"
+        "/_authenticated/forms/ma-court-order",
+        "/_authenticated/forms/social-security"
       ]
     },
     "/_unauthenticated": {
@@ -767,6 +791,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/forms/ma-court-order": {
       "filePath": "_authenticated/forms/ma-court-order.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/forms/social-security": {
+      "filePath": "_authenticated/forms/social-security.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/settings/account": {
