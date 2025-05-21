@@ -1,7 +1,6 @@
 import { Banner, Button } from "@/components/common";
 import {
   AddressField,
-  CheckboxField,
   CheckboxGroupField,
   FormContainer,
   FormSection,
@@ -279,13 +278,7 @@ function RouteComponent() {
         <PhoneField name="phoneNumber" />
       </FormSection>
       <FormSection title="What is your mailing address?">
-        <CheckboxField
-          name="isCurrentlyUnhoused"
-          label="I am currently unhoused or without permanent housing"
-        />
-        {!form.watch("isCurrentlyUnhoused") === true && (
-          <AddressField type="mailing" />
-        )}
+        <AddressField type="mailing" />
       </FormSection>
       <FormSection title="Are you filing this form for someone else?">
         <YesNoField
