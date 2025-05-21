@@ -5,59 +5,59 @@ import ss5Application from "../ss5-application-for-social-security-card";
 describe("SS-5 Application for Social Security Card", () => {
   const testData = {
     // Field 1: Name
-    newFirstName: "Eva",
-    newMiddleName: "K",
-    newLastName: "Decker",
-    oldFirstName: "Old",
+    newFirstName: "Marsha",
+    newMiddleName: "P",
+    newLastName: "Johnson",
+    oldFirstName: "Malcolm",
     oldMiddleName: "M",
-    oldLastName: "Name",
-    previousLegalNames: "Previous Name",
+    oldLastName: "Michaels, Jr.",
+    previousLegalNames: "Black Marsha",
 
     // Field 3: Birthplace
-    birthplaceCity: "Boston",
-    birthplaceState: "MA",
+    birthplaceCity: "Elizabeth",
+    birthplaceState: "NJ",
 
     // Field 4: Date of Birth
-    dateOfBirth: "1990-01-01",
+    dateOfBirth: "1945-08-24",
 
     // Field 5: Citizenship
     citizenshipStatus: "usCitizen",
 
     // Field 6: Ethnicity
-    isHispanicOrLatino: true,
+    isHispanicOrLatino: false,
 
     // Field 7: Race
-    race: ["white", "asian"],
+    race: ["black"],
 
     // Field 8: Sex
-    sexAssignedAtBirth: "female",
+    sexAssignedAtBirth: "male",
 
     // Field 9: Mother's name
-    mothersFirstName: "Mother",
+    mothersFirstName: "Alberta",
     mothersMiddleName: "M",
-    mothersLastName: "Name",
+    mothersLastName: "Michaels",
 
     // Field 10: Father's name
-    fathersFirstName: "Father",
+    fathersFirstName: "Malcolm",
     fathersMiddleName: "F",
-    fathersLastName: "Name",
+    fathersLastName: "Michaels, Sr.",
 
     // Field 11: Previous Social Security Card
     hasPreviousSocialSecurityCard: true,
 
     // Field 12: Previous Social Security Card name
-    previousSocialSecurityCardFirstName: "Previous",
-    previousSocialSecurityCardMiddleName: "P",
-    previousSocialSecurityCardLastName: "Name",
+    previousSocialSecurityCardFirstName: "Malcolm",
+    previousSocialSecurityCardMiddleName: "M",
+    previousSocialSecurityCardLastName: "Michaels, Jr.",
 
     // Field 15: Phone number
     phoneNumber: "555-555-5555",
 
     // Field 16: Address
     mailingStreetAddress: "123 Main St",
-    mailingCity: "Boston",
-    mailingState: "MA",
-    mailingZipCode: "02110",
+    mailingCity: "New York",
+    mailingState: "NY",
+    mailingZipCode: "10001",
 
     // Field 18: Relationship
     isFilingForSomeoneElse: false,
@@ -78,22 +78,20 @@ describe("SS-5 Application for Social Security Card", () => {
     });
 
     // Field 1: Name
-    expect(form.getTextField("newFirstName").getText()).toBe("Eva");
-    expect(form.getTextField("newMiddleName").getText()).toBe("K");
-    expect(form.getTextField("newLastName").getText()).toBe("Decker");
-    expect(form.getTextField("oldFirstName").getText()).toBe("Old");
+    expect(form.getTextField("newFirstName").getText()).toBe("Marsha");
+    expect(form.getTextField("newMiddleName").getText()).toBe("P");
+    expect(form.getTextField("newLastName").getText()).toBe("Johnson");
+    expect(form.getTextField("oldFirstName").getText()).toBe("Malcolm");
     expect(form.getTextField("oldMiddleName").getText()).toBe("M");
-    expect(form.getTextField("oldLastName").getText()).toBe("Name");
-    expect(form.getTextField("otherNames").getText()).toBe("Previous Name");
+    expect(form.getTextField("oldLastName").getText()).toBe("Michaels, Jr.");
+    expect(form.getTextField("otherNames").getText()).toBe("Black Marsha");
 
     // Field 3: Birthplace
-    expect(form.getTextField("birthplaceCity").getText()).toBe("Boston");
-    expect(form.getTextField("birthplaceState").getText()).toBe(
-      "Massachusetts",
-    );
+    expect(form.getTextField("birthplaceCity").getText()).toBe("Elizabeth");
+    expect(form.getTextField("birthplaceState").getText()).toBe("New Jersey");
 
     // Field 4: Date of Birth
-    expect(form.getTextField("dateOfBirth").getText()).toBe("01/01/1990");
+    expect(form.getTextField("dateOfBirth").getText()).toBe("08/24/1945");
 
     // Field 5: Citizenship
     expect(form.getCheckBox("usCitizen").isChecked()).toBe(true);
@@ -104,31 +102,33 @@ describe("SS-5 Application for Social Security Card", () => {
     expect(form.getCheckBox("citizenshipOther").isChecked()).toBe(false);
 
     // Field 6: Ethnicity
-    expect(form.getCheckBox("isHispanicOrLatino").isChecked()).toBe(true);
-    expect(form.getCheckBox("isNotHispanicOrLatino").isChecked()).toBe(false);
+    expect(form.getCheckBox("isHispanicOrLatino").isChecked()).toBe(false);
+    expect(form.getCheckBox("isNotHispanicOrLatino").isChecked()).toBe(true);
 
     // Field 7: Race
-    expect(form.getCheckBox("isWhite").isChecked()).toBe(true);
-    expect(form.getCheckBox("isAsian").isChecked()).toBe(true);
-    expect(form.getCheckBox("isBlack").isChecked()).toBe(false);
+    expect(form.getCheckBox("isWhite").isChecked()).toBe(false);
+    expect(form.getCheckBox("isAsian").isChecked()).toBe(false);
+    expect(form.getCheckBox("isBlack").isChecked()).toBe(true);
     expect(form.getCheckBox("isNativeHawaiian").isChecked()).toBe(false);
     expect(form.getCheckBox("isAlaskaNative").isChecked()).toBe(false);
     expect(form.getCheckBox("isAmericanIndian").isChecked()).toBe(false);
     expect(form.getCheckBox("isOtherPacificIslander").isChecked()).toBe(false);
 
     // Field 8: Sex
-    expect(form.getCheckBox("isFemale").isChecked()).toBe(true);
-    expect(form.getCheckBox("isMale").isChecked()).toBe(false);
+    expect(form.getCheckBox("isFemale").isChecked()).toBe(false);
+    expect(form.getCheckBox("isMale").isChecked()).toBe(true);
 
     // Field 9: Mother's name
-    expect(form.getTextField("mothersFirstName").getText()).toBe("Mother");
+    expect(form.getTextField("mothersFirstName").getText()).toBe("Alberta");
     expect(form.getTextField("mothersMiddleName").getText()).toBe("M");
-    expect(form.getTextField("mothersLastName").getText()).toBe("Name");
+    expect(form.getTextField("mothersLastName").getText()).toBe("Michaels");
 
     // Field 10: Father's name
-    expect(form.getTextField("fathersFirstName").getText()).toBe("Father");
+    expect(form.getTextField("fathersFirstName").getText()).toBe("Malcolm");
     expect(form.getTextField("fathersMiddleName").getText()).toBe("F");
-    expect(form.getTextField("fathersLastName").getText()).toBe("Name");
+    expect(form.getTextField("fathersLastName").getText()).toBe(
+      "Michaels, Sr.",
+    );
 
     // Field 11: Previous Social Security Card
     expect(form.getCheckBox("hasPreviousSocialSecurityCard").isChecked()).toBe(
@@ -141,13 +141,13 @@ describe("SS-5 Application for Social Security Card", () => {
     // Field 12: Previous Social Security Card name
     expect(
       form.getTextField("previousSocialSecurityCardFirstName").getText(),
-    ).toBe("Previous");
+    ).toBe("Malcolm");
     expect(
       form.getTextField("previousSocialSecurityCardMiddleName").getText(),
-    ).toBe("P");
+    ).toBe("M");
     expect(
       form.getTextField("previousSocialSecurityCardLastName").getText(),
-    ).toBe("Name");
+    ).toBe("Michaels, Jr.");
 
     // Field 14: Today's date
     expect(form.getTextField("todaysDate").getText()).toBe(today);
@@ -159,9 +159,9 @@ describe("SS-5 Application for Social Security Card", () => {
     expect(form.getTextField("mailingStreetAddress").getText()).toBe(
       "123 Main St",
     );
-    expect(form.getTextField("mailingCity").getText()).toBe("Boston");
-    expect(form.getTextField("mailingState").getText()).toBe("MA");
-    expect(form.getTextField("mailingZipCode").getText()).toBe("02110");
+    expect(form.getTextField("mailingCity").getText()).toBe("New York");
+    expect(form.getTextField("mailingState").getText()).toBe("NY");
+    expect(form.getTextField("mailingZipCode").getText()).toBe("10001");
 
     // Field 18: Relationship
     expect(form.getCheckBox("isSelf").isChecked()).toBe(true);
