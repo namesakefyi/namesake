@@ -21,13 +21,17 @@ import {
   NodeViewWrapper,
 } from "@tiptap/react";
 import { LinkIcon, Unlink } from "lucide-react";
-import { type Key, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useInteractOutside } from "react-aria";
+
+type LinkType = "namesake" | "external";
 
 export default function ButtonComponent({ editor, node }: NodeViewProps) {
   const { routesByPath } = useRouter();
   const [url, setUrl] = useState<string | null>(
-    node.attrs.href && node.attrs.href.length > 0
+    node.attrs.href &&
+      node.attrs.href.length > 0 &&
+      !node.attrs.href.startsWith("/forms/")
       ? node.attrs.href
       : "https://",
   );
@@ -35,7 +39,7 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
     node.attrs.href?.startsWith("/forms/") ? node.attrs.href : null,
   );
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedTab, setSelectedTab] = useState<"namesake" | "external">(
+  const [selectedTab, setSelectedTab] = useState<LinkType>(
     node.attrs.href?.startsWith("/forms/") ? "namesake" : "external",
   );
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -47,17 +51,10 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
     onInteractOutside: () => setIsOpen(false),
   });
 
-  const handleSave = () => {
-    if (form) {
-      editor.chain().focus().updateAttributes("button", { href: form }).run();
-    } else if (url) {
-      editor.chain().focus().setLink({ href: url }).run();
-    }
-  };
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleSave();
+    const href = selectedTab === "namesake" ? form : url;
+    editor.chain().focus().updateAttributes("button", { href }).run();
     setIsOpen(false);
   };
 
@@ -65,8 +62,26 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
     setIsOpen(isOpen);
   };
 
-  const handleFormSelect = (value: Key) => {
-    setForm(value.toString());
+  const formRoutes = Object.entries(routesByPath ?? {})
+    .filter(([path]) => path.startsWith("/forms/"))
+    .map(([path]) => ({
+      value: path,
+      label: path,
+    }));
+
+  const tooltipText = () => {
+    if (
+      selectedTab === "external" &&
+      url &&
+      url.length > 0 &&
+      url !== "https://"
+    ) {
+      return url;
+    }
+    if (selectedTab === "namesake" && form) {
+      return form;
+    }
+    return "Click to add link";
   };
 
   return (
@@ -87,15 +102,11 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
               <NodeViewContent />
               {!node.attrs.href && (
                 <Badge icon={Unlink} variant="warning">
-                  No URL
+                  No link
                 </Badge>
               )}
             </Button>
-            <Tooltip>
-              {url && url.length > 0 && url !== "https://"
-                ? url
-                : "Click to add URL"}
-            </Tooltip>
+            <Tooltip>{tooltipText()}</Tooltip>
           </TooltipTrigger>
           <Popover
             ref={popoverRef}
@@ -107,34 +118,29 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
             shouldCloseOnInteractOutside={() => false} // Manually handling
             UNSTABLE_portalContainer={containerRef.current ?? undefined}
           >
-            <Tabs
-              selectedKey={selectedTab}
-              onSelectionChange={(key) =>
-                setSelectedTab(key as "namesake" | "external")
-              }
-              className="gap-2"
-            >
-              <TabList>
-                <Tab id="namesake">Namesake</Tab>
-                <Tab id="external">External</Tab>
-              </TabList>
-              <TabPanel id="namesake">
-                <Form
-                  onSubmit={handleSubmit}
+            <Form onSubmit={handleSubmit}>
+              <Tabs
+                selectedKey={selectedTab}
+                onSelectionChange={(key) => setSelectedTab(key as LinkType)}
+                className="gap-2"
+              >
+                <TabList>
+                  <Tab id="namesake">Namesake</Tab>
+                  <Tab id="external">External</Tab>
+                </TabList>
+                <TabPanel
+                  id="namesake"
                   className="flex flex-row items-start gap-1 w-full"
                 >
                   <Select
                     aria-label="Select path"
                     selectedKey={form}
-                    onSelectionChange={handleFormSelect}
+                    onSelectionChange={(value) => {
+                      setForm(value.toString());
+                    }}
                     placeholder="Select path"
                     className="flex-1"
-                    items={Object.entries(routesByPath)
-                      .filter(([path]) => path.startsWith("/forms/"))
-                      .map(([path]) => ({
-                        value: path,
-                        label: path,
-                      }))}
+                    items={formRoutes}
                   >
                     {(item) => (
                       <SelectItem key={item.value} id={item.value}>
@@ -145,11 +151,9 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
                   <Button type="submit" variant="primary">
                     Apply
                   </Button>
-                </Form>
-              </TabPanel>
-              <TabPanel id="external">
-                <Form
-                  onSubmit={handleSubmit}
+                </TabPanel>
+                <TabPanel
+                  id="external"
                   className="flex flex-row items-start gap-1 w-full"
                 >
                   <TextField
@@ -165,9 +169,9 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
                   <Button type="submit" variant="primary">
                     Apply
                   </Button>
-                </Form>
-              </TabPanel>
-            </Tabs>
+                </TabPanel>
+              </Tabs>
+            </Form>
           </Popover>
         </div>
       ) : (
