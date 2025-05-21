@@ -4,7 +4,6 @@ import type { NodeViewProps } from "@tiptap/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import ButtonComponent from "./ButtonComponent";
 
-// Mock the NodeViewContent component
 vi.mock("@tiptap/react", () => ({
   NodeViewWrapper: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="node-view-wrapper">{children}</div>
@@ -12,7 +11,6 @@ vi.mock("@tiptap/react", () => ({
   NodeViewContent: () => <span data-testid="button-content">Button Text</span>,
 }));
 
-// Mock the router
 vi.mock("@tanstack/react-router", () => ({
   useRouter: () => ({
     routesByPath: {
@@ -88,7 +86,7 @@ describe("ButtonComponent", () => {
     expect(screen.getByRole("textbox", { name: "URL" })).toBeInTheDocument();
   });
 
-  it("opens popover with Namesake tab selected when URL is a form path", async () => {
+  it("opens popover with Internal tab selected when URL is a form path", async () => {
     const props = {
       ...baseMockProps,
       node: {
@@ -102,7 +100,7 @@ describe("ButtonComponent", () => {
     await userEvent.click(button);
 
     expect(screen.getByRole("tab", { selected: true })).toHaveTextContent(
-      "Namesake",
+      "Internal",
     );
     const select = screen.getByRole("button", { name: /Select path/i });
     expect(select).toBeInTheDocument();
@@ -114,13 +112,11 @@ describe("ButtonComponent", () => {
     const button = screen.getByRole("button");
     await userEvent.click(button);
 
-    // Switch to Namesake tab
-    await userEvent.click(screen.getByRole("tab", { name: "Namesake" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Internal" }));
     expect(
       screen.getByRole("button", { name: /Select path/i }),
     ).toBeInTheDocument();
 
-    // Switch back to External tab
     await userEvent.click(screen.getByRole("tab", { name: "External" }));
     expect(screen.getByRole("textbox", { name: "URL" })).toBeInTheDocument();
   });
@@ -185,10 +181,8 @@ describe("ButtonComponent", () => {
     const button = screen.getByRole("button");
     await userEvent.click(button);
 
-    // Switch to Namesake tab
-    await userEvent.click(screen.getByRole("tab", { name: "Namesake" }));
+    await userEvent.click(screen.getByRole("tab", { name: "Internal" }));
 
-    // Select a form path
     const select = screen.getByRole("button", { name: /Select path/i });
     await userEvent.click(select);
     await userEvent.keyboard("{arrowdown}");

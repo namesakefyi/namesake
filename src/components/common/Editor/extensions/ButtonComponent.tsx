@@ -24,7 +24,7 @@ import { LinkIcon, Unlink } from "lucide-react";
 import { useRef, useState } from "react";
 import { useInteractOutside } from "react-aria";
 
-type LinkType = "namesake" | "external";
+type LinkType = "internal" | "external";
 
 export default function ButtonComponent({ editor, node }: NodeViewProps) {
   const { routesByPath } = useRouter();
@@ -40,7 +40,7 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
   );
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<LinkType>(
-    node.attrs.href?.startsWith("/forms/") ? "namesake" : "external",
+    node.attrs.href?.startsWith("/forms/") ? "internal" : "external",
   );
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -53,7 +53,7 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const href = selectedTab === "namesake" ? form : url;
+    const href = selectedTab === "internal" ? form : url;
     editor.chain().focus().updateAttributes("button", { href }).run();
     setIsOpen(false);
   };
@@ -78,7 +78,7 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
     ) {
       return url;
     }
-    if (selectedTab === "namesake" && form) {
+    if (selectedTab === "internal" && form) {
       return form;
     }
     return "Click to add link";
@@ -125,11 +125,11 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
                 className="gap-2"
               >
                 <TabList>
-                  <Tab id="namesake">Namesake</Tab>
+                  <Tab id="internal">Internal</Tab>
                   <Tab id="external">External</Tab>
                 </TabList>
                 <TabPanel
-                  id="namesake"
+                  id="internal"
                   className="flex flex-row items-start gap-1 w-full"
                 >
                   <Select
