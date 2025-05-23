@@ -44,7 +44,7 @@ export type Jurisdiction = keyof typeof JURISDICTIONS;
 
 export const BIRTHPLACES: Record<Jurisdiction | "other", string> = {
   ...JURISDICTIONS,
-  other: "I was born outside the US",
+  other: "Outside the US",
 };
 export type Birthplace = keyof typeof BIRTHPLACES;
 
