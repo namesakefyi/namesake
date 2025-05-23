@@ -97,7 +97,7 @@ describe("EditBirthplaceSetting", () => {
     // Open popover
     await user.click(screen.getByRole("button"));
 
-    // Use ComboBoxTester to interact with the combobox
+    // Select option
     const comboboxTester = testUtilUser.createTester("ComboBox", {
       root: screen.getByRole("combobox"),
       interactionType: "keyboard",
@@ -120,7 +120,7 @@ describe("EditBirthplaceSetting", () => {
     // Open popover
     await user.click(screen.getByRole("button"));
 
-    // Use ComboBoxTester to interact with the combobox
+    // Select option
     const comboboxTester = testUtilUser.createTester("ComboBox", {
       root: screen.getByRole("combobox"),
       interactionType: "keyboard",
