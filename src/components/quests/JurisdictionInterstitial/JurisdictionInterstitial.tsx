@@ -13,12 +13,14 @@ import {
   JURISDICTIONS,
   type Jurisdiction,
 } from "@/constants";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { api } from "@convex/_generated/api";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 import type { Selection } from "react-aria-components";
 import { toast } from "sonner";
+import { tv } from "tailwind-variants";
 
 interface JurisdictionInterstitialProps {
   type: "courtOrder" | "stateId" | "birthCertificate";
@@ -28,6 +30,7 @@ export const JurisdictionInterstitial = ({
   type,
 }: JurisdictionInterstitialProps) => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [selected, setSelected] = useState<Selection>(new Set());
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string>();
@@ -108,12 +111,30 @@ export const JurisdictionInterstitial = ({
     },
   };
 
+  const emptyStyles = tv({
+    variants: {
+      isMobile: {
+        true: "h-full-minus-mobile-nav",
+        false: "h-[100dvh]",
+      },
+    },
+  });
+
+  const listBoxStyles = tv({
+    base: "flex-1",
+    variants: {
+      isMobile: {
+        true: "max-h-[45dvh]",
+        false: "max-h-[50dvh]",
+      },
+    },
+  });
   return (
     <Empty
       icon={CATEGORIES[type].icon}
       title={copy[type].title}
       subtitle={copy[type].description}
-      className="h-[100dvh]"
+      className={emptyStyles({ isMobile })}
     >
       <Form onSubmit={handleSubmit} className="w-64">
         {error && <Banner variant="danger">{error}</Banner>}
@@ -124,7 +145,7 @@ export const JurisdictionInterstitial = ({
             setError(undefined);
           }}
           selectionMode="single"
-          className="flex-1 max-h-[60dvh]"
+          className={listBoxStyles({ isMobile })}
           aria-label="Select a state"
         >
           {Object.entries(
