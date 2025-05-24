@@ -92,7 +92,7 @@ export function DropdownItem(props: ListBoxItemProps) {
     >
       {composeRenderProps(props.children, (children, { isSelected }) => (
         <>
-          <span className="flex items-center flex-1 gap-2 font-normal truncate">
+          <span className="flex items-center flex-1 gap-2 truncate">
             {children}
           </span>
           {isSelected && (
