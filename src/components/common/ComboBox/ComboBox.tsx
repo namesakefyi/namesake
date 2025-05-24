@@ -83,7 +83,11 @@ export function ComboBox<T extends object>({
           </FieldGroup>
           {description && <FieldDescription>{description}</FieldDescription>}
           <FieldError>{errorMessage}</FieldError>
-          <Popover className="w-(--trigger-width)" placement="bottom start">
+          <Popover
+            className="w-(--trigger-width)"
+            placement="bottom start"
+            shouldFlip={false}
+          >
             <ListBox
               items={items}
               className="outline-none p-1 max-h-[inherit] overflow-auto [clip-path:inset(0_0_0_0_round_.75rem)]"
