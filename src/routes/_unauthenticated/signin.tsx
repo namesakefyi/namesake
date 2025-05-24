@@ -80,9 +80,11 @@ const SignIn = () => {
 
     try {
       if (flow === "signUp" && passwordState && passwordState.score < 3) {
-        setError(
-          `Please choose a stronger password. ${passwordState.feedback.warning}`,
-        );
+        let errorMessage = "Please choose a stronger password.";
+        if (passwordState.feedback.warning) {
+          errorMessage += ` ${passwordState.feedback.warning}`;
+        }
+        setError(errorMessage);
         setIsSubmitting(false);
         return;
       }
