@@ -1,36 +1,56 @@
+import { User } from "@react-aria/test-utils";
+import userEvent from "@testing-library/user-event";
 import { renderWithFormProvider, screen } from "@tests/test-utils";
 import languageNameMap from "language-name-map/map";
 import { describe, expect, it } from "vitest";
 import { LanguageSelectField } from "./LanguageSelectField";
 
 describe("LanguageSelectField", () => {
+  const testUtilUser = new User({ interactionType: "mouse" });
+
   it("renders language select field", () => {
     renderWithFormProvider(<LanguageSelectField name="language" />);
 
-    const languageSelect = screen.getByLabelText("Language");
+    const languageSelect = screen.getByRole("combobox");
     expect(languageSelect).toBeInTheDocument();
-    expect(languageSelect).toHaveTextContent("Select a language");
+    expect(languageSelect).toHaveAttribute("placeholder", "Select a language");
   });
 
-  it("renders languages sorted by English name", async () => {
+  it("renders all languages", async () => {
     renderWithFormProvider(<LanguageSelectField name="language" />);
 
-    const languageOptions = screen.getAllByRole("option", {
-      // Non-empty options
-      name: /[\S\s]+[\S]+/,
-      hidden: true,
+    const comboboxTester = testUtilUser.createTester("ComboBox", {
+      root: screen.getByRole("combobox"),
+      interactionType: "keyboard",
     });
+    await comboboxTester.open();
+    expect(comboboxTester.listbox).toBeInTheDocument();
 
-    // Check that options are sorted alphabetically by name
-    const sortedLanguages = Object.entries(languageNameMap)
-      .sort(([_, { name: aName }], [_2, { name: bName }]) =>
-        aName.localeCompare(bName),
-      )
-      .map(([lang]) => lang);
+    const languageOptions = comboboxTester.options();
+    expect(languageOptions).toHaveLength(Object.keys(languageNameMap).length);
+  });
 
-    languageOptions.forEach((option, index) => {
-      expect(option).toHaveValue(sortedLanguages[index]);
+  it("filters languages by native name", async () => {
+    const user = userEvent.setup();
+    renderWithFormProvider(<LanguageSelectField name="language" />);
+
+    const comboboxTester = testUtilUser.createTester("ComboBox", {
+      root: screen.getByRole("combobox"),
+      interactionType: "keyboard",
     });
+    await comboboxTester.open();
+
+    // Type "Fra" to filter for French
+    await user.keyboard("Fra");
+
+    expect(comboboxTester.options()).toHaveLength(1);
+    expect(comboboxTester.options()[0]).toHaveTextContent(/French/);
+
+    await user.keyboard("{Backspace}{Backspace}{Backspace}");
+    await user.keyboard("espa");
+
+    expect(comboboxTester.options()).toHaveLength(1);
+    expect(comboboxTester.options()[0]).toHaveTextContent(/Spanish/);
   });
 
   it("supports optional children", () => {

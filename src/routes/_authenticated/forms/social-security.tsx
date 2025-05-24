@@ -2,6 +2,7 @@ import { Banner, Button } from "@/components/common";
 import {
   AddressField,
   CheckboxGroupField,
+  ComboBoxField,
   FormContainer,
   FormSection,
   FormSubsection,
@@ -10,7 +11,6 @@ import {
   NameField,
   PhoneField,
   RadioGroupField,
-  SelectField,
   ShortTextField,
   YesNoField,
 } from "@/components/forms";
@@ -119,7 +119,7 @@ function RouteComponent() {
       <FormSection title="Where were you born?">
         <div className="flex flex-wrap gap-4">
           <ShortTextField name="birthplaceCity" label="City" />
-          <SelectField
+          <ComboBoxField
             name="birthplaceState"
             label="State"
             placeholder="Select a state"
@@ -129,7 +129,7 @@ function RouteComponent() {
             }))}
           />
           {form.watch("birthplaceState") === "other" && (
-            <SelectField
+            <ComboBoxField
               name="birthplaceCountry"
               label="Country"
               placeholder="Select a country"
