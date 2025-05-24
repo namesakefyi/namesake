@@ -1,5 +1,11 @@
 # namesake
 
+## 0.29.0
+
+### Minor Changes
+
+- 82c6413: Allow removing quest badges for costs, time required, and state
+
 ## 0.28.2
 
 ### Patch Changes
