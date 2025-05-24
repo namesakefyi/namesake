@@ -129,6 +129,7 @@ export const JurisdictionInterstitial = ({
       },
     },
   });
+
   return (
     <Empty
       icon={CATEGORIES[type].icon}
