@@ -37,7 +37,7 @@ function RouteComponent() {
     base: "flex flex-col h-dvh flex-1",
     variants: {
       isMobile: {
-        true: "h-full-minus-mobile-nav",
+        true: "h-full-minus-mobile-nav w-screen",
         false: "h-dvh",
       },
     },
