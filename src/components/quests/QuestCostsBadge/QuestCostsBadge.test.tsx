@@ -38,8 +38,8 @@ describe("QuestCostsBadge", () => {
     slug: "zero-cost-quest",
     updatedAt: 1234567890,
     costs: [
-      { cost: 0, description: "Free application" },
-      { cost: 0, description: "No filing fee" },
+      { cost: 0, description: "Free application", isRequired: true },
+      { cost: 0, description: "No filing fee", isRequired: true },
     ],
   } as Doc<"quests">;
 
@@ -164,26 +164,6 @@ describe("QuestCostsBadge", () => {
     expect(descriptionInputs[1].value).toBe("Certified copies");
   });
 
-  it("toggles between free and paid costs", async () => {
-    const user = userEvent.setup();
-    render(<QuestCostsBadge quest={mockQuest} editable={true} />);
-
-    await user.click(screen.getByRole("button", { name: "Edit costs" }));
-
-    // Toggle to free
-    const freeSwitch = screen.getByRole("switch", { name: "Free" });
-    await user.click(freeSwitch);
-
-    // Cost inputs should be removed
-    expect(screen.queryByLabelText("Cost")).not.toBeInTheDocument();
-    expect(screen.queryByLabelText("For")).not.toBeInTheDocument();
-
-    // Toggle back to paid
-    await user.click(freeSwitch);
-    expect(screen.getByLabelText("Cost")).toBeInTheDocument();
-    expect(screen.getByLabelText("For")).toBeInTheDocument();
-  });
-
   it("adds and removes cost items", async () => {
     const user = userEvent.setup();
     render(<QuestCostsBadge quest={mockQuest} editable={true} />);
@@ -286,6 +266,20 @@ describe("QuestCostsBadge", () => {
 
     // Check if popover was closed without saving
     expect(mockSetCosts).not.toHaveBeenCalled();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("handles remove costs", async () => {
+    const user = userEvent.setup();
+    render(<QuestCostsBadge quest={mockQuest} editable={true} />);
+
+    await user.click(screen.getByRole("button", { name: "Edit costs" }));
+    await user.click(screen.getByText("Remove"));
+
+    expect(mockSetCosts).toHaveBeenCalledWith({
+      costs: undefined,
+      questId: mockQuest._id,
+    });
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });

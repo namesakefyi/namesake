@@ -59,7 +59,7 @@ describe("QuestJurisdictionBadge", () => {
     render(<QuestJurisdictionBadge quest={mockQuest} editable={true} />);
 
     const editButton = screen.getByRole("button", {
-      name: "Edit jurisdiction",
+      name: "Edit state",
     });
     expect(editButton).toBeInTheDocument();
   });
@@ -67,14 +67,14 @@ describe("QuestJurisdictionBadge", () => {
   it("hides edit button when editable prop is false", () => {
     render(<QuestJurisdictionBadge quest={mockQuest} editable={false} />);
     expect(
-      screen.queryByRole("button", { name: "Edit jurisdiction" }),
+      screen.queryByRole("button", { name: "Edit state" }),
     ).not.toBeInTheDocument();
   });
 
   it("hides edit button for federal quests even when editable is true", () => {
     render(<QuestJurisdictionBadge quest={mockFederalQuest} editable={true} />);
     expect(
-      screen.queryByRole("button", { name: "Edit jurisdiction" }),
+      screen.queryByRole("button", { name: "Edit state" }),
     ).not.toBeInTheDocument();
   });
 
@@ -82,10 +82,11 @@ describe("QuestJurisdictionBadge", () => {
     const user = userEvent.setup();
     render(<QuestJurisdictionBadge quest={mockQuest} editable={true} />);
 
-    await user.click(screen.getByRole("button", { name: "Edit jurisdiction" }));
+    await user.click(screen.getByRole("button", { name: "Edit state" }));
 
     // Menu should be visible with state options
     expect(screen.getByRole("menu")).toBeInTheDocument();
+    expect(screen.getByText("States")).toBeInTheDocument();
     expect(
       screen.getByRole("menuitemradio", { name: "California" }),
     ).toBeInTheDocument();
@@ -98,6 +99,7 @@ describe("QuestJurisdictionBadge", () => {
     expect(
       screen.getByRole("menuitemradio", { name: "New York" }),
     ).not.toBeChecked();
+    expect(screen.getByText("Remove")).toBeInTheDocument();
   });
 
   it("updates jurisdiction on selection", async () => {
@@ -107,8 +109,8 @@ describe("QuestJurisdictionBadge", () => {
     render(<QuestJurisdictionBadge quest={mockQuest} editable={true} />);
 
     // Open menu and select new jurisdiction
-    await user.click(screen.getByRole("button", { name: "Edit jurisdiction" }));
-    await user.click(screen.getByText("New York"));
+    await user.click(screen.getByRole("button", { name: "Edit state" }));
+    await user.click(screen.getByRole("menuitemradio", { name: "New York" }));
 
     expect(mockSetJurisdiction).toHaveBeenCalledWith({
       questId: mockQuest._id,
@@ -122,8 +124,8 @@ describe("QuestJurisdictionBadge", () => {
 
     render(<QuestJurisdictionBadge quest={mockQuest} editable={true} />);
 
-    await user.click(screen.getByRole("button", { name: "Edit jurisdiction" }));
-    await user.click(screen.getByText("New York"));
+    await user.click(screen.getByRole("button", { name: "Edit state" }));
+    await user.click(screen.getByRole("menuitemradio", { name: "New York" }));
 
     expect(toast.error).toHaveBeenCalledWith("Couldn't update state.");
   });
@@ -134,10 +136,25 @@ describe("QuestJurisdictionBadge", () => {
 
     render(<QuestJurisdictionBadge quest={mockQuest} editable={true} />);
 
-    await user.click(screen.getByRole("button", { name: "Edit jurisdiction" }));
-    await user.click(screen.getByText("New York"));
+    await user.click(screen.getByRole("button", { name: "Edit state" }));
+    await user.click(screen.getByRole("menuitemradio", { name: "New York" }));
 
     // Should still show California after failed update
     expect(screen.getByText("California")).toBeInTheDocument();
+  });
+
+  it("removes jurisdiction when Remove is clicked", async () => {
+    const user = userEvent.setup();
+    mockSetJurisdiction.mockResolvedValueOnce(undefined);
+
+    render(<QuestJurisdictionBadge quest={mockQuest} editable={true} />);
+
+    await user.click(screen.getByRole("button", { name: "Edit state" }));
+    await user.click(screen.getByText("Remove"));
+
+    expect(mockSetJurisdiction).toHaveBeenCalledWith({
+      questId: mockQuest._id,
+      jurisdiction: undefined,
+    });
   });
 });

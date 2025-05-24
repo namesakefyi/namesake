@@ -96,6 +96,7 @@ describe("QuestCategoryBadge", () => {
 
     // Menu should be visible with category options
     expect(screen.getByRole("menu")).toBeInTheDocument();
+    expect(screen.getByText("Categories")).toBeInTheDocument();
     expect(
       screen.getByRole("menuitemradio", { name: "Education" }),
     ).toBeInTheDocument();
@@ -126,9 +127,10 @@ describe("QuestCategoryBadge", () => {
     });
   });
 
-  it("handles update failure", async () => {
+  it("handles update failure with specific error message", async () => {
     const user = userEvent.setup();
-    mockSetCategory.mockRejectedValueOnce(new Error("Update failed"));
+    const error = new Error("Network error");
+    mockSetCategory.mockRejectedValueOnce(error);
 
     render(<QuestCategoryBadge quest={mockQuest} editable={true} />);
 
@@ -136,6 +138,7 @@ describe("QuestCategoryBadge", () => {
     await user.click(screen.getByText("Passport"));
 
     expect(toast.error).toHaveBeenCalledWith("Couldn't update state.");
+    expect(toast.error).toHaveBeenCalledTimes(1);
   });
 
   it("maintains current selection on update failure", async () => {
@@ -172,5 +175,20 @@ describe("QuestCategoryBadge", () => {
     for (const item of menuItems) {
       expect(item.querySelector("svg")).toBeInTheDocument();
     }
+  });
+
+  it("initializes with correct category selection", async () => {
+    render(<QuestCategoryBadge quest={mockQuest} editable={true} />);
+
+    // Open the menu
+    await userEvent.click(
+      screen.getByRole("button", { name: "Edit category" }),
+    );
+
+    // Check that the initial category is selected
+    const educationMenuItem = screen.getByRole("menuitemradio", {
+      name: "Education",
+    });
+    expect(educationMenuItem).toBeChecked();
   });
 });

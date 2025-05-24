@@ -3,6 +3,7 @@ import {
   BadgeButton,
   Menu,
   MenuItem,
+  MenuSection,
   MenuTrigger,
   Tooltip,
   TooltipTrigger,
@@ -49,7 +50,7 @@ export const QuestCategoryBadge = ({
   };
 
   return (
-    <Badge size="lg">
+    <Badge size="lg" icon={CATEGORIES[quest.category as Category]?.icon}>
       {CATEGORIES[quest.category as Category]?.label ?? "Unknown"}
       {editable && (
         <MenuTrigger>
@@ -57,20 +58,23 @@ export const QuestCategoryBadge = ({
             <BadgeButton icon={Pencil} label="Edit category" />
             <Tooltip>Edit category</Tooltip>
           </TooltipTrigger>
-          <Menu
-            disallowEmptySelection
-            selectionMode="single"
-            selectedKeys={category}
-            onSelectionChange={handleChange}
-          >
-            {Object.entries(CATEGORIES).map(([key, { label, icon }]) => {
-              const Icon = icon ?? CircleHelp;
-              return (
-                <MenuItem key={key} id={key} textValue={key} icon={Icon}>
-                  {label}
-                </MenuItem>
-              );
-            })}
+          <Menu>
+            <MenuSection
+              selectionMode="single"
+              disallowEmptySelection
+              selectedKeys={category}
+              onSelectionChange={handleChange}
+              title="Categories"
+            >
+              {Object.entries(CATEGORIES).map(([key, { label, icon }]) => {
+                const Icon = icon ?? CircleHelp;
+                return (
+                  <MenuItem key={key} id={key} textValue={key} icon={Icon}>
+                    {label}
+                  </MenuItem>
+                );
+              })}
+            </MenuSection>
           </Menu>
         </MenuTrigger>
       )}
