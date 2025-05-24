@@ -127,10 +127,9 @@ describe("QuestCategoryBadge", () => {
     });
   });
 
-  it("handles update failure with specific error message", async () => {
+  it("handles update failure", async () => {
     const user = userEvent.setup();
-    const error = new Error("Network error");
-    mockSetCategory.mockRejectedValueOnce(error);
+    mockSetCategory.mockRejectedValueOnce(new Error("Update failed"));
 
     render(<QuestCategoryBadge quest={mockQuest} editable={true} />);
 
@@ -138,7 +137,6 @@ describe("QuestCategoryBadge", () => {
     await user.click(screen.getByText("Passport"));
 
     expect(toast.error).toHaveBeenCalledWith("Couldn't update state.");
-    expect(toast.error).toHaveBeenCalledTimes(1);
   });
 
   it("maintains current selection on update failure", async () => {

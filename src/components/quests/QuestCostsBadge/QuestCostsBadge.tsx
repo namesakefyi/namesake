@@ -122,7 +122,7 @@ export const QuestCostsBadge = ({
 
   if (!quest) return null;
 
-  const handleDelete = () => {
+  const handleRemove = () => {
     setCosts({ costs: undefined, questId: quest._id });
     setIsEditing(false);
   };
@@ -261,7 +261,7 @@ export const QuestCostsBadge = ({
                 <Button
                   variant="secondary"
                   size="small"
-                  onPress={handleDelete}
+                  onPress={handleRemove}
                   className="mr-auto"
                 >
                   Remove

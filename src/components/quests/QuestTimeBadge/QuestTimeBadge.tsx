@@ -116,7 +116,7 @@ export const QuestTimeBadge = ({
 
   if (!quest) return null;
 
-  const handleDelete = () => {
+  const handleRemove = () => {
     setTimeRequired({
       timeRequired: undefined,
       questId: quest._id,
@@ -197,7 +197,7 @@ export const QuestTimeBadge = ({
                 <Button
                   variant="secondary"
                   size="small"
-                  onPress={handleDelete}
+                  onPress={handleRemove}
                   className="mr-auto"
                 >
                   Remove
