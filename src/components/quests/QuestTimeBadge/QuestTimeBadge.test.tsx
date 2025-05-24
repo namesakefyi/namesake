@@ -161,9 +161,10 @@ describe("QuestTimeBadge", () => {
       screen.getByRole("button", { name: "Edit time required" }),
     );
 
-    const descriptionInput = screen.getByLabelText("Description");
-    await user.clear(descriptionInput);
-    await user.type(descriptionInput, "New description");
+    // Select a different unit
+    const unitSelect = screen.getByLabelText("Unit");
+    await user.click(unitSelect);
+    await user.click(screen.getByRole("option", { name: "Months" }));
 
     await user.click(screen.getByText("Save"));
 
@@ -171,8 +172,8 @@ describe("QuestTimeBadge", () => {
       timeRequired: {
         min: 2,
         max: 4,
-        unit: "weeks",
-        description: "New description",
+        unit: "months",
+        description: "Processing time varies by court",
       },
       questId: "quest123",
     });

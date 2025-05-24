@@ -157,4 +157,14 @@ describe("QuestJurisdictionBadge", () => {
       jurisdiction: undefined,
     });
   });
+
+  it("displays 'Unknown' when jurisdiction is invalid", () => {
+    const questWithoutJurisdiction = {
+      ...mockQuest,
+      jurisdiction: "invalid",
+    };
+
+    render(<QuestJurisdictionBadge quest={questWithoutJurisdiction} />);
+    expect(screen.getByText("Unknown")).toBeInTheDocument();
+  });
 });

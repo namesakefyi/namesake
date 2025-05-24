@@ -69,8 +69,7 @@ export const QuestJurisdictionBadge = ({
   const getJurisdictionLabel = () => {
     if (isFederal) return "United States";
     if (hasJurisdiction)
-      return JURISDICTIONS[[...jurisdiction][0] as Jurisdiction];
-    return "Unknown";
+      return JURISDICTIONS[[...jurisdiction][0] as Jurisdiction] ?? "Unknown";
   };
 
   if (!hasJurisdiction && !editable) return null;
