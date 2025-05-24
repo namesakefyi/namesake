@@ -38,8 +38,8 @@ describe("QuestCostsBadge", () => {
     slug: "zero-cost-quest",
     updatedAt: 1234567890,
     costs: [
-      { cost: 0, description: "Free application" },
-      { cost: 0, description: "No filing fee" },
+      { cost: 0, description: "Free application", isRequired: true },
+      { cost: 0, description: "No filing fee", isRequired: true },
     ],
   } as Doc<"quests">;
 
@@ -164,26 +164,6 @@ describe("QuestCostsBadge", () => {
     expect(descriptionInputs[1].value).toBe("Certified copies");
   });
 
-  it("toggles between free and paid costs", async () => {
-    const user = userEvent.setup();
-    render(<QuestCostsBadge quest={mockQuest} editable={true} />);
-
-    await user.click(screen.getByRole("button", { name: "Edit costs" }));
-
-    // Toggle to free
-    const freeSwitch = screen.getByRole("switch", { name: "Free" });
-    await user.click(freeSwitch);
-
-    // Cost inputs should be removed
-    expect(screen.queryByLabelText("Cost")).not.toBeInTheDocument();
-    expect(screen.queryByLabelText("For")).not.toBeInTheDocument();
-
-    // Toggle back to paid
-    await user.click(freeSwitch);
-    expect(screen.getByLabelText("Cost")).toBeInTheDocument();
-    expect(screen.getByLabelText("For")).toBeInTheDocument();
-  });
-
   it("adds and removes cost items", async () => {
     const user = userEvent.setup();
     render(<QuestCostsBadge quest={mockQuest} editable={true} />);
@@ -287,5 +267,54 @@ describe("QuestCostsBadge", () => {
     // Check if popover was closed without saving
     expect(mockSetCosts).not.toHaveBeenCalled();
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("handles remove costs", async () => {
+    const user = userEvent.setup();
+    render(<QuestCostsBadge quest={mockQuest} editable={true} />);
+
+    await user.click(screen.getByRole("button", { name: "Edit costs" }));
+    await user.click(screen.getByText("Remove"));
+
+    expect(mockSetCosts).toHaveBeenCalledWith({
+      costs: undefined,
+      questId: mockQuest._id,
+    });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("toggles cost required/optional status correctly", async () => {
+    const user = userEvent.setup();
+    render(<QuestCostsBadge quest={mockQuest} editable={true} />);
+
+    await user.click(screen.getByRole("button", { name: "Edit costs" }));
+
+    // Find the toggle button group for the first cost
+    const toggleButtons = screen.getAllByRole("radio", {
+      name: /Required cost|Optional cost/,
+    });
+
+    // Initially, the first cost should be required
+    expect(toggleButtons[0]).toBeChecked();
+    expect(toggleButtons[1]).not.toBeChecked();
+
+    // Click the optional button
+    await user.click(toggleButtons[1]);
+
+    // Verify the toggle state changed
+    expect(toggleButtons[0]).not.toBeChecked();
+    expect(toggleButtons[1]).toBeChecked();
+
+    // Save the changes
+    await user.click(screen.getByText("Save"));
+
+    // Verify the mutation was called with the updated cost
+    expect(mockSetCosts).toHaveBeenCalledWith({
+      costs: [
+        { cost: 100, description: "Application fee", isRequired: false },
+        { cost: 50, description: "Certified copies", isRequired: true },
+      ],
+      questId: mockQuest._id,
+    });
   });
 });

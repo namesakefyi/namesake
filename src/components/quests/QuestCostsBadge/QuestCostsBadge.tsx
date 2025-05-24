@@ -6,14 +6,13 @@ import {
   Form,
   NumberField,
   Popover,
-  Switch,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
-import type { Cost } from "@/constants";
+import { type Cost, DEFAULT_COSTS } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
@@ -117,14 +116,19 @@ export const QuestCostsBadge = ({
   editable = false,
 }: QuestCostsBadgeProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [costsInput, setCostsInput] = useState(quest?.costs ?? null);
+  const [costsInput, setCostsInput] = useState(quest?.costs ?? DEFAULT_COSTS);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const setCosts = useMutation(api.quests.setCosts);
 
   if (!quest) return null;
 
+  const handleRemove = () => {
+    setCosts({ costs: undefined, questId: quest._id });
+    setIsEditing(false);
+  };
+
   const handleCancel = () => {
-    setCostsInput(quest.costs ?? null);
+    setCostsInput(quest.costs ?? DEFAULT_COSTS);
     setIsEditing(false);
   };
 
@@ -172,9 +176,11 @@ export const QuestCostsBadge = ({
     return `${formatCurrency(requiredTotal)}–${formatCurrency(totalWithOptional)}`;
   };
 
+  if (!costs && !editable) return null;
+
   return (
     <Badge size="lg">
-      {getTotalCosts(costs)}
+      {costs ? getTotalCosts(costs) : "Add costs"}
       {costs && costs.length > 0 && (
         <DialogTrigger>
           <TooltipTrigger>
@@ -212,11 +218,11 @@ export const QuestCostsBadge = ({
         <DialogTrigger>
           <TooltipTrigger>
             <BadgeButton
-              icon={Pencil}
+              icon={costs ? Pencil : Plus}
               onPress={() => setIsEditing(true)}
-              label="Edit costs"
+              label={costs ? "Edit costs" : "Add costs"}
             />
-            <Tooltip>Edit costs</Tooltip>
+            <Tooltip>{costs ? "Edit costs" : "Add costs"}</Tooltip>
           </TooltipTrigger>
           <Popover isOpen={isEditing} className="p-4 w-full max-w-md">
             <Form onSubmit={handleSubmit} className="w-full">
@@ -252,19 +258,14 @@ export const QuestCostsBadge = ({
                 </div>
               )}
               <div className="flex w-full justify-end gap-2">
-                <Switch
-                  isSelected={!costsInput}
-                  onChange={(isSelected) =>
-                    setCostsInput(
-                      isSelected
-                        ? null
-                        : [{ cost: 0, description: "", isRequired: true }],
-                    )
-                  }
-                  className="justify-self-start mr-auto"
+                <Button
+                  variant="secondary"
+                  size="small"
+                  onPress={handleRemove}
+                  className="mr-auto"
                 >
-                  Free
-                </Switch>
+                  Remove
+                </Button>
                 <Button variant="secondary" size="small" onPress={handleCancel}>
                   Cancel
                 </Button>

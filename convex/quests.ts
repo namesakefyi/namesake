@@ -1,9 +1,5 @@
 import { v } from "convex/values";
-import {
-  type Category,
-  DEFAULT_TIME_REQUIRED,
-  type Jurisdiction,
-} from "../src/constants";
+import type { Category, Jurisdiction } from "../src/constants";
 import { query } from "./_generated/server";
 import { userMutation, userQuery } from "./helpers";
 import * as Quests from "./model/questsModel";
@@ -108,7 +104,6 @@ export const create = userMutation({
       category: args.category,
       jurisdiction: args.jurisdiction,
       slug: finalSlug,
-      timeRequired: DEFAULT_TIME_REQUIRED,
       creationUser: ctx.userId,
       updatedAt: Date.now(),
       updatedBy: ctx.userId,

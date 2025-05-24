@@ -209,6 +209,14 @@ export type Cost = {
   isRequired?: boolean;
 };
 
+export const DEFAULT_COSTS: Cost[] = [
+  {
+    cost: 0,
+    description: "",
+    isRequired: true,
+  },
+];
+
 /**
  * Time units.
  * Used to display time required in quest details.
@@ -250,7 +258,7 @@ export type TimeRequired = {
 };
 
 export const DEFAULT_TIME_REQUIRED: TimeRequired = {
-  min: 5,
-  max: 10,
-  unit: "minutes",
+  min: 2,
+  max: 6,
+  unit: "weeks",
 };

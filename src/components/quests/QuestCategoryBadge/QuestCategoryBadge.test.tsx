@@ -96,6 +96,7 @@ describe("QuestCategoryBadge", () => {
 
     // Menu should be visible with category options
     expect(screen.getByRole("menu")).toBeInTheDocument();
+    expect(screen.getByText("Categories")).toBeInTheDocument();
     expect(
       screen.getByRole("menuitemradio", { name: "Education" }),
     ).toBeInTheDocument();
@@ -172,5 +173,20 @@ describe("QuestCategoryBadge", () => {
     for (const item of menuItems) {
       expect(item.querySelector("svg")).toBeInTheDocument();
     }
+  });
+
+  it("initializes with correct category selection", async () => {
+    render(<QuestCategoryBadge quest={mockQuest} editable={true} />);
+
+    // Open the menu
+    await userEvent.click(
+      screen.getByRole("button", { name: "Edit category" }),
+    );
+
+    // Check that the initial category is selected
+    const educationMenuItem = screen.getByRole("menuitemradio", {
+      name: "Education",
+    });
+    expect(educationMenuItem).toBeChecked();
   });
 });
