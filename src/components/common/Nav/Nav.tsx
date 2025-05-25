@@ -121,14 +121,14 @@ interface NavGroupProps {
 
 export const NavGroup = ({ children, label, icon: Icon }: NavGroupProps) => {
   return (
-    <div className="flex flex-col gap-0.5 pt-2 mt-2 first:mt-0 first:border-0 first:pt-0">
+    <div className="flex flex-col gap-0.5 pt-2 mt-2 first:mt-0 border-gray-dim not-has-[header]:border-t first:border-0 first:pt-0">
       {label && (
-        <div className="flex items-center gap-2 border-b border-gray-dim pb-2">
+        <header className="flex items-center gap-2 border-b border-gray-dim pb-2">
           {Icon && <Icon className="size-4 text-gray-dim" />}
           <Heading className="flex-1  text-sm font-medium text-gray-dim">
             {label}
           </Heading>
-        </div>
+        </header>
       )}
       {children}
     </div>
