@@ -46,7 +46,7 @@ describe("QuestCallToAction", () => {
 
   it("shows 'Add to my quests' button when no userQuest exists", () => {
     render(<QuestCallToAction quest={mockQuest} />);
-    expect(screen.getByText("Add to my quiests")).toBeInTheDocument();
+    expect(screen.getByText("Add to my quests")).toBeInTheDocument();
   });
 
   it("handles adding to my quests", async () => {
