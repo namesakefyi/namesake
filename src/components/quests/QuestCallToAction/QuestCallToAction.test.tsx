@@ -44,17 +44,17 @@ describe("QuestCallToAction", () => {
       .mockReturnValueOnce(mockSetStatus); // Second call for setStatus
   });
 
-  it("shows 'Add to my list' button when no userQuest exists", () => {
+  it("shows 'Add to my quests' button when no userQuest exists", () => {
     render(<QuestCallToAction quest={mockQuest} />);
-    expect(screen.getByText("Add to my list")).toBeInTheDocument();
+    expect(screen.getByText("Add to my quiests")).toBeInTheDocument();
   });
 
-  it("handles adding quest to list", async () => {
+  it("handles adding to my quests", async () => {
     const user = userEvent.setup();
     mockCreate.mockResolvedValueOnce(undefined);
 
     render(<QuestCallToAction quest={mockQuest} />);
-    await user.click(screen.getByText("Add to my list"));
+    await user.click(screen.getByText("Add to my quests"));
 
     expect(mockCreate).toHaveBeenCalledWith({ questId: mockQuest._id });
   });
@@ -152,7 +152,7 @@ describe("QuestCallToAction", () => {
 
   it("maintains consistent button width", () => {
     const { rerender } = render(<QuestCallToAction quest={mockQuest} />);
-    const addButton = screen.getByRole("button", { name: "Add to my list" });
+    const addButton = screen.getByRole("button", { name: "Add to my quests" });
     expect(addButton).toHaveClass("w-64");
 
     rerender(

@@ -257,7 +257,7 @@ const AllQuestsNavItem = ({ quest }: { quest: Doc<"quests"> }) => {
             onPress={handleAddQuest}
             className="ml-auto"
           />
-          <Tooltip>Add to my list</Tooltip>
+          <Tooltip>Add to my quests</Tooltip>
         </TooltipTrigger>
       )}
     </NavItem>

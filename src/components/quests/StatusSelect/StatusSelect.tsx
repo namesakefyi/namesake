@@ -124,7 +124,7 @@ export function StatusSelect({
           ))}
         </MenuSection>
         <MenuSection>
-          <MenuItem onAction={handleRemove}>Remove from my list</MenuItem>
+          <MenuItem onAction={handleRemove}>Remove from my quests</MenuItem>
         </MenuSection>
       </Menu>
     </MenuTrigger>
