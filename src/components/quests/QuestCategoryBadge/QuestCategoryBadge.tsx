@@ -1,6 +1,7 @@
 import {
   Badge,
   BadgeButton,
+  type BadgeProps,
   Menu,
   MenuItem,
   MenuSection,
@@ -20,11 +21,12 @@ import { toast } from "sonner";
 type QuestCategoryBadgeProps = {
   quest?: Doc<"quests"> | null;
   editable?: boolean;
-};
+} & Omit<BadgeProps, "children">;
 
 export const QuestCategoryBadge = ({
   quest,
   editable = false,
+  ...props
 }: QuestCategoryBadgeProps) => {
   const [category, setCategory] = useState<Selection>(
     new Set(quest?.category ? [quest.category] : undefined),
@@ -50,7 +52,11 @@ export const QuestCategoryBadge = ({
   };
 
   return (
-    <Badge size="lg" icon={CATEGORIES[quest.category as Category]?.icon}>
+    <Badge
+      size={props.size ?? "lg"}
+      icon={CATEGORIES[quest.category as Category]?.icon}
+      {...props}
+    >
       {CATEGORIES[quest.category as Category]?.label ?? "Unknown"}
       {editable && (
         <MenuTrigger>

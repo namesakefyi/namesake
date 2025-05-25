@@ -86,6 +86,7 @@
     "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.56.4",
     "react-random-reveal": "^2.0.1",
+    "react-stately": "^3.38.0",
     "resend": "4.5.1",
     "sonner": "^2.0.3",
     "storybook": "^9.0.0-rc.2",

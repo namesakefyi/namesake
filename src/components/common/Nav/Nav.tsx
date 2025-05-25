@@ -3,6 +3,7 @@ import { focusRing } from "@/components/utils";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useMatchRoute } from "@tanstack/react-router";
 import { ChevronRight, ExternalLink, type LucideIcon } from "lucide-react";
+import { Heading } from "react-aria-components";
 import { tv } from "tailwind-variants";
 
 type NavItemBaseProps = {
@@ -114,11 +115,21 @@ export const NavItem = ({
 
 interface NavGroupProps {
   children: React.ReactNode;
+  label?: string;
+  icon?: LucideIcon;
 }
 
-export const NavGroup = ({ children }: NavGroupProps) => {
+export const NavGroup = ({ children, label, icon: Icon }: NavGroupProps) => {
   return (
-    <div className="flex flex-col gap-0.5 pt-2 mt-2 border-t border-gray-dim first:mt-0 first:border-0 first:pt-0">
+    <div className="flex flex-col gap-0.5 pt-2 mt-2 first:mt-0 first:border-0 first:pt-0">
+      {label && (
+        <div className="flex items-center gap-2 border-b border-gray-dim pb-2">
+          {Icon && <Icon className="size-4 text-gray-dim" />}
+          <Heading className="flex-1  text-sm font-medium text-gray-dim">
+            {label}
+          </Heading>
+        </div>
+      )}
       {children}
     </div>
   );

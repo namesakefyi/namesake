@@ -163,6 +163,9 @@ importers:
       react-random-reveal:
         specifier: ^2.0.1
         version: 2.0.1(react@19.1.0)
+      react-stately:
+        specifier: ^3.38.0
+        version: 3.38.0(react@19.1.0)
       resend:
         specifier: 4.5.1
         version: 4.5.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1105,11 +1108,17 @@ packages:
   '@internationalized/date@3.8.0':
     resolution: {integrity: sha512-J51AJ0fEL68hE4CwGPa6E0PO6JDaVLd8aln48xFCSy7CZkZc96dGEGmLs2OEEbBxcsVZtfrqkXJwI2/MSG8yKw==}
 
+  '@internationalized/date@3.8.1':
+    resolution: {integrity: sha512-PgVE6B6eIZtzf9Gu5HvJxRK3ufUFz9DhspELuhW/N0GuMGMTLvPQNRkHP2hTuP9lblOk+f+1xi96sPiPXANXAA==}
+
   '@internationalized/message@3.1.7':
     resolution: {integrity: sha512-gLQlhEW4iO7DEFPf/U7IrIdA3UyLGS0opeqouaFwlMObLUzwexRjbygONHDVbC9G9oFLXsLyGKYkJwqXw/QADg==}
 
   '@internationalized/number@3.6.1':
     resolution: {integrity: sha512-UVsb4bCwbL944E0SX50CHFtWEeZ2uB5VozZ5yDXJdq6iPZsZO5p+bjVMZh2GxHf4Bs/7xtDCcPwEa2NU9DaG/g==}
+
+  '@internationalized/number@3.6.2':
+    resolution: {integrity: sha512-E5QTOlMg9wo5OrKdHD6edo1JJlIoOsylh0+mbf0evi1tHJwMZfJSaBpGtnJV9N7w3jeiioox9EG/EWRWPh82vg==}
 
   '@internationalized/string@3.2.6':
     resolution: {integrity: sha512-LR2lnM4urJta5/wYJVV7m8qk5DrMZmLRTuFhbQO5b9/sKLHgty6unQy1Li4+Su2DWydmB4aZdS5uxBRXIq2aAw==}
@@ -1703,8 +1712,18 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/calendar@3.8.1':
+    resolution: {integrity: sha512-pTPRmPRD/0JeKhCRvXhVIH/yBimtIHnZGUxH12dcTl3MLxjXQDTn6/LWK0s4rzJcjsC+EzGUCVBBXgESb7PUlw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/checkbox@3.6.13':
     resolution: {integrity: sha512-b8+bkOhobzuJ5bAA16JpYg1tM973eNXD3U4h/8+dckLndKHRjIwPvrL25tzKN7NcQp2LKVCauFesgI+Z+/2FJg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/checkbox@3.6.14':
+    resolution: {integrity: sha512-eGl0GP/F/nUrA33gDCYikyXK+Yer7sFOx8T4EU2AF4E8n1VQIRiVNaxDg7Ar6L3CMKor01urppFHFJsBUnSgyw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1713,8 +1732,18 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/collections@3.12.4':
+    resolution: {integrity: sha512-H+47fRkwYX2/BdSA+NLTzbR+8QclZXyBgC7tHH3dzljyxNimhrMDnbmk520nvGCebNf3nuxtFHq9iVTLpazSVA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/color@3.8.4':
     resolution: {integrity: sha512-LXmfnJPWnL5q1/Z8Pn2d+9efrClLWCiK6c3IGXN8ZWcdR/cMJ/w9SY9f7evyXvmeUmdU1FTGgoSVqGfup3tSyA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/color@3.8.5':
+    resolution: {integrity: sha512-yi1MQAbYuAYKu0AtMO+mWQWlWk6OzGMa9j4PGtQN2PI5Uv1NylWOvdquxbUJ4GUAuSYNopYG8Ci9MZMwtito8w==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1723,8 +1752,13 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
-  '@react-stately/data@3.12.3':
-    resolution: {integrity: sha512-JYPNV1gd9OZm8xPay0exx5okFNgiwESNvdBHsfDC+f8BifRyFLdrvoaUGF0enKIeSQMB1oReFAxTAXtDZd27rA==}
+  '@react-stately/combobox@3.10.5':
+    resolution: {integrity: sha512-27SkClMqbMAKuVnmXhYzYisbLfzV7MO/DEiqWO4/3l+PZ+whL7Wi/Ek7Wqlfluid/y4pN4EkHCKNt4HJ2mhORQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/data@3.13.0':
+    resolution: {integrity: sha512-7LYPxVbWB6tvmLYKO19H5G5YtXV6eKCSXisOUiL9fVnOcGOPDK5z310sj9TP5vaX7zVPtwy0lDBUrZuRfhvQIQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1733,13 +1767,28 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/datepicker@3.14.1':
+    resolution: {integrity: sha512-ad3IOrRppy/F8FZpznGacsaWWHdzUGZ4vpymD+y6TYeQ+RQvS9PLA5Z1TanH9iqLZgkf6bvVggJFg/hhDh2hmg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/disclosure@3.0.3':
     resolution: {integrity: sha512-4kB+WDXVcrxCmJ+X6c23wa5Ax5dPSpm6Ef8DktLrLcUfJyfr+SWs5/IfkrYG0sOl3/u5OwyWe1pq3hDpzyDlLA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/disclosure@3.0.4':
+    resolution: {integrity: sha512-RE4hYnDYgsd5bi01z/hZHShRGKxW++xCA6PCufxtipc1sxZGUF4Sb1tTSIxOjh1dq5iDVdrAQAS6en0weaGgLA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/dnd@3.5.3':
     resolution: {integrity: sha512-e4IodPF7fv9hR6jqSjiyrrFQ/6NbHNM5Ft1MJzCu6tJHvT+sl6qxIP5A+XR3wkjMpi4QW2WhVUmoFNbS/6ZAug==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/dnd@3.5.4':
+    resolution: {integrity: sha512-YkvkehpsSeGZPH7S7EYyLchSxZPhzShdf9Zjh6UAsM7mAcxjRsChMqsf6zuM+l0jgMo40Ka1mvwDYegz92Qkyg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1751,8 +1800,18 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/form@3.1.4':
+    resolution: {integrity: sha512-A6GOaZ9oEIo5/XOE+JT9Z8OBt0osIOfes4EcIxGS1C9ght/Smg0gNcIJ2/Wle8qmro4RoJcza2yJ+EglVOuE0w==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/grid@3.11.1':
     resolution: {integrity: sha512-xMk2YsaIKkF8dInRLUFpUXBIqnYt88hehhq2nb65RFgsFFhngE/OkaFudSUzaYPc1KvHpW+oHqvseC+G1iDG2w==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/grid@3.11.2':
+    resolution: {integrity: sha512-P0vfK5B1NW8glYD6QMrR2X/7UMXx2J8v48QIQV6KgLZjFbyXhzRb+MY0BoIy4tUfJL0yQU2GKbKKVSUIQxbv0g==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1767,8 +1826,18 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/list@3.12.2':
+    resolution: {integrity: sha512-XPGvdPidOV4hnpmaUNc4C/1jX7ZhBwmAI9p6bEXDA3du3XrWess6MWcaQvPxXbrZ6ZX8/OyOC2wp7ixJoJRGyA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/menu@3.9.3':
     resolution: {integrity: sha512-9x1sTX3Xq2Q3mJUHV+YN9MR36qNzgn8eBSLa40eaFDaOOtoJ+V10m7OriUfpjey7WzLBpq00Sfda54/PbQHZ0g==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/menu@3.9.4':
+    resolution: {integrity: sha512-sqYcSBuTEtCebZuByUou2aZzwlnrrOlrvmGwFNJy49N3LXXXPENCcCERuWa8TE9eBevIVTQorBZlID6rFG+wdQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1777,8 +1846,18 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/numberfield@3.9.12':
+    resolution: {integrity: sha512-E56RuRRdu/lzd8e5aEifP4n8CL/as0sZqIQFSyMv/ZUIIGeksqy+zykzo01skaHKY8u2NixrVHPVDtvPcRuooA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/overlays@3.6.15':
     resolution: {integrity: sha512-LBaGpXuI+SSd5HSGzyGJA0Gy09V2tl2G/r0lllTYqwt0RDZR6p7IrhdGVXZm6vI0oWEnih7yLC32krkVQrffgQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/overlays@3.6.16':
+    resolution: {integrity: sha512-+Ve/TBlUNg3otVC4ZfCq1a8q8FwC7xNebWkVOCGviTqiYodPCGqBwR9Z1xonuFLF/HuQYqALHHTOZtxceU+nVQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1787,8 +1866,18 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/radio@3.10.13':
+    resolution: {integrity: sha512-q7UKcVYY7rqpxKfYRzvKVEqFhxElDFX2c+xliZQtjXuSexhxRb2xjEh+bDkhzbXzrJkrBT6VmE/rSYPurC3xTw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/searchfield@3.5.11':
     resolution: {integrity: sha512-vOgK3kgkYcyjTLsBABVzoQL9w6qBamnWAQICcw5OkA6octnF7NZ5DqdjkwnMY95KOGchiTlD5tNNHrz0ekeGiw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/searchfield@3.5.12':
+    resolution: {integrity: sha512-RC3QTEPVNUbgtuqzpwPUfbV9UkUC1j4XkHoynWDbMt0bE0tPe2Picnl0/r/kq6MO527idV6Ur4zuOF4x9a97LQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1797,8 +1886,18 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/select@3.6.13':
+    resolution: {integrity: sha512-saZo67CreQZPdmqvz9+P6N4kjohpwdVncH98qBi0Q2FvxGAMnpJQgx97rtfDvnSziST5Yx1JnMI4kSSndbtFwg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/selection@3.20.1':
     resolution: {integrity: sha512-K9MP6Rfg2yvFoY2Cr+ykA7bP4EBXlGaq5Dqfa1krvcXlEgMbQka5muLHdNXqjzGgcwPmS1dx1NECD15q63NtOw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/selection@3.20.2':
+    resolution: {integrity: sha512-Fw6nnG+VKMsncsY4SNxGYOhnHojVFzFv+Uhy6P39QBp6AXtSaRKMg2VR4MPxQ7XgOjHh5ZuSvCY1RwocweqjwQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1807,13 +1906,28 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/slider@3.6.4':
+    resolution: {integrity: sha512-6SdG0VJZLMRIBnPjqkbIsdyQcW9zJ5Br716cl/7kLT9owiIwMJiAdjdYHab5+8ShWzU2D8Ae+LdQk8ZxIiIjkg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/table@3.14.1':
     resolution: {integrity: sha512-7P5h4YBAv3B/7BGq/kln+xSKgJCSq4xjt4HmJA7ZkGnEksUPUokBNQdWwZsy3lX/mwunaaKR9x/YNIu7yXB02g==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/table@3.14.2':
+    resolution: {integrity: sha512-SqE5A/Ve5H2ApnAblMGBMGRzY7cgdQmNPzXB8tGVc38NsC/STmMkq9m54gAl8dBVNbLzzd6HJBe9lqz5keYIhQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/tabs@3.8.1':
     resolution: {integrity: sha512-1TBbt2BXbemstb/gEYw/NVt3esi5WvgWQW5Z7G8nDzLkpnMHOZXueoUkMxsdm0vhE8p0M9fsJQCMXKvCG3JzJg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/tabs@3.8.2':
+    resolution: {integrity: sha512-lNpby7zUVdAeqo3mjGdPBxppEskOLyqR82LWBtP8Xg4olnjA5RmDFOuoJkIFttDX689zamjN3OE+Ra6WWgJczg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1827,8 +1941,23 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-stately/toggle@3.8.4':
+    resolution: {integrity: sha512-JbKoXhkJ5P5nCrNXChMos3yNqkIeGXPDEMS/dfkHlsjQYxJfylRm4j/nWoDXxxkUmfkvXcNEMofMn9iO1+H0DQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-stately/tooltip@3.5.3':
     resolution: {integrity: sha512-btfy/gQ3Eccudx//4HkyQ+CRr3vxbLs74HYHthaoJ9GZbRj/3XDzfUM2X16zRoqTZVrIz/AkUj7AfGfsitU5nQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/tooltip@3.5.4':
+    resolution: {integrity: sha512-HxNTqn9nMBuGbEVeeuZyhrzNbyW7sgwk+8o0mN/BrMrk7E/UBhyL2SUxXnAUQftpTjX+29hmx1sPhIprIDzR3Q==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/tree@3.8.10':
+    resolution: {integrity: sha512-sMqBRKAAZMiXJwlzAFpkXqUaGlNBfKnL8usAiKdoeGcLLJt2Ni9gPoPOLBJSPqLOAFCgLWtr5IYjdhel9aXRzQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1868,8 +1997,18 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-types/calendar@3.7.1':
+    resolution: {integrity: sha512-a/wGT9vZewPNL72Xni8T/gv4IS2w6iRtryqMF425OL+kaCQrxJYlkDxb74bQs9+k9ZYabrxJgz9vFcFnY7S9gw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-types/checkbox@3.9.3':
     resolution: {integrity: sha512-h6wmK7CraKHKE6L13Ut+CtnjRktbMRhkCSorv7eg82M6p4PDhZ7mfDSh13IlGR4sryT8Ka+aOjOU+EvMrKiduA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-types/checkbox@3.9.4':
+    resolution: {integrity: sha512-fU3Q1Nw+zbXKm68ba8V7cQzpiX0rIiAUKrBTl2BK97QiTlGBDvMCf4TfEuaNoGbJq+gx+X3n/3yr6c3IAb0ZIg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1878,13 +2017,28 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-types/color@3.0.5':
+    resolution: {integrity: sha512-72uZ0B3EcaC2DGOpnhwHSVxcvQ3UDNSVR2gVx7PgUCGlEjhnn9i0UErIP8ZzV2RsAvjK6MrGs7ZCwZtl+LxCcg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-types/combobox@3.13.4':
     resolution: {integrity: sha512-4mX7eZ/Bv3YWzEzLEZAF/TfKM+I+SCsvnm/cHqOJq3jEE8aVU1ql4Q1+3+SvciX3pfFIfeKlu9S3oYKRT5WIgg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-types/combobox@3.13.5':
+    resolution: {integrity: sha512-wqHBF0YDkrp4Ylyxpd3xhnDECe5eao27bsu+4AvjlVKtaxaoppNq2MwSzkuSSS/GEUXT6K9DDjrGFcp07ad5gA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-types/datepicker@3.12.0':
     resolution: {integrity: sha512-dw/xflOdQPQ3uEABaBrZRTvjsMRu5/VZjRx9ygc64sX2N7HKIt+foMPXKJ+1jhtki2p4gigNVjcnJndJHoj9SA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-types/datepicker@3.12.1':
+    resolution: {integrity: sha512-+wv57fVd6Y/+KnHNEmVzfrQtWs85Ga1Xb63AIkBk+E294aMqFYqRg0dQds6V/qrP758TWnXUrhKza1zMbjHalw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1903,6 +2057,11 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-types/grid@3.3.2':
+    resolution: {integrity: sha512-NwfydUbPc1zVi/Rp7+oRN2+vE1xMokc2J+nr0VcHwFGt1bR1psakHu45Pk/t763BDvPr/A3xIHc1rk3eWEhxJw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-types/link@3.6.0':
     resolution: {integrity: sha512-BQ5Tktb+fUxvtqksAJZuP8Z/bpmnQ/Y/zgwxfU0OKmIWkKMUsXY+e0GBVxwFxeh39D77stpVxRsTl7NQrjgtSw==}
     peerDependencies:
@@ -1918,6 +2077,11 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-types/menu@3.10.1':
+    resolution: {integrity: sha512-wkyWzIqaCbUYiD7YXr8YvdimB1bxQHqgj6uE4MKzryCbVqb4L8fRUM0V6AHkQS1TxBYNkNn1h4g7XNd5Vmyf3Q==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-types/meter@3.4.8':
     resolution: {integrity: sha512-uXmHdUDbAo7L3EkytrUrU6DLOFUt63s9QSTcDp+vwyWoshY4/4Dm4JARdmhJU2ZP1nb2Sy45ASeMvSBw3ia2oA==}
     peerDependencies:
@@ -1928,8 +2092,18 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-types/numberfield@3.8.11':
+    resolution: {integrity: sha512-D66Bop7M3JKzBV2vsECsVYfPrx8eRIx4/K2KLo/XjwMA7C34+Ou07f/bnD1TQQ/wr6XwiFxZTi6JsKDwnST+9Q==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-types/overlays@3.8.14':
     resolution: {integrity: sha512-XJS67KHYhdMvPNHXNGdmc85gE+29QT5TwC58V4kxxHVtQh9fYzEEPzIV8K84XWSz04rRGe3fjDgRNbcqBektWQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-types/overlays@3.8.15':
+    resolution: {integrity: sha512-ppDfezvVYOJDHLZmTSmIXajxAo30l2a1jjy4G65uBYy8J8kTZU7mcfQql5Pii1TwybcNMsayf2WtPItiWmJnOA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1943,8 +2117,18 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-types/radio@3.8.9':
+    resolution: {integrity: sha512-l4uzlxmGGuR8IkWrMYdKj1sc3Pgo/LdfEGuIgK+d8kjPu0AZcnSgp5Oz035bCosZUabY6dEWxQHIoAH2zN7YZA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-types/searchfield@3.6.1':
     resolution: {integrity: sha512-XR4tYktxHxGJufpO0MTAPknIbmN5eZqXCZwTdBS4tecihf9iGDsXmrBOs+M7LEnil67GaZcFrMhKxOMVpLwZAg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-types/searchfield@3.6.2':
+    resolution: {integrity: sha512-XQRQyJLNC9uLyCq+97eiqeQuM6+dCMrHu6aH6KSVt1Xh6HMmdx/TdSf6JrMkN+1xSxcW3lDE2iSf3jXDT87gag==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1953,13 +2137,28 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-types/select@3.9.12':
+    resolution: {integrity: sha512-qo+9JS1kfMxuibmSmMp0faGKbeVftYnSk1f7Rh5PKi4tzMe3C0A9IAr27hUOfWeJMBOdetaoTpYmoXW6+CgW3g==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-types/shared@3.29.0':
     resolution: {integrity: sha512-IDQYu/AHgZimObzCFdNl1LpZvQW/xcfLt3v20sorl5qRucDVj4S9os98sVTZ4IRIBjmS+MkjqpR5E70xan7ooA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-types/shared@3.29.1':
+    resolution: {integrity: sha512-KtM+cDf2CXoUX439rfEhbnEdAgFZX20UP2A35ypNIawR7/PFFPjQDWyA2EnClCcW/dLWJDEPX2U8+EJff8xqmQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-types/slider@3.7.10':
     resolution: {integrity: sha512-Yb8wbpu2gS7AwvJUuz0IdZBRi6eIBZq32BSss4UHX0StA8dtR1/K4JeTsArxwiA3P0BA6t0gbR6wzxCvVA9fRw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-types/slider@3.7.11':
+    resolution: {integrity: sha512-uNhNLhVrt/2teXBOJSoZXyXg308A72qe1HOmlGdJcnh8iXA35y5ZHzeK1P6ZOJ37Aeh7bYGm3/UdURmFgSlW7w==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1973,8 +2172,18 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-types/table@3.13.0':
+    resolution: {integrity: sha512-kn+OsEWJfUSSb4N4J0yl+tqx5grDpcaWcu2J8hA62hQCr/Leuj946ScYaKA9a/p0MAaOAaeCWx/Zcss6F8gJIQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-types/tabs@3.3.14':
     resolution: {integrity: sha512-/uKsA7L2dctKU0JEaBWerlX+3BoXpKUFr3kHpRUoH66DSGvAo34vZ7kv/BHMZifJenIbF04GhDBsGp1zjrQKBg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-types/tabs@3.3.15':
+    resolution: {integrity: sha512-VLgh9YLQdS4FQSk0sGTNHEVN2jeC0fZvOqEFHaEDgDyDgVOukxYuHjqVIx2IavYu1yNBrGO2b6P4M6dF+hcgwQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -1983,8 +2192,18 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
+  '@react-types/textfield@3.12.2':
+    resolution: {integrity: sha512-dMm0cGLG5bkJYvt6lqXIty5HXTZjuIpa9I8jAIYua//J8tESAOE9BA285Zl43kx7cZGtgrHKHVFjITDLNUrNhA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
   '@react-types/tooltip@3.4.16':
     resolution: {integrity: sha512-XEyKeqR3YxqJcR0cpigLGEBeRTEzrB0cu++IaADdqXJ8dBzS6s8y9EgR5UvKZmX1CQOBvMfXyYkj7nmJ039fOw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-types/tooltip@3.4.17':
+    resolution: {integrity: sha512-yjySKA1uzJAbio+xGv03DUoWIajteqtsXMd4Y3AJEdBFqSYhXbyrgAxw0oJDgRAgRxY4Rx5Hrhvbt/z7Di94QQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -4327,8 +4546,8 @@ packages:
     peerDependencies:
       react: '>=16.8.0'
 
-  react-stately@3.37.0:
-    resolution: {integrity: sha512-fm2LRM3XN5lJD48+WQKWvESx54kAIHw0JztCRHMsFmTDgYWX/VASuXKON7LECv227stSEadrxGa8LhPkcelljw==}
+  react-stately@3.38.0:
+    resolution: {integrity: sha512-zS06DsDhH44z7bsOkMHJ0gnjuLO3UWZ33l7JOgFscrv1qa33IG9fn707sI7GAJdLgDiWXJbeFvXdix2jR1fU1w==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -5770,12 +5989,20 @@ snapshots:
     dependencies:
       '@swc/helpers': 0.5.17
 
+  '@internationalized/date@3.8.1':
+    dependencies:
+      '@swc/helpers': 0.5.17
+
   '@internationalized/message@3.1.7':
     dependencies:
       '@swc/helpers': 0.5.17
       intl-messageformat: 10.7.16
 
   '@internationalized/number@3.6.1':
+    dependencies:
+      '@swc/helpers': 0.5.17
+
+  '@internationalized/number@3.6.2':
     dependencies:
       '@swc/helpers': 0.5.17
 
@@ -6674,6 +6901,15 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
+  '@react-stately/calendar@3.8.1(react@19.1.0)':
+    dependencies:
+      '@internationalized/date': 3.8.1
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/calendar': 3.7.1(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
   '@react-stately/checkbox@3.6.13(react@19.1.0)':
     dependencies:
       '@react-stately/form': 3.1.3(react@19.1.0)
@@ -6683,9 +6919,24 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
+  '@react-stately/checkbox@3.6.14(react@19.1.0)':
+    dependencies:
+      '@react-stately/form': 3.1.4(react@19.1.0)
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/checkbox': 3.9.4(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
   '@react-stately/collections@3.12.3(react@19.1.0)':
     dependencies:
       '@react-types/shared': 3.29.0(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
+  '@react-stately/collections@3.12.4(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
@@ -6702,6 +6953,19 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
+  '@react-stately/color@3.8.5(react@19.1.0)':
+    dependencies:
+      '@internationalized/number': 3.6.2
+      '@internationalized/string': 3.2.6
+      '@react-stately/form': 3.1.4(react@19.1.0)
+      '@react-stately/numberfield': 3.9.12(react@19.1.0)
+      '@react-stately/slider': 3.6.4(react@19.1.0)
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/color': 3.0.5(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
   '@react-stately/combobox@3.10.4(react@19.1.0)':
     dependencies:
       '@react-stately/collections': 3.12.3(react@19.1.0)
@@ -6715,9 +6979,22 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
-  '@react-stately/data@3.12.3(react@19.1.0)':
+  '@react-stately/combobox@3.10.5(react@19.1.0)':
     dependencies:
-      '@react-types/shared': 3.29.0(react@19.1.0)
+      '@react-stately/collections': 3.12.4(react@19.1.0)
+      '@react-stately/form': 3.1.4(react@19.1.0)
+      '@react-stately/list': 3.12.2(react@19.1.0)
+      '@react-stately/overlays': 3.6.16(react@19.1.0)
+      '@react-stately/select': 3.6.13(react@19.1.0)
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/combobox': 3.13.5(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
+  '@react-stately/data@3.13.0(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
@@ -6733,6 +7010,18 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
+  '@react-stately/datepicker@3.14.1(react@19.1.0)':
+    dependencies:
+      '@internationalized/date': 3.8.1
+      '@internationalized/string': 3.2.6
+      '@react-stately/form': 3.1.4(react@19.1.0)
+      '@react-stately/overlays': 3.6.16(react@19.1.0)
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/datepicker': 3.12.1(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
   '@react-stately/disclosure@3.0.3(react@19.1.0)':
     dependencies:
       '@react-stately/utils': 3.10.6(react@19.1.0)
@@ -6740,10 +7029,24 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
+  '@react-stately/disclosure@3.0.4(react@19.1.0)':
+    dependencies:
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
   '@react-stately/dnd@3.5.3(react@19.1.0)':
     dependencies:
       '@react-stately/selection': 3.20.1(react@19.1.0)
       '@react-types/shared': 3.29.0(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
+  '@react-stately/dnd@3.5.4(react@19.1.0)':
+    dependencies:
+      '@react-stately/selection': 3.20.2(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
@@ -6757,12 +7060,27 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
+  '@react-stately/form@3.1.4(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
   '@react-stately/grid@3.11.1(react@19.1.0)':
     dependencies:
       '@react-stately/collections': 3.12.3(react@19.1.0)
       '@react-stately/selection': 3.20.1(react@19.1.0)
       '@react-types/grid': 3.3.1(react@19.1.0)
       '@react-types/shared': 3.29.0(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
+  '@react-stately/grid@3.11.2(react@19.1.0)':
+    dependencies:
+      '@react-stately/collections': 3.12.4(react@19.1.0)
+      '@react-stately/selection': 3.20.2(react@19.1.0)
+      '@react-types/grid': 3.3.2(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
@@ -6787,11 +7105,28 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
+  '@react-stately/list@3.12.2(react@19.1.0)':
+    dependencies:
+      '@react-stately/collections': 3.12.4(react@19.1.0)
+      '@react-stately/selection': 3.20.2(react@19.1.0)
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
   '@react-stately/menu@3.9.3(react@19.1.0)':
     dependencies:
       '@react-stately/overlays': 3.6.15(react@19.1.0)
       '@react-types/menu': 3.10.0(react@19.1.0)
       '@react-types/shared': 3.29.0(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
+  '@react-stately/menu@3.9.4(react@19.1.0)':
+    dependencies:
+      '@react-stately/overlays': 3.6.16(react@19.1.0)
+      '@react-types/menu': 3.10.1(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
@@ -6804,10 +7139,26 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
+  '@react-stately/numberfield@3.9.12(react@19.1.0)':
+    dependencies:
+      '@internationalized/number': 3.6.2
+      '@react-stately/form': 3.1.4(react@19.1.0)
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/numberfield': 3.8.11(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
   '@react-stately/overlays@3.6.15(react@19.1.0)':
     dependencies:
       '@react-stately/utils': 3.10.6(react@19.1.0)
       '@react-types/overlays': 3.8.14(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
+  '@react-stately/overlays@3.6.16(react@19.1.0)':
+    dependencies:
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/overlays': 3.8.15(react@19.1.0)
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
@@ -6820,10 +7171,26 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
+  '@react-stately/radio@3.10.13(react@19.1.0)':
+    dependencies:
+      '@react-stately/form': 3.1.4(react@19.1.0)
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/radio': 3.8.9(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
   '@react-stately/searchfield@3.5.11(react@19.1.0)':
     dependencies:
       '@react-stately/utils': 3.10.6(react@19.1.0)
       '@react-types/searchfield': 3.6.1(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
+  '@react-stately/searchfield@3.5.12(react@19.1.0)':
+    dependencies:
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/searchfield': 3.6.2(react@19.1.0)
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
@@ -6837,6 +7204,16 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
+  '@react-stately/select@3.6.13(react@19.1.0)':
+    dependencies:
+      '@react-stately/form': 3.1.4(react@19.1.0)
+      '@react-stately/list': 3.12.2(react@19.1.0)
+      '@react-stately/overlays': 3.6.16(react@19.1.0)
+      '@react-types/select': 3.9.12(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
   '@react-stately/selection@3.20.1(react@19.1.0)':
     dependencies:
       '@react-stately/collections': 3.12.3(react@19.1.0)
@@ -6845,11 +7222,27 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
+  '@react-stately/selection@3.20.2(react@19.1.0)':
+    dependencies:
+      '@react-stately/collections': 3.12.4(react@19.1.0)
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
   '@react-stately/slider@3.6.3(react@19.1.0)':
     dependencies:
       '@react-stately/utils': 3.10.6(react@19.1.0)
       '@react-types/shared': 3.29.0(react@19.1.0)
       '@react-types/slider': 3.7.10(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
+  '@react-stately/slider@3.6.4(react@19.1.0)':
+    dependencies:
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@react-types/slider': 3.7.11(react@19.1.0)
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
@@ -6866,11 +7259,32 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
+  '@react-stately/table@3.14.2(react@19.1.0)':
+    dependencies:
+      '@react-stately/collections': 3.12.4(react@19.1.0)
+      '@react-stately/flags': 3.1.1
+      '@react-stately/grid': 3.11.2(react@19.1.0)
+      '@react-stately/selection': 3.20.2(react@19.1.0)
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/grid': 3.3.2(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@react-types/table': 3.13.0(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
   '@react-stately/tabs@3.8.1(react@19.1.0)':
     dependencies:
       '@react-stately/list': 3.12.1(react@19.1.0)
       '@react-types/shared': 3.29.0(react@19.1.0)
       '@react-types/tabs': 3.3.14(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
+  '@react-stately/tabs@3.8.2(react@19.1.0)':
+    dependencies:
+      '@react-stately/list': 3.12.2(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@react-types/tabs': 3.3.15(react@19.1.0)
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
@@ -6888,10 +7302,34 @@ snapshots:
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
+  '@react-stately/toggle@3.8.4(react@19.1.0)':
+    dependencies:
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/checkbox': 3.9.4(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
   '@react-stately/tooltip@3.5.3(react@19.1.0)':
     dependencies:
       '@react-stately/overlays': 3.6.15(react@19.1.0)
       '@react-types/tooltip': 3.4.16(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
+  '@react-stately/tooltip@3.5.4(react@19.1.0)':
+    dependencies:
+      '@react-stately/overlays': 3.6.16(react@19.1.0)
+      '@react-types/tooltip': 3.4.17(react@19.1.0)
+      '@swc/helpers': 0.5.17
+      react: 19.1.0
+
+  '@react-stately/tree@3.8.10(react@19.1.0)':
+    dependencies:
+      '@react-stately/collections': 3.12.4(react@19.1.0)
+      '@react-stately/selection': 3.20.2(react@19.1.0)
+      '@react-stately/utils': 3.10.6(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
       '@swc/helpers': 0.5.17
       react: 19.1.0
 
@@ -6941,9 +7379,20 @@ snapshots:
       '@react-types/shared': 3.29.0(react@19.1.0)
       react: 19.1.0
 
+  '@react-types/calendar@3.7.1(react@19.1.0)':
+    dependencies:
+      '@internationalized/date': 3.8.1
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      react: 19.1.0
+
   '@react-types/checkbox@3.9.3(react@19.1.0)':
     dependencies:
       '@react-types/shared': 3.29.0(react@19.1.0)
+      react: 19.1.0
+
+  '@react-types/checkbox@3.9.4(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
       react: 19.1.0
 
   '@react-types/color@3.0.4(react@19.1.0)':
@@ -6952,9 +7401,20 @@ snapshots:
       '@react-types/slider': 3.7.10(react@19.1.0)
       react: 19.1.0
 
+  '@react-types/color@3.0.5(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@react-types/slider': 3.7.11(react@19.1.0)
+      react: 19.1.0
+
   '@react-types/combobox@3.13.4(react@19.1.0)':
     dependencies:
       '@react-types/shared': 3.29.0(react@19.1.0)
+      react: 19.1.0
+
+  '@react-types/combobox@3.13.5(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
       react: 19.1.0
 
   '@react-types/datepicker@3.12.0(react@19.1.0)':
@@ -6963,6 +7423,14 @@ snapshots:
       '@react-types/calendar': 3.7.0(react@19.1.0)
       '@react-types/overlays': 3.8.14(react@19.1.0)
       '@react-types/shared': 3.29.0(react@19.1.0)
+      react: 19.1.0
+
+  '@react-types/datepicker@3.12.1(react@19.1.0)':
+    dependencies:
+      '@internationalized/date': 3.8.1
+      '@react-types/calendar': 3.7.1(react@19.1.0)
+      '@react-types/overlays': 3.8.15(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
       react: 19.1.0
 
   '@react-types/dialog@3.5.17(react@19.1.0)':
@@ -6981,6 +7449,11 @@ snapshots:
       '@react-types/shared': 3.29.0(react@19.1.0)
       react: 19.1.0
 
+  '@react-types/grid@3.3.2(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      react: 19.1.0
+
   '@react-types/link@3.6.0(react@19.1.0)':
     dependencies:
       '@react-types/shared': 3.29.0(react@19.1.0)
@@ -6997,6 +7470,12 @@ snapshots:
       '@react-types/shared': 3.29.0(react@19.1.0)
       react: 19.1.0
 
+  '@react-types/menu@3.10.1(react@19.1.0)':
+    dependencies:
+      '@react-types/overlays': 3.8.15(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      react: 19.1.0
+
   '@react-types/meter@3.4.8(react@19.1.0)':
     dependencies:
       '@react-types/progress': 3.5.11(react@19.1.0)
@@ -7007,9 +7486,19 @@ snapshots:
       '@react-types/shared': 3.29.0(react@19.1.0)
       react: 19.1.0
 
+  '@react-types/numberfield@3.8.11(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      react: 19.1.0
+
   '@react-types/overlays@3.8.14(react@19.1.0)':
     dependencies:
       '@react-types/shared': 3.29.0(react@19.1.0)
+      react: 19.1.0
+
+  '@react-types/overlays@3.8.15(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
       react: 19.1.0
 
   '@react-types/progress@3.5.11(react@19.1.0)':
@@ -7022,10 +7511,21 @@ snapshots:
       '@react-types/shared': 3.29.0(react@19.1.0)
       react: 19.1.0
 
+  '@react-types/radio@3.8.9(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      react: 19.1.0
+
   '@react-types/searchfield@3.6.1(react@19.1.0)':
     dependencies:
       '@react-types/shared': 3.29.0(react@19.1.0)
       '@react-types/textfield': 3.12.1(react@19.1.0)
+      react: 19.1.0
+
+  '@react-types/searchfield@3.6.2(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      '@react-types/textfield': 3.12.2(react@19.1.0)
       react: 19.1.0
 
   '@react-types/select@3.9.11(react@19.1.0)':
@@ -7033,13 +7533,27 @@ snapshots:
       '@react-types/shared': 3.29.0(react@19.1.0)
       react: 19.1.0
 
+  '@react-types/select@3.9.12(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      react: 19.1.0
+
   '@react-types/shared@3.29.0(react@19.1.0)':
+    dependencies:
+      react: 19.1.0
+
+  '@react-types/shared@3.29.1(react@19.1.0)':
     dependencies:
       react: 19.1.0
 
   '@react-types/slider@3.7.10(react@19.1.0)':
     dependencies:
       '@react-types/shared': 3.29.0(react@19.1.0)
+      react: 19.1.0
+
+  '@react-types/slider@3.7.11(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
       react: 19.1.0
 
   '@react-types/switch@3.5.10(react@19.1.0)':
@@ -7053,9 +7567,20 @@ snapshots:
       '@react-types/shared': 3.29.0(react@19.1.0)
       react: 19.1.0
 
+  '@react-types/table@3.13.0(react@19.1.0)':
+    dependencies:
+      '@react-types/grid': 3.3.2(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      react: 19.1.0
+
   '@react-types/tabs@3.3.14(react@19.1.0)':
     dependencies:
       '@react-types/shared': 3.29.0(react@19.1.0)
+      react: 19.1.0
+
+  '@react-types/tabs@3.3.15(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
       react: 19.1.0
 
   '@react-types/textfield@3.12.1(react@19.1.0)':
@@ -7063,10 +7588,21 @@ snapshots:
       '@react-types/shared': 3.29.0(react@19.1.0)
       react: 19.1.0
 
+  '@react-types/textfield@3.12.2(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.29.1(react@19.1.0)
+      react: 19.1.0
+
   '@react-types/tooltip@3.4.16(react@19.1.0)':
     dependencies:
       '@react-types/overlays': 3.8.14(react@19.1.0)
       '@react-types/shared': 3.29.0(react@19.1.0)
+      react: 19.1.0
+
+  '@react-types/tooltip@3.4.17(react@19.1.0)':
+    dependencies:
+      '@react-types/overlays': 3.8.15(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
       react: 19.1.0
 
   '@remirror/core-constants@3.0.0': {}
@@ -9458,7 +9994,7 @@ snapshots:
       react: 19.1.0
       react-aria: 3.39.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react-dom: 19.1.0(react@19.1.0)
-      react-stately: 3.37.0(react@19.1.0)
+      react-stately: 3.38.0(react@19.1.0)
       use-sync-external-store: 1.5.0(react@19.1.0)
 
   react-aria@3.39.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
@@ -9558,34 +10094,34 @@ snapshots:
       react: 19.1.0
       use-elapsed-time: 3.0.2(react@19.1.0)
 
-  react-stately@3.37.0(react@19.1.0):
+  react-stately@3.38.0(react@19.1.0):
     dependencies:
-      '@react-stately/calendar': 3.8.0(react@19.1.0)
-      '@react-stately/checkbox': 3.6.13(react@19.1.0)
-      '@react-stately/collections': 3.12.3(react@19.1.0)
-      '@react-stately/color': 3.8.4(react@19.1.0)
-      '@react-stately/combobox': 3.10.4(react@19.1.0)
-      '@react-stately/data': 3.12.3(react@19.1.0)
-      '@react-stately/datepicker': 3.14.0(react@19.1.0)
-      '@react-stately/disclosure': 3.0.3(react@19.1.0)
-      '@react-stately/dnd': 3.5.3(react@19.1.0)
-      '@react-stately/form': 3.1.3(react@19.1.0)
-      '@react-stately/list': 3.12.1(react@19.1.0)
-      '@react-stately/menu': 3.9.3(react@19.1.0)
-      '@react-stately/numberfield': 3.9.11(react@19.1.0)
-      '@react-stately/overlays': 3.6.15(react@19.1.0)
-      '@react-stately/radio': 3.10.12(react@19.1.0)
-      '@react-stately/searchfield': 3.5.11(react@19.1.0)
-      '@react-stately/select': 3.6.12(react@19.1.0)
-      '@react-stately/selection': 3.20.1(react@19.1.0)
-      '@react-stately/slider': 3.6.3(react@19.1.0)
-      '@react-stately/table': 3.14.1(react@19.1.0)
-      '@react-stately/tabs': 3.8.1(react@19.1.0)
+      '@react-stately/calendar': 3.8.1(react@19.1.0)
+      '@react-stately/checkbox': 3.6.14(react@19.1.0)
+      '@react-stately/collections': 3.12.4(react@19.1.0)
+      '@react-stately/color': 3.8.5(react@19.1.0)
+      '@react-stately/combobox': 3.10.5(react@19.1.0)
+      '@react-stately/data': 3.13.0(react@19.1.0)
+      '@react-stately/datepicker': 3.14.1(react@19.1.0)
+      '@react-stately/disclosure': 3.0.4(react@19.1.0)
+      '@react-stately/dnd': 3.5.4(react@19.1.0)
+      '@react-stately/form': 3.1.4(react@19.1.0)
+      '@react-stately/list': 3.12.2(react@19.1.0)
+      '@react-stately/menu': 3.9.4(react@19.1.0)
+      '@react-stately/numberfield': 3.9.12(react@19.1.0)
+      '@react-stately/overlays': 3.6.16(react@19.1.0)
+      '@react-stately/radio': 3.10.13(react@19.1.0)
+      '@react-stately/searchfield': 3.5.12(react@19.1.0)
+      '@react-stately/select': 3.6.13(react@19.1.0)
+      '@react-stately/selection': 3.20.2(react@19.1.0)
+      '@react-stately/slider': 3.6.4(react@19.1.0)
+      '@react-stately/table': 3.14.2(react@19.1.0)
+      '@react-stately/tabs': 3.8.2(react@19.1.0)
       '@react-stately/toast': 3.1.0(react@19.1.0)
-      '@react-stately/toggle': 3.8.3(react@19.1.0)
-      '@react-stately/tooltip': 3.5.3(react@19.1.0)
-      '@react-stately/tree': 3.8.9(react@19.1.0)
-      '@react-types/shared': 3.29.0(react@19.1.0)
+      '@react-stately/toggle': 3.8.4(react@19.1.0)
+      '@react-stately/tooltip': 3.5.4(react@19.1.0)
+      '@react-stately/tree': 3.8.10(react@19.1.0)
+      '@react-types/shared': 3.29.1(react@19.1.0)
       react: 19.1.0
 
   react@19.1.0: {}

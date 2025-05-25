@@ -1,6 +1,7 @@
 import {
   Badge,
   BadgeButton,
+  type BadgeProps,
   Button,
   DialogTrigger,
   Form,
@@ -101,11 +102,12 @@ const TimeRequiredInput = memo(function TimeRequiredInput({
 type QuestTimeBadgeProps = {
   quest?: Doc<"quests"> | null;
   editable?: boolean;
-};
+} & Omit<BadgeProps, "children">;
 
 export const QuestTimeBadge = ({
   quest,
   editable = false,
+  ...props
 }: QuestTimeBadgeProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [timeInput, setTimeInput] = useState<TimeRequired>(
@@ -162,7 +164,7 @@ export const QuestTimeBadge = ({
   if (!timeRequired && !editable) return null;
 
   return (
-    <Badge size="lg">
+    <Badge size={props.size ?? "lg"} {...props}>
       {timeRequired ? formattedTime : "Add time required"}
       {timeRequired?.description && (
         <DialogTrigger>

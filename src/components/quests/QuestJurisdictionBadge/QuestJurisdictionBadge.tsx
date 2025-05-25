@@ -1,6 +1,7 @@
 import {
   Badge,
   BadgeButton,
+  type BadgeProps,
   Menu,
   MenuItem,
   MenuSection,
@@ -29,12 +30,13 @@ type QuestJurisdictionBadgeProps = {
   quest?: Doc<"quests"> | null;
   editable?: boolean;
   short?: boolean;
-};
+} & Omit<BadgeProps, "children">;
 
 export const QuestJurisdictionBadge = ({
   quest,
   editable = false,
   short = false,
+  ...props
 }: QuestJurisdictionBadgeProps) => {
   const [jurisdiction, setJurisdiction] = useState<Selection>(
     new Set(quest?.jurisdiction ? [quest.jurisdiction] : []),
@@ -69,9 +71,7 @@ export const QuestJurisdictionBadge = ({
   const hasJurisdiction = isFederal || [...jurisdiction][0] !== undefined;
 
   const getJurisdictionLabel = () => {
-    if (isFederal) {
-      return short ? "US" : "United States";
-    }
+    if (isFederal) return short ? "US" : "United States";
     if (hasJurisdiction)
       return short
         ? [...jurisdiction][0]
@@ -81,7 +81,7 @@ export const QuestJurisdictionBadge = ({
   if (!hasJurisdiction && !editable) return null;
 
   return (
-    <Badge size="lg">
+    <Badge size={props.size ?? "lg"} {...props}>
       {hasJurisdiction ? getJurisdictionLabel() : "Add state"}
       {editable && !isFederal && (
         <MenuTrigger>
