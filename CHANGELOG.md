@@ -1,5 +1,33 @@
 # namesake
 
+## 0.29.0
+
+### Minor Changes
+
+- 82c6413: Allow removing quest badges for costs, time required, and state
+
+## 0.28.2
+
+### Patch Changes
+
+- 757361c: Revert link change
+
+## 0.28.1
+
+### Patch Changes
+
+- ce50655: Fix router provider appending link to self
+
+## 0.28.0
+
+### Minor Changes
+
+- e5a8ebd: Add form for Social Security application
+
+### Patch Changes
+
+- 265caff: Fix router link handling when passing in full strings
+
 ## 0.27.1
 
 ### Patch Changes

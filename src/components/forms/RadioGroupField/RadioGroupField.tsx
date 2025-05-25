@@ -17,12 +17,14 @@ export interface RadioGroupFieldProps extends RadioGroupProps {
   children?: React.ReactNode;
   name: FieldName;
   label: string;
+  labelHidden?: boolean;
   options: RadioOption[];
 }
 
 export function RadioGroupField({
   name,
   label,
+  labelHidden,
   options,
   children,
   ...props
@@ -38,7 +40,8 @@ export function RadioGroupField({
         render={({ field, fieldState: { invalid, error } }) => (
           <RadioGroup
             {...field}
-            label={smartquotes(label)}
+            label={!labelHidden ? smartquotes(label) : undefined}
+            aria-label={labelHidden ? label : undefined}
             size="large"
             isInvalid={invalid}
             errorMessage={error?.message}

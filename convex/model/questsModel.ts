@@ -1,8 +1,4 @@
-import {
-  type Category,
-  DEFAULT_TIME_REQUIRED,
-  type Jurisdiction,
-} from "../../src/constants";
+import type { Category, Jurisdiction } from "../../src/constants";
 import type { Doc, Id } from "../_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
 
@@ -139,7 +135,6 @@ export async function create(
     category,
     jurisdiction,
     slug: finalSlug,
-    timeRequired: DEFAULT_TIME_REQUIRED,
     creationUser: userId,
     updatedAt: Date.now(),
     updatedBy: userId,

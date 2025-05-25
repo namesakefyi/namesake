@@ -60,12 +60,12 @@ function RootRoute() {
   const { theme } = useTheme();
 
   return (
-    // TODO: Improve this API
-    // https://github.com/adobe/react-spectrum/issues/6587
     <RouterProvider
       navigate={(path, options) =>
         router.navigate(
-          typeof path === "string" ? { ...options } : { ...path, ...options },
+          typeof path === "string"
+            ? { href: path, ...options }
+            : { ...path, ...options },
         )
       }
       useHref={(path) =>
