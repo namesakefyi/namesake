@@ -163,9 +163,6 @@ importers:
       react-random-reveal:
         specifier: ^2.0.1
         version: 2.0.1(react@19.1.0)
-      react-stately:
-        specifier: ^3.38.0
-        version: 3.38.0(react@19.1.0)
       resend:
         specifier: 4.5.1
         version: 4.5.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)

@@ -1,7 +1,6 @@
 import {
   Badge,
   BadgeButton,
-  type BadgeProps,
   Button,
   DialogTrigger,
   Form,
@@ -110,12 +109,11 @@ const CostInput = memo(function CostInput({
 type QuestCostsBadgeProps = {
   quest?: Doc<"quests"> | null;
   editable?: boolean;
-} & Omit<BadgeProps, "children">;
+};
 
 export const QuestCostsBadge = ({
   quest,
   editable = false,
-  ...props
 }: QuestCostsBadgeProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [costsInput, setCostsInput] = useState(quest?.costs ?? DEFAULT_COSTS);
@@ -181,7 +179,7 @@ export const QuestCostsBadge = ({
   if (!costs && !editable) return null;
 
   return (
-    <Badge size={props.size ?? "lg"} {...props}>
+    <Badge size="lg">
       {costs ? getTotalCosts(costs) : "Add costs"}
       {costs && costs.length > 0 && (
         <DialogTrigger>
