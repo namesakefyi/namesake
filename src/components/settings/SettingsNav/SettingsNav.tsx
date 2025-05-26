@@ -80,7 +80,7 @@ export const SettingsNav = ({ className }: { className?: string }) => {
         </NavItem>
       </NavGroup>
       <NavGroup>
-        <NavItem href="/signout" icon={LogOut}>
+        <NavItem href={{ to: "/signout" }} icon={LogOut}>
           Sign out
         </NavItem>
       </NavGroup>
