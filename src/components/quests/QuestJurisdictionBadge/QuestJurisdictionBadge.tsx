@@ -3,6 +3,8 @@ import {
   BadgeButton,
   Menu,
   MenuItem,
+  MenuSection,
+  MenuSeparator,
   MenuTrigger,
   Tooltip,
   TooltipTrigger,
@@ -16,7 +18,7 @@ import {
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
-import { Pencil } from "lucide-react";
+import { CircleX, Pencil, Plus } from "lucide-react";
 import { useState } from "react";
 import type { Selection } from "react-aria-components";
 import { toast } from "sonner";
@@ -39,6 +41,14 @@ export const QuestJurisdictionBadge = ({
 
   if (!quest) return null;
 
+  const handleRemove = () => {
+    setJurisdiction(new Set());
+    updateJurisdiction({
+      questId: quest._id,
+      jurisdiction: undefined,
+    });
+  };
+
   const handleChange = async (keys: Selection) => {
     if (keys !== ALL && keys.size === 1) {
       try {
@@ -54,30 +64,46 @@ export const QuestJurisdictionBadge = ({
   };
 
   const isFederal = FEDERAL_CATEGORIES.includes(quest.category as Category);
+  const hasJurisdiction = isFederal || [...jurisdiction][0] !== undefined;
 
-  const jurisdictionLabel = isFederal
-    ? "United States"
-    : JURISDICTIONS[[...jurisdiction][0] as Jurisdiction];
+  const getJurisdictionLabel = () => {
+    if (isFederal) return "United States";
+    if (hasJurisdiction)
+      return JURISDICTIONS[[...jurisdiction][0] as Jurisdiction] ?? "Unknown";
+  };
+
+  if (!hasJurisdiction && !editable) return null;
 
   return (
     <Badge size="lg">
-      {jurisdictionLabel}
+      {hasJurisdiction ? getJurisdictionLabel() : "Add state"}
       {editable && !isFederal && (
         <MenuTrigger>
           <TooltipTrigger>
-            <BadgeButton icon={Pencil} label="Edit jurisdiction" />
-            <Tooltip>Edit state</Tooltip>
+            <BadgeButton
+              icon={hasJurisdiction ? Pencil : Plus}
+              label={hasJurisdiction ? "Edit state" : "Add state"}
+            />
+            <Tooltip>{hasJurisdiction ? "Edit state" : "Add state"}</Tooltip>
           </TooltipTrigger>
-          <Menu
-            selectionMode="single"
-            onSelectionChange={handleChange}
-            selectedKeys={jurisdiction}
-          >
-            {Object.entries(JURISDICTIONS).map(([value, label]) => (
-              <MenuItem key={value} id={value}>
-                {label}
-              </MenuItem>
-            ))}
+          <Menu placement="bottom end">
+            <MenuSection
+              selectionMode="single"
+              disallowEmptySelection
+              selectedKeys={jurisdiction}
+              onSelectionChange={handleChange}
+              title="States"
+            >
+              {Object.entries(JURISDICTIONS).map(([value, label]) => (
+                <MenuItem key={value} id={value}>
+                  {label}
+                </MenuItem>
+              ))}
+            </MenuSection>
+            <MenuSeparator />
+            <MenuItem onAction={handleRemove} icon={CircleX}>
+              Remove
+            </MenuItem>
           </Menu>
         </MenuTrigger>
       )}

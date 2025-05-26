@@ -46,7 +46,7 @@ describe("QuestPageBadges", () => {
       screen.queryByRole("button", { name: "Edit category" }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: "Edit jurisdiction" }),
+      screen.queryByRole("button", { name: "Edit state" }),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: "Edit costs" }),
@@ -63,7 +63,7 @@ describe("QuestPageBadges", () => {
       screen.getByRole("button", { name: "Edit category" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Edit jurisdiction" }),
+      screen.getByRole("button", { name: "Edit state" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Edit costs" }),
@@ -89,9 +89,13 @@ describe("QuestPageBadges", () => {
     // Check if category badge is rendered
     expect(screen.getByText("Education")).toBeInTheDocument();
 
-    // Check if other badges show default/empty states
-    expect(screen.getByText("Unknown")).toBeInTheDocument(); // For jurisdiction
-    expect(screen.getByText("Free")).toBeInTheDocument(); // For costs
+    // Check if other badges are not rendered
+    expect(
+      screen.queryByRole("button", { name: "Edit state" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Edit costs" }),
+    ).not.toBeInTheDocument();
   });
 
   it("handles overflow", () => {
