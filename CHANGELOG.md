@@ -1,5 +1,15 @@
 # namesake
 
+## 0.29.1
+
+### Patch Changes
+
+- 8f54af9: Fix low-contrast highlight color when viewing dark theme using light OS theme
+- 4ef20d2: Fix links from quests to forms and make it easier to select internal links
+- f3d9fcb: Fix unintended 'null' string in password error banner
+- f91ffe8: Fix docs from scrolling horizontally on mobile
+- 4698222: Prevent "continue" button from scrolling off screen on mobile when asking for state
+
 ## 0.29.0
 
 ### Minor Changes
