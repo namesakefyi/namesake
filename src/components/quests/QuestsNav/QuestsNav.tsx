@@ -209,16 +209,16 @@ const AllQuestsNavItem = ({ quest }: { quest: Doc<"quests"> }) => {
   const handleAddQuest = async () => {
     try {
       await addQuest({ questId: quest._id });
-      toast.success("Added to your list");
+      toast.success("Added to your quests");
     } catch (err) {
-      toast.error("Failed to update quest. Please try again.");
+      toast.error("Failed to add quest. Please try again.");
     }
   };
 
   const handleRemoveQuest = async () => {
     try {
       await removeQuest({ questId: quest._id });
-      toast.success("Removed from your list");
+      toast.success("Removed from your quests");
     } catch (err) {
       toast.error("Something went wrong. Please try again.");
     }
