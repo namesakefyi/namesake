@@ -101,11 +101,14 @@ export const NavItem = ({
           })
         }
         aria-current={current ? "true" : null}
-      />
-      <div className="flex flex-1 items-center gap-2 min-w-0 pointer-events-none">
-        {Icon && <Icon className={iconStyles({ isActive: !!current, size })} />}
-        {children}
-      </div>
+      >
+        <div className="flex flex-1 items-center gap-2 min-w-0 pointer-events-none">
+          {Icon && (
+            <Icon className={iconStyles({ isActive: !!current, size })} />
+          )}
+          {children}
+        </div>
+      </Link>
       <div className="justify-self-end flex items-center gap-1 z-10 pointer-events-none">
         <span className="pointer-events-auto">{actions}</span>
         {displayExternalLink && (
