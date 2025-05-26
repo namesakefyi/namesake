@@ -136,7 +136,7 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
                     aria-label="Select path"
                     selectedKey={form}
                     onSelectionChange={(value) => {
-                      setForm(value.toString());
+                      setForm(value?.toString() ?? null);
                     }}
                     placeholder="Select path"
                     className="flex-1"
