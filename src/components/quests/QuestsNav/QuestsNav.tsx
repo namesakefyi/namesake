@@ -121,20 +121,21 @@ const MyQuests = () => {
                 }}
                 icon={config.icon}
                 size="large"
+                actions={
+                  <StatusSelect
+                    status={userQuest.status as Status}
+                    onChange={(status) =>
+                      handleStatusChange(userQuest.questId, status)
+                    }
+                    onRemove={() => handleRemoveQuest(userQuest.questId)}
+                    condensed
+                  />
+                }
               >
                 {userQuest.title}
                 {userQuest.jurisdiction && (
                   <Badge size="xs">{userQuest.jurisdiction}</Badge>
                 )}
-                <StatusSelect
-                  status={userQuest.status as Status}
-                  onChange={(status) =>
-                    handleStatusChange(userQuest.questId, status)
-                  }
-                  onRemove={() => handleRemoveQuest(userQuest.questId)}
-                  condensed
-                  className="ml-auto"
-                />
               </NavItem>
             );
           }
@@ -172,20 +173,21 @@ const MyQuests = () => {
                     }}
                     size="large"
                     icon={CATEGORIES[quest.category as Category]?.icon}
+                    actions={
+                      <StatusSelect
+                        status={quest.status as Status}
+                        onChange={(status) =>
+                          handleStatusChange(quest.questId, status)
+                        }
+                        onRemove={() => handleRemoveQuest(quest.questId)}
+                        condensed
+                      />
+                    }
                   >
                     {quest.title}
                     {quest.jurisdiction && (
                       <Badge size="xs">{quest.jurisdiction}</Badge>
                     )}
-                    <StatusSelect
-                      status={quest.status as Status}
-                      onChange={(status) =>
-                        handleStatusChange(quest.questId, status)
-                      }
-                      onRemove={() => handleRemoveQuest(quest.questId)}
-                      condensed
-                      className="ml-auto"
-                    />
                   </NavItem>
                 ))}
               </NavGroup>
@@ -237,29 +239,29 @@ const AllQuestsNavItem = ({ quest }: { quest: Doc<"quests"> }) => {
         to: "/quests/$questSlug",
         params: { questSlug: quest.slug },
       }}
+      actions={
+        userQuest ? (
+          <StatusSelect
+            status={userQuest.status as Status}
+            onChange={handleStatusChange}
+            onRemove={handleRemoveQuest}
+            condensed
+          />
+        ) : (
+          <TooltipTrigger>
+            <Button
+              variant="icon"
+              size="small"
+              icon={Plus}
+              onPress={handleAddQuest}
+            />
+            <Tooltip>Add to my quests</Tooltip>
+          </TooltipTrigger>
+        )
+      }
     >
       {quest.title}
       {quest.jurisdiction && <Badge size="xs">{quest.jurisdiction}</Badge>}
-      {userQuest ? (
-        <StatusSelect
-          status={userQuest.status as Status}
-          onChange={handleStatusChange}
-          onRemove={handleRemoveQuest}
-          condensed
-          className="ml-auto"
-        />
-      ) : (
-        <TooltipTrigger>
-          <Button
-            variant="icon"
-            size="small"
-            icon={Plus}
-            onPress={handleAddQuest}
-            className="ml-auto"
-          />
-          <Tooltip>Add to my quests</Tooltip>
-        </TooltipTrigger>
-      )}
     </NavItem>
   );
 };

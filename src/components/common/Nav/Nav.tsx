@@ -10,6 +10,7 @@ type NavItemBaseProps = {
   icon?: LucideIcon;
   className?: string;
   children?: React.ReactNode;
+  actions?: React.ReactNode;
   size?: "medium" | "large";
 };
 
@@ -65,6 +66,7 @@ export const NavItem = ({
   icon: Icon,
   className,
   children,
+  actions,
   size,
   ...props
 }: NavItemProps) => {
@@ -87,29 +89,33 @@ export const NavItem = ({
   }
 
   return (
-    <Link
-      {...props}
-      className={({ isFocusVisible }) =>
-        navItemStyles({
-          isFocusVisible,
-          isActive: !!current,
-          class: className,
-          size,
-        })
-      }
-      aria-current={current ? "true" : null}
-    >
-      <div className="flex flex-1 items-center gap-2 min-w-0">
+    <div className="grid *:[grid-area:1/1] ">
+      <Link
+        {...props}
+        className={({ isFocusVisible }) =>
+          navItemStyles({
+            isFocusVisible,
+            isActive: !!current,
+            class: className,
+            size,
+          })
+        }
+        aria-current={current ? "true" : null}
+      />
+      <div className="flex flex-1 items-center gap-2 min-w-0 pointer-events-none">
         {Icon && <Icon className={iconStyles({ isActive: !!current, size })} />}
         {children}
       </div>
-      {displayExternalLink && (
-        <ExternalLink aria-hidden className="size-4 text-gray-8" />
-      )}
-      {displayChevron && (
-        <ChevronRight aria-hidden className="size-5 -mr-0.5 text-gray-8" />
-      )}
-    </Link>
+      <div className="justify-self-end flex items-center gap-1 z-10 pointer-events-none">
+        <span className="pointer-events-auto">{actions}</span>
+        {displayExternalLink && (
+          <ExternalLink aria-hidden className="size-4 text-gray-8" />
+        )}
+        {displayChevron && (
+          <ChevronRight aria-hidden className="size-5 -mr-0.5 text-gray-8" />
+        )}
+      </div>
+    </div>
   );
 };
 
