@@ -119,8 +119,8 @@ importers:
         specifier: ^1.24.1
         version: 1.24.1(react@19.1.0)
       convex-helpers:
-        specifier: ^0.1.86
-        version: 0.1.86(convex@1.24.1(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.25.3)
+        specifier: ^0.1.89
+        version: 0.1.89(convex@1.24.1(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.25.3)
       language-name-map:
         specifier: ^0.3.0
         version: 0.3.0
@@ -255,8 +255,8 @@ importers:
         specifier: ^2.2.11
         version: 2.2.11(axe-core@4.10.2)
       convex-test:
-        specifier: ^0.0.36
-        version: 0.0.36(convex@1.24.1(react@19.1.0))
+        specifier: ^0.0.37
+        version: 0.0.37(convex@1.24.1(react@19.1.0))
       globals:
         specifier: ^16.1.0
         version: 16.1.0
@@ -2934,16 +2934,19 @@ packages:
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
-  convex-helpers@0.1.86:
-    resolution: {integrity: sha512-ZJBrVykJpM2XJhlLTpejTFKDxGooEce6n+g/3BbTfhiBHBJkf97Je+VKMtKFfKS50quzc3lqGrt3XIUlhyyZNQ==}
+  convex-helpers@0.1.89:
+    resolution: {integrity: sha512-G/rfndoWBAChChDe6d1UTD27YadwTi0vzZrwy59gERCnumFVOJVS6VItMmlVr4yCOTXZwd69YEVbVoP8BvssJw==}
     hasBin: true
     peerDependencies:
+      '@standard-schema/spec': ^1.0.0
       convex: ^1.13.0
       hono: ^4.0.5
       react: ^17.0.2 || ^18.0.0 || ^19.0.0
       typescript: ^5.5
       zod: ^3.22.4
     peerDependenciesMeta:
+      '@standard-schema/spec':
+        optional: true
       hono:
         optional: true
       react:
@@ -2953,8 +2956,8 @@ packages:
       zod:
         optional: true
 
-  convex-test@0.0.36:
-    resolution: {integrity: sha512-xcmjiYodRNypQLIVTSq/23BSH1sbJ8GKKKSX9A/JmZovrm1SEV0ATYriOlvRyoU6+3BNWt0AvP2Wql2HOSMHOg==}
+  convex-test@0.0.37:
+    resolution: {integrity: sha512-gC2ReAGgPAlCCWKNHAjJnEr/IMi1oo5ux9g5cLL68m401Ne1xXc43TfVAD+m/FiGDztmsHtfPr61EWn51mCRjw==}
     peerDependencies:
       convex: ^1.16.4
 
@@ -8008,7 +8011,7 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  convex-helpers@0.1.86(convex@1.24.1(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.25.3):
+  convex-helpers@0.1.89(convex@1.24.1(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.25.3):
     dependencies:
       convex: 1.24.1(react@19.1.0)
     optionalDependencies:
@@ -8016,7 +8019,7 @@ snapshots:
       typescript: 5.8.3
       zod: 3.25.3
 
-  convex-test@0.0.36(convex@1.24.1(react@19.1.0)):
+  convex-test@0.0.37(convex@1.24.1(react@19.1.0)):
     dependencies:
       convex: 1.24.1(react@19.1.0)
 
