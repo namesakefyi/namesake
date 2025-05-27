@@ -1,5 +1,6 @@
 import { JURISDICTIONS } from "@/constants";
 import type { Doc, Id } from "@convex/_generated/dataModel";
+import { User } from "@react-aria/test-utils";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useMutation } from "convex/react";
@@ -16,6 +17,7 @@ describe("EditResidenceSetting", () => {
   };
 
   const mockSetResidence = vi.fn();
+  const testUtilUser = new User({ interactionType: "mouse" });
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -24,21 +26,19 @@ describe("EditResidenceSetting", () => {
     );
   });
 
-  it("renders current residence if it exists", () => {
+  it("renders correct residence if it exists", () => {
     render(<EditResidenceSetting user={mockUser} />);
-    expect(screen.getByRole("combobox", { hidden: true })).toHaveValue("CA");
     expect(screen.getByRole("button")).toHaveTextContent(JURISDICTIONS.CA);
   });
 
-  it("shows empty select if residence is not set", () => {
+  it("shows placeholder button if residence is not set", () => {
     render(
       <EditResidenceSetting user={{ ...mockUser, residence: undefined }} />,
     );
-    const stateSelect = screen.getByLabelText("State");
-    expect(stateSelect).toHaveValue("");
+    expect(screen.getByRole("button")).toHaveTextContent("Set residence");
   });
 
-  it("shows save/cancel buttons when residence is changed", async () => {
+  it("shows edit form in popover when button is clicked", async () => {
     const user = userEvent.setup();
     render(<EditResidenceSetting user={mockUser} />);
 
@@ -50,10 +50,11 @@ describe("EditResidenceSetting", () => {
       screen.queryByRole("button", { name: "Cancel" }),
     ).not.toBeInTheDocument();
 
-    // Change residence
-    const stateSelect = screen.getByLabelText("State");
-    await user.click(stateSelect);
-    await user.click(screen.getByRole("option", { name: JURISDICTIONS.NY }));
+    // Open popover
+    await user.click(screen.getByRole("button"));
+
+    // Focus should be on the combobox
+    expect(screen.getByRole("combobox")).toHaveFocus();
 
     // Buttons should now be visible
     expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
@@ -66,10 +67,17 @@ describe("EditResidenceSetting", () => {
 
     render(<EditResidenceSetting user={mockUser} />);
 
-    // Change residence
-    const stateSelect = screen.getByLabelText("State");
-    await user.click(stateSelect);
-    await user.click(screen.getByRole("option", { name: JURISDICTIONS.NY }));
+    // Open popover
+    await user.click(screen.getByRole("button"));
+
+    // Use ComboBoxTester to interact with the combobox
+    const comboboxTester = testUtilUser.createTester("ComboBox", {
+      root: screen.getByRole("combobox"),
+      interactionType: "keyboard",
+    });
+    await comboboxTester.open();
+    expect(comboboxTester.listbox).toBeInTheDocument();
+    await comboboxTester.selectOption({ option: JURISDICTIONS.NY });
 
     // Submit form
     await user.click(screen.getByRole("button", { name: "Save" }));
@@ -86,10 +94,16 @@ describe("EditResidenceSetting", () => {
 
     render(<EditResidenceSetting user={mockUser} />);
 
-    // Change residence
-    const stateSelect = screen.getByLabelText("State");
-    await user.click(stateSelect);
-    await user.click(screen.getByRole("option", { name: JURISDICTIONS.NY }));
+    // Open popover
+    await user.click(screen.getByRole("button"));
+
+    // Use ComboBoxTester to interact with the combobox
+    const comboboxTester = testUtilUser.createTester("ComboBox", {
+      root: screen.getByRole("combobox"),
+      interactionType: "keyboard",
+    });
+    await comboboxTester.open();
+    await comboboxTester.selectOption({ option: JURISDICTIONS.NY });
 
     // Submit form
     await user.click(screen.getByRole("button", { name: "Save" }));
@@ -103,16 +117,21 @@ describe("EditResidenceSetting", () => {
     const user = userEvent.setup();
     render(<EditResidenceSetting user={mockUser} />);
 
-    // Change residence
-    const stateSelect = screen.getByLabelText("State");
-    await user.click(stateSelect);
-    await user.click(screen.getByRole("option", { name: JURISDICTIONS.NY }));
+    // Open popover
+    await user.click(screen.getByRole("button"));
+
+    // Use ComboBoxTester to interact with the combobox
+    const comboboxTester = testUtilUser.createTester("ComboBox", {
+      root: screen.getByRole("combobox"),
+      interactionType: "keyboard",
+    });
+    await comboboxTester.open();
+    await comboboxTester.selectOption({ option: JURISDICTIONS.NY });
 
     // Click cancel
     await user.click(screen.getByRole("button", { name: "Cancel" }));
 
     // Should reset to original value
-    expect(screen.getByRole("combobox", { hidden: true })).toHaveValue("CA");
     expect(screen.getByRole("button")).toHaveTextContent(JURISDICTIONS.CA);
 
     // Buttons should be hidden

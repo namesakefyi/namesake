@@ -10,7 +10,9 @@ describe("AddressField", () => {
 
     const streetAddressInput = screen.getByLabelText("Street address");
     const cityInput = screen.getByLabelText("City");
-    const stateSelect = screen.getByLabelText("State");
+    const stateSelect = screen.getByRole("combobox", {
+      name: "State",
+    });
     const zipInput = screen.getByLabelText("ZIP");
 
     expect(streetAddressInput).toBeInTheDocument();
@@ -24,7 +26,9 @@ describe("AddressField", () => {
 
     const streetAddressInput = screen.getByLabelText("Street address");
     const cityInput = screen.getByLabelText("City");
-    const stateSelect = screen.getByLabelText("State");
+    const stateSelect = screen.getByRole("combobox", {
+      name: "State",
+    });
     const zipInput = screen.getByLabelText("ZIP");
 
     await userEvent.type(streetAddressInput, "123 Main St");
@@ -41,7 +45,7 @@ describe("AddressField", () => {
 
     expect(streetAddressInput).toHaveValue("123 Main St");
     expect(cityInput).toHaveValue("Anytown");
-    expect(stateSelect).toHaveTextContent("California");
+    expect(stateSelect).toHaveValue("California");
     expect(zipInput).toHaveValue("12345-6789");
   });
 
@@ -123,7 +127,9 @@ describe("AddressField", () => {
     expect(screen.queryByLabelText("County")).not.toBeInTheDocument();
 
     // Select California
-    const stateSelect = screen.getByLabelText("State");
+    const stateSelect = screen.getByRole("combobox", {
+      name: "State",
+    });
     await userEvent.click(stateSelect);
     const californiaOption = screen.getByRole("option", {
       name: JURISDICTIONS.CA,
@@ -131,7 +137,9 @@ describe("AddressField", () => {
     await userEvent.click(californiaOption);
 
     // County dropdown should now be visible
-    const countySelect = screen.getByLabelText("County");
+    const countySelect = screen.getByRole("combobox", {
+      name: "County",
+    });
     expect(countySelect).toBeInTheDocument();
 
     // Should be able to select a county
@@ -140,14 +148,16 @@ describe("AddressField", () => {
       name: "Los Angeles County",
     });
     await userEvent.click(losAngelesOption);
-    expect(countySelect).toHaveTextContent("Los Angeles County");
+    expect(countySelect).toHaveValue("Los Angeles County");
   });
 
   it("clears county selection when state changes", async () => {
     renderWithFormProvider(<AddressField type="residence" includeCounty />);
 
     // Select New York
-    const stateSelect = screen.getByLabelText("State");
+    const stateSelect = screen.getByRole("combobox", {
+      name: "State",
+    });
     await userEvent.click(stateSelect);
     const newYorkOption = screen.getByRole("option", {
       name: JURISDICTIONS.NY,
@@ -155,7 +165,9 @@ describe("AddressField", () => {
     await userEvent.click(newYorkOption);
 
     // Select New York county
-    const countySelect = screen.getByLabelText("County");
+    const countySelect = screen.getByRole("combobox", {
+      name: "County",
+    });
     await userEvent.click(countySelect);
     const queensCountyOption = screen.getByRole("option", {
       name: "Queens County",
@@ -183,16 +195,18 @@ describe("AddressField", () => {
     renderWithFormProvider(<AddressField type="residence" includeCounty />);
 
     // Select New York to show county field
-    const stateSelect = screen.getByLabelText("State");
+    const stateSelect = screen.getByRole("combobox", {
+      name: "State",
+    });
     await userEvent.click(stateSelect);
     const newYorkOption = screen.getByRole("option", {
       name: JURISDICTIONS.NY,
     });
     await userEvent.click(newYorkOption);
 
-    const selectElements = screen.getAllByRole("combobox", {
-      hidden: true,
+    const countySelect = screen.getByRole("combobox", {
+      name: "County",
     });
-    expect(selectElements[1]).toHaveAttribute("name", "residenceCounty");
+    expect(countySelect).toHaveAttribute("name", "residenceCounty");
   });
 });

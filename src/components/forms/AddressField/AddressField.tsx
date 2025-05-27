@@ -1,4 +1,4 @@
-import { Select, SelectItem, TextField } from "@/components/common";
+import { ComboBox, ComboBoxItem, TextField } from "@/components/common";
 import { type FieldName, JURISDICTIONS } from "@/constants";
 import { maskitoTransform } from "@maskito/core";
 import type { MaskitoOptions } from "@maskito/core";
@@ -112,7 +112,7 @@ export function AddressField({
           defaultValue={""}
           shouldUnregister={true}
           render={({ field, fieldState: { invalid, error } }) => (
-            <Select
+            <ComboBox
               {...field}
               label="State"
               placeholder="Select state"
@@ -125,13 +125,14 @@ export function AddressField({
               size="large"
               isInvalid={invalid}
               errorMessage={error?.message}
+              menuTrigger="focus"
             >
               {Object.entries(JURISDICTIONS).map(([value, label]) => (
-                <SelectItem key={value} id={value}>
+                <ComboBoxItem key={value} id={value}>
                   {label}
-                </SelectItem>
+                </ComboBoxItem>
               ))}
-            </Select>
+            </ComboBox>
           )}
         />
         {includeCounty && counties.length > 0 && (
@@ -141,7 +142,7 @@ export function AddressField({
             defaultValue={""}
             shouldUnregister={true}
             render={({ field, fieldState: { invalid, error } }) => (
-              <Select
+              <ComboBox
                 {...field}
                 label="County"
                 placeholder="Select county"
@@ -153,13 +154,14 @@ export function AddressField({
                 size="large"
                 isInvalid={invalid}
                 errorMessage={error?.message}
+                menuTrigger="focus"
               >
                 {counties.map((county) => (
-                  <SelectItem key={county} id={county}>
+                  <ComboBoxItem key={county} id={county}>
                     {county}
-                  </SelectItem>
+                  </ComboBoxItem>
                 ))}
-              </Select>
+              </ComboBox>
             )}
           />
         )}

@@ -1,10 +1,18 @@
-import { Banner, Button, Form, Select, SelectItem } from "@/components/common";
+import {
+  Banner,
+  Button,
+  ComboBox,
+  ComboBoxItem,
+  DialogTrigger,
+  Form,
+  Popover,
+} from "@/components/common";
 import { SettingsItem } from "@/components/settings";
 import { JURISDICTIONS, type Jurisdiction } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 type EditResidenceSettingProps = {
@@ -20,12 +28,6 @@ export const EditResidenceSetting = ({ user }: EditResidenceSettingProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const updateResidence = useMutation(api.users.setResidence);
-
-  useEffect(() => {
-    if (residence !== user.residence) {
-      setIsEditing(true);
-    }
-  }, [residence, user.residence]);
 
   const handleCancel = () => {
     setResidence(user.residence as Jurisdiction);
@@ -59,47 +61,61 @@ export const EditResidenceSetting = ({ user }: EditResidenceSettingProps) => {
       label="Residence"
       description="Where do you live? This helps select the forms for your court order and state ID."
     >
-      <Form onSubmit={handleSubmit} className="gap-2 items-end">
-        <Select
-          aria-label="State"
-          name="residence"
-          selectedKey={residence}
-          onSelectionChange={(key) => {
-            setResidence(key as Jurisdiction);
-            setError(undefined);
-          }}
-          isRequired
-          placeholder="Select state"
-          isDisabled={isSubmitting}
-        >
-          {Object.entries(JURISDICTIONS).map(([value, label]) => (
-            <SelectItem key={value} id={value}>
-              {label}
-            </SelectItem>
-          ))}
-        </Select>
-        {isEditing && (
-          <div className="flex gap-1 justify-end">
-            <Button
-              variant="secondary"
-              onPress={handleCancel}
-              isSubmitting={isSubmitting}
-              size="small"
+      <DialogTrigger>
+        <Button onPress={() => setIsEditing(true)}>
+          <span className="truncate max-w-[24ch]">
+            {JURISDICTIONS[user?.residence as Jurisdiction] ?? "Set residence"}
+          </span>
+        </Button>
+        <Popover className="p-2" placement="bottom end" isOpen={isEditing}>
+          <Form onSubmit={handleSubmit} className="gap-2 items-end">
+            <ComboBox
+              aria-label="State"
+              name="residence"
+              selectedKey={residence}
+              onSelectionChange={(key) => {
+                setResidence(key as Jurisdiction);
+                setError(undefined);
+              }}
+              items={Object.entries(JURISDICTIONS).map(([value, label]) => ({
+                id: value,
+                label,
+              }))}
+              defaultInputValue={JURISDICTIONS[user?.residence as Jurisdiction]}
+              autoFocus
+              isRequired
+              placeholder="Select state"
+              isDisabled={isSubmitting}
             >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              size="small"
-              isSubmitting={isSubmitting}
-            >
-              Save
-            </Button>
-          </div>
-        )}
-        {error && <Banner variant="danger">{error}</Banner>}
-      </Form>
+              {(item) => (
+                <ComboBoxItem key={item.id} id={item.id}>
+                  {item.label}
+                </ComboBoxItem>
+              )}
+            </ComboBox>
+            <div className="flex gap-1 justify-end">
+              <Button
+                variant="secondary"
+                onPress={handleCancel}
+                isDisabled={isSubmitting}
+                size="small"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                size="small"
+                isDisabled={residence === user.residence}
+                isSubmitting={isSubmitting}
+              >
+                Save
+              </Button>
+            </div>
+            {error && <Banner variant="danger">{error}</Banner>}
+          </Form>
+        </Popover>
+      </DialogTrigger>
     </SettingsItem>
   );
 };
