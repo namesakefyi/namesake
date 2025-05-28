@@ -39,7 +39,17 @@ export const Route = createFileRoute("/_unauthenticated/signin")({
 
 const SignIn = () => {
   const { signIn } = useAuthActions();
-  const [flow, setFlow] = useState<Key>("signIn");
+  const [flow, setFlow] = useState<Key>(() => {
+    // Check if this is the first visit
+    if (typeof window !== "undefined") {
+      const hasVisitedBefore = localStorage.getItem("hasVisitedBefore");
+      if (!hasVisitedBefore) {
+        localStorage.setItem("hasVisitedBefore", "true");
+        return "signUp";
+      }
+    }
+    return "signIn";
+  });
   const [isCodeRequired, setIsCodeRequired] = useState(true);
   const [code, setCode] = useState<string>("");
   const [email, setEmail] = useState<string>("");
