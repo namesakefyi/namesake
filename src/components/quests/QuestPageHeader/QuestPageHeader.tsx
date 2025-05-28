@@ -97,7 +97,7 @@ export function QuestPageHeader({
             size="small"
             isSubmitting={isSubmitting}
           >
-            Add to my list
+            Add to my quests
           </Button>
         )}
         {editable && (

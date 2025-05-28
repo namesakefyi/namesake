@@ -3,12 +3,14 @@ import { focusRing } from "@/components/utils";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useMatchRoute } from "@tanstack/react-router";
 import { ChevronRight, ExternalLink, type LucideIcon } from "lucide-react";
+import { Heading } from "react-aria-components";
 import { tv } from "tailwind-variants";
 
 type NavItemBaseProps = {
   icon?: LucideIcon;
   className?: string;
   children?: React.ReactNode;
+  actions?: React.ReactNode;
   size?: "medium" | "large";
 };
 
@@ -64,6 +66,7 @@ export const NavItem = ({
   icon: Icon,
   className,
   children,
+  actions,
   size,
   ...props
 }: NavItemProps) => {
@@ -86,39 +89,56 @@ export const NavItem = ({
   }
 
   return (
-    <Link
-      {...props}
-      className={({ isFocusVisible }) =>
-        navItemStyles({
-          isFocusVisible,
-          isActive: !!current,
-          class: className,
-          size,
-        })
-      }
-      aria-current={current ? "true" : null}
-    >
-      <div className="flex flex-1 items-center gap-2 min-w-0">
-        {Icon && <Icon className={iconStyles({ isActive: !!current, size })} />}
-        {children}
+    <div className="grid *:[grid-area:1/1] ">
+      <Link
+        {...props}
+        className={({ isFocusVisible }) =>
+          navItemStyles({
+            isFocusVisible,
+            isActive: !!current,
+            class: className,
+            size,
+          })
+        }
+        aria-current={current ? "true" : null}
+      >
+        <div className="flex flex-1 items-center gap-2 min-w-0 pointer-events-none">
+          {Icon && (
+            <Icon className={iconStyles({ isActive: !!current, size })} />
+          )}
+          {children}
+        </div>
+      </Link>
+      <div className="justify-self-end flex items-center gap-1 z-10 pointer-events-none">
+        <span className="pointer-events-auto">{actions}</span>
+        {displayExternalLink && (
+          <ExternalLink aria-hidden className="size-4 text-gray-8" />
+        )}
+        {displayChevron && (
+          <ChevronRight aria-hidden className="size-5 -mr-0.5 text-gray-8" />
+        )}
       </div>
-      {displayExternalLink && (
-        <ExternalLink aria-hidden className="size-4 text-gray-8" />
-      )}
-      {displayChevron && (
-        <ChevronRight aria-hidden className="size-5 -mr-0.5 text-gray-8" />
-      )}
-    </Link>
+    </div>
   );
 };
 
 interface NavGroupProps {
   children: React.ReactNode;
+  label?: string;
+  icon?: LucideIcon;
 }
 
-export const NavGroup = ({ children }: NavGroupProps) => {
+export const NavGroup = ({ children, label, icon: Icon }: NavGroupProps) => {
   return (
-    <div className="flex flex-col gap-0.5 pt-2 mt-2 border-t border-gray-dim first:mt-0 first:border-0 first:pt-0">
+    <div className="flex flex-col gap-0.5 pt-2 mt-2 first:mt-0 border-gray-dim not-has-[header]:border-t first:border-0 first:pt-0">
+      {label && (
+        <header className="flex items-center gap-2 border-b border-gray-dim pb-2">
+          {Icon && <Icon className="size-4 text-gray-dim" />}
+          <Heading className="flex-1  text-sm font-medium text-gray-dim">
+            {label}
+          </Heading>
+        </header>
+      )}
       {children}
     </div>
   );
