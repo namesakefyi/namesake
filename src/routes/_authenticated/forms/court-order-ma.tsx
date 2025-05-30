@@ -16,6 +16,7 @@ import {
   ShortTextField,
   YesNoField,
 } from "@/components/forms";
+import { QuestCostsTable } from "@/components/quests";
 import { BIRTHPLACES, type FieldName, type FieldType } from "@/constants";
 import affidavitOfIndigency from "@/forms/ma/affidavit-of-indigency";
 import cjd400MotionToImpound from "@/forms/ma/cjd400-motion-to-impound";
@@ -26,11 +27,11 @@ import { downloadMergedPdf } from "@/forms/utils";
 import { useForm } from "@/hooks/useForm";
 import { api } from "@convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import type { FormEvent } from "react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/forms/ma-court-order")({
+export const Route = createFileRoute("/_authenticated/forms/court-order-ma")({
   component: RouteComponent,
 });
 
@@ -82,6 +83,9 @@ type FormData = {
 function RouteComponent() {
   const { onSubmit, isSubmitting, ...form } = useForm<FormData>(FORM_FIELDS);
   const saveDocuments = useMutation(api.userDocuments.set);
+  const quest = useQuery(api.quests.getBySlug, {
+    slug: "court-order-ma",
+  });
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -384,16 +388,18 @@ function RouteComponent() {
       </FormSection>
       <FormSection
         title="Do you need to apply for a fee waiver?"
-        description="If you are unable to pay the filing fee, you can file an Affidavit of Indigency—a document proving that you are unable to pay. You will need to provide proof of income."
+        description="If you are unable to pay the filing fee, you can file an Affidavit of Indigency—a document proving that you are unable to pay."
       >
         <YesNoField
           name="shouldApplyForFeeWaiver"
           label="Apply for a fee waiver?"
           labelHidden
-          yesLabel="Help me waive filing fees; I can provide proof of income"
-          noLabel="I will pay the filing fee"
+          yesLabel="Yes, help me waive filing fees"
+          noLabel="No, I will pay the filing fee"
         />
-        {form.watch("shouldApplyForFeeWaiver") === true && (
+        {form.watch("shouldApplyForFeeWaiver") !== true ? (
+          <QuestCostsTable costs={quest?.costs} card />
+        ) : (
           <Banner variant="info" size="large">
             Your download will include an Affidavit of Indigency.{" "}
             <strong>
