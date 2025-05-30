@@ -74,7 +74,7 @@ function RootRoute() {
       <Toaster
         theme={theme as "light" | "dark" | "system"}
         offset={16}
-        mobileOffset={{ bottom: "60px" }}
+        mobileOffset={{ bottom: "68px" }}
         gap={8}
         position="bottom-right"
         toastOptions={{
