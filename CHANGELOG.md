@@ -1,5 +1,11 @@
 # namesake
 
+## 0.29.2
+
+### Patch Changes
+
+- d21f548: Toast placement improved
+
 ## 0.29.1
 
 ### Patch Changes
