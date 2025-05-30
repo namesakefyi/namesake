@@ -3,10 +3,14 @@ import type { Cost } from "@/constants";
 import { getTotalCosts } from "@/utils/getTotalCosts";
 
 interface QuestCostsTableProps {
+  /**
+   * The costs to display in the table.
+   */
   costs?: Cost[];
 
   /**
-   *
+   * Whether to wrap the table in a card. Useful when displaying the table
+   * within a form or on the main surface of a view.
    */
   card?: boolean;
 }
