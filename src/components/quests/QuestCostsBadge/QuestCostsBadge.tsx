@@ -161,7 +161,7 @@ export const QuestCostsBadge = ({
             <BadgeButton label="Cost details" icon={HelpCircle} />
             <Tooltip>See cost details</Tooltip>
           </TooltipTrigger>
-          <Popover placement="bottom" className="py-3 px-3.5">
+          <Popover placement="bottom" className="p-4">
             <QuestCostsTable costs={costs} />
           </Popover>
         </DialogTrigger>
