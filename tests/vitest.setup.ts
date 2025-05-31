@@ -8,6 +8,7 @@ vi.mock("convex/react", () => ({
   useQuery: vi.fn(),
   useMutation: vi.fn(),
   Authenticated: ({ children }: { children: React.ReactNode }) => children,
+  ConvexReactClient: vi.fn(),
 }));
 
 vi.mock("sonner", () => ({
@@ -85,7 +86,7 @@ vi.mock("@erquhart/convex-better-auth/convex.config", () => ({
 }));
 
 vi.mock("@erquhart/convex-better-auth", () => ({
-  BetterAuth: vi.fn().mockImplementation(() => ({
+  BetterAuth: vi.fn(() => ({
     createAuthFunctions: vi.fn(() => ({
       createUser: vi.fn(),
       updateUser: vi.fn(),
@@ -122,7 +123,7 @@ vi.mock("better-auth", () => ({
 
 // Mock Resend email service
 vi.mock("resend", () => ({
-  Resend: vi.fn().mockImplementation(() => ({
+  Resend: vi.fn(() => ({
     emails: {
       send: vi.fn().mockResolvedValue({
         id: "mock-email-id",
@@ -192,3 +193,20 @@ beforeEach(() => {
 afterEach(() => {
   global.fetch = originalFetch;
 });
+
+// Mock exports from src/main.tsx directly
+vi.mock("@/main", () => ({
+  authClient: {
+    signIn: { email: vi.fn() },
+    signUp: { email: vi.fn() },
+    signOut: vi.fn(),
+    resetPassword: vi.fn(),
+    forgetPassword: vi.fn(),
+    deleteUser: vi.fn(),
+  },
+  router: {
+    // Mock for the router instance exported by src/main.tsx
+    navigate: vi.fn(),
+    history: { go: vi.fn() },
+  },
+}));

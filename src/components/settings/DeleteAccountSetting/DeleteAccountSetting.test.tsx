@@ -1,23 +1,20 @@
-import { useNavigate } from "@tanstack/react-router";
+import { authClient } from "@/main";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useMutation } from "convex/react";
 import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DeleteAccountSetting } from "./DeleteAccountSetting";
 
 describe("DeleteAccountSetting", () => {
-  const mockNavigate = vi.fn();
-  const mockDeleteAccount = vi.fn();
-
   beforeEach(() => {
     vi.clearAllMocks();
-    (useMutation as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockDeleteAccount,
-    );
-    (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockNavigate,
-    );
+    // Mock localStorage.removeItem
+    Object.defineProperty(window, "localStorage", {
+      value: {
+        removeItem: vi.fn(),
+      },
+      writable: true,
+    });
   });
 
   it("renders the DeleteAccountSetting component", () => {
@@ -37,57 +34,46 @@ describe("DeleteAccountSetting", () => {
     expect(screen.getByText("Delete account?")).toBeInTheDocument();
     expect(
       screen.getByText(
-        "This will permanently erase your account and all data.",
+        "A confirmation email will be sent to your email address.",
       ),
     ).toBeInTheDocument();
   });
 
-  it("shows an error if the confirmation text is incorrect", async () => {
-    const user = userEvent.setup();
-    render(<DeleteAccountSetting />);
-    await user.click(screen.getByRole("button", { name: "Delete account" }));
-
-    const input = screen.getByLabelText("Type DELETE to confirm");
-    await user.type(input, "WRONG_TEXT");
-
-    await user.click(screen.getByRole("button", { name: "Delete account" }));
-    expect(screen.getByRole("alert")).toHaveTextContent(
-      "Please type DELETE to confirm.",
-    );
-
-    expect(mockDeleteAccount).not.toHaveBeenCalled();
-  });
-
   it("submits the form successfully", async () => {
     const user = userEvent.setup();
+    vi.mocked(authClient.deleteUser).mockResolvedValue({ error: null });
+
     render(<DeleteAccountSetting />);
     await user.click(screen.getByRole("button", { name: "Delete account" }));
-
-    const input = screen.getByLabelText("Type DELETE to confirm");
-    await user.type(input, "DELETE");
-    await user.click(screen.getByRole("button", { name: "Delete account" }));
+    await user.click(
+      screen.getByRole("button", { name: "Send deletion email" }),
+    );
 
     await waitFor(() => {
-      expect(mockDeleteAccount).toHaveBeenCalled();
-      expect(mockNavigate).toHaveBeenCalledWith({ to: "/signout" });
-      expect(toast.success).toHaveBeenCalledWith("Account deleted.");
+      expect(authClient.deleteUser).toHaveBeenCalledWith({
+        callbackURL: "/goodbye",
+      });
+      expect(window.localStorage.removeItem).toHaveBeenCalledWith("theme");
+      expect(toast.success).toHaveBeenCalledWith(
+        "Check your email to finish deleting your account.",
+      );
     });
   });
 
   it("displays an error if account deletion fails", async () => {
     const user = userEvent.setup();
-    mockDeleteAccount.mockRejectedValue(new Error("Deletion failed"));
+    const errorMessage = "Failed to delete account";
+    vi.mocked(authClient.deleteUser).mockResolvedValue({
+      error: new Error(errorMessage),
+    });
 
     render(<DeleteAccountSetting />);
     await user.click(screen.getByRole("button", { name: "Delete account" }));
+    await user.click(
+      screen.getByRole("button", { name: "Send deletion email" }),
+    );
 
-    const input = screen.getByLabelText("Type DELETE to confirm");
-    await user.type(input, "DELETE");
-    await user.click(screen.getByRole("button", { name: "Delete account" }));
-
-    expect(
-      await screen.findByText("Failed to delete account. Please try again."),
-    ).toBeInTheDocument();
+    expect(await screen.findByText(errorMessage)).toBeInTheDocument();
     expect(toast.success).not.toHaveBeenCalled();
   });
 
