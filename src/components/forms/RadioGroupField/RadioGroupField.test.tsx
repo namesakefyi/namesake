@@ -81,4 +81,50 @@ describe("RadioGroupField", () => {
     const childComponent = screen.getByTestId("child-component");
     expect(childComponent).toBeInTheDocument();
   });
+
+  it("renders prefer not to answer option when includePreferNotToAnswer is true", () => {
+    renderWithFormProvider(
+      <RadioGroupField
+        name="pronouns"
+        label="Test Label"
+        options={mockOptions}
+        includePreferNotToAnswer
+      />,
+    );
+
+    const preferNotToAnswerOption = screen.getByText("Prefer not to answer");
+    expect(preferNotToAnswerOption).toBeInTheDocument();
+  });
+
+  it("does not render prefer not to answer option when includePreferNotToAnswer is false", () => {
+    renderWithFormProvider(
+      <RadioGroupField
+        name="pronouns"
+        label="Test Label"
+        options={mockOptions}
+      />,
+    );
+
+    const preferNotToAnswerOption = screen.queryByText("Prefer not to answer");
+    expect(preferNotToAnswerOption).not.toBeInTheDocument();
+  });
+
+  it("allows selecting prefer not to answer option", async () => {
+    renderWithFormProvider(
+      <RadioGroupField
+        name="pronouns"
+        label="Test Label"
+        options={mockOptions}
+        includePreferNotToAnswer={true}
+      />,
+    );
+
+    const preferNotToAnswerOption = screen.getByText("Prefer not to answer");
+    await userEvent.click(preferNotToAnswerOption);
+
+    const selectedRadio = screen.getByRole("radio", {
+      name: "Prefer not to answer",
+    }) as HTMLInputElement;
+    expect(selectedRadio.checked).toBe(true);
+  });
 });

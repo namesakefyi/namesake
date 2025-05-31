@@ -4,7 +4,7 @@ import {
   type RadioGroupProps,
   type RadioProps,
 } from "@/components/common";
-import type { FieldName } from "@/constants";
+import { type FieldName, PREFER_NOT_TO_ANSWER } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -19,6 +19,7 @@ export interface RadioGroupFieldProps extends RadioGroupProps {
   label: string;
   labelHidden?: boolean;
   options: RadioOption[];
+  includePreferNotToAnswer?: boolean;
 }
 
 export function RadioGroupField({
@@ -27,6 +28,7 @@ export function RadioGroupField({
   labelHidden,
   options,
   children,
+  includePreferNotToAnswer,
   ...props
 }: RadioGroupFieldProps) {
   const { control } = useFormContext();
@@ -54,6 +56,11 @@ export function RadioGroupField({
                 {label}
               </Radio>
             ))}
+            {includePreferNotToAnswer && (
+              <Radio value={PREFER_NOT_TO_ANSWER} size="large" card>
+                Prefer not to answer
+              </Radio>
+            )}
           </RadioGroup>
         )}
       />

@@ -218,3 +218,5 @@ export type FormData = {
 };
 
 export const COMMON_PRONOUNS = ["they/them", "she/her", "he/him"];
+
+export const PREFER_NOT_TO_ANSWER = "preferNotToAnswer";
