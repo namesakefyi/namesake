@@ -1,4 +1,3 @@
-import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
@@ -89,6 +88,8 @@ const users = defineTable({
   birthplace: v.optional(birthplace),
   /** Whether the user is a minor. */
   isMinor: v.optional(v.boolean()),
+  /** Time in ms since epoch when the user was deleted. */
+  deletedAt: v.optional(v.number()),
 }).index("email", ["email"]);
 
 /**
@@ -160,7 +161,6 @@ const earlyAccessCodes = defineTable({
 }).index("createdBy", ["createdBy"]);
 
 export default defineSchema({
-  ...authTables,
   earlyAccessCodes,
   quests,
   users,

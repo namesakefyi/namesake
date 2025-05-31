@@ -79,34 +79,5 @@ export async function deleteUser(
   ctx: MutationCtx,
   { userId }: { userId: Id<"users"> },
 ) {
-  // Delete userQuests
-  const userQuests = await ctx.db
-    .query("userQuests")
-    .withIndex("userId", (q) => q.eq("userId", userId))
-    .collect();
-  for (const userQuest of userQuests) await ctx.db.delete(userQuest._id);
-
-  // Delete userSettings
-  const userSettings = await ctx.db
-    .query("userSettings")
-    .withIndex("userId", (q) => q.eq("userId", userId))
-    .first();
-  if (userSettings) await ctx.db.delete(userSettings._id);
-
-  // Delete authAccounts
-  const authAccounts = await ctx.db
-    .query("authAccounts")
-    .withIndex("userIdAndProvider", (q) => q.eq("userId", userId))
-    .collect();
-  for (const account of authAccounts) await ctx.db.delete(account._id);
-
-  // Delete authSessions
-  const authSessions = await ctx.db
-    .query("authSessions")
-    .withIndex("userId", (q) => q.eq("userId", userId))
-    .collect();
-  for (const session of authSessions) await ctx.db.delete(session._id);
-
-  // Finally, delete the user
-  await ctx.db.delete(userId);
+  await ctx.db.patch(userId, { deletedAt: Date.now() });
 }

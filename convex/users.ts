@@ -1,8 +1,9 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import type { Birthplace, Jurisdiction, Role } from "../src/constants";
+import type { Id } from "./_generated/dataModel";
 import { query } from "./_generated/server";
-import { userMutation } from "./helpers";
+import { betterAuthComponent } from "./auth";
+import { userMutation, userQuery } from "./helpers";
 import * as Users from "./model/usersModel";
 import { birthplace, jurisdiction } from "./validators";
 
@@ -19,16 +20,16 @@ export const getById = query({
 export const getCurrent = query({
   args: {},
   handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    return await Users.getById(ctx, { userId });
+    const userId = await betterAuthComponent.getAuthUserId(ctx);
+    if (!userId) return null;
+    return await Users.getById(ctx, { userId: userId as Id<"users"> });
   },
 });
 
-export const getCurrentRole = query({
+export const getCurrentRole = userQuery({
   args: {},
   handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    const user = await Users.getById(ctx, { userId });
+    const user = await Users.getById(ctx, { userId: ctx.userId });
     return user?.role as Role;
   },
 });
@@ -90,16 +91,9 @@ export const setCurrentUserIsMinor = userMutation({
   },
 });
 
-// TODO: This throws an error when deleting own account
-// Implement RLS check for whether this is the user's own account
-// or a different account being deleted by an admin
 export const deleteCurrentUser = userMutation({
   args: {},
   handler: async (ctx) => {
     await Users.deleteUser(ctx, { userId: ctx.userId });
   },
-});
-
-export const isSignedIn = query(async (ctx) => {
-  return !!(await getAuthUserId(ctx));
 });
