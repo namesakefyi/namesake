@@ -88,8 +88,6 @@ const users = defineTable({
   birthplace: v.optional(birthplace),
   /** Whether the user is a minor. */
   isMinor: v.optional(v.boolean()),
-  /** Time in ms since epoch when the user was deleted. */
-  deletedAt: v.optional(v.number()),
 }).index("email", ["email"]);
 
 /**

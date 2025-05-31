@@ -65,6 +65,75 @@ vi.mock("@/utils/encryption", () => ({
   decryptData: vi.fn(),
 }));
 
+// Mock convex-better-auth
+vi.mock("@erquhart/convex-better-auth/react", () => ({
+  ConvexBetterAuthProvider: ({ children }: { children: ReactNode }) => children,
+}));
+
+vi.mock("@erquhart/convex-better-auth/client/plugins", () => ({
+  convexClient: vi.fn(() => ({})),
+  crossDomainClient: vi.fn(() => ({})),
+}));
+
+vi.mock("@erquhart/convex-better-auth/plugins", () => ({
+  convex: vi.fn(() => ({})),
+  crossDomain: vi.fn(() => ({})),
+}));
+
+vi.mock("@erquhart/convex-better-auth/convex.config", () => ({
+  default: {},
+}));
+
+vi.mock("@erquhart/convex-better-auth", () => ({
+  BetterAuth: vi.fn().mockImplementation(() => ({
+    createAuthFunctions: vi.fn(() => ({
+      createUser: vi.fn(),
+      updateUser: vi.fn(),
+      deleteUser: vi.fn(),
+      createSession: vi.fn(),
+    })),
+    getHeaders: vi.fn(),
+  })),
+  convexAdapter: vi.fn(),
+  AuthFunctions: {},
+}));
+
+vi.mock("better-auth/react", () => ({
+  createAuthClient: vi.fn(() => ({
+    signIn: {
+      email: vi.fn(),
+    },
+    signUp: {
+      email: vi.fn(),
+    },
+    signOut: vi.fn(),
+    resetPassword: vi.fn(),
+    forgetPassword: vi.fn(),
+  })),
+}));
+
+vi.mock("better-auth", () => ({
+  betterAuth: vi.fn(() => ({
+    api: {
+      getSession: vi.fn(),
+    },
+  })),
+}));
+
+// Mock Resend email service
+vi.mock("resend", () => ({
+  Resend: vi.fn().mockImplementation(() => ({
+    emails: {
+      send: vi.fn().mockResolvedValue({
+        id: "mock-email-id",
+        from: "hey@namesake.fyi",
+        to: "user@example.com",
+        created_at: new Date().toISOString(),
+      }),
+    },
+  })),
+}));
+
 // Add type for mocked IntersectionObserver
 declare global {
   interface Window {

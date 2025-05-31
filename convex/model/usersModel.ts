@@ -74,10 +74,3 @@ export function setIsMinor(
 ) {
   return ctx.db.patch(userId, { isMinor });
 }
-
-export async function deleteUser(
-  ctx: MutationCtx,
-  { userId }: { userId: Id<"users"> },
-) {
-  await ctx.db.patch(userId, { deletedAt: Date.now() });
-}

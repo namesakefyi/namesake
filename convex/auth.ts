@@ -7,6 +7,7 @@ import {
 import { convex, crossDomain } from "@erquhart/convex-better-auth/plugins";
 import { betterAuth } from "better-auth";
 import { Resend } from "resend";
+import { DeleteAccountEmail } from "../emails/DeleteAccount";
 import { ResetPasswordEmail } from "../emails/ResetPassword";
 import { components, internal } from "./_generated/api";
 import type { DataModel, Id } from "./_generated/dataModel";
@@ -46,6 +47,19 @@ export const createAuth = (ctx: GenericCtx) =>
           subject: "Reset your password",
           react: ResetPasswordEmail({ email: user.email, url }),
         });
+      },
+    },
+    user: {
+      deleteUser: {
+        enabled: true,
+        sendDeleteAccountVerification: async ({ user, url }, _request) => {
+          await resend.emails.send({
+            from: "hey@namesake.fyi",
+            to: user.email,
+            subject: "Delete your account",
+            react: DeleteAccountEmail({ email: user.email, url }),
+          });
+        },
       },
     },
   });

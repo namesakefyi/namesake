@@ -2,8 +2,7 @@ import { v } from "convex/values";
 import type { Birthplace, Jurisdiction, Role } from "../src/constants";
 import type { Id } from "./_generated/dataModel";
 import { query } from "./_generated/server";
-import { betterAuthComponent } from "./auth";
-import { userMutation, userQuery } from "./helpers";
+import { userMutation } from "./helpers";
 import * as Users from "./model/usersModel";
 import { birthplace, jurisdiction } from "./validators";
 
@@ -20,16 +19,22 @@ export const getById = query({
 export const getCurrent = query({
   args: {},
   handler: async (ctx) => {
-    const userId = await betterAuthComponent.getAuthUserId(ctx);
-    if (!userId) return null;
-    return await Users.getById(ctx, { userId: userId as Id<"users"> });
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return null;
+    return await Users.getById(ctx, {
+      userId: identity.subject as Id<"users">,
+    });
   },
 });
 
-export const getCurrentRole = userQuery({
+export const getCurrentRole = query({
   args: {},
   handler: async (ctx) => {
-    const user = await Users.getById(ctx, { userId: ctx.userId });
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return null;
+    const user = await Users.getById(ctx, {
+      userId: identity.subject as Id<"users">,
+    });
     return user?.role as Role;
   },
 });
@@ -88,12 +93,5 @@ export const setCurrentUserIsMinor = userMutation({
       userId: ctx.userId,
       isMinor: args.isMinor,
     });
-  },
-});
-
-export const deleteCurrentUser = userMutation({
-  args: {},
-  handler: async (ctx) => {
-    await Users.deleteUser(ctx, { userId: ctx.userId });
   },
 });

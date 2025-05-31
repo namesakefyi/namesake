@@ -5,13 +5,11 @@ import {
   Modal,
   ModalFooter,
   ModalHeader,
-  TextField,
 } from "@/components/common";
 import { SettingsItem } from "@/components/settings";
-import { api } from "@convex/_generated/api";
-import { useNavigate } from "@tanstack/react-router";
-import { useMutation } from "convex/react";
+import { authClient } from "@/main";
 import { Trash } from "lucide-react";
+import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -26,62 +24,47 @@ const DeleteAccountModal = ({
   onOpenChange,
   onSubmit,
 }: DeleteAccountModalProps) => {
-  const navigate = useNavigate();
-  const [value, setValue] = useState("");
   const [error, setError] = useState<string>();
   const [isDeleting, setIsDeleting] = useState(false);
+  const postHog = usePostHog();
 
   const clearLocalStorage = () => {
     localStorage.removeItem("theme");
   };
-  const deleteAccount = useMutation(api.users.deleteCurrentUser);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(undefined);
 
-    if (value !== "DELETE") {
-      setError("Please type DELETE to confirm.");
+    setIsDeleting(true);
+    const { error } = await authClient.deleteUser({
+      callbackURL: "/goodbye",
+    });
+    if (error) {
+      setError(error.message || "Something went wrong.");
+      postHog.captureException(error);
       return;
     }
-
-    try {
-      setIsDeleting(true);
-      await deleteAccount();
-      clearLocalStorage();
-      onSubmit();
-      navigate({ to: "/signout" });
-      toast.success("Account deleted.");
-    } catch (err) {
-      setError("Failed to delete account. Please try again.");
-    } finally {
-      setIsDeleting(false);
-    }
+    toast.success("Check your email to finish deleting your account.");
+    clearLocalStorage();
+    onSubmit();
+    setIsDeleting(false);
   };
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalHeader
         title="Delete account?"
-        description="This will permanently erase your account and all data."
+        description="A confirmation email will be sent to your email address."
       />
       <Form onSubmit={handleSubmit} className="w-full">
         {error ? (
           <Banner variant="danger">{error}</Banner>
         ) : (
-          <Banner variant="warning">This action cannot be undone.</Banner>
+          <Banner variant="warning">
+            Once deleted, your account is gone forever.
+          </Banner>
         )}
-        <TextField
-          label="Type DELETE to confirm"
-          isRequired
-          value={value}
-          onChange={(value) => {
-            setValue(value);
-            setError(undefined);
-          }}
-          className="w-full"
-          autoComplete="off"
-        />
         <ModalFooter>
           <Button
             variant="secondary"
@@ -91,7 +74,7 @@ const DeleteAccountModal = ({
             Cancel
           </Button>
           <Button type="submit" variant="destructive" isDisabled={isDeleting}>
-            Delete account
+            Send deletion email
           </Button>
         </ModalFooter>
       </Form>

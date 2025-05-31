@@ -1,7 +1,7 @@
 import { AppNav } from "@/components/app";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Navigate, Outlet, createFileRoute } from "@tanstack/react-router";
-import { useConvexAuth } from "convex/react";
+import { Authenticated, Unauthenticated } from "convex/react";
 import { tv } from "tailwind-variants";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -9,7 +9,6 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 function AuthenticatedRoute() {
-  const { isAuthenticated, isLoading } = useConvexAuth();
   const isMobile = useIsMobile();
 
   const styles = tv({
@@ -21,16 +20,17 @@ function AuthenticatedRoute() {
     },
   });
 
-  if (isLoading) return <div>Loading...</div>;
-
-  if (isAuthenticated) {
-    return (
-      <main className={styles({ isMobile })}>
-        <Outlet />
-        {isMobile && <AppNav />}
-      </main>
-    );
-  }
-
-  return <Navigate to="/signin" />;
+  return (
+    <>
+      <Authenticated>
+        <main className={styles({ isMobile })}>
+          <Outlet />
+          {isMobile && <AppNav />}
+        </main>
+      </Authenticated>
+      <Unauthenticated>
+        <Navigate to="/signin" />
+      </Unauthenticated>
+    </>
+  );
 }
