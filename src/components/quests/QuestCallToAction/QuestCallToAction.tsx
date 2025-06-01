@@ -110,7 +110,7 @@ const QuestCTAButton = ({ quest, userQuest }: QuestCTAButtonProps) => {
         onClick={handleAddQuest}
         isSubmitting={isSubmitting}
       >
-        Add to my list
+        Add to my quests
       </Button>
     );
   }

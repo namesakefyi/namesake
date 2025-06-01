@@ -73,7 +73,7 @@ describe("StatusBadge", () => {
 
     // Should show the icon only
     const badge = screen.getByTestId("badge");
-    expect(badge).toHaveClass("size-5");
+    expect(badge).toHaveClass("size-6");
   });
 
   it("returns null when status is undefined", () => {
