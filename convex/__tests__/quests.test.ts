@@ -1,6 +1,7 @@
 import { convexTest } from "convex-test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "../_generated/api";
+import { createAdmin, createUser } from "../helpers";
 import schema from "../schema";
 import { modules } from "../test.setup";
 
@@ -18,15 +19,7 @@ describe("quests", () => {
   describe("getAll", () => {
     it("should return all quests", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createUser(t);
 
       await t.run(async (ctx) => {
         await ctx.db.insert("quests", {
@@ -58,15 +51,7 @@ describe("quests", () => {
   describe("getAllActive", () => {
     it("should only return non-deleted quests", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createUser(t);
 
       await t.run(async (ctx) => {
         await ctx.db.insert("quests", {
@@ -98,15 +83,7 @@ describe("quests", () => {
   describe("create", () => {
     it("should create a quest with required fields", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "admin@namesake.fyi",
-          role: "admin",
-        });
-      });
-
-      const asAdmin = t.withIdentity({ subject: userId });
+      const { asAdmin, adminId } = await createAdmin(t);
 
       const { questId, slug } = await asAdmin.mutation(api.quests.create, {
         title: "New Quest",
@@ -121,22 +98,14 @@ describe("quests", () => {
       expect(quest?.category).toBe("education");
       expect(quest?.jurisdiction).toBe("MA");
       expect(quest?.slug).toBe(slug);
-      expect(quest?.creationUser).toBe(userId);
+      expect(quest?.creationUser).toBe(adminId);
       expect(quest?.updatedAt).toBe(UPDATE_TIMESTAMP);
-      expect(quest?.updatedBy).toBe(userId);
+      expect(quest?.updatedBy).toBe(adminId);
     });
 
     it("should generate unique slugs for duplicate titles", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "admin@namesake.fyi",
-          role: "admin",
-        });
-      });
-
-      const asAdmin = t.withIdentity({ subject: userId });
+      const { asAdmin } = await createAdmin(t);
 
       const quest1 = await asAdmin.mutation(api.quests.create, {
         title: "Same Title",
@@ -157,15 +126,7 @@ describe("quests", () => {
   describe("softDelete", () => {
     it("should mark a quest as deleted", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "admin@namesake.fyi",
-          role: "admin",
-        });
-      });
-
-      const asAdmin = t.withIdentity({ subject: userId });
+      const { asAdmin, adminId } = await createAdmin(t);
 
       const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "To Delete",
@@ -179,20 +140,12 @@ describe("quests", () => {
       expect(quest?.deletedAt).toBeDefined();
       expect(typeof quest?.deletedAt).toBe("number");
       expect(quest?.updatedAt).toBe(UPDATE_TIMESTAMP);
-      expect(quest?.updatedBy).toBe(userId);
+      expect(quest?.updatedBy).toBe(adminId);
     });
 
     it("should be reversible", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "admin@namesake.fyi",
-          role: "admin",
-        });
-      });
-
-      const asAdmin = t.withIdentity({ subject: userId });
+      const { asAdmin, adminId } = await createAdmin(t);
 
       const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "To Restore",
@@ -206,22 +159,14 @@ describe("quests", () => {
       const quest = await asAdmin.query(api.quests.getById, { questId });
       expect(quest?.deletedAt).toBeUndefined();
       expect(quest?.updatedAt).toBe(UPDATE_TIMESTAMP);
-      expect(quest?.updatedBy).toBe(userId);
+      expect(quest?.updatedBy).toBe(adminId);
     });
   });
 
   describe("deleteForever", () => {
     it("should permanently delete a quest and its associated userQuests", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "admin@namesake.fyi",
-          role: "admin",
-        });
-      });
-
-      const asAdmin = t.withIdentity({ subject: userId });
+      const { asAdmin, adminId } = await createAdmin(t);
 
       const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "To Delete Forever",
@@ -232,7 +177,7 @@ describe("quests", () => {
       // Create a userQuest
       await t.run(async (ctx) => {
         await ctx.db.insert("userQuests", {
-          userId,
+          userId: adminId,
           questId,
           status: "active",
         });
@@ -254,15 +199,7 @@ describe("quests", () => {
   describe("getByCategoryAndJurisdiction", () => {
     it("should return quest matching category and jurisdiction", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "admin@namesake.fyi",
-          role: "admin",
-        });
-      });
-
-      const asAdmin = t.withIdentity({ subject: userId });
+      const { asAdmin } = await createAdmin(t);
 
       await asAdmin.mutation(api.quests.create, {
         title: "Court Order Quest",
@@ -270,14 +207,7 @@ describe("quests", () => {
         jurisdiction: "MA",
       });
 
-      const userId2 = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId2 });
+      const { asUser } = await createUser(t);
 
       const quest = await asUser.query(
         api.quests.getByCategoryAndJurisdiction,
@@ -295,15 +225,7 @@ describe("quests", () => {
 
     it("should return null if jurisdiction is not provided", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser } = await createUser(t);
 
       const quest = await asUser.query(
         api.quests.getByCategoryAndJurisdiction,
