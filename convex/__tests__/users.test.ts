@@ -40,16 +40,8 @@ describe("users", () => {
   describe("getCurrent", () => {
     it("should return the current user", async () => {
       const t = convexTest(schema, modules);
+      const { asUser } = await createUser(t, "test@example.com", "Test User");
 
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-          name: "Test User",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
       const user = await asUser.query(api.users.getCurrent, {});
       expect(user?.email).toBe("test@example.com");
       expect(user?.name).toBe("Test User");
@@ -66,17 +58,14 @@ describe("users", () => {
   describe("getCurrentRole", () => {
     it("should return the current user's role", async () => {
       const t = convexTest(schema, modules);
+      const { asUser } = await createUser(t);
 
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "admin",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
       const role = await asUser.query(api.users.getCurrentRole, {});
-      expect(role).toBe("admin");
+      expect(role).toBe("user");
+
+      const { asAdmin } = await createAdmin(t);
+      const adminRole = await asAdmin.query(api.users.getCurrentRole, {});
+      expect(adminRole).toBe("admin");
     });
 
     it("should return null if user not authenticated", async () => {
@@ -96,13 +85,7 @@ describe("users", () => {
 
     it("should return an error if not authorized", async () => {
       const t = convexTest(schema, modules);
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser } = await createUser(t);
       await expect(
         asUser.query(api.users.getByEmail, { email: "test@example.com" }),
       ).rejects.toThrow("Insufficient permissions");
@@ -111,14 +94,7 @@ describe("users", () => {
     it("should return user by email", async () => {
       const t = convexTest(schema, modules);
       const { asAdmin } = await createAdmin(t);
-
-      await t.run(async (ctx) => {
-        await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-          name: "Test User",
-        });
-      });
+      await createUser(t, "test@example.com", "Test User");
 
       const user = await asAdmin.query(api.users.getByEmail, {
         email: "test@example.com",
@@ -237,7 +213,7 @@ describe("users", () => {
   describe("deleteCurrentUser", () => {
     it("should delete user and all associated data", async () => {
       const t = convexTest(schema, modules);
-      const { userId } = await createUser(t);
+      const { asUser, userId } = await createUser(t);
 
       // Create associated data
       await t.run(async (ctx) => {
@@ -266,7 +242,6 @@ describe("users", () => {
       });
 
       // Delete user and verify all data is deleted
-      const asUser = t.withIdentity({ subject: userId });
       await asUser.mutation(api.users.deleteCurrentUser, {});
 
       await t.run(async (ctx) => {

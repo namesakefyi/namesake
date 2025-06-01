@@ -59,10 +59,12 @@ export const adminMutation = customMutation(mutation, {
 export const createUser = async (
   t: ReturnType<typeof convexTest>,
   email?: string,
+  name?: string,
 ) => {
   const userId = await t.run(async (ctx) => {
     return await ctx.db.insert("users", {
       email: email ?? "user@example.com",
+      name: name ?? "Test User",
       role: "user",
     });
   });
@@ -73,10 +75,12 @@ export const createUser = async (
 export const createAdmin = async (
   t: ReturnType<typeof convexTest>,
   email?: string,
+  name?: string,
 ) => {
   const adminId = await t.run(async (ctx) => {
     return await ctx.db.insert("users", {
       email: email ?? "admin@namesake.fyi",
+      name: name ?? "Test Admin",
       role: "admin",
     });
   });

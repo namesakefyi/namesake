@@ -1,6 +1,7 @@
 import { convexTest } from "convex-test";
 import { describe, expect, it, vi } from "vitest";
 import { api } from "../../_generated/api";
+import { createAdmin, createUser } from "../../helpers";
 import schema from "../../schema";
 import { modules } from "../../test.setup";
 import { createOrUpdateUser } from "../authModel";
@@ -28,6 +29,7 @@ describe("authModel", () => {
 
     it("should set role to admin in development environment", async () => {
       const t = convexTest(schema, modules);
+      const { asAdmin } = await createAdmin(t);
 
       vi.stubEnv("NODE_ENV", "development");
       await t.run(async (ctx) => {
@@ -37,15 +39,6 @@ describe("authModel", () => {
           },
         });
       });
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "admin@namesake.fyi",
-          role: "admin",
-        });
-      });
-
-      const asAdmin = t.withIdentity({ subject: userId });
 
       const user = await asAdmin.query(api.users.getByEmail, {
         email: "devUser@test.com",
@@ -57,6 +50,7 @@ describe("authModel", () => {
 
     it("should set role to user in production environment", async () => {
       const t = convexTest(schema, modules);
+      const { asAdmin } = await createAdmin(t);
 
       vi.stubEnv("NODE_ENV", "production");
       await t.run(async (ctx) => {
@@ -66,14 +60,6 @@ describe("authModel", () => {
           },
         });
       });
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "admin@namesake.fyi",
-          role: "admin",
-        });
-      });
-      const asAdmin = t.withIdentity({ subject: userId });
 
       const user = await asAdmin.query(api.users.getByEmail, {
         email: "prodUser@test.com",
@@ -85,16 +71,7 @@ describe("authModel", () => {
 
     it("should initialize default user settings", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await createOrUpdateUser(ctx, {
-          profile: {
-            email: "testUser@test.com",
-          },
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser } = await createUser(t);
 
       const userSettings = await asUser.query(
         api.userSettings.getCurrentUserSettings,

@@ -334,15 +334,7 @@ describe("userQuests", () => {
   describe("deleteForever", () => {
     it("should delete a user quest", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createUser(t);
 
       const questId = await t.run(async (ctx) => {
         return await ctx.db.insert("quests", {
