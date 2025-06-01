@@ -1,7 +1,7 @@
 import { convexTest } from "convex-test";
 import { describe, expect, it, vi } from "vitest";
 import { api } from "../../_generated/api";
-import { createAdmin, createUser } from "../../helpers";
+import { createAdmin } from "../../helpers";
 import schema from "../../schema";
 import { modules } from "../../test.setup";
 import { createOrUpdateUser } from "../authModel";
@@ -71,7 +71,15 @@ describe("authModel", () => {
 
     it("should initialize default user settings", async () => {
       const t = convexTest(schema, modules);
-      const { asUser } = await createUser(t);
+
+      const userId = await t.run(async (ctx) => {
+        return await createOrUpdateUser(ctx, {
+          profile: {
+            email: "testUser@test.com",
+          },
+        });
+      });
+      const asUser = t.withIdentity({ subject: userId });
 
       const userSettings = await asUser.query(
         api.userSettings.getCurrentUserSettings,

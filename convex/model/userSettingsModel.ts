@@ -9,7 +9,7 @@ export async function getSettingsForUser(
   const userSettings = await ctx.db
     .query("userSettings")
     .withIndex("userId", (q) => q.eq("userId", userId))
-    .first();
+    .unique();
 
   if (!userSettings) throw new Error("User settings not found");
 
