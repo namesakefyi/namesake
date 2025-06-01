@@ -1,18 +1,17 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
-import { userMutation } from "./helpers";
+import { adminQuery, userMutation, userQuery } from "./helpers";
 import * as EarlyAccessCodes from "./model/earlyAccessCodesModel";
 
-export const getAll = query({
+export const getAll = adminQuery({
   handler: async (ctx) => {
     return await EarlyAccessCodes.getAll(ctx);
   },
 });
 
-export const getCodesForUser = query({
-  args: { userId: v.id("users") },
-  handler: async (ctx, { userId }) => {
-    return await EarlyAccessCodes.getCodesForUser(ctx, { userId });
+export const getCodesForUser = userQuery({
+  args: {},
+  handler: async (ctx) => {
+    return await EarlyAccessCodes.getCodesForUser(ctx, { userId: ctx.userId });
   },
 });
 
@@ -23,7 +22,7 @@ export const create = userMutation({
   },
 });
 
-export const redeem = mutation({
+export const redeem = userMutation({
   args: { earlyAccessCodeId: v.id("earlyAccessCodes") },
   handler: async (ctx, { earlyAccessCodeId }) => {
     return await EarlyAccessCodes.redeem(ctx, { earlyAccessCodeId });

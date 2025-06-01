@@ -38,7 +38,16 @@ describe("authModel", () => {
         });
       });
 
-      const user = await t.query(api.users.getByEmail, {
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "admin@namesake.fyi",
+          role: "admin",
+        });
+      });
+
+      const asAdmin = t.withIdentity({ subject: userId });
+
+      const user = await asAdmin.query(api.users.getByEmail, {
         email: "devUser@test.com",
       });
 
@@ -58,7 +67,15 @@ describe("authModel", () => {
         });
       });
 
-      const user = await t.query(api.users.getByEmail, {
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "admin@namesake.fyi",
+          role: "admin",
+        });
+      });
+      const asAdmin = t.withIdentity({ subject: userId });
+
+      const user = await asAdmin.query(api.users.getByEmail, {
         email: "prodUser@test.com",
       });
 
@@ -77,9 +94,11 @@ describe("authModel", () => {
         });
       });
 
-      const userSettings = await t.query(api.userSettings.getByUserId, {
-        userId,
-      });
+      const asUser = t.withIdentity({ subject: userId });
+
+      const userSettings = await asUser.query(
+        api.userSettings.getCurrentUserSettings,
+      );
 
       expect(userSettings).toBeDefined();
       expect(userSettings?.theme).toBe("system");

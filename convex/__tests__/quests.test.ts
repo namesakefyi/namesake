@@ -101,20 +101,20 @@ describe("quests", () => {
 
       const userId = await t.run(async (ctx) => {
         return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
+          email: "admin@namesake.fyi",
+          role: "admin",
         });
       });
 
-      const asUser = t.withIdentity({ subject: userId });
+      const asAdmin = t.withIdentity({ subject: userId });
 
-      const { questId, slug } = await asUser.mutation(api.quests.create, {
+      const { questId, slug } = await asAdmin.mutation(api.quests.create, {
         title: "New Quest",
         category: "education",
         jurisdiction: "MA",
       });
 
-      const quest = await asUser.query(api.quests.getById, { questId });
+      const quest = await asAdmin.query(api.quests.getById, { questId });
 
       expect(quest).not.toBeNull();
       expect(quest?.title).toBe("New Quest");
@@ -131,20 +131,20 @@ describe("quests", () => {
 
       const userId = await t.run(async (ctx) => {
         return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
+          email: "admin@namesake.fyi",
+          role: "admin",
         });
       });
 
-      const asUser = t.withIdentity({ subject: userId });
+      const asAdmin = t.withIdentity({ subject: userId });
 
-      const quest1 = await asUser.mutation(api.quests.create, {
+      const quest1 = await asAdmin.mutation(api.quests.create, {
         title: "Same Title",
         category: "education",
         jurisdiction: "MA",
       });
 
-      const quest2 = await asUser.mutation(api.quests.create, {
+      const quest2 = await asAdmin.mutation(api.quests.create, {
         title: "Same Title",
         category: "education",
         jurisdiction: "MA",
@@ -160,22 +160,22 @@ describe("quests", () => {
 
       const userId = await t.run(async (ctx) => {
         return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
+          email: "admin@namesake.fyi",
+          role: "admin",
         });
       });
 
-      const asUser = t.withIdentity({ subject: userId });
+      const asAdmin = t.withIdentity({ subject: userId });
 
-      const { questId } = await asUser.mutation(api.quests.create, {
+      const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "To Delete",
         category: "education",
         jurisdiction: "MA",
       });
 
-      await asUser.mutation(api.quests.softDelete, { questId });
+      await asAdmin.mutation(api.quests.softDelete, { questId });
 
-      const quest = await asUser.query(api.quests.getById, { questId });
+      const quest = await asAdmin.query(api.quests.getById, { questId });
       expect(quest?.deletedAt).toBeDefined();
       expect(typeof quest?.deletedAt).toBe("number");
       expect(quest?.updatedAt).toBe(UPDATE_TIMESTAMP);
@@ -187,23 +187,23 @@ describe("quests", () => {
 
       const userId = await t.run(async (ctx) => {
         return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
+          email: "admin@namesake.fyi",
+          role: "admin",
         });
       });
 
-      const asUser = t.withIdentity({ subject: userId });
+      const asAdmin = t.withIdentity({ subject: userId });
 
-      const { questId } = await asUser.mutation(api.quests.create, {
+      const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "To Restore",
         category: "education",
         jurisdiction: "MA",
       });
 
-      await asUser.mutation(api.quests.softDelete, { questId });
-      await asUser.mutation(api.quests.undoSoftDelete, { questId });
+      await asAdmin.mutation(api.quests.softDelete, { questId });
+      await asAdmin.mutation(api.quests.undoSoftDelete, { questId });
 
-      const quest = await asUser.query(api.quests.getById, { questId });
+      const quest = await asAdmin.query(api.quests.getById, { questId });
       expect(quest?.deletedAt).toBeUndefined();
       expect(quest?.updatedAt).toBe(UPDATE_TIMESTAMP);
       expect(quest?.updatedBy).toBe(userId);
@@ -216,14 +216,14 @@ describe("quests", () => {
 
       const userId = await t.run(async (ctx) => {
         return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
+          email: "admin@namesake.fyi",
+          role: "admin",
         });
       });
 
-      const asUser = t.withIdentity({ subject: userId });
+      const asAdmin = t.withIdentity({ subject: userId });
 
-      const { questId } = await asUser.mutation(api.quests.create, {
+      const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "To Delete Forever",
         category: "education",
         jurisdiction: "MA",
@@ -238,13 +238,13 @@ describe("quests", () => {
         });
       });
 
-      await asUser.mutation(api.quests.deleteForever, { questId });
+      await asAdmin.mutation(api.quests.deleteForever, { questId });
 
-      const quest = await asUser.query(api.quests.getById, { questId });
+      const quest = await asAdmin.query(api.quests.getById, { questId });
       expect(quest).toBeNull();
 
       // Verify userQuest is also deleted
-      const userQuest = await asUser.query(api.userQuests.getByQuestId, {
+      const userQuest = await asAdmin.query(api.userQuests.getByQuestId, {
         questId,
       });
       expect(userQuest).toBeNull();
@@ -257,18 +257,27 @@ describe("quests", () => {
 
       const userId = await t.run(async (ctx) => {
         return await ctx.db.insert("users", {
+          email: "admin@namesake.fyi",
+          role: "admin",
+        });
+      });
+
+      const asAdmin = t.withIdentity({ subject: userId });
+
+      await asAdmin.mutation(api.quests.create, {
+        title: "Court Order Quest",
+        category: "courtOrder",
+        jurisdiction: "MA",
+      });
+
+      const userId2 = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
           email: "test@example.com",
           role: "user",
         });
       });
 
-      const asUser = t.withIdentity({ subject: userId });
-
-      await asUser.mutation(api.quests.create, {
-        title: "Court Order Quest",
-        category: "courtOrder",
-        jurisdiction: "MA",
-      });
+      const asUser = t.withIdentity({ subject: userId2 });
 
       const quest = await asUser.query(
         api.quests.getByCategoryAndJurisdiction,

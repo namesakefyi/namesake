@@ -5,7 +5,7 @@ import schema from "../schema";
 import { modules } from "../test.setup";
 
 describe("userSettings", () => {
-  describe("getByUserId", () => {
+  describe("getCurrentUserSettings", () => {
     it("should throw error if user settings not found", async () => {
       const t = convexTest(schema, modules);
 
@@ -16,8 +16,10 @@ describe("userSettings", () => {
         });
       });
 
+      const asUser = t.withIdentity({ subject: userId });
+
       await expect(
-        t.query(api.userSettings.getByUserId, { userId }),
+        asUser.query(api.userSettings.getCurrentUserSettings),
       ).rejects.toThrow("User settings not found");
     });
 
@@ -38,7 +40,10 @@ describe("userSettings", () => {
         });
       });
 
-      const settings = await t.query(api.userSettings.getByUserId, { userId });
+      const asUser = t.withIdentity({ subject: userId });
+      const settings = await asUser.query(
+        api.userSettings.getCurrentUserSettings,
+      );
 
       expect(settings._id).toBe(settingsId);
       expect(settings.theme).toBe("dark");
@@ -88,7 +93,9 @@ describe("userSettings", () => {
         theme: "dark",
       });
 
-      const settings = await t.query(api.userSettings.getByUserId, { userId });
+      const settings = await asUser.query(
+        api.userSettings.getCurrentUserSettings,
+      );
       expect(settings.theme).toBe("dark");
     });
   });

@@ -2,16 +2,16 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import type { Birthplace, Jurisdiction, Role } from "../src/constants";
 import { query } from "./_generated/server";
-import { userMutation } from "./helpers";
+import { adminQuery, userMutation } from "./helpers";
 import * as Users from "./model/usersModel";
 import { birthplace, jurisdiction } from "./validators";
 
-export const getAll = query({
+export const getAll = adminQuery({
   args: {},
   handler: async (ctx) => await Users.getAll(ctx),
 });
 
-export const getById = query({
+export const getById = adminQuery({
   args: { userId: v.optional(v.id("users")) },
   handler: async (ctx, { userId }) => await Users.getById(ctx, { userId }),
 });
@@ -33,7 +33,7 @@ export const getCurrentRole = query({
   },
 });
 
-export const getByEmail = query({
+export const getByEmail = adminQuery({
   args: { email: v.string() },
   handler: async (ctx, { email }) => {
     return await Users.getByEmail(ctx, { email });

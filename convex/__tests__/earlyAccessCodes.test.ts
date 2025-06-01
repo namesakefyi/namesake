@@ -10,18 +10,18 @@ describe("earlyAccessCodes", () => {
 
     const userId = await t.run(async (ctx) => {
       return await ctx.db.insert("users", {
-        email: "test@example.com",
+        email: "admin@namesake.fyi",
         role: "admin",
       });
     });
 
-    const asUser = t.withIdentity({ subject: userId });
+    const asAdmin = t.withIdentity({ subject: userId });
 
     // Create a code
-    await asUser.mutation(api.earlyAccessCodes.create, {});
+    await asAdmin.mutation(api.earlyAccessCodes.create, {});
 
     // Verify code creation
-    const codes = await t.query(api.earlyAccessCodes.getAll, {});
+    const codes = await asAdmin.query(api.earlyAccessCodes.getAll, {});
     expect(codes.length).toBe(1);
     expect(codes[0]?.createdBy).toBe(userId);
     expect(codes[0]?.claimedAt).toBeUndefined();
@@ -54,17 +54,17 @@ describe("earlyAccessCodes", () => {
     await asUser2.mutation(api.earlyAccessCodes.create, {});
 
     // Verify user1's codes
-    const user1Codes = await t.query(api.earlyAccessCodes.getCodesForUser, {
-      userId: user1Id,
-    });
+    const user1Codes = await asUser1.query(
+      api.earlyAccessCodes.getCodesForUser,
+    );
     expect(user1Codes.length).toBe(2);
     expect(user1Codes[0]?.createdBy).toBe(user1Id);
     expect(user1Codes[1]?.createdBy).toBe(user1Id);
 
     // Verify user2's codes
-    const user2Codes = await t.query(api.earlyAccessCodes.getCodesForUser, {
-      userId: user2Id,
-    });
+    const user2Codes = await asUser2.query(
+      api.earlyAccessCodes.getCodesForUser,
+    );
     expect(user2Codes.length).toBe(1);
     expect(user2Codes[0]?.createdBy).toBe(user2Id);
   });
@@ -101,7 +101,7 @@ describe("earlyAccessCodes", () => {
     });
 
     // Verify code is redeemed
-    const codes = await t.query(api.earlyAccessCodes.getAll, {});
+    const codes = await asAdmin.query(api.earlyAccessCodes.getAll, {});
     expect(codes[0]?.claimedAt).toBeDefined();
   });
 

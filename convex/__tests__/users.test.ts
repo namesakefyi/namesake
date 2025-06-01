@@ -7,8 +7,39 @@ import { modules } from "../test.setup";
 
 describe("users", () => {
   describe("getAll", () => {
+    it("should return an error if not authenticated", async () => {
+      const t = convexTest(schema, modules);
+      await expect(t.query(api.users.getAll, {})).rejects.toThrow(
+        "Not authenticated",
+      );
+    });
+
+    it("should return an error if not authorized", async () => {
+      const t = convexTest(schema, modules);
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "test@example.com",
+          role: "user",
+        });
+      });
+      const asUser = t.withIdentity({ subject: userId });
+      await expect(asUser.query(api.users.getAll, {})).rejects.toThrow(
+        "Insufficient permissions",
+      );
+    });
+
     it("should return all users", async () => {
       const t = convexTest(schema, modules);
+
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "admin@namesake.fyi",
+          role: "admin",
+          name: "Admin User",
+        });
+      });
+
+      const asAdmin = t.withIdentity({ subject: userId });
 
       await t.run(async (ctx) => {
         await ctx.db.insert("users", {
@@ -22,8 +53,9 @@ describe("users", () => {
         });
       });
 
-      const users = await t.query(api.users.getAll, {});
-      expect(users).toHaveLength(2);
+      const users = await asAdmin.query(api.users.getAll, {});
+      expect(users).toHaveLength(3);
+      expect(users.map((u) => u.email)).toContain("admin@namesake.fyi");
       expect(users.map((u) => u.email)).toContain("test1@example.com");
       expect(users.map((u) => u.email)).toContain("test2@example.com");
     });
@@ -79,8 +111,38 @@ describe("users", () => {
   });
 
   describe("getByEmail", () => {
+    it("should return an error if not authenticated", async () => {
+      const t = convexTest(schema, modules);
+      await expect(
+        t.query(api.users.getByEmail, { email: "test@example.com" }),
+      ).rejects.toThrow("Not authenticated");
+    });
+
+    it("should return an error if not authorized", async () => {
+      const t = convexTest(schema, modules);
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "test@example.com",
+          role: "user",
+        });
+      });
+      const asUser = t.withIdentity({ subject: userId });
+      await expect(
+        asUser.query(api.users.getByEmail, { email: "test@example.com" }),
+      ).rejects.toThrow("Insufficient permissions");
+    });
+
     it("should return user by email", async () => {
       const t = convexTest(schema, modules);
+
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "admin@namesake.fyi",
+          role: "admin",
+        });
+      });
+
+      const asAdmin = t.withIdentity({ subject: userId });
 
       await t.run(async (ctx) => {
         await ctx.db.insert("users", {
@@ -90,7 +152,7 @@ describe("users", () => {
         });
       });
 
-      const user = await t.query(api.users.getByEmail, {
+      const user = await asAdmin.query(api.users.getByEmail, {
         email: "test@example.com",
       });
       expect(user?.name).toBe("Test User");
@@ -98,7 +160,16 @@ describe("users", () => {
 
     it("should return null if user not found", async () => {
       const t = convexTest(schema, modules);
-      const user = await t.query(api.users.getByEmail, {
+
+      const userId = await t.run(async (ctx) => {
+        return await ctx.db.insert("users", {
+          email: "admin@namesake.fyi",
+          role: "admin",
+        });
+      });
+      const asAdmin = t.withIdentity({ subject: userId });
+
+      const user = await asAdmin.query(api.users.getByEmail, {
         email: "nonexistent@example.com",
       });
       expect(user).toBeNull();
