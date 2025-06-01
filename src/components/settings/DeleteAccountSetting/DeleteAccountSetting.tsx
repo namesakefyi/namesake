@@ -31,27 +31,25 @@ const DeleteAccountModal = ({
   const [isSending, setIsSending] = useState(false);
   const postHog = usePostHog();
 
-  const clearLocalStorage = () => {
-    localStorage.removeItem("theme");
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(undefined);
-
     setIsSending(true);
+
     const { error } = await authClient.deleteUser({
       callbackURL: "/goodbye",
     });
+
     if (error) {
       setError(error.message || "Something went wrong.");
+      setIsSending(false);
       postHog.captureException(error);
       return;
     }
-    clearLocalStorage();
+
     onSubmit();
-    setIsSending(false);
     toast.success("Check your email to finish deleting your account.");
+    setIsSending(false);
   };
 
   return (
