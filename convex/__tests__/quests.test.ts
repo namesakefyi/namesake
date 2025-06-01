@@ -16,6 +16,36 @@ describe("quests", () => {
     vi.useRealTimers();
   });
 
+  describe("count", () => {
+    it("should return the total number of quests", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createUser(t);
+
+      await t.run(async (ctx) => {
+        await ctx.db.insert("quests", {
+          title: "Test Quest 1",
+          slug: "test-quest-1",
+          category: "education",
+          jurisdiction: "MA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Test Quest 2",
+          slug: "test-quest-2",
+          category: "housing",
+          jurisdiction: "NY",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+      });
+
+      const count = await asUser.query(api.quests.count, {});
+      expect(count).toBe(2);
+    });
+  });
+
   describe("getAll", () => {
     it("should return all quests", async () => {
       const t = convexTest(schema, modules);
@@ -48,6 +78,39 @@ describe("quests", () => {
     });
   });
 
+  describe("getAllInCategory", () => {
+    it("should return quests in a specific category", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createUser(t);
+
+      await t.run(async (ctx) => {
+        await ctx.db.insert("quests", {
+          title: "Education Quest",
+          slug: "education-quest",
+          category: "education",
+          jurisdiction: "MA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Housing Quest",
+          slug: "housing-quest",
+          category: "housing",
+          jurisdiction: "NY",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+      });
+
+      const quests = await asUser.query(api.quests.getAllInCategory, {
+        category: "education",
+      });
+      expect(quests).toHaveLength(1);
+      expect(quests[0].title).toBe("Education Quest");
+    });
+  });
+
   describe("getAllActive", () => {
     it("should only return non-deleted quests", async () => {
       const t = convexTest(schema, modules);
@@ -77,6 +140,127 @@ describe("quests", () => {
       const quests = await asUser.query(api.quests.getAllActive, {});
       expect(quests).toHaveLength(1);
       expect(quests[0].title).toBe("Active Quest");
+    });
+  });
+
+  describe("getWithUserQuest", () => {
+    it("should return quest with associated user quest data", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createUser(t);
+
+      await t.run(async (ctx) => {
+        const questId = await ctx.db.insert("quests", {
+          title: "Test Quest",
+          slug: "test-quest",
+          category: "education",
+          jurisdiction: "MA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("userQuests", {
+          userId,
+          questId,
+          status: "active",
+        });
+      });
+
+      const quest = await asUser.query(api.quests.getWithUserQuest, {
+        slug: "test-quest",
+      });
+      expect(quest).not.toBeNull();
+      expect(quest?.quest?.title).toBe("Test Quest");
+      expect(quest?.userQuest).toBeDefined();
+      expect(quest?.userQuest?.status).toBe("active");
+    });
+  });
+
+  describe("getByCategoryAndJurisdiction", () => {
+    it("should return quest matching category and jurisdiction", async () => {
+      const t = convexTest(schema, modules);
+      const { asAdmin } = await createAdmin(t);
+
+      await asAdmin.mutation(api.quests.create, {
+        title: "Court Order Quest",
+        category: "courtOrder",
+        jurisdiction: "MA",
+      });
+
+      const { asUser } = await createUser(t);
+
+      const quest = await asUser.query(
+        api.quests.getByCategoryAndJurisdiction,
+        {
+          category: "courtOrder",
+          jurisdiction: "MA",
+        },
+      );
+
+      expect(quest).not.toBeNull();
+      expect(quest?.title).toBe("Court Order Quest");
+      expect(quest?.category).toBe("courtOrder");
+      expect(quest?.jurisdiction).toBe("MA");
+    });
+
+    it("should return null if jurisdiction is not provided", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser } = await createUser(t);
+
+      const quest = await asUser.query(
+        api.quests.getByCategoryAndJurisdiction,
+        {
+          category: "courtOrder",
+          jurisdiction: undefined,
+        },
+      );
+
+      expect(quest).toBeNull();
+    });
+  });
+
+  describe("getById", () => {
+    it("should return a quest by its ID", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createUser(t);
+
+      const questId = await t.run(async (ctx) => {
+        return await ctx.db.insert("quests", {
+          title: "Test Quest",
+          slug: "test-quest",
+          category: "education",
+          jurisdiction: "MA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+      });
+
+      const quest = await asUser.query(api.quests.getById, { questId });
+      expect(quest).not.toBeNull();
+      expect(quest?.title).toBe("Test Quest");
+    });
+  });
+
+  describe("getBySlug", () => {
+    it("should return a quest by its slug", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createUser(t);
+
+      await t.run(async (ctx) => {
+        await ctx.db.insert("quests", {
+          title: "Test Quest",
+          slug: "test-quest",
+          category: "education",
+          jurisdiction: "MA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+      });
+
+      const quest = await asUser.query(api.quests.getBySlug, {
+        slug: "test-quest",
+      });
+      expect(quest).not.toBeNull();
+      expect(quest?.title).toBe("Test Quest");
     });
   });
 
@@ -120,6 +304,146 @@ describe("quests", () => {
       });
 
       expect(quest1.slug).not.toBe(quest2.slug);
+    });
+  });
+
+  describe("setTitle", () => {
+    it("should update a quest's title", async () => {
+      const t = convexTest(schema, modules);
+      const { asAdmin } = await createAdmin(t);
+
+      const { questId } = await asAdmin.mutation(api.quests.create, {
+        title: "Original Title",
+        category: "education",
+        jurisdiction: "MA",
+      });
+
+      await asAdmin.mutation(api.quests.setTitle, {
+        questId,
+        title: "Updated Title",
+      });
+
+      const quest = await asAdmin.query(api.quests.getById, { questId });
+      expect(quest?.title).toBe("Updated Title");
+    });
+  });
+
+  describe("setJurisdiction", () => {
+    it("should update a quest's jurisdiction", async () => {
+      const t = convexTest(schema, modules);
+      const { asAdmin } = await createAdmin(t);
+
+      const { questId } = await asAdmin.mutation(api.quests.create, {
+        title: "Test Quest",
+        category: "education",
+        jurisdiction: "MA",
+      });
+
+      await asAdmin.mutation(api.quests.setJurisdiction, {
+        questId,
+        jurisdiction: "NY",
+      });
+
+      const quest = await asAdmin.query(api.quests.getById, { questId });
+      expect(quest?.jurisdiction).toBe("NY");
+    });
+  });
+
+  describe("setCategory", () => {
+    it("should update a quest's category", async () => {
+      const t = convexTest(schema, modules);
+      const { asAdmin } = await createAdmin(t);
+
+      const { questId } = await asAdmin.mutation(api.quests.create, {
+        title: "Test Quest",
+        category: "education",
+        jurisdiction: "MA",
+      });
+
+      await asAdmin.mutation(api.quests.setCategory, {
+        questId,
+        category: "housing",
+      });
+
+      const quest = await asAdmin.query(api.quests.getById, { questId });
+      expect(quest?.category).toBe("housing");
+    });
+  });
+
+  describe("setCosts", () => {
+    it("should update a quest's costs", async () => {
+      const t = convexTest(schema, modules);
+      const { asAdmin } = await createAdmin(t);
+
+      const { questId } = await asAdmin.mutation(api.quests.create, {
+        title: "Test Quest",
+        category: "education",
+        jurisdiction: "MA",
+      });
+
+      const costs = [
+        { cost: 50, description: "Application Fee", isRequired: true },
+        { cost: 25, description: "Processing Fee", isRequired: false },
+      ];
+
+      await asAdmin.mutation(api.quests.setCosts, {
+        questId,
+        costs,
+      });
+
+      const quest = await asAdmin.query(api.quests.getById, { questId });
+      expect(quest?.costs).toEqual(costs);
+    });
+  });
+
+  describe("setTimeRequired", () => {
+    it("should update a quest's time required", async () => {
+      const t = convexTest(schema, modules);
+      const { asAdmin } = await createAdmin(t);
+
+      const { questId } = await asAdmin.mutation(api.quests.create, {
+        title: "Test Quest",
+        category: "education",
+        jurisdiction: "MA",
+      });
+
+      const timeRequired = {
+        min: 1,
+        max: 2,
+        unit: "weeks",
+        description: "Processing time",
+      };
+
+      await asAdmin.mutation(api.quests.setTimeRequired, {
+        questId,
+        timeRequired,
+      });
+
+      const quest = await asAdmin.query(api.quests.getById, { questId });
+      expect(quest?.timeRequired).toEqual(timeRequired);
+    });
+  });
+
+  describe("setContent", () => {
+    it("should update a quest's content", async () => {
+      const t = convexTest(schema, modules);
+      const { asAdmin } = await createAdmin(t);
+
+      const { questId } = await asAdmin.mutation(api.quests.create, {
+        title: "Test Quest",
+        category: "education",
+        jurisdiction: "MA",
+      });
+
+      const content = "This is the updated content for the quest.";
+
+      await asAdmin.mutation(api.quests.setContent, {
+        questId,
+        content,
+      });
+
+      const quest = await asAdmin.query(api.quests.getById, { questId });
+      expect(quest?.content).toBe(content);
     });
   });
 
@@ -193,49 +517,6 @@ describe("quests", () => {
         questId,
       });
       expect(userQuest).toBeNull();
-    });
-  });
-
-  describe("getByCategoryAndJurisdiction", () => {
-    it("should return quest matching category and jurisdiction", async () => {
-      const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
-
-      await asAdmin.mutation(api.quests.create, {
-        title: "Court Order Quest",
-        category: "courtOrder",
-        jurisdiction: "MA",
-      });
-
-      const { asUser } = await createUser(t);
-
-      const quest = await asUser.query(
-        api.quests.getByCategoryAndJurisdiction,
-        {
-          category: "courtOrder",
-          jurisdiction: "MA",
-        },
-      );
-
-      expect(quest).not.toBeNull();
-      expect(quest?.title).toBe("Court Order Quest");
-      expect(quest?.category).toBe("courtOrder");
-      expect(quest?.jurisdiction).toBe("MA");
-    });
-
-    it("should return null if jurisdiction is not provided", async () => {
-      const t = convexTest(schema, modules);
-      const { asUser } = await createUser(t);
-
-      const quest = await asUser.query(
-        api.quests.getByCategoryAndJurisdiction,
-        {
-          category: "courtOrder",
-          jurisdiction: undefined,
-        },
-      );
-
-      expect(quest).toBeNull();
     });
   });
 });

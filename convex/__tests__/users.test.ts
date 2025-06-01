@@ -194,6 +194,22 @@ describe("users", () => {
     });
   });
 
+  describe("setResidence", () => {
+    it("should update user residence", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createUser(t);
+
+      await asUser.mutation(api.users.setResidence, {
+        residence: "CA",
+      });
+
+      const user = await t.run(async (ctx) => {
+        return await ctx.db.get(userId);
+      });
+      expect(user?.residence).toBe("CA");
+    });
+  });
+
   describe("setCurrentUserIsMinor", () => {
     it("should update user isMinor status", async () => {
       const t = convexTest(schema, modules);
@@ -263,6 +279,21 @@ describe("users", () => {
           .collect();
         expect(quests).toHaveLength(0);
       });
+    });
+  });
+
+  describe("isSignedIn", () => {
+    it("should return true when user is authenticated", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser } = await createUser(t);
+      const isSignedIn = await asUser.query(api.users.isSignedIn, {});
+      expect(isSignedIn).toBe(true);
+    });
+
+    it("should return false when user is not authenticated", async () => {
+      const t = convexTest(schema, modules);
+      const isSignedIn = await t.query(api.users.isSignedIn, {});
+      expect(isSignedIn).toBe(false);
     });
   });
 });
