@@ -140,6 +140,40 @@ describe("ResetPasswordForm", () => {
     expect(errorMessage).toBeInTheDocument();
   });
 
+  it("shows fallback error message when error has no message property", async () => {
+    const mockError = {
+      status: 500,
+      statusText: "Internal Server Error",
+      error: "Unknown error",
+      name: "BetterFetchError",
+    };
+
+    mockResetPassword.mockImplementation(({ fetchOptions }) => {
+      if (fetchOptions?.onSuccess) {
+        fetchOptions.onSuccess({
+          error: mockError,
+          response: new Response(null, { status: 500 }),
+          request: new Request("http://example.com"),
+        });
+      }
+      return Promise.resolve({ error: mockError });
+    });
+
+    render(<ResetPasswordForm />);
+    const user = userEvent.setup();
+
+    await user.type(
+      screen.getByLabelText("New password"),
+      "StrongPassword123!",
+    );
+    await user.click(screen.getByRole("button", { name: "Reset password" }));
+
+    const errorMessage = await screen.findByText(
+      "Something went wrong. Please try again.",
+    );
+    expect(errorMessage).toBeInTheDocument();
+  });
+
   it("prevents reset with weak passwords", async () => {
     // Mock weak password strength
     vi.mocked(usePasswordStrength).mockReturnValue({

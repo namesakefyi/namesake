@@ -114,6 +114,28 @@ describe("RegistrationForm", () => {
     expect(errorMessage).toBeInTheDocument();
   });
 
+  it("shows fallback error message when error has no message property", async () => {
+    const mockError = {};
+    mockSignUp.mockImplementation((_credentials, callbacks) => {
+      callbacks.onRequest();
+      callbacks.onError({ error: mockError });
+      return Promise.resolve({ error: mockError });
+    });
+
+    render(<RegistrationForm />);
+    const user = userEvent.setup();
+
+    await user.type(screen.getByLabelText("Email"), "test@example.com");
+    await user.type(screen.getByLabelText("Display Name"), "Test User");
+    await user.type(screen.getByLabelText("Password"), "StrongPassword123!");
+    await user.click(screen.getByRole("button", { name: "Register" }));
+
+    const errorMessage = await screen.findByText(
+      "Couldn't sign in. Check your information and try again.",
+    );
+    expect(errorMessage).toBeInTheDocument();
+  });
+
   it("prevents registration with weak passwords", async () => {
     // Mock weak password strength
     vi.mocked(usePasswordStrength).mockReturnValue({
