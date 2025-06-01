@@ -8,6 +8,7 @@ import {
 } from "@/components/common";
 import { SettingsItem } from "@/components/settings";
 import { authClient } from "@/main";
+import type { Doc } from "@convex/_generated/dataModel";
 import { Trash } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
@@ -17,15 +18,17 @@ type DeleteAccountModalProps = {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onSubmit: () => void;
+  email?: string;
 };
 
 const DeleteAccountModal = ({
   isOpen,
   onOpenChange,
   onSubmit,
+  email,
 }: DeleteAccountModalProps) => {
   const [error, setError] = useState<string>();
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const postHog = usePostHog();
 
   const clearLocalStorage = () => {
@@ -36,7 +39,7 @@ const DeleteAccountModal = ({
     e.preventDefault();
     setError(undefined);
 
-    setIsDeleting(true);
+    setIsSending(true);
     const { error } = await authClient.deleteUser({
       callbackURL: "/goodbye",
     });
@@ -45,17 +48,17 @@ const DeleteAccountModal = ({
       postHog.captureException(error);
       return;
     }
-    toast.success("Check your email to finish deleting your account.");
     clearLocalStorage();
     onSubmit();
-    setIsDeleting(false);
+    setIsSending(false);
+    toast.success("Check your email to finish deleting your account.");
   };
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalHeader
         title="Delete account?"
-        description="A confirmation email will be sent to your email address."
+        description={`A confirmation email will be sent to ${email || "your email address"}.`}
       />
       <Form onSubmit={handleSubmit} className="w-full">
         {error ? (
@@ -69,11 +72,11 @@ const DeleteAccountModal = ({
           <Button
             variant="secondary"
             onPress={() => onOpenChange(false)}
-            isDisabled={isDeleting}
+            isDisabled={isSending}
           >
             Cancel
           </Button>
-          <Button type="submit" variant="destructive" isDisabled={isDeleting}>
+          <Button type="submit" variant="destructive" isSubmitting={isSending}>
             Send deletion email
           </Button>
         </ModalFooter>
@@ -82,7 +85,11 @@ const DeleteAccountModal = ({
   );
 };
 
-export const DeleteAccountSetting = () => {
+type DeleteAccountSettingProps = {
+  user: Doc<"users">;
+};
+
+export const DeleteAccountSetting = ({ user }: DeleteAccountSettingProps) => {
   const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
     useState(false);
 
@@ -98,6 +105,7 @@ export const DeleteAccountSetting = () => {
         isOpen={isDeleteAccountModalOpen}
         onOpenChange={setIsDeleteAccountModalOpen}
         onSubmit={() => setIsDeleteAccountModalOpen(false)}
+        email={user.email}
       />
     </SettingsItem>
   );

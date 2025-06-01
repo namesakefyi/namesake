@@ -61,8 +61,9 @@ export const ForgotPasswordForm = () => {
           <Link href={sniperResponse.url} button={{ variant: "secondary" }}>
             <img
               src={sniperResponse.image}
-              alt={sniperResponse.provider_pretty}
+              alt={`${sniperResponse.provider_pretty} logo`}
               className="w-5 mr-0.5"
+              aria-hidden="true"
             />
             Open {sniperResponse.provider_pretty}
           </Link>
@@ -90,6 +91,7 @@ export const ForgotPasswordForm = () => {
         label="Email"
         type="email"
         autoComplete="email"
+        isDisabled={isSubmitting}
         value={email}
         onChange={setEmail}
       />

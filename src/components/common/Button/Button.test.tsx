@@ -90,6 +90,11 @@ describe("Button", () => {
         .getByRole("button")
         .querySelector("svg.animate-spin");
       expect(spinner).toBeInTheDocument();
+
+      expect(screen.getByRole("button")).toHaveAttribute(
+        "aria-label",
+        "Loading",
+      );
     });
 
     it("is disabled when submitting", () => {

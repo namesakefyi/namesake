@@ -56,7 +56,7 @@ export const createAuth = (ctx: GenericCtx) =>
           await resend.emails.send({
             from: "hey@namesake.fyi",
             to: user.email,
-            subject: "Delete your account",
+            subject: "Confirm account deletion",
             react: DeleteAccountEmail({ email: user.email, url }),
           });
         },

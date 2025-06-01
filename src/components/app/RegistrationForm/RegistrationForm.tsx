@@ -74,19 +74,18 @@ export const RegistrationForm = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsSubmitting(true);
     setError(null);
 
-    try {
-      if (passwordState && passwordState.score < 3) {
-        let errorMessage = "Please choose a stronger password.";
-        if (passwordState.feedback.warning) {
-          errorMessage += ` ${passwordState.feedback.warning}`;
-        }
-        setError(errorMessage);
-        setIsSubmitting(false);
-        return;
+    if (passwordState && passwordState.score < 3) {
+      let errorMessage = "Please choose a stronger password.";
+      if (passwordState.feedback.warning) {
+        errorMessage += ` ${passwordState.feedback.warning}`;
       }
+      setError(errorMessage);
+      return;
+    }
+
+    try {
       await authClient.signUp.email(
         {
           email,
@@ -98,19 +97,17 @@ export const RegistrationForm = () => {
             setIsSubmitting(true);
           },
           onSuccess: () => {
-            setIsSubmitting(false);
             navigate({ to: "/" });
           },
-          onError: (ctx) => {
-            setError(ctx.error.message);
-            setIsSubmitting(false);
+          onError: ({ error }) => {
+            setError(
+              error.message ||
+                "Couldn't sign in. Check your information and try again.",
+            );
             postHog.captureException(error);
           },
         },
       );
-    } catch (error) {
-      setError("Couldn't sign in. Check your information and try again.");
-      postHog.captureException(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -126,6 +123,7 @@ export const RegistrationForm = () => {
         name="email"
         type="email"
         autoComplete="email"
+        isDisabled={isSubmitting}
         isRequired
         value={email}
         onChange={setEmail}
@@ -135,6 +133,7 @@ export const RegistrationForm = () => {
         name="name"
         type="text"
         isRequired
+        isDisabled={isSubmitting}
         value={name}
         onChange={setName}
         minLength={3}
@@ -144,6 +143,7 @@ export const RegistrationForm = () => {
         label="Password"
         name="password"
         type="password"
+        isDisabled={isSubmitting}
         isRequired
         value={password}
         onChange={setPassword}
@@ -155,7 +155,7 @@ export const RegistrationForm = () => {
         Register
       </Button>
       <p className="text-sm text-gray-dim text-center text-balance">
-        By registering, you agree to Namesake’s{" "}
+        By registering, you agree to Namesake's{" "}
         <Link
           href="https://namesake.fyi/terms"
           target="_blank"

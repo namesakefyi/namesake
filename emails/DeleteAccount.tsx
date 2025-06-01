@@ -18,12 +18,12 @@ export function DeleteAccountEmail({
   return (
     <Html>
       <Head>
-        <title>Delete your account</title>
+        <title>Confirm account deletion</title>
       </Head>
       <Body style={styles.main}>
         <Preview>We got a request to delete your Namesake account.</Preview>
         <Container style={styles.container} className="container">
-          <Heading style={styles.heading}>Delete your account</Heading>
+          <Heading style={styles.heading}>Confirm account deletion</Heading>
           <Text style={styles.paragraph}>
             We got a request to delete the Namesake account associated with{" "}
             {email ?? "this email address"}. We hope we've been able to help you

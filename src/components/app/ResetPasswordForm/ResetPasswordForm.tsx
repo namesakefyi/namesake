@@ -1,15 +1,11 @@
-import { Button } from "@/components/common";
-
-import { Banner, TextField } from "@/components/common";
-
-import { Form } from "@/components/common";
+import { PasswordStrength } from "@/components/app";
+import { Banner, Button, Form, TextField } from "@/components/common";
 import { usePasswordStrength } from "@/hooks/usePasswordStrength";
 import { authClient, router } from "@/main";
 import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 import { Heading } from "react-aria-components";
 import { toast } from "sonner";
-import { PasswordStrength } from "../PasswordStrength/PasswordStrength";
 
 export const ResetPasswordForm = () => {
   const [password, setPassword] = useState("");
@@ -74,6 +70,7 @@ export const ResetPasswordForm = () => {
         label="New password"
         type="password"
         isRequired
+        isDisabled={isSubmitting}
         autoComplete="new-password"
         value={password}
         onChange={setPassword}

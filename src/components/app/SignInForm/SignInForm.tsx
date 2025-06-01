@@ -25,7 +25,7 @@ export const SignInForm = () => {
     setIsSubmitting(true);
     setError(null);
 
-    await authClient.signIn.email(
+    const { error } = await authClient.signIn.email(
       {
         email,
         password,
@@ -38,13 +38,15 @@ export const SignInForm = () => {
           setIsSubmitting(false);
           navigate({ to: "/" });
         },
-        onError: (ctx) => {
-          setError(ctx.error.message);
-          setIsSubmitting(false);
-          postHog.captureException(error);
-        },
       },
     );
+
+    if (error) {
+      setError(error?.message || "Something went wrong. Please try again.");
+      postHog.captureException(error);
+    }
+
+    setIsSubmitting(false);
   };
 
   return (
