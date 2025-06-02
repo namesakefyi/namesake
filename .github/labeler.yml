@@ -7,17 +7,25 @@ backend:
 bug:
 - head-branch: ['^fix', 'fix']
 
+content:
+- changed-files:
+  - any-glob-to-any-file: ['src/forms/**']
+
 dependencies:
 - changed-files:
   - any-glob-to-any-file: package.json
 
 documentation:
 - changed-files:
-  - any-glob-to-any-file: docs/**
+  - any-glob-to-any-file: ['docs/**', 'CONTRIBUTING.md', 'README.md', 'SECURITY.md']
+
+email:
+- changed-files:
+  - any-glob-to-any-file: ['emails/**']
 
 frontend:
 - changed-files:
-  - any-glob-to-any-file: src/**
+  - any-glob-to-any-file: ['src/**', 'index.html']
 
 testing:
 - changed-files:
@@ -25,4 +33,4 @@ testing:
 
 workflows:
 - changed-files:
-  - any-glob-to-any-file: ['.github/workflows/**', '.husky/**', 'biome.json']
+  - any-glob-to-any-file: ['.github/workflows/**', '.github/labeler.yml', '.github/dependabot.yml', '.husky/**', 'biome.json']
