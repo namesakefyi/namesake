@@ -31,7 +31,7 @@ import { useMutation, useQuery } from "convex/react";
 import type { FormEvent } from "react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_authenticated/forms/court-order-ma")({
+export const Route = createFileRoute("/_authenticated/forms/ma-court-order")({
   component: RouteComponent,
 });
 
