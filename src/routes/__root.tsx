@@ -68,17 +68,15 @@ function RootRoute() {
             : { ...path, ...options },
         )
       }
-      useHref={(path) =>
-        typeof path === "string" ? path : router.buildLocation(path).href
-      }
     >
       <Outlet />
       <PostHogPageView />
       <Toaster
         theme={theme as "light" | "dark" | "system"}
         offset={16}
+        mobileOffset={{ bottom: "68px" }}
         gap={8}
-        position="bottom-left"
+        position="bottom-right"
         toastOptions={{
           unstyled: true,
           classNames: {

@@ -11,3 +11,5 @@ jobs:
       contents: read
     secrets:
       DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_CONGRATS }}
+    with:
+      exclude: '["^chore\\(deps\\)", "^chore:"]'
