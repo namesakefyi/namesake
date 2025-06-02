@@ -2,6 +2,7 @@ import { Banner, Button } from "@/components/common";
 import {
   AddressField,
   CheckboxField,
+  ComboBoxField,
   EmailField,
   FormContainer,
   FormSection,
@@ -12,7 +13,6 @@ import {
   NameField,
   PhoneField,
   PronounSelectField,
-  SelectField,
   ShortTextField,
   YesNoField,
 } from "@/components/forms";
@@ -179,7 +179,7 @@ function RouteComponent() {
       <FormSection title="Where were you born?">
         <div className="flex flex-wrap gap-4">
           <ShortTextField name="birthplaceCity" label="City" />
-          <SelectField
+          <ComboBoxField
             name="birthplaceState"
             label="State"
             placeholder="Select a state"

@@ -75,7 +75,7 @@ export const EditEmailSetting = ({ user }: EditEmailSettingProps) => {
             <div className="flex gap-1 justify-end">
               <Button
                 variant="secondary"
-                isSubmitting={isSubmitting}
+                isDisabled={isSubmitting}
                 size="small"
                 onPress={() => setIsEditing(false)}
               >
