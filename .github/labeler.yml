@@ -33,4 +33,4 @@ testing:
 
 workflows:
 - changed-files:
-  - any-glob-to-any-file: ['.github/workflows/**', '.husky/**', 'biome.json']
+  - any-glob-to-any-file: ['.github/workflows/**', '.github/labeler.yml', '.github/dependabot.yml', '.husky/**', 'biome.json']
