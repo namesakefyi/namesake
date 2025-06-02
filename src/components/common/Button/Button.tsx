@@ -88,7 +88,7 @@ export function Button({
   isDisabled,
   ...props
 }: ButtonProps) {
-  const iconSize = size === "large" ? 20 : 16;
+  const iconSize = size === "large" ? 18 : 16;
   const iconStrokeWidth = size === "large" ? 2.5 : 2;
   const sharedIconProps = {
     size: iconSize,

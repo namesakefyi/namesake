@@ -83,7 +83,7 @@ export const EditResidenceSetting = ({ user }: EditResidenceSettingProps) => {
             <Button
               variant="secondary"
               onPress={handleCancel}
-              isSubmitting={isSubmitting}
+              isDisabled={isSubmitting}
               size="small"
             >
               Cancel

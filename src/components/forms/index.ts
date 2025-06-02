@@ -1,6 +1,7 @@
 export * from "./AddressField/AddressField";
 export * from "./CheckboxField/CheckboxField";
 export * from "./CheckboxGroupField/CheckboxGroupField";
+export * from "./ComboBoxField/ComboBoxField";
 export * from "./EmailField/EmailField";
 export * from "./FormContainer/FormContainer";
 export * from "./FormNavigation/FormNavigation";

@@ -103,6 +103,7 @@
     "@changesets/cli": "^2.29.4",
     "@edge-runtime/vm": "^5.0.0",
     "@playwright/test": "^1.52.0",
+    "@react-aria/test-utils": "1.0.0-alpha.7",
     "@storybook/addon-themes": "^9.0.4",
     "@storybook/react-vite": "^9.0.4",
     "@tanstack/router-devtools": "^1.120.13",
