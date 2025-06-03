@@ -1,5 +1,16 @@
 # namesake
 
+## 0.30.0
+
+### Minor Changes
+
+- 0bba6ab: Improve ease of selection by replacing select elements with comboboxes to allow typing and filtering results for state, county, language, and more
+
+### Patch Changes
+
+- 7f804bd: Clarify language around fee waivers and display costs within form
+- 7945b02: Support selecting 'prefer not to answer' for certain optional questions
+
 ## 0.29.2
 
 ### Patch Changes
