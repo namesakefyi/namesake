@@ -105,23 +105,23 @@ describe("QuestCostsBadge", () => {
     });
 
     // Check if costs are displayed in description list
-    const descriptions = screen.getAllByRole("term");
-    const values = screen.getAllByRole("definition");
+    const rows = screen.getAllByRole("row");
+    const cells = screen.getAllByRole("cell");
 
-    expect(descriptions).toHaveLength(5); // 4 items + total
-    expect(values).toHaveLength(5);
+    expect(rows).toHaveLength(6); // 4 items + header + footer
+    expect(cells).toHaveLength(10);
 
     // Check individual costs
-    expect(descriptions[0]).toHaveTextContent("Application fee");
-    expect(values[0]).toHaveTextContent("$100");
-    expect(descriptions[1]).toHaveTextContent("Certified copies");
-    expect(values[1]).toHaveTextContent("$50");
-    expect(descriptions[2]).toHaveTextContent("Expedited processing");
-    expect(values[2]).toHaveTextContent("$75");
-    expect(descriptions[3]).toHaveTextContent("Optional notary");
-    expect(values[3]).toHaveTextContent("$25");
-    expect(descriptions[4]).toHaveTextContent("Total");
-    expect(values[4]).toHaveTextContent("$150–$250");
+    expect(screen.getByText("Application fee")).toBeInTheDocument();
+    expect(screen.getByText("$100")).toBeInTheDocument();
+    expect(screen.getByText("Certified copies")).toBeInTheDocument();
+    expect(screen.getByText("$50")).toBeInTheDocument();
+    expect(screen.getByText("Expedited processing")).toBeInTheDocument();
+    expect(screen.getByText("$75")).toBeInTheDocument();
+    expect(screen.getByText("Optional notary")).toBeInTheDocument();
+    expect(screen.getByText("$25")).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: "Total" })).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: "$150–$250" })).toBeInTheDocument();
   });
 
   it("shows edit button when editable prop is true", async () => {

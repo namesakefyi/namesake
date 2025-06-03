@@ -4,6 +4,7 @@ export * from "./QuestCallToAction/QuestCallToAction";
 export * from "./QuestCategoryBadge/QuestCategoryBadge";
 export * from "./QuestContent/QuestContent";
 export * from "./QuestCostsBadge/QuestCostsBadge";
+export * from "./QuestCostsTable/QuestCostsTable";
 export * from "./QuestJurisdictionBadge/QuestJurisdictionBadge";
 export * from "./QuestPageBadges/QuestPageBadges";
 export * from "./QuestPageHeader/QuestPageHeader";
