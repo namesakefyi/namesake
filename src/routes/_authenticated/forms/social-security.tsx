@@ -189,6 +189,7 @@ function RouteComponent() {
           label="Are you Hispanic or Latino?"
           yesLabel="I am Hispanic or Latino"
           noLabel="I am not Hispanic or Latino"
+          includePreferNotToAnswer
         />
       </FormSection>
       <FormSection
@@ -199,6 +200,7 @@ function RouteComponent() {
           name="race"
           label="Race"
           labelHidden
+          includePreferNotToAnswer
           options={[
             {
               label: "Native Hawaiian",
