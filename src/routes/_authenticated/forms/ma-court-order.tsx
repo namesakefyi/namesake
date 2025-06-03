@@ -109,8 +109,8 @@ function RouteComponent() {
         instructions: [
           "Review all documents carefully.",
           "Do not sign documents until in the presence of a notary.",
-          "Remember to bring all required supporting documents to the court.",
-          "You got this! We're here for you.",
+          "File with the Probate and Family Court in your county.",
+          "Remember to bring all supporting documents to the court.",
         ],
         pdfs,
         userData: form.getValues(),

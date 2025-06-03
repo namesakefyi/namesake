@@ -1,6 +1,12 @@
 import type { FormData, PDFDefinition } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
-import { PDFDocument, StandardFonts } from "@cantoo/pdf-lib";
+import {
+  PDFDocument,
+  StandardFonts,
+  popGraphicsState,
+  pushGraphicsState,
+  setCharacterSpacing,
+} from "@cantoo/pdf-lib";
 
 /**
  * Fetch a PDF file from the /src/forms.
@@ -194,62 +200,81 @@ export async function createCoverPage({
   const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const { height, width } = page.getSize();
 
-  function drawBulletList(title: string, items: string[], y: number) {
-    page.drawLine({
-      start: { x: 50, y },
-      end: { x: width - 50, y },
-      thickness: 1.5,
-    });
+  const margin = 50;
+  const contentWidth = width - margin * 2;
 
-    page.drawText(title, {
-      x: 50,
-      y: y - 20,
-      size: 14,
+  function drawList({
+    title,
+    items,
+    y,
+  }: {
+    title: string;
+    items: string[];
+    y: number;
+  }) {
+    const listOffset = 150;
+
+    page.drawText(smartquotes(title), {
+      x: margin,
+      y: y,
+      size: 16,
       font: helveticaBold,
     });
 
     const listText = items
       .filter((item) => item.trim().length > 0)
-      .map((item) => `• ${smartquotes(item)}`)
+      .map((item) => smartquotes(item))
       .join("\n");
 
     page.drawText(listText, {
-      x: 55,
-      y: y - 50,
-      size: 12,
+      x: margin + listOffset,
+      y: y,
+      size: 13,
       font: helvetica,
-      maxWidth: 500,
+      maxWidth: contentWidth - listOffset,
       wordBreaks: [" "],
-      lineHeight: 18,
+      lineHeight: 21,
     });
   }
 
   page.drawText("Name Change Packet", {
-    x: 50,
-    y: height - 70,
+    x: margin,
+    y: height - 65,
     size: 14,
     font: helveticaBold,
   });
 
-  page.drawText(title, {
-    x: 49,
-    y: height - 110,
-    size: 32,
-    lineHeight: 36,
-    maxWidth: 500,
+  page.drawLine({
+    start: { x: margin, y: height - 80 },
+    end: { x: width - margin, y: height - 80 },
+    thickness: 2.5,
+  });
+
+  page.pushOperators(pushGraphicsState(), setCharacterSpacing(-1));
+  page.drawText(smartquotes(title), {
+    x: margin - 1.5, // Optical fix
+    y: height - 130,
+    size: 44,
+    lineHeight: 48,
+    maxWidth: contentWidth,
     wordBreaks: [" "],
     font: helveticaBold,
   });
+  page.pushOperators(popGraphicsState());
 
-  drawBulletList(
-    "Included Documents",
-    documents.map((doc) =>
+  drawList({
+    title: "Packet Includes",
+    items: documents.map((doc) =>
       doc.code ? `${doc.title} (${doc.code})` : doc.title,
     ),
-    height - 170,
-  );
+    y: height - 270,
+  });
 
-  drawBulletList("Instructions", instructions, height - 340);
+  drawList({
+    title: "Instructions",
+    items: instructions,
+    y: height - 420,
+  });
 
   try {
     const logoResponse = await fetch("/forms/pdf-cover-logo.png");
@@ -257,8 +282,8 @@ export async function createCoverPage({
     const logoImage = await pdfDoc.embedPng(new Uint8Array(logoBytes));
 
     page.drawImage(logoImage, {
-      x: 50,
-      y: 110,
+      x: margin,
+      y: 105,
       height: 16,
       width: 83,
     });
@@ -274,8 +299,8 @@ export async function createCoverPage({
     minute: "2-digit",
   });
   const generatedOn = `Document generated from https://app.namesake.fyi on ${currentDate}.`;
-  page.drawText(generatedOn, {
-    x: 50,
+  page.drawText(smartquotes(generatedOn), {
+    x: margin,
     y: 80,
     size: 9,
     lineHeight: 11,
@@ -284,12 +309,12 @@ export async function createCoverPage({
 
   const disclaimer =
     "Disclaimer: The information provided by Namesake is for general informational purposes and does not constitute legal advice. Use of namesake.fyi does not create an attorney-client relationship between you and Namesake.";
-  page.drawText(disclaimer, {
-    x: 50,
+  page.drawText(smartquotes(disclaimer), {
+    x: margin,
     y: 60,
     size: 9,
     font: helvetica,
-    maxWidth: 500,
+    maxWidth: contentWidth,
     wordBreaks: [" "],
     lineHeight: 11,
   });
