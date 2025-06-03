@@ -81,6 +81,16 @@ function RouteComponent() {
 
       await downloadMergedPdf({
         title: "Social Security Card",
+        instructions: [
+          "Please review all documents carefully.",
+          "Fill in your social security number—for security, Namesake never asks for this.",
+          "Remember to bring certified copies of your completed court order, along with other required supporting documents.",
+          form.watch("citizenshipStatus") === "legalAlienNotAllowedToWork" ||
+          form.watch("citizenshipStatus") === "other"
+            ? "You must provide a document from a U.S. Federal, State, or local government agency that explains why you need a Social Security number and that you meet all the requirements for the government benefit."
+            : "",
+          "You got this! We're here for you.",
+        ],
         pdfs,
         userData: form.getValues(),
       });
