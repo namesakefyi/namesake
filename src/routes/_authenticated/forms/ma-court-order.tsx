@@ -110,6 +110,12 @@ function RouteComponent() {
 
       await downloadMergedPdf({
         title: "Massachusetts Court Order",
+        instructions: [
+          "Review all documents carefully.",
+          "Do not sign documents until in the presence of a notary.",
+          "File with the Probate and Family Court in your county.",
+          "Remember to bring all supporting documents to the court.",
+        ],
         pdfs,
         userData: form.getValues(),
       });
