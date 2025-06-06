@@ -2,9 +2,14 @@ import "./styles/index.css";
 import { Logo } from "@/components/app";
 import { Empty } from "@/components/common";
 import type { Jurisdiction, Role } from "@/constants";
-import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
+import {
+  convexClient,
+  crossDomainClient,
+} from "@erquhart/convex-better-auth/client/plugins";
+import { ConvexBetterAuthProvider } from "@erquhart/convex-better-auth/react";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { createAuthClient } from "better-auth/react";
 import { ConvexReactClient, useQuery } from "convex/react";
 import { ArrowLeft, CircleAlert, TriangleAlert } from "lucide-react";
 import { LazyMotion, domAnimation } from "motion/react";
@@ -17,6 +22,11 @@ import { HelmetProvider } from "react-helmet-async";
 import { routeTree } from "./routeTree.gen";
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
+
+export const authClient = createAuthClient({
+  baseURL: "https://modest-caterpillar-513.convex.site",
+  plugins: [convexClient(), crossDomainClient()],
+});
 
 const NotFoundComponent = () => (
   <div className="flex flex-col items-center justify-center gap-12 w-full min-h-screen px-4">
@@ -104,7 +114,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <PostHogProvider client={posthog}>
         <HelmetProvider>
-          <ConvexAuthProvider client={convex}>
+          <ConvexBetterAuthProvider client={convex} authClient={authClient}>
             <ThemeProvider attribute="class" disableTransitionOnChange>
               <LazyMotion strict features={domAnimation}>
                 <PostHogErrorBoundary fallback={fallback}>
@@ -112,7 +122,7 @@ if (!rootElement.innerHTML) {
                 </PostHogErrorBoundary>
               </LazyMotion>
             </ThemeProvider>
-          </ConvexAuthProvider>
+          </ConvexBetterAuthProvider>
         </HelmetProvider>
       </PostHogProvider>
     </StrictMode>,

@@ -1,21 +1,15 @@
 import { useTheme } from "@/hooks/useTheme";
-import { useAuthActions } from "@convex-dev/auth/react";
 import { render, screen } from "@testing-library/react";
 import { useQuery } from "convex/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AppSidebar } from "./AppSidebar";
 
 describe("AppSidebar", () => {
-  const mockSignOut = vi.fn();
   const mockSetTheme = vi.fn();
   const mockThemeSelection = new Set(["light"]);
 
   beforeEach(() => {
     vi.clearAllMocks();
-
-    (useAuthActions as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      signOut: mockSignOut,
-    });
     (useTheme as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       theme: "light",
       themeSelection: mockThemeSelection,
