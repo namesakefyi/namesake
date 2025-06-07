@@ -1,5 +1,15 @@
 # namesake
 
+## 0.31.0
+
+### Minor Changes
+
+- d07ffb3: Add cover page to pdf packet downloads
+
+### Patch Changes
+
+- 39287d0: Add safeguards for certain queries and mutations to make sure only admins can access them
+
 ## 0.30.0
 
 ### Minor Changes
