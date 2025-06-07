@@ -3,8 +3,8 @@ import { describe, expect, it } from "vitest";
 import { DUPLICATE_EMAIL, INVALID_EMAIL } from "../../src/constants/errors";
 import { api } from "../_generated/api";
 import schema from "../schema";
-import { createTestAdmin, createTestUser } from "../test-helpers";
 import { modules } from "../test.setup";
+import { createTestAdmin, createTestUser } from "./helpers";
 
 describe("users", () => {
   describe("getAll", () => {

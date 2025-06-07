@@ -1,8 +1,8 @@
 import { convexTest } from "convex-test";
 import { describe, expect, it, vi } from "vitest";
+import { createTestAdmin } from "../../__tests__/helpers";
 import { api } from "../../_generated/api";
 import schema from "../../schema";
-import { createTestAdmin } from "../../test-helpers";
 import { modules } from "../../test.setup";
 import { createOrUpdateUser } from "../authModel";
 

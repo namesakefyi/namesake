@@ -3,8 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { type PDFId, PDF_IDS } from "../../src/constants/forms";
 import { api } from "../_generated/api";
 import schema from "../schema";
-import { createTestUser } from "../test-helpers";
 import { modules } from "../test.setup";
+import { createTestUser } from "./helpers";
 
 const UPDATE_TIMESTAMP = 662585400000;
 const TEST_PDF_IDS: PDFId[] = [...PDF_IDS];

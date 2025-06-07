@@ -2,8 +2,8 @@ import { convexTest } from "convex-test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "../_generated/api";
 import schema from "../schema";
-import { createTestAdmin, createTestUser } from "../test-helpers";
 import { modules } from "../test.setup";
+import { createTestAdmin, createTestUser } from "./helpers";
 
 const UPDATE_TIMESTAMP = 662585400000;
 
