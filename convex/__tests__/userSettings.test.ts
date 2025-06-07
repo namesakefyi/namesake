@@ -3,33 +3,22 @@ import { describe, expect, it } from "vitest";
 import { api } from "../_generated/api";
 import schema from "../schema";
 import { modules } from "../test.setup";
+import { createTestUser } from "./helpers";
 
 describe("userSettings", () => {
-  describe("getByUserId", () => {
+  describe("getCurrentUserSettings", () => {
     it("should throw error if user settings not found", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
+      const { asUser } = await createTestUser(t);
 
       await expect(
-        t.query(api.userSettings.getByUserId, { userId }),
+        asUser.query(api.userSettings.getCurrentUserSettings),
       ).rejects.toThrow("User settings not found");
     });
 
     it("should return user settings if found", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
+      const { asUser, userId } = await createTestUser(t);
 
       const settingsId = await t.run(async (ctx) => {
         return await ctx.db.insert("userSettings", {
@@ -38,7 +27,9 @@ describe("userSettings", () => {
         });
       });
 
-      const settings = await t.query(api.userSettings.getByUserId, { userId });
+      const settings = await asUser.query(
+        api.userSettings.getCurrentUserSettings,
+      );
 
       expect(settings._id).toBe(settingsId);
       expect(settings.theme).toBe("dark");
@@ -48,15 +39,7 @@ describe("userSettings", () => {
   describe("setTheme", () => {
     it("should throw error if user settings not found", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser } = await createTestUser(t);
 
       await expect(
         asUser.mutation(api.userSettings.setTheme, {
@@ -67,15 +50,7 @@ describe("userSettings", () => {
 
     it("should update existing user settings theme", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createTestUser(t);
 
       await t.run(async (ctx) => {
         return await ctx.db.insert("userSettings", {
@@ -88,7 +63,9 @@ describe("userSettings", () => {
         theme: "dark",
       });
 
-      const settings = await t.query(api.userSettings.getByUserId, { userId });
+      const settings = await asUser.query(
+        api.userSettings.getCurrentUserSettings,
+      );
       expect(settings.theme).toBe("dark");
     });
   });

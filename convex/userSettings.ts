@@ -1,15 +1,13 @@
-import { v } from "convex/values";
 import type { Theme } from "../src/constants";
-import { query } from "./_generated/server";
-import { userMutation } from "./helpers";
+import { userMutation, userQuery } from "./helpers";
 import * as UserSettings from "./model/userSettingsModel";
 import { theme } from "./validators";
 
-export const getByUserId = query({
-  args: { userId: v.id("users") },
-  handler: async (ctx, args) => {
+export const getCurrentUserSettings = userQuery({
+  args: {},
+  handler: async (ctx) => {
     return await UserSettings.getSettingsForUser(ctx, {
-      userId: args.userId,
+      userId: ctx.userId,
     });
   },
 });
