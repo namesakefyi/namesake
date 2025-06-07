@@ -1,8 +1,8 @@
 import { convexTest } from "convex-test";
 import { describe, expect, it, vi } from "vitest";
 import { api } from "../../_generated/api";
-import { createAdmin } from "../../helpers";
 import schema from "../../schema";
+import { createTestAdmin } from "../../test-helpers";
 import { modules } from "../../test.setup";
 import { createOrUpdateUser } from "../authModel";
 
@@ -29,7 +29,7 @@ describe("authModel", () => {
 
     it("should set role to admin in development environment", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
+      const { asAdmin } = await createTestAdmin(t);
 
       vi.stubEnv("NODE_ENV", "development");
       await t.run(async (ctx) => {
@@ -50,7 +50,7 @@ describe("authModel", () => {
 
     it("should set role to user in production environment", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
+      const { asAdmin } = await createTestAdmin(t);
 
       vi.stubEnv("NODE_ENV", "production");
       await t.run(async (ctx) => {

@@ -4,7 +4,6 @@ import {
   customMutation,
   customQuery,
 } from "convex-helpers/server/customFunctions";
-import type { convexTest } from "convex-test";
 import type { Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
 
@@ -55,35 +54,3 @@ export const adminMutation = customMutation(mutation, {
     return { ctx: { userId: user._id }, args: {} };
   },
 });
-
-export const createUser = async (
-  t: ReturnType<typeof convexTest>,
-  email?: string,
-  name?: string,
-) => {
-  const userId = await t.run(async (ctx) => {
-    return await ctx.db.insert("users", {
-      email: email ?? "user@example.com",
-      name: name ?? "Test User",
-      role: "user",
-    });
-  });
-  const asUser = t.withIdentity({ subject: userId });
-  return { userId, asUser };
-};
-
-export const createAdmin = async (
-  t: ReturnType<typeof convexTest>,
-  email?: string,
-  name?: string,
-) => {
-  const adminId = await t.run(async (ctx) => {
-    return await ctx.db.insert("users", {
-      email: email ?? "admin@namesake.fyi",
-      name: name ?? "Test Admin",
-      role: "admin",
-    });
-  });
-  const asAdmin = t.withIdentity({ subject: adminId });
-  return { adminId, asAdmin };
-};

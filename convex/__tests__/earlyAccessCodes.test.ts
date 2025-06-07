@@ -1,14 +1,14 @@
 import { convexTest } from "convex-test";
 import { describe, expect, it } from "vitest";
 import { api } from "../_generated/api";
-import { createAdmin, createUser } from "../helpers";
 import schema from "../schema";
+import { createTestAdmin, createTestUser } from "../test-helpers";
 import { modules } from "../test.setup";
 
 describe("earlyAccessCodes", () => {
   it("creates an early access code", async () => {
     const t = convexTest(schema, modules);
-    const { asAdmin, adminId } = await createAdmin(t);
+    const { asAdmin, adminId } = await createTestAdmin(t);
 
     // Create a code
     await asAdmin.mutation(api.earlyAccessCodes.create, {});
@@ -22,11 +22,11 @@ describe("earlyAccessCodes", () => {
 
   it("lists codes for a specific user", async () => {
     const t = convexTest(schema, modules);
-    const { asUser: asUser1, userId: user1Id } = await createUser(
+    const { asUser: asUser1, userId: user1Id } = await createTestUser(
       t,
       "user1@example.com",
     );
-    const { asUser: asUser2, userId: user2Id } = await createUser(
+    const { asUser: asUser2, userId: user2Id } = await createTestUser(
       t,
       "user2@example.com",
     );
@@ -54,8 +54,8 @@ describe("earlyAccessCodes", () => {
 
   it("redeems an early access code", async () => {
     const t = convexTest(schema, modules);
-    const { asAdmin } = await createAdmin(t);
-    const { asUser } = await createUser(t);
+    const { asAdmin } = await createTestAdmin(t);
+    const { asUser } = await createTestUser(t);
 
     // (Admin) Create a code
     const codeId = await asAdmin.mutation(api.earlyAccessCodes.create, {});
@@ -72,12 +72,12 @@ describe("earlyAccessCodes", () => {
 
   it("prevents redeeming an already claimed code", async () => {
     const t = convexTest(schema, modules);
-    const { asAdmin } = await createAdmin(t);
+    const { asAdmin } = await createTestAdmin(t);
 
     const codeId = await asAdmin.mutation(api.earlyAccessCodes.create, {});
 
-    const { asUser: asUser1 } = await createUser(t, "user1@example.com");
-    const { asUser: asUser2 } = await createUser(t, "user2@example.com");
+    const { asUser: asUser1 } = await createTestUser(t, "user1@example.com");
+    const { asUser: asUser2 } = await createTestUser(t, "user2@example.com");
 
     // First user redeems code
     await asUser1.mutation(api.earlyAccessCodes.redeem, {

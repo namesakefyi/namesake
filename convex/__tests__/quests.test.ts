@@ -1,8 +1,8 @@
 import { convexTest } from "convex-test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "../_generated/api";
-import { createAdmin, createUser } from "../helpers";
 import schema from "../schema";
+import { createTestAdmin, createTestUser } from "../test-helpers";
 import { modules } from "../test.setup";
 
 const UPDATE_TIMESTAMP = 662585400000;
@@ -19,7 +19,7 @@ describe("quests", () => {
   describe("count", () => {
     it("should return the total number of quests", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       await t.run(async (ctx) => {
         await ctx.db.insert("quests", {
@@ -49,7 +49,7 @@ describe("quests", () => {
   describe("getAll", () => {
     it("should return all quests", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       await t.run(async (ctx) => {
         await ctx.db.insert("quests", {
@@ -81,7 +81,7 @@ describe("quests", () => {
   describe("getAllInCategory", () => {
     it("should return quests in a specific category", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       await t.run(async (ctx) => {
         await ctx.db.insert("quests", {
@@ -114,7 +114,7 @@ describe("quests", () => {
   describe("getAllActive", () => {
     it("should only return non-deleted quests", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       await t.run(async (ctx) => {
         await ctx.db.insert("quests", {
@@ -146,7 +146,7 @@ describe("quests", () => {
   describe("getWithUserQuest", () => {
     it("should return quest with associated user quest data", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       await t.run(async (ctx) => {
         const questId = await ctx.db.insert("quests", {
@@ -178,7 +178,7 @@ describe("quests", () => {
   describe("getByCategoryAndJurisdiction", () => {
     it("should return quest matching category and jurisdiction", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
+      const { asAdmin } = await createTestAdmin(t);
 
       await asAdmin.mutation(api.quests.create, {
         title: "Court Order Quest",
@@ -186,7 +186,7 @@ describe("quests", () => {
         jurisdiction: "MA",
       });
 
-      const { asUser } = await createUser(t);
+      const { asUser } = await createTestUser(t);
 
       const quest = await asUser.query(
         api.quests.getByCategoryAndJurisdiction,
@@ -204,7 +204,7 @@ describe("quests", () => {
 
     it("should return null if jurisdiction is not provided", async () => {
       const t = convexTest(schema, modules);
-      const { asUser } = await createUser(t);
+      const { asUser } = await createTestUser(t);
 
       const quest = await asUser.query(
         api.quests.getByCategoryAndJurisdiction,
@@ -221,7 +221,7 @@ describe("quests", () => {
   describe("getById", () => {
     it("should return a quest by its ID", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       const questId = await t.run(async (ctx) => {
         return await ctx.db.insert("quests", {
@@ -243,7 +243,7 @@ describe("quests", () => {
   describe("getBySlug", () => {
     it("should return a quest by its slug", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       await t.run(async (ctx) => {
         await ctx.db.insert("quests", {
@@ -267,7 +267,7 @@ describe("quests", () => {
   describe("create", () => {
     it("should create a quest with required fields", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin, adminId } = await createAdmin(t);
+      const { asAdmin, adminId } = await createTestAdmin(t);
 
       const { questId, slug } = await asAdmin.mutation(api.quests.create, {
         title: "New Quest",
@@ -289,7 +289,7 @@ describe("quests", () => {
 
     it("should generate unique slugs for duplicate titles", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
+      const { asAdmin } = await createTestAdmin(t);
 
       const quest1 = await asAdmin.mutation(api.quests.create, {
         title: "Same Title",
@@ -310,7 +310,7 @@ describe("quests", () => {
   describe("setTitle", () => {
     it("should update a quest's title", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
+      const { asAdmin } = await createTestAdmin(t);
 
       const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "Original Title",
@@ -331,7 +331,7 @@ describe("quests", () => {
   describe("setJurisdiction", () => {
     it("should update a quest's jurisdiction", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
+      const { asAdmin } = await createTestAdmin(t);
 
       const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "Test Quest",
@@ -352,7 +352,7 @@ describe("quests", () => {
   describe("setCategory", () => {
     it("should update a quest's category", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
+      const { asAdmin } = await createTestAdmin(t);
 
       const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "Test Quest",
@@ -373,7 +373,7 @@ describe("quests", () => {
   describe("setCosts", () => {
     it("should update a quest's costs", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
+      const { asAdmin } = await createTestAdmin(t);
 
       const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "Test Quest",
@@ -399,7 +399,7 @@ describe("quests", () => {
   describe("setTimeRequired", () => {
     it("should update a quest's time required", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
+      const { asAdmin } = await createTestAdmin(t);
 
       const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "Test Quest",
@@ -427,7 +427,7 @@ describe("quests", () => {
   describe("setContent", () => {
     it("should update a quest's content", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
+      const { asAdmin } = await createTestAdmin(t);
 
       const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "Test Quest",
@@ -450,7 +450,7 @@ describe("quests", () => {
   describe("softDelete", () => {
     it("should mark a quest as deleted", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin, adminId } = await createAdmin(t);
+      const { asAdmin, adminId } = await createTestAdmin(t);
 
       const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "To Delete",
@@ -469,7 +469,7 @@ describe("quests", () => {
 
     it("should be reversible", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin, adminId } = await createAdmin(t);
+      const { asAdmin, adminId } = await createTestAdmin(t);
 
       const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "To Restore",
@@ -490,7 +490,7 @@ describe("quests", () => {
   describe("deleteForever", () => {
     it("should permanently delete a quest and its associated userQuests", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin, adminId } = await createAdmin(t);
+      const { asAdmin, adminId } = await createTestAdmin(t);
 
       const { questId } = await asAdmin.mutation(api.quests.create, {
         title: "To Delete Forever",

@@ -2,8 +2,8 @@ import { convexTest } from "convex-test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { type PDFId, PDF_IDS } from "../../src/constants/forms";
 import { api } from "../_generated/api";
-import { createUser } from "../helpers";
 import schema from "../schema";
+import { createTestUser } from "../test-helpers";
 import { modules } from "../test.setup";
 
 const UPDATE_TIMESTAMP = 662585400000;
@@ -20,7 +20,7 @@ describe("userDocuments", () => {
 
   it("should return an empty list for a new user", async () => {
     const t = convexTest(schema, modules);
-    const { asUser } = await createUser(t);
+    const { asUser } = await createTestUser(t);
 
     const docs = await asUser.query(api.userDocuments.list, {});
     expect(docs).toEqual([]);
@@ -28,7 +28,7 @@ describe("userDocuments", () => {
 
   it("should add documents for a user and list them", async () => {
     const t = convexTest(schema, modules);
-    const { asUser, userId } = await createUser(t);
+    const { asUser, userId } = await createTestUser(t);
 
     await asUser.mutation(api.userDocuments.set, {
       pdfIds: [TEST_PDF_IDS[0], TEST_PDF_IDS[1]],
@@ -43,7 +43,7 @@ describe("userDocuments", () => {
 
   it("should not duplicate userDocuments for the same pdfId", async () => {
     const t = convexTest(schema, modules);
-    const { asUser } = await createUser(t);
+    const { asUser } = await createTestUser(t);
 
     await asUser.mutation(api.userDocuments.set, { pdfIds: [TEST_PDF_IDS[2]] });
     await asUser.mutation(api.userDocuments.set, { pdfIds: [TEST_PDF_IDS[2]] });
@@ -54,7 +54,7 @@ describe("userDocuments", () => {
 
   it("should delete all documents for the current user", async () => {
     const t = convexTest(schema, modules);
-    const { asUser } = await createUser(t);
+    const { asUser } = await createTestUser(t);
 
     await asUser.mutation(api.userDocuments.set, { pdfIds: TEST_PDF_IDS });
     let docs = await asUser.query(api.userDocuments.list, {});
@@ -66,7 +66,7 @@ describe("userDocuments", () => {
 
   it("should delete specific userDocument IDs", async () => {
     const t = convexTest(schema, modules);
-    const { asUser } = await createUser(t);
+    const { asUser } = await createTestUser(t);
 
     await asUser.mutation(api.userDocuments.set, { pdfIds: TEST_PDF_IDS });
     let docs = await asUser.query(api.userDocuments.list, {});

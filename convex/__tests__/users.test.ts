@@ -2,8 +2,8 @@ import { convexTest } from "convex-test";
 import { describe, expect, it } from "vitest";
 import { DUPLICATE_EMAIL, INVALID_EMAIL } from "../../src/constants/errors";
 import { api } from "../_generated/api";
-import { createAdmin, createUser } from "../helpers";
 import schema from "../schema";
+import { createTestAdmin, createTestUser } from "../test-helpers";
 import { modules } from "../test.setup";
 
 describe("users", () => {
@@ -17,7 +17,7 @@ describe("users", () => {
 
     it("should return an error if not authorized", async () => {
       const t = convexTest(schema, modules);
-      const { asUser } = await createUser(t);
+      const { asUser } = await createTestUser(t);
       await expect(asUser.query(api.users.getAll, {})).rejects.toThrow(
         "Insufficient permissions",
       );
@@ -25,9 +25,9 @@ describe("users", () => {
 
     it("should return all users", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
-      await createUser(t, "test1@example.com");
-      await createUser(t, "test2@example.com");
+      const { asAdmin } = await createTestAdmin(t);
+      await createTestUser(t, "test1@example.com");
+      await createTestUser(t, "test2@example.com");
 
       const users = await asAdmin.query(api.users.getAll, {});
       expect(users).toHaveLength(3);
@@ -40,7 +40,11 @@ describe("users", () => {
   describe("getCurrent", () => {
     it("should return the current user", async () => {
       const t = convexTest(schema, modules);
-      const { asUser } = await createUser(t, "test@example.com", "Test User");
+      const { asUser } = await createTestUser(
+        t,
+        "test@example.com",
+        "Test User",
+      );
 
       const user = await asUser.query(api.users.getCurrent, {});
       expect(user?.email).toBe("test@example.com");
@@ -58,12 +62,12 @@ describe("users", () => {
   describe("getCurrentRole", () => {
     it("should return the current user's role", async () => {
       const t = convexTest(schema, modules);
-      const { asUser } = await createUser(t);
+      const { asUser } = await createTestUser(t);
 
       const role = await asUser.query(api.users.getCurrentRole, {});
       expect(role).toBe("user");
 
-      const { asAdmin } = await createAdmin(t);
+      const { asAdmin } = await createTestAdmin(t);
       const adminRole = await asAdmin.query(api.users.getCurrentRole, {});
       expect(adminRole).toBe("admin");
     });
@@ -85,7 +89,7 @@ describe("users", () => {
 
     it("should return an error if not authorized", async () => {
       const t = convexTest(schema, modules);
-      const { asUser } = await createUser(t);
+      const { asUser } = await createTestUser(t);
       await expect(
         asUser.query(api.users.getByEmail, { email: "test@example.com" }),
       ).rejects.toThrow("Insufficient permissions");
@@ -93,8 +97,8 @@ describe("users", () => {
 
     it("should return user by email", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
-      await createUser(t, "test@example.com", "Test User");
+      const { asAdmin } = await createTestAdmin(t);
+      await createTestUser(t, "test@example.com", "Test User");
 
       const user = await asAdmin.query(api.users.getByEmail, {
         email: "test@example.com",
@@ -104,7 +108,7 @@ describe("users", () => {
 
     it("should return null if user not found", async () => {
       const t = convexTest(schema, modules);
-      const { asAdmin } = await createAdmin(t);
+      const { asAdmin } = await createTestAdmin(t);
 
       const user = await asAdmin.query(api.users.getByEmail, {
         email: "nonexistent@example.com",
@@ -116,7 +120,7 @@ describe("users", () => {
   describe("setName", () => {
     it("should update user name", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       await asUser.mutation(api.users.setName, {
         name: "New Name",
@@ -130,7 +134,7 @@ describe("users", () => {
 
     it("should clear user name when undefined", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       await asUser.mutation(api.users.setName, {
         name: undefined,
@@ -146,7 +150,7 @@ describe("users", () => {
   describe("setEmail", () => {
     it("should update the user's email", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       await asUser.mutation(api.users.setEmail, {
         email: "new@example.com",
@@ -160,7 +164,7 @@ describe("users", () => {
 
     it("should throw an error for an invalid email", async () => {
       const t = convexTest(schema, modules);
-      const { asUser } = await createUser(t);
+      const { asUser } = await createTestUser(t);
 
       await expect(
         asUser.mutation(api.users.setEmail, { email: "invalid-email" }),
@@ -169,8 +173,8 @@ describe("users", () => {
 
     it("should throw an error for a duplicate email", async () => {
       const t = convexTest(schema, modules);
-      await createUser(t, "existing@example.com");
-      const { asUser } = await createUser(t, "new@example.com");
+      await createTestUser(t, "existing@example.com");
+      const { asUser } = await createTestUser(t, "new@example.com");
 
       await expect(
         asUser.mutation(api.users.setEmail, { email: "existing@example.com" }),
@@ -181,7 +185,7 @@ describe("users", () => {
   describe("setBirthplace", () => {
     it("should update user birthplace", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       await asUser.mutation(api.users.setBirthplace, {
         birthplace: "CA",
@@ -197,7 +201,7 @@ describe("users", () => {
   describe("setResidence", () => {
     it("should update user residence", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       await asUser.mutation(api.users.setResidence, {
         residence: "CA",
@@ -213,7 +217,7 @@ describe("users", () => {
   describe("setCurrentUserIsMinor", () => {
     it("should update user isMinor status", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       await asUser.mutation(api.users.setCurrentUserIsMinor, {
         isMinor: true,
@@ -229,7 +233,7 @@ describe("users", () => {
   describe("deleteCurrentUser", () => {
     it("should delete user and all associated data", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       // Create associated data
       await t.run(async (ctx) => {
@@ -285,7 +289,7 @@ describe("users", () => {
   describe("isSignedIn", () => {
     it("should return true when user is authenticated", async () => {
       const t = convexTest(schema, modules);
-      const { asUser } = await createUser(t);
+      const { asUser } = await createTestUser(t);
       const isSignedIn = await asUser.query(api.users.isSignedIn, {});
       expect(isSignedIn).toBe(true);
     });

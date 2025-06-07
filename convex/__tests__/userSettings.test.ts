@@ -1,15 +1,15 @@
 import { convexTest } from "convex-test";
 import { describe, expect, it } from "vitest";
 import { api } from "../_generated/api";
-import { createUser } from "../helpers";
 import schema from "../schema";
+import { createTestUser } from "../test-helpers";
 import { modules } from "../test.setup";
 
 describe("userSettings", () => {
   describe("getCurrentUserSettings", () => {
     it("should throw error if user settings not found", async () => {
       const t = convexTest(schema, modules);
-      const { asUser } = await createUser(t);
+      const { asUser } = await createTestUser(t);
 
       await expect(
         asUser.query(api.userSettings.getCurrentUserSettings),
@@ -18,7 +18,7 @@ describe("userSettings", () => {
 
     it("should return user settings if found", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       const settingsId = await t.run(async (ctx) => {
         return await ctx.db.insert("userSettings", {
@@ -39,7 +39,7 @@ describe("userSettings", () => {
   describe("setTheme", () => {
     it("should throw error if user settings not found", async () => {
       const t = convexTest(schema, modules);
-      const { asUser } = await createUser(t);
+      const { asUser } = await createTestUser(t);
 
       await expect(
         asUser.mutation(api.userSettings.setTheme, {
@@ -50,7 +50,7 @@ describe("userSettings", () => {
 
     it("should update existing user settings theme", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createUser(t);
+      const { asUser, userId } = await createTestUser(t);
 
       await t.run(async (ctx) => {
         return await ctx.db.insert("userSettings", {
