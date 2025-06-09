@@ -210,8 +210,8 @@ importers:
         specifier: ^1.52.0
         version: 1.52.0
       '@react-aria/test-utils':
-        specifier: 1.0.0-alpha.7
-        version: 1.0.0-alpha.7(@testing-library/react@16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.5(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 1.0.0-alpha.8
+        version: 1.0.0-alpha.8(@testing-library/react@16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.5(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@storybook/addon-themes':
         specifier: ^9.0.4
         version: 9.0.4(storybook@9.0.4(@testing-library/dom@10.4.0)(prettier@3.5.3))
@@ -1789,8 +1789,8 @@ packages:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
       react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
-  '@react-aria/test-utils@1.0.0-alpha.7':
-    resolution: {integrity: sha512-sT5G8Bpx/wYnFG39514ZB/+frblvJU0xcTVOrYIvopLjqOQZOn8GS2wHKHmKnsaub8CyRbOMV93v9fz6qQkWRg==}
+  '@react-aria/test-utils@1.0.0-alpha.8':
+    resolution: {integrity: sha512-NGXZzN/8O7DbTdIhivD1d8NRuXWl8rW/TSML9KBAxF9cHHVDpEOx6douOLGowi78KioFUI06Wr/DOlok1Ok4XA==}
     peerDependencies:
       '@testing-library/react': ^16.0.0
       '@testing-library/user-event': ^14.0.0
@@ -4024,6 +4024,7 @@ packages:
 
   lucia@3.2.2:
     resolution: {integrity: sha512-P1FlFBGCMPMXu+EGdVD9W4Mjm0DqsusmKgO7Xc33mI5X1bklmsQb0hfzPhXomQr9waWIBDsiOjvr1e6BTaUqpA==}
+    deprecated: This package has been deprecated. Please see https://lucia-auth.com/lucia-v3/migrate.
 
   lucide-react@0.511.0:
     resolution: {integrity: sha512-VK5a2ydJ7xm8GvBeKLS9mu1pVK6ucef9780JVUjw6bAjJL/QXnd4Y0p7SPeOUMC27YhzNCZvm5d/QX0Tp3rc0w==}
@@ -6844,7 +6845,7 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@react-aria/test-utils@1.0.0-alpha.7(@testing-library/react@16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.5(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@react-aria/test-utils@1.0.0-alpha.8(@testing-library/react@16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.5(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@swc/helpers': 0.5.17
       '@testing-library/react': 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.5(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
