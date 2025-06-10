@@ -33,6 +33,15 @@ export default {
           a12: "var(--color-theme-a12)",
         },
       },
+      keyframes: {
+        gradient: {
+          "0%": { backgroundPosition: "0% 0%" },
+          "100%": { backgroundPosition: "200% 200%" },
+        },
+      },
+      animation: {
+        gradient: "gradient 8s linear infinite",
+      },
     },
   },
 } satisfies Config;

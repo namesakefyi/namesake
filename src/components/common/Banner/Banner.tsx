@@ -21,11 +21,11 @@ const bannerStyles = tv({
     variant: {
       success: "bg-green-3 text-green-normal [&_a]:text-green-normal",
       danger: "bg-red-3 text-red-normal [&_a]:text-red-normal",
-      warning: "bg-amber-3 text-amber-normal [&_a]:text-amber-normal",
+      warning: "bg-yellow-3 text-yellow-normal [&_a]:text-yellow-normal",
     },
     size: {
       medium: "gap-2 p-2.5 px-3 pr-4 !text-sm",
-      large: "gap-3 p-3 px-4 !text-base",
+      large: "gap-4 p-3 px-4 !text-base",
     },
   },
   defaultVariants: {
@@ -35,12 +35,12 @@ const bannerStyles = tv({
 });
 
 const iconStyles = tv({
-  base: "text-brand-9 shrink-0",
+  base: "text-theme-11 shrink-0",
   variants: {
     variant: {
       success: "text-green-11",
       danger: "text-red-11",
-      warning: "text-amber-11",
+      warning: "text-yellow-11",
     },
     size: {
       medium: "size-5",

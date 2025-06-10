@@ -19,7 +19,8 @@ const styles = tv({
   base: "px-3.5 [&:has(svg:only-child)]:px-2 text-sm text-center font-medium transition rounded-lg border border-transparent relative isolate shrink-0 flex items-center justify-center gap-2",
   variants: {
     isSelected: {
-      false: "bg-transparent text-dim hover:text-normal",
+      false:
+        "bg-transparent text-dim hover:text-normal before:absolute before:-z-1 before:inset-1 before:rounded-full before:bg-transparent hover:before:bg-theme-2/80 dark:hover:before:bg-theme-11/15",
       true: "bg-theme-1 dark:bg-theme-3 text-normal shadow-xs border border-dim",
     },
     isDisabled: buttonStyles.variants.isDisabled,

@@ -110,7 +110,7 @@ export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
 
 const rowStyles = tv({
   extend: focusRing,
-  base: "group/row relative cursor-default select-none -outline-offset-2 text-sm text-normal selected:bg-purple-subtle",
+  base: "group/row relative cursor-default select-none -outline-offset-2 text-sm text-normal selected:bg-theme-3",
 });
 
 export function TableRow<T extends object>({
@@ -140,7 +140,7 @@ export function TableRow<T extends object>({
 
 const cellStyles = tv({
   extend: focusRing,
-  base: "border-b border-dim group-last/row:border-b-0 group-selected/row:border-purple-dim in-[:has(+[data-selected])]:border-purple-dim p-2 truncate -outline-offset-2",
+  base: "border-b border-dim group-last/row:border-b-0 group-selected/row:border-theme-dim in-[:has(+[data-selected])]:border-theme-dim p-2 truncate -outline-offset-2",
 });
 
 export function TableCell(props: CellProps) {

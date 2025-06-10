@@ -23,6 +23,7 @@ export const THEMES: Record<Theme, FieldDetails> = {
 } as const;
 
 export type ThemeColor =
+  | "rainbow"
   | "pink"
   | "red"
   | "orange"
@@ -30,13 +31,16 @@ export type ThemeColor =
   | "green"
   | "turquoise"
   | "indigo"
-  | "violet"
-  | "gray";
+  | "violet";
 
 export const THEME_COLORS: Record<
   ThemeColor,
   { label: string; meaning?: string }
 > = {
+  rainbow: {
+    label: "Rainbow",
+    meaning: "Pride",
+  },
   pink: {
     label: "Pink",
     meaning: "Sex",
@@ -68,9 +72,6 @@ export const THEME_COLORS: Record<
   violet: {
     label: "Violet",
     meaning: "Spirit",
-  },
-  gray: {
-    label: "Gray",
   },
 };
 

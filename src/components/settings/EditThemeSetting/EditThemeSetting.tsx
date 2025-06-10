@@ -1,38 +1,8 @@
 import { useTheme } from "@/components/app";
-import {
-  Card,
-  ToggleButton,
-  ToggleButtonGroup,
-  Tooltip,
-  TooltipTrigger,
-} from "@/components/common";
+import { Card, ToggleButton, ToggleButtonGroup } from "@/components/common";
 import { THEMES, THEME_COLORS, type Theme, type ThemeColor } from "@/constants";
 import type { Key } from "react-aria-components";
 import { tv } from "tailwind-variants";
-
-interface ColorSwatchProps {
-  color: ThemeColor;
-}
-
-const ColorSwatch = ({ color }: ColorSwatchProps) => {
-  const swatchStyles = tv({
-    base: "size-4 rounded-full",
-    variants: {
-      color: {
-        pink: "bg-pink-9",
-        red: "bg-red-9",
-        orange: "bg-orange-9",
-        yellow: "bg-yellow-9",
-        green: "bg-green-9",
-        turquoise: "bg-turquoise-9",
-        indigo: "bg-indigo-9",
-        violet: "bg-violet-9",
-        gray: "bg-gray-9",
-      },
-    },
-  });
-  return <div className={swatchStyles({ color })} />;
-};
 
 export const EditThemeSetting = () => {
   const { theme, setTheme, color, setColor } = useTheme();
@@ -45,27 +15,43 @@ export const EditThemeSetting = () => {
     setColor(Array.from(newColor)[0] as ThemeColor);
   };
 
+  const swatchStyles = tv({
+    base: "w-full h-full rounded-full",
+    variants: {
+      color: {
+        pink: "bg-pink-9",
+        red: "bg-red-9",
+        orange: "bg-orange-9",
+        yellow: "bg-yellow-9",
+        green: "bg-green-9",
+        turquoise: "bg-turquoise-9",
+        indigo: "bg-indigo-9",
+        violet: "bg-violet-9",
+        gray: "bg-gray-9",
+        rainbow: "bg-rainbow",
+      },
+    },
+  });
+
   return (
     <Card className="@container flex justify-center pb-4">
-      <div className="flex flex-col @2xl:flex-row gap-6">
+      <div className="flex flex-col @xl:flex-row gap-6">
         <div className="flex flex-col gap-2">
           <ToggleButtonGroup
             selectionMode="single"
             disallowEmptySelection
             selectedKeys={new Set([theme ?? "system"])}
             onSelectionChange={handleThemeChange}
-            className="w-max rounded-full"
+            className="w-max mx-auto rounded-full"
           >
             {Object.entries(THEMES).map(([theme, { label, icon }]) => (
-              <TooltipTrigger key={theme}>
-                <ToggleButton
-                  aria-label={label}
-                  id={theme}
-                  icon={icon}
-                  className="rounded-full w-16"
-                />
-                <Tooltip>{label}</Tooltip>
-              </TooltipTrigger>
+              <ToggleButton
+                aria-label={label}
+                key={theme}
+                id={theme}
+                icon={icon}
+                className="rounded-full w-16"
+              />
             ))}
           </ToggleButtonGroup>
           <div className="font-medium text-center">
@@ -80,27 +66,19 @@ export const EditThemeSetting = () => {
             onSelectionChange={handleColorChange}
             className="w-max mx-auto rounded-full"
           >
-            {Object.entries(THEME_COLORS).map(([color, { label, meaning }]) => (
-              <TooltipTrigger key={color}>
-                <ToggleButton
-                  id={color}
-                  aria-label={label}
-                  className="rounded-full w-10 p-0"
-                >
-                  <ColorSwatch color={color as ThemeColor} />
-                </ToggleButton>
-                <Tooltip
-                  className="flex flex-col items-center text-center"
-                  color={color as ThemeColor}
-                >
-                  {label}
-                  {meaning && (
-                    <span className="italic text-xs -mt-0.5 mb-0.5 opacity-80">
-                      {meaning}
-                    </span>
-                  )}
-                </Tooltip>
-              </TooltipTrigger>
+            {Object.entries(THEME_COLORS).map(([themeColor, { label }]) => (
+              <ToggleButton
+                id={themeColor}
+                key={themeColor}
+                aria-label={label}
+                className="rounded-full p-2 w-10"
+              >
+                <div
+                  className={swatchStyles({
+                    color: themeColor as ThemeColor,
+                  })}
+                />
+              </ToggleButton>
             ))}
           </ToggleButtonGroup>
           <div className="font-medium flex gap-2 justify-center">

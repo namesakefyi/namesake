@@ -6,14 +6,8 @@ import { useMutation } from "convex/react";
 import * as React from "react";
 import { script } from "./script";
 
-/**
- * HTML attribute that can be used to modify theme-related styles
- */
 export type Attribute = "class" | "data-theme" | "data-color";
 
-/**
- * Props for the theme provider context
- */
 export interface UseThemeProps {
   /** List of all available theme names */
   themes: Theme[];
@@ -33,9 +27,6 @@ export interface UseThemeProps {
   setColor: (color: ThemeColor) => void;
 }
 
-/**
- * Props for the theme provider component
- */
 export interface ThemeProviderProps {
   /** List of all available theme names */
   themes?: Theme[];
@@ -95,7 +86,7 @@ const ThemeComponent = ({
   enableColorScheme = true,
   attribute = "data-theme",
   storageKey = "theme",
-  defaultColor = "violet",
+  defaultColor = "rainbow",
   colorStorageKey = "color",
   children,
 }: ThemeProviderProps) => {

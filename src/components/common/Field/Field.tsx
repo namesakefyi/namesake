@@ -73,8 +73,8 @@ export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
       false:
-        "border-dim has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
-      true: "border-normal has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
+        "border-dim has-autofill:border-yellow-6 dark:has-autofill:border-purple-6",
+      true: "border-normal has-autofill:border-yellow-6 dark:has-autofill:border-purple-6",
     },
     isInvalid: {
       true: "border-red-9",
@@ -89,8 +89,8 @@ export const innerBorderStyles = tv({
   variants: {
     isFocusWithin: {
       false:
-        "border-dim has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
-      true: "border-normal has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
+        "border-dim has-autofill:border-yellow-6 dark:has-autofill:border-purple-6",
+      true: "border-normal has-autofill:border-yellow-6 dark:has-autofill:border-purple-6",
     },
     isInvalid: {
       true: "border-red-9",
@@ -103,7 +103,7 @@ export const innerBorderStyles = tv({
 
 const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "border text-sm group has-autofill:bg-amber-a3 dark:has-autofill:bg-purple-a3 flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
+  base: "border text-sm group has-autofill:bg-yellow-3 dark:has-autofill:bg-yellow-3 flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
   variants: {
     ...fieldBorderStyles.variants,
     size: {

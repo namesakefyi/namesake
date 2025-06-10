@@ -36,8 +36,8 @@ export const strengthConfig: Record<number, StrengthConfig> = {
   2: {
     label: "Okay",
     color: {
-      text: "text-amber-normal",
-      bg: "bg-amber-9",
+      text: "text-yellow-normal",
+      bg: "bg-yellow-9",
     },
   },
   3: {

@@ -25,7 +25,7 @@ const tagStyles = tv({
     },
     isSelected: {
       false: "text-dim border-dim hover:text-normal hover:border-gray-normal",
-      true: "bg-purple-9 text-white border border-transparent forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-color-adjust-none",
+      true: "bg-theme-9 text-white border border-transparent forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-color-adjust-none",
     },
     isDisabled: {
       true: "cursor-default text-dim opacity-50 forced-colors:text-[GrayText]",

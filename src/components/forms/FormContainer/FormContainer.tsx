@@ -70,9 +70,9 @@ export function FormContainer({
           <Form
             onSubmit={onSubmit}
             autoComplete="on"
-            className="gap-0 divide-y divide-theme-a3"
+            className="gap-0 divide-y divide-dim"
           >
-            <header className="flex flex-col gap-1 mb-8">
+            <header className="flex flex-col gap-1 mb-8 border-0">
               {jurisdiction && (
                 <Badge size="lg">{JURISDICTIONS[jurisdiction]}</Badge>
               )}
