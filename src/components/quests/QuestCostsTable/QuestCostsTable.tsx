@@ -21,7 +21,7 @@ export const QuestCostsTable = ({ costs, card }: QuestCostsTableProps) => {
   const table = (
     <table className="leading-none [&_tbody_td]:py-1.5 [&_tfoot_td]:pt-3 w-full">
       <thead>
-        <tr className="text-sm leading-none text-gray-dim">
+        <tr className="text-sm leading-none text-dim">
           <th className="text-left font-semibold">Cost</th>
           <th className="text-right font-semibold">Amount</th>
         </tr>
@@ -32,7 +32,7 @@ export const QuestCostsTable = ({ costs, card }: QuestCostsTableProps) => {
             <td className="pr-4">
               {description}
               {!isRequired && (
-                <span className="text-gray-dim italic"> optional</span>
+                <span className="text-dim italic"> optional</span>
               )}
             </td>
             <td className="text-right tabular-nums">
@@ -46,7 +46,7 @@ export const QuestCostsTable = ({ costs, card }: QuestCostsTableProps) => {
         ))}
       </tbody>
       <tfoot>
-        <tr className="font-semibold text-lg leading-none border-t border-gray-dim">
+        <tr className="font-semibold text-lg leading-none border-t border-dim">
           <td className="pr-4">Total</td>
           <td className="text-right">{getTotalCosts(costs)}</td>
         </tr>

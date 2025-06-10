@@ -54,7 +54,7 @@ export function LanguageSelectField({
                   {name}
                   <Text
                     slot="description"
-                    className="text-gray-dim"
+                    className="text-dim"
                     data-testid="native-name"
                   >
                     {native}

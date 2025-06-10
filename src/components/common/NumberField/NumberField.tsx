@@ -82,7 +82,7 @@ function StepperButton(props: ButtonProps) {
   return (
     <Button
       {...props}
-      className="p-0.5 cursor-pointer text-gray-dim group-disabled:text-gray-2 forced-colors:group-disabled:text-[GrayText]"
+      className="p-0.5 cursor-pointer text-dim group-disabled:text-gray-2 forced-colors:group-disabled:text-[GrayText]"
     />
   );
 }

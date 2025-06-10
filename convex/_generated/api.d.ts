@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as __tests___helpers from "../__tests__/helpers.js";
 import type * as auth from "../auth.js";
 import type * as earlyAccessCodes from "../earlyAccessCodes.js";
 import type * as helpers from "../helpers.js";
@@ -46,6 +47,7 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  "__tests__/helpers": typeof __tests___helpers;
   auth: typeof auth;
   earlyAccessCodes: typeof earlyAccessCodes;
   helpers: typeof helpers;

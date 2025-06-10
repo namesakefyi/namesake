@@ -37,12 +37,11 @@ export function StatusBadge({
 }: StatusBadgeProps) {
   if (status === undefined) return null;
 
-  const { label, icon, variant } = STATUS[status];
+  const { label, icon } = STATUS[status];
 
   return (
     <Badge
       icon={icon}
-      variant={variant}
       {...props}
       aria-label={condensed ? label : undefined}
       className={badgeStyles({ condensed, className })}

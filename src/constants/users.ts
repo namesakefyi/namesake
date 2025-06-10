@@ -22,6 +22,58 @@ export const THEMES: Record<Theme, FieldDetails> = {
   },
 } as const;
 
+export type ThemeColor =
+  | "pink"
+  | "red"
+  | "orange"
+  | "yellow"
+  | "green"
+  | "turquoise"
+  | "indigo"
+  | "violet"
+  | "gray";
+
+export const THEME_COLORS: Record<
+  ThemeColor,
+  { label: string; meaning?: string }
+> = {
+  pink: {
+    label: "Pink",
+    meaning: "Sex",
+  },
+  red: {
+    label: "Red",
+    meaning: "Life",
+  },
+  orange: {
+    label: "Orange",
+    meaning: "Healing",
+  },
+  yellow: {
+    label: "Yellow",
+    meaning: "Sunlight",
+  },
+  green: {
+    label: "Green",
+    meaning: "Nature",
+  },
+  turquoise: {
+    label: "Turquoise",
+    meaning: "Magic and Art",
+  },
+  indigo: {
+    label: "Indigo",
+    meaning: "Serenity",
+  },
+  violet: {
+    label: "Violet",
+    meaning: "Spirit",
+  },
+  gray: {
+    label: "Gray",
+  },
+};
+
 export const ROLES = {
   user: "User",
   editor: "Editor",

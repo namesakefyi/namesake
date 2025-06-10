@@ -16,11 +16,11 @@ export interface ToggleButtonProps extends AriaToggleButtonProps {
 
 const styles = tv({
   extend: focusRing,
-  base: "px-3.5 [&:has(svg:only-child)]:px-2 text-sm text-center font-medium transition rounded-lg border border-transparent relative isolate shrink-0",
+  base: "px-3.5 [&:has(svg:only-child)]:px-2 text-sm text-center font-medium transition rounded-lg border border-transparent relative isolate shrink-0 flex items-center justify-center gap-2",
   variants: {
     isSelected: {
-      false: "bg-transparent text-gray-dim hover:text-gray-normal",
-      true: "bg-app text-gray-normal shadow-xs border border-gray-dim",
+      false: "bg-transparent text-dim hover:text-normal",
+      true: "bg-theme-1 dark:bg-theme-3 text-normal shadow-xs border border-dim",
     },
     isDisabled: buttonStyles.variants.isDisabled,
     size: {
@@ -47,7 +47,7 @@ export function ToggleButton({
         styles({ ...renderProps, size, className }),
       )}
     >
-      {Icon && <Icon size={size === "small" ? 16 : 20} />}
+      {Icon && <Icon size={size === "small" ? 16 : 20} className="shrink-0" />}
       {children}
     </AriaToggleButton>
   );

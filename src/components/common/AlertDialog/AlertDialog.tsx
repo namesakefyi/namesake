@@ -28,7 +28,7 @@ export function AlertDialog({
         <>
           <Heading
             slot="title"
-            className="text-xl font-medium text-gray-normal leading-6 my-0"
+            className="text-xl font-medium text-normal leading-6 my-0"
           >
             {title}
           </Heading>
@@ -41,7 +41,7 @@ export function AlertDialog({
               <Info aria-hidden />
             )}
           </div>
-          <p className="mt-3 text-gray-dim">{children}</p>
+          <p className="mt-3 text-dim">{children}</p>
           <div className="mt-6 flex justify-end gap-2">
             <Button onPress={close}>{cancelLabel || "Cancel"}</Button>
             <Button

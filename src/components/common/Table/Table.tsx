@@ -26,7 +26,7 @@ import { tv } from "tailwind-variants";
 
 export function Table(props: TableProps) {
   return (
-    <ResizableTableContainer className="max-h-full max-w-full overflow-auto scroll-pt-[2.281rem] relative border border-gray-dim rounded-lg">
+    <ResizableTableContainer className="max-h-full max-w-full overflow-auto scroll-pt-[2.281rem] relative border border-dim rounded-lg">
       <AriaTable {...props} className="border-separate border-spacing-0" />
     </ResizableTableContainer>
   );
@@ -48,7 +48,7 @@ export function TableColumn(props: ColumnProps) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "[&:hover]:z-20 focus-within:z-20 text-start text-sm font-semibold text-gray-dim cursor-default border-b border-gray-dim",
+        "[&:hover]:z-20 focus-within:z-20 text-start text-sm font-semibold text-dim cursor-default border-b border-dim",
       )}
     >
       {composeRenderProps(
@@ -66,7 +66,7 @@ export function TableColumn(props: ColumnProps) {
                   {sortDirection && (
                     <ChevronUp
                       aria-hidden
-                      className="w-4 h-4 text-gray-dim forced-colors:text-[ButtonText]"
+                      className="w-4 h-4 text-dim forced-colors:text-[ButtonText]"
                     />
                   )}
                 </span>
@@ -98,7 +98,7 @@ export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
         <AriaColumn
           width={40}
           minWidth={40}
-          className="text-start text-sm font-semibold cursor-default p-2 border-b border-gray-dim"
+          className="text-start text-sm font-semibold cursor-default p-2 border-b border-dim"
         >
           {selectionMode === "multiple" && <Checkbox slot="selection" />}
         </AriaColumn>
@@ -110,7 +110,7 @@ export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
 
 const rowStyles = tv({
   extend: focusRing,
-  base: "group/row relative cursor-default select-none -outline-offset-2 text-sm text-gray-normal selected:bg-purple-subtle",
+  base: "group/row relative cursor-default select-none -outline-offset-2 text-sm text-normal selected:bg-purple-subtle",
 });
 
 export function TableRow<T extends object>({
@@ -140,7 +140,7 @@ export function TableRow<T extends object>({
 
 const cellStyles = tv({
   extend: focusRing,
-  base: "border-b border-gray-dim group-last/row:border-b-0 group-selected/row:border-purple-dim in-[:has(+[data-selected])]:border-purple-dim p-2 truncate -outline-offset-2",
+  base: "border-b border-dim group-last/row:border-b-0 group-selected/row:border-purple-dim in-[:has(+[data-selected])]:border-purple-dim p-2 truncate -outline-offset-2",
 });
 
 export function TableCell(props: CellProps) {

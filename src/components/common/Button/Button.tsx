@@ -31,20 +31,20 @@ export interface ButtonProps extends AriaButtonProps {
 
 export const buttonStyles = tv({
   extend: focusRing,
-  base: "py-2 text-sm font-medium relative whitespace-nowrap rounded-lg border border-gray-dim transition-all duration-200 ease-in-out flex items-center justify-center",
+  base: "py-2 text-sm font-medium relative whitespace-nowrap rounded-lg border border-dim transition-all duration-200 ease-in-out flex items-center justify-center tabular-nums",
   variants: {
     variant: {
       primary:
-        "bg-purple-9 hover:bg-purple-10 text-white border-purple-10 shadow-xs",
+        "bg-theme-9 hover:bg-theme-10 text-white border-overlay shadow-xs",
       secondary:
-        "bg-white dark:bg-gray-3 dark:hover:bg-gray-4 hover:border-gray-normal text-gray-normal shadow-sm",
+        "bg-theme-1 dark:bg-theme-3 dark:hover:bg-theme-4 hover:border-theme-a7 text-normal shadow-sm",
       destructive:
         "bg-red-9 text-white border-red-11 shadow-sm hover:bg-red-10",
       success:
         "bg-green-9 text-white border-green-11 shadow-sm hover:bg-green-10",
-      icon: "bg-transparent hover:bg-gray-a3 text-gray-dim hover:text-gray-normal border-0 flex shrink-0 items-center justify-center rounded-full",
+      icon: "bg-transparent hover:bg-theme-a3 text-dim hover:text-normal border-0 flex shrink-0 items-center justify-center rounded-full",
       ghost:
-        "bg-transparent hover:bg-gray-a3 text-gray-dim hover:text-gray-normal border-0",
+        "bg-transparent hover:bg-theme-a3 text-dim hover:text-normal border-0",
     },
     size: {
       small: "h-8 px-2 gap-1.5",

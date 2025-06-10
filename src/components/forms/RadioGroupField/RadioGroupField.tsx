@@ -34,7 +34,7 @@ export function RadioGroupField({
   const { control } = useFormContext();
 
   return (
-    <div className="@container flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <Controller
         control={control}
         name={name}
@@ -50,7 +50,7 @@ export function RadioGroupField({
             orientation="vertical"
             {...props}
           >
-            <span className="italic text-gray-dim text-sm">Select one:</span>
+            <span className="italic text-dim text-sm">Select one:</span>
             {options?.map(({ label, ...option }) => (
               <Radio key={option.value} {...option} size="large" card>
                 {label}

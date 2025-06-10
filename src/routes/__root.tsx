@@ -1,3 +1,4 @@
+import { useTheme } from "@/components/app";
 import type { Jurisdiction, Role } from "@/constants";
 import {
   type NavigateOptions,
@@ -15,7 +16,6 @@ import {
   LoaderCircle,
   OctagonAlert,
 } from "lucide-react";
-import { useTheme } from "next-themes";
 import { usePostHog } from "posthog-js/react";
 import { useEffect } from "react";
 import { RouterProvider } from "react-aria-components";

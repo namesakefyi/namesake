@@ -180,11 +180,7 @@ export const CATEGORIES: Record<Category, GroupDetails> = {
  */
 export type Status = "notStarted" | "inProgress" | "complete";
 
-interface StatusDetails extends GroupDetails {
-  variant?: "info" | "warning" | "danger" | "brand" | "success";
-}
-
-export const STATUS: Record<Status, StatusDetails> = {
+export const STATUS: Record<Status, GroupDetails> = {
   notStarted: {
     label: "Not started",
     icon: CircleDashed,
@@ -192,12 +188,10 @@ export const STATUS: Record<Status, StatusDetails> = {
   inProgress: {
     label: "In progress",
     icon: LoaderCircle,
-    variant: "warning",
   },
   complete: {
     label: "Done",
     icon: CircleCheckBig,
-    variant: "success",
   },
 } as const;
 

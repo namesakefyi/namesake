@@ -179,7 +179,7 @@ export const QuestCallToAction = ({
     variants: {
       isComplete: {
         true: "bg-green-3 border-green-5 items-end",
-        false: "bg-element border-gray-dim",
+        false: "bg-element border-dim",
       },
     },
   });

@@ -154,7 +154,7 @@ function RouteComponent() {
           name="reasonForChangingName"
           label="Reason for name change"
         />
-        <Banner variant="info" size="large">
+        <Banner size="large">
           <p>
             <strong>What do I write?</strong> Provide a basic reason—no need to
             go into detail. Examples:
@@ -327,7 +327,7 @@ function RouteComponent() {
             description='Ask for a waiver of publication for your name change and state a "good cause" for it.'
             inputClassName="min-h-32"
           />
-          <Banner variant="info" size="large">
+          <Banner size="large">
             <p>
               <strong>What do I write?</strong> The court is looking for a legal
               basis to exempt you from the newspaper publishing requirement.
@@ -372,7 +372,7 @@ function RouteComponent() {
             description="Explain why you want to keep your case private."
             inputClassName="min-h-32"
           />
-          <Banner variant="info" size="large">
+          <Banner size="large">
             <p>
               <strong>What do I write?</strong> The court is looking for a legal
               basis to <em>impound</em> (make private) these court records.
@@ -406,7 +406,7 @@ function RouteComponent() {
         {form.watch("shouldApplyForFeeWaiver") !== true ? (
           <QuestCostsTable costs={quest?.costs} card />
         ) : (
-          <Banner variant="info" size="large">
+          <Banner size="large">
             Your download will include an Affidavit of Indigency.{" "}
             <strong>
               There are additional fields in the download you have to fill out.

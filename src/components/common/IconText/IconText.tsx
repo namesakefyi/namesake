@@ -9,7 +9,7 @@ export interface IconTextProps {
 
 export function IconText({ icon: Icon, children, className }: IconTextProps) {
   const styles = tv({
-    base: "text-gray-dim text-sm flex items-center gap-1.5",
+    base: "text-dim text-sm flex items-center gap-1.5",
   });
 
   return (

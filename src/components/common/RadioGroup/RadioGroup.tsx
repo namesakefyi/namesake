@@ -50,14 +50,14 @@ export function RadioGroup({
 
 const radioItemStyles = tv({
   extend: focusRing,
-  base: "flex shrink-0 items-center group text-gray-normal disabled:opacity-50 forced-colors:disabled:text-[GrayText] transition",
+  base: "flex shrink-0 items-center group text-normal disabled:opacity-50 forced-colors:disabled:text-[GrayText] transition",
   variants: {
     size: {
       medium: "gap-2",
       large: "gap-3",
     },
     card: {
-      true: "border border-gray-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-gray-a2 selected:bg-purple-a3 selected:border-purple-6",
+      true: "border border-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-theme-a2 selected:bg-theme-a3 selected:border-theme-6",
     },
   },
 });
@@ -67,14 +67,14 @@ const radioStyles = tv({
   base: "rounded-full border bg-app transition-all ease-out duration-150 cursor-pointer shrink-0",
   variants: {
     isSelected: {
-      false: "border-gray-dim",
-      true: "bg-white border-[6px] border-purple-9 forced-colors:border-[Highlight]",
+      false: "border-dim",
+      true: "bg-white border-[6px] border-theme-9 forced-colors:border-[Highlight]",
     },
     isInvalid: {
       true: "border-red-9 forced-colors:border-[Mark]!",
     },
     isDisabled: {
-      true: "border-gray-2 cursor-default forced-colors:border-[GrayText]!",
+      true: "border-theme-2 cursor-default forced-colors:border-[GrayText]!",
     },
     size: {
       medium: "size-5",

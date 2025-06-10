@@ -2,7 +2,7 @@
   @apply text-base lg:text-lg;
 
   a:not([data-type="button"]):not(:where(.not-prose *)) {
-    @apply underline underline-offset-2 hover:decoration-inherit decoration-gray-a8;
+    @apply underline underline-offset-2 hover:decoration-inherit decoration-theme-a8;
   }
 
   :where(p, h2, h3, blockquote, ul, ol, img, div, aside) + :where(p, h2, h3, blockquote, ul, ol, img, div, aside):not(:where(.not-prose *)) {
@@ -20,7 +20,7 @@
   }
 
   blockquote:not(:where(.not-prose *)) {
-    @apply border-l-2 border-gray-9 pl-4;
+    @apply border-l-2 border-theme-9 pl-4;
   }
 
   li:not(:where(.not-prose *)) {
@@ -103,7 +103,7 @@
       top: 0;
       font-size: 1.1em;
       content: counter(steps);
-      @apply bg-gray-a4;
+      @apply bg-theme-a4;
     }
     
     &::after {
@@ -112,7 +112,7 @@
       top: var(--step-number-size);
       width: 2px;
       bottom: 0;
-      @apply bg-gray-a3;
+      @apply bg-theme-a3;
       content: "";
     }
     
@@ -130,7 +130,7 @@
     
     &.is-empty::before {
       content: attr(data-placeholder);
-      @apply text-gray-9;
+      @apply text-theme-9;
       float: left;
       height: 0;
       pointer-events: none;
@@ -142,7 +142,7 @@
 
     &.is-empty::before {
       content: attr(data-placeholder);
-      @apply text-gray-9;
+      @apply text-theme-9;
       float: left;
       height: 0;
       pointer-events: none;
@@ -195,19 +195,19 @@
   }
 
   details:not([open]) summary {
-    @apply text-gray-11;
+    color: color-mix(in srgb, var(--color-theme-12) 80%, transparent);
   }
 
   &:not(:has([contenteditable="true"])) summary {
     @apply cursor-pointer;
 
     &:hover {
-      @apply text-gray-12;
+      @apply text-theme-12;
       &:before {
         opacity: 1;
       }
       &:after {
-        @apply bg-gray-a4;
+        @apply bg-theme-a4;
       }
     }
   }
@@ -223,7 +223,7 @@
 
 .tiptap {
   &.is-empty :not([data-type="step-content"]) p:first-child::before {
-    @apply text-gray-9;
+    @apply text-theme-9;
     content: attr(data-placeholder);
     float: left;
     height: 0;

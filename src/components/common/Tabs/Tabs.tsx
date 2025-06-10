@@ -76,7 +76,7 @@ const tabProps = tv({
   base: "flex items-center justify-center cursor-pointer rounded-md px-4 py-2 text-sm text-center transition forced-color-adjust-none",
   variants: {
     isSelected: {
-      false: "text-gray-dim hover:text-gray-normal",
+      false: "text-dim hover:text-normal",
       true: "forced-colors:text-[HighlightText] forced-colors:bg-[Highlight]",
     },
     isDisabled: {

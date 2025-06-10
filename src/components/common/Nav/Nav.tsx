@@ -22,10 +22,10 @@ type NavItemProps = NavItemBaseProps & (NavLinkProps | NavButtonProps);
 
 const navItemStyles = tv({
   extend: focusRing,
-  base: "rounded-md gap-2 no-underline px-2 -mx-2 flex border border-transparent items-center text-base md:text-sm lg:text-base hover:bg-gray-3 text-gray-normal aria-current:font-semibold aria-current:text-gray-normal cursor-pointer",
+  base: "rounded-md gap-2 no-underline px-2 -mx-2 flex border border-transparent items-center text-base md:text-sm lg:text-base hover:bg-theme-a3 text-gray-normal aria-current:font-semibold aria-current:text-gray-normal cursor-pointer",
   variants: {
     isActive: {
-      true: "bg-gray-3 hover:bg-gray-3 text-gray-normal",
+      true: "bg-theme-a3 text-normal",
     },
     size: {
       medium: "h-9 md:h-8 lg:h-9",
@@ -38,14 +38,15 @@ const navItemStyles = tv({
 });
 
 const iconStyles = tv({
-  base: "text-gray-dim shrink-0 stroke-[1.5px]",
+  base: "shrink-0 stroke-[1.5px]",
   variants: {
     isActive: {
-      true: "text-gray-normal",
+      false: "text-dim",
+      true: "text-normal",
     },
     size: {
       medium: "size-5",
-      large: "bg-gray-a3 rounded-sm size-8 p-1",
+      large: "bg-theme-a3 rounded-sm size-8 p-1",
     },
   },
   compoundVariants: [
@@ -103,10 +104,10 @@ export const NavItem = ({
         {children}
       </div>
       {displayExternalLink && (
-        <ExternalLink aria-hidden className="size-4 text-gray-8" />
+        <ExternalLink aria-hidden className="size-4 text-subtle" />
       )}
       {displayChevron && (
-        <ChevronRight aria-hidden className="size-5 -mr-0.5 text-gray-8" />
+        <ChevronRight aria-hidden className="size-5 -mr-0.5 text-subtle" />
       )}
     </Link>
   );
@@ -118,7 +119,7 @@ interface NavGroupProps {
 
 export const NavGroup = ({ children }: NavGroupProps) => {
   return (
-    <div className="flex flex-col gap-0.5 pt-2 mt-2 border-t border-gray-dim first:mt-0 first:border-0 first:pt-0">
+    <div className="flex flex-col gap-0.5 pt-2 mt-2 border-t border-dim first:mt-0 first:border-0 first:pt-0">
       {children}
     </div>
   );

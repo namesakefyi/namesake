@@ -15,7 +15,7 @@ export interface PopoverProps extends Omit<AriaPopoverProps, "children"> {
 }
 
 export const popoverStyles = tv({
-  base: "bg-element outline-none forced-colors:bg-[Canvas] shadow-2xl rounded-xl bg-clip-padding border border-gray-dim text-gray-normal",
+  base: "bg-element outline-none forced-colors:bg-[Canvas] shadow-2xl rounded-xl bg-clip-padding border border-overlay text-normal",
   variants: {
     isEntering: {
       true: "animate-in fade-in placement-bottom:slide-in-from-top-1 placement-top:slide-in-from-bottom-1 placement-left:slide-in-from-right-1 placement-right:slide-in-from-left-1 ease-out duration-200",

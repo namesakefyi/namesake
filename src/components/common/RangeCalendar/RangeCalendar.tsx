@@ -18,7 +18,7 @@ export interface RangeCalendarProps<T extends DateValue>
 
 const cell = tv({
   extend: focusRing,
-  base: "w-full h-full flex items-center justify-center rounded-full cursor-pointer forced-color-adjust-none text-gray-normal",
+  base: "w-full h-full flex items-center justify-center rounded-full cursor-pointer forced-color-adjust-none text-normal",
   variants: {
     selectionState: {
       none: "group-hover:bg-gray-3 group-pressed:bg-gray-2",
@@ -29,7 +29,7 @@ const cell = tv({
       cap: "bg-purple-9 group-invalid:bg-red-9 forced-colors:bg-[Highlight] forced-colors:group-invalid:bg-[Mark] text-white forced-colors:text-[HighlightText]",
     },
     isDisabled: {
-      true: "text-gray-dim opacity-50 forced-colors:text-[GrayText] cursor-default",
+      true: "text-dim opacity-50 forced-colors:text-[GrayText] cursor-default",
     },
   },
 });

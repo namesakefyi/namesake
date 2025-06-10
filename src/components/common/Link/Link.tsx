@@ -20,7 +20,7 @@ const linkStyles = tv({
   variants: {
     variant: {
       primary: "text-blue-9",
-      secondary: "text-gray-dim hover:text-gray-normal",
+      secondary: "text-dim hover:text-normal",
     },
   },
   defaultVariants: {

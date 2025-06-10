@@ -54,16 +54,16 @@ export function DateField<T extends DateValue>({
 }
 
 const segmentStyles = tv({
-  base: "inline px-0.5 type-literal:px-1 rounded-sm outline-none forced-color-adjust-none caret-transparent text-gray-normal forced-colors:text-[ButtonText]",
+  base: "inline px-0.5 type-literal:px-1 rounded-sm outline-none forced-color-adjust-none caret-transparent text-normal forced-colors:text-[ButtonText]",
   variants: {
     isPlaceholder: {
-      true: "text-gray-9",
+      true: "text-placeholder",
     },
     isDisabled: {
       true: "text-gray-2 forced-colors:text-[GrayText]",
     },
     isFocused: {
-      true: "bg-purple-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
+      true: "bg-theme-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
     },
   },
 });

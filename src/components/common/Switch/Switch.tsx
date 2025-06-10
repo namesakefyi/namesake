@@ -15,8 +15,8 @@ const track = tv({
   base: "flex h-5 w-9 px-px items-center shrink-0 cursor-pointer rounded-full transition duration-200 ease-in-out border border-transparent",
   variants: {
     isSelected: {
-      false: "bg-gray-4",
-      true: "bg-green-9 forced-colors:bg-[Highlight]!",
+      false: "bg-theme-a4",
+      true: "bg-theme-9 forced-colors:bg-[Highlight]!",
     },
     isDisabled: {
       true: "bg-gray-2 forced-colors:group-selected:!bg-[GrayText] forced-colors:border-[GrayText]",

@@ -24,7 +24,7 @@ export function ListBox<T extends object>({
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "outline-none p-1 border border-gray-dim rounded-lg overflow-y-auto",
+        "outline-none p-1 border border-dim rounded-lg overflow-y-auto",
       )}
     >
       {children}
@@ -37,11 +37,11 @@ export const itemStyles = tv({
   base: "group relative flex items-center gap-8 cursor-pointer select-none py-1.5 px-2.5 rounded-md will-change-transform forced-color-adjust-none",
   variants: {
     isSelected: {
-      false: "text-gray-normal -outline-offset-2",
-      true: "bg-purple-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white forced-colors:outline-[HighlightText]",
+      false: "text-normal -outline-offset-2",
+      true: "bg-theme-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white forced-colors:outline-[HighlightText]",
     },
     isDisabled: {
-      true: "text-gray-dim opacity-50 cursor-default forced-colors:text-[GrayText]",
+      true: "text-dim opacity-50 cursor-default forced-colors:text-[GrayText]",
     },
   },
 });
@@ -67,14 +67,14 @@ export const dropdownItemStyles = tv({
   base: "group flex items-center gap-3 cursor-pointer select-none py-2 px-2.5 pr-3 rounded-lg outline-none text-sm forced-color-adjust-none",
   variants: {
     isDisabled: {
-      false: "text-gray-normal",
-      true: "text-gray-dim opacity-50 forced-colors:text-[GrayText] cursor-default",
+      false: "text-normal",
+      true: "text-dim opacity-50 forced-colors:text-[GrayText] cursor-default",
     },
     isFocused: {
-      true: "bg-gray-a3 text-gray-normal forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
+      true: "bg-theme-a3 text-normal forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
     },
     isOpen: {
-      true: "bg-gray-3",
+      true: "bg-theme-a3",
     },
   },
 });
@@ -115,7 +115,7 @@ export function DropdownSection<T extends object>(
 ) {
   return (
     <ListBoxSection>
-      <Header className="text-sm font-semibold text-gray-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-element border-b border-gray-dim [&+*]:mt-1">
+      <Header className="text-sm font-semibold text-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-element border-b border-dim [&+*]:mt-1">
         {props.title}
       </Header>
       <Collection items={props.items}>{props.children}</Collection>

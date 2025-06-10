@@ -14,31 +14,3 @@ export const Default: Story = {
     children: "Basic information",
   },
 };
-
-export const Info: Story = {
-  args: {
-    children: "Here's some handy information",
-    variant: "info",
-  },
-};
-
-export const Success: Story = {
-  args: {
-    children: "Something successful happened",
-    variant: "success",
-  },
-};
-
-export const Danger: Story = {
-  args: {
-    children: "Something went wrong",
-    variant: "danger",
-  },
-};
-
-export const Warning: Story = {
-  args: {
-    children: "Be careful!",
-    variant: "warning",
-  },
-};

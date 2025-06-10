@@ -26,3 +26,14 @@ export async function setThemeForUser(
 
   await ctx.db.patch(userSettings._id, { theme });
 }
+
+export async function setColorForUser(
+  ctx: MutationCtx,
+  { userId, color }: { userId: Id<"users">; color: string },
+) {
+  const userSettings = await getSettingsForUser(ctx, { userId });
+
+  if (!userSettings) throw new Error("User settings not found");
+
+  await ctx.db.patch(userSettings._id, { color });
+}

@@ -67,7 +67,7 @@ export function CalendarHeader() {
         slot="previous"
         icon={direction === "rtl" ? ArrowRight : ArrowLeft}
       />
-      <Heading className="flex-1 font-medium text-xl text-center mx-2 text-gray-normal" />
+      <Heading className="flex-1 font-medium text-xl text-center mx-2 text-normal" />
       <Button
         variant="icon"
         slot="next"

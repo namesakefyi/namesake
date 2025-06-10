@@ -25,7 +25,7 @@ interface LabelProps extends AriaLabelProps {
 }
 
 const labelStyles = tv({
-  base: "text-sm text-gray-dim cursor-default w-fit",
+  base: "text-sm text-dim cursor-default w-fit",
   variants: {
     size: {
       small: "text-xs",
@@ -52,7 +52,7 @@ export function FieldDescription(props: TextProps) {
     <Text
       {...props}
       slot="description"
-      className={twMerge("text-sm text-gray-dim", props.className)}
+      className={twMerge("text-sm text-dim", props.className)}
     />
   );
 }
@@ -73,14 +73,14 @@ export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
       false:
-        "border-gray-6 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
-      true: "border-gray-7 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
+        "border-dim has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
+      true: "border-normal has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
     },
     isInvalid: {
       true: "border-red-9",
     },
     isDisabled: {
-      true: "border-gray-4",
+      true: "border-dim",
     },
   },
 });
@@ -89,8 +89,8 @@ export const innerBorderStyles = tv({
   variants: {
     isFocusWithin: {
       false:
-        "border-gray-6 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
-      true: "border-gray-7 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
+        "border-dim has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
+      true: "border-normal has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
     },
     isInvalid: {
       true: "border-red-9",
@@ -138,7 +138,7 @@ interface InputProps extends Omit<AriaInputProps, "size"> {
 }
 
 export const inputStyles = tv({
-  base: "flex-1 min-w-0 outline outline-none bg-transparent disable-native-autofill text-gray-normal disabled:text-gray-dim",
+  base: "flex-1 min-w-0 outline outline-none bg-transparent disable-native-autofill text-normal disabled:text-dim",
   variants: {
     size: {
       // Since the input is wrapped in a fieldGroup which has a border, subtract 2px from the
@@ -166,7 +166,7 @@ export function Input({ ref, size, ...props }: InputProps) {
 }
 
 export const inputTextAreaStyles = tv({
-  base: "flex-1 min-w-0 leading-snug outline-none bg-transparent disable-native-autofill text-gray-normal disabled:text-gray-dim",
+  base: "flex-1 min-w-0 leading-snug outline-none bg-transparent disable-native-autofill text-normal disabled:text-dim",
   variants: {
     size: {
       small: "px-2 py-1",
