@@ -22,10 +22,6 @@ vi.mock("@convex-dev/auth/react", () => ({
   useAuthActions: vi.fn(),
 }));
 
-vi.mock("@/hooks/useTheme", () => ({
-  useTheme: vi.fn(),
-}));
-
 vi.mock("@tanstack/react-router", () => ({
   useNavigate: vi.fn(),
   useRouter: () => ({

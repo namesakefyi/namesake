@@ -74,7 +74,7 @@ export const EditorToolbar = ({ editor, extensions }: EditorToolbarProps) => {
   return (
     <Toolbar
       orientation="horizontal"
-      className="px-3 py-2 shadow-[0_1px_0_0_var(--color-gray-a5)] sticky bg-element rounded-t-lg top-0 z-10"
+      className="px-3 py-2 shadow-[0_1px_0_0_var(--color-theme-a5)] sticky bg-element rounded-t-lg top-0 z-10"
     >
       <EditorToggleButton
         icon={Undo}

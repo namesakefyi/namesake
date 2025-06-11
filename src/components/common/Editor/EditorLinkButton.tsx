@@ -73,7 +73,7 @@ export const EditorLinkButton = ({ editor }: EditorLinkButtonProps) => {
               value={url ?? ""}
               onChange={setUrl}
               className="flex-1"
-              prefix={<Link className="size-4 text-gray-9 ml-2 -mr-0.5" />}
+              prefix={<Link className="size-4 text-primary-9 ml-2 -mr-0.5" />}
               size="small"
             />
             <Button type="submit" variant="primary" size="small">

@@ -1,5 +1,6 @@
 import { convexTest } from "convex-test";
 import { describe, expect, it, vi } from "vitest";
+import { createTestAdmin } from "../../__tests__/helpers";
 import { api } from "../../_generated/api";
 import schema from "../../schema";
 import { modules } from "../../test.setup";
@@ -28,6 +29,7 @@ describe("authModel", () => {
 
     it("should set role to admin in development environment", async () => {
       const t = convexTest(schema, modules);
+      const { asAdmin } = await createTestAdmin(t);
 
       vi.stubEnv("NODE_ENV", "development");
       await t.run(async (ctx) => {
@@ -38,7 +40,7 @@ describe("authModel", () => {
         });
       });
 
-      const user = await t.query(api.users.getByEmail, {
+      const user = await asAdmin.query(api.users.getByEmail, {
         email: "devUser@test.com",
       });
 
@@ -48,6 +50,7 @@ describe("authModel", () => {
 
     it("should set role to user in production environment", async () => {
       const t = convexTest(schema, modules);
+      const { asAdmin } = await createTestAdmin(t);
 
       vi.stubEnv("NODE_ENV", "production");
       await t.run(async (ctx) => {
@@ -58,7 +61,7 @@ describe("authModel", () => {
         });
       });
 
-      const user = await t.query(api.users.getByEmail, {
+      const user = await asAdmin.query(api.users.getByEmail, {
         email: "prodUser@test.com",
       });
 
@@ -76,13 +79,15 @@ describe("authModel", () => {
           },
         });
       });
+      const asUser = t.withIdentity({ subject: userId });
 
-      const userSettings = await t.query(api.userSettings.getByUserId, {
-        userId,
-      });
+      const userSettings = await asUser.query(
+        api.userSettings.getCurrentUserSettings,
+      );
 
       expect(userSettings).toBeDefined();
       expect(userSettings?.theme).toBe("system");
+      expect(userSettings?.color).toBe("rainbow");
     });
   });
 });

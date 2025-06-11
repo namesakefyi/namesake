@@ -19,7 +19,7 @@ export function GridList<T extends object>({
       {...props}
       className={composeTailwindRenderProps(
         className,
-        "relative border border-gray-dim rounded-lg p-1",
+        "overflow-auto relative border border-dim rounded-lg",
       )}
     >
       {children}
@@ -32,8 +32,8 @@ const itemStyles = tv({
   base: "group relative text-gray-normal flex items-center gap-3 select-none py-1 px-3 text-sm -outline-offset-2 rounded-md peer",
   variants: {
     isSelected: {
-      false: "hover:bg-gray-a2",
-      true: "bg-purple-9 text-white z-20 [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none",
+      false: "hover:bg-theme-a2",
+      true: "bg-primary-9 text-white z-20 [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none",
     },
     isDisabled: {
       false: "cursor-pointer",

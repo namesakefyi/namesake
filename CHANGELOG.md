@@ -1,5 +1,42 @@
 # namesake
 
+## 0.31.0
+
+### Minor Changes
+
+- d07ffb3: Add cover page to pdf packet downloads
+
+### Patch Changes
+
+- 39287d0: Add safeguards for certain queries and mutations to make sure only admins can access them
+
+## 0.30.0
+
+### Minor Changes
+
+- 0bba6ab: Improve ease of selection by replacing select elements with comboboxes to allow typing and filtering results for state, county, language, and more
+
+### Patch Changes
+
+- 7f804bd: Clarify language around fee waivers and display costs within form
+- 7945b02: Support selecting 'prefer not to answer' for certain optional questions
+
+## 0.29.2
+
+### Patch Changes
+
+- d21f548: Toast placement improved
+
+## 0.29.1
+
+### Patch Changes
+
+- 8f54af9: Fix low-contrast highlight color when viewing dark theme using light OS theme
+- 4ef20d2: Fix links from quests to forms and make it easier to select internal links
+- f3d9fcb: Fix unintended 'null' string in password error banner
+- f91ffe8: Fix docs from scrolling horizontally on mobile
+- 4698222: Prevent "continue" button from scrolling off screen on mobile when asking for state
+
 ## 0.29.0
 
 ### Minor Changes

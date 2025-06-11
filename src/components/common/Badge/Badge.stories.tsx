@@ -10,7 +10,7 @@ const meta = {
       control: { type: "radio" },
     },
     variant: {
-      options: ["info", "warning", "danger", "brand", "success"],
+      options: ["default", "warning", "danger", "success"],
       control: { type: "radio" },
     },
   },

@@ -2,6 +2,7 @@ import { Banner, Button } from "@/components/common";
 import {
   AddressField,
   CheckboxGroupField,
+  ComboBoxField,
   FormContainer,
   FormSection,
   FormSubsection,
@@ -10,7 +11,6 @@ import {
   NameField,
   PhoneField,
   RadioGroupField,
-  SelectField,
   ShortTextField,
   YesNoField,
 } from "@/components/forms";
@@ -81,6 +81,16 @@ function RouteComponent() {
 
       await downloadMergedPdf({
         title: "Social Security Card",
+        instructions: [
+          "Please review all documents carefully.",
+          "Fill in your social security number—for security, Namesake never asks for this.",
+          "Remember to bring certified copies of your completed court order, along with other required supporting documents.",
+          form.watch("citizenshipStatus") === "legalAlienNotAllowedToWork" ||
+          form.watch("citizenshipStatus") === "other"
+            ? "You must provide a document from a U.S. Federal, State, or local government agency that explains why you need a Social Security number and that you meet all the requirements for the government benefit."
+            : "",
+          "You got this! We're here for you.",
+        ],
         pdfs,
         userData: form.getValues(),
       });
@@ -119,7 +129,7 @@ function RouteComponent() {
       <FormSection title="Where were you born?">
         <div className="flex flex-wrap gap-4">
           <ShortTextField name="birthplaceCity" label="City" />
-          <SelectField
+          <ComboBoxField
             name="birthplaceState"
             label="State"
             placeholder="Select a state"
@@ -129,7 +139,7 @@ function RouteComponent() {
             }))}
           />
           {form.watch("birthplaceState") === "other" && (
-            <SelectField
+            <ComboBoxField
               name="birthplaceCountry"
               label="Country"
               placeholder="Select a country"
@@ -189,6 +199,7 @@ function RouteComponent() {
           label="Are you Hispanic or Latino?"
           yesLabel="I am Hispanic or Latino"
           noLabel="I am not Hispanic or Latino"
+          includePreferNotToAnswer
         />
       </FormSection>
       <FormSection
@@ -199,6 +210,7 @@ function RouteComponent() {
           name="race"
           label="Race"
           labelHidden
+          includePreferNotToAnswer
           options={[
             {
               label: "Native Hawaiian",

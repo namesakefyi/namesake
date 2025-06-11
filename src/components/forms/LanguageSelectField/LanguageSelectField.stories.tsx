@@ -21,8 +21,6 @@ Example.args = {
   label: "Language",
   name: "language",
   children: (
-    <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
-      Children
-    </div>
+    <div className="border border-dim p-3 rounded-lg text-dim">Children</div>
   ),
 };

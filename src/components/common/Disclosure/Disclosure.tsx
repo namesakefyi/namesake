@@ -26,7 +26,7 @@ export interface DisclosureProps
 
 const disclosureTriggerStyles = tv({
   extend: focusRing,
-  base: "group flex-1 flex rounded-lg transition-colors text-gray-dim hover:text-gray-normal justify-between text-lg font-medium text-left py-2",
+  base: "group flex-1 flex rounded-lg transition-colors text-dim hover:text-normal justify-between text-lg font-medium text-left py-2",
 });
 
 const disclosurePanelStyles = tv({
@@ -56,7 +56,7 @@ export function Disclosure({
           <ChevronDown
             size={20}
             className={twMerge(
-              "group-hover:bg-gray-a3 group-hover:text-gray-normal rounded-full size-8 p-1.5 shrink-0 ml-2",
+              "group-hover:bg-theme-a3 group-hover:text-normal rounded-full size-8 p-1.5 shrink-0 ml-2",
               "transition-transform opacity-60",
               "group-data-expanded:rotate-180",
             )}

@@ -14,7 +14,7 @@ describe("FormSection", () => {
     const titleElement = screen.getByText(formSection.title);
     expect(titleElement).toBeInTheDocument();
     expect(titleElement).toHaveClass("font-medium");
-    expect(titleElement).toHaveClass("text-gray-normal");
+    expect(titleElement).toHaveClass("text-normal");
   });
 
   it("renders optional description", () => {
