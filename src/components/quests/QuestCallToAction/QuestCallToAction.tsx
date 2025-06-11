@@ -69,7 +69,7 @@ function QuestCompletedDate({ userQuest }: { userQuest: Doc<"userQuests"> }) {
   return (
     <div className="flex flex-col items-end gap-1">
       <Heading className="text-3xl font-medium">Done!</Heading>
-      <IconText icon={Check} className="text-green-12">
+      <IconText icon={Check} className="text-primary-12">
         <TimeAgo date={completedDate} />
       </IconText>
     </div>
@@ -110,7 +110,7 @@ const QuestCTAButton = ({ quest, userQuest }: QuestCTAButtonProps) => {
         onClick={handleAddQuest}
         isSubmitting={isSubmitting}
       >
-        Add to my list
+        Add to my quests
       </Button>
     );
   }
@@ -178,7 +178,7 @@ export const QuestCallToAction = ({
     base: "flex flex-col justify-center items-center sm:items-end gap-4 py-4 app-padding rounded-xl border overflow-hidden h-24 relative transition-colors",
     variants: {
       isComplete: {
-        true: "bg-green-3 border-green-5 items-end",
+        true: "bg-primary-3 border-primary-5 items-end",
         false: "bg-element border-dim",
       },
     },

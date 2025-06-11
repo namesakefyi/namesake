@@ -88,7 +88,7 @@ export function Editor({
   }
 
   const wrapperStyles = tv({
-    base: "w-full flex-col outline-none bg-transparent",
+    base: "w-full flex-col outline-none bg-transparent!",
     variants: {
       editable: {
         true: "[&_.tiptap]:outline-none",

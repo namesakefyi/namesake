@@ -55,7 +55,7 @@ const icon = tv({
     size: {
       xs: "size-3",
       sm: "size-4",
-      lg: "size-4.5",
+      lg: "size-4",
     },
     variant: {
       warning: "text-yellow-11",
