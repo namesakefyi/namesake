@@ -9,7 +9,7 @@ const styles = tv({
   variants: {
     orientation: {
       horizontal: "h-px w-full",
-      vertical: "w-px h-6 mx-1.5 bg-gray-4 shrink-0",
+      vertical: "w-px h-6 mx-1.5 bg-theme-4 shrink-0",
     },
   },
   defaultVariants: {

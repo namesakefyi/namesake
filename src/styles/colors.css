@@ -441,6 +441,8 @@
   --color-primary-a10: var(--color-violet-a10);
   --color-primary-a11: var(--color-violet-a11);
   --color-primary-a12: var(--color-violet-a12);
+
+  --color-primary-contrast: var(--color-white);
 }
 
 [data-color="pink"] {
@@ -657,6 +659,8 @@
   --color-primary-a10: var(--color-yellow-a10);
   --color-primary-a11: var(--color-yellow-a11);
   --color-primary-a12: var(--color-yellow-a12);
+
+  --color-primary-contrast: var(--color-black);
 }
 
 [data-color="green"] {
@@ -877,13 +881,13 @@
 
 @layer base {
   .border-dim {
-    @apply border-theme-12/25;
+    @apply border-theme-12/15;
   }
   .border-normal {
-    @apply border-theme-11/30;
+    @apply border-theme-12/30;
   }
   .border-overlay {
-    @apply border-theme-11/20;
+    @apply border-theme-12/10;
   }
   .divide-dim {
     @apply divide-theme-11/20;
@@ -915,6 +919,6 @@
 }
 
 ::selection {
-  background-color: var(--color-theme-5);
-  color: var(--color-theme-12);
+  background-color: var(--color-primary-5);
+  color: var(--color-primary-12);
 }

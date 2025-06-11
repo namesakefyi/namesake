@@ -73,8 +73,8 @@ export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
       false:
-        "border-dim has-autofill:border-yellow-6 dark:has-autofill:border-purple-6",
-      true: "border-normal has-autofill:border-yellow-6 dark:has-autofill:border-purple-6",
+        "border-dim has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
+      true: "border-normal has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
     },
     isInvalid: {
       true: "border-red-9",
@@ -89,8 +89,8 @@ export const innerBorderStyles = tv({
   variants: {
     isFocusWithin: {
       false:
-        "border-dim has-autofill:border-yellow-6 dark:has-autofill:border-purple-6",
-      true: "border-normal has-autofill:border-yellow-6 dark:has-autofill:border-purple-6",
+        "border-dim has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
+      true: "border-normal has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
     },
     isInvalid: {
       true: "border-red-9",
@@ -103,7 +103,7 @@ export const innerBorderStyles = tv({
 
 const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "border text-sm group has-autofill:bg-yellow-3 flex items-center bg-theme-1 dark:bg-theme-2 forced-colors:bg-[Field] rounded-lg",
+  base: "border bg-theme-1 dark:bg-theme-2 text-sm group has-autofill:bg-yellow-3 dark:has-autofill:bg-violet-3 flex items-center forced-colors:bg-[Field] rounded-lg",
   variants: {
     ...fieldBorderStyles.variants,
     size: {
@@ -138,7 +138,7 @@ interface InputProps extends Omit<AriaInputProps, "size"> {
 }
 
 export const inputStyles = tv({
-  base: "flex-1 min-w-0 outline outline-none bg-transparent disable-native-autofill disabled:text-dim",
+  base: "flex-1 min-w-0 outline outline-none !bg-transparent disable-native-autofill disabled:text-dim",
   variants: {
     size: {
       // Since the input is wrapped in a fieldGroup which has a border, subtract 2px from the

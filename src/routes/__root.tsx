@@ -81,10 +81,10 @@ function RootRoute() {
           unstyled: true,
           classNames: {
             toast:
-              "bg-gray-12 rounded-lg p-4 w-full font-sans text-sm shadow-md flex items-center gap-2 text-gray-1",
-            title: "text-gray-1",
-            description: "text-gray-3",
-            icon: "text-gray-5",
+              "bg-theme-12 rounded-lg p-4 w-full font-sans text-sm shadow-md flex items-center gap-2 text-theme-1",
+            title: "text-theme-1",
+            description: "text-theme-3",
+            icon: "text-theme-5",
           },
         }}
         icons={{

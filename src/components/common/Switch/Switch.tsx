@@ -19,7 +19,7 @@ const track = tv({
       true: "bg-primary-9 forced-colors:bg-[Highlight]!",
     },
     isDisabled: {
-      true: "bg-gray-2 forced-colors:group-selected:!bg-[GrayText] forced-colors:border-[GrayText]",
+      true: "bg-theme-2 forced-colors:group-selected:!bg-[GrayText] forced-colors:border-[GrayText]",
     },
   },
 });

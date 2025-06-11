@@ -16,9 +16,10 @@ export const EditThemeSetting = () => {
   };
 
   const swatchStyles = tv({
-    base: "w-full h-full",
+    base: "w-full h-full rounded-full",
     variants: {
       color: {
+        rainbow: "bg-rainbow",
         pink: "bg-pink-9",
         red: "bg-red-9",
         orange: "bg-orange-9",
@@ -27,8 +28,6 @@ export const EditThemeSetting = () => {
         turquoise: "bg-turquoise-9",
         indigo: "bg-indigo-9",
         violet: "bg-violet-9",
-        gray: "bg-gray-9",
-        rainbow: "bg-rainbow",
       },
     },
   });

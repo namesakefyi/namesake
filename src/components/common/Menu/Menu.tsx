@@ -75,7 +75,7 @@ export function MenuItem({ className, icon: Icon, ...props }: MenuItemProps) {
               {children}
             </span>
             {props.target === "_blank" && (
-              <ExternalLink aria-hidden className="size-4 ml-1 text-gray-8" />
+              <ExternalLink aria-hidden className="size-4 ml-1 text-subtle" />
             )}
             {hasSubmenu && (
               <ChevronRight aria-hidden className="size-4 ml-auto -mr-1" />

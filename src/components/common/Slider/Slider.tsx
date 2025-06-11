@@ -18,8 +18,8 @@ const trackStyles = tv({
       vertical: "h-full w-[6px] ml-[50%] -translate-x-[50%]",
     },
     isDisabled: {
-      false: "bg-gray-5 forced-colors:bg-[ButtonBorder]",
-      true: "bg-gray-1 forced-colors:bg-[GrayText]",
+      false: "bg-theme-5 forced-colors:bg-[ButtonBorder]",
+      true: "opacity-50 forced-colors:bg-[GrayText]",
     },
   },
 });
@@ -32,7 +32,7 @@ const thumbStyles = tv({
       true: "bg-primary-10 forced-colors:bg-[ButtonBorder]",
     },
     isDisabled: {
-      true: "border-gray-3 forced-colors:border-[GrayText]",
+      true: "forced-colors:border-[GrayText]",
     },
   },
 });

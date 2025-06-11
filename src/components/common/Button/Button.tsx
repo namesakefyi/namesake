@@ -31,20 +31,18 @@ export interface ButtonProps extends AriaButtonProps {
 
 export const buttonStyles = tv({
   extend: focusRing,
-  base: "py-2 text-sm font-medium relative whitespace-nowrap rounded-lg border border-dim transition-all duration-200 ease-in-out flex items-center justify-center tabular-nums",
+  base: "py-2 text-sm shadow-sm font-medium relative whitespace-nowrap rounded-lg border-0 transition-all duration-200 ease-in-out flex items-center justify-center tabular-nums",
   variants: {
     variant: {
-      primary:
-        "bg-primary-9 hover:bg-primary-10 text-white border-overlay shadow-xs",
+      primary: "bg-primary-9 hover:bg-primary-10 text-primary-contrast",
       secondary:
-        "bg-theme-1 dark:bg-theme-3 dark:hover:bg-theme-4 border-theme-6 hover:border-theme-6 text-normal shadow-sm",
+        "bg-white dark:bg-theme-4 dark:hover:bg-theme-5 text-normal hover:text-theme-11 dark:hover:text-white",
       destructive:
-        "bg-red-9 text-white border-red-10 shadow-sm hover:bg-red-10 hover:border-red-11",
-      success:
-        "bg-green-9 text-white border-green-11 shadow-sm hover:bg-green-10",
-      icon: "bg-transparent hover:bg-theme-a3 text-dim hover:text-normal border-0 flex shrink-0 items-center justify-center rounded-full",
+        "bg-red-9 text-white hover:bg-red-10 outline-0 !outline-red-a8",
+      success: "bg-green-9 text-white hover:bg-green-10",
+      icon: "bg-transparent hover:bg-theme-a3 text-dim shadow-none hover:text-normal flex shrink-0 items-center justify-center rounded-full",
       ghost:
-        "bg-transparent hover:bg-theme-a3 text-dim hover:text-normal border-0",
+        "bg-transparent hover:bg-theme-a3 text-dim shadow-none hover:text-normal",
     },
     size: {
       small: "h-8 px-2 gap-1.5",

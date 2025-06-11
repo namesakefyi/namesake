@@ -39,7 +39,7 @@ const columnStyles = tv({
 
 const resizerStyles = tv({
   extend: focusRing,
-  base: "w-px px-[8px] translate-x-[8px] box-content py-1 h-6 bg-clip-content bg-gray-3 forced-colors:bg-[ButtonBorder] cursor-col-resize rounded-sm resizing:bg-blue-9 forced-colors:resizing:bg-[Highlight] resizing:w-[2px] resizing:pl-[7px] -outline-offset-2",
+  base: "w-px px-[8px] translate-x-[8px] box-content py-1 h-6 bg-clip-content bg-theme-3 forced-colors:bg-[ButtonBorder] cursor-col-resize rounded-sm resizing:bg-blue-9 forced-colors:resizing:bg-[Highlight] resizing:w-[2px] resizing:pl-[7px] -outline-offset-2",
 });
 
 export function TableColumn(props: ColumnProps) {
@@ -89,7 +89,7 @@ export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "sticky top-0 z-10 bg-gray forced-colors:bg-[Canvas] rounded-t-lg",
+        "sticky top-0 z-10 bg-theme-1 forced-colors:bg-[Canvas] rounded-t-lg",
       )}
     >
       {/* Add extra columns for drag and drop and selection. */}
@@ -110,7 +110,7 @@ export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
 
 const rowStyles = tv({
   extend: focusRing,
-  base: "group/row relative cursor-default select-none -outline-offset-2 text-sm text-normal selected:bg-theme-3",
+  base: "group/row relative cursor-default select-none -outline-offset-2 text-sm text-normal selected:bg-primary-3",
 });
 
 export function TableRow<T extends object>({
@@ -140,7 +140,7 @@ export function TableRow<T extends object>({
 
 const cellStyles = tv({
   extend: focusRing,
-  base: "border-b border-dim group-last/row:border-b-0 group-selected/row:border-theme-dim in-[:has(+[data-selected])]:border-theme-dim p-2 truncate -outline-offset-2",
+  base: "border-b border-dim group-last/row:border-b-0 group-selected/row:border-primary-12/20 in-[:has(+[data-selected])]:border-primary-12/20 p-2 truncate -outline-offset-2",
 });
 
 export function TableCell(props: CellProps) {

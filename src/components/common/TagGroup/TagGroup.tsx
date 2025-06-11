@@ -24,7 +24,7 @@ const tagStyles = tv({
       true: "pr-1",
     },
     isSelected: {
-      false: "text-dim border-dim hover:text-normal hover:border-gray-normal",
+      false: "text-dim border-dim hover:text-normal hover:border-normal",
       true: "bg-primary-9 text-white border border-transparent forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] forced-color-adjust-none",
     },
     isDisabled: {
