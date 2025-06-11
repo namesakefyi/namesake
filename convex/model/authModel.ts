@@ -27,6 +27,7 @@ export async function createOrUpdateUser(ctx: MutationCtx, args: any) {
       ctx.db.insert("userSettings", {
         userId,
         theme: "system",
+        color: "rainbow",
       });
 
       return userId;
