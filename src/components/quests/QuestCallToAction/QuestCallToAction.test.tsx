@@ -137,7 +137,10 @@ describe("QuestCallToAction", () => {
         userQuest={mockUserQuest("complete")}
       />,
     );
-    expect(container.firstChild).toHaveClass("bg-green-3", "border-green-5");
+    expect(container.firstChild).toHaveClass(
+      "bg-primary-3",
+      "border-primary-5",
+    );
   });
 
   it("shows relative completion time", () => {
