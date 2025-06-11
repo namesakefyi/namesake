@@ -69,4 +69,38 @@ describe("userSettings", () => {
       expect(settings.theme).toBe("dark");
     });
   });
+
+  describe("setColor", () => {
+    it("should throw error if user settings not found", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser } = await createTestUser(t);
+
+      await expect(
+        asUser.mutation(api.userSettings.setColor, {
+          color: "pink",
+        }),
+      ).rejects.toThrow("User settings not found");
+    });
+
+    it("should update existing user settings color", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createTestUser(t);
+
+      await t.run(async (ctx) => {
+        return await ctx.db.insert("userSettings", {
+          userId,
+          color: "green",
+        });
+      });
+
+      await asUser.mutation(api.userSettings.setColor, {
+        color: "pink",
+      });
+
+      const settings = await asUser.query(
+        api.userSettings.getCurrentUserSettings,
+      );
+      expect(settings.color).toBe("pink");
+    });
+  });
 });
