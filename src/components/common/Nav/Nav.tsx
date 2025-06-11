@@ -23,7 +23,7 @@ type NavItemProps = NavItemBaseProps & (NavLinkProps | NavButtonProps);
 
 const navItemStyles = tv({
   extend: focusRing,
-  base: "rounded-md gap-2 no-underline px-2 -mx-2 flex border border-transparent items-center text-base md:text-sm lg:text-base hover:bg-theme-a3 text-normal aria-current:font-semibold aria-current:text-normal cursor-pointer",
+  base: "rounded-md gap-2 no-underline px-2 -mx-2 min-w-0 flex border border-transparent items-center text-base md:text-sm lg:text-base hover:bg-theme-a3 text-normal aria-current:font-semibold aria-current:text-normal cursor-pointer",
   variants: {
     isActive: {
       true: "bg-theme-a3 text-normal",
@@ -89,7 +89,7 @@ export const NavItem = ({
   }
 
   return (
-    <div className="grid *:[grid-area:1/1] ">
+    <div className="grid *:[grid-area:1/1]">
       <Link
         {...props}
         className={({ isFocusVisible }) =>
@@ -102,7 +102,7 @@ export const NavItem = ({
         }
         aria-current={current ? "true" : null}
       >
-        <div className="flex flex-1 items-center gap-2 min-w-0 pointer-events-none">
+        <div className="flex flex-1 items-center gap-2 pointer-events-none truncate">
           {Icon && (
             <Icon className={iconStyles({ isActive: !!current, size })} />
           )}
