@@ -7,6 +7,7 @@ import {
   ROLES,
   STATUS,
   THEMES,
+  THEME_COLORS,
   TIME_UNITS,
 } from "../src/constants";
 
@@ -24,6 +25,10 @@ export const status = v.union(
 
 export const theme = v.union(
   ...Object.keys(THEMES).map((theme) => v.literal(theme)),
+);
+
+export const themeColor = v.union(
+  ...Object.keys(THEME_COLORS).map((color) => v.literal(color)),
 );
 
 export const role = v.union(

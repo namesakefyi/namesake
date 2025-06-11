@@ -50,7 +50,7 @@ export function YesNoField({
   const { control, setValue } = useFormContext();
 
   return (
-    <div className="@container flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <Controller
         control={control}
         name={name}

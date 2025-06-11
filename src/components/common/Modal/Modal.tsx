@@ -21,7 +21,7 @@ const overlayStyles = tv({
 });
 
 const modalStyles = tv({
-  base: "p-5 w-[400px] max-w-full max-h-full rounded-2xl bg-app forced-colors:bg-[Canvas] flex flex-col items-start gap-4 shadow-2xl bg-clip-padding border border-gray-dim",
+  base: "p-5 w-[400px] max-w-full max-h-full rounded-2xl bg-app forced-colors:bg-[Canvas] flex flex-col items-start gap-4 shadow-2xl bg-clip-padding border border-overlay",
   variants: {
     isEntering: {
       true: "animate-in zoom-in-105 ease-out duration-200",
@@ -63,11 +63,11 @@ export function ModalHeader({
   return (
     <header className="flex items-center justify-between w-full">
       <div className="flex flex-col gap-1">
-        <Heading className="text-xl font-medium text-gray-normal" slot="title">
+        <Heading className="text-xl font-medium text-normal" slot="title">
           {title}
         </Heading>
         {description && (
-          <p className="text-gray-dim text-sm text-pretty">{description}</p>
+          <p className="text-dim text-sm text-pretty">{description}</p>
         )}
       </div>
       {children}

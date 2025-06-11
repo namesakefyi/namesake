@@ -36,8 +36,8 @@ export const strengthConfig: Record<number, StrengthConfig> = {
   2: {
     label: "Okay",
     color: {
-      text: "text-amber-normal",
-      bg: "bg-amber-9",
+      text: "text-yellow-normal",
+      bg: "bg-yellow-9",
     },
   },
   3: {
@@ -90,7 +90,7 @@ export function PasswordStrength({ value, ...props }: MeterProps) {
     >
       {({ percentage }) => (
         <>
-          <div className="w-full min-w-64 h-1 rounded-full bg-gray-4 outline-1 -outline-offset-1 outline-transparent relative overflow-hidden">
+          <div className="w-full min-w-64 h-1 rounded-full bg-theme-4 outline-1 -outline-offset-1 outline-transparent relative overflow-hidden">
             <div
               className={`absolute top-0 left-0 h-full w-full rounded-full ${strengthConfig[value].color.bg} transition-all duration-300 forced-colors:bg-[Highlight]`}
               style={{ translate: `-${100 - percentage}%` }}
@@ -98,7 +98,7 @@ export function PasswordStrength({ value, ...props }: MeterProps) {
             />
           </div>
           <div className="flex justify-between gap-2">
-            <Label className="text-gray-dim font-mono">Password Strength</Label>
+            <Label className="text-dim font-mono">Password Strength</Label>
             <StrengthLabel value={value} />
           </div>
         </>

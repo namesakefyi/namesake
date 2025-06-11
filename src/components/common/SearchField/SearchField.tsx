@@ -42,7 +42,7 @@ export function SearchField({
           <FieldGroup isDisabled={isDisabled} isInvalid={isInvalid}>
             <Search
               aria-hidden
-              className="w-4 h-4 ml-3 text-gray-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText]"
+              className="w-4 h-4 ml-3 text-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText]"
             />
             <Input
               placeholder={placeholder}

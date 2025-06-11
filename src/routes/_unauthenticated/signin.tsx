@@ -159,7 +159,7 @@ const SignIn = () => {
       <TabPanel id="signUp">
         {import.meta.env.PROD && isCodeRequired ? (
           <Form onSubmit={handleCodeSubmit} className="items-stretch">
-            <Banner variant="info">
+            <Banner>
               Namesake is in early access. To register, please enter a code.
             </Banner>
             {error && <Banner variant="danger">{error}</Banner>}
@@ -203,7 +203,7 @@ const SignIn = () => {
             <Button type="submit" isSubmitting={isSubmitting} variant="primary">
               Register
             </Button>
-            <p className="text-sm text-gray-dim text-center text-balance">
+            <p className="text-sm text-dim text-center text-balance">
               By registering, you agree to Namesake’s{" "}
               <Link
                 href="https://namesake.fyi/terms"

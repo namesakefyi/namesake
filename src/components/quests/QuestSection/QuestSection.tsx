@@ -14,7 +14,7 @@ export const QuestSection = ({
 }: QuestSectionProps) => {
   return (
     <section>
-      <div className="flex justify-between items-center border-b border-gray-dim h-9 pb-1 mb-4">
+      <div className="flex justify-between items-center border-b border-dim h-9 pb-1 mb-4">
         <Heading className="text-lg text-medium">{title}</Heading>
         {action && <Button variant="ghost" size="small" {...action} />}
       </div>

@@ -87,6 +87,7 @@ describe("authModel", () => {
 
       expect(userSettings).toBeDefined();
       expect(userSettings?.theme).toBe("system");
+      expect(userSettings?.color).toBe("rainbow");
     });
   });
 });

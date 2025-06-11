@@ -54,10 +54,10 @@ export function Select<T extends object>({
         endIcon={ChevronDown}
         endIconProps={{
           className:
-            "size-4 text-gray-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText] shrink-0",
+            "size-4 text-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText] shrink-0",
         }}
       >
-        <SelectValue className="flex-1 text-gray-normal placeholder-shown:font-normal placeholder-shown:text-gray-9" />
+        <SelectValue className="flex-1 text-normal placeholder-shown:font-normal placeholder-shown:opacity-60" />
       </Button>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>

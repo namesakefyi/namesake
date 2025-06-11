@@ -75,7 +75,7 @@ export function DeleteFormResponseModal({
       {selectedRows !== ALL && (
         <>
           <p>The following responses will be deleted:</p>
-          <ul className="list-disc list-inside text-sm leading-6 text-gray-dim">
+          <ul className="list-disc list-inside text-sm leading-6 text-dim">
             {Array.from(selectedRows).map((row) => (
               <li key={row}>{rows?.find((r) => r.id === row)?.field}</li>
             ))}

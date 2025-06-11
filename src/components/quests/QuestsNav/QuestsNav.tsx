@@ -62,12 +62,12 @@ export const QuestsNav = () => {
             value={completedQuests}
             maxValue={userQuests}
             valueLabel={
-              <span className="text-gray-normal">
-                <span className="text-gray-normal text-base font-medium mr-0.5 leading-none">
+              <span className="text-normal">
+                <span className="text-normal text-base font-medium mr-0.5 leading-none">
                   {completedQuests}
                 </span>{" "}
-                <span className="text-gray-8">/</span>{" "}
-                <span className="text-gray-dim">{userQuests} complete</span>
+                <span className="text-dim opacity-60">/</span>{" "}
+                <span className="text-dim">{userQuests} complete</span>
               </span>
             }
           />
@@ -115,7 +115,7 @@ export const QuestsNav = () => {
               }}
               icon={config.icon}
               size="large"
-              className="border border-dashed border-gray-dim"
+              className="border border-dashed border-dim"
             >
               {config.label}
             </NavItem>

@@ -66,7 +66,7 @@ export function CheckboxGroupField({
               }}
               {...props}
             >
-              <span className="italic text-gray-dim text-sm">
+              <span className="italic text-dim text-sm">
                 Select all that apply:
               </span>
               {options?.map(({ label, ...option }) => (
