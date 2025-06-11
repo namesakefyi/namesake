@@ -1,7 +1,4 @@
-import {
-  withThemeByClassName,
-  withThemeByDataAttribute,
-} from "@storybook/addon-themes";
+import { withThemeByDataAttribute } from "@storybook/addon-themes";
 import type { Preview } from "@storybook/react-vite";
 import { FormProvider, useForm } from "react-hook-form";
 
