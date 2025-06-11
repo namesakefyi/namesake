@@ -42,7 +42,7 @@ export function NumberField({
         <>
           {label && <Label>{label}</Label>}
           <FieldGroup isDisabled={isDisabled} isInvalid={isInvalid}>
-            {(renderProps) => (
+            {({ isDisabled, isInvalid }) => (
               <>
                 {prefix && (
                   <span className="text-gray-9 ml-2 -mr-2">{prefix}</span>
@@ -50,7 +50,8 @@ export function NumberField({
                 <Input />
                 <div
                   className={innerBorderStyles({
-                    ...renderProps,
+                    isDisabled,
+                    isInvalid,
                     class: "flex flex-col border-s h-10",
                   })}
                 >
@@ -59,7 +60,8 @@ export function NumberField({
                   </StepperButton>
                   <div
                     className={innerBorderStyles({
-                      ...renderProps,
+                      isDisabled,
+                      isInvalid,
                       class: "border-b",
                     })}
                   />

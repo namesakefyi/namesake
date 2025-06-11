@@ -64,15 +64,16 @@ export function ComboBox<T extends object>({
         "group flex flex-col gap-1.5",
       )}
     >
-      {(renderProps) => (
+      {({ isOpen, isDisabled, isInvalid, isRequired }) => (
         <>
           {label && <Label size={size}>{label}</Label>}
-          <FieldGroup {...renderProps} size={size}>
+          <FieldGroup size={size} isInvalid={isInvalid} isDisabled={isDisabled}>
             <Input
               placeholder={placeholder}
               size={size}
               autoComplete={autoComplete}
               name={name}
+              required={isRequired}
             />
             <Button
               variant="icon"
@@ -87,6 +88,7 @@ export function ComboBox<T extends object>({
             className="w-(--trigger-width)"
             placement="bottom start"
             shouldFlip={false}
+            isOpen={isOpen}
           >
             <ListBox
               items={items}

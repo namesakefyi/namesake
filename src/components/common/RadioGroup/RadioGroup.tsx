@@ -115,12 +115,19 @@ export function Radio({
         radioItemStyles({ size, card }),
       )}
     >
-      {(renderProps) => (
+      {({ isSelected, isInvalid, isDisabled, ...renderProps }) => (
         <>
-          <div className={radioStyles({ ...renderProps, size })} />
+          <div
+            className={radioStyles({ isSelected, isInvalid, isDisabled, size })}
+          />
           {/* Types workaround: https://github.com/adobe/react-spectrum/issues/7434 */}
           {typeof props.children === "function"
-            ? props.children(renderProps)
+            ? props.children({
+                isSelected,
+                isInvalid,
+                isDisabled,
+                ...renderProps,
+              })
             : props.children}
         </>
       )}

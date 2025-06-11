@@ -122,13 +122,20 @@ export function Checkbox({
           checkboxStyles({ ...renderProps, size, card, className }),
         )}
       >
-        {({ isSelected, isIndeterminate, ...renderProps }) => (
+        {({
+          isSelected,
+          isIndeterminate,
+          isDisabled,
+          isInvalid,
+          defaultChildren,
+        }) => (
           <>
             <div
               className={boxStyles({
                 isSelected: isSelected || isIndeterminate,
                 size,
-                ...renderProps,
+                isDisabled,
+                isInvalid,
               })}
             >
               {isIndeterminate ? (
@@ -138,7 +145,7 @@ export function Checkbox({
               ) : null}
             </div>
             {label}
-            {renderProps.defaultChildren}
+            {defaultChildren}
           </>
         )}
       </AriaCheckbox>

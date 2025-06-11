@@ -46,10 +46,10 @@ export function Switch({ children, ...props }: SwitchProps) {
         "group flex gap-2 items-center disabled:opacity-50 forced-colors:disabled:text-[GrayText] text-sm transition",
       )}
     >
-      {(renderProps) => (
+      {({ isSelected, isDisabled }) => (
         <>
-          <div className={track(renderProps)}>
-            <span className={handle(renderProps)} />
+          <div className={track({ isSelected, isDisabled })}>
+            <span className={handle({ isSelected, isDisabled })} />
           </div>
           {children}
         </>

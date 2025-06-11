@@ -73,9 +73,9 @@ export function Slider<T extends number | number[]>({
         }
       </SliderOutput>
       <SliderTrack className="group col-span-2 orientation-horizontal:h-6 orientation-vertical:w-6 orientation-vertical:h-64 flex items-center">
-        {({ state, ...renderProps }) => (
+        {({ state, orientation, isDisabled }) => (
           <>
-            <div className={trackStyles(renderProps)} />
+            <div className={trackStyles({ orientation, isDisabled })} />
             <div
               className="absolute h-[6px] top-[50%] translate-y-[-50%] rounded-full bg-theme-6"
               style={getThumbTrackFillStyle(state)}
