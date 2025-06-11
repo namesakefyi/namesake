@@ -57,7 +57,7 @@ const radioItemStyles = tv({
       large: "gap-3",
     },
     card: {
-      true: "border border-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-theme-a2 selected:bg-theme-a3 selected:border-theme-6",
+      true: "border border-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-theme-a2 selected:bg-primary-a3 selected:border-primary-6",
     },
   },
 });
@@ -68,7 +68,7 @@ const radioStyles = tv({
   variants: {
     isSelected: {
       false: "border-dim",
-      true: "bg-white border-[6px] border-theme-9 forced-colors:border-[Highlight]",
+      true: "bg-white border-[6px] border-primary-9 forced-colors:border-[Highlight]",
     },
     isInvalid: {
       true: "border-red-9 forced-colors:border-[Mark]!",

@@ -63,7 +63,7 @@ const segmentStyles = tv({
       true: "text-subtle forced-colors:text-[GrayText]",
     },
     isFocused: {
-      true: "bg-theme-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
+      true: "bg-primary-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
     },
   },
 });

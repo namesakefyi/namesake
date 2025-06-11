@@ -88,7 +88,7 @@ export function MenuItem({ className, icon: Icon, ...props }: MenuItemProps) {
 }
 
 export function MenuSeparator(props: SeparatorProps) {
-  return <Separator {...props} className="mx-3 my-1 border-b border-dim" />;
+  return <Separator {...props} className="mx-3 my-1 border-b border-overlay" />;
 }
 
 export interface MenuSectionProps<T> extends AriaMenuSectionProps<T> {
@@ -99,7 +99,7 @@ export interface MenuSectionProps<T> extends AriaMenuSectionProps<T> {
 export function MenuSection<T extends object>(props: MenuSectionProps<T>) {
   return (
     <AriaMenuSection {...props}>
-      <Header className="text-sm font-semibold text-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-element border-b border-dim [&+*]:mt-1">
+      <Header className="text-sm font-semibold text-dim px-4 py-1 truncate sticky -top-[5px] -mt-px -mx-1 z-10 bg-element border-b border-overlay [&+*]:mt-1">
         {props.title}
       </Header>
       <Collection items={props.items}>{props.children}</Collection>

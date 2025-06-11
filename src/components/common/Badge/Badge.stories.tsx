@@ -9,6 +9,10 @@ const meta = {
       options: ["xs", "sm", "lg"],
       control: { type: "radio" },
     },
+    variant: {
+      options: ["default", "warning", "danger", "success"],
+      control: { type: "radio" },
+    },
   },
 } satisfies Meta<typeof Badge>;
 

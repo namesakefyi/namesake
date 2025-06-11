@@ -26,10 +26,10 @@ const trackStyles = tv({
 
 const thumbStyles = tv({
   extend: focusRing,
-  base: "w-6 h-6 group-orientation-horizontal:mt-6 group-orientation-vertical:ml-3 rounded-full bg-theme-9 shadow-sm",
+  base: "size-6 group-orientation-horizontal:mt-6 group-orientation-vertical:ml-3 rounded-full bg-primary-9 shadow-sm",
   variants: {
     isDragging: {
-      true: "bg-theme-10 forced-colors:bg-[ButtonBorder]",
+      true: "bg-primary-10 forced-colors:bg-[ButtonBorder]",
     },
     isDisabled: {
       true: "border-gray-3 forced-colors:border-[GrayText]",
@@ -77,7 +77,7 @@ export function Slider<T extends number | number[]>({
           <>
             <div className={trackStyles({ orientation, isDisabled })} />
             <div
-              className="absolute h-[6px] top-[50%] translate-y-[-50%] rounded-full bg-theme-6"
+              className="absolute h-[6px] top-[50%] translate-y-[-50%] rounded-full bg-primary-6"
               style={getThumbTrackFillStyle(state)}
             />
             {state.values.map((_, i) => (

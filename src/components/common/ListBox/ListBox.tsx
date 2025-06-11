@@ -38,7 +38,7 @@ export const itemStyles = tv({
   variants: {
     isSelected: {
       false: "text-normal -outline-offset-2",
-      true: "bg-theme-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white forced-colors:outline-[HighlightText]",
+      true: "bg-primary-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white forced-colors:outline-[HighlightText]",
     },
     isDisabled: {
       true: "text-dim opacity-50 cursor-default forced-colors:text-[GrayText]",
@@ -71,10 +71,10 @@ export const dropdownItemStyles = tv({
       true: "text-dim opacity-50 forced-colors:text-[GrayText] cursor-default",
     },
     isFocused: {
-      true: "bg-theme-a3 text-normal forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
+      true: "bg-theme-3 text-normal forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
     },
     isOpen: {
-      true: "bg-theme-a3",
+      true: "bg-theme-3",
     },
   },
 });

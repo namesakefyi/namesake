@@ -57,7 +57,7 @@ const checkboxStyles = tv({
       large: "gap-3",
     },
     card: {
-      true: "border border-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-theme-a2 selected:bg-theme-a3 selected:border-theme-6",
+      true: "border border-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-theme-a2 selected:bg-primary-a3 selected:border-primary-6",
       false: "w-max",
     },
   },
@@ -72,7 +72,7 @@ const boxStyles = tv({
   variants: {
     isSelected: {
       false: "bg-element border-dim",
-      true: "bg-theme-9 border-transparent",
+      true: "bg-primary-9 border-transparent",
     },
     isInvalid: {
       true: "text-red-9",

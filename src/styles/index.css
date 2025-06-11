@@ -62,7 +62,7 @@ body,
   }
 
   to {
-    outline-color: var(--color-theme-a8);
+    outline-color: var(--color-primary-a8);
     outline-width: 3px;
   }
 }

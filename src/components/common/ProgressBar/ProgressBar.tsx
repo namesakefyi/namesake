@@ -37,7 +37,7 @@ export function ProgressBar({
           </div>
           <div className="w-full h-2 rounded-full bg-theme-a4 outline-1 -outline-offset-1 outline-transparent relative overflow-hidden">
             <div
-              className={`absolute top-0 h-full rounded-full bg-theme-9 transition-all forced-colors:bg-[Highlight] ${isIndeterminate ? "left-full animate-in duration-10 [--tw-enter-translate-x:calc(-16rem-1%)] slide-out-to-right-full repeat-infinite ease-out" : "left-0"}`}
+              className={`absolute top-0 h-full rounded-full bg-primary-9 transition-all forced-colors:bg-[Highlight] ${isIndeterminate ? "left-full animate-in duration-10 [--tw-enter-translate-x:calc(-16rem-1%)] slide-out-to-right-full repeat-infinite ease-out" : "left-0"}`}
               style={{ width: `${isIndeterminate ? 40 : percentage}%` }}
             />
           </div>

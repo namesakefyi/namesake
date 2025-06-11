@@ -25,6 +25,7 @@ export function BadgeButton({ icon, label, ...props }: BadgeButtonProps) {
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   size?: "xs" | "sm" | "lg";
+  variant?: "warning" | "danger" | "success";
   icon?: LucideIcon;
 }
 
@@ -36,8 +37,14 @@ const badge = tv({
       sm: "text-xs rounded-sm h-5 min-w-5",
       lg: "text-sm rounded-md px-1.5 h-6 min-w-6 gap-1.5",
     },
+    variant: {
+      warning: "bg-yellow-4 text-yellow-12",
+      danger: "bg-red-4 text-red-12",
+      success: "bg-green-4 text-green-12",
+    },
   },
   defaultVariants: {
+    variant: undefined,
     size: "sm",
   },
 });
@@ -50,20 +57,32 @@ const icon = tv({
       sm: "size-4",
       lg: "size-4.5",
     },
+    variant: {
+      warning: "text-yellow-11",
+      danger: "text-red-11",
+      success: "text-green-11",
+    },
   },
 });
 
-export function Badge({ icon: Icon, className, size, ...props }: BadgeProps) {
+export function Badge({
+  icon: Icon,
+  className,
+  size,
+  variant,
+  ...props
+}: BadgeProps) {
   return (
     <div
       {...props}
       className={badge({
         size,
+        variant,
         className,
       })}
       data-testid="badge"
     >
-      {Icon && <Icon className={icon({ size })} />}
+      {Icon && <Icon className={icon({ size, variant })} />}
       {props.children}
     </div>
   );

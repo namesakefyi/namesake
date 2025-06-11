@@ -97,7 +97,7 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
               onPress={() => setIsOpen(true)}
             >
               {!node.textContent && (
-                <span className="text-theme-9">Insert button text</span>
+                <span className="text-primary-9">Insert button text</span>
               )}
               <NodeViewContent />
               {!node.attrs.href && <Badge icon={Unlink}>No link</Badge>}
@@ -159,7 +159,7 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
                     onChange={setUrl}
                     className="flex-1"
                     prefix={
-                      <LinkIcon className="size-4 text-theme-9 ml-2 -mr-0.5" />
+                      <LinkIcon className="size-4 text-primary-9 ml-2 -mr-0.5" />
                     }
                   />
                   <Button type="submit" variant="primary">

@@ -16,7 +16,7 @@ const track = tv({
   variants: {
     isSelected: {
       false: "bg-theme-3",
-      true: "bg-theme-9 forced-colors:bg-[Highlight]!",
+      true: "bg-primary-9 forced-colors:bg-[Highlight]!",
     },
     isDisabled: {
       true: "bg-gray-2 forced-colors:group-selected:!bg-[GrayText] forced-colors:border-[GrayText]",

@@ -35,11 +35,11 @@ export const buttonStyles = tv({
   variants: {
     variant: {
       primary:
-        "bg-theme-9 hover:bg-theme-10 text-white border-overlay shadow-xs",
+        "bg-primary-9 hover:bg-primary-10 text-white border-overlay shadow-xs",
       secondary:
-        "bg-theme-1 dark:bg-theme-3 dark:hover:bg-theme-4 hover:border-theme-a7 text-normal shadow-sm",
+        "bg-theme-1 dark:bg-theme-3 dark:hover:bg-theme-4 border-theme-6 hover:border-theme-6 text-normal shadow-sm",
       destructive:
-        "bg-red-9 text-white border-red-11 shadow-sm hover:bg-red-10",
+        "bg-red-9 text-white border-red-10 shadow-sm hover:bg-red-10 hover:border-red-11",
       success:
         "bg-green-9 text-white border-green-11 shadow-sm hover:bg-green-10",
       icon: "bg-transparent hover:bg-theme-a3 text-dim hover:text-normal border-0 flex shrink-0 items-center justify-center rounded-full",
