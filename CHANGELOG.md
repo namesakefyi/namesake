@@ -1,5 +1,16 @@
 # namesake
 
+## 0.32.0
+
+### Minor Changes
+
+- bb27a66: Add user-selectable color themes
+- cb94e09: Make it easier to browse all available quests
+
+### Patch Changes
+
+- bb27a66: Fix focus ring not displaying around text fields
+
 ## 0.31.0
 
 ### Minor Changes
