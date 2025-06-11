@@ -123,6 +123,7 @@ export function Checkbox({
         )}
       >
         {({
+          isFocusVisible,
           isSelected,
           isIndeterminate,
           isDisabled,
@@ -132,6 +133,7 @@ export function Checkbox({
           <>
             <div
               className={boxStyles({
+                isFocusVisible,
                 isSelected: isSelected || isIndeterminate,
                 size,
                 isDisabled,
