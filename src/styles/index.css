@@ -14,7 +14,7 @@ html {
 body {
   color-scheme: dark light;
   -webkit-font-smoothing: antialiased;
-  @apply text-theme-12;
+  @apply bg-theme-2 dark:bg-theme-1 text-theme-12;
 }
 
 body,

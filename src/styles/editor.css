@@ -104,7 +104,7 @@
       top: 0;
       font-size: 1.1em;
       content: counter(steps);
-      @apply bg-theme-a4;
+      @apply bg-theme-4;
     }
     
     &::after {
@@ -113,7 +113,7 @@
       top: var(--step-number-size);
       width: 2px;
       bottom: 0;
-      @apply bg-theme-a3;
+      @apply bg-theme-4;
       content: "";
     }
     

@@ -670,7 +670,7 @@
 
 @layer base {
   .border-dim {
-    @apply border-theme-11/20;
+    @apply border-theme-12/25;
   }
   .border-normal {
     @apply border-theme-11/30;

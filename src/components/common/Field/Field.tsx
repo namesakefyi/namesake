@@ -96,14 +96,14 @@ export const innerBorderStyles = tv({
       true: "border-red-9",
     },
     isDisabled: {
-      true: "border-gray-4",
+      true: "border-dim",
     },
   },
 });
 
 const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "border text-sm group has-autofill:bg-yellow-3 dark:has-autofill:bg-yellow-3 flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
+  base: "border text-sm group has-autofill:bg-yellow-3 flex items-center bg-theme-1 dark:bg-theme-2 forced-colors:bg-[Field] rounded-lg",
   variants: {
     ...fieldBorderStyles.variants,
     size: {
@@ -138,7 +138,7 @@ interface InputProps extends Omit<AriaInputProps, "size"> {
 }
 
 export const inputStyles = tv({
-  base: "flex-1 min-w-0 outline outline-none bg-transparent disable-native-autofill text-normal disabled:text-dim",
+  base: "flex-1 min-w-0 outline outline-none bg-transparent disable-native-autofill disabled:text-dim",
   variants: {
     size: {
       // Since the input is wrapped in a fieldGroup which has a border, subtract 2px from the

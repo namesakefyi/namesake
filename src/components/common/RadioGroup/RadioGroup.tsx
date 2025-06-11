@@ -74,7 +74,7 @@ const radioStyles = tv({
       true: "border-red-9 forced-colors:border-[Mark]!",
     },
     isDisabled: {
-      true: "border-theme-2 cursor-default forced-colors:border-[GrayText]!",
+      true: "border-dim cursor-default forced-colors:border-[GrayText]!",
     },
     size: {
       medium: "size-5",

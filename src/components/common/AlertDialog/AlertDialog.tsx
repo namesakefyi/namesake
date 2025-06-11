@@ -33,7 +33,7 @@ export function AlertDialog({
             {title}
           </Heading>
           <div
-            className={`w-6 h-6 absolute right-0 top-0 stroke-2 ${variant === "destructive" ? "text-red-9" : "text-blue-9"}`}
+            className={`size-6 absolute right-0 top-0 stroke-2 ${variant === "destructive" ? "text-red-9" : "text-blue-9"}`}
           >
             {variant === "destructive" ? (
               <TriangleAlert aria-hidden />

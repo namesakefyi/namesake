@@ -16,7 +16,7 @@ export const EditThemeSetting = () => {
   };
 
   const swatchStyles = tv({
-    base: "w-full h-full rounded-full",
+    base: "w-full h-full",
     variants: {
       color: {
         pink: "bg-pink-9",
@@ -42,7 +42,7 @@ export const EditThemeSetting = () => {
             disallowEmptySelection
             selectedKeys={new Set([theme ?? "system"])}
             onSelectionChange={handleThemeChange}
-            className="w-max mx-auto rounded-full"
+            className="w-max mx-auto"
           >
             {Object.entries(THEMES).map(([theme, { label, icon }]) => (
               <ToggleButton
@@ -50,7 +50,7 @@ export const EditThemeSetting = () => {
                 key={theme}
                 id={theme}
                 icon={icon}
-                className="rounded-full w-16"
+                className="w-16"
               />
             ))}
           </ToggleButtonGroup>

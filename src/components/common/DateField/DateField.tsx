@@ -4,7 +4,7 @@ import {
   FieldGroup,
   Label,
 } from "@/components/common";
-import { composeTailwindRenderProps, focusRing } from "@/components/utils";
+import { composeTailwindRenderProps } from "@/components/utils";
 import {
   DateField as AriaDateField,
   type DateFieldProps as AriaDateFieldProps,
@@ -60,7 +60,7 @@ const segmentStyles = tv({
       true: "text-placeholder",
     },
     isDisabled: {
-      true: "text-gray-2 forced-colors:text-[GrayText]",
+      true: "text-subtle forced-colors:text-[GrayText]",
     },
     isFocused: {
       true: "bg-theme-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
@@ -69,7 +69,6 @@ const segmentStyles = tv({
 });
 
 const dateFieldStyles = tv({
-  extend: focusRing,
   base: "w-[15ch] tabular-nums group flex items-center overflow-hidden",
   variants: {
     size: {

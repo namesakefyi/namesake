@@ -327,9 +327,8 @@ const getColor = (key: string, fallback: ThemeColor): ThemeColor => {
   return color || fallback;
 };
 
-const disableAnimation = (nonce?: string) => {
+const disableAnimation = () => {
   const css = document.createElement("style");
-  if (nonce) css.setAttribute("nonce", nonce);
   css.appendChild(
     document.createTextNode(
       "*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}",

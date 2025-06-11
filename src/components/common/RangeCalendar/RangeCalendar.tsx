@@ -21,7 +21,7 @@ const cell = tv({
   base: "w-full h-full flex items-center justify-center rounded-full cursor-pointer forced-color-adjust-none text-normal",
   variants: {
     selectionState: {
-      none: "group-hover:bg-gray-3 group-pressed:bg-gray-2",
+      none: "group-hover:bg-theme-3 group-pressed:bg-theme-2",
       middle: [
         "group-hover:bg-theme-4 forced-colors:group-hover:bg-[Highlight]",
         "group-hover:group-invalid:bg-red-4 forced-colors:group-hover:group-invalid:bg-[Mark]",
@@ -47,7 +47,7 @@ export function RangeCalendar<T extends DateValue>({
           {(date) => (
             <CalendarCell
               date={date}
-              className="group w-9 h-9 text-sm outline-none cursor-default outside-month:text-gray-10 selected:bg-theme-3 selected:text-theme-12 forced-colors:selected:bg-[Highlight] invalid:selected:bg-red-3 forced-colors:invalid:selected:bg-[Mark] [td:first-child_&]:rounded-s-full selection-start:rounded-s-full [td:last-child_&]:rounded-e-full selection-end:rounded-e-full"
+              className="group size-9 text-sm outline-none cursor-default outside-month:opacity-70 selected:bg-theme-3 selected:text-theme-12 forced-colors:selected:bg-[Highlight] invalid:selected:bg-red-3 forced-colors:invalid:selected:bg-[Mark] [td:first-child_&]:rounded-s-full selection-start:rounded-s-full [td:last-child_&]:rounded-e-full selection-end:rounded-e-full"
             >
               {({
                 formattedDate,
