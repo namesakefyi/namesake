@@ -119,6 +119,7 @@ export default function ButtonComponent({ editor, node }: NodeViewProps) {
                 selectedKey={selectedTab}
                 onSelectionChange={(key) => setSelectedTab(key as LinkType)}
                 className="gap-2"
+                size="small"
               >
                 <TabList>
                   <Tab id="internal">Internal</Tab>
