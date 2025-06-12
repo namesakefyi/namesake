@@ -33,9 +33,9 @@ export const EditThemeSetting = () => {
   });
 
   return (
-    <Card className="@container flex justify-center p-0">
-      <div className="flex flex-col @xl:flex-row gap-6 w-full">
-        <div className="flex flex-col gap-2 pt-6 px-6">
+    <Card className="@container px-0 pt-6 pb-4">
+      <div className="flex flex-col @[38rem]:flex-row justify-center gap-6 w-full min-w-0">
+        <div className="flex flex-col gap-2">
           <ToggleButtonGroup
             selectionMode="single"
             disallowEmptySelection
@@ -57,8 +57,8 @@ export const EditThemeSetting = () => {
             {THEMES[theme ?? "system"].label}
           </div>
         </div>
-        <div className="flex flex-col gap-2 pb-5">
-          <div className="overflow-x-auto px-4 w-full no-scrollbar">
+        <div className="flex flex-col gap-2">
+          <div className="overflow-x-auto px-4 @[38rem]:px-0 w-full no-scrollbar">
             <ToggleButtonGroup
               selectionMode="single"
               disallowEmptySelection

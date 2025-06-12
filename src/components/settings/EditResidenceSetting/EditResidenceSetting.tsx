@@ -57,7 +57,7 @@ export const EditResidenceSetting = ({ user }: EditResidenceSettingProps) => {
   return (
     <SettingsItem
       label="Residence"
-      description="This helps select the forms for your court order and state ID."
+      description="This helps select state‑specific forms."
     >
       <Form onSubmit={handleSubmit} className="gap-2 items-end">
         <Select
