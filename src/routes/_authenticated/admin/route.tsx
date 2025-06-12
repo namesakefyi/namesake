@@ -3,7 +3,10 @@ import {
   AppContent,
   AppNav,
   AppSidebar,
+  AppSidebarContent,
+  AppSidebarFooter,
   AppSidebarHeader,
+  NamesakeHeader,
 } from "@/components/app";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
@@ -29,8 +32,16 @@ function AdminRoute() {
   return (
     <div className="flex">
       {!isMobile && (
-        <AppSidebar header={<AppSidebarHeader />} footer={<AppNav />}>
-          <AdminNav />
+        <AppSidebar>
+          <AppSidebarHeader>
+            <NamesakeHeader />
+          </AppSidebarHeader>
+          <AppSidebarContent>
+            <AdminNav />
+          </AppSidebarContent>
+          <AppSidebarFooter>
+            <AppNav />
+          </AppSidebarFooter>
         </AppSidebar>
       )}
       <AppContent>
