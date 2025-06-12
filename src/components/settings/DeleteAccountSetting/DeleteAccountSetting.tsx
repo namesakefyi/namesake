@@ -106,7 +106,7 @@ export const DeleteAccountSetting = () => {
   return (
     <SettingsItem
       label="Delete account"
-      description="Permanently delete your Namesake account and data."
+      description="Permanently delete your Namesake account."
     >
       <Button onPress={() => setIsDeleteAccountModalOpen(true)} icon={Trash}>
         Delete account

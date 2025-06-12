@@ -16,7 +16,7 @@ export const EditThemeSetting = () => {
   };
 
   const swatchStyles = tv({
-    base: "w-full h-full rounded-full",
+    base: "size-full rounded-full",
     variants: {
       color: {
         rainbow: "bg-rainbow",
@@ -33,8 +33,8 @@ export const EditThemeSetting = () => {
   });
 
   return (
-    <Card className="@container flex justify-center pb-4">
-      <div className="flex flex-col @xl:flex-row gap-6">
+    <Card className="@container px-0 pt-6 pb-4">
+      <div className="flex flex-col @[38rem]:flex-row justify-center gap-6 w-full min-w-0">
         <div className="flex flex-col gap-2">
           <ToggleButtonGroup
             selectionMode="single"
@@ -58,28 +58,30 @@ export const EditThemeSetting = () => {
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <ToggleButtonGroup
-            selectionMode="single"
-            disallowEmptySelection
-            selectedKeys={new Set([color ?? "violet"])}
-            onSelectionChange={handleColorChange}
-            className="w-max mx-auto rounded-full"
-          >
-            {Object.entries(THEME_COLORS).map(([themeColor, { label }]) => (
-              <ToggleButton
-                id={themeColor}
-                key={themeColor}
-                aria-label={label}
-                className="rounded-full p-2 w-10"
-              >
-                <div
-                  className={swatchStyles({
-                    color: themeColor as ThemeColor,
-                  })}
-                />
-              </ToggleButton>
-            ))}
-          </ToggleButtonGroup>
+          <div className="overflow-x-auto px-4 @[38rem]:px-0 w-full no-scrollbar">
+            <ToggleButtonGroup
+              selectionMode="single"
+              disallowEmptySelection
+              selectedKeys={new Set([color ?? "violet"])}
+              onSelectionChange={handleColorChange}
+              className="w-max mx-auto rounded-full"
+            >
+              {Object.entries(THEME_COLORS).map(([themeColor, { label }]) => (
+                <ToggleButton
+                  id={themeColor}
+                  key={themeColor}
+                  aria-label={label}
+                  className="rounded-full p-2 w-10"
+                >
+                  <div
+                    className={swatchStyles({
+                      color: themeColor as ThemeColor,
+                    })}
+                  />
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
+          </div>
           <div className="font-medium flex gap-2 justify-center">
             {THEME_COLORS[color ?? "violet"].label}
             <span className="italic text-dim">

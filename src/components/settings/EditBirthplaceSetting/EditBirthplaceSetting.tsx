@@ -55,7 +55,7 @@ export const EditBirthplaceSetting = ({ user }: EditBirthplaceSettingProps) => {
   return (
     <SettingsItem
       label="Birthplace"
-      description="Where were you born? This helps select the form for your birth certificate."
+      description="This helps select the form for your birth certificate."
     >
       <Form onSubmit={handleSubmit} className="gap-2 items-end">
         <Select
