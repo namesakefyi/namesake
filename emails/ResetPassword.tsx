@@ -35,7 +35,7 @@ export function ResetPasswordEmail({
             Reset your password
           </Button>
           <Text style={styles.paragraph}>
-            If you didn't request a new password, please let us know by replying
+            If you didn’t request a new password, please let us know by replying
             to this email.
           </Text>
           <EmailFooter />

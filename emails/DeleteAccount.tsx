@@ -26,7 +26,7 @@ export function DeleteAccountEmail({
           <Heading style={styles.heading}>Confirm account deletion</Heading>
           <Text style={styles.paragraph}>
             We got a request to delete the Namesake account associated with{" "}
-            {email ?? "this email address"}. We hope we've been able to help you
+            {email ?? "this email address"}. We hope we’ve been able to help you
             with the name change process.
           </Text>
           <Text style={styles.paragraph}>

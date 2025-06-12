@@ -1,6 +1,21 @@
+import type { MarkdownProps } from "@react-email/components";
 import type { CSSProperties } from "react";
 
-export const styles: Record<string, CSSProperties> = {
+type classNames =
+  | "main"
+  | "container"
+  | "heading"
+  | "subheading"
+  | "link"
+  | "hr"
+  | "paragraph"
+  | "button"
+  | "footer"
+  | "footerLogo"
+  | "socialLink"
+  | "disclaimer";
+
+export const styles: Record<classNames, CSSProperties> = {
   main: {
     fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
     fontSize: "16px",
@@ -60,4 +75,12 @@ export const styles: Record<string, CSSProperties> = {
     fontSize: "14px",
     lineHeight: "18px",
   },
+};
+
+export const markdownCustomStyles: MarkdownProps["markdownCustomStyles"] = {
+  p: styles.paragraph,
+  link: styles.link,
+  hr: styles.hr,
+  h1: styles.heading,
+  h2: styles.subheading,
 };

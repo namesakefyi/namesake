@@ -1,5 +1,6 @@
 import { PasswordStrength } from "@/components/app";
 import { Banner, Button, Form, Link, TextField } from "@/components/common";
+import { MAX_DISPLAY_NAME_LENGTH, MIN_DISPLAY_NAME_LENGTH } from "@/constants";
 import { usePasswordStrength } from "@/hooks/usePasswordStrength";
 import { authClient } from "@/main";
 import { api } from "@convex/_generated/api";
@@ -136,8 +137,8 @@ export const RegistrationForm = () => {
         isDisabled={isSubmitting}
         value={name}
         onChange={setName}
-        minLength={3}
-        maxLength={24}
+        minLength={MIN_DISPLAY_NAME_LENGTH}
+        maxLength={MAX_DISPLAY_NAME_LENGTH}
       />
       <TextField
         label="Password"

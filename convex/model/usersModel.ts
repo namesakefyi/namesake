@@ -1,6 +1,11 @@
 import { ConvexError } from "convex/values";
 import { z } from "zod";
-import type { Birthplace, Jurisdiction } from "../../src/constants";
+import {
+  type Birthplace,
+  type Jurisdiction,
+  MAX_DISPLAY_NAME_LENGTH,
+  MIN_DISPLAY_NAME_LENGTH,
+} from "../../src/constants";
 import { DUPLICATE_EMAIL, INVALID_EMAIL } from "../../src/constants/errors";
 import type { Id } from "../_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
@@ -28,6 +33,21 @@ export function setName(
   ctx: MutationCtx,
   { userId, name }: { userId: Id<"users">; name: string },
 ) {
+  if (!name) return;
+  name = name.trim();
+
+  if (name.length < MIN_DISPLAY_NAME_LENGTH) {
+    throw new ConvexError(
+      `Display name must be at least ${MIN_DISPLAY_NAME_LENGTH} characters.`,
+    );
+  }
+
+  if (name.length > MAX_DISPLAY_NAME_LENGTH) {
+    throw new ConvexError(
+      `Display name must be less than ${MAX_DISPLAY_NAME_LENGTH} characters.`,
+    );
+  }
+
   return ctx.db.patch(userId, { name });
 }
 

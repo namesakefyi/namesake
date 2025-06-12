@@ -132,9 +132,13 @@ describe("users", () => {
       expect(user?.name).toBe("New Name");
     });
 
-    it("should clear user name when undefined", async () => {
+    it("should not update user name if undefined", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createTestUser(t);
+      const { asUser, userId } = await createTestUser(
+        t,
+        undefined,
+        "Sylvia Rivera",
+      );
 
       await asUser.mutation(api.users.setName, {
         name: undefined,
@@ -143,7 +147,7 @@ describe("users", () => {
       const user = await t.run(async (ctx) => {
         return await ctx.db.get(userId);
       });
-      expect(user?.name).toBeUndefined();
+      expect(user?.name).toBe("Sylvia Rivera");
     });
   });
 
