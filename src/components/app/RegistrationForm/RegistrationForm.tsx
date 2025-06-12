@@ -40,7 +40,7 @@ const EarlyAccessCodeForm = ({
 
   return (
     <Form onSubmit={handleCodeSubmit} className="items-stretch">
-      <Banner variant="info">
+      <Banner>
         Namesake is in early access. To register, please enter a code.
       </Banner>
       {error && <Banner variant="danger">{error}</Banner>}

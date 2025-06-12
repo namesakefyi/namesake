@@ -1,19 +1,18 @@
 import "./styles/index.css";
-import { Logo } from "@/components/app";
+import { Logo, ThemeProvider } from "@/components/app";
 import { Empty } from "@/components/common";
 import type { Jurisdiction, Role } from "@/constants";
-import { api } from "@convex/_generated/api";
 import {
   convexClient,
   crossDomainClient,
-} from "@erquhart/convex-better-auth/client/plugins";
-import { ConvexBetterAuthProvider } from "@erquhart/convex-better-auth/react";
+} from "@convex-dev/better-auth/client/plugins";
+import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
+import { api } from "@convex/_generated/api";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { createAuthClient } from "better-auth/react";
 import { ConvexReactClient, useQuery } from "convex/react";
 import { ArrowLeft, CircleAlert, TriangleAlert } from "lucide-react";
 import { LazyMotion, domAnimation } from "motion/react";
-import { ThemeProvider } from "next-themes";
 import { posthog } from "posthog-js";
 import { PostHogErrorBoundary, PostHogProvider } from "posthog-js/react";
 import { StrictMode } from "react";
@@ -24,7 +23,7 @@ import { routeTree } from "./routeTree.gen";
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
 export const authClient = createAuthClient({
-  baseURL: "https://modest-caterpillar-513.convex.site",
+  baseURL: import.meta.env.VITE_CONVEX_SITE_URL,
   plugins: [convexClient(), crossDomainClient()],
 });
 
@@ -101,7 +100,7 @@ posthog.init(import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_KEY, {
 const fallback = () => (
   <Empty
     title="Something went wrong"
-    subtitle="We’ve been notified of the issue. Refresh the page to try again."
+    subtitle="We've been notified of the issue. Refresh the page to try again."
     icon={CircleAlert}
     className="min-h-dvh"
   />
@@ -115,7 +114,7 @@ if (!rootElement.innerHTML) {
       <PostHogProvider client={posthog}>
         <HelmetProvider>
           <ConvexBetterAuthProvider client={convex} authClient={authClient}>
-            <ThemeProvider attribute="class" disableTransitionOnChange>
+            <ThemeProvider attribute="class">
               <LazyMotion strict features={domAnimation}>
                 <PostHogErrorBoundary fallback={fallback}>
                   <InnerApp />

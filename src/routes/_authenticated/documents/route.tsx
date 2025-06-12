@@ -1,4 +1,11 @@
-import { AppNav, AppSidebar, AppSidebarHeader } from "@/components/app";
+import {
+  AppNav,
+  AppSidebar,
+  AppSidebarContent,
+  AppSidebarFooter,
+  AppSidebarHeader,
+  NamesakeHeader,
+} from "@/components/app";
 import { DocumentsNav } from "@/components/documents";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
@@ -13,8 +20,16 @@ function DocumentsRoute() {
   return (
     <div className="flex">
       {!isMobile && (
-        <AppSidebar header={<AppSidebarHeader />} footer={<AppNav />}>
-          <DocumentsNav />
+        <AppSidebar>
+          <AppSidebarHeader>
+            <NamesakeHeader />
+          </AppSidebarHeader>
+          <AppSidebarContent>
+            <DocumentsNav />
+          </AppSidebarContent>
+          <AppSidebarFooter>
+            <AppNav />
+          </AppSidebarFooter>
         </AppSidebar>
       )}
       <Outlet />

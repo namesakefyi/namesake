@@ -3,8 +3,8 @@ import {
   type AuthFunctions,
   BetterAuth,
   convexAdapter,
-} from "@erquhart/convex-better-auth";
-import { convex, crossDomain } from "@erquhart/convex-better-auth/plugins";
+} from "@convex-dev/better-auth";
+import { convex, crossDomain } from "@convex-dev/better-auth/plugins";
 import { betterAuth } from "better-auth";
 import { Resend } from "resend";
 import { DeleteAccountEmail } from "../emails/DeleteAccount";
@@ -19,24 +19,18 @@ const resend = new Resend(process.env.AUTH_RESEND_KEY);
 const authFunctions: AuthFunctions = internal.auth;
 
 // Initialize the component
-export const betterAuthComponent = new BetterAuth(
-  components.betterAuth,
+export const betterAuthComponent = new BetterAuth(components.betterAuth, {
   authFunctions,
-);
+});
 
 export const createAuth = (ctx: GenericCtx) =>
   betterAuth({
     database: convexAdapter(ctx, betterAuthComponent),
-    trustedOrigins: [
-      "http://localhost:3000",
-      "http://localhost:5173",
-      "https://modest-caterpillar-513.convex.cloud",
-      "https://modest-caterpillar-513.convex.site",
-      "https://app.namesake.fyi",
-    ],
     plugins: [
-      convex(), // Required
-      crossDomain(), // Support client and Convex backend being on separate domains
+      convex(),
+      crossDomain({
+        siteUrl: "http://localhost:5173",
+      }),
     ],
     emailAndPassword: {
       enabled: true,

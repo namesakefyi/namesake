@@ -8,11 +8,13 @@
  * @module
  */
 
+import type * as __tests___helpers from "../__tests__/helpers.js";
 import type * as auth from "../auth.js";
 import type * as earlyAccessCodes from "../earlyAccessCodes.js";
 import type * as helpers from "../helpers.js";
 import type * as http from "../http.js";
 import type * as migrations from "../migrations.js";
+import type * as model_authModel from "../model/authModel.js";
 import type * as model_earlyAccessCodesModel from "../model/earlyAccessCodesModel.js";
 import type * as model_questsModel from "../model/questsModel.js";
 import type * as model_userDocumentsModel from "../model/userDocumentsModel.js";
@@ -44,11 +46,13 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  "__tests__/helpers": typeof __tests___helpers;
   auth: typeof auth;
   earlyAccessCodes: typeof earlyAccessCodes;
   helpers: typeof helpers;
   http: typeof http;
   migrations: typeof migrations;
+  "model/authModel": typeof model_authModel;
   "model/earlyAccessCodesModel": typeof model_earlyAccessCodesModel;
   "model/questsModel": typeof model_questsModel;
   "model/userDocumentsModel": typeof model_userDocumentsModel;

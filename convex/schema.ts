@@ -8,6 +8,7 @@ import {
   role,
   status,
   theme,
+  themeColor,
   timeRequiredUnit,
 } from "./validators";
 
@@ -124,6 +125,8 @@ const userSettings = defineTable({
   userId: v.id("users"),
   /** The user's preferred color scheme. (e.g. "system", "light", "dark") */
   theme: v.optional(theme),
+  /** The user's preferred color. */
+  color: v.optional(themeColor),
 }).index("userId", ["userId"]);
 
 /**

@@ -3,50 +3,33 @@ import { describe, expect, it } from "vitest";
 import { api } from "../_generated/api";
 import schema from "../schema";
 import { modules } from "../test.setup";
+import { createTestAdmin, createTestUser } from "./helpers";
 
 describe("earlyAccessCodes", () => {
   it("creates an early access code", async () => {
     const t = convexTest(schema, modules);
-
-    const userId = await t.run(async (ctx) => {
-      return await ctx.db.insert("users", {
-        email: "test@example.com",
-        role: "admin",
-      });
-    });
-
-    const asUser = t.withIdentity({ subject: userId });
+    const { asAdmin, adminId } = await createTestAdmin(t);
 
     // Create a code
-    await asUser.mutation(api.earlyAccessCodes.create, {});
+    await asAdmin.mutation(api.earlyAccessCodes.create, {});
 
     // Verify code creation
-    const codes = await t.query(api.earlyAccessCodes.getAll, {});
+    const codes = await asAdmin.query(api.earlyAccessCodes.getAll, {});
     expect(codes.length).toBe(1);
-    expect(codes[0]?.createdBy).toBe(userId);
+    expect(codes[0]?.createdBy).toBe(adminId);
     expect(codes[0]?.claimedAt).toBeUndefined();
   });
 
   it("lists codes for a specific user", async () => {
     const t = convexTest(schema, modules);
-
-    // Create two users
-    const user1Id = await t.run(async (ctx) => {
-      return await ctx.db.insert("users", {
-        email: "user1@example.com",
-        role: "admin",
-      });
-    });
-
-    const user2Id = await t.run(async (ctx) => {
-      return await ctx.db.insert("users", {
-        email: "user2@example.com",
-        role: "admin",
-      });
-    });
-
-    const asUser1 = t.withIdentity({ subject: user1Id });
-    const asUser2 = t.withIdentity({ subject: user2Id });
+    const { asUser: asUser1, userId: user1Id } = await createTestUser(
+      t,
+      "user1@example.com",
+    );
+    const { asUser: asUser2, userId: user2Id } = await createTestUser(
+      t,
+      "user2@example.com",
+    );
 
     // Each user creates a code
     await asUser1.mutation(api.earlyAccessCodes.create, {});
@@ -54,88 +37,47 @@ describe("earlyAccessCodes", () => {
     await asUser2.mutation(api.earlyAccessCodes.create, {});
 
     // Verify user1's codes
-    const user1Codes = await t.query(api.earlyAccessCodes.getCodesForUser, {
-      userId: user1Id,
-    });
+    const user1Codes = await asUser1.query(
+      api.earlyAccessCodes.getCodesForUser,
+    );
     expect(user1Codes.length).toBe(2);
     expect(user1Codes[0]?.createdBy).toBe(user1Id);
     expect(user1Codes[1]?.createdBy).toBe(user1Id);
 
     // Verify user2's codes
-    const user2Codes = await t.query(api.earlyAccessCodes.getCodesForUser, {
-      userId: user2Id,
-    });
+    const user2Codes = await asUser2.query(
+      api.earlyAccessCodes.getCodesForUser,
+    );
     expect(user2Codes.length).toBe(1);
     expect(user2Codes[0]?.createdBy).toBe(user2Id);
   });
 
   it("redeems an early access code", async () => {
     const t = convexTest(schema, modules);
+    const { asAdmin } = await createTestAdmin(t);
+    const { asUser } = await createTestUser(t);
 
-    // Create admin user to generate code
-    const adminId = await t.run(async (ctx) => {
-      return await ctx.db.insert("users", {
-        email: "admin@example.com",
-        role: "admin",
-      });
-    });
-
-    const asAdmin = t.withIdentity({ subject: adminId });
-
-    // Create a code
+    // (Admin) Create a code
     const codeId = await asAdmin.mutation(api.earlyAccessCodes.create, {});
 
-    // Create user to redeem code
-    const userId = await t.run(async (ctx) => {
-      return await ctx.db.insert("users", {
-        email: "user@example.com",
-        role: "user",
-      });
-    });
-
-    const asUser = t.withIdentity({ subject: userId });
-
-    // Redeem the code
+    // (User) Redeem the code
     await asUser.mutation(api.earlyAccessCodes.redeem, {
       earlyAccessCodeId: codeId,
     });
 
-    // Verify code is redeemed
-    const codes = await t.query(api.earlyAccessCodes.getAll, {});
+    // (Admin) Verify code is redeemed
+    const codes = await asAdmin.query(api.earlyAccessCodes.getAll, {});
     expect(codes[0]?.claimedAt).toBeDefined();
   });
 
   it("prevents redeeming an already claimed code", async () => {
     const t = convexTest(schema, modules);
+    const { asAdmin } = await createTestAdmin(t);
 
-    // Create admin and code
-    const adminId = await t.run(async (ctx) => {
-      return await ctx.db.insert("users", {
-        email: "admin@example.com",
-        role: "admin",
-      });
-    });
-
-    const asAdmin = t.withIdentity({ subject: adminId });
     const codeId = await asAdmin.mutation(api.earlyAccessCodes.create, {});
 
-    // Create two users
-    const user1Id = await t.run(async (ctx) => {
-      return await ctx.db.insert("users", {
-        email: "user1@example.com",
-        role: "user",
-      });
-    });
-
-    const user2Id = await t.run(async (ctx) => {
-      return await ctx.db.insert("users", {
-        email: "user2@example.com",
-        role: "user",
-      });
-    });
-
-    const asUser1 = t.withIdentity({ subject: user1Id });
-    const asUser2 = t.withIdentity({ subject: user2Id });
+    const { asUser: asUser1 } = await createTestUser(t, "user1@example.com");
+    const { asUser: asUser2 } = await createTestUser(t, "user2@example.com");
 
     // First user redeems code
     await asUser1.mutation(api.earlyAccessCodes.redeem, {

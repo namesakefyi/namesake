@@ -85,4 +85,59 @@ describe("CheckboxGroupField", () => {
     const childComponent = screen.getByTestId("child-component");
     expect(childComponent).toBeInTheDocument();
   });
+
+  it("renders prefer not to answer option when enabled", () => {
+    renderWithFormProvider(
+      <CheckboxGroupField
+        name="reasonForChangingName"
+        label="Test Label"
+        options={mockOptions}
+        includePreferNotToAnswer
+      />,
+    );
+
+    const preferNotToAnswer = screen.getByText("Prefer not to answer");
+    expect(preferNotToAnswer).toBeInTheDocument();
+  });
+
+  it("disables other options when prefer not to answer is selected", async () => {
+    renderWithFormProvider(
+      <CheckboxGroupField
+        name="reasonForChangingName"
+        label="Test Label"
+        options={mockOptions}
+        includePreferNotToAnswer
+      />,
+    );
+
+    // Select prefer not to answer
+    const preferNotToAnswer = screen.getByText("Prefer not to answer");
+    await userEvent.click(preferNotToAnswer);
+
+    // Check that all other options are disabled
+    for (const option of mockOptions) {
+      const checkbox = screen.getByRole("checkbox", {
+        name: option.label,
+      }) as HTMLInputElement;
+      expect(checkbox.disabled).toBe(true);
+      expect(checkbox.checked).toBe(false);
+    }
+
+    // Verify prefer not to answer is checked
+    const preferNotToAnswerCheckbox = screen.getByRole("checkbox", {
+      name: "Prefer not to answer",
+    }) as HTMLInputElement;
+    expect(preferNotToAnswerCheckbox.checked).toBe(true);
+
+    // Uncheck prefer not to answer
+    await userEvent.click(preferNotToAnswer);
+
+    // Verify all options are enabled
+    for (const option of mockOptions) {
+      const checkbox = screen.getByRole("checkbox", {
+        name: option.label,
+      }) as HTMLInputElement;
+      expect(checkbox.disabled).toBe(false);
+    }
+  });
 });

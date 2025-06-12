@@ -19,10 +19,6 @@ vi.mock("sonner", () => ({
   },
 }));
 
-vi.mock("@/hooks/useTheme", () => ({
-  useTheme: vi.fn(),
-}));
-
 vi.mock("@tanstack/react-router", () => ({
   useNavigate: vi.fn(),
   useRouter: () => ({
@@ -67,25 +63,25 @@ vi.mock("@/utils/encryption", () => ({
 }));
 
 // Mock convex-better-auth
-vi.mock("@erquhart/convex-better-auth/react", () => ({
+vi.mock("@convex-dev/better-auth/react", () => ({
   ConvexBetterAuthProvider: ({ children }: { children: ReactNode }) => children,
 }));
 
-vi.mock("@erquhart/convex-better-auth/client/plugins", () => ({
+vi.mock("@convex-dev/better-auth/client/plugins", () => ({
   convexClient: vi.fn(() => ({})),
   crossDomainClient: vi.fn(() => ({})),
 }));
 
-vi.mock("@erquhart/convex-better-auth/plugins", () => ({
+vi.mock("@convex-dev/better-auth/plugins", () => ({
   convex: vi.fn(() => ({})),
   crossDomain: vi.fn(() => ({})),
 }));
 
-vi.mock("@erquhart/convex-better-auth/convex.config", () => ({
+vi.mock("@convex-dev/better-auth/convex.config", () => ({
   default: {},
 }));
 
-vi.mock("@erquhart/convex-better-auth", () => ({
+vi.mock("@convex-dev/better-auth", () => ({
   BetterAuth: vi.fn(() => ({
     createAuthFunctions: vi.fn(() => ({
       createUser: vi.fn(),

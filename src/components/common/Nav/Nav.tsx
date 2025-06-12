@@ -9,6 +9,7 @@ type NavItemBaseProps = {
   icon?: LucideIcon;
   className?: string;
   children?: React.ReactNode;
+  actions?: React.ReactNode;
   size?: "medium" | "large";
 };
 
@@ -22,30 +23,44 @@ type NavItemProps = NavItemBaseProps & (NavLinkProps | NavButtonProps);
 
 const navItemStyles = tv({
   extend: focusRing,
-  base: "rounded-md gap-2 no-underline px-2 -mx-2 flex border border-transparent items-center text-base md:text-sm lg:text-base hover:bg-gray-3 text-gray-normal aria-current:font-semibold aria-current:text-gray-normal cursor-pointer",
+  base: "rounded-md gap-2 no-underline px-2 -mx-2 min-w-0 flex border border-transparent items-center text-base md:text-sm lg:text-base hover:bg-theme-a3 text-normal aria-current:font-semibold aria-current:text-normal cursor-pointer",
   variants: {
     isActive: {
-      true: "bg-gray-3 hover:bg-gray-3 text-gray-normal",
+      true: "bg-theme-a3 text-normal",
     },
     size: {
       medium: "h-9 md:h-8 lg:h-9",
       large: "h-12",
     },
+    displayExternalLink: {
+      true: "pr-8",
+    },
+    displayChevron: {
+      true: "pr-8",
+    },
   },
+  compoundVariants: [
+    {
+      displayExternalLink: true,
+      displayChevron: true,
+      className: "pr-14",
+    },
+  ],
   defaultVariants: {
     size: "medium",
   },
 });
 
 const iconStyles = tv({
-  base: "text-gray-dim shrink-0 stroke-[1.5px]",
+  base: "shrink-0 stroke-[1.5px]",
   variants: {
     isActive: {
-      true: "text-gray-normal",
+      false: "text-dim",
+      true: "text-normal",
     },
     size: {
       medium: "size-5",
-      large: "bg-gray-a3 rounded-sm size-8 p-1",
+      large: "bg-theme-a3 rounded-sm size-8 p-1",
     },
   },
   compoundVariants: [
@@ -64,6 +79,7 @@ export const NavItem = ({
   icon: Icon,
   className,
   children,
+  actions,
   size,
   ...props
 }: NavItemProps) => {
@@ -86,39 +102,50 @@ export const NavItem = ({
   }
 
   return (
-    <Link
-      {...props}
-      className={({ isFocusVisible }) =>
-        navItemStyles({
-          isFocusVisible,
-          isActive: !!current,
-          class: className,
-          size,
-        })
-      }
-      aria-current={current ? "true" : null}
-    >
-      <div className="flex flex-1 items-center gap-2 min-w-0">
-        {Icon && <Icon className={iconStyles({ isActive: !!current, size })} />}
-        {children}
+    <div className="grid *:[grid-area:1/1]">
+      <Link
+        {...props}
+        className={({ isFocusVisible }) =>
+          navItemStyles({
+            isFocusVisible,
+            displayExternalLink,
+            displayChevron,
+            isActive: !!current,
+            class: className,
+            size,
+          })
+        }
+        aria-current={current ? "true" : null}
+      >
+        <div className="flex flex-1 items-center gap-2 pointer-events-none truncate">
+          {Icon && (
+            <Icon className={iconStyles({ isActive: !!current, size })} />
+          )}
+          {children}
+        </div>
+      </Link>
+      <div className="justify-self-end flex items-center gap-1 z-10 pointer-events-none">
+        <span className="pointer-events-auto">{actions}</span>
+        {displayExternalLink && (
+          <ExternalLink aria-hidden className="size-4 text-subtle" />
+        )}
+        {displayChevron && (
+          <ChevronRight aria-hidden className="size-5 -mr-0.5 text-subtle" />
+        )}
       </div>
-      {displayExternalLink && (
-        <ExternalLink aria-hidden className="size-4 text-gray-8" />
-      )}
-      {displayChevron && (
-        <ChevronRight aria-hidden className="size-5 -mr-0.5 text-gray-8" />
-      )}
-    </Link>
+    </div>
   );
 };
 
 interface NavGroupProps {
   children: React.ReactNode;
+  label?: string;
+  icon?: LucideIcon;
 }
 
 export const NavGroup = ({ children }: NavGroupProps) => {
   return (
-    <div className="flex flex-col gap-0.5 pt-2 mt-2 border-t border-gray-dim first:mt-0 first:border-0 first:pt-0">
+    <div className="flex flex-col gap-0.5 pt-2 mt-2 border-t border-dim first:mt-0 first:border-0 first:pt-0">
       {children}
     </div>
   );

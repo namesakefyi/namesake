@@ -1,5 +1,5 @@
+import betterAuth from "@convex-dev/better-auth/convex.config";
 import migrations from "@convex-dev/migrations/convex.config";
-import betterAuth from "@erquhart/convex-better-auth/convex.config";
 import { defineApp } from "convex/server";
 
 const app = defineApp();

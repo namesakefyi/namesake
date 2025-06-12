@@ -25,7 +25,7 @@ describe("DeleteAccountSetting", () => {
       screen.getByRole("button", { name: "Delete account" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("Permanently delete your Namesake account and data."),
+      screen.getByText("Permanently delete your Namesake account."),
     ).toBeInTheDocument();
   });
 

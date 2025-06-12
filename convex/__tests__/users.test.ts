@@ -4,26 +4,34 @@ import { DUPLICATE_EMAIL, INVALID_EMAIL } from "../../src/constants/errors";
 import { api } from "../_generated/api";
 import schema from "../schema";
 import { modules } from "../test.setup";
+import { createTestAdmin, createTestUser } from "./helpers";
 
 describe("users", () => {
   describe("getAll", () => {
+    it("should return an error if not authenticated", async () => {
+      const t = convexTest(schema, modules);
+      await expect(t.query(api.users.getAll, {})).rejects.toThrow(
+        "Not authenticated",
+      );
+    });
+
+    it("should return an error if not authorized", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser } = await createTestUser(t);
+      await expect(asUser.query(api.users.getAll, {})).rejects.toThrow(
+        "Insufficient permissions",
+      );
+    });
+
     it("should return all users", async () => {
       const t = convexTest(schema, modules);
+      const { asAdmin } = await createTestAdmin(t);
+      await createTestUser(t, "test1@example.com");
+      await createTestUser(t, "test2@example.com");
 
-      await t.run(async (ctx) => {
-        await ctx.db.insert("users", {
-          email: "test1@example.com",
-          role: "user",
-        });
-
-        await ctx.db.insert("users", {
-          email: "test2@example.com",
-          role: "admin",
-        });
-      });
-
-      const users = await t.query(api.users.getAll, {});
-      expect(users).toHaveLength(2);
+      const users = await asAdmin.query(api.users.getAll, {});
+      expect(users).toHaveLength(3);
+      expect(users.map((u) => u.email)).toContain("admin@namesake.fyi");
       expect(users.map((u) => u.email)).toContain("test1@example.com");
       expect(users.map((u) => u.email)).toContain("test2@example.com");
     });
@@ -32,16 +40,12 @@ describe("users", () => {
   describe("getCurrent", () => {
     it("should return the current user", async () => {
       const t = convexTest(schema, modules);
+      const { asUser } = await createTestUser(
+        t,
+        "test@example.com",
+        "Test User",
+      );
 
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-          name: "Test User",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
       const user = await asUser.query(api.users.getCurrent, {});
       expect(user?.email).toBe("test@example.com");
       expect(user?.name).toBe("Test User");
@@ -58,17 +62,14 @@ describe("users", () => {
   describe("getCurrentRole", () => {
     it("should return the current user's role", async () => {
       const t = convexTest(schema, modules);
+      const { asUser } = await createTestUser(t);
 
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "admin",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
       const role = await asUser.query(api.users.getCurrentRole, {});
-      expect(role).toBe("admin");
+      expect(role).toBe("user");
+
+      const { asAdmin } = await createTestAdmin(t);
+      const adminRole = await asAdmin.query(api.users.getCurrentRole, {});
+      expect(adminRole).toBe("admin");
     });
 
     it("should return null if user not authenticated", async () => {
@@ -79,18 +80,27 @@ describe("users", () => {
   });
 
   describe("getByEmail", () => {
+    it("should return an error if not authenticated", async () => {
+      const t = convexTest(schema, modules);
+      await expect(
+        t.query(api.users.getByEmail, { email: "test@example.com" }),
+      ).rejects.toThrow("Not authenticated");
+    });
+
+    it("should return an error if not authorized", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser } = await createTestUser(t);
+      await expect(
+        asUser.query(api.users.getByEmail, { email: "test@example.com" }),
+      ).rejects.toThrow("Insufficient permissions");
+    });
+
     it("should return user by email", async () => {
       const t = convexTest(schema, modules);
+      const { asAdmin } = await createTestAdmin(t);
+      await createTestUser(t, "test@example.com", "Test User");
 
-      await t.run(async (ctx) => {
-        await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-          name: "Test User",
-        });
-      });
-
-      const user = await t.query(api.users.getByEmail, {
+      const user = await asAdmin.query(api.users.getByEmail, {
         email: "test@example.com",
       });
       expect(user?.name).toBe("Test User");
@@ -98,7 +108,9 @@ describe("users", () => {
 
     it("should return null if user not found", async () => {
       const t = convexTest(schema, modules);
-      const user = await t.query(api.users.getByEmail, {
+      const { asAdmin } = await createTestAdmin(t);
+
+      const user = await asAdmin.query(api.users.getByEmail, {
         email: "nonexistent@example.com",
       });
       expect(user).toBeNull();
@@ -108,15 +120,8 @@ describe("users", () => {
   describe("setName", () => {
     it("should update user name", async () => {
       const t = convexTest(schema, modules);
+      const { asUser, userId } = await createTestUser(t);
 
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
       await asUser.mutation(api.users.setName, {
         name: "New Name",
       });
@@ -129,16 +134,8 @@ describe("users", () => {
 
     it("should clear user name when undefined", async () => {
       const t = convexTest(schema, modules);
+      const { asUser, userId } = await createTestUser(t);
 
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-          name: "Test User",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
       await asUser.mutation(api.users.setName, {
         name: undefined,
       });
@@ -153,15 +150,8 @@ describe("users", () => {
   describe("setEmail", () => {
     it("should update the user's email", async () => {
       const t = convexTest(schema, modules);
+      const { asUser, userId } = await createTestUser(t);
 
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "old@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
       await asUser.mutation(api.users.setEmail, {
         email: "new@example.com",
       });
@@ -174,15 +164,8 @@ describe("users", () => {
 
     it("should throw an error for an invalid email", async () => {
       const t = convexTest(schema, modules);
+      const { asUser } = await createTestUser(t);
 
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "valid@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
       await expect(
         asUser.mutation(api.users.setEmail, { email: "invalid-email" }),
       ).rejects.toThrow(INVALID_EMAIL);
@@ -190,22 +173,9 @@ describe("users", () => {
 
     it("should throw an error for a duplicate email", async () => {
       const t = convexTest(schema, modules);
+      await createTestUser(t, "existing@example.com");
+      const { asUser } = await createTestUser(t, "new@example.com");
 
-      await t.run(async (ctx) => {
-        await ctx.db.insert("users", {
-          email: "existing@example.com",
-          role: "user",
-        });
-      });
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "new@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
       await expect(
         asUser.mutation(api.users.setEmail, { email: "existing@example.com" }),
       ).rejects.toThrow(DUPLICATE_EMAIL);
@@ -215,15 +185,8 @@ describe("users", () => {
   describe("setBirthplace", () => {
     it("should update user birthplace", async () => {
       const t = convexTest(schema, modules);
+      const { asUser, userId } = await createTestUser(t);
 
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
       await asUser.mutation(api.users.setBirthplace, {
         birthplace: "CA",
       });
@@ -235,18 +198,27 @@ describe("users", () => {
     });
   });
 
+  describe("setResidence", () => {
+    it("should update user residence", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createTestUser(t);
+
+      await asUser.mutation(api.users.setResidence, {
+        residence: "CA",
+      });
+
+      const user = await t.run(async (ctx) => {
+        return await ctx.db.get(userId);
+      });
+      expect(user?.residence).toBe("CA");
+    });
+  });
+
   describe("setCurrentUserIsMinor", () => {
     it("should update user isMinor status", async () => {
       const t = convexTest(schema, modules);
+      const { asUser, userId } = await createTestUser(t);
 
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
       await asUser.mutation(api.users.setCurrentUserIsMinor, {
         isMinor: true,
       });

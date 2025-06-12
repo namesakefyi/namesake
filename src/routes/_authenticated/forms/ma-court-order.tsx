@@ -2,6 +2,7 @@ import { Banner, Button } from "@/components/common";
 import {
   AddressField,
   CheckboxField,
+  ComboBoxField,
   EmailField,
   FormContainer,
   FormSection,
@@ -12,10 +13,10 @@ import {
   NameField,
   PhoneField,
   PronounSelectField,
-  SelectField,
   ShortTextField,
   YesNoField,
 } from "@/components/forms";
+import { QuestCostsTable } from "@/components/quests";
 import { BIRTHPLACES, type FieldName, type FieldType } from "@/constants";
 import affidavitOfIndigency from "@/forms/ma/affidavit-of-indigency";
 import cjd400MotionToImpound from "@/forms/ma/cjd400-motion-to-impound";
@@ -26,7 +27,7 @@ import { downloadMergedPdf } from "@/forms/utils";
 import { useForm } from "@/hooks/useForm";
 import { api } from "@convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import type { FormEvent } from "react";
 import { toast } from "sonner";
 
@@ -82,6 +83,9 @@ type FormData = {
 function RouteComponent() {
   const { onSubmit, isSubmitting, ...form } = useForm<FormData>(FORM_FIELDS);
   const saveDocuments = useMutation(api.userDocuments.set);
+  const quest = useQuery(api.quests.getBySlug, {
+    slug: "court-order-ma",
+  });
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -106,6 +110,12 @@ function RouteComponent() {
 
       await downloadMergedPdf({
         title: "Massachusetts Court Order",
+        instructions: [
+          "Review all documents carefully.",
+          "Do not sign documents until in the presence of a notary.",
+          "File with the Probate and Family Court in your county.",
+          "Remember to bring all supporting documents to the court.",
+        ],
         pdfs,
         userData: form.getValues(),
       });
@@ -144,7 +154,7 @@ function RouteComponent() {
           name="reasonForChangingName"
           label="Reason for name change"
         />
-        <Banner variant="info" size="large">
+        <Banner size="large">
           <p>
             <strong>What do I write?</strong> Provide a basic reason—no need to
             go into detail. Examples:
@@ -175,7 +185,7 @@ function RouteComponent() {
       <FormSection title="Where were you born?">
         <div className="flex flex-wrap gap-4">
           <ShortTextField name="birthplaceCity" label="City" />
-          <SelectField
+          <ComboBoxField
             name="birthplaceState"
             label="State"
             placeholder="Select a state"
@@ -317,7 +327,7 @@ function RouteComponent() {
             description='Ask for a waiver of publication for your name change and state a "good cause" for it.'
             inputClassName="min-h-32"
           />
-          <Banner variant="info" size="large">
+          <Banner size="large">
             <p>
               <strong>What do I write?</strong> The court is looking for a legal
               basis to exempt you from the newspaper publishing requirement.
@@ -362,7 +372,7 @@ function RouteComponent() {
             description="Explain why you want to keep your case private."
             inputClassName="min-h-32"
           />
-          <Banner variant="info" size="large">
+          <Banner size="large">
             <p>
               <strong>What do I write?</strong> The court is looking for a legal
               basis to <em>impound</em> (make private) these court records.
@@ -384,17 +394,19 @@ function RouteComponent() {
       </FormSection>
       <FormSection
         title="Do you need to apply for a fee waiver?"
-        description="If you are unable to pay the filing fee, you can file an Affidavit of Indigency—a document proving that you are unable to pay. You will need to provide proof of income."
+        description="If you are unable to pay the filing fee, you can file an Affidavit of Indigency—a document proving that you are unable to pay."
       >
         <YesNoField
           name="shouldApplyForFeeWaiver"
           label="Apply for a fee waiver?"
           labelHidden
-          yesLabel="Help me waive filing fees; I can provide proof of income"
-          noLabel="I will pay the filing fee"
+          yesLabel="Yes, help me waive filing fees"
+          noLabel="No, I will pay the filing fee"
         />
-        {form.watch("shouldApplyForFeeWaiver") === true && (
-          <Banner variant="info" size="large">
+        {form.watch("shouldApplyForFeeWaiver") !== true ? (
+          <QuestCostsTable costs={quest?.costs} card />
+        ) : (
+          <Banner size="large">
             Your download will include an Affidavit of Indigency.{" "}
             <strong>
               There are additional fields in the download you have to fill out.

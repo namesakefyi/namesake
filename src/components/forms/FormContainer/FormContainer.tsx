@@ -70,9 +70,9 @@ export function FormContainer({
           <Form
             onSubmit={onSubmit}
             autoComplete="on"
-            className="gap-0 divide-y divide-gray-a3"
+            className="gap-0 divide-y divide-dim"
           >
-            <header className="flex flex-col gap-1 mb-8">
+            <header className="flex flex-col gap-1 mb-8 border-0">
               {jurisdiction && (
                 <Badge size="lg">{JURISDICTIONS[jurisdiction]}</Badge>
               )}
@@ -80,16 +80,9 @@ export function FormContainer({
                 {title}
               </Heading>
               {description && (
-                <p className="text-sm text-gray-dim">
-                  {smartquotes(description)}
-                </p>
+                <p className="text-sm text-dim">{smartquotes(description)}</p>
               )}
-              <Banner
-                variant="brand"
-                icon={ShieldCheck}
-                size="large"
-                className="mt-6"
-              >
+              <Banner icon={ShieldCheck} size="large" className="mt-6">
                 Namesake takes your privacy seriously. All responses are
                 end-to-end encrypted. That means no one—not even Namesake—can
                 see your answers.

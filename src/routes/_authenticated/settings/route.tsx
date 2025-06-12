@@ -2,7 +2,10 @@ import {
   AppContent,
   AppNav,
   AppSidebar,
+  AppSidebarContent,
+  AppSidebarFooter,
   AppSidebarHeader,
+  NamesakeHeader,
 } from "@/components/app";
 import { SettingsNav } from "@/components/settings";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -18,8 +21,16 @@ function SettingsRoute() {
   return (
     <div className="flex">
       {!isMobile && (
-        <AppSidebar header={<AppSidebarHeader />} footer={<AppNav />}>
-          <SettingsNav />
+        <AppSidebar>
+          <AppSidebarHeader>
+            <NamesakeHeader />
+          </AppSidebarHeader>
+          <AppSidebarContent>
+            <SettingsNav />
+          </AppSidebarContent>
+          <AppSidebarFooter>
+            <AppNav />
+          </AppSidebarFooter>
         </AppSidebar>
       )}
       <AppContent>

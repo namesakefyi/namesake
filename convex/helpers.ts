@@ -27,3 +27,33 @@ export const userMutation = customMutation(mutation, {
     return { ctx: { userId: identity.subject as Id<"users"> }, args: {} };
   },
 });
+
+export const adminQuery = customQuery(query, {
+  args: {},
+  input: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_id", (q) => q.eq("_id", identity.subject as Id<"users">))
+      .unique();
+    if (!user) throw new Error("Not authenticated");
+    if (user.role !== "admin") throw new Error("Insufficient permissions");
+    return { ctx: { userId: user._id }, args: {} };
+  },
+});
+
+export const adminMutation = customMutation(mutation, {
+  args: {},
+  input: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_id", (q) => q.eq("_id", identity.subject as Id<"users">))
+      .unique();
+    if (!user) throw new Error("Not authenticated");
+    if (user.role !== "admin") throw new Error("Insufficient permissions");
+    return { ctx: { userId: user._id }, args: {} };
+  },
+});

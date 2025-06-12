@@ -44,7 +44,7 @@ export type Jurisdiction = keyof typeof JURISDICTIONS;
 
 export const BIRTHPLACES: Record<Jurisdiction | "other", string> = {
   ...JURISDICTIONS,
-  other: "I was born outside the US",
+  other: "Outside the US",
 };
 export type Birthplace = keyof typeof BIRTHPLACES;
 
@@ -181,7 +181,7 @@ export const CATEGORIES: Record<Category, GroupDetails> = {
 export type Status = "notStarted" | "inProgress" | "complete";
 
 interface StatusDetails extends GroupDetails {
-  variant?: "info" | "warning" | "danger" | "brand" | "success";
+  variant?: "warning" | "danger" | "success";
 }
 
 export const STATUS: Record<Status, StatusDetails> = {

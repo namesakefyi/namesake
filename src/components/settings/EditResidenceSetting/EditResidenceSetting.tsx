@@ -57,7 +57,7 @@ export const EditResidenceSetting = ({ user }: EditResidenceSettingProps) => {
   return (
     <SettingsItem
       label="Residence"
-      description="Where do you live? This helps select the forms for your court order and state ID."
+      description="This helps select state‑specific forms."
     >
       <Form onSubmit={handleSubmit} className="gap-2 items-end">
         <Select
@@ -83,7 +83,7 @@ export const EditResidenceSetting = ({ user }: EditResidenceSettingProps) => {
             <Button
               variant="secondary"
               onPress={handleCancel}
-              isSubmitting={isSubmitting}
+              isDisabled={isSubmitting}
               size="small"
             >
               Cancel

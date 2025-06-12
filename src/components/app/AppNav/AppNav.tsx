@@ -19,11 +19,11 @@ interface AppNavItemProps extends Omit<LinkProps, "href"> {
 }
 
 const navItemStyles = tv({
-  base: "font-medium flex flex-col items-center h-12 gap-0.5 justify-center no-underline text-xs text-gray-dim hover:text-gray-normal leading-none rounded-md py-1 px-2 transition-colors",
+  base: "font-medium flex flex-col items-center h-12 gap-0.5 justify-center no-underline text-xs text-dim hover:text-normal leading-none rounded-lg py-1 px-2 transition-colors",
   variants: {
     isActive: {
-      false: "text-gray-dim",
-      true: "text-gray-normal",
+      false: "text-dim",
+      true: "text-normal",
     },
   },
 });
@@ -31,8 +31,8 @@ const navItemStyles = tv({
 const iconStyles = tv({
   variants: {
     isActive: {
-      false: "text-gray-9 stroke-[1.5px]",
-      true: "text-gray-11 stroke-2",
+      false: "text-dim opacity-50 hover:opacity-80 stroke-[1.5px]",
+      true: "text-dim stroke-2",
     },
   },
 });
@@ -78,11 +78,11 @@ export const AppNav = () => {
   const isMobile = useIsMobile();
 
   const styles = tv({
-    base: "w-full shrink-0 flex *:flex-1 *:shrink-0 gap-1 h-mobile-nav p-1 items-center ",
+    base: "w-full shrink-0 flex *:flex-1 *:shrink-0 gap-1 h-mobile-nav p-1 items-center z-30",
     variants: {
       isMobile: {
-        true: "fixed bottom-0 bg-element border-t border-gray-a4 shadow-2xl",
-        false: "absolute bottom-0 bg-sidebar",
+        true: "fixed bottom-0 bg-element border-t border-overlay shadow-2xl",
+        false: "absolute bottom-0 bg-app",
       },
     },
   });
