@@ -32,7 +32,20 @@ const navItemStyles = tv({
       medium: "h-9 md:h-8 lg:h-9",
       large: "h-12",
     },
+    displayExternalLink: {
+      true: "pr-8",
+    },
+    displayChevron: {
+      true: "pr-8",
+    },
   },
+  compoundVariants: [
+    {
+      displayExternalLink: true,
+      displayChevron: true,
+      className: "pr-14",
+    },
+  ],
   defaultVariants: {
     size: "medium",
   },
@@ -95,6 +108,8 @@ export const NavItem = ({
         className={({ isFocusVisible }) =>
           navItemStyles({
             isFocusVisible,
+            displayExternalLink,
+            displayChevron,
             isActive: !!current,
             class: className,
             size,

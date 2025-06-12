@@ -24,6 +24,7 @@ import {
   type CoreCategory,
   type Status,
 } from "@/constants";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { api } from "@convex/_generated/api";
 import type { Doc, Id } from "@convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
@@ -326,6 +327,7 @@ const AllQuests = () => {
 };
 
 export const QuestsSidebar = () => {
+  const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState<"user" | "all">("user");
 
   return (
@@ -353,9 +355,11 @@ export const QuestsSidebar = () => {
       <AppSidebarContent>
         {activeTab === "user" ? <MyQuests /> : <AllQuests />}
       </AppSidebarContent>
-      <AppSidebarFooter>
-        <AppNav />
-      </AppSidebarFooter>
+      {!isMobile && (
+        <AppSidebarFooter>
+          <AppNav />
+        </AppSidebarFooter>
+      )}
     </AppSidebar>
   );
 };

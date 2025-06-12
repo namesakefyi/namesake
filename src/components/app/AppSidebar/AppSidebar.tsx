@@ -64,7 +64,7 @@ type AppSidebarFooterProps = {
 
 export const AppSidebarFooter = ({ children }: AppSidebarFooterProps) => {
   return (
-    <div className="h-header shrink-0 flex items-center sticky bottom-0 bg-app">
+    <div className="h-header shrink-0 flex items-center sticky bottom-0 bg-app z-20">
       {children}
     </div>
   );
