@@ -10,6 +10,6 @@ export * from "./QuestPageBadges/QuestPageBadges";
 export * from "./QuestPageHeader/QuestPageHeader";
 export * from "./QuestPageToolbar/QuestPageToolbar";
 export * from "./QuestSection/QuestSection";
-export * from "./QuestsNav/QuestsNav";
+export * from "./QuestsSidebar/QuestsSidebar";
 export * from "./QuestTimeBadge/QuestTimeBadge";
 export * from "./StatusSelect/StatusSelect";

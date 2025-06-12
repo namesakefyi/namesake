@@ -1,4 +1,12 @@
 import {
+  AppNav,
+  AppSidebarContent,
+  AppSidebarFooter,
+  NamesakeHeader,
+} from "@/components/app";
+import { AppSidebar } from "@/components/app";
+import { AppSidebarHeader } from "@/components/app";
+import {
   Badge,
   Button,
   Nav,
@@ -6,10 +14,6 @@ import {
   NavItem,
   ProgressBar,
   SearchField,
-  Tab,
-  TabList,
-  TabPanel,
-  Tabs,
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
@@ -20,10 +24,11 @@ import {
   type CoreCategory,
   type Status,
 } from "@/constants";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { api } from "@convex/_generated/api";
 import type { Doc, Id } from "@convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
-import { type LucideIcon, Plus } from "lucide-react";
+import { type LucideIcon, Plus, Search, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -269,7 +274,6 @@ const AllQuestsNavItem = ({ quest }: { quest: Doc<"quests"> }) => {
 const AllQuests = () => {
   const [search, setSearch] = useState("");
   const activeQuests = useQuery(api.quests.getAllActive);
-  const activeQuestsCount = activeQuests?.length ?? 0;
   const filteredQuests = activeQuests?.filter((quest) =>
     quest.title.toLowerCase().includes(search.toLowerCase()),
   );
@@ -292,10 +296,11 @@ const AllQuests = () => {
   return (
     <div className="flex flex-col gap-4">
       <SearchField
-        placeholder={`Search ${activeQuestsCount} quests`}
+        placeholder="Search all quests"
         aria-label="Search"
         value={search}
         onChange={setSearch}
+        autoFocus
       />
       <Nav>
         {questsByCategory &&
@@ -321,19 +326,40 @@ const AllQuests = () => {
   );
 };
 
-export const QuestsNav = () => {
+export const QuestsSidebar = () => {
+  const isMobile = useIsMobile();
+  const [activeTab, setActiveTab] = useState<"user" | "all">("user");
+
   return (
-    <Tabs size="small">
-      <TabList>
-        <Tab id="My quests">My quests</Tab>
-        <Tab id="All quests">All quests</Tab>
-      </TabList>
-      <TabPanel id="My quests">
-        <MyQuests />
-      </TabPanel>
-      <TabPanel id="All quests">
-        <AllQuests />
-      </TabPanel>
-    </Tabs>
+    <AppSidebar>
+      <AppSidebarHeader>
+        <NamesakeHeader>
+          <TooltipTrigger>
+            <Button
+              aria-label={
+                activeTab === "user" ? "Browse all quests" : "Back to my quests"
+              }
+              variant="icon"
+              onPress={() =>
+                setActiveTab(activeTab === "user" ? "all" : "user")
+              }
+              icon={activeTab === "user" ? Search : X}
+              className="ml-auto -mr-2"
+            />
+            <Tooltip placement="left">
+              {activeTab === "user" ? "Browse all quests" : "Back to my quests"}
+            </Tooltip>
+          </TooltipTrigger>
+        </NamesakeHeader>
+      </AppSidebarHeader>
+      <AppSidebarContent>
+        {activeTab === "user" ? <MyQuests /> : <AllQuests />}
+      </AppSidebarContent>
+      {!isMobile && (
+        <AppSidebarFooter>
+          <AppNav />
+        </AppSidebarFooter>
+      )}
+    </AppSidebar>
   );
 };

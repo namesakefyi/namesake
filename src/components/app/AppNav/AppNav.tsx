@@ -78,11 +78,11 @@ export const AppNav = () => {
   const isMobile = useIsMobile();
 
   const styles = tv({
-    base: "w-full shrink-0 flex *:flex-1 *:shrink-0 gap-1 h-mobile-nav p-1 items-center ",
+    base: "w-full shrink-0 flex *:flex-1 *:shrink-0 gap-1 h-mobile-nav p-1 items-center z-30",
     variants: {
       isMobile: {
         true: "fixed bottom-0 bg-element border-t border-overlay shadow-2xl",
-        false: "absolute bottom-0 bg-sidebar",
+        false: "absolute bottom-0 bg-app",
       },
     },
   });
