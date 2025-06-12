@@ -1,5 +1,11 @@
 # namesake
 
+## 0.32.1
+
+### Patch Changes
+
+- 4b3449d: Fix issues with scrolling nav z-index
+
 ## 0.32.0
 
 ### Minor Changes
