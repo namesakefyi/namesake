@@ -1,5 +1,11 @@
 # namesake
 
+## 0.32.2
+
+### Patch Changes
+
+- 6f2b56c: Fix swatch controls overflow on mobile
+
 ## 0.32.1
 
 ### Patch Changes
