@@ -11,8 +11,14 @@ interface SniperResponse {
   provider_pretty: string;
 }
 
-export const ForgotPasswordForm = () => {
-  const [email, setEmail] = useState<string>("");
+interface ForgotPasswordFormProps {
+  defaultEmail?: string;
+}
+
+export const ForgotPasswordForm = ({
+  defaultEmail,
+}: ForgotPasswordFormProps) => {
+  const [email, setEmail] = useState<string>(defaultEmail ?? "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [didSendEmail, setDidSendEmail] = useState(false);

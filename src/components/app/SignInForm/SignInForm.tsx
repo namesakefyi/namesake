@@ -70,7 +70,7 @@ export const SignInForm = () => {
         suffix={
           <TooltipTrigger>
             <Link
-              href={{ to: "/forgot" }}
+              href={{ to: "/forgot", search: email ? { email } : undefined }}
               button={{ variant: "ghost", size: "small" }}
             >
               Forgot?
