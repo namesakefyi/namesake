@@ -14,6 +14,9 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as UnauthenticatedImport } from './routes/_unauthenticated'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as UnauthenticatedSigninImport } from './routes/_unauthenticated/signin'
+import { Route as UnauthenticatedResetPasswordImport } from './routes/_unauthenticated/reset-password'
+import { Route as UnauthenticatedGoodbyeImport } from './routes/_unauthenticated/goodbye'
+import { Route as UnauthenticatedForgotImport } from './routes/_unauthenticated/forgot'
 import { Route as AuthenticatedSignoutImport } from './routes/_authenticated/signout'
 import { Route as AuthenticatedHomeImport } from './routes/_authenticated/_home'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings/route'
@@ -53,6 +56,25 @@ const AuthenticatedRoute = AuthenticatedImport.update({
 const UnauthenticatedSigninRoute = UnauthenticatedSigninImport.update({
   id: '/signin',
   path: '/signin',
+  getParentRoute: () => UnauthenticatedRoute,
+} as any)
+
+const UnauthenticatedResetPasswordRoute =
+  UnauthenticatedResetPasswordImport.update({
+    id: '/reset-password',
+    path: '/reset-password',
+    getParentRoute: () => UnauthenticatedRoute,
+  } as any)
+
+const UnauthenticatedGoodbyeRoute = UnauthenticatedGoodbyeImport.update({
+  id: '/goodbye',
+  path: '/goodbye',
+  getParentRoute: () => UnauthenticatedRoute,
+} as any)
+
+const UnauthenticatedForgotRoute = UnauthenticatedForgotImport.update({
+  id: '/forgot',
+  path: '/forgot',
   getParentRoute: () => UnauthenticatedRoute,
 } as any)
 
@@ -265,6 +287,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/signout'
       preLoaderRoute: typeof AuthenticatedSignoutImport
       parentRoute: typeof AuthenticatedImport
+    }
+    '/_unauthenticated/forgot': {
+      id: '/_unauthenticated/forgot'
+      path: '/forgot'
+      fullPath: '/forgot'
+      preLoaderRoute: typeof UnauthenticatedForgotImport
+      parentRoute: typeof UnauthenticatedImport
+    }
+    '/_unauthenticated/goodbye': {
+      id: '/_unauthenticated/goodbye'
+      path: '/goodbye'
+      fullPath: '/goodbye'
+      preLoaderRoute: typeof UnauthenticatedGoodbyeImport
+      parentRoute: typeof UnauthenticatedImport
+    }
+    '/_unauthenticated/reset-password': {
+      id: '/_unauthenticated/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof UnauthenticatedResetPasswordImport
+      parentRoute: typeof UnauthenticatedImport
     }
     '/_unauthenticated/signin': {
       id: '/_unauthenticated/signin'
@@ -526,10 +569,16 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface UnauthenticatedRouteChildren {
+  UnauthenticatedForgotRoute: typeof UnauthenticatedForgotRoute
+  UnauthenticatedGoodbyeRoute: typeof UnauthenticatedGoodbyeRoute
+  UnauthenticatedResetPasswordRoute: typeof UnauthenticatedResetPasswordRoute
   UnauthenticatedSigninRoute: typeof UnauthenticatedSigninRoute
 }
 
 const UnauthenticatedRouteChildren: UnauthenticatedRouteChildren = {
+  UnauthenticatedForgotRoute: UnauthenticatedForgotRoute,
+  UnauthenticatedGoodbyeRoute: UnauthenticatedGoodbyeRoute,
+  UnauthenticatedResetPasswordRoute: UnauthenticatedResetPasswordRoute,
   UnauthenticatedSigninRoute: UnauthenticatedSigninRoute,
 }
 
@@ -543,6 +592,9 @@ export interface FileRoutesByFullPath {
   '/documents': typeof AuthenticatedDocumentsRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/signout': typeof AuthenticatedSignoutRoute
+  '/forgot': typeof UnauthenticatedForgotRoute
+  '/goodbye': typeof UnauthenticatedGoodbyeRoute
+  '/reset-password': typeof UnauthenticatedResetPasswordRoute
   '/signin': typeof UnauthenticatedSigninRoute
   '/documents/$pdfId': typeof AuthenticatedDocumentsPdfIdRoute
   '/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
@@ -567,6 +619,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '': typeof UnauthenticatedRouteWithChildren
   '/signout': typeof AuthenticatedSignoutRoute
+  '/forgot': typeof UnauthenticatedForgotRoute
+  '/goodbye': typeof UnauthenticatedGoodbyeRoute
+  '/reset-password': typeof UnauthenticatedResetPasswordRoute
   '/signin': typeof UnauthenticatedSigninRoute
   '/documents/$pdfId': typeof AuthenticatedDocumentsPdfIdRoute
   '/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
@@ -596,6 +651,9 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/_authenticated/_home': typeof AuthenticatedHomeRouteWithChildren
   '/_authenticated/signout': typeof AuthenticatedSignoutRoute
+  '/_unauthenticated/forgot': typeof UnauthenticatedForgotRoute
+  '/_unauthenticated/goodbye': typeof UnauthenticatedGoodbyeRoute
+  '/_unauthenticated/reset-password': typeof UnauthenticatedResetPasswordRoute
   '/_unauthenticated/signin': typeof UnauthenticatedSigninRoute
   '/_authenticated/documents/$pdfId': typeof AuthenticatedDocumentsPdfIdRoute
   '/_authenticated/forms/ma-court-order': typeof AuthenticatedFormsMaCourtOrderRoute
@@ -625,6 +683,9 @@ export interface FileRouteTypes {
     | '/documents'
     | '/settings'
     | '/signout'
+    | '/forgot'
+    | '/goodbye'
+    | '/reset-password'
     | '/signin'
     | '/documents/$pdfId'
     | '/forms/ma-court-order'
@@ -648,6 +709,9 @@ export interface FileRouteTypes {
   to:
     | ''
     | '/signout'
+    | '/forgot'
+    | '/goodbye'
+    | '/reset-password'
     | '/signin'
     | '/documents/$pdfId'
     | '/forms/ma-court-order'
@@ -675,6 +739,9 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/_home'
     | '/_authenticated/signout'
+    | '/_unauthenticated/forgot'
+    | '/_unauthenticated/goodbye'
+    | '/_unauthenticated/reset-password'
     | '/_unauthenticated/signin'
     | '/_authenticated/documents/$pdfId'
     | '/_authenticated/forms/ma-court-order'
@@ -736,6 +803,9 @@ export const routeTree = rootRoute
     "/_unauthenticated": {
       "filePath": "_unauthenticated.tsx",
       "children": [
+        "/_unauthenticated/forgot",
+        "/_unauthenticated/goodbye",
+        "/_unauthenticated/reset-password",
         "/_unauthenticated/signin"
       ]
     },
@@ -780,6 +850,18 @@ export const routeTree = rootRoute
     "/_authenticated/signout": {
       "filePath": "_authenticated/signout.tsx",
       "parent": "/_authenticated"
+    },
+    "/_unauthenticated/forgot": {
+      "filePath": "_unauthenticated/forgot.tsx",
+      "parent": "/_unauthenticated"
+    },
+    "/_unauthenticated/goodbye": {
+      "filePath": "_unauthenticated/goodbye.tsx",
+      "parent": "/_unauthenticated"
+    },
+    "/_unauthenticated/reset-password": {
+      "filePath": "_unauthenticated/reset-password.tsx",
+      "parent": "/_unauthenticated"
     },
     "/_unauthenticated/signin": {
       "filePath": "_unauthenticated/signin.tsx",

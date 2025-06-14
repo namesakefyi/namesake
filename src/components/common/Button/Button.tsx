@@ -106,6 +106,7 @@ export function Button({
   return (
     <AriaButton
       {...props}
+      aria-label={isSubmitting ? "Loading" : props["aria-label"]}
       ref={ref}
       isDisabled={isSubmitting || isDisabled}
       className={composeRenderProps(className, (className, renderProps) =>
