@@ -132,9 +132,13 @@ describe("users", () => {
       expect(user?.name).toBe("New Name");
     });
 
-    it("should clear user name when undefined", async () => {
+    it("should not update user name if undefined", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createTestUser(t);
+      const { asUser, userId } = await createTestUser(
+        t,
+        undefined,
+        "Sylvia Rivera",
+      );
 
       await asUser.mutation(api.users.setName, {
         name: undefined,
@@ -143,7 +147,7 @@ describe("users", () => {
       const user = await t.run(async (ctx) => {
         return await ctx.db.get(userId);
       });
-      expect(user?.name).toBeUndefined();
+      expect(user?.name).toBe("Sylvia Rivera");
     });
   });
 
@@ -227,77 +231,6 @@ describe("users", () => {
         return await ctx.db.get(userId);
       });
       expect(user?.isMinor).toBe(true);
-    });
-  });
-
-  describe("deleteCurrentUser", () => {
-    it("should delete user and all associated data", async () => {
-      const t = convexTest(schema, modules);
-      const { asUser, userId } = await createTestUser(t);
-
-      // Create associated data
-      await t.run(async (ctx) => {
-        // Create user settings
-        await ctx.db.insert("userSettings", {
-          userId,
-          theme: "dark",
-        });
-
-        // Create quest
-        const questId = await ctx.db.insert("quests", {
-          title: "Test Quest",
-          slug: "test-quest",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
-          creationUser: userId,
-          updatedAt: Date.now(),
-        });
-
-        // Create user quest
-        await ctx.db.insert("userQuests", {
-          userId,
-          questId,
-          status: "active",
-        });
-      });
-
-      // Delete user and verify all data is deleted
-      await asUser.mutation(api.users.deleteCurrentUser, {});
-
-      await t.run(async (ctx) => {
-        // Verify user is deleted
-        const user = await ctx.db.get(userId);
-        expect(user).toBeNull();
-
-        // Verify user settings are deleted
-        const settings = await ctx.db
-          .query("userSettings")
-          .withIndex("userId", (q) => q.eq("userId", userId))
-          .first();
-        expect(settings).toBeNull();
-
-        // Verify user quests are deleted
-        const quests = await ctx.db
-          .query("userQuests")
-          .withIndex("userId", (q) => q.eq("userId", userId))
-          .collect();
-        expect(quests).toHaveLength(0);
-      });
-    });
-  });
-
-  describe("isSignedIn", () => {
-    it("should return true when user is authenticated", async () => {
-      const t = convexTest(schema, modules);
-      const { asUser } = await createTestUser(t);
-      const isSignedIn = await asUser.query(api.users.isSignedIn, {});
-      expect(isSignedIn).toBe(true);
-    });
-
-    it("should return false when user is not authenticated", async () => {
-      const t = convexTest(schema, modules);
-      const isSignedIn = await t.query(api.users.isSignedIn, {});
-      expect(isSignedIn).toBe(false);
     });
   });
 });

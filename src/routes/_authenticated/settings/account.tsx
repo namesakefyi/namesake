@@ -40,7 +40,7 @@ function SettingsAccountRoute() {
             <EditThemeSetting />
           </SettingsGroup>
           <SettingsGroup title="Danger Zone">
-            <DeleteAccountSetting />
+            <DeleteAccountSetting user={user} />
           </SettingsGroup>
         </div>
       )}

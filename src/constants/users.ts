@@ -82,3 +82,6 @@ export const ROLES = {
 } as const;
 
 export type Role = keyof typeof ROLES;
+
+export const MIN_DISPLAY_NAME_LENGTH = 2;
+export const MAX_DISPLAY_NAME_LENGTH = 24;

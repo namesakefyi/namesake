@@ -1,4 +1,3 @@
-import { useAuthActions } from "@convex-dev/auth/react";
 import { render, screen } from "@testing-library/react";
 import { useQuery } from "convex/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -10,13 +9,8 @@ import {
 } from "./AppSidebar";
 
 describe("AppSidebar", () => {
-  const mockSignOut = vi.fn();
-
   beforeEach(() => {
     vi.clearAllMocks();
-    (useAuthActions as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      signOut: mockSignOut,
-    });
     (useQuery as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       role: "user",
     });
