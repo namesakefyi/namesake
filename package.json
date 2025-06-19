@@ -10,6 +10,7 @@
     "dev:frontend": "vite",
     "dev:backend": "convex dev",
     "dev:delete": "bash scripts/deleteConvexTables.sh",
+    "dev:email": "email dev",
     "build": "tsc -b && vite build",
     "lint": "biome lint",
     "lint:fix": "biome lint --write",
@@ -36,15 +37,15 @@
     "*": "pnpm check:fix"
   },
   "dependencies": {
-    "@auth/core": "0.39.1",
     "@cantoo/pdf-lib": "^2.4.1",
-    "@convex-dev/auth": "^0.0.87",
     "@convex-dev/migrations": "^0.2.9",
+    "@convex-dev/better-auth": "^0.6.0",
     "@faker-js/faker": "^9.8.0",
     "@maskito/core": "^3.9.0",
     "@maskito/react": "^3.9.0",
     "@namesake/tiptap-extensions": "^2.0.1",
     "@radix-ui/colors": "^3.0.0",
+    "@react-email/components": "0.0.41",
     "@tailwindcss/vite": "^4.1.10",
     "@tanstack/react-router": "^1.121.16",
     "@tiptap/core": "^2.14.0",
@@ -70,12 +71,13 @@
     "@zxcvbn-ts/core": "^3.0.4",
     "@zxcvbn-ts/language-common": "^3.0.4",
     "@zxcvbn-ts/language-en": "^3.0.2",
+
+    "better-auth": "1.2.8",
     "convex": "^1.24.8",
     "convex-helpers": "^0.1.94",
     "language-name-map": "^0.3.0",
     "lucide-react": "^0.515.0",
     "motion": "^12.18.1",
-    "oslo": "^1.2.1",
     "postcss": "^8.5.6",
     "posthog-js": "^1.253.3",
     "react": "^19.1.0",
@@ -127,6 +129,7 @@
     "npm-run-all": "^4.1.5",
     "playwright": "^1.53.0",
     "prop-types": "^15.8.1",
+    "react-email": "4.0.15",
     "rollup-plugin-webpack-stats": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-react-aria-components": "^2.0.0",
@@ -138,7 +141,8 @@
   "packageManager": "pnpm@9.11.0",
   "pnpm": {
     "overrides": {
-      "esbuild@<0.25.0": "0.25.0"
+      "esbuild@<0.25.0": "0.25.0",
+      "@react-email/render": "1.1.2"
     }
   }
 }
