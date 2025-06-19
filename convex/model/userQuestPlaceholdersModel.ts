@@ -54,6 +54,25 @@ export async function dismissPlaceholderForUser(
   });
 }
 
+export async function restorePlaceholderForUser(
+  ctx: MutationCtx,
+  { userId, category }: { userId: Id<"users">; category: Category },
+) {
+  const placeholder = await ctx.db
+    .query("userQuestPlaceholders")
+    .withIndex("userId", (q) => q.eq("userId", userId))
+    .filter((q) => q.eq(q.field("category"), category))
+    .first();
+
+  if (!placeholder) {
+    throw new Error("Placeholder not found for user and category");
+  }
+
+  await ctx.db.patch(placeholder._id, {
+    dismissedAt: undefined,
+  });
+}
+
 export async function getActivePlaceholdersForUser(
   ctx: QueryCtx,
   { userId }: { userId: Id<"users"> },

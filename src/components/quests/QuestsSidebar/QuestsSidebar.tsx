@@ -40,6 +40,7 @@ const MyQuests = () => {
   const removeQuest = useMutation(api.userQuests.deleteForever);
   const updateStatus = useMutation(api.userQuests.setStatus);
   const dismissPlaceholder = useMutation(api.userQuestPlaceholders.dismiss);
+  const restorePlaceholder = useMutation(api.userQuestPlaceholders.restore);
 
   const handleRemoveQuest = async (questId: Id<"quests">) => {
     try {
@@ -60,9 +61,21 @@ const MyQuests = () => {
   const handleDismissPlaceholder = async (category: CoreCategory) => {
     try {
       await dismissPlaceholder({ category });
+      const categoryInfo = CATEGORIES[category];
+      toast(`Dismissed ${categoryInfo.label} suggestion`, {
+        action: {
+          label: "Undo",
+          onClick: () => handleRestorePlaceholder(category),
+        },
+        duration: 8000,
+      });
     } catch (err) {
       toast.error("Couldn't dismiss placeholder. Please try again.");
     }
+  };
+
+  const handleRestorePlaceholder = async (category: CoreCategory) => {
+    await restorePlaceholder({ category });
   };
 
   const hasQuests = userQuests > 0;
@@ -232,7 +245,7 @@ const MyQuests = () => {
                           icon={X}
                           onPress={() => handleDismissPlaceholder(category)}
                         />
-                        <Tooltip>Dismiss</Tooltip>
+                        <Tooltip>Dismiss suggestion</Tooltip>
                       </TooltipTrigger>
                     }
                   >

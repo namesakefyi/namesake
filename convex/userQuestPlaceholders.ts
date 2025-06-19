@@ -36,6 +36,17 @@ export const dismiss = userMutation({
   },
 });
 
+export const restore = userMutation({
+  args: { category: category },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    return await UserQuestPlaceholders.restorePlaceholderForUser(ctx, {
+      userId: ctx.userId,
+      category: args.category as CoreCategory,
+    });
+  },
+});
+
 export const getActive = userQuery({
   args: {},
   handler: async (ctx) => {

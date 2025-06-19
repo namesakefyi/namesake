@@ -85,6 +85,7 @@ function RootRoute() {
             title: "text-theme-1",
             description: "text-theme-3",
             icon: "text-theme-5",
+            actionButton: "ml-auto cursor-pointer",
           },
         }}
         icons={{
