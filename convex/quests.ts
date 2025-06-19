@@ -1,11 +1,7 @@
 import { v } from "convex/values";
-import {
-  type Category,
-  DEFAULT_TIME_REQUIRED,
-  type Jurisdiction,
-} from "../src/constants";
+import type { Category, Jurisdiction } from "../src/constants";
 import { query } from "./_generated/server";
-import { userMutation, userQuery } from "./helpers";
+import { adminMutation, userQuery } from "./helpers";
 import * as Quests from "./model/questsModel";
 import { category, jurisdiction, timeRequiredUnit } from "./validators";
 
@@ -80,7 +76,7 @@ export const getBySlug = query({
   },
 });
 
-export const create = userMutation({
+export const create = adminMutation({
   args: {
     title: v.string(),
     jurisdiction: v.optional(jurisdiction),
@@ -108,7 +104,6 @@ export const create = userMutation({
       category: args.category,
       jurisdiction: args.jurisdiction,
       slug: finalSlug,
-      timeRequired: DEFAULT_TIME_REQUIRED,
       creationUser: ctx.userId,
       updatedAt: Date.now(),
       updatedBy: ctx.userId,
@@ -118,14 +113,14 @@ export const create = userMutation({
   },
 });
 
-export const setTitle = userMutation({
+export const setTitle = adminMutation({
   args: { questId: v.id("quests"), title: v.string() },
   handler: async (ctx, args) => {
     await Quests.update(ctx, args.questId, ctx.userId, { title: args.title });
   },
 });
 
-export const setJurisdiction = userMutation({
+export const setJurisdiction = adminMutation({
   args: { questId: v.id("quests"), jurisdiction: v.optional(jurisdiction) },
   handler: async (ctx, args) => {
     await Quests.update(ctx, args.questId, ctx.userId, {
@@ -134,7 +129,7 @@ export const setJurisdiction = userMutation({
   },
 });
 
-export const setCategory = userMutation({
+export const setCategory = adminMutation({
   args: { questId: v.id("quests"), category: v.optional(category) },
   handler: async (ctx, args) => {
     await Quests.update(ctx, args.questId, ctx.userId, {
@@ -143,7 +138,7 @@ export const setCategory = userMutation({
   },
 });
 
-export const setCosts = userMutation({
+export const setCosts = adminMutation({
   args: {
     questId: v.id("quests"),
     costs: v.optional(
@@ -165,7 +160,7 @@ export const setCosts = userMutation({
   },
 });
 
-export const setTimeRequired = userMutation({
+export const setTimeRequired = adminMutation({
   args: {
     questId: v.id("quests"),
     timeRequired: v.optional(
@@ -186,7 +181,7 @@ export const setTimeRequired = userMutation({
   },
 });
 
-export const setContent = userMutation({
+export const setContent = adminMutation({
   args: { questId: v.id("quests"), content: v.string() },
   handler: async (ctx, args) => {
     return await Quests.update(ctx, args.questId, ctx.userId, {
@@ -195,7 +190,7 @@ export const setContent = userMutation({
   },
 });
 
-export const softDelete = userMutation({
+export const softDelete = adminMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     await Quests.update(ctx, args.questId, ctx.userId, {
@@ -204,7 +199,7 @@ export const softDelete = userMutation({
   },
 });
 
-export const undoSoftDelete = userMutation({
+export const undoSoftDelete = adminMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     await Quests.update(ctx, args.questId, ctx.userId, {
@@ -213,7 +208,7 @@ export const undoSoftDelete = userMutation({
   },
 });
 
-export const deleteForever = userMutation({
+export const deleteForever = adminMutation({
   args: { questId: v.id("quests") },
   handler: async (ctx, args) => {
     return await Quests.deleteForever(ctx, { questId: args.questId });

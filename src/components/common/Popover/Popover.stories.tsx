@@ -1,5 +1,5 @@
 import { Button, DialogTrigger, Popover } from "@/components/common";
-import type { Meta } from "@storybook/react";
+import type { Meta } from "@storybook/react-vite";
 import { CircleHelp } from "lucide-react";
 
 const meta: Meta<typeof Popover> = {

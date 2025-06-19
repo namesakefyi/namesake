@@ -42,9 +42,7 @@ export function FormResponseItem({
       {decryptedValue && (
         <Text slot="description">
           {error ? (
-            <Badge variant="danger" icon={AlertTriangle}>
-              Error
-            </Badge>
+            <Badge icon={AlertTriangle}>Error</Badge>
           ) : (
             <span className="opacity-70 font-mono text-sm">
               {decryptedValue.toString()}

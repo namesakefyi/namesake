@@ -70,9 +70,7 @@ describe("EditNameSetting", () => {
     await user.type(input, "a".repeat(101));
     await user.click(screen.getByRole("button", { name: "Save" }));
 
-    expect(
-      screen.getByText("Name must be less than 100 characters."),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toBeInTheDocument();
   });
 
   it("submits the form successfully", async () => {

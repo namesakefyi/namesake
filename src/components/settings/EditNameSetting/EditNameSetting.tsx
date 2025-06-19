@@ -10,6 +10,7 @@ import { SettingsItem } from "@/components/settings";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
+import { ConvexError } from "convex/values";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -33,18 +34,17 @@ export const EditNameSetting = ({ user }: EditNameSettingProps) => {
     e.preventDefault();
     setError(undefined);
 
-    if (name.length > 100) {
-      setError("Name must be less than 100 characters.");
-      return;
-    }
-
     try {
       setIsSubmitting(true);
-      await updateName({ name: name.trim() });
+      await updateName({ name });
       toast.success("Name updated.");
       setIsEditing(false);
     } catch (err) {
-      setError("Failed to update name. Please try again.");
+      setError(
+        err instanceof ConvexError
+          ? err.message
+          : "Failed to update name. Please try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -78,7 +78,7 @@ export const EditNameSetting = ({ user }: EditNameSettingProps) => {
             <div className="flex gap-1 justify-end">
               <Button
                 size="small"
-                isSubmitting={isSubmitting}
+                isDisabled={isSubmitting}
                 onPress={handleCancel}
               >
                 Cancel

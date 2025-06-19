@@ -15,11 +15,11 @@ const track = tv({
   base: "flex h-5 w-9 px-px items-center shrink-0 cursor-pointer rounded-full transition duration-200 ease-in-out border border-transparent",
   variants: {
     isSelected: {
-      false: "bg-gray-4",
-      true: "bg-green-9 forced-colors:bg-[Highlight]!",
+      false: "bg-theme-3",
+      true: "bg-primary-9 forced-colors:bg-[Highlight]!",
     },
     isDisabled: {
-      true: "bg-gray-2 forced-colors:group-selected:!bg-[GrayText] forced-colors:border-[GrayText]",
+      true: "bg-theme-2 forced-colors:group-selected:!bg-[GrayText] forced-colors:border-[GrayText]",
     },
   },
 });
@@ -46,10 +46,10 @@ export function Switch({ children, ...props }: SwitchProps) {
         "group flex gap-2 items-center disabled:opacity-50 forced-colors:disabled:text-[GrayText] text-sm transition",
       )}
     >
-      {(renderProps) => (
+      {({ isSelected, isDisabled }) => (
         <>
-          <div className={track(renderProps)}>
-            <span className={handle(renderProps)} />
+          <div className={track({ isSelected, isDisabled })}>
+            <span className={handle({ isSelected, isDisabled })} />
           </div>
           {children}
         </>

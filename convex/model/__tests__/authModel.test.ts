@@ -1,88 +1,73 @@
 import { convexTest } from "convex-test";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
+import { createTestAdmin } from "../../__tests__/helpers";
 import { api } from "../../_generated/api";
 import schema from "../../schema";
 import { modules } from "../../test.setup";
-import { createOrUpdateUser } from "../authModel";
+import { createUser, updateUser } from "../authModel";
 
 describe("authModel", () => {
-  describe("createOrUpdateUser", () => {
-    it("should return existing user if id already exists", async () => {
+  describe("createUser", () => {
+    it("should create a new user with default settings", async () => {
+      const t = convexTest(schema, modules);
+      const { asAdmin } = await createTestAdmin(t);
+
+      const userId = await t.run(async (ctx) => {
+        return await createUser(ctx, {
+          name: "Test User",
+          email: "testUser@test.com",
+          emailVerified: true,
+        });
+      });
+
+      const asUser = t.withIdentity({ subject: userId });
+      const user = await asAdmin.query(api.users.getById, {
+        userId,
+      });
+
+      expect(user?.name).toBe("Test User");
+      expect(user?.email).toBe("testUser@test.com");
+      expect(user?.emailVerified).toBe(true);
+      expect(user?.role).toBe("user");
+
+      const userSettings = await asUser.query(
+        api.userSettings.getCurrentUserSettings,
+      );
+
+      expect(userSettings).toBeDefined();
+      expect(userSettings?.theme).toBe("system");
+      expect(userSettings?.color).toBe("rainbow");
+    });
+  });
+
+  describe("updateUser", () => {
+    it("should update an existing user", async () => {
       const t = convexTest(schema, modules);
 
       const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "testUser@test.com",
-          role: "user",
+        return await createUser(ctx, {
+          name: "Original Name",
+          email: "updateTest@test.com",
+          emailVerified: true,
+        });
+      });
+
+      await t.run(async (ctx) => {
+        await updateUser(ctx, {
+          userId,
+          name: "Updated Name",
+          email: "updateTest@test.com",
+          emailVerified: true,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
         });
       });
 
       const user = await t.run(async (ctx) => {
-        return await createOrUpdateUser(ctx, {
-          existingUserId: userId,
-        });
+        return await ctx.db.get(userId);
       });
 
-      expect(user).toBe(userId);
-    });
-
-    it("should set role to admin in development environment", async () => {
-      const t = convexTest(schema, modules);
-
-      vi.stubEnv("NODE_ENV", "development");
-      await t.run(async (ctx) => {
-        return await createOrUpdateUser(ctx, {
-          profile: {
-            email: "devUser@test.com",
-          },
-        });
-      });
-
-      const user = await t.query(api.users.getByEmail, {
-        email: "devUser@test.com",
-      });
-
-      expect(user?.role).toBe("admin");
-      vi.unstubAllEnvs();
-    });
-
-    it("should set role to user in production environment", async () => {
-      const t = convexTest(schema, modules);
-
-      vi.stubEnv("NODE_ENV", "production");
-      await t.run(async (ctx) => {
-        return await createOrUpdateUser(ctx, {
-          profile: {
-            email: "prodUser@test.com",
-          },
-        });
-      });
-
-      const user = await t.query(api.users.getByEmail, {
-        email: "prodUser@test.com",
-      });
-
-      expect(user?.role).toBe("user");
-      vi.unstubAllEnvs();
-    });
-
-    it("should initialize default user settings", async () => {
-      const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await createOrUpdateUser(ctx, {
-          profile: {
-            email: "testUser@test.com",
-          },
-        });
-      });
-
-      const userSettings = await t.query(api.userSettings.getByUserId, {
-        userId,
-      });
-
-      expect(userSettings).toBeDefined();
-      expect(userSettings?.theme).toBe("system");
+      expect(user?.name).toBe("Updated Name");
     });
   });
 });

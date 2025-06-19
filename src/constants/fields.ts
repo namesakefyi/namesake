@@ -15,6 +15,7 @@ export const FIELD_DEFS = [
   { name: "dateOfBirth", label: "Date of birth", type: "string" },
   { name: "birthplaceCity", label: "City of birth", type: "string" },
   { name: "birthplaceState", label: "State of birth", type: "string" },
+  { name: "birthplaceCountry", label: "Country of birth", type: "string" },
   {
     name: "isCurrentlyUnhoused",
     label: "Currently unhoused?",
@@ -106,6 +107,91 @@ export const FIELD_DEFS = [
     type: "boolean",
   },
   { name: "mothersMaidenName", label: "Mother's maiden name", type: "string" },
+  {
+    name: "citizenshipStatus",
+    label: "Citizenship status",
+    type: "string",
+  },
+  {
+    name: "sexAssignedAtBirth",
+    label: "Sex assigned at birth",
+    type: "string",
+  },
+  {
+    name: "isHispanicOrLatino",
+    label: "Hispanic or Latino?",
+    type: "boolean",
+  },
+  {
+    name: "race",
+    label: "Race",
+    type: "string[]",
+  },
+  {
+    name: "mothersFirstName",
+    label: "Mother's first name",
+    type: "string",
+  },
+  {
+    name: "mothersMiddleName",
+    label: "Mother's middle name",
+    type: "string",
+  },
+  {
+    name: "mothersLastName",
+    label: "Mother's last name",
+    type: "string",
+  },
+  {
+    name: "fathersFirstName",
+    label: "Father's first name",
+    type: "string",
+  },
+  {
+    name: "fathersMiddleName",
+    label: "Father's middle name",
+    type: "string",
+  },
+  {
+    name: "fathersLastName",
+    label: "Father's last name",
+    type: "string",
+  },
+  {
+    name: "hasPreviousSocialSecurityCard",
+    label: "Previous Social Security card?",
+    type: "boolean",
+  },
+  {
+    name: "previousSocialSecurityCardFirstName",
+    label: "First name on previous Social Security card",
+    type: "string",
+  },
+  {
+    name: "previousSocialSecurityCardMiddleName",
+    label: "Middle name on previous Social Security card",
+    type: "string",
+  },
+  {
+    name: "previousSocialSecurityCardLastName",
+    label: "Last name on previous Social Security card",
+    type: "string",
+  },
+  {
+    name: "isFilingForSomeoneElse",
+    label: "Are you filing this form for someone else?",
+    type: "boolean",
+  },
+  {
+    name: "relationshipToFilingFor",
+    label: "Relationship to the person you are filing for",
+    type: "string",
+  },
+  {
+    name: "relationshipToFilingForOther",
+    label: "Relationship to the person you are filing for (other)",
+    type: "string",
+  },
 ] as const;
 
 export type FieldName = (typeof FIELD_DEFS)[number]["name"];
@@ -132,3 +218,5 @@ export type FormData = {
 };
 
 export const COMMON_PRONOUNS = ["they/them", "she/her", "he/him"];
+
+export const PREFER_NOT_TO_ANSWER = "preferNotToAnswer";

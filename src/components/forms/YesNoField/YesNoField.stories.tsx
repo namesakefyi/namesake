@@ -1,5 +1,5 @@
 import { YesNoField, type YesNoFieldProps } from "@/components/forms";
-import type { Meta } from "@storybook/react";
+import type { Meta } from "@storybook/react-vite";
 
 const meta: Meta<typeof YesNoField> = {
   component: YesNoField,
@@ -17,8 +17,6 @@ Example.args = {
   name: "customField",
   description: "A custom description",
   children: (
-    <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
-      Children
-    </div>
+    <div className="border border-dim p-3 rounded-lg text-dim">Children</div>
   ),
 };

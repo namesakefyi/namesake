@@ -49,7 +49,7 @@ export function DateRangePicker<T extends DateValue>({
             <DateInput slot="start" className="px-3 py-2" />
             <span
               aria-hidden="true"
-              className="text-gray-dim forced-colors:text-[ButtonText] group-disabled:text-gray-2 forced-colors:group-disabled:text-[GrayText]"
+              className="text-dim forced-colors:text-[ButtonText] group-disabled:text-theme-2 forced-colors:group-disabled:text-[GrayText]"
             >
               –
             </span>

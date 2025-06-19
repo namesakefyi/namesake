@@ -94,6 +94,56 @@ describe("YesNoField", () => {
     const childComponent = screen.getByTestId("child-component");
     expect(childComponent).toBeInTheDocument();
   });
+
+  it("renders prefer not to answer option when includePreferNotToAnswer is true", () => {
+    renderWithFormProvider(
+      <YesNoField
+        name="isCurrentlyUnhoused"
+        label="Are you currently unhoused?"
+        includePreferNotToAnswer
+      />,
+    );
+
+    const preferNotToAnswerOption = screen.getByRole("radio", {
+      name: "Prefer not to answer",
+    });
+    expect(preferNotToAnswerOption).toBeInTheDocument();
+  });
+
+  it("does not render prefer not to answer option by default", () => {
+    renderWithFormProvider(
+      <YesNoField
+        name="isCurrentlyUnhoused"
+        label="Are you currently unhoused?"
+      />,
+    );
+
+    const preferNotToAnswerOption = screen.queryByRole("radio", {
+      name: "Prefer not to answer",
+    });
+    expect(preferNotToAnswerOption).not.toBeInTheDocument();
+  });
+
+  it("allows selecting prefer not to answer option", async () => {
+    renderWithFormProvider(
+      <YesNoField
+        name="isCurrentlyUnhoused"
+        label="Are you currently unhoused?"
+        includePreferNotToAnswer
+      />,
+    );
+
+    const yesOption = screen.getByRole("radio", { name: "Yes" });
+    const noOption = screen.getByRole("radio", { name: "No" });
+    const preferNotToAnswerOption = screen.getByRole("radio", {
+      name: "Prefer not to answer",
+    });
+
+    await userEvent.click(preferNotToAnswerOption);
+    expect(preferNotToAnswerOption).toBeChecked();
+    expect(yesOption).not.toBeChecked();
+    expect(noOption).not.toBeChecked();
+  });
 });
 
 describe("getYesNoStringFromBoolean", () => {
@@ -103,6 +153,12 @@ describe("getYesNoStringFromBoolean", () => {
 
   it("returns 'no' if the value is false", () => {
     expect(getYesNoStringFromBoolean(false)).toBe("no");
+  });
+
+  it("returns 'preferNotToAnswer' if the value is 'preferNotToAnswer'", () => {
+    expect(getYesNoStringFromBoolean("preferNotToAnswer")).toBe(
+      "preferNotToAnswer",
+    );
   });
 
   it("returns null if the value is undefined", () => {
@@ -119,8 +175,17 @@ describe("getBooleanValueFromYesNoString", () => {
     expect(getBooleanValueFromYesNoString("yes")).toBe(true);
   });
 
-  it("returns false otherwise", () => {
+  it("returns false if the value is 'no'", () => {
     expect(getBooleanValueFromYesNoString("no")).toBe(false);
+  });
+
+  it("returns 'preferNotToAnswer' if the value is 'preferNotToAnswer'", () => {
+    expect(getBooleanValueFromYesNoString("preferNotToAnswer")).toBe(
+      "preferNotToAnswer",
+    );
+  });
+
+  it("returns false for other values", () => {
     expect(getBooleanValueFromYesNoString("")).toBe(false);
     expect(getBooleanValueFromYesNoString("garbage")).toBe(false);
     expect(getBooleanValueFromYesNoString(null as any)).toBe(false);

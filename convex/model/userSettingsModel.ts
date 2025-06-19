@@ -9,7 +9,7 @@ export async function getSettingsForUser(
   const userSettings = await ctx.db
     .query("userSettings")
     .withIndex("userId", (q) => q.eq("userId", userId))
-    .first();
+    .unique();
 
   if (!userSettings) throw new Error("User settings not found");
 
@@ -25,4 +25,15 @@ export async function setThemeForUser(
   if (!userSettings) throw new Error("User settings not found");
 
   await ctx.db.patch(userSettings._id, { theme });
+}
+
+export async function setColorForUser(
+  ctx: MutationCtx,
+  { userId, color }: { userId: Id<"users">; color: string },
+) {
+  const userSettings = await getSettingsForUser(ctx, { userId });
+
+  if (!userSettings) throw new Error("User settings not found");
+
+  await ctx.db.patch(userSettings._id, { color });
 }

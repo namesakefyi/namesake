@@ -17,7 +17,7 @@ describe("Button", () => {
     render(<Button variant="primary">Primary Button</Button>);
 
     const button = screen.getByRole("button");
-    expect(button).toHaveClass("bg-purple-9");
+    expect(button).toHaveClass("bg-primary-9");
   });
 
   it("renders with different sizes", () => {
@@ -90,6 +90,11 @@ describe("Button", () => {
         .getByRole("button")
         .querySelector("svg.animate-spin");
       expect(spinner).toBeInTheDocument();
+
+      expect(screen.getByRole("button")).toHaveAttribute(
+        "aria-label",
+        "Loading",
+      );
     });
 
     it("is disabled when submitting", () => {

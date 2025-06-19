@@ -4,7 +4,7 @@ import {
   type CheckboxGroupProps,
   type CheckboxProps,
 } from "@/components/common";
-import type { FieldName } from "@/constants";
+import { type FieldName, PREFER_NOT_TO_ANSWER } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -19,6 +19,7 @@ export interface CheckboxGroupFieldProps extends CheckboxGroupProps {
   label: string;
   labelHidden?: boolean;
   options: CheckboxOption[];
+  includePreferNotToAnswer?: boolean;
 }
 
 export function CheckboxGroupField({
@@ -27,9 +28,17 @@ export function CheckboxGroupField({
   labelHidden,
   options,
   children,
+  includePreferNotToAnswer,
   ...props
 }: CheckboxGroupFieldProps) {
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext();
+
+  const handlePreferNotToAnswer = (value: string[]) => {
+    if (value.includes(PREFER_NOT_TO_ANSWER)) {
+      // If "prefer not to answer" is checked, uncheck all other options
+      setValue(name, [PREFER_NOT_TO_ANSWER]);
+    }
+  };
 
   return (
     <div className="@container flex flex-col gap-4">
@@ -38,30 +47,49 @@ export function CheckboxGroupField({
         name={name}
         defaultValue={[]}
         shouldUnregister={true}
-        render={({ field, fieldState: { error, invalid } }) => (
-          <CheckboxGroup
-            {...field}
-            label={!labelHidden ? smartquotes(label) : undefined}
-            aria-label={label}
-            size="large"
-            isInvalid={invalid}
-            errorMessage={error?.message}
-            {...props}
-          >
-            <span className="italic text-gray-dim text-sm">
-              Select all that apply:
-            </span>
-            {options?.map(({ label, ...option }) => (
-              <Checkbox
-                key={option.value}
-                {...option}
-                size="large"
-                label={label}
-                card
-              />
-            ))}
-          </CheckboxGroup>
-        )}
+        render={({ field, fieldState: { error, invalid } }) => {
+          const currentValue = field.value || [];
+          const isPreferNotToAnswerChecked =
+            currentValue.includes(PREFER_NOT_TO_ANSWER);
+
+          return (
+            <CheckboxGroup
+              {...field}
+              label={!labelHidden ? smartquotes(label) : undefined}
+              aria-label={labelHidden ? label : undefined}
+              size="large"
+              isInvalid={invalid}
+              errorMessage={error?.message}
+              onChange={(value) => {
+                field.onChange(value);
+                handlePreferNotToAnswer(value);
+              }}
+              {...props}
+            >
+              <span className="italic text-dim text-sm">
+                Select all that apply:
+              </span>
+              {options?.map(({ label, ...option }) => (
+                <Checkbox
+                  key={option.value}
+                  {...option}
+                  size="large"
+                  label={label}
+                  card
+                  isDisabled={isPreferNotToAnswerChecked}
+                />
+              ))}
+              {includePreferNotToAnswer && (
+                <Checkbox
+                  value={PREFER_NOT_TO_ANSWER}
+                  size="large"
+                  label="Prefer not to answer"
+                  card
+                />
+              )}
+            </CheckboxGroup>
+          );
+        }}
       />
       {children}
     </div>

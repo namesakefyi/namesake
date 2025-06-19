@@ -87,7 +87,7 @@ describe("Editor", () => {
   it("applies correct styles when not editable", () => {
     const { container } = render(<Editor editable={false} />);
     expect(container.firstChild).toHaveClass(
-      "border-none rounded-none bg-transparent",
+      "border-none rounded-none bg-transparent!",
     );
     expect(screen.getByRole("textbox")).not.toHaveAttribute("contenteditable");
   });

@@ -6,22 +6,22 @@ import {
   Form,
   NumberField,
   Popover,
-  Switch,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
-import type { Cost } from "@/constants";
+import { type Cost, DEFAULT_COSTS } from "@/constants";
+import { getTotalCosts } from "@/utils/getTotalCosts";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
 import { CircleDollarSign, CircleOff, HelpCircle, Pencil } from "lucide-react";
 import { Plus, Trash } from "lucide-react";
 import { memo, useState } from "react";
-import { Fragment } from "react/jsx-runtime";
 import { toast } from "sonner";
+import { QuestCostsTable } from "../QuestCostsTable/QuestCostsTable";
 
 type CostInputProps = {
   cost: Cost;
@@ -117,14 +117,19 @@ export const QuestCostsBadge = ({
   editable = false,
 }: QuestCostsBadgeProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [costsInput, setCostsInput] = useState(quest?.costs ?? null);
+  const [costsInput, setCostsInput] = useState(quest?.costs ?? DEFAULT_COSTS);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const setCosts = useMutation(api.quests.setCosts);
 
   if (!quest) return null;
 
+  const handleRemove = () => {
+    setCosts({ costs: undefined, questId: quest._id });
+    setIsEditing(false);
+  };
+
   const handleCancel = () => {
-    setCostsInput(quest.costs ?? null);
+    setCostsInput(quest.costs ?? DEFAULT_COSTS);
     setIsEditing(false);
   };
 
@@ -145,66 +150,19 @@ export const QuestCostsBadge = ({
 
   const { costs } = quest;
 
-  const getTotalCosts = (costs?: Cost[]) => {
-    if (!costs || costs.length === 0) return "Free";
-
-    const formatCurrency = (amount: number) =>
-      amount.toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
-        maximumFractionDigits: 0,
-      });
-
-    const requiredTotal = costs
-      .filter((cost) => cost.isRequired !== false)
-      .reduce((acc, cost) => acc + cost.cost, 0);
-
-    const totalWithOptional = costs.reduce((acc, cost) => acc + cost.cost, 0);
-
-    if (requiredTotal === 0) {
-      return "Free";
-    }
-
-    if (requiredTotal === totalWithOptional) {
-      return formatCurrency(requiredTotal);
-    }
-
-    return `${formatCurrency(requiredTotal)}–${formatCurrency(totalWithOptional)}`;
-  };
+  if (!costs && !editable) return null;
 
   return (
     <Badge size="lg">
-      {getTotalCosts(costs)}
+      {costs ? getTotalCosts(costs) : "Add costs"}
       {costs && costs.length > 0 && (
         <DialogTrigger>
           <TooltipTrigger>
             <BadgeButton label="Cost details" icon={HelpCircle} />
             <Tooltip>See cost details</Tooltip>
           </TooltipTrigger>
-          <Popover placement="bottom" className="py-3 px-3.5">
-            <dl className="grid grid-cols-[1fr_auto]">
-              {costs.map(({ cost, description, isRequired }) => (
-                <Fragment key={description}>
-                  <dt className="pr-4">
-                    {description}
-                    {!isRequired && (
-                      <span className="text-gray-dim italic"> optional</span>
-                    )}
-                  </dt>
-                  <dd className="text-right tabular-nums">
-                    {cost.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                      maximumFractionDigits: 0,
-                    })}
-                  </dd>
-                </Fragment>
-              ))}
-              <dt className="pr-4 border-t border-gray-a5 pt-2 mt-2">Total</dt>
-              <dd className="text-right border-t border-gray-a5 pt-2 mt-2">
-                {getTotalCosts(costs)}
-              </dd>
-            </dl>
+          <Popover placement="bottom" className="p-4">
+            <QuestCostsTable costs={costs} />
           </Popover>
         </DialogTrigger>
       )}
@@ -212,11 +170,11 @@ export const QuestCostsBadge = ({
         <DialogTrigger>
           <TooltipTrigger>
             <BadgeButton
-              icon={Pencil}
+              icon={costs ? Pencil : Plus}
               onPress={() => setIsEditing(true)}
-              label="Edit costs"
+              label={costs ? "Edit costs" : "Add costs"}
             />
-            <Tooltip>Edit costs</Tooltip>
+            <Tooltip>{costs ? "Edit costs" : "Add costs"}</Tooltip>
           </TooltipTrigger>
           <Popover isOpen={isEditing} className="p-4 w-full max-w-md">
             <Form onSubmit={handleSubmit} className="w-full">
@@ -252,19 +210,14 @@ export const QuestCostsBadge = ({
                 </div>
               )}
               <div className="flex w-full justify-end gap-2">
-                <Switch
-                  isSelected={!costsInput}
-                  onChange={(isSelected) =>
-                    setCostsInput(
-                      isSelected
-                        ? null
-                        : [{ cost: 0, description: "", isRequired: true }],
-                    )
-                  }
-                  className="justify-self-start mr-auto"
+                <Button
+                  variant="secondary"
+                  size="small"
+                  onPress={handleRemove}
+                  className="mr-auto"
                 >
-                  Free
-                </Switch>
+                  Remove
+                </Button>
                 <Button variant="secondary" size="small" onPress={handleCancel}>
                   Cancel
                 </Button>

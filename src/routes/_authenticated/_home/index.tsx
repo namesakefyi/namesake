@@ -1,5 +1,4 @@
-import { AppSidebarHeader } from "@/components/app";
-import { QuestsNav } from "@/components/quests";
+import { QuestsSidebar } from "@/components/quests";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { Navigate, createFileRoute } from "@tanstack/react-router";
 
@@ -12,10 +11,5 @@ function IndexRoute() {
 
   if (!isMobile) return <Navigate to="/quests/court-order" replace />;
 
-  return (
-    <div className="flex flex-col py-7 gap-7 app-padding">
-      <AppSidebarHeader />
-      <QuestsNav />
-    </div>
-  );
+  return <QuestsSidebar />;
 }

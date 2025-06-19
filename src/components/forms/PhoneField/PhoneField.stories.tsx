@@ -1,5 +1,5 @@
 import { PhoneField, type PhoneFieldProps } from "@/components/forms";
-import type { Meta } from "@storybook/react";
+import type { Meta } from "@storybook/react-vite";
 
 const meta: Meta<typeof PhoneField> = {
   component: PhoneField,
@@ -15,8 +15,6 @@ export const Example = (args: PhoneFieldProps) => <PhoneField {...args} />;
 Example.args = {
   name: "phoneNumber",
   children: (
-    <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
-      Children
-    </div>
+    <div className="border border-dim p-3 rounded-lg text-dim">Children</div>
   ),
 };

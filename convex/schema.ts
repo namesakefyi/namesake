@@ -1,4 +1,3 @@
-import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
@@ -9,6 +8,7 @@ import {
   role,
   status,
   theme,
+  themeColor,
   timeRequiredUnit,
 } from "./validators";
 
@@ -125,6 +125,8 @@ const userSettings = defineTable({
   userId: v.id("users"),
   /** The user's preferred color scheme. (e.g. "system", "light", "dark") */
   theme: v.optional(theme),
+  /** The user's preferred color. */
+  color: v.optional(themeColor),
 }).index("userId", ["userId"]);
 
 /**
@@ -160,7 +162,6 @@ const earlyAccessCodes = defineTable({
 }).index("createdBy", ["createdBy"]);
 
 export default defineSchema({
-  ...authTables,
   earlyAccessCodes,
   quests,
   users,

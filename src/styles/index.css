@@ -14,20 +14,12 @@ html {
 body {
   color-scheme: dark light;
   -webkit-font-smoothing: antialiased;
-  @apply bg-gray-1 dark:bg-gray-2 text-gray-12;
+  @apply bg-theme-2 dark:bg-theme-1 text-theme-12;
 }
 
 body,
 #root {
   min-height: 100dvh;
-}
-
-::selection {
-  @apply bg-amber-5 text-gray-12;
-}
-
-.dark ::selection {
-  @apply bg-purple-5 text-gray-12;
 }
 
 .app-padding {
@@ -70,7 +62,7 @@ body,
   }
 
   to {
-    outline-color: var(--color-purple-a9);
+    outline-color: var(--color-primary-a8);
     outline-width: 3px;
   }
 }
@@ -96,5 +88,16 @@ body,
     transition-delay: 2147483647s;
     background-color: transparent !important;
     -webkit-text-fill-color: inherit;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

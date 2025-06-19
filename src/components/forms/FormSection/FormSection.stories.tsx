@@ -1,5 +1,5 @@
 import { FormSection, type FormSectionProps } from "@/components/forms";
-import type { Meta } from "@storybook/react";
+import type { Meta } from "@storybook/react-vite";
 
 const meta: Meta<typeof FormSection> = {
   component: FormSection,
@@ -15,8 +15,6 @@ export const Example = (args: FormSectionProps) => <FormSection {...args} />;
 Example.args = {
   title: "Form Section",
   children: (
-    <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
-      Children
-    </div>
+    <div className="border border-dim p-3 rounded-lg text-dim">Children</div>
   ),
 };

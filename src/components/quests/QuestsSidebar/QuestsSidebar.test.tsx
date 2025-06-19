@@ -3,7 +3,7 @@ import { useMatchRoute } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import { useQuery } from "convex/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { QuestsNav } from "./QuestsNav";
+import { QuestsSidebar } from "./QuestsSidebar";
 
 interface MockQueriesConfig {
   user?: { birthplace: string } | undefined;
@@ -43,7 +43,7 @@ describe("QuestsNav", () => {
       completedQuests: 2,
     });
 
-    render(<QuestsNav />);
+    render(<QuestsSidebar />);
 
     expect(screen.getByRole("progressbar")).toBeInTheDocument();
     expect(screen.getByText("2")).toBeInTheDocument();
@@ -53,13 +53,13 @@ describe("QuestsNav", () => {
 
   it("does not render progress bar when there are no quests", () => {
     mockQueries();
-    render(<QuestsNav />);
+    render(<QuestsSidebar />);
     expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
   });
 
   it("renders core category items when no quests exist", () => {
     mockQueries();
-    render(<QuestsNav />);
+    render(<QuestsSidebar />);
 
     // Check for core category labels
     expect(screen.getByText(CATEGORIES.courtOrder.label)).toBeInTheDocument();
@@ -78,7 +78,7 @@ describe("QuestsNav", () => {
       user: { birthplace: "other" },
     });
 
-    render(<QuestsNav />);
+    render(<QuestsSidebar />);
     expect(
       screen.queryByText(CATEGORIES.birthCertificate.label),
     ).not.toBeInTheDocument();
@@ -101,7 +101,7 @@ describe("QuestsNav", () => {
       },
     });
 
-    render(<QuestsNav />);
+    render(<QuestsSidebar />);
 
     expect(screen.getByText("MA Court Order")).toBeInTheDocument();
     expect(screen.getByText("Massachusetts")).toBeInTheDocument();
@@ -124,7 +124,7 @@ describe("QuestsNav", () => {
       },
     });
 
-    render(<QuestsNav />);
+    render(<QuestsSidebar />);
 
     expect(screen.getByText("Other Quest")).toBeInTheDocument();
     expect(screen.getByLabelText("Not started")).toBeInTheDocument();
@@ -138,7 +138,7 @@ describe("QuestsNav", () => {
       questsByCategory: undefined,
     });
 
-    render(<QuestsNav />);
+    render(<QuestsSidebar />);
     expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
   });
 });

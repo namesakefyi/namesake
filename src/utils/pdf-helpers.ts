@@ -1,3 +1,5 @@
+import { BIRTHPLACES, COUNTRIES } from "@/constants";
+
 export const joinNames = (first?: string, middle?: string, last?: string) => {
   return [first, middle, last].filter(Boolean).join(" ");
 };
@@ -24,4 +26,17 @@ export const formatDateMMDDYYYY = (date?: string) => {
     console.error("Error formatting date", error);
     return "";
   }
+};
+
+export const formatBirthplaceStateOrCountry = (
+  birthplaceState?: string,
+  birthplaceCountry?: string,
+) => {
+  if (birthplaceState === "other" && birthplaceCountry) {
+    return COUNTRIES[birthplaceCountry];
+  }
+  if (birthplaceState && birthplaceState !== "other") {
+    return BIRTHPLACES[birthplaceState];
+  }
+  return "";
 };

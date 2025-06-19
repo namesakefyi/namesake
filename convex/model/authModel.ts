@@ -1,34 +1,68 @@
+import type { Id } from "../_generated/dataModel";
 import type { MutationCtx } from "../_generated/server";
-import * as Users from "./usersModel";
 
-export async function createOrUpdateUser(ctx: MutationCtx, args: any) {
-  // Handle merging updated fields into existing user
-  if (args.existingUserId) {
-    return args.existingUserId;
-  }
+export async function createUser(
+  ctx: MutationCtx,
+  user: {
+    name: string;
+    email: string;
+    emailVerified: boolean;
+  },
+) {
+  const id = await ctx.db.insert("users", {
+    name: user.name,
+    email: user.email,
+    emailVerified: user.emailVerified,
+    role: "user",
+  });
 
-  // Handle account linking
-  if (args.profile.email) {
-    const existingUser = await Users.getByEmail(ctx, {
-      email: args.profile.email,
-    });
-    if (existingUser) return existingUser._id;
-  }
+  // Initialize default user settings
+  await ctx.db.insert("userSettings", {
+    userId: id,
+    theme: "system",
+    color: "rainbow",
+  });
 
-  // Create a new user with defaults
-  return ctx.db
-    .insert("users", {
-      email: args.profile.email,
-      emailVerified: args.profile.emailVerified ?? false,
-      role: process.env.NODE_ENV === "development" ? "admin" : "user",
-    })
-    .then((userId) => {
-      // Initialize default user settings
-      ctx.db.insert("userSettings", {
-        userId,
-        theme: "system",
-      });
+  return id;
+}
 
-      return userId;
-    });
+export async function updateUser(
+  ctx: MutationCtx,
+  user: {
+    userId: string;
+    name: string;
+    email: string;
+    emailVerified: boolean;
+    image?: string;
+    twoFactorEnabled?: boolean;
+    createdAt: number;
+    updatedAt: number;
+  },
+) {
+  await ctx.db.patch(user.userId as Id<"users">, {
+    name: user.name,
+    email: user.email,
+    emailVerified: user.emailVerified,
+  });
+}
+
+export async function deleteUser(ctx: MutationCtx, id: string) {
+  const userId = id as Id<"users">;
+
+  // Delete userQuests
+  const userQuests = await ctx.db
+    .query("userQuests")
+    .withIndex("userId", (q) => q.eq("userId", userId))
+    .collect();
+  for (const userQuest of userQuests) await ctx.db.delete(userQuest._id);
+
+  // Delete userSettings
+  const userSettings = await ctx.db
+    .query("userSettings")
+    .withIndex("userId", (q) => q.eq("userId", userId))
+    .first();
+  if (userSettings) await ctx.db.delete(userSettings._id);
+
+  // Finally, delete the user
+  await ctx.db.delete(userId);
 }
