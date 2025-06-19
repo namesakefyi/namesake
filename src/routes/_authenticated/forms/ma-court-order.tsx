@@ -111,9 +111,12 @@ function RouteComponent() {
       await downloadMergedPdf({
         title: "Massachusetts Court Order",
         instructions: [
+          "Do not sign the Petition to Change Name (CJP 27) until in the presence of a notary.",
           "Review all documents carefully.",
-          "Do not sign documents until in the presence of a notary.",
           "File with the Probate and Family Court in your county.",
+          form.watch("shouldApplyForFeeWaiver") === true
+            ? "Complete the Affidavit of Indigency on your own."
+            : "To pay for filing, bring a credit or debit card, a check made payable to the Commonwealth of Massachusetts, or exact cash.",
           "Remember to bring all supporting documents to the court.",
         ],
         pdfs,

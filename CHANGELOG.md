@@ -1,5 +1,11 @@
 # namesake
 
+## 0.32.3
+
+### Patch Changes
+
+- 7b7dae3: Clarify instructions for MA Court Order on cover pages
+
 ## 0.32.2
 
 ### Patch Changes
