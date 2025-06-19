@@ -1,27 +1,26 @@
-import { useNavigate } from "@tanstack/react-router";
+import { authClient } from "@/main";
+import type { Doc, Id } from "@convex/_generated/dataModel";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useMutation } from "convex/react";
 import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DeleteAccountSetting } from "./DeleteAccountSetting";
 
-describe("DeleteAccountSetting", () => {
-  const mockNavigate = vi.fn();
-  const mockDeleteAccount = vi.fn();
+const mockUser: Doc<"users"> = {
+  _id: "test-user-id" as Id<"users">,
+  _creationTime: Date.now(),
+  email: "test@example.com",
+  name: "Test User",
+  role: "user",
+};
 
+describe("DeleteAccountSetting", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (useMutation as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockDeleteAccount,
-    );
-    (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockNavigate,
-    );
   });
 
   it("renders the DeleteAccountSetting component", () => {
-    render(<DeleteAccountSetting />);
+    render(<DeleteAccountSetting user={mockUser} />);
     expect(
       screen.getByRole("button", { name: "Delete account" }),
     ).toBeInTheDocument();
@@ -32,68 +31,78 @@ describe("DeleteAccountSetting", () => {
 
   it("opens the delete account modal when the button is clicked", async () => {
     const user = userEvent.setup();
-    render(<DeleteAccountSetting />);
+    render(<DeleteAccountSetting user={mockUser} />);
     await user.click(screen.getByRole("button", { name: "Delete account" }));
     expect(screen.getByText("Delete account?")).toBeInTheDocument();
     expect(
       screen.getByText(
-        "This will permanently erase your account and all data.",
+        "A confirmation email will be sent to test@example.com.",
       ),
     ).toBeInTheDocument();
   });
 
-  it("shows an error if the confirmation text is incorrect", async () => {
+  it("submits the form successfully and shows loading state", async () => {
     const user = userEvent.setup();
-    render(<DeleteAccountSetting />);
-    await user.click(screen.getByRole("button", { name: "Delete account" }));
-
-    const input = screen.getByLabelText("Type DELETE to confirm");
-    await user.type(input, "WRONG_TEXT");
-
-    await user.click(screen.getByRole("button", { name: "Delete account" }));
-    expect(screen.getByRole("alert")).toHaveTextContent(
-      "Please type DELETE to confirm.",
+    vi.mocked(authClient.deleteUser).mockImplementation(
+      () =>
+        new Promise((resolve) =>
+          setTimeout(() => resolve({ error: null }), 100),
+        ),
     );
 
-    expect(mockDeleteAccount).not.toHaveBeenCalled();
-  });
-
-  it("submits the form successfully", async () => {
-    const user = userEvent.setup();
-    render(<DeleteAccountSetting />);
+    render(<DeleteAccountSetting user={mockUser} />);
     await user.click(screen.getByRole("button", { name: "Delete account" }));
+    const submitButton = screen.getByRole("button", {
+      name: "Send deletion email",
+    });
+    await user.click(submitButton);
 
-    const input = screen.getByLabelText("Type DELETE to confirm");
-    await user.type(input, "DELETE");
-    await user.click(screen.getByRole("button", { name: "Delete account" }));
+    // Verify loading state
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeDisabled();
+    expect(submitButton).toBeDisabled();
+    expect(submitButton).toHaveAttribute("aria-label", "Loading");
 
     await waitFor(() => {
-      expect(mockDeleteAccount).toHaveBeenCalled();
-      expect(mockNavigate).toHaveBeenCalledWith({ to: "/signout" });
-      expect(toast.success).toHaveBeenCalledWith("Account deleted.");
+      expect(authClient.deleteUser).toHaveBeenCalledWith({
+        callbackURL: "/goodbye",
+      });
+      expect(toast.success).toHaveBeenCalledWith(
+        "Check your email to finish deleting your account.",
+      );
     });
   });
 
-  it("displays an error if account deletion fails", async () => {
+  it("displays an error if sending the deletion email fails", async () => {
     const user = userEvent.setup();
-    mockDeleteAccount.mockRejectedValue(new Error("Deletion failed"));
+    const errorMessage = "Failed to delete account";
 
-    render(<DeleteAccountSetting />);
+    vi.mocked(authClient.deleteUser).mockImplementation(() => {
+      return Promise.resolve({ error: { message: errorMessage } });
+    });
+
+    render(<DeleteAccountSetting user={mockUser} />);
+
+    // Open dialog and submit form
     await user.click(screen.getByRole("button", { name: "Delete account" }));
+    const submitButton = screen.getByRole("button", {
+      name: "Send deletion email",
+    });
+    await user.click(submitButton);
 
-    const input = screen.getByLabelText("Type DELETE to confirm");
-    await user.type(input, "DELETE");
-    await user.click(screen.getByRole("button", { name: "Delete account" }));
+    // Wait for error message to appear and button to be re-enabled
+    await vi.waitFor(() => {
+      expect(screen.getByText(errorMessage)).toBeInTheDocument();
+      expect(submitButton).not.toBeDisabled();
+    });
 
-    expect(
-      await screen.findByText("Failed to delete account. Please try again."),
-    ).toBeInTheDocument();
     expect(toast.success).not.toHaveBeenCalled();
   });
 
-  it("closes the modal when 'Cancel' is clicked", async () => {
+  it("closes the dialog when 'Cancel' is clicked", async () => {
     const user = userEvent.setup();
-    render(<DeleteAccountSetting />);
+    render(<DeleteAccountSetting user={mockUser} />);
+
+    // Open the dialog
     await user.click(screen.getByRole("button", { name: "Delete account" }));
 
     await user.click(screen.getByRole("button", { name: "Cancel" }));

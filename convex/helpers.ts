@@ -1,4 +1,3 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
 import {
   customCtx,
   customMutation,
@@ -10,18 +9,22 @@ import { mutation, query } from "./_generated/server";
 export const userQuery = customQuery(
   query,
   customCtx(async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
-    return { userId, ctx };
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+    return { userId: identity.subject as Id<"users">, ctx };
   }),
 );
 
 export const userMutation = customMutation(mutation, {
   args: {},
   input: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (userId === null) throw new Error("Not authenticated");
-    return { ctx: { userId }, args: {} };
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+    return { ctx: { userId: identity.subject as Id<"users"> }, args: {} };
   },
 });
 
