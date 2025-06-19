@@ -33,23 +33,25 @@ import { useRef, useState } from "react";
 import type { Key } from "react-aria";
 import { toast } from "sonner";
 
+export const getInitialFlow = (): Key => {
+  // Check if this is the first visit
+  if (typeof window !== "undefined") {
+    const hasVisitedBefore = localStorage.getItem("hasVisitedBefore");
+    if (!hasVisitedBefore) {
+      localStorage.setItem("hasVisitedBefore", "true");
+      return "signUp";
+    }
+  }
+  return "signIn";
+};
+
 export const Route = createFileRoute("/_unauthenticated/signin")({
   component: LoginRoute,
 });
 
 const SignIn = () => {
   const { signIn } = useAuthActions();
-  const [flow, setFlow] = useState<Key>(() => {
-    // Check if this is the first visit
-    if (typeof window !== "undefined") {
-      const hasVisitedBefore = localStorage.getItem("hasVisitedBefore");
-      if (!hasVisitedBefore) {
-        localStorage.setItem("hasVisitedBefore", "true");
-        return "signUp";
-      }
-    }
-    return "signIn";
-  });
+  const [flow, setFlow] = useState<Key>(getInitialFlow);
   const [isCodeRequired, setIsCodeRequired] = useState(true);
   const [code, setCode] = useState<string>("");
   const [email, setEmail] = useState<string>("");

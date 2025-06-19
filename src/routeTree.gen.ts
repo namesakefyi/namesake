@@ -30,6 +30,7 @@ import { Route as AuthenticatedDocumentsPdfIdImport } from './routes/_authentica
 import { Route as AuthenticatedAdminQuestsIndexImport } from './routes/_authenticated/admin/quests.index'
 import { Route as AuthenticatedAdminEarlyAccessIndexImport } from './routes/_authenticated/admin/early-access.index'
 import { Route as AuthenticatedHomeQuestsIndexImport } from './routes/_authenticated/_home/quests/index'
+import { Route as UnauthenticatedtestsSigninTestImport } from './routes/_unauthenticated/__tests__/signin.test'
 import { Route as AuthenticatedHomeQuestsQuestSlugRouteImport } from './routes/_authenticated/_home/quests/$questSlug/route'
 import { Route as AuthenticatedHomeQuestsStateIdIndexImport } from './routes/_authenticated/_home/quests/state-id.index'
 import { Route as AuthenticatedHomeQuestsCourtOrderIndexImport } from './routes/_authenticated/_home/quests/court-order.index'
@@ -161,6 +162,13 @@ const AuthenticatedHomeQuestsIndexRoute =
     id: '/quests/',
     path: '/quests/',
     getParentRoute: () => AuthenticatedHomeRoute,
+  } as any)
+
+const UnauthenticatedtestsSigninTestRoute =
+  UnauthenticatedtestsSigninTestImport.update({
+    id: '/__tests__/signin/test',
+    path: '/signin/test',
+    getParentRoute: () => UnauthenticatedRoute,
   } as any)
 
 const AuthenticatedHomeQuestsQuestSlugRouteRoute =
@@ -327,6 +335,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/quests/$questSlug'
       preLoaderRoute: typeof AuthenticatedHomeQuestsQuestSlugRouteImport
       parentRoute: typeof AuthenticatedHomeImport
+    }
+    '/_unauthenticated/__tests__/signin/test': {
+      id: '/_unauthenticated/__tests__/signin/test'
+      path: '/signin/test'
+      fullPath: '/signin/test'
+      preLoaderRoute: typeof UnauthenticatedtestsSigninTestImport
+      parentRoute: typeof UnauthenticatedImport
     }
     '/_authenticated/_home/quests/': {
       id: '/_authenticated/_home/quests/'
@@ -510,10 +525,12 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 
 interface UnauthenticatedRouteChildren {
   UnauthenticatedSigninRoute: typeof UnauthenticatedSigninRoute
+  UnauthenticatedtestsSigninTestRoute: typeof UnauthenticatedtestsSigninTestRoute
 }
 
 const UnauthenticatedRouteChildren: UnauthenticatedRouteChildren = {
   UnauthenticatedSigninRoute: UnauthenticatedSigninRoute,
+  UnauthenticatedtestsSigninTestRoute: UnauthenticatedtestsSigninTestRoute,
 }
 
 const UnauthenticatedRouteWithChildren = UnauthenticatedRoute._addFileChildren(
@@ -536,6 +553,7 @@ export interface FileRoutesByFullPath {
   '/documents/': typeof AuthenticatedDocumentsIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/quests/$questSlug': typeof AuthenticatedHomeQuestsQuestSlugRouteRouteWithChildren
+  '/signin/test': typeof UnauthenticatedtestsSigninTestRoute
   '/quests': typeof AuthenticatedHomeQuestsIndexRoute
   '/admin/early-access': typeof AuthenticatedAdminEarlyAccessIndexRoute
   '/admin/quests': typeof AuthenticatedAdminQuestsIndexRoute
@@ -558,6 +576,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/documents': typeof AuthenticatedDocumentsIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
+  '/signin/test': typeof UnauthenticatedtestsSigninTestRoute
   '/quests': typeof AuthenticatedHomeQuestsIndexRoute
   '/admin/early-access': typeof AuthenticatedAdminEarlyAccessIndexRoute
   '/admin/quests': typeof AuthenticatedAdminQuestsIndexRoute
@@ -587,6 +606,7 @@ export interface FileRoutesById {
   '/_authenticated/documents/': typeof AuthenticatedDocumentsIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/_home/quests/$questSlug': typeof AuthenticatedHomeQuestsQuestSlugRouteRouteWithChildren
+  '/_unauthenticated/__tests__/signin/test': typeof UnauthenticatedtestsSigninTestRoute
   '/_authenticated/_home/quests/': typeof AuthenticatedHomeQuestsIndexRoute
   '/_authenticated/admin/early-access/': typeof AuthenticatedAdminEarlyAccessIndexRoute
   '/_authenticated/admin/quests/': typeof AuthenticatedAdminQuestsIndexRoute
@@ -615,6 +635,7 @@ export interface FileRouteTypes {
     | '/documents/'
     | '/settings/'
     | '/quests/$questSlug'
+    | '/signin/test'
     | '/quests'
     | '/admin/early-access'
     | '/admin/quests'
@@ -636,6 +657,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/documents'
     | '/settings'
+    | '/signin/test'
     | '/quests'
     | '/admin/early-access'
     | '/admin/quests'
@@ -663,6 +685,7 @@ export interface FileRouteTypes {
     | '/_authenticated/documents/'
     | '/_authenticated/settings/'
     | '/_authenticated/_home/quests/$questSlug'
+    | '/_unauthenticated/__tests__/signin/test'
     | '/_authenticated/_home/quests/'
     | '/_authenticated/admin/early-access/'
     | '/_authenticated/admin/quests/'
@@ -712,7 +735,8 @@ export const routeTree = rootRoute
     "/_unauthenticated": {
       "filePath": "_unauthenticated.tsx",
       "children": [
-        "/_unauthenticated/signin"
+        "/_unauthenticated/signin",
+        "/_unauthenticated/__tests__/signin/test"
       ]
     },
     "/_authenticated/admin": {
@@ -800,6 +824,10 @@ export const routeTree = rootRoute
         "/_authenticated/_home/quests/$questSlug/edit",
         "/_authenticated/_home/quests/$questSlug/"
       ]
+    },
+    "/_unauthenticated/__tests__/signin/test": {
+      "filePath": "_unauthenticated/__tests__/signin.test.tsx",
+      "parent": "/_unauthenticated"
     },
     "/_authenticated/_home/quests/": {
       "filePath": "_authenticated/_home/quests/index.tsx",
