@@ -1,6 +1,7 @@
 import { type Category, STATUS, type Status } from "../../src/constants";
 import type { Id } from "../_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
+import * as UserQuestPlaceholders from "./userQuestPlaceholdersModel";
 
 export async function getAllForUser(
   ctx: QueryCtx,
@@ -139,6 +140,18 @@ export async function createQuestForUser(
     .collect();
 
   if (existing.length > 0) throw new Error("Quest already exists for user");
+
+  const quest = await ctx.db.get(questId);
+  if (!quest) throw new Error("Quest not found");
+
+  try {
+    await UserQuestPlaceholders.dismissPlaceholderForUser(ctx, {
+      userId,
+      category: quest.category as Category,
+    });
+  } catch (error) {
+    // If no placeholder exists, that's fine. Just continue.
+  }
 
   await ctx.db.insert("userQuests", {
     userId,

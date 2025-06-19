@@ -148,6 +148,20 @@ const userQuests = defineTable({
   .index("userId", ["userId"])
   .index("questId", ["questId"]);
 
+/**
+ * Placeholders for core quests.
+ */
+const userQuestPlaceholders = defineTable({
+  /** The user who owns the placeholder. */
+  userId: v.id("users"),
+  /** The category of the placeholder. */
+  category: category,
+  /** Time the placeholder was dismissed. */
+  dismissedAt: v.optional(v.number()),
+})
+  .index("userId", ["userId"])
+  .index("userIdAndCategory", ["userId", "category"]);
+
 // ----------------------------------------------
 // Early Access
 // ----------------------------------------------
@@ -171,4 +185,5 @@ export default defineSchema({
   userFormResponses,
   userSettings,
   userQuests,
+  userQuestPlaceholders,
 });

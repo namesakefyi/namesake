@@ -1,4 +1,5 @@
 import type { MutationCtx } from "../_generated/server";
+import * as UserQuestPlaceholders from "./userQuestPlaceholdersModel";
 import * as Users from "./usersModel";
 
 export async function createOrUpdateUser(ctx: MutationCtx, args: any) {
@@ -22,12 +23,17 @@ export async function createOrUpdateUser(ctx: MutationCtx, args: any) {
       emailVerified: args.profile.emailVerified ?? false,
       role: process.env.NODE_ENV === "development" ? "admin" : "user",
     })
-    .then((userId) => {
+    .then(async (userId) => {
       // Initialize default user settings
-      ctx.db.insert("userSettings", {
+      await ctx.db.insert("userSettings", {
         userId,
         theme: "system",
         color: "rainbow",
+      });
+
+      // Initialize default placeholders
+      await UserQuestPlaceholders.createDefaultPlaceholdersForUser(ctx, {
+        userId,
       });
 
       return userId;

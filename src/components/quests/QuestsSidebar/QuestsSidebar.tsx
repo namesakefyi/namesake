@@ -28,17 +28,18 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { api } from "@convex/_generated/api";
 import type { Doc, Id } from "@convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
-import { type LucideIcon, Plus, Search, X } from "lucide-react";
+import { Plus, Search, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 const MyQuests = () => {
-  const user = useQuery(api.users.getCurrent);
   const userQuests = useQuery(api.userQuests.count) ?? 0;
   const completedQuests = useQuery(api.userQuests.countCompleted) ?? 0;
   const questsByCategory = useQuery(api.userQuests.getByCategory);
+  const placeholders = useQuery(api.userQuestPlaceholders.getActive);
   const removeQuest = useMutation(api.userQuests.deleteForever);
   const updateStatus = useMutation(api.userQuests.setStatus);
+  const dismissPlaceholder = useMutation(api.userQuestPlaceholders.dismiss);
 
   const handleRemoveQuest = async (questId: Id<"quests">) => {
     try {
@@ -56,41 +57,117 @@ const MyQuests = () => {
     }
   };
 
-  const CORE_CATEGORIES: Record<
-    CoreCategory,
-    { to: string; label: string; icon: LucideIcon }
-  > = {
-    courtOrder: {
-      to: "court-order",
-      label: CATEGORIES.courtOrder.label,
-      icon: CATEGORIES.courtOrder.icon,
+  const handleDismissPlaceholder = async (category: CoreCategory) => {
+    try {
+      await dismissPlaceholder({ category });
+    } catch (err) {
+      toast.error("Couldn't dismiss placeholder. Please try again.");
+    }
+  };
+
+  const hasQuests = userQuests > 0;
+
+  const createUnifiedList = () => {
+    const unifiedItems: Array<{
+      type: "placeholder" | "quest";
+      category: Category;
+      data: any;
+      slug: string;
+      isCorePlaceholder?: boolean;
+    }> = [];
+
+    if (placeholders) {
+      for (const placeholder of placeholders) {
+        const category = placeholder.category as CoreCategory;
+
+        unifiedItems.push({
+          type: "placeholder",
+          category,
+          data: placeholder,
+          slug:
+            category === "courtOrder"
+              ? "court-order"
+              : category === "socialSecurity"
+                ? "social-security"
+                : category === "stateId"
+                  ? "state-id"
+                  : category === "passport"
+                    ? "passport"
+                    : "birth-certificate",
+          isCorePlaceholder: true,
+        });
+      }
+    }
+
+    // Add quests
+    if (questsByCategory) {
+      for (const [category, quests] of Object.entries(questsByCategory)) {
+        for (const quest of quests) {
+          unifiedItems.push({
+            type: "quest",
+            category: category as Category,
+            data: quest,
+            slug: quest.slug,
+          });
+        }
+      }
+    }
+
+    return unifiedItems;
+  };
+
+  const unifiedItems = createUnifiedList();
+
+  const corePlaceholders = unifiedItems.filter(
+    (item) => item.isCorePlaceholder,
+  );
+  const otherItems = unifiedItems.filter((item) => !item.isCorePlaceholder);
+
+  // Group non-placeholder items by category
+  const groupedItems = otherItems.reduce(
+    (acc, item) => {
+      if (!acc[item.category]) {
+        acc[item.category] = [];
+      }
+      acc[item.category].push(item);
+      return acc;
     },
-    socialSecurity: {
-      to: "social-security",
-      label: CATEGORIES.socialSecurity.label,
-      icon: CATEGORIES.socialSecurity.icon,
-    },
-    stateId: {
-      to: "state-id",
-      label: CATEGORIES.stateId.label,
-      icon: CATEGORIES.stateId.icon,
-    },
-    passport: {
-      to: "passport",
-      label: CATEGORIES.passport.label,
-      icon: CATEGORIES.passport.icon,
-    },
-    birthCertificate: {
-      to: "birth-certificate",
-      label: CATEGORIES.birthCertificate.label,
-      icon: CATEGORIES.birthCertificate.icon,
-    },
-  } as const;
+    {} as Record<Category, typeof otherItems>,
+  );
+
+  // Create ordered categories: core categories first, then non-core
+  const orderedCategories: Category[] = [
+    ...(
+      [
+        "courtOrder",
+        "socialSecurity",
+        "stateId",
+        "passport",
+        "birthCertificate",
+      ] as CoreCategory[]
+    ).filter((cat) => groupedItems[cat]?.length > 0),
+    ...(Object.keys(groupedItems)
+      .filter(
+        (cat) =>
+          ![
+            "courtOrder",
+            "socialSecurity",
+            "stateId",
+            "passport",
+            "birthCertificate",
+          ].includes(cat as CoreCategory),
+      )
+      .sort((a, b) => {
+        const aInfo = CATEGORIES[a as Category];
+        const bInfo = CATEGORIES[b as Category];
+        return aInfo.label.localeCompare(bInfo.label);
+      }) as Category[]),
+  ];
 
   return (
     <div className="flex flex-col gap-4">
-      {userQuests > 0 && (
-        <div className="flex items-center">
+      {hasQuests && (
+        <div className="flex items-end bg-theme-3 rounded-lg p-2 -mx-2 h-12">
           <ProgressBar
             label="Progress"
             value={completedQuests}
@@ -108,68 +185,80 @@ const MyQuests = () => {
         </div>
       )}
       <Nav>
-        {(Object.keys(CORE_CATEGORIES) as CoreCategory[]).map((category) => {
-          const userQuest = questsByCategory?.[category]?.[0];
-          const config = CORE_CATEGORIES[category];
+        {/* Core Documents section with placeholders */}
+        {corePlaceholders.length > 0 && (
+          <NavGroup
+            key="core-documents"
+            label="Core Documents"
+            icon={CATEGORIES.courtOrder.icon}
+          >
+            {corePlaceholders
+              .sort((a, b) => {
+                const aIndex = [
+                  "courtOrder",
+                  "socialSecurity",
+                  "stateId",
+                  "passport",
+                  "birthCertificate",
+                ].indexOf(a.category as CoreCategory);
+                const bIndex = [
+                  "courtOrder",
+                  "socialSecurity",
+                  "stateId",
+                  "passport",
+                  "birthCertificate",
+                ].indexOf(b.category as CoreCategory);
+                return aIndex - bIndex;
+              })
+              .map((item) => {
+                const category = item.category as CoreCategory;
+                const categoryInfo = CATEGORIES[category];
 
-          if (category === "birthCertificate" && user?.birthplace === "other") {
-            return null;
-          }
-
-          if (userQuest) {
-            return (
-              <NavItem
-                key={userQuest._id}
-                href={{
-                  to: "/quests/$questSlug",
-                  params: { questSlug: userQuest.slug },
-                }}
-                icon={config.icon}
-                size="large"
-                actions={
-                  <StatusSelect
-                    status={userQuest.status as Status}
-                    onChange={(status) =>
-                      handleStatusChange(userQuest.questId, status)
+                return (
+                  <NavItem
+                    key={`placeholder-${item.category}`}
+                    href={{
+                      to: "/quests/$questSlug",
+                      params: { questSlug: item.slug },
+                    }}
+                    icon={categoryInfo.icon}
+                    size="large"
+                    className="border border-dashed border-dim"
+                    actions={
+                      <TooltipTrigger>
+                        <Button
+                          variant="icon"
+                          size="small"
+                          icon={X}
+                          onPress={() => handleDismissPlaceholder(category)}
+                        />
+                        <Tooltip>Dismiss</Tooltip>
+                      </TooltipTrigger>
                     }
-                    onRemove={() => handleRemoveQuest(userQuest.questId)}
-                    condensed
-                  />
-                }
-              >
-                {userQuest.title}
-                {userQuest.jurisdiction && (
-                  <Badge size="xs">{userQuest.jurisdiction}</Badge>
-                )}
-              </NavItem>
-            );
-          }
+                  >
+                    {categoryInfo.label}
+                  </NavItem>
+                );
+              })}
+          </NavGroup>
+        )}
+
+        {/* Regular quest categories */}
+        {orderedCategories.map((category) => {
+          const items = groupedItems[category];
+          if (!items || items.length === 0) return null;
+
+          const categoryInfo = CATEGORIES[category];
 
           return (
-            <NavItem
+            <NavGroup
               key={category}
-              href={{
-                to: "/quests/$questSlug",
-                params: { questSlug: config.to },
-              }}
-              icon={config.icon}
-              size="large"
-              className="border border-dashed border-dim"
+              label={categoryInfo.label}
+              icon={categoryInfo.icon}
             >
-              {config.label}
-            </NavItem>
-          );
-        })}
-
-        {questsByCategory &&
-          Object.entries(questsByCategory).map(([group, quests]) => {
-            if (quests.length === 0 || group in CORE_CATEGORIES) return null;
-
-            const { label } = CATEGORIES[group as keyof typeof CATEGORIES];
-
-            return (
-              <NavGroup key={label}>
-                {quests.map((quest) => (
+              {items.map((item) => {
+                const quest = item.data;
+                return (
                   <NavItem
                     key={quest._id}
                     href={{
@@ -194,10 +283,11 @@ const MyQuests = () => {
                       <Badge size="xs">{quest.jurisdiction}</Badge>
                     )}
                   </NavItem>
-                ))}
-              </NavGroup>
-            );
-          })}
+                );
+              })}
+            </NavGroup>
+          );
+        })}
       </Nav>
     </div>
   );
@@ -333,7 +423,7 @@ export const QuestsSidebar = () => {
   return (
     <AppSidebar>
       <AppSidebarHeader>
-        <NamesakeHeader>
+        <NamesakeHeader onLogoPress={() => setActiveTab("user")}>
           <TooltipTrigger>
             <Button
               aria-label={
