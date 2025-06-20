@@ -207,8 +207,16 @@ export async function getByCategoryWithPlaceholdersForUser(
   // Create groups array with proper ordering
   const groups: CategoryGroup[] = [];
 
+  // Get all categories that have items, sorted by their order in CATEGORIES
+  const categoriesWithItems = Object.keys(result).sort((a, b) => {
+    const categoryA = a as Category;
+    const categoryB = b as Category;
+    const categoryKeys = Object.keys(CATEGORIES) as Category[];
+    return categoryKeys.indexOf(categoryA) - categoryKeys.indexOf(categoryB);
+  });
+
   // Add core categories as a single group if any exist
-  const coreCategories = Object.keys(result).filter(
+  const coreCategories = categoriesWithItems.filter(
     (category) => CATEGORIES[category as Category]?.isCore,
   );
 
@@ -221,7 +229,7 @@ export async function getByCategoryWithPlaceholdersForUser(
   }
 
   // Add non-core categories as individual groups
-  const nonCoreCategories = Object.keys(result).filter(
+  const nonCoreCategories = categoriesWithItems.filter(
     (category) => !CATEGORIES[category as Category]?.isCore,
   );
 
