@@ -6,7 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignore": ["convex/_generated", "routeTree.gen.ts"]
+    "ignore": ["convex/_generated", "routeTree.gen.ts", "convex.json"]
   },
   "formatter": {
     "enabled": true,
