@@ -1,28 +1,18 @@
 import { RegistrationForm, SignInForm, SignInWrapper } from "@/components/app";
 import { Tab, TabList, TabPanel, Tabs } from "@/components/common";
+import { useHasVisited } from "@/hooks/useHasVisited";
 import { Navigate, createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { useState } from "react";
 import type { Key } from "react-aria";
-
-export const getInitialFlow = (): Key => {
-  // Check if this is the first visit
-  if (typeof window !== "undefined") {
-    const hasVisitedBefore = localStorage.getItem("hasVisitedBefore");
-    if (!hasVisitedBefore) {
-      localStorage.setItem("hasVisitedBefore", "true");
-      return "signUp";
-    }
-  }
-  return "signIn";
-};
 
 export const Route = createFileRoute("/_unauthenticated/signin")({
   component: LoginRoute,
 });
 
 function LoginRoute() {
-  const [tab, setTab] = useState<Key>(getInitialFlow());
+  const hasVisited = useHasVisited();
+  const [tab, setTab] = useState<Key>(hasVisited ? "signIn" : "signUp");
 
   return (
     <>
