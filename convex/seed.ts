@@ -14,10 +14,9 @@ const seed = internalMutation(async (ctx) => {
   } else {
     console.log("Seeding quest data...");
 
-    // Create a system user for seeding
     const systemUserId = await ctx.db.insert("users", {
       name: "System",
-      email: "system@namesake.app",
+      email: "system@namesake.fyi",
       emailVerified: true,
       role: "admin",
     });
