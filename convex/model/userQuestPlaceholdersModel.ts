@@ -45,9 +45,7 @@ export async function dismissPlaceholderForUser(
     .filter((q) => q.eq(q.field("category"), category))
     .first();
 
-  if (!placeholder) {
-    throw new Error("Placeholder not found for user and category");
-  }
+  if (!placeholder) return;
 
   await ctx.db.patch(placeholder._id, {
     dismissedAt: Date.now(),

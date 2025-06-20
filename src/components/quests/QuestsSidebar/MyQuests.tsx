@@ -74,7 +74,6 @@ export const MyQuests = () => {
 
   const hasQuests = userQuests > 0;
 
-  // Render a single item (placeholder or quest)
   const renderItem = (item: CategoryItem, category: Category) => {
     const categoryInfo = CATEGORIES[category];
 

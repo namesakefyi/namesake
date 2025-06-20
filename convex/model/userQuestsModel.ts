@@ -8,7 +8,6 @@ import type { Doc, Id } from "../_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
 import * as UserQuestPlaceholders from "./userQuestPlaceholdersModel";
 
-// Type definitions for the combined quest and placeholder data
 export type QuestData = Omit<Doc<"quests">, "_id"> & Doc<"userQuests">;
 export type PlaceholderData = Doc<"userQuestPlaceholders">;
 
@@ -159,6 +158,84 @@ export async function getByCategoryForUser(
   );
 }
 
+export async function getByCategoryWithPlaceholdersForUser(
+  ctx: QueryCtx,
+  { userId }: { userId: Id<"users"> },
+): Promise<CategoryGroup[]> {
+  const questsByCategory = await getByCategoryForUser(ctx, {
+    userId,
+  });
+
+  const placeholders = await UserQuestPlaceholders.getActivePlaceholdersForUser(
+    ctx,
+    {
+      userId,
+    },
+  );
+
+  // Combine quests and placeholders into a single structure
+  const result: Record<string, CategoryItem[]> = {};
+
+  for (const [category, quests] of Object.entries(questsByCategory)) {
+    if (!result[category]) {
+      result[category] = [];
+    }
+
+    for (const quest of quests) {
+      result[category].push({
+        type: "quest",
+        category: category as Category,
+        data: quest,
+        slug: quest.slug,
+      });
+    }
+  }
+
+  for (const placeholder of placeholders) {
+    const category = placeholder.category;
+    if (!result[category]) {
+      result[category] = [];
+    }
+
+    result[category].push({
+      type: "placeholder",
+      category: category as Category,
+      data: placeholder,
+    });
+  }
+
+  // Create groups array with proper ordering
+  const groups: CategoryGroup[] = [];
+
+  // Add core categories as a single group if any exist
+  const coreCategories = Object.keys(result).filter(
+    (category) => CATEGORIES[category as Category]?.isCore,
+  );
+
+  if (coreCategories.length > 0) {
+    groups.push({
+      label: "Core",
+      category: null,
+      items: coreCategories.flatMap((category) => result[category]),
+    });
+  }
+
+  // Add non-core categories as individual groups
+  const nonCoreCategories = Object.keys(result).filter(
+    (category) => !CATEGORIES[category as Category]?.isCore,
+  );
+
+  for (const category of nonCoreCategories) {
+    groups.push({
+      label: CATEGORIES[category as Category].label,
+      category: category as Category,
+      items: result[category],
+    });
+  }
+
+  return groups;
+}
+
 export async function createQuestForUser(
   ctx: MutationCtx,
   { userId, questId }: { userId: Id<"users">; questId: Id<"quests"> },
@@ -174,14 +251,10 @@ export async function createQuestForUser(
   const quest = await ctx.db.get(questId);
   if (!quest) throw new Error("Quest not found");
 
-  try {
-    await UserQuestPlaceholders.dismissPlaceholderForUser(ctx, {
-      userId,
-      category: quest.category as Category,
-    });
-  } catch (error) {
-    // If no placeholder exists, that's fine. Just continue.
-  }
+  await UserQuestPlaceholders.dismissPlaceholderForUser(ctx, {
+    userId,
+    category: quest.category as Category,
+  });
 
   await ctx.db.insert("userQuests", {
     userId,
@@ -280,85 +353,4 @@ export async function deleteQuestForUser(
   });
   if (userQuest === null) throw new Error("Quest not found");
   await ctx.db.delete(userQuest._id);
-}
-
-export async function getByCategoryWithPlaceholdersForUser(
-  ctx: QueryCtx,
-  { userId }: { userId: Id<"users"> },
-): Promise<CategoryGroup[]> {
-  // Get user quests grouped by category
-  const questsByCategory = await getByCategoryForUser(ctx, {
-    userId,
-  });
-
-  // Get active placeholders
-  const placeholders = await ctx.db
-    .query("userQuestPlaceholders")
-    .withIndex("userId", (q) => q.eq("userId", userId))
-    .filter((q) => q.eq(q.field("dismissedAt"), undefined))
-    .collect();
-
-  // Create a unified structure that combines quests and placeholders
-  const result: Record<string, CategoryItem[]> = {};
-
-  // Add quests to the result
-  for (const [category, quests] of Object.entries(questsByCategory)) {
-    if (!result[category]) {
-      result[category] = [];
-    }
-
-    for (const quest of quests) {
-      result[category].push({
-        type: "quest",
-        category: category as Category,
-        data: quest,
-        slug: quest.slug,
-      });
-    }
-  }
-
-  // Add placeholders to the result
-  for (const placeholder of placeholders) {
-    const category = placeholder.category;
-    if (!result[category]) {
-      result[category] = [];
-    }
-
-    result[category].push({
-      type: "placeholder",
-      category: category as Category,
-      data: placeholder,
-    });
-  }
-
-  // Create groups array with proper ordering
-  const groups: CategoryGroup[] = [];
-
-  // Add core categories as a single group if any exist
-  const coreCategories = Object.keys(result).filter(
-    (category) => CATEGORIES[category as Category]?.isCore,
-  );
-
-  if (coreCategories.length > 0) {
-    groups.push({
-      label: "Core",
-      category: null,
-      items: coreCategories.flatMap((category) => result[category]),
-    });
-  }
-
-  // Add non-core categories as individual groups
-  const nonCoreCategories = Object.keys(result).filter(
-    (category) => !CATEGORIES[category as Category]?.isCore,
-  );
-
-  for (const category of nonCoreCategories) {
-    groups.push({
-      label: CATEGORIES[category as Category].label,
-      category: category as Category,
-      items: result[category],
-    });
-  }
-
-  return groups;
 }
