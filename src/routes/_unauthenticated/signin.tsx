@@ -1,5 +1,6 @@
 import { RegistrationForm, SignInForm, SignInWrapper } from "@/components/app";
 import { Tab, TabList, TabPanel, Tabs } from "@/components/common";
+import { useHasVisited } from "@/hooks/useHasVisited";
 import { Navigate, createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { useState } from "react";
@@ -10,7 +11,8 @@ export const Route = createFileRoute("/_unauthenticated/signin")({
 });
 
 function LoginRoute() {
-  const [tab, setTab] = useState<Key>("signIn");
+  const hasVisited = useHasVisited();
+  const [tab, setTab] = useState<Key>(hasVisited ? "signIn" : "signUp");
 
   return (
     <>
