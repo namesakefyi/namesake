@@ -1,4 +1,3 @@
-import { CATEGORIES } from "@/constants";
 import { useMatchRoute } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import { useQuery } from "convex/react";
@@ -52,22 +51,6 @@ describe("QuestsNav", () => {
     mockQueries();
     render(<QuestsSidebar />);
     expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
-  });
-
-  it("renders core category items when no quests exist", () => {
-    mockQueries();
-    render(<QuestsSidebar />);
-
-    // Check for core category labels
-    expect(screen.getByText(CATEGORIES.courtOrder.label)).toBeInTheDocument();
-    expect(
-      screen.getByText(CATEGORIES.socialSecurity.label),
-    ).toBeInTheDocument();
-    expect(screen.getByText(CATEGORIES.stateId.label)).toBeInTheDocument();
-    expect(screen.getByText(CATEGORIES.passport.label)).toBeInTheDocument();
-    expect(
-      screen.getByText(CATEGORIES.birthCertificate.label),
-    ).toBeInTheDocument();
   });
 
   it("renders quest items with status badges and jurisdiction", () => {

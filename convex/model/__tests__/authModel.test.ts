@@ -1,6 +1,7 @@
 import { convexTest } from "convex-test";
 import { describe, expect, it } from "vitest";
-import { createTestAdmin, createTestUser } from "../../__tests__/helpers";
+import type { Category } from "../../../src/constants";
+import { createTestAdmin } from "../../__tests__/helpers";
 import { api } from "../../_generated/api";
 import schema from "../../schema";
 import { modules } from "../../test.setup";
@@ -41,15 +42,22 @@ describe("authModel", () => {
 
     it("should create default placeholders for the user", async () => {
       const t = convexTest(schema, modules);
-      const { asUser, userId } = await createTestUser(t);
 
-      // Get active placeholders for the user
+      const userId = await t.run(async (ctx) => {
+        return await createUser(ctx, {
+          name: "Test User",
+          email: "testUser@test.com",
+          emailVerified: true,
+        });
+      });
+
+      const asUser = t.withIdentity({ subject: userId });
+
       const activePlaceholders = await asUser.query(
         api.userQuestPlaceholders.getActive,
       );
 
-      // Verify that all core categories are present
-      const expectedCoreCategories = [
+      const expectedCoreCategories: Category[] = [
         "courtOrder",
         "stateId",
         "socialSecurity",

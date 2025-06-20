@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { useQuestsSidebar } from "./QuestsSidebarProvider";
 
 export const MyQuests = () => {
-  const { switchToAllAndFilter } = useQuestsSidebar();
+  const { setActiveTab, setCategoryFilter } = useQuestsSidebar();
   const userQuests = useQuery(api.userQuests.count) ?? 0;
   const completedQuests = useQuery(api.userQuests.countCompleted) ?? 0;
   const questsByCategory = useQuery(api.userQuests.getByCategory);
@@ -65,7 +65,8 @@ export const MyQuests = () => {
   };
 
   const handlePlaceholderClick = (category: Category) => {
-    switchToAllAndFilter(category);
+    setActiveTab("all");
+    setCategoryFilter(category);
   };
 
   const hasQuests = userQuests > 0;

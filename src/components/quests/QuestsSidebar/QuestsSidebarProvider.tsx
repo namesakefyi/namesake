@@ -6,7 +6,6 @@ type QuestsSidebarContextType = {
   categoryFilter: Category | undefined;
   setActiveTab: (tab: "user" | "all") => void;
   setCategoryFilter: (category: Category | undefined) => void;
-  switchToAllAndFilter: (category: Category) => void;
 };
 
 const QuestsSidebarContext = createContext<
@@ -42,11 +41,6 @@ export const QuestsSidebarProvider = ({
     setCategoryFilterState(category);
   };
 
-  const switchToAllAndFilter = (category: Category) => {
-    setActiveTabState("all");
-    setCategoryFilterState(category);
-  };
-
   return (
     <QuestsSidebarContext.Provider
       value={{
@@ -54,7 +48,6 @@ export const QuestsSidebarProvider = ({
         categoryFilter,
         setActiveTab,
         setCategoryFilter,
-        switchToAllAndFilter,
       }}
     >
       {children}
