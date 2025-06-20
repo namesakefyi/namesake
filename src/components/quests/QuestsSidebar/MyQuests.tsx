@@ -1,6 +1,7 @@
 import {
   Badge,
   Button,
+  Empty,
   Nav,
   NavGroup,
   NavItem,
@@ -12,8 +13,9 @@ import { StatusSelect } from "@/components/quests";
 import { CATEGORIES, type Category, type Status } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Id } from "@convex/_generated/dataModel";
+import type { CategoryItem } from "@convex/model/userQuestsModel";
 import { useMutation, useQuery } from "convex/react";
-import { X } from "lucide-react";
+import { Milestone, X } from "lucide-react";
 import { toast } from "sonner";
 import { useQuestsSidebar } from "./QuestsSidebarProvider";
 
@@ -21,8 +23,9 @@ export const MyQuests = () => {
   const { setActiveTab, setCategoryFilter } = useQuestsSidebar();
   const userQuests = useQuery(api.userQuests.count) ?? 0;
   const completedQuests = useQuery(api.userQuests.countCompleted) ?? 0;
-  const questsByCategory = useQuery(api.userQuests.getByCategory);
-  const placeholders = useQuery(api.userQuestPlaceholders.getActive);
+  const questsByCategory = useQuery(
+    api.userQuests.getByCategoryWithPlaceholders,
+  );
   const removeQuest = useMutation(api.userQuests.deleteForever);
   const updateStatus = useMutation(api.userQuests.setStatus);
   const dismissPlaceholder = useMutation(api.userQuestPlaceholders.dismiss);
@@ -71,86 +74,69 @@ export const MyQuests = () => {
 
   const hasQuests = userQuests > 0;
 
-  const createUnifiedList = () => {
-    const unifiedItems: Array<{
-      type: "placeholder" | "quest";
-      category: Category;
-      data: any;
-      slug?: string;
-      isCorePlaceholder?: boolean;
-    }> = [];
+  // Render a single item (placeholder or quest)
+  const renderItem = (item: CategoryItem, category: Category) => {
+    const categoryInfo = CATEGORIES[category];
 
-    if (placeholders) {
-      for (const placeholder of placeholders) {
-        const category = placeholder.category as Category;
-
-        unifiedItems.push({
-          type: "placeholder",
-          category,
-          data: placeholder,
-          isCorePlaceholder: true,
-        });
-      }
+    if (item.type === "placeholder") {
+      return (
+        <NavItem
+          key={`placeholder-${item.category}`}
+          onPress={() => handlePlaceholderClick(category)}
+          icon={categoryInfo.icon}
+          size="large"
+          className="border border-dashed border-dim cursor-pointer"
+          actions={
+            <TooltipTrigger>
+              <Button
+                variant="icon"
+                size="small"
+                icon={X}
+                onPress={() => handleDismissPlaceholder(category)}
+              />
+              <Tooltip placement="right">Dismiss suggestion</Tooltip>
+            </TooltipTrigger>
+          }
+        >
+          {categoryInfo.label}
+        </NavItem>
+      );
     }
 
-    // Add quests
-    if (questsByCategory) {
-      for (const [category, quests] of Object.entries(questsByCategory)) {
-        for (const quest of quests) {
-          unifiedItems.push({
-            type: "quest",
-            category: category as Category,
-            data: quest,
-            slug: quest.slug,
-          });
+    const quest = item.data;
+    return (
+      <NavItem
+        key={quest._id}
+        href={{
+          to: "/quests/$questSlug",
+          params: { questSlug: quest.slug },
+        }}
+        size="large"
+        icon={categoryInfo.icon}
+        actions={
+          <StatusSelect
+            status={quest.status as Status}
+            onChange={(status) => handleStatusChange(quest.questId, status)}
+            onRemove={() => handleRemoveQuest(quest.questId)}
+            condensed
+          />
         }
-      }
-    }
-
-    return unifiedItems;
+      >
+        {quest.title}
+        {quest.jurisdiction && <Badge size="xs">{quest.jurisdiction}</Badge>}
+      </NavItem>
+    );
   };
 
-  const unifiedItems = createUnifiedList();
-
-  // Separate core and non-core items based on isCore property
-  const coreItems = unifiedItems.filter(
-    (item) => CATEGORIES[item.category]?.isCore,
-  );
-  const nonCoreItems = unifiedItems.filter(
-    (item) => !CATEGORIES[item.category]?.isCore,
-  );
-
-  // Group non-core items by category
-  const groupedNonCoreItems = nonCoreItems.reduce(
-    (acc, item) => {
-      if (!acc[item.category]) {
-        acc[item.category] = [];
-      }
-      acc[item.category].push(item);
-      return acc;
-    },
-    {} as Record<Category, typeof nonCoreItems>,
-  );
-
-  // Create ordered non-core categories
-  const orderedNonCoreCategories: Category[] = Object.keys(groupedNonCoreItems)
-    .filter((cat) => groupedNonCoreItems[cat as Category]?.length > 0)
-    .sort((a, b) => {
-      const aInfo = CATEGORIES[a as Category];
-      const bInfo = CATEGORIES[b as Category];
-      return aInfo.label.localeCompare(bInfo.label);
-    }) as Category[];
-
-  // Get core categories in their defined order from CATEGORIES
-  const coreCategoriesOrder: Category[] = Object.keys(CATEGORIES).filter(
-    (cat) => CATEGORIES[cat as Category]?.isCore,
-  ) as Category[];
-
-  const sortedCoreItems = coreItems.sort((a, b) => {
-    const aIndex = coreCategoriesOrder.indexOf(a.category);
-    const bIndex = coreCategoriesOrder.indexOf(b.category);
-    return aIndex - bIndex;
-  });
+  if (!questsByCategory || questsByCategory.length === 0) {
+    return (
+      <Empty
+        title="No quests found"
+        subtitle="Add quests to get started."
+        icon={Milestone}
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -173,118 +159,11 @@ export const MyQuests = () => {
         </div>
       )}
       <Nav>
-        {/* Core Documents section */}
-        {sortedCoreItems.length > 0 && (
-          <NavGroup
-            key="core-documents"
-            label="Core Documents"
-            icon={CATEGORIES.courtOrder.icon}
-          >
-            {sortedCoreItems.map((item) => {
-              const category = item.category;
-              const categoryInfo = CATEGORIES[category];
-
-              if (item.type === "placeholder") {
-                return (
-                  <NavItem
-                    key={`placeholder-${item.category}`}
-                    onPress={() => handlePlaceholderClick(category)}
-                    icon={categoryInfo.icon}
-                    size="large"
-                    className="border border-dashed border-dim cursor-pointer"
-                    actions={
-                      <TooltipTrigger>
-                        <Button
-                          variant="icon"
-                          size="small"
-                          icon={X}
-                          onPress={() => handleDismissPlaceholder(category)}
-                        />
-                        <Tooltip placement="right">Dismiss suggestion</Tooltip>
-                      </TooltipTrigger>
-                    }
-                  >
-                    {categoryInfo.label}
-                  </NavItem>
-                );
-              }
-
-              const quest = item.data;
-              return (
-                <NavItem
-                  key={quest._id}
-                  href={{
-                    to: "/quests/$questSlug",
-                    params: { questSlug: quest.slug },
-                  }}
-                  size="large"
-                  icon={categoryInfo.icon}
-                  actions={
-                    <StatusSelect
-                      status={quest.status as Status}
-                      onChange={(status) =>
-                        handleStatusChange(quest.questId, status)
-                      }
-                      onRemove={() => handleRemoveQuest(quest.questId)}
-                      condensed
-                    />
-                  }
-                >
-                  {quest.title}
-                  {quest.jurisdiction && (
-                    <Badge size="xs">{quest.jurisdiction}</Badge>
-                  )}
-                </NavItem>
-              );
-            })}
+        {questsByCategory.map((group) => (
+          <NavGroup key={group.category} label={group.label}>
+            {group.items.map((item) => renderItem(item, item.category))}
           </NavGroup>
-        )}
-
-        {/* Non-core quest categories */}
-        {orderedNonCoreCategories.map((category) => {
-          const items = groupedNonCoreItems[category];
-          if (!items || items.length === 0) return null;
-
-          const categoryInfo = CATEGORIES[category];
-
-          return (
-            <NavGroup
-              key={category}
-              label={categoryInfo.label}
-              icon={categoryInfo.icon}
-            >
-              {items.map((item) => {
-                const quest = item.data;
-                return (
-                  <NavItem
-                    key={quest._id}
-                    href={{
-                      to: "/quests/$questSlug",
-                      params: { questSlug: quest.slug },
-                    }}
-                    size="large"
-                    icon={CATEGORIES[quest.category as Category]?.icon}
-                    actions={
-                      <StatusSelect
-                        status={quest.status as Status}
-                        onChange={(status) =>
-                          handleStatusChange(quest.questId, status)
-                        }
-                        onRemove={() => handleRemoveQuest(quest.questId)}
-                        condensed
-                      />
-                    }
-                  >
-                    {quest.title}
-                    {quest.jurisdiction && (
-                      <Badge size="xs">{quest.jurisdiction}</Badge>
-                    )}
-                  </NavItem>
-                );
-              })}
-            </NavGroup>
-          );
-        })}
+        ))}
       </Nav>
     </div>
   );

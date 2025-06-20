@@ -175,7 +175,7 @@ export const CATEGORIES: Record<Category, GroupDetails> = {
     label: "Other",
     icon: CircleHelp,
   },
-};
+} as const;
 
 /**
  * User quest statuses.
@@ -246,7 +246,7 @@ export const TIME_UNITS: Record<TimeUnit, GroupDetails> = {
     label: "Months",
     icon: CalendarClock,
   },
-};
+} as const;
 
 export const TIME_UNITS_ORDER: TimeUnit[] = Object.keys(
   TIME_UNITS,
@@ -263,4 +263,4 @@ export const DEFAULT_TIME_REQUIRED: TimeRequired = {
   min: 2,
   max: 6,
   unit: "weeks",
-};
+} as const;

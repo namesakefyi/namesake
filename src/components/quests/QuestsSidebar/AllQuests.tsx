@@ -234,11 +234,7 @@ export const AllQuests = () => {
             if (!categoryInfo) return null;
 
             return (
-              <NavGroup
-                key={category}
-                label={categoryInfo.label}
-                icon={categoryInfo.icon}
-              >
+              <NavGroup key={category} label={categoryInfo.label}>
                 {quests.map((quest) => (
                   <AllQuestsNavItem
                     key={quest._id}
