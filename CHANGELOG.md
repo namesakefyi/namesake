@@ -1,5 +1,13 @@
 # namesake
 
+## 0.33.0
+
+### Minor Changes
+
+- a21d95a: Send email verification before account deletion
+- a21d95a: Improve authentication and Namesake emails
+- a9ec789: Show the signup screen the first time you visit
+
 ## 0.32.3
 
 ### Patch Changes
