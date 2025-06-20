@@ -128,3 +128,12 @@ export const getByCategory = userQuery({
     });
   },
 });
+
+export const getByCategoryWithPlaceholders = userQuery({
+  args: {},
+  handler: async (ctx) => {
+    return await UserQuests.getByCategoryWithPlaceholdersForUser(ctx, {
+      userId: ctx.userId,
+    });
+  },
+});

@@ -1,6 +1,36 @@
-import { type Category, STATUS, type Status } from "../../src/constants";
-import type { Id } from "../_generated/dataModel";
+import {
+  CATEGORIES,
+  type Category,
+  STATUS,
+  type Status,
+} from "../../src/constants";
+import type { Doc, Id } from "../_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
+import * as UserQuestPlaceholders from "./userQuestPlaceholdersModel";
+
+export type QuestData = Omit<Doc<"quests">, "_id"> & Doc<"userQuests">;
+export type PlaceholderData = Doc<"userQuestPlaceholders">;
+
+export type QuestItem = {
+  type: "quest";
+  category: Category;
+  data: QuestData;
+  slug: string;
+};
+
+export type PlaceholderItem = {
+  type: "placeholder";
+  category: Category;
+  data: PlaceholderData;
+};
+
+export type CategoryItem = QuestItem | PlaceholderItem;
+
+export type CategoryGroup = {
+  label: string;
+  category: Category | null;
+  items: CategoryItem[];
+};
 
 export async function getAllForUser(
   ctx: QueryCtx,
@@ -128,6 +158,92 @@ export async function getByCategoryForUser(
   );
 }
 
+export async function getByCategoryWithPlaceholdersForUser(
+  ctx: QueryCtx,
+  { userId }: { userId: Id<"users"> },
+): Promise<CategoryGroup[]> {
+  const questsByCategory = await getByCategoryForUser(ctx, {
+    userId,
+  });
+
+  const placeholders = await UserQuestPlaceholders.getActivePlaceholdersForUser(
+    ctx,
+    {
+      userId,
+    },
+  );
+
+  // Combine quests and placeholders into a single structure
+  const result: Record<string, CategoryItem[]> = {};
+
+  for (const [category, quests] of Object.entries(questsByCategory)) {
+    if (!result[category]) {
+      result[category] = [];
+    }
+
+    for (const quest of quests) {
+      result[category].push({
+        type: "quest",
+        category: category as Category,
+        data: quest,
+        slug: quest.slug,
+      });
+    }
+  }
+
+  for (const placeholder of placeholders) {
+    const category = placeholder.category;
+    if (!result[category]) {
+      result[category] = [];
+    }
+
+    result[category].push({
+      type: "placeholder",
+      category: category as Category,
+      data: placeholder,
+    });
+  }
+
+  // Create groups array with proper ordering
+  const groups: CategoryGroup[] = [];
+
+  // Get all categories that have items, sorted by their order in CATEGORIES
+  const categoriesWithItems = Object.keys(result).sort((a, b) => {
+    const categoryA = a as Category;
+    const categoryB = b as Category;
+    const categoryKeys = Object.keys(CATEGORIES) as Category[];
+    return categoryKeys.indexOf(categoryA) - categoryKeys.indexOf(categoryB);
+  });
+
+  // Add core categories as a single group if any exist
+  const coreCategories = categoriesWithItems.filter(
+    (category) => CATEGORIES[category as Category]?.isCore,
+  );
+
+  if (coreCategories.length > 0) {
+    groups.push({
+      label: "Core",
+      category: null,
+      items: coreCategories.flatMap((category) => result[category]),
+    });
+  }
+
+  // Add non-core categories as individual groups
+  const nonCoreCategories = categoriesWithItems.filter(
+    (category) => !CATEGORIES[category as Category]?.isCore,
+  );
+
+  for (const category of nonCoreCategories) {
+    groups.push({
+      label: CATEGORIES[category as Category].label,
+      category: category as Category,
+      items: result[category],
+    });
+  }
+
+  return groups;
+}
+
 export async function createQuestForUser(
   ctx: MutationCtx,
   { userId, questId }: { userId: Id<"users">; questId: Id<"quests"> },
@@ -139,6 +255,14 @@ export async function createQuestForUser(
     .collect();
 
   if (existing.length > 0) throw new Error("Quest already exists for user");
+
+  const quest = await ctx.db.get(questId);
+  if (!quest) throw new Error("Quest not found");
+
+  await UserQuestPlaceholders.dismissPlaceholderForUser(ctx, {
+    userId,
+    category: quest.category as Category,
+  });
 
   await ctx.db.insert("userQuests", {
     userId,

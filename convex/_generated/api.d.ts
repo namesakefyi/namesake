@@ -19,6 +19,7 @@ import type * as model_earlyAccessCodesModel from "../model/earlyAccessCodesMode
 import type * as model_questsModel from "../model/questsModel.js";
 import type * as model_userDocumentsModel from "../model/userDocumentsModel.js";
 import type * as model_userFormResponsesModel from "../model/userFormResponsesModel.js";
+import type * as model_userQuestPlaceholdersModel from "../model/userQuestPlaceholdersModel.js";
 import type * as model_userQuestsModel from "../model/userQuestsModel.js";
 import type * as model_userSettingsModel from "../model/userSettingsModel.js";
 import type * as model_usersModel from "../model/usersModel.js";
@@ -26,6 +27,7 @@ import type * as quests from "../quests.js";
 import type * as seed from "../seed.js";
 import type * as userDocuments from "../userDocuments.js";
 import type * as userFormResponses from "../userFormResponses.js";
+import type * as userQuestPlaceholders from "../userQuestPlaceholders.js";
 import type * as userQuests from "../userQuests.js";
 import type * as userSettings from "../userSettings.js";
 import type * as users from "../users.js";
@@ -57,6 +59,7 @@ declare const fullApi: ApiFromModules<{
   "model/questsModel": typeof model_questsModel;
   "model/userDocumentsModel": typeof model_userDocumentsModel;
   "model/userFormResponsesModel": typeof model_userFormResponsesModel;
+  "model/userQuestPlaceholdersModel": typeof model_userQuestPlaceholdersModel;
   "model/userQuestsModel": typeof model_userQuestsModel;
   "model/userSettingsModel": typeof model_userSettingsModel;
   "model/usersModel": typeof model_usersModel;
@@ -64,6 +67,7 @@ declare const fullApi: ApiFromModules<{
   seed: typeof seed;
   userDocuments: typeof userDocuments;
   userFormResponses: typeof userFormResponses;
+  userQuestPlaceholders: typeof userQuestPlaceholders;
   userQuests: typeof userQuests;
   userSettings: typeof userSettings;
   users: typeof users;

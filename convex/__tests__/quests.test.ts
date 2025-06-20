@@ -1,6 +1,7 @@
 import { convexTest } from "convex-test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "../_generated/api";
+import type { Id } from "../_generated/dataModel";
 import schema from "../schema";
 import { modules } from "../test.setup";
 import { createTestAdmin, createTestUser } from "./helpers";
@@ -140,6 +141,358 @@ describe("quests", () => {
       const quests = await asUser.query(api.quests.getAllActive, {});
       expect(quests).toHaveLength(1);
       expect(quests[0].title).toBe("Active Quest");
+    });
+  });
+
+  describe("getRelevantActive", () => {
+    it("should return all quests when user has no quests", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createTestUser(t);
+
+      await t.run(async (ctx) => {
+        await ctx.db.insert("quests", {
+          title: "Court Order MA",
+          slug: "court-order-ma",
+          category: "courtOrder",
+          jurisdiction: "MA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Birth Certificate NY",
+          slug: "birth-certificate-ny",
+          category: "birthCertificate",
+          jurisdiction: "NY",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Education Quest",
+          slug: "education-quest",
+          category: "education",
+          jurisdiction: "CA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+      });
+
+      const quests = await asUser.query(api.quests.getRelevantActive, {});
+      expect(quests).toHaveLength(3);
+      expect(quests.map((q) => q.title)).toContain("Court Order MA");
+      expect(quests.map((q) => q.title)).toContain("Birth Certificate NY");
+      expect(quests.map((q) => q.title)).toContain("Education Quest");
+    });
+
+    it("should filter out other court orders when user has a court order", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createTestUser(t);
+
+      let courtOrderMAId: Id<"quests">;
+
+      await t.run(async (ctx) => {
+        courtOrderMAId = await ctx.db.insert("quests", {
+          title: "Court Order MA",
+          slug: "court-order-ma",
+          category: "courtOrder",
+          jurisdiction: "MA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Court Order NY",
+          slug: "court-order-ny",
+          category: "courtOrder",
+          jurisdiction: "NY",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Education Quest",
+          slug: "education-quest",
+          category: "education",
+          jurisdiction: "CA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        // User adds MA court order to their quests
+        await ctx.db.insert("userQuests", {
+          userId,
+          questId: courtOrderMAId,
+          status: "notStarted",
+        });
+      });
+
+      const quests = await asUser.query(api.quests.getRelevantActive, {});
+      expect(quests).toHaveLength(2);
+      expect(quests.map((q) => q.title)).toContain("Court Order MA");
+      expect(quests.map((q) => q.title)).toContain("Education Quest");
+      expect(quests.map((q) => q.title)).not.toContain("Court Order NY");
+    });
+
+    it("should filter out other birth certificates when user has a birth certificate", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createTestUser(t);
+
+      let birthCertMAId: Id<"quests">;
+
+      await t.run(async (ctx) => {
+        birthCertMAId = await ctx.db.insert("quests", {
+          title: "Birth Certificate MA",
+          slug: "birth-certificate-ma",
+          category: "birthCertificate",
+          jurisdiction: "MA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Birth Certificate NY",
+          slug: "birth-certificate-ny",
+          category: "birthCertificate",
+          jurisdiction: "NY",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Housing Quest",
+          slug: "housing-quest",
+          category: "housing",
+          jurisdiction: "CA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        // User adds MA birth certificate to their quests
+        await ctx.db.insert("userQuests", {
+          userId,
+          questId: birthCertMAId,
+          status: "notStarted",
+        });
+      });
+
+      const quests = await asUser.query(api.quests.getRelevantActive, {});
+      expect(quests).toHaveLength(2);
+      expect(quests.map((q) => q.title)).toContain("Birth Certificate MA");
+      expect(quests.map((q) => q.title)).toContain("Housing Quest");
+      expect(quests.map((q) => q.title)).not.toContain("Birth Certificate NY");
+    });
+
+    it("should filter out other state IDs when user has a state ID", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createTestUser(t);
+
+      let stateIdMAId: Id<"quests">;
+
+      await t.run(async (ctx) => {
+        stateIdMAId = await ctx.db.insert("quests", {
+          title: "State ID MA",
+          slug: "state-id-ma",
+          category: "stateId",
+          jurisdiction: "MA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "State ID NY",
+          slug: "state-id-ny",
+          category: "stateId",
+          jurisdiction: "NY",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Finance Quest",
+          slug: "finance-quest",
+          category: "finance",
+          jurisdiction: "CA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        // User adds MA state ID to their quests
+        await ctx.db.insert("userQuests", {
+          userId,
+          questId: stateIdMAId,
+          status: "notStarted",
+        });
+      });
+
+      const quests = await asUser.query(api.quests.getRelevantActive, {});
+      expect(quests).toHaveLength(2);
+      expect(quests.map((q) => q.title)).toContain("State ID MA");
+      expect(quests.map((q) => q.title)).toContain("Finance Quest");
+      expect(quests.map((q) => q.title)).not.toContain("State ID NY");
+    });
+
+    it("should show all quests in non-filterable categories regardless of user quests", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createTestUser(t);
+
+      let educationQuestId: Id<"quests">;
+
+      await t.run(async (ctx) => {
+        educationQuestId = await ctx.db.insert("quests", {
+          title: "Education Quest 1",
+          slug: "education-quest-1",
+          category: "education",
+          jurisdiction: "MA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Housing Quest 1",
+          slug: "housing-quest-1",
+          category: "housing",
+          jurisdiction: "NY",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Education Quest 2",
+          slug: "education-quest-2",
+          category: "education",
+          jurisdiction: "CA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Housing Quest 2",
+          slug: "housing-quest-2",
+          category: "housing",
+          jurisdiction: "TX",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        // User adds one education quest to their quests
+        await ctx.db.insert("userQuests", {
+          userId,
+          questId: educationQuestId,
+          status: "notStarted",
+        });
+      });
+
+      const quests = await asUser.query(api.quests.getRelevantActive, {});
+      expect(quests).toHaveLength(4);
+      expect(quests.map((q) => q.title)).toContain("Education Quest 1");
+      expect(quests.map((q) => q.title)).toContain("Education Quest 2");
+      expect(quests.map((q) => q.title)).toContain("Housing Quest 1");
+      expect(quests.map((q) => q.title)).toContain("Housing Quest 2");
+    });
+
+    it("should handle multiple filterable categories correctly", async () => {
+      const t = convexTest(schema, modules);
+      const { asUser, userId } = await createTestUser(t);
+
+      let courtOrderMAId: Id<"quests">;
+      let birthCertNYId: Id<"quests">;
+      let stateIdCAId: Id<"quests">;
+
+      await t.run(async (ctx) => {
+        courtOrderMAId = await ctx.db.insert("quests", {
+          title: "Court Order MA",
+          slug: "court-order-ma",
+          category: "courtOrder",
+          jurisdiction: "MA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        birthCertNYId = await ctx.db.insert("quests", {
+          title: "Birth Certificate NY",
+          slug: "birth-certificate-ny",
+          category: "birthCertificate",
+          jurisdiction: "NY",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        stateIdCAId = await ctx.db.insert("quests", {
+          title: "State ID CA",
+          slug: "state-id-ca",
+          category: "stateId",
+          jurisdiction: "CA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        // Add other quests in same categories
+        await ctx.db.insert("quests", {
+          title: "Court Order NY",
+          slug: "court-order-ny",
+          category: "courtOrder",
+          jurisdiction: "NY",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Birth Certificate MA",
+          slug: "birth-certificate-ma",
+          category: "birthCertificate",
+          jurisdiction: "MA",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "State ID TX",
+          slug: "state-id-tx",
+          category: "stateId",
+          jurisdiction: "TX",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        await ctx.db.insert("quests", {
+          title: "Education Quest",
+          slug: "education-quest",
+          category: "education",
+          jurisdiction: "FL",
+          creationUser: userId,
+          updatedAt: UPDATE_TIMESTAMP,
+        });
+
+        // User adds one quest from each filterable category
+        await ctx.db.insert("userQuests", {
+          userId,
+          questId: courtOrderMAId,
+          status: "notStarted",
+        });
+
+        await ctx.db.insert("userQuests", {
+          userId,
+          questId: birthCertNYId,
+          status: "notStarted",
+        });
+
+        await ctx.db.insert("userQuests", {
+          userId,
+          questId: stateIdCAId,
+          status: "notStarted",
+        });
+      });
+
+      const quests = await asUser.query(api.quests.getRelevantActive, {});
+      expect(quests).toHaveLength(4);
+      expect(quests.map((q) => q.title)).toContain("Court Order MA");
+      expect(quests.map((q) => q.title)).toContain("Birth Certificate NY");
+      expect(quests.map((q) => q.title)).toContain("State ID CA");
+      expect(quests.map((q) => q.title)).toContain("Education Quest");
+      expect(quests.map((q) => q.title)).not.toContain("Court Order NY");
+      expect(quests.map((q) => q.title)).not.toContain("Birth Certificate MA");
+      expect(quests.map((q) => q.title)).not.toContain("State ID TX");
     });
   });
 

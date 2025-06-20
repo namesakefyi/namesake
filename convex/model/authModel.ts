@@ -1,5 +1,6 @@
 import type { Id } from "../_generated/dataModel";
 import type { MutationCtx } from "../_generated/server";
+import * as UserQuestPlaceholders from "./userQuestPlaceholdersModel";
 
 export async function createUser(
   ctx: MutationCtx,
@@ -16,11 +17,14 @@ export async function createUser(
     role: "user",
   });
 
-  // Initialize default user settings
   await ctx.db.insert("userSettings", {
     userId: id,
     theme: "system",
     color: "rainbow",
+  });
+
+  await UserQuestPlaceholders.createDefaultPlaceholdersForUser(ctx, {
+    userId: id,
   });
 
   return id;
@@ -55,6 +59,14 @@ export async function deleteUser(ctx: MutationCtx, id: string) {
     .withIndex("userId", (q) => q.eq("userId", userId))
     .collect();
   for (const userQuest of userQuests) await ctx.db.delete(userQuest._id);
+
+  // Delete userQuestPlaceholders
+  const userQuestPlaceholders = await ctx.db
+    .query("userQuestPlaceholders")
+    .withIndex("userId", (q) => q.eq("userId", userId))
+    .collect();
+  for (const userQuestPlaceholder of userQuestPlaceholders)
+    await ctx.db.delete(userQuestPlaceholder._id);
 
   // Delete userSettings
   const userSettings = await ctx.db

@@ -138,7 +138,7 @@ const NewQuestModal = ({
           <Button
             type="button"
             onPress={() => onOpenChange(false)}
-            isSubmitting={isSubmitting}
+            isDisabled={isSubmitting}
           >
             Cancel
           </Button>

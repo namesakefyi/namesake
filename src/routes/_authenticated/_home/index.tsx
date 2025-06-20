@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_authenticated/_home/")({
 function IndexRoute() {
   const isMobile = useIsMobile();
 
-  if (!isMobile) return <Navigate to="/quests/court-order" replace />;
+  if (!isMobile) return <Navigate to="/quests" replace />;
 
   return <QuestsSidebar />;
 }

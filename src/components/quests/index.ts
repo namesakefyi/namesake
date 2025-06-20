@@ -1,5 +1,4 @@
 export * from "./EditQuestTitleModal/EditQuestTitleModal";
-export * from "./JurisdictionInterstitial/JurisdictionInterstitial";
 export * from "./QuestCallToAction/QuestCallToAction";
 export * from "./QuestCategoryBadge/QuestCategoryBadge";
 export * from "./QuestContent/QuestContent";

@@ -1,7 +1,7 @@
 import "./styles/index.css";
 import { Logo, ThemeProvider } from "@/components/app";
 import { Empty } from "@/components/common";
-import type { Jurisdiction, Role } from "@/constants";
+import type { Role } from "@/constants";
 import {
   convexClient,
   crossDomainClient,
@@ -59,8 +59,6 @@ export const router = createRouter({
     convex: undefined!,
     title: undefined!,
     role: undefined!,
-    residence: undefined!,
-    birthplace: undefined!,
   },
   defaultPreload: "intent",
   defaultNotFoundComponent: NotFoundComponent,
@@ -76,15 +74,8 @@ const InnerApp = () => {
   const title = "Namesake";
   const user = useQuery(api.users.getCurrent);
   const role = user?.role as Role;
-  const residence = user?.residence as Jurisdiction;
-  const birthplace = user?.birthplace as Jurisdiction;
 
-  return (
-    <RouterProvider
-      router={router}
-      context={{ convex, title, role, residence, birthplace }}
-    />
-  );
+  return <RouterProvider router={router} context={{ convex, title, role }} />;
 };
 
 posthog.init(import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_KEY, {

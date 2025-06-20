@@ -186,38 +186,6 @@ describe("users", () => {
     });
   });
 
-  describe("setBirthplace", () => {
-    it("should update user birthplace", async () => {
-      const t = convexTest(schema, modules);
-      const { asUser, userId } = await createTestUser(t);
-
-      await asUser.mutation(api.users.setBirthplace, {
-        birthplace: "CA",
-      });
-
-      const user = await t.run(async (ctx) => {
-        return await ctx.db.get(userId);
-      });
-      expect(user?.birthplace).toBe("CA");
-    });
-  });
-
-  describe("setResidence", () => {
-    it("should update user residence", async () => {
-      const t = convexTest(schema, modules);
-      const { asUser, userId } = await createTestUser(t);
-
-      await asUser.mutation(api.users.setResidence, {
-        residence: "CA",
-      });
-
-      const user = await t.run(async (ctx) => {
-        return await ctx.db.get(userId);
-      });
-      expect(user?.residence).toBe("CA");
-    });
-  });
-
   describe("setCurrentUserIsMinor", () => {
     it("should update user isMinor status", async () => {
       const t = convexTest(schema, modules);

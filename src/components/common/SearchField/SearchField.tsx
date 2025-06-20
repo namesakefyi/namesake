@@ -50,7 +50,7 @@ export function SearchField({
             />
             <Button
               variant="icon"
-              className="mr-1 w-7 h-7 p-0 group-empty:invisible"
+              className="mr-1 w-7 h-7 p-0 group-empty:hidden"
               size="small"
               icon={CircleX}
               aria-label="Clear search"

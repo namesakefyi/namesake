@@ -1,10 +1,9 @@
 import { v } from "convex/values";
-import type { Birthplace, Jurisdiction, Role } from "../src/constants";
+import type { Role } from "../src/constants";
 import type { Id } from "./_generated/dataModel";
 import { query } from "./_generated/server";
 import { adminQuery, userMutation } from "./helpers";
 import * as Users from "./model/usersModel";
-import { birthplace, jurisdiction } from "./validators";
 
 export const getAll = adminQuery({
   args: {},
@@ -62,26 +61,6 @@ export const setEmail = userMutation({
     await Users.setEmail(ctx, {
       userId: ctx.userId,
       email: args.email as string,
-    });
-  },
-});
-
-export const setResidence = userMutation({
-  args: { residence: jurisdiction },
-  handler: async (ctx, args) => {
-    await Users.setResidence(ctx, {
-      userId: ctx.userId,
-      residence: args.residence as Jurisdiction,
-    });
-  },
-});
-
-export const setBirthplace = userMutation({
-  args: { birthplace: birthplace },
-  handler: async (ctx, args) => {
-    await Users.setBirthplace(ctx, {
-      userId: ctx.userId,
-      birthplace: args.birthplace as Birthplace,
     });
   },
 });
