@@ -17,14 +17,12 @@ export async function createUser(
     role: "user",
   });
 
-  // Initialize default user settings
   await ctx.db.insert("userSettings", {
     userId: id,
     theme: "system",
     color: "rainbow",
   });
 
-  // Initialize default placeholders
   await UserQuestPlaceholders.createDefaultPlaceholdersForUser(ctx, {
     userId: id,
   });

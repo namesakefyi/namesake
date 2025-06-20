@@ -58,10 +58,10 @@ export async function getAllActive(ctx: QueryCtx) {
 }
 
 /**
- * Get all active quests, but do not show court orders, state IDs,
- * or birth certificates if the user already has one. This prevents
- * irrelevant quests (court orders in 49+ other states, etc.) from
- * appearing.
+ * Get all active quests, but do not show court orders,
+ * state IDs, or birth certificates if the user already
+ * has one. This prevents irrelevant quests (court orders
+ * in 49+ other states, etc.) from appearing.
  *
  * @param ctx - The query context.
  * @param userId - The ID of the user.
