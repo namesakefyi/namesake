@@ -13,6 +13,9 @@ export async function createPlaceholderForUser(
     .first();
 
   if (existingPlaceholder) {
+    await ctx.db.patch(existingPlaceholder._id, {
+      dismissedAt: undefined,
+    });
     return existingPlaceholder._id;
   }
 

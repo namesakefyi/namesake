@@ -22,6 +22,7 @@ import {
 } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
+import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { ListFilter, Plus, X } from "lucide-react";
 import { useState } from "react";
@@ -35,17 +36,20 @@ export const AllQuestsNavItem = ({
   quest: Doc<"quests">;
   categoryFilter?: Category;
 }) => {
+  const navigate = useNavigate();
   const userQuest = useQuery(api.userQuests.getByQuestId, {
     questId: quest._id,
   });
   const addQuest = useMutation(api.userQuests.create);
   const removeQuest = useMutation(api.userQuests.deleteForever);
   const updateStatus = useMutation(api.userQuests.setStatus);
+  const { setActiveTab } = useQuestsSidebar();
 
   const handleAddQuest = async () => {
     try {
       await addQuest({ questId: quest._id });
-      toast.success("Added to your quests");
+      navigate({ to: "/quests/$questSlug", params: { questSlug: quest.slug } });
+      setActiveTab("user");
     } catch (err) {
       toast.error("Failed to add quest. Please try again.");
     }

@@ -28,6 +28,9 @@ export const MyQuests = () => {
   );
   const removeQuest = useMutation(api.userQuests.deleteForever);
   const updateStatus = useMutation(api.userQuests.setStatus);
+  const addDefaultPlaceholders = useMutation(
+    api.userQuestPlaceholders.createDefault,
+  );
   const dismissPlaceholder = useMutation(api.userQuestPlaceholders.dismiss);
   const restorePlaceholder = useMutation(api.userQuestPlaceholders.restore);
 
@@ -130,10 +133,20 @@ export const MyQuests = () => {
   if (!questsByCategory || questsByCategory.length === 0) {
     return (
       <Empty
-        title="No quests found"
+        title="No quests"
         subtitle="Add quests to get started."
         icon={Milestone}
-      />
+        className="h-full"
+      >
+        <div className="flex flex-col gap-2 items-center -mt-2">
+          <Button onPress={() => addDefaultPlaceholders()}>
+            Add recommended quests
+          </Button>
+          <Button variant="ghost" onPress={() => setActiveTab("all")}>
+            Explore all quests
+          </Button>
+        </div>
+      </Empty>
     );
   }
 
