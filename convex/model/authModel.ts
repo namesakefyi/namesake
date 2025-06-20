@@ -60,6 +60,14 @@ export async function deleteUser(ctx: MutationCtx, id: string) {
     .collect();
   for (const userQuest of userQuests) await ctx.db.delete(userQuest._id);
 
+  // Delete userQuestPlaceholders
+  const userQuestPlaceholders = await ctx.db
+    .query("userQuestPlaceholders")
+    .withIndex("userId", (q) => q.eq("userId", userId))
+    .collect();
+  for (const userQuestPlaceholder of userQuestPlaceholders)
+    await ctx.db.delete(userQuestPlaceholder._id);
+
   // Delete userSettings
   const userSettings = await ctx.db
     .query("userSettings")

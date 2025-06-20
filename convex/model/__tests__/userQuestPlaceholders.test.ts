@@ -11,6 +11,7 @@ import {
   createPlaceholderForUser,
   dismissPlaceholderForUser,
   getActivePlaceholdersForUser,
+  restorePlaceholderForUser,
 } from "../userQuestPlaceholdersModel";
 import * as UserQuests from "../userQuestsModel";
 
@@ -20,7 +21,7 @@ const CORE_CATEGORIES = Object.entries(CATEGORIES)
   .filter(([_, details]) => details.isCore)
   .map(([category]) => category as Category);
 
-describe("userQuestPlaceholders", () => {
+describe("userQuestPlaceholdersModel", () => {
   let t: ReturnType<typeof convexTest>;
   let userId: Id<"users">;
 
@@ -190,6 +191,114 @@ describe("userQuestPlaceholders", () => {
           });
         }),
       ).resolves.toBeNull();
+    });
+  });
+
+  describe("restorePlaceholderForUser", () => {
+    beforeEach(setupUser);
+
+    it("should restore a dismissed placeholder and include it in active results", async () => {
+      await t.run(async (ctx) => {
+        await createDefaultPlaceholdersForUser(ctx, { userId });
+      });
+
+      await t.run(async (ctx) => {
+        await dismissPlaceholderForUser(ctx, {
+          userId,
+          category: "courtOrder",
+        });
+      });
+
+      let placeholders = await t.run(async (ctx) => {
+        return await getActivePlaceholdersForUser(ctx, { userId });
+      });
+      expect(placeholders).toHaveLength(CORE_CATEGORIES.length - 1);
+      expect(placeholders.map((p) => p.category)).not.toContain("courtOrder");
+
+      await t.run(async (ctx) => {
+        await restorePlaceholderForUser(ctx, {
+          userId,
+          category: "courtOrder",
+        });
+      });
+
+      placeholders = await t.run(async (ctx) => {
+        return await getActivePlaceholdersForUser(ctx, { userId });
+      });
+      expect(placeholders).toHaveLength(CORE_CATEGORIES.length);
+      expect(placeholders.map((p) => p.category)).toContain("courtOrder");
+    });
+
+    it("should throw error when trying to restore non-existent placeholder", async () => {
+      await expect(
+        t.run(async (ctx) => {
+          await restorePlaceholderForUser(ctx, {
+            userId,
+            category: "courtOrder",
+          });
+        }),
+      ).rejects.toThrow("Placeholder not found for user and category");
+    });
+
+    it("should restore multiple dismissed placeholders", async () => {
+      await t.run(async (ctx) => {
+        await createDefaultPlaceholdersForUser(ctx, { userId });
+      });
+
+      await t.run(async (ctx) => {
+        await dismissPlaceholderForUser(ctx, {
+          userId,
+          category: "courtOrder",
+        });
+        await dismissPlaceholderForUser(ctx, {
+          userId,
+          category: "stateId",
+        });
+      });
+
+      let placeholders = await t.run(async (ctx) => {
+        return await getActivePlaceholdersForUser(ctx, { userId });
+      });
+      expect(placeholders).toHaveLength(CORE_CATEGORIES.length - 2);
+      expect(placeholders.map((p) => p.category)).not.toContain("courtOrder");
+      expect(placeholders.map((p) => p.category)).not.toContain("stateId");
+
+      await t.run(async (ctx) => {
+        await restorePlaceholderForUser(ctx, {
+          userId,
+          category: "courtOrder",
+        });
+        await restorePlaceholderForUser(ctx, {
+          userId,
+          category: "stateId",
+        });
+      });
+
+      placeholders = await t.run(async (ctx) => {
+        return await getActivePlaceholdersForUser(ctx, { userId });
+      });
+      expect(placeholders).toHaveLength(CORE_CATEGORIES.length);
+      expect(placeholders.map((p) => p.category)).toContain("courtOrder");
+      expect(placeholders.map((p) => p.category)).toContain("stateId");
+    });
+
+    it("should handle restoring already active placeholder", async () => {
+      await t.run(async (ctx) => {
+        await createDefaultPlaceholdersForUser(ctx, { userId });
+      });
+
+      await t.run(async (ctx) => {
+        await restorePlaceholderForUser(ctx, {
+          userId,
+          category: "courtOrder",
+        });
+      });
+
+      const placeholders = await t.run(async (ctx) => {
+        return await getActivePlaceholdersForUser(ctx, { userId });
+      });
+      expect(placeholders).toHaveLength(CORE_CATEGORIES.length);
+      expect(placeholders.map((p) => p.category)).toContain("courtOrder");
     });
   });
 
