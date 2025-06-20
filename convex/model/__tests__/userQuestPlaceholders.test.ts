@@ -266,7 +266,7 @@ describe("userQuestPlaceholders", () => {
       expect(categories).not.toContain("courtOrder");
     });
 
-    it("should throw error if placeholder not found", async () => {
+    it("should return null if placeholder not found", async () => {
       const t = convexTest(schema, modules);
 
       const userId = await t.run(async (ctx) => {
@@ -283,7 +283,7 @@ describe("userQuestPlaceholders", () => {
             category: "courtOrder",
           });
         }),
-      ).rejects.toThrow("Placeholder not found for user and category");
+      ).resolves.toBeNull();
     });
 
     it("should not affect other placeholders when dismissing one", async () => {

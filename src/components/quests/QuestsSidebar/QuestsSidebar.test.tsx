@@ -7,13 +7,24 @@ import { QuestsSidebar } from "./QuestsSidebar";
 interface MockQueriesConfig {
   totalQuests?: number | undefined;
   completedQuests?: number | undefined;
-  questsByCategory?: Record<string, any[]> | undefined;
+  questsByCategory?:
+    | Array<{
+        label: string;
+        category: string | null;
+        items: Array<{
+          type: "quest" | "placeholder";
+          category: string;
+          data: any;
+          slug?: string;
+        }>;
+      }>
+    | undefined;
 }
 
 const mockQueries = ({
   totalQuests = 0,
   completedQuests = 0,
-  questsByCategory = {},
+  questsByCategory = [],
 }: MockQueriesConfig = {}) => {
   const queryMock = useQuery as ReturnType<typeof vi.fn>;
 
@@ -37,6 +48,27 @@ describe("QuestsNav", () => {
     mockQueries({
       totalQuests: 5,
       completedQuests: 2,
+      questsByCategory: [
+        {
+          label: "Core",
+          category: null,
+          items: [
+            {
+              type: "quest",
+              category: "courtOrder",
+              data: {
+                _id: "quest1",
+                slug: "ma-court-order",
+                title: "MA Court Order",
+                status: "inProgress",
+                jurisdiction: "Massachusetts",
+                category: "courtOrder",
+              },
+              slug: "ma-court-order",
+            },
+          ],
+        },
+      ],
     });
 
     render(<QuestsSidebar />);
@@ -56,18 +88,27 @@ describe("QuestsNav", () => {
   it("renders quest items with status badges and jurisdiction", () => {
     mockQueries({
       totalQuests: 1,
-      questsByCategory: {
-        courtOrder: [
-          {
-            _id: "quest1",
-            slug: "ma-court-order",
-            title: "MA Court Order",
-            status: "inProgress",
-            jurisdiction: "Massachusetts",
-            category: "courtOrder",
-          },
-        ],
-      },
+      questsByCategory: [
+        {
+          label: "Core",
+          category: null,
+          items: [
+            {
+              type: "quest",
+              category: "courtOrder",
+              data: {
+                _id: "quest1",
+                slug: "ma-court-order",
+                title: "MA Court Order",
+                status: "inProgress",
+                jurisdiction: "Massachusetts",
+                category: "courtOrder",
+              },
+              slug: "ma-court-order",
+            },
+          ],
+        },
+      ],
     });
 
     render(<QuestsSidebar />);
@@ -80,17 +121,26 @@ describe("QuestsNav", () => {
   it("renders additional quest groups", () => {
     mockQueries({
       totalQuests: 1,
-      questsByCategory: {
-        other: [
-          {
-            _id: "quest2",
-            slug: "other-quest",
-            title: "Other Quest",
-            status: "notStarted",
-            category: "other",
-          },
-        ],
-      },
+      questsByCategory: [
+        {
+          label: "Other",
+          category: "other",
+          items: [
+            {
+              type: "quest",
+              category: "other",
+              data: {
+                _id: "quest2",
+                slug: "other-quest",
+                title: "Other Quest",
+                status: "notStarted",
+                category: "other",
+              },
+              slug: "other-quest",
+            },
+          ],
+        },
+      ],
     });
 
     render(<QuestsSidebar />);
