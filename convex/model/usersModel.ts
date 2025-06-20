@@ -1,8 +1,6 @@
 import { ConvexError } from "convex/values";
 import { z } from "zod";
 import {
-  type Birthplace,
-  type Jurisdiction,
   MAX_DISPLAY_NAME_LENGTH,
   MIN_DISPLAY_NAME_LENGTH,
 } from "../../src/constants";
@@ -72,20 +70,6 @@ export async function setEmail(
   }
 
   await ctx.db.patch(userId, { email });
-}
-
-export function setResidence(
-  ctx: MutationCtx,
-  { userId, residence }: { userId: Id<"users">; residence: Jurisdiction },
-) {
-  return ctx.db.patch(userId, { residence });
-}
-
-export function setBirthplace(
-  ctx: MutationCtx,
-  { userId, birthplace }: { userId: Id<"users">; birthplace: Birthplace },
-) {
-  return ctx.db.patch(userId, { birthplace });
 }
 
 export function setIsMinor(

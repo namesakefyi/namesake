@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import type { CoreCategory } from "../src/constants";
+import type { Category } from "../src/constants";
 import { userMutation, userQuery } from "./helpers";
 import * as UserQuestPlaceholders from "./model/userQuestPlaceholdersModel";
 import { category } from "./validators";
@@ -20,7 +20,7 @@ export const create = userMutation({
   handler: async (ctx, args) => {
     return await UserQuestPlaceholders.createPlaceholderForUser(ctx, {
       userId: ctx.userId,
-      category: args.category as CoreCategory,
+      category: args.category as Category,
     });
   },
 });
@@ -31,7 +31,7 @@ export const dismiss = userMutation({
   handler: async (ctx, args) => {
     return await UserQuestPlaceholders.dismissPlaceholderForUser(ctx, {
       userId: ctx.userId,
-      category: args.category as CoreCategory,
+      category: args.category as Category,
     });
   },
 });
@@ -42,7 +42,7 @@ export const restore = userMutation({
   handler: async (ctx, args) => {
     return await UserQuestPlaceholders.restorePlaceholderForUser(ctx, {
       userId: ctx.userId,
-      category: args.category as CoreCategory,
+      category: args.category as Category,
     });
   },
 });

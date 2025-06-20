@@ -1,7 +1,6 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
-  birthplace,
   category,
   jurisdiction,
   pdfId,
@@ -83,10 +82,6 @@ const users = defineTable({
   email: v.optional(v.string()),
   /** Whether the user's email address has been verified. */
   emailVerified: v.optional(v.boolean()),
-  /** The US State where the user resides. */
-  residence: v.optional(jurisdiction),
-  /** The US State where the user was born, or "other" if they were born outside the US. */
-  birthplace: v.optional(birthplace),
   /** Whether the user is a minor. */
   isMinor: v.optional(v.boolean()),
 }).index("email", ["email"]);

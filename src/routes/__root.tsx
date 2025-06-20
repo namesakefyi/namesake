@@ -1,5 +1,5 @@
 import { useTheme } from "@/components/app";
-import type { Jurisdiction, Role } from "@/constants";
+import type { Role } from "@/constants";
 import {
   type NavigateOptions,
   Outlet,
@@ -47,8 +47,6 @@ interface RouterContext {
   convex: ConvexReactClient;
   title: string;
   role: Role;
-  residence: Jurisdiction;
-  birthplace: Jurisdiction;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({

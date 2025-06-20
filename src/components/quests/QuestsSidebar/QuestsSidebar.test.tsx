@@ -6,14 +6,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { QuestsSidebar } from "./QuestsSidebar";
 
 interface MockQueriesConfig {
-  user?: { birthplace: string } | undefined;
   totalQuests?: number | undefined;
   completedQuests?: number | undefined;
   questsByCategory?: Record<string, any[]> | undefined;
 }
 
 const mockQueries = ({
-  user = { birthplace: "US" },
   totalQuests = 0,
   completedQuests = 0,
   questsByCategory = {},
@@ -21,7 +19,6 @@ const mockQueries = ({
   const queryMock = useQuery as ReturnType<typeof vi.fn>;
 
   queryMock
-    .mockReturnValueOnce(user)
     .mockReturnValueOnce(totalQuests)
     .mockReturnValueOnce(completedQuests)
     .mockReturnValueOnce(questsByCategory);
@@ -73,17 +70,6 @@ describe("QuestsNav", () => {
     ).toBeInTheDocument();
   });
 
-  it("hides birth certificate option for users born outside US", () => {
-    mockQueries({
-      user: { birthplace: "other" },
-    });
-
-    render(<QuestsSidebar />);
-    expect(
-      screen.queryByText(CATEGORIES.birthCertificate.label),
-    ).not.toBeInTheDocument();
-  });
-
   it("renders quest items with status badges and jurisdiction", () => {
     mockQueries({
       totalQuests: 1,
@@ -132,7 +118,6 @@ describe("QuestsNav", () => {
 
   it("handles loading state when queries return undefined", () => {
     mockQueries({
-      user: undefined,
       totalQuests: undefined,
       completedQuests: undefined,
       questsByCategory: undefined,

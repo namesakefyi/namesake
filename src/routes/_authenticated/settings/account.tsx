@@ -1,17 +1,17 @@
 import { PageHeader } from "@/components/app";
+import { Empty } from "@/components/common";
 import {
   DeleteAccountSetting,
-  EditBirthplaceSetting,
   EditEmailSetting,
   EditMinorSetting,
   EditNameSetting,
-  EditResidenceSetting,
   EditThemeSetting,
   SettingsGroup,
 } from "@/components/settings";
 import { api } from "@convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
+import { UserX } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/settings/account")({
   component: SettingsAccountRoute,
@@ -26,15 +26,17 @@ function SettingsAccountRoute() {
       {user === undefined ? (
         "Loading..."
       ) : user === null ? (
-        "User not found, please reload"
+        <Empty
+          title="User not found"
+          subtitle="Try refreshing the page or signing out and back in."
+          icon={UserX}
+        />
       ) : (
         <div className="app-padding pb-8">
           <SettingsGroup title="Personal Information">
             <EditNameSetting user={user} />
             <EditEmailSetting user={user} />
             <EditMinorSetting user={user} />
-            <EditResidenceSetting user={user} />
-            <EditBirthplaceSetting user={user} />
           </SettingsGroup>
           <SettingsGroup title="Appearance">
             <EditThemeSetting />

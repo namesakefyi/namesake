@@ -76,10 +76,12 @@ export type Category =
   | "travel"
   | "other";
 
-export type CoreCategory = keyof Pick<
-  typeof CATEGORIES,
-  "courtOrder" | "stateId" | "socialSecurity" | "passport" | "birthCertificate"
->;
+export type CoreCategory =
+  | "courtOrder"
+  | "socialSecurity"
+  | "stateId"
+  | "passport"
+  | "birthCertificate";
 
 /**
  * Generic group details.
