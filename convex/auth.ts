@@ -44,6 +44,7 @@ export const createAuth = (ctx: GenericCtx) =>
         });
       },
     },
+    trustedOrigins: ["http://localhost:5173", "https://app.namesake.fyi"],
     user: {
       deleteUser: {
         enabled: true,
