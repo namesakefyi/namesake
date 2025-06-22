@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@cantoo/pdf-lib": "^2.4.1",
-    "@convex-dev/better-auth": "^0.6.0",
+    "@convex-dev/better-auth": "0.7.0-alpha.1",
     "@convex-dev/migrations": "^0.2.9",
     "@faker-js/faker": "^9.8.0",
     "@maskito/core": "^3.9.0",
