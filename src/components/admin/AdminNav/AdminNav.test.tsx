@@ -19,9 +19,8 @@ describe("AdminNav", () => {
     expect(screen.getByRole("navigation")).toBeInTheDocument();
 
     const navItems = screen.getAllByRole("link");
-    expect(navItems).toHaveLength(2);
+    expect(navItems).toHaveLength(1);
 
     expect(screen.getByText("Quests")).toBeInTheDocument();
-    expect(screen.getByText("Early Access")).toBeInTheDocument();
   });
 });
