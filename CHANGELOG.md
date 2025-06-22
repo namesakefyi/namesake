@@ -1,5 +1,11 @@
 # namesake
 
+## 0.34.1
+
+### Patch Changes
+
+- 414007d: Fix trusted origins and cors setup for Better Auth
+
 ## 0.34.0
 
 ### Minor Changes
