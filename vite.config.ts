@@ -1,8 +1,9 @@
 import tailwindcss from "@tailwindcss/vite";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react-swc";
 import webpackStatsPlugin from "rollup-plugin-webpack-stats";
 import { defineConfig } from "vite";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { configDefaults, coverageConfigDefaults } from "vitest/config";
 
@@ -19,11 +20,14 @@ export default defineConfig({
     },
   },
   plugins: [
-    TanStackRouterVite(),
+    tanstackRouter({
+      target: "react",
+    }),
     tsconfigPaths(),
     react(),
     webpackStatsPlugin(),
     tailwindcss(),
+    ViteImageOptimizer(),
   ],
   define: {
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
