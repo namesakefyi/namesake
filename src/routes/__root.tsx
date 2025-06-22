@@ -1,5 +1,5 @@
 import { useTheme } from "@/components/app";
-import type { Jurisdiction, Role } from "@/constants";
+import type { Role } from "@/constants";
 import {
   type NavigateOptions,
   Outlet,
@@ -47,8 +47,6 @@ interface RouterContext {
   convex: ConvexReactClient;
   title: string;
   role: Role;
-  residence: Jurisdiction;
-  birthplace: Jurisdiction;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
@@ -88,6 +86,7 @@ function RootRoute() {
             title: "text-theme-1",
             description: "text-theme-3",
             icon: "text-theme-5",
+            actionButton: "ml-auto cursor-pointer",
           },
         }}
         icons={{

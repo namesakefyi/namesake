@@ -140,7 +140,6 @@ export const NavItem = ({
 interface NavGroupProps {
   children: React.ReactNode;
   label?: string;
-  icon?: LucideIcon;
 }
 
 export const NavGroup = ({ children }: NavGroupProps) => {

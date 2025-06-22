@@ -1,4 +1,3 @@
-import { CATEGORIES } from "@/constants";
 import { useMatchRoute } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import { useQuery } from "convex/react";
@@ -6,22 +5,30 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { QuestsSidebar } from "./QuestsSidebar";
 
 interface MockQueriesConfig {
-  user?: { birthplace: string } | undefined;
   totalQuests?: number | undefined;
   completedQuests?: number | undefined;
-  questsByCategory?: Record<string, any[]> | undefined;
+  questsByCategory?:
+    | Array<{
+        label: string;
+        category: string | null;
+        items: Array<{
+          type: "quest" | "placeholder";
+          category: string;
+          data: any;
+          slug?: string;
+        }>;
+      }>
+    | undefined;
 }
 
 const mockQueries = ({
-  user = { birthplace: "US" },
   totalQuests = 0,
   completedQuests = 0,
-  questsByCategory = {},
+  questsByCategory = [],
 }: MockQueriesConfig = {}) => {
   const queryMock = useQuery as ReturnType<typeof vi.fn>;
 
   queryMock
-    .mockReturnValueOnce(user)
     .mockReturnValueOnce(totalQuests)
     .mockReturnValueOnce(completedQuests)
     .mockReturnValueOnce(questsByCategory);
@@ -41,6 +48,27 @@ describe("QuestsNav", () => {
     mockQueries({
       totalQuests: 5,
       completedQuests: 2,
+      questsByCategory: [
+        {
+          label: "Core",
+          category: null,
+          items: [
+            {
+              type: "quest",
+              category: "courtOrder",
+              data: {
+                _id: "quest1",
+                slug: "ma-court-order",
+                title: "MA Court Order",
+                status: "inProgress",
+                jurisdiction: "Massachusetts",
+                category: "courtOrder",
+              },
+              slug: "ma-court-order",
+            },
+          ],
+        },
+      ],
     });
 
     render(<QuestsSidebar />);
@@ -57,48 +85,30 @@ describe("QuestsNav", () => {
     expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
   });
 
-  it("renders core category items when no quests exist", () => {
-    mockQueries();
-    render(<QuestsSidebar />);
-
-    // Check for core category labels
-    expect(screen.getByText(CATEGORIES.courtOrder.label)).toBeInTheDocument();
-    expect(
-      screen.getByText(CATEGORIES.socialSecurity.label),
-    ).toBeInTheDocument();
-    expect(screen.getByText(CATEGORIES.stateId.label)).toBeInTheDocument();
-    expect(screen.getByText(CATEGORIES.passport.label)).toBeInTheDocument();
-    expect(
-      screen.getByText(CATEGORIES.birthCertificate.label),
-    ).toBeInTheDocument();
-  });
-
-  it("hides birth certificate option for users born outside US", () => {
-    mockQueries({
-      user: { birthplace: "other" },
-    });
-
-    render(<QuestsSidebar />);
-    expect(
-      screen.queryByText(CATEGORIES.birthCertificate.label),
-    ).not.toBeInTheDocument();
-  });
-
   it("renders quest items with status badges and jurisdiction", () => {
     mockQueries({
       totalQuests: 1,
-      questsByCategory: {
-        courtOrder: [
-          {
-            _id: "quest1",
-            slug: "ma-court-order",
-            title: "MA Court Order",
-            status: "inProgress",
-            jurisdiction: "Massachusetts",
-            category: "courtOrder",
-          },
-        ],
-      },
+      questsByCategory: [
+        {
+          label: "Core",
+          category: null,
+          items: [
+            {
+              type: "quest",
+              category: "courtOrder",
+              data: {
+                _id: "quest1",
+                slug: "ma-court-order",
+                title: "MA Court Order",
+                status: "inProgress",
+                jurisdiction: "Massachusetts",
+                category: "courtOrder",
+              },
+              slug: "ma-court-order",
+            },
+          ],
+        },
+      ],
     });
 
     render(<QuestsSidebar />);
@@ -111,17 +121,26 @@ describe("QuestsNav", () => {
   it("renders additional quest groups", () => {
     mockQueries({
       totalQuests: 1,
-      questsByCategory: {
-        other: [
-          {
-            _id: "quest2",
-            slug: "other-quest",
-            title: "Other Quest",
-            status: "notStarted",
-            category: "other",
-          },
-        ],
-      },
+      questsByCategory: [
+        {
+          label: "Other",
+          category: "other",
+          items: [
+            {
+              type: "quest",
+              category: "other",
+              data: {
+                _id: "quest2",
+                slug: "other-quest",
+                title: "Other Quest",
+                status: "notStarted",
+                category: "other",
+              },
+              slug: "other-quest",
+            },
+          ],
+        },
+      ],
     });
 
     render(<QuestsSidebar />);
@@ -132,7 +151,6 @@ describe("QuestsNav", () => {
 
   it("handles loading state when queries return undefined", () => {
     mockQueries({
-      user: undefined,
       totalQuests: undefined,
       completedQuests: undefined,
       questsByCategory: undefined,

@@ -1,7 +1,6 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
-  birthplace,
   category,
   jurisdiction,
   pdfId,
@@ -83,10 +82,6 @@ const users = defineTable({
   email: v.optional(v.string()),
   /** Whether the user's email address has been verified. */
   emailVerified: v.optional(v.boolean()),
-  /** The US State where the user resides. */
-  residence: v.optional(jurisdiction),
-  /** The US State where the user was born, or "other" if they were born outside the US. */
-  birthplace: v.optional(birthplace),
   /** Whether the user is a minor. */
   isMinor: v.optional(v.boolean()),
 }).index("email", ["email"]);
@@ -147,6 +142,20 @@ const userQuests = defineTable({
   .index("userId", ["userId"])
   .index("questId", ["questId"]);
 
+/**
+ * Placeholders for core quests.
+ */
+const userQuestPlaceholders = defineTable({
+  /** The user who owns the placeholder. */
+  userId: v.id("users"),
+  /** The category of the placeholder. */
+  category: category,
+  /** Time the placeholder was dismissed. */
+  dismissedAt: v.optional(v.number()),
+})
+  .index("userId", ["userId"])
+  .index("userIdAndCategory", ["userId", "category"]);
+
 // ----------------------------------------------
 // Early Access
 // ----------------------------------------------
@@ -169,4 +178,5 @@ export default defineSchema({
   userFormResponses,
   userSettings,
   userQuests,
+  userQuestPlaceholders,
 });

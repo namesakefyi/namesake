@@ -57,6 +57,81 @@ export async function getAllActive(ctx: QueryCtx) {
     .collect();
 }
 
+/**
+ * Get all active quests, but do not show court orders,
+ * state IDs, or birth certificates if the user already
+ * has one. This prevents irrelevant quests (court orders
+ * in 49+ other states, etc.) from appearing.
+ *
+ * @param ctx - The query context.
+ * @param userId - The ID of the user.
+ * @returns The relevant active quests.
+ */
+export async function getRelevantActiveForUser(
+  ctx: QueryCtx,
+  { userId }: { userId: Id<"users"> },
+) {
+  const allActiveQuests = await ctx.db
+    .query("quests")
+    .filter((q) => q.eq(q.field("deletedAt"), undefined))
+    .collect();
+
+  const userQuests = await ctx.db
+    .query("userQuests")
+    .withIndex("userId", (q) => q.eq("userId", userId))
+    .collect();
+
+  const userQuestDetails = await Promise.all(
+    userQuests.map(async (userQuest) => {
+      const quest = await ctx.db.get(userQuest.questId);
+      return quest && quest.deletedAt === undefined ? quest : null;
+    }),
+  );
+
+  const validUserQuests = userQuestDetails.filter(
+    (q): q is NonNullable<typeof q> => q !== null,
+  );
+
+  const filterableCategories: Category[] = [
+    "courtOrder",
+    "birthCertificate",
+    "stateId",
+  ];
+
+  const userQuestIds = new Set(validUserQuests.map((quest) => quest._id));
+
+  // Group user's quests by category to check which filterable categories they have
+  const userQuestsByCategory = validUserQuests.reduce(
+    (acc, quest) => {
+      const category = quest.category as Category;
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(quest);
+      return acc;
+    },
+    {} as Record<Category, typeof validUserQuests>,
+  );
+
+  const relevantQuests = allActiveQuests.filter((quest) => {
+    const category = quest.category as Category;
+
+    // If it's not a filterable category, always include it
+    if (!filterableCategories.includes(category)) return true;
+
+    // If it's a filterable category, check if user has any quests in this category
+    const userQuestsInCategory = userQuestsByCategory[category] || [];
+
+    // If user has no quests in this category, show all quests in this category
+    if (userQuestsInCategory.length === 0) return true;
+
+    // If user has quests in this category, only show the ones they already have
+    return userQuestIds.has(quest._id);
+  });
+
+  return relevantQuests;
+}
+
 export async function getWithUserQuest(
   ctx: QueryCtx,
   { slug, userId }: { slug: string; userId: Id<"users"> },

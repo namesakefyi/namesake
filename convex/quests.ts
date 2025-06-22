@@ -35,6 +35,13 @@ export const getAllActive = query({
   },
 });
 
+export const getRelevantActive = userQuery({
+  args: {},
+  handler: async (ctx) => {
+    return await Quests.getRelevantActiveForUser(ctx, { userId: ctx.userId });
+  },
+});
+
 export const getWithUserQuest = userQuery({
   args: { slug: v.string() },
   handler: async (ctx, args) => {
