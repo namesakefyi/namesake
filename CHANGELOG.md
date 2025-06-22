@@ -1,5 +1,16 @@
 # namesake
 
+## 0.34.0
+
+### Minor Changes
+
+- 3d7c236: Remove early access codes and open registration to all
+
+### Patch Changes
+
+- b178fd2: Fix incorrect sizing of tab indicator
+- 803597f: Add description and link to history of color meanings from original Gilbert Baker flag
+
 ## 0.33.0
 
 ### Minor Changes
