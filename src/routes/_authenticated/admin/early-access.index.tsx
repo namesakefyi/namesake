@@ -106,34 +106,32 @@ function EarlyAccessRoute() {
           Generate Code
         </Button>
       </PageHeader>
-      <div className="app-padding">
-        <Table aria-label="Early Access Codes">
-          <TableHeader>
-            <TableColumn isRowHeader defaultWidth={400}>
-              Code
-            </TableColumn>
-            <TableColumn>Created By</TableColumn>
-            <TableColumn>Status</TableColumn>
-          </TableHeader>
-          <TableBody
-            items={codes}
-            renderEmptyState={() => (
-              <Empty
-                title="No access codes"
-                icon={Key}
-                button={{
-                  children: "Generate Code",
-                  onPress: handleGenerateCode,
-                }}
-              />
-            )}
-          >
-            {codes?.map((code) => (
-              <EarlyAccessCodeRow key={code._id} code={code} />
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      <Table aria-label="Early Access Codes">
+        <TableHeader>
+          <TableColumn isRowHeader defaultWidth={400}>
+            Code
+          </TableColumn>
+          <TableColumn>Created By</TableColumn>
+          <TableColumn>Status</TableColumn>
+        </TableHeader>
+        <TableBody
+          items={codes}
+          renderEmptyState={() => (
+            <Empty
+              title="No access codes"
+              icon={Key}
+              button={{
+                children: "Generate Code",
+                onPress: handleGenerateCode,
+              }}
+            />
+          )}
+        >
+          {codes?.map((code) => (
+            <EarlyAccessCodeRow key={code._id} code={code} />
+          ))}
+        </TableBody>
+      </Table>
     </>
   );
 }

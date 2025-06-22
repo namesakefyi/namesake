@@ -25,7 +25,7 @@ export const QuestPageToolbar = ({
 
   return (
     <div
-      className="flex app-padding items-center justify-between h-12 py-1 -mt-2 w-full overflow-x-auto border-b border-dim"
+      className="flex items-center justify-between h-12 py-1 -mt-2 w-full overflow-x-auto border-b border-dim"
       role="toolbar"
     >
       <IconText icon={Clock}>Last edited {updatedTime}</IconText>

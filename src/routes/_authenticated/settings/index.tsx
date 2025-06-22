@@ -15,7 +15,7 @@ function SettingsIndexRoute() {
   return (
     <>
       <PageHeader title="Settings" />
-      <SettingsNav className="app-padding" />
+      <SettingsNav />
     </>
   );
 }

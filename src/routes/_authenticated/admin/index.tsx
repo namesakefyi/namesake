@@ -15,7 +15,7 @@ function AdminIndexRoute() {
   return (
     <>
       <PageHeader title="Admin" />
-      <AdminNav className="app-padding" />
+      <AdminNav />
     </>
   );
 }

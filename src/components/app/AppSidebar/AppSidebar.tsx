@@ -12,10 +12,11 @@ export const AppSidebar = ({ children }: AppSidebarProps) => {
   const isMobile = useIsMobile();
 
   const sidebarStyles = tv({
-    base: "flex flex-col shrink-0 sticky top-0 h-screen max-h-full align-self-stretch overflow-y-auto bg-app",
+    base: "flex flex-col shrink-0 sticky top-0 h-screen max-h-full align-self-stretch bg-app",
     variants: {
       isMobile: {
-        false: "w-72 lg:w-80 xl:w-[22rem] border-r border-overlay",
+        false:
+          "w-72 lg:w-80 xl:w-[22rem] px-6 border-r border-overlay overflow-y-auto",
         true: "w-full",
       },
     },
@@ -30,7 +31,7 @@ interface AppSidebarHeaderProps {
 
 export const AppSidebarHeader = ({ children }: AppSidebarHeaderProps) => {
   return (
-    <div className="app-padding flex items-center shrink-0 sticky top-0 bg-app z-40">
+    <div className="flex items-center shrink-0 sticky top-0 bg-app z-40">
       {children}
     </div>
   );
@@ -53,7 +54,7 @@ export const AppSidebarContent = ({ children }: AppSidebarContentProps) => {
 
   return (
     <PostHogErrorBoundary fallback={fallback}>
-      <div className="app-padding flex-1 pt-1.5">{children}</div>
+      <div className="flex-1 pt-1.5">{children}</div>
     </PostHogErrorBoundary>
   );
 };

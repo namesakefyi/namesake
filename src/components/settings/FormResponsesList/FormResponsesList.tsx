@@ -101,7 +101,7 @@ export function FormResponsesList({ rows }: FormResponsesListProps) {
     hasSelectedAll ? setSelectedRows(new Set()) : setSelectedRows(ALL);
 
   return (
-    <div className="flex flex-col pb-8 app-padding">
+    <div className="flex flex-col pb-8">
       {shouldShowControls && (
         <div className="flex gap-2 pb-4 items-center justify-between bg-app sticky sticky-top-header z-10">
           <Button variant="secondary" size="small" onPress={handleSelectAll}>

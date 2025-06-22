@@ -175,7 +175,7 @@ export const QuestCallToAction = ({
   userQuest,
 }: QuestCallToActionProps) => {
   const containerStyles = tv({
-    base: "flex flex-col justify-center items-center sm:items-end gap-4 py-4 app-padding rounded-xl border overflow-hidden h-24 relative transition-colors",
+    base: "flex flex-col justify-center items-center sm:items-end gap-4 py-4 px-6 rounded-xl border overflow-hidden h-24 relative transition-colors",
     variants: {
       isComplete: {
         true: "bg-primary-3 border-primary-5 items-end",
