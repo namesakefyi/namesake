@@ -1,7 +1,7 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_home/quests/")({
   beforeLoad: async () => {
-    throw redirect({ to: "/quests/court-order" });
+    // Todo: redirect to last viewed quest (https://github.com/namesakefyi/namesake/issues/642)
   },
 });
