@@ -1,4 +1,4 @@
-import { Badge, Link } from "@/components/common";
+import { Link } from "@/components/common";
 import { Logo } from "../Logo/Logo";
 
 interface NamesakeHeaderProps {
@@ -15,7 +15,6 @@ export const NamesakeHeader = ({
       <Link href={{ to: "/" }} className="p-1 -m-1" onPress={onLogoPress}>
         <Logo className="h-5 lg:h-[1.35rem]" />
       </Link>
-      <Badge className="-mb-1">Early Access</Badge>
       {children}
     </div>
   );
