@@ -24,13 +24,6 @@ const tabsStyles = tv({
       horizontal: "flex-col",
       vertical: "flex-row w-[800px]",
     },
-    size: {
-      small: "gap-2",
-      medium: "gap-4",
-    },
-  },
-  defaultVariants: {
-    size: "medium",
   },
 });
 
@@ -58,10 +51,6 @@ const tabListStyles = tv({
       horizontal: "grid-flow-col auto-cols-fr",
       vertical: "grid-flow-row auto-rows-fr",
     },
-    size: {
-      small: "gap-2",
-      medium: "gap-4",
-    },
   },
 });
 
@@ -70,7 +59,6 @@ export function TabList<T extends object>({
   ...props
 }: TabListProps<T>) {
   const state = use(TabListStateContext);
-  const size = useContext(TabsSizeContext);
 
   const tabList = state?.collection;
   const activeTab = state?.selectedKey ?? "";
@@ -84,7 +72,7 @@ export function TabList<T extends object>({
       className={composeRenderProps(
         `${className} ${styles["tab-list"]}`,
         (className, renderProps) =>
-          tabListStyles({ ...renderProps, size, className }),
+          tabListStyles({ ...renderProps, className }),
       )}
       style={{
         ["--count" as string]: count,
