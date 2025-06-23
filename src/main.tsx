@@ -20,7 +20,8 @@ import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import { routeTree } from "./routeTree.gen";
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
+const deploymentURL = import.meta.env.VITE_CONVEX_URL;
+const convex = new ConvexReactClient(deploymentURL);
 
 export const authClient = createAuthClient({
   baseURL: import.meta.env.VITE_CONVEX_SITE_URL,
