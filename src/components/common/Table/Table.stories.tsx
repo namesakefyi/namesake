@@ -1,3 +1,5 @@
+import type { Meta } from "@storybook/react-vite";
+import { useMemo, useState } from "react";
 import {
   Table,
   TableBody,
@@ -6,8 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/common";
-import type { Meta } from "@storybook/react-vite";
-import { useMemo, useState } from "react";
 
 const meta: Meta<typeof Table> = {
   component: Table,

@@ -1,3 +1,5 @@
+import type { Key } from "react-aria-components";
+import { tv } from "tailwind-variants";
 import { useTheme } from "@/components/app";
 import {
   Card,
@@ -5,9 +7,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@/components/common";
-import { THEMES, THEME_COLORS, type Theme, type ThemeColor } from "@/constants";
-import type { Key } from "react-aria-components";
-import { tv } from "tailwind-variants";
+import { THEME_COLORS, THEMES, type Theme, type ThemeColor } from "@/constants";
 
 export const EditThemeSetting = () => {
   const { theme, setTheme, color, setColor } = useTheme();

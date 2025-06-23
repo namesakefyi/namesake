@@ -1,3 +1,4 @@
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import {
   AppContent,
   AppNav,
@@ -9,7 +10,6 @@ import {
 } from "@/components/app";
 import { SettingsNav } from "@/components/settings";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   component: SettingsRoute,

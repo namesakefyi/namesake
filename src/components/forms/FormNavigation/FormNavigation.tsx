@@ -1,3 +1,7 @@
+import { ArrowLeft, MenuIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Heading } from "react-aria-components";
+import { useFormContext } from "react-hook-form";
 import {
   Badge,
   Button,
@@ -11,10 +15,6 @@ import {
 } from "@/components/common";
 import type { Jurisdiction } from "@/constants";
 import { useFormSections } from "@/hooks/useFormSections";
-import { ArrowLeft, MenuIcon } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Heading } from "react-aria-components";
-import { useFormContext } from "react-hook-form";
 
 interface FormNavigationProps {
   title: string;

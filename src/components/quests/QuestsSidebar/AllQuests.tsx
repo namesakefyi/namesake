@@ -1,3 +1,10 @@
+import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
+import { useNavigate } from "@tanstack/react-router";
+import { useMutation, useQuery } from "convex/react";
+import { ListFilter, Plus, X } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import {
   Badge,
   BadgeButton,
@@ -20,13 +27,6 @@ import {
   JURISDICTIONS,
   type Status,
 } from "@/constants";
-import { api } from "@convex/_generated/api";
-import type { Doc } from "@convex/_generated/dataModel";
-import { useNavigate } from "@tanstack/react-router";
-import { useMutation, useQuery } from "convex/react";
-import { ListFilter, Plus, X } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
 import { useQuestsSidebar } from "./QuestsSidebarProvider";
 
 export const AllQuestsNavItem = ({
@@ -50,7 +50,7 @@ export const AllQuestsNavItem = ({
       await addQuest({ questId: quest._id });
       navigate({ to: "/quests/$questSlug", params: { questSlug: quest.slug } });
       setActiveTab("user");
-    } catch (err) {
+    } catch (_err) {
       toast.error("Failed to add quest. Please try again.");
     }
   };
@@ -59,7 +59,7 @@ export const AllQuestsNavItem = ({
     try {
       await removeQuest({ questId: quest._id });
       toast.success("Removed from your quests");
-    } catch (err) {
+    } catch (_err) {
       toast.error("Something went wrong. Please try again.");
     }
   };
@@ -67,7 +67,7 @@ export const AllQuestsNavItem = ({
   const handleStatusChange = async (status: Status) => {
     try {
       await updateStatus({ questId: quest._id, status });
-    } catch (err) {
+    } catch (_err) {
       toast.error("Couldn't update status. Please try again.");
     }
   };

@@ -172,7 +172,7 @@ beforeEach(() => {
           }),
         }),
       );
-    } catch (error) {
+    } catch (_error) {
       return Promise.resolve(
         new Response(null, {
           status: 404,

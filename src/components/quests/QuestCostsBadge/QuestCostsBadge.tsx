@@ -1,3 +1,16 @@
+import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import {
+  CircleDollarSign,
+  CircleOff,
+  HelpCircle,
+  Pencil,
+  Plus,
+  Trash,
+} from "lucide-react";
+import { memo, useState } from "react";
+import { toast } from "sonner";
 import {
   Badge,
   BadgeButton,
@@ -14,13 +27,6 @@ import {
 } from "@/components/common";
 import { type Cost, DEFAULT_COSTS } from "@/constants";
 import { getTotalCosts } from "@/utils/getTotalCosts";
-import { api } from "@convex/_generated/api";
-import type { Doc } from "@convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { CircleDollarSign, CircleOff, HelpCircle, Pencil } from "lucide-react";
-import { Plus, Trash } from "lucide-react";
-import { memo, useState } from "react";
-import { toast } from "sonner";
 import { QuestCostsTable } from "../QuestCostsTable/QuestCostsTable";
 
 type CostInputProps = {
@@ -141,7 +147,7 @@ export const QuestCostsBadge = ({
       setIsSubmitting(true);
       await setCosts({ costs: costsInput ?? undefined, questId: quest._id });
       setIsEditing(false);
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to update costs");
     } finally {
       setIsSubmitting(false);
@@ -182,7 +188,7 @@ export const QuestCostsBadge = ({
                 <div className="flex flex-col gap-2 w-full">
                   {costsInput.map((cost, index) => (
                     <CostInput
-                      // biome-ignore lint/suspicious/noArrayIndexKey:
+                      // biome-ignore lint/suspicious/noArrayIndexKey: Index is fine
                       key={index}
                       cost={cost}
                       onChange={(value) => {

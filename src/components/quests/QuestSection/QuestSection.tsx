@@ -1,5 +1,5 @@
-import { Button, type ButtonProps } from "@/components/common";
 import { Heading } from "react-aria-components";
+import { Button, type ButtonProps } from "@/components/common";
 
 type QuestSectionProps = {
   title: string;

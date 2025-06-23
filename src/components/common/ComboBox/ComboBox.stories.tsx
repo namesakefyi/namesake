@@ -1,3 +1,4 @@
+import type { Meta } from "@storybook/react-vite";
 import {
   Button,
   ComboBox,
@@ -5,7 +6,6 @@ import {
   ComboBoxSection,
   Form,
 } from "@/components/common";
-import type { Meta } from "@storybook/react-vite";
 
 const meta: Meta<typeof ComboBox> = {
   component: ComboBox,

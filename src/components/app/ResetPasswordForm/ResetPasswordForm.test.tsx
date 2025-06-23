@@ -1,9 +1,9 @@
-import { usePasswordStrength } from "@/hooks/usePasswordStrength";
-import { authClient, router } from "@/main";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ZxcvbnResult } from "@zxcvbn-ts/core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { usePasswordStrength } from "@/hooks/usePasswordStrength";
+import { authClient, router } from "@/main";
 import { ResetPasswordForm } from "./ResetPasswordForm";
 
 vi.mock("@/hooks/usePasswordStrength", () => ({

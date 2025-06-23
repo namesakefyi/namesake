@@ -1,4 +1,3 @@
-import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 import type { Ref } from "react";
 import {
   FieldError as AriaFieldError,
@@ -9,14 +8,15 @@ import {
   type LabelProps as AriaLabelProps,
   TextArea as AriaTextArea,
   type TextAreaProps as AriaTextAreaProps,
+  composeRenderProps,
   type FieldErrorProps,
   Group,
   Text,
   type TextProps,
-  composeRenderProps,
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
+import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 
 export type FieldSize = "small" | "medium" | "large";
 

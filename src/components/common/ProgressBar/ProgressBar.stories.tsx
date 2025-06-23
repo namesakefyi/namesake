@@ -1,5 +1,5 @@
-import { ProgressBar } from "@/components/common";
 import type { Meta } from "@storybook/react-vite";
+import { ProgressBar } from "@/components/common";
 
 const meta: Meta<typeof ProgressBar> = {
   component: ProgressBar,

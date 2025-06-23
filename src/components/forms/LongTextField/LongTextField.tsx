@@ -1,7 +1,7 @@
+import { Controller, useFormContext } from "react-hook-form";
 import { TextArea, type TextAreaProps } from "@/components/common";
 import type { FieldName } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
-import { Controller, useFormContext } from "react-hook-form";
 
 export interface LongTextFieldProps extends Omit<TextAreaProps, "size"> {
   label: string;

@@ -1,6 +1,6 @@
-import { focusRing } from "@/components/utils";
 import { type FocusEventHandler, useState } from "react";
 import { tv } from "tailwind-variants";
+import { focusRing } from "@/components/utils";
 
 export interface HiddenTextProps {
   children: string;

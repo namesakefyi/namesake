@@ -1,11 +1,11 @@
+import { useNavigate } from "@tanstack/react-router";
+import { usePostHog } from "posthog-js/react";
+import { useState } from "react";
 import { PasswordStrength } from "@/components/app";
 import { Banner, Button, Form, Link, TextField } from "@/components/common";
 import { MAX_DISPLAY_NAME_LENGTH, MIN_DISPLAY_NAME_LENGTH } from "@/constants";
 import { usePasswordStrength } from "@/hooks/usePasswordStrength";
 import { authClient } from "@/main";
-import { useNavigate } from "@tanstack/react-router";
-import { usePostHog } from "posthog-js/react";
-import { useState } from "react";
 
 export const RegistrationForm = () => {
   const [email, setEmail] = useState("");

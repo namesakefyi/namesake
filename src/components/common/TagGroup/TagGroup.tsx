@@ -1,5 +1,3 @@
-import { Button, FieldDescription, Label } from "@/components/common";
-import { focusRing } from "@/components/utils";
 import { X } from "lucide-react";
 import { createContext, use } from "react";
 import {
@@ -7,12 +5,14 @@ import {
   TagGroup as AriaTagGroup,
   type TagGroupProps as AriaTagGroupProps,
   type TagProps as AriaTagProps,
+  composeRenderProps,
   TagList,
   type TagListProps,
   Text,
-  composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { Button, FieldDescription, Label } from "@/components/common";
+import { focusRing } from "@/components/utils";
 
 const SizeContext = createContext<"medium" | "large">("medium");
 

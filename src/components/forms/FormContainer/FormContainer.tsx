@@ -1,3 +1,7 @@
+import { ShieldCheck } from "lucide-react";
+import { Children, isValidElement, useMemo } from "react";
+import { Heading } from "react-aria-components";
+import { FormProvider, type UseFormReturn } from "react-hook-form";
 import { Badge, Banner, Container, Form } from "@/components/common";
 import { FormNavigation, FormSection } from "@/components/forms";
 import { JURISDICTIONS, type Jurisdiction } from "@/constants";
@@ -7,10 +11,6 @@ import {
 } from "@/hooks/useFormSections";
 import { getFormSectionId } from "@/utils/getFormSectionId";
 import { smartquotes } from "@/utils/smartquotes";
-import { ShieldCheck } from "lucide-react";
-import { Children, isValidElement, useMemo } from "react";
-import { Heading } from "react-aria-components";
-import { FormProvider, type UseFormReturn } from "react-hook-form";
 
 export interface FormContainerProps {
   /** The title of the page. */

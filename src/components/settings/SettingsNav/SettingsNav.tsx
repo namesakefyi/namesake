@@ -1,4 +1,3 @@
-import { Nav, NavGroup, NavItem } from "@/components/common";
 import {
   Bug,
   CircleUser,
@@ -9,6 +8,7 @@ import {
   MessageCircleQuestion,
   Snail,
 } from "lucide-react";
+import { Nav, NavGroup, NavItem } from "@/components/common";
 
 export const SettingsNav = ({ className }: { className?: string }) => {
   return (

@@ -1,3 +1,7 @@
+import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
+import { Heading } from "react-aria-components";
+import { twMerge } from "tailwind-merge";
 import {
   Button,
   type ButtonProps,
@@ -5,10 +9,6 @@ import {
   type LinkProps,
 } from "@/components/common";
 import { smartquotes } from "@/utils/smartquotes";
-import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
-import { Heading } from "react-aria-components";
-import { twMerge } from "tailwind-merge";
 
 interface EmptyProps {
   icon: LucideIcon;

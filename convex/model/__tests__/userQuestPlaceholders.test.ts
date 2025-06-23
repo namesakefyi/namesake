@@ -1,6 +1,5 @@
 import { convexTest } from "convex-test";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CATEGORIES, type Category } from "../../../src/constants";
 import { createTestUser } from "../../__tests__/helpers";
 import type { Id } from "../../_generated/dataModel";

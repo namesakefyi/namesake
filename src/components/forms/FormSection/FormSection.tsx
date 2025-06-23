@@ -1,7 +1,7 @@
-import { getFormSectionId } from "@/utils/getFormSectionId";
-import { smartquotes } from "@/utils/smartquotes";
 import { Heading } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
+import { getFormSectionId } from "@/utils/getFormSectionId";
+import { smartquotes } from "@/utils/smartquotes";
 
 export interface FormSectionProps {
   /**

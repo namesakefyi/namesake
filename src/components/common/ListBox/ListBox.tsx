@@ -1,17 +1,17 @@
-import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 import { Check } from "lucide-react";
 import {
   ListBox as AriaListBox,
   ListBoxItem as AriaListBoxItem,
   type ListBoxProps as AriaListBoxProps,
   Collection,
+  composeRenderProps,
   Header,
   type ListBoxItemProps,
   ListBoxSection,
   type SectionProps,
-  composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 
 type ListBoxProps<T> = Omit<AriaListBoxProps<T>, "layout" | "orientation">;
 

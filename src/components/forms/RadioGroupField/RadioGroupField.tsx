@@ -1,3 +1,4 @@
+import { Controller, useFormContext } from "react-hook-form";
 import {
   Radio,
   RadioGroup,
@@ -6,7 +7,6 @@ import {
 } from "@/components/common";
 import { type FieldName, PREFER_NOT_TO_ANSWER } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
-import { Controller, useFormContext } from "react-hook-form";
 
 interface RadioOption extends RadioProps {
   label: string;

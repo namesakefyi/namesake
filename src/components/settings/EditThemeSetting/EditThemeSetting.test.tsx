@@ -1,8 +1,8 @@
-import { useTheme } from "@/components/app";
-import { THEMES, THEME_COLORS } from "@/constants";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { useTheme } from "@/components/app";
+import { THEME_COLORS, THEMES } from "@/constants";
 import { EditThemeSetting } from "./EditThemeSetting";
 
 vi.mock("@/components/app", () => ({

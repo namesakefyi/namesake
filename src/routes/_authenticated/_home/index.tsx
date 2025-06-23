@@ -1,6 +1,6 @@
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { QuestsSidebar } from "@/components/quests";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { Navigate, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_home/")({
   component: IndexRoute,

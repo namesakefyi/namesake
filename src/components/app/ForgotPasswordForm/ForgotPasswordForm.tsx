@@ -1,9 +1,9 @@
-import { Banner, Button, Form, Link, TextField } from "@/components/common";
-import { authClient } from "@/main";
 import { ChevronLeft, Send } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 import { Heading } from "react-aria-components";
+import { Banner, Button, Form, Link, TextField } from "@/components/common";
+import { authClient } from "@/main";
 
 interface SniperResponse {
   url: string;

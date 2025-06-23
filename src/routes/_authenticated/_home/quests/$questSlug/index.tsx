@@ -1,11 +1,11 @@
+import { api } from "@convex/_generated/api";
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "convex/react";
 import {
   QuestCallToAction,
   QuestContent,
   QuestPageHeader,
 } from "@/components/quests";
-import { api } from "@convex/_generated/api";
-import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "convex/react";
 
 export const Route = createFileRoute(
   "/_authenticated/_home/quests/$questSlug/",

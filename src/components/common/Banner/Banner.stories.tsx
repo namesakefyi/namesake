@@ -1,5 +1,5 @@
-import { Banner } from "@/components/common";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Banner } from "@/components/common";
 
 const meta = {
   component: Banner,

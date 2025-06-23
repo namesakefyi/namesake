@@ -1,3 +1,9 @@
+import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { ConvexError } from "convex/values";
+import { useState } from "react";
+import { toast } from "sonner";
 import {
   Banner,
   Button,
@@ -7,12 +13,6 @@ import {
   TextField,
 } from "@/components/common";
 import { SettingsItem } from "@/components/settings";
-import { api } from "@convex/_generated/api";
-import type { Doc } from "@convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { ConvexError } from "convex/values";
-import { useState } from "react";
-import { toast } from "sonner";
 
 type EditNameSettingProps = {
   user: Doc<"users">;

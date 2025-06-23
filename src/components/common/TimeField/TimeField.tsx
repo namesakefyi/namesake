@@ -1,4 +1,10 @@
 import {
+  TimeField as AriaTimeField,
+  type TimeFieldProps as AriaTimeFieldProps,
+  type TimeValue,
+  type ValidationResult,
+} from "react-aria-components";
+import {
   DateInput,
   FieldDescription,
   FieldError,
@@ -6,12 +12,6 @@ import {
   Label,
 } from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
-import {
-  TimeField as AriaTimeField,
-  type TimeFieldProps as AriaTimeFieldProps,
-  type TimeValue,
-  type ValidationResult,
-} from "react-aria-components";
 
 export interface TimeFieldProps<T extends TimeValue>
   extends AriaTimeFieldProps<T> {

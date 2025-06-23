@@ -1,5 +1,3 @@
-import { buttonStyles } from "@/components/common";
-import { focusRing } from "@/components/utils";
 import type { LucideIcon } from "lucide-react";
 import {
   ToggleButton as AriaToggleButton,
@@ -7,6 +5,8 @@ import {
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { buttonStyles } from "@/components/common";
+import { focusRing } from "@/components/utils";
 
 export interface ToggleButtonProps extends AriaToggleButtonProps {
   children?: React.ReactNode;

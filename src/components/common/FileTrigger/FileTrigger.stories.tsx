@@ -1,5 +1,5 @@
-import { Button, FileTrigger } from "@/components/common";
 import type { Meta } from "@storybook/react-vite";
+import { Button, FileTrigger } from "@/components/common";
 
 const meta = {
   component: FileTrigger,

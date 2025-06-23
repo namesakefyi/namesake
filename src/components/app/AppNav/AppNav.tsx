@@ -1,3 +1,9 @@
+import { api } from "@convex/_generated/api";
+import { type ToOptions, useMatchRoute } from "@tanstack/react-router";
+import { useQuery } from "convex/react";
+import type { LucideIcon } from "lucide-react";
+import { FileText, GlobeLock, Home, Settings } from "lucide-react";
+import { tv } from "tailwind-variants";
 import {
   Link,
   type LinkProps,
@@ -5,12 +11,6 @@ import {
   TooltipTrigger,
 } from "@/components/common";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { api } from "@convex/_generated/api";
-import { type ToOptions, useMatchRoute } from "@tanstack/react-router";
-import { useQuery } from "convex/react";
-import { FileText, GlobeLock, Home, Settings } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-import { tv } from "tailwind-variants";
 
 interface AppNavItemProps extends Omit<LinkProps, "href"> {
   icon: LucideIcon;

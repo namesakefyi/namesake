@@ -1,7 +1,3 @@
-import { Button, IconText, TimeAgo } from "@/components/common";
-import type { Category, Status } from "@/constants";
-import { CATEGORIES, STATUS } from "@/constants";
-import type { CoreCategory } from "@/constants";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
@@ -10,6 +6,9 @@ import { useState } from "react";
 import { Heading } from "react-aria-components";
 import { toast } from "sonner";
 import { tv } from "tailwind-variants";
+import { Button, IconText, TimeAgo } from "@/components/common";
+import type { Category, CoreCategory, Status } from "@/constants";
+import { CATEGORIES, STATUS } from "@/constants";
 import flowerImg from "./flower.png";
 import gavelImg from "./gavel.png";
 import idImg from "./id.png";
@@ -19,7 +18,10 @@ import socialSecurityImg from "./social-security.png";
 function CoreQuestIllustration({
   category,
   isComplete,
-}: { category: CoreCategory; isComplete: boolean }) {
+}: {
+  category: CoreCategory;
+  isComplete: boolean;
+}) {
   const illustration: Record<CoreCategory, { alt: string; src: string }> = {
     courtOrder: {
       alt: "A gavel with a snail on it",
@@ -90,7 +92,7 @@ const QuestCTAButton = ({ quest, userQuest }: QuestCTAButtonProps) => {
     try {
       setIsSubmitting(true);
       if (quest) await addQuest({ questId: quest._id });
-    } catch (err) {
+    } catch (_err) {
       toast.error("Failed to add quest. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -122,7 +124,7 @@ const QuestCTAButton = ({ quest, userQuest }: QuestCTAButtonProps) => {
         questId: quest._id,
         status,
       });
-    } catch (err) {
+    } catch (_err) {
       toast.error("Failed to change status. Please try again.");
     } finally {
       setIsSubmitting(false);

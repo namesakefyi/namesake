@@ -1,8 +1,8 @@
+import { Controller, useFormContext } from "react-hook-form";
+import { twMerge } from "tailwind-merge";
 import { Checkbox, type CheckboxProps } from "@/components/common";
 import type { FieldName } from "@/constants";
 import { smartquotes } from "@/utils/smartquotes";
-import { Controller, useFormContext } from "react-hook-form";
-import { twMerge } from "tailwind-merge";
 
 export interface CheckboxFieldProps extends CheckboxProps {
   children?: React.ReactNode;

@@ -1,5 +1,3 @@
-import { Link } from "@/components/common";
-import { composeTailwindRenderProps } from "@/components/utils";
 import { ChevronRight } from "lucide-react";
 import {
   Breadcrumb as AriaBreadcrumb,
@@ -9,6 +7,8 @@ import {
   type LinkProps,
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
+import { Link } from "@/components/common";
+import { composeTailwindRenderProps } from "@/components/utils";
 
 export function Breadcrumbs<T extends object>(props: BreadcrumbsProps<T>) {
   return (

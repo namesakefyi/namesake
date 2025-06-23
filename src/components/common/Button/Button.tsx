@@ -1,5 +1,3 @@
-import type { FieldSize } from "@/components/common";
-import { focusRing } from "@/components/utils";
 import type { LucideIcon, LucideProps } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import type { Ref } from "react";
@@ -9,6 +7,8 @@ import {
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import type { FieldSize } from "@/components/common";
+import { focusRing } from "@/components/utils";
 
 export interface ButtonProps extends AriaButtonProps {
   children?: React.ReactNode;

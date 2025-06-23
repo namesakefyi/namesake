@@ -1,3 +1,6 @@
+import type { Editor } from "@tiptap/react";
+import { Link } from "lucide-react";
+import { useEffect, useState } from "react";
 import {
   Button,
   DialogTrigger,
@@ -5,9 +8,6 @@ import {
   Popover,
   TextField,
 } from "@/components/common";
-import type { Editor } from "@tiptap/react";
-import { Link } from "lucide-react";
-import { useEffect, useState } from "react";
 import { EditorToggleButton } from "./EditorToolbar";
 
 type EditorLinkButtonProps = {

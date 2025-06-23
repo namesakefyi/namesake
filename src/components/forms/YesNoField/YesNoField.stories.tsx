@@ -1,5 +1,5 @@
-import { YesNoField, type YesNoFieldProps } from "@/components/forms";
 import type { Meta } from "@storybook/react-vite";
+import { YesNoField, type YesNoFieldProps } from "@/components/forms";
 
 const meta: Meta<typeof YesNoField> = {
   component: YesNoField,

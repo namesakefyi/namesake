@@ -1,3 +1,8 @@
+import type { Doc } from "@convex/_generated/dataModel";
+import { Trash } from "lucide-react";
+import { usePostHog } from "posthog-js/react";
+import { useState } from "react";
+import { toast } from "sonner";
 import {
   Banner,
   Button,
@@ -8,11 +13,6 @@ import {
 } from "@/components/common";
 import { SettingsItem } from "@/components/settings";
 import { authClient } from "@/main";
-import type { Doc } from "@convex/_generated/dataModel";
-import { Trash } from "lucide-react";
-import { usePostHog } from "posthog-js/react";
-import { useState } from "react";
-import { toast } from "sonner";
 
 type DeleteAccountModalProps = {
   isOpen: boolean;

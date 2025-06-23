@@ -1,6 +1,6 @@
+import { useEffect, useState } from "react";
 import type { PDFDefinition, PDFId } from "@/constants/forms";
 import { getPdfDefinition } from "@/forms";
-import { useEffect, useState } from "react";
 
 /**
  * Given a PDF ID, returns the PDF details.

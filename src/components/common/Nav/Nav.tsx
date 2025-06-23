@@ -1,9 +1,9 @@
-import { Link, type LinkProps } from "@/components/common";
-import { focusRing } from "@/components/utils";
-import { useIsMobile } from "@/hooks/useIsMobile";
 import { useMatchRoute } from "@tanstack/react-router";
 import { ChevronRight, ExternalLink, type LucideIcon } from "lucide-react";
 import { tv } from "tailwind-variants";
+import { Link, type LinkProps } from "@/components/common";
+import { focusRing } from "@/components/utils";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 type NavItemBaseProps = {
   icon?: LucideIcon;

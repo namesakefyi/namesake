@@ -1,5 +1,5 @@
-import { Button } from "@/components/common";
 import { ArrowRight, Plus } from "lucide-react";
+import { Button } from "@/components/common";
 
 export default {
   component: Button,

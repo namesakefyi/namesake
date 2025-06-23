@@ -1,10 +1,10 @@
-import { RegistrationForm, SignInForm, SignInWrapper } from "@/components/app";
-import { Tab, TabList, TabPanel, Tabs } from "@/components/common";
-import { useHasVisited } from "@/hooks/useHasVisited";
-import { Navigate, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { useState } from "react";
 import type { Key } from "react-aria";
+import { RegistrationForm, SignInForm, SignInWrapper } from "@/components/app";
+import { Tab, TabList, TabPanel, Tabs } from "@/components/common";
+import { useHasVisited } from "@/hooks/useHasVisited";
 
 export const Route = createFileRoute("/_unauthenticated/signin")({
   component: LoginRoute,
