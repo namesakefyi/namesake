@@ -1,5 +1,11 @@
 # namesake
 
+## 0.34.2
+
+### Patch Changes
+
+- 3573d02: Handle auth environments appropriately
+
 ## 0.34.1
 
 ### Patch Changes
