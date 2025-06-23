@@ -1,5 +1,11 @@
 # namesake
 
+## 0.34.3
+
+### Patch Changes
+
+- 03219f2: Prevent multi-column address fields from overflowing width on mobile
+
 ## 0.34.2
 
 ### Patch Changes
