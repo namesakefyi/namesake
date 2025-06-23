@@ -1,3 +1,12 @@
+import { useRouter } from "@tanstack/react-router";
+import {
+  NodeViewContent,
+  type NodeViewProps,
+  NodeViewWrapper,
+} from "@tiptap/react";
+import { LinkIcon, Unlink } from "lucide-react";
+import { useRef, useState } from "react";
+import { useInteractOutside } from "react-aria";
 import {
   Badge,
   Button,
@@ -14,15 +23,6 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
-import { useRouter } from "@tanstack/react-router";
-import {
-  NodeViewContent,
-  type NodeViewProps,
-  NodeViewWrapper,
-} from "@tiptap/react";
-import { LinkIcon, Unlink } from "lucide-react";
-import { useRef, useState } from "react";
-import { useInteractOutside } from "react-aria";
 
 type LinkType = "internal" | "external";
 

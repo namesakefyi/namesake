@@ -1,4 +1,3 @@
-import { focusRing } from "@/components/utils";
 import { createContext, use, useContext } from "react";
 import {
   Tab as AriaTab,
@@ -6,13 +5,14 @@ import {
   TabPanel as AriaTabPanel,
   Tabs as AriaTabs,
   type TabsProps as AriaTabsProps,
+  composeRenderProps,
   type TabListProps,
   TabListStateContext,
   type TabPanelProps,
   type TabProps,
-  composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { focusRing } from "@/components/utils";
 import styles from "./Tabs.module.css";
 
 const TabsSizeContext = createContext<"small" | "medium">("medium");
@@ -24,13 +24,6 @@ const tabsStyles = tv({
       horizontal: "flex-col",
       vertical: "flex-row w-[800px]",
     },
-    size: {
-      small: "gap-2",
-      medium: "gap-4",
-    },
-  },
-  defaultVariants: {
-    size: "medium",
   },
 });
 
@@ -58,10 +51,6 @@ const tabListStyles = tv({
       horizontal: "grid-flow-col auto-cols-fr",
       vertical: "grid-flow-row auto-rows-fr",
     },
-    size: {
-      small: "gap-2",
-      medium: "gap-4",
-    },
   },
 });
 
@@ -70,7 +59,6 @@ export function TabList<T extends object>({
   ...props
 }: TabListProps<T>) {
   const state = use(TabListStateContext);
-  const size = useContext(TabsSizeContext);
 
   const tabList = state?.collection;
   const activeTab = state?.selectedKey ?? "";
@@ -84,7 +72,7 @@ export function TabList<T extends object>({
       className={composeRenderProps(
         `${className} ${styles["tab-list"]}`,
         (className, renderProps) =>
-          tabListStyles({ ...renderProps, size, className }),
+          tabListStyles({ ...renderProps, className }),
       )}
       style={{
         ["--count" as string]: count,

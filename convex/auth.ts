@@ -16,6 +16,8 @@ import * as AuthModel from "./model/authModel";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
+const siteUrl = process.env.SITE_URL ?? "http://localhost:5173";
+
 // Typesafe way to pass the functions below into the component
 const authFunctions: AuthFunctions = internal.auth;
 
@@ -27,12 +29,7 @@ export const betterAuthComponent = new BetterAuth(components.betterAuth, {
 export const createAuth = (ctx: GenericCtx) =>
   betterAuth({
     database: convexAdapter(ctx, betterAuthComponent),
-    plugins: [
-      convex(),
-      crossDomain({
-        siteUrl: "http://localhost:5173",
-      }),
-    ],
+    plugins: [convex(), crossDomain({ siteUrl })],
     emailAndPassword: {
       enabled: true,
       sendResetPassword: async ({ user, url }, _request) => {
@@ -44,6 +41,7 @@ export const createAuth = (ctx: GenericCtx) =>
         });
       },
     },
+    trustedOrigins: ["http://localhost:5173", "https://app.namesake.fyi"],
     user: {
       deleteUser: {
         enabled: true,

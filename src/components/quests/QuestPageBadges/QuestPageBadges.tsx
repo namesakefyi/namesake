@@ -1,10 +1,10 @@
+import type { Doc } from "@convex/_generated/dataModel";
 import {
   QuestCategoryBadge,
   QuestCostsBadge,
   QuestJurisdictionBadge,
   QuestTimeBadge,
 } from "@/components/quests";
-import type { Doc } from "@convex/_generated/dataModel";
 
 interface QuestPageBadgesProps {
   quest?: Doc<"quests"> | null;

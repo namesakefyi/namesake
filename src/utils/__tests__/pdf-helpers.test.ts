@@ -1,5 +1,5 @@
-import { BIRTHPLACES, COUNTRIES } from "@/constants";
 import { describe, expect, it } from "vitest";
+import { BIRTHPLACES, COUNTRIES } from "@/constants";
 import {
   formatBirthplaceStateOrCountry,
   formatDateMMDDYYYY,

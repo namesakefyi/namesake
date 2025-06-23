@@ -1,3 +1,9 @@
+import type { Ref } from "react";
+import {
+  TextField as AriaTextField,
+  type TextFieldProps as AriaTextFieldProps,
+  type ValidationResult,
+} from "react-aria-components";
 import {
   FieldDescription,
   FieldError,
@@ -6,12 +12,6 @@ import {
   Label,
 } from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
-import type { Ref } from "react";
-import {
-  TextField as AriaTextField,
-  type TextFieldProps as AriaTextFieldProps,
-  type ValidationResult,
-} from "react-aria-components";
 
 export interface TextAreaProps extends AriaTextFieldProps {
   label?: string;

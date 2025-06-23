@@ -1,7 +1,7 @@
-import { Empty } from "@/components/common";
 import { AlertCircle } from "lucide-react";
 import { PostHogErrorBoundary } from "posthog-js/react";
 import { tv } from "tailwind-variants";
+import { Empty } from "@/components/common";
 
 type AppContentProps = {
   children: React.ReactNode;

@@ -1,11 +1,11 @@
-import { usePasswordStrength } from "@/hooks/usePasswordStrength";
-import { authClient } from "@/main";
 import { useNavigate } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ZxcvbnResult } from "@zxcvbn-ts/core";
 import { useMutation } from "convex/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { usePasswordStrength } from "@/hooks/usePasswordStrength";
+import { authClient } from "@/main";
 import { RegistrationForm } from "./RegistrationForm";
 
 vi.mock("@/hooks/usePasswordStrength", () => ({
@@ -200,54 +200,5 @@ describe("RegistrationForm", () => {
       expect(input).toBeDisabled();
     }
     expect(submitButton).toBeDisabled();
-  });
-});
-
-describe("EarlyAccessCodeForm", () => {
-  const ACCESS_CODE = "nd78cjmsgs2sh2ga77r57yzw057g882y";
-  const mockRedeem = vi.fn();
-
-  beforeEach(() => {
-    // Mock production environment
-    vi.stubEnv("PROD", true);
-    (useMutation as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockRedeem,
-    );
-  });
-
-  it("renders early access code form in production", () => {
-    render(<RegistrationForm />);
-
-    expect(screen.getByText(/Namesake is in early access/)).toBeInTheDocument();
-    expect(screen.getByLabelText("Early Access Code")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Continue" }),
-    ).toBeInTheDocument();
-  });
-
-  it("handles successful code redemption", async () => {
-    mockRedeem.mockResolvedValue(undefined);
-
-    render(<RegistrationForm />);
-    const user = userEvent.setup();
-
-    await user.type(screen.getByLabelText("Early Access Code"), ACCESS_CODE);
-    await user.click(screen.getByRole("button", { name: "Continue" }));
-
-    expect(mockRedeem).toHaveBeenCalledWith({
-      earlyAccessCodeId: ACCESS_CODE,
-    });
-  });
-
-  it("handles invalid code error", async () => {
-    mockRedeem.mockRejectedValue(new Error("Invalid code"));
-
-    render(<RegistrationForm />);
-    const user = userEvent.setup();
-
-    await user.type(screen.getByLabelText("Early Access Code"), "invalid-code");
-    await user.click(screen.getByRole("button", { name: "Continue" }));
-
-    expect(screen.getByText(/Invalid code/i)).toBeInTheDocument();
   });
 });

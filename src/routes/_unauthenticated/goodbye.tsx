@@ -1,7 +1,7 @@
-import { SignInWrapper } from "@/components/app";
-import { Link } from "@/components/common";
 import { createFileRoute } from "@tanstack/react-router";
 import { Heading } from "react-aria-components";
+import { SignInWrapper } from "@/components/app";
+import { Link } from "@/components/common";
 
 export const Route = createFileRoute("/_unauthenticated/goodbye")({
   component: GoodbyeRoute,

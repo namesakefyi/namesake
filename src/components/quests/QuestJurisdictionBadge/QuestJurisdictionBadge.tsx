@@ -1,3 +1,10 @@
+import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { CircleX, Pencil, Plus } from "lucide-react";
+import { useState } from "react";
+import type { Selection } from "react-aria-components";
+import { toast } from "sonner";
 import {
   Badge,
   BadgeButton,
@@ -15,13 +22,6 @@ import {
   JURISDICTIONS,
   type Jurisdiction,
 } from "@/constants";
-import { api } from "@convex/_generated/api";
-import type { Doc } from "@convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { CircleX, Pencil, Plus } from "lucide-react";
-import { useState } from "react";
-import type { Selection } from "react-aria-components";
-import { toast } from "sonner";
 
 const FEDERAL_CATEGORIES: Category[] = ["passport", "socialSecurity"];
 
@@ -57,7 +57,7 @@ export const QuestJurisdictionBadge = ({
           jurisdiction: [...keys][0] as Jurisdiction,
         });
         setJurisdiction(keys);
-      } catch (error) {
+      } catch (_error) {
         toast.error("Couldn't update state.");
       }
     }

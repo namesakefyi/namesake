@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { TimeAgo } from "./TimeAgo";
-import { getRelativeTimeString } from "./TimeAgo";
+import { getRelativeTimeString, TimeAgo } from "./TimeAgo";
 
 describe("TimeAgo", () => {
   it("renders the relative time with correct title and datetime attributes", () => {

@@ -1,8 +1,7 @@
-import { ForgotPasswordForm, SignInWrapper } from "@/components/app";
-import { Navigate, createFileRoute, useSearch } from "@tanstack/react-router";
-import { Authenticated } from "convex/react";
-import { Unauthenticated } from "convex/react";
+import { createFileRoute, Navigate, useSearch } from "@tanstack/react-router";
+import { Authenticated, Unauthenticated } from "convex/react";
 import { z } from "zod";
+import { ForgotPasswordForm, SignInWrapper } from "@/components/app";
 
 const searchSchema = z.object({
   email: z.string().optional(),

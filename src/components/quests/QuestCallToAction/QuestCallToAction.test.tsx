@@ -1,9 +1,9 @@
-import type { Status } from "@/constants";
 import type { Doc, Id } from "@convex/_generated/dataModel";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useMutation } from "convex/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { Status } from "@/constants";
 import { QuestCallToAction } from "./QuestCallToAction";
 
 describe("QuestCallToAction", () => {

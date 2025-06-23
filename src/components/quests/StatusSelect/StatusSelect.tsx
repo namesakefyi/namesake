@@ -1,3 +1,7 @@
+import { ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import type { Selection } from "react-aria-components";
+import { tv } from "tailwind-variants";
 import {
   Badge,
   type BadgeProps,
@@ -8,10 +12,6 @@ import {
   MenuTrigger,
 } from "@/components/common";
 import { STATUS, type Status } from "@/constants";
-import { ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
-import type { Selection } from "react-aria-components";
-import { tv } from "tailwind-variants";
 
 interface StatusBadgeProps extends Omit<BadgeProps, "children"> {
   status: Status;

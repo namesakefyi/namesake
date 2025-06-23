@@ -3,7 +3,6 @@ import type { Preview } from "@storybook/react-vite";
 import { FormProvider, useForm } from "react-hook-form";
 
 import "../src/styles/index.css";
-import React from "react";
 
 const preview: Preview = {
   parameters: {

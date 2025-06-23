@@ -1,12 +1,3 @@
-import {
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  Input,
-  Label,
-  innerBorderStyles,
-} from "@/components/common";
-import { composeTailwindRenderProps } from "@/components/utils";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import {
   NumberField as AriaNumberField,
@@ -15,6 +6,15 @@ import {
   type ButtonProps,
   type ValidationResult,
 } from "react-aria-components";
+import {
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  Input,
+  innerBorderStyles,
+  Label,
+} from "@/components/common";
+import { composeTailwindRenderProps } from "@/components/utils";
 
 export interface NumberFieldProps extends AriaNumberFieldProps {
   label?: string;

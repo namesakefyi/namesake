@@ -1,8 +1,8 @@
-import { Empty } from "@/components/common";
 import { api } from "@convex/_generated/api";
-import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { Milestone } from "lucide-react";
+import { Empty } from "@/components/common";
 
 export const Route = createFileRoute("/_authenticated/_home/quests/$questSlug")(
   {

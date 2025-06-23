@@ -1,3 +1,8 @@
+import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { useState } from "react";
+import { toast } from "sonner";
 import {
   Button,
   Form,
@@ -5,11 +10,6 @@ import {
   ModalHeader,
   TextField,
 } from "@/components/common";
-import { api } from "@convex/_generated/api";
-import type { Doc } from "@convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { useState } from "react";
-import { toast } from "sonner";
 
 type EditQuestTitleModalProps = {
   quest: Doc<"quests">;
@@ -40,7 +40,7 @@ export const EditQuestTitleModal = ({
       updateTitle({ questId: quest._id, title });
       toast.success("Updated title");
       onOpenChange(false);
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to update title");
     } finally {
       setIsSubmitting(false);

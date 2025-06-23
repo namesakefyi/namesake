@@ -1,8 +1,8 @@
+import type { Meta } from "@storybook/react-vite";
 import {
   CheckboxGroupField,
   type CheckboxGroupFieldProps,
 } from "@/components/forms";
-import type { Meta } from "@storybook/react-vite";
 
 const meta: Meta<typeof CheckboxGroupField> = {
   component: CheckboxGroupField,

@@ -1,7 +1,7 @@
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { PageHeader } from "@/components/app";
 import { SettingsNav } from "@/components/settings";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { Navigate, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/settings/")({
   component: SettingsIndexRoute,

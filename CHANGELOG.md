@@ -1,5 +1,43 @@
 # namesake
 
+## 0.34.3
+
+### Patch Changes
+
+- 03219f2: Prevent multi-column address fields from overflowing width on mobile
+
+## 0.34.2
+
+### Patch Changes
+
+- 3573d02: Handle auth environments appropriately
+
+## 0.34.1
+
+### Patch Changes
+
+- 414007d: Fix trusted origins and cors setup for Better Auth
+
+## 0.34.0
+
+### Minor Changes
+
+- 3d7c236: Remove early access codes and open registration to all
+
+### Patch Changes
+
+- b178fd2: Fix incorrect sizing of tab indicator
+- 803597f: Add description and link to history of color meanings from original Gilbert Baker flag
+
+## 0.33.0
+
+### Minor Changes
+
+- a21d95a: Send email verification before account deletion
+- a21d95a: Improve authentication and Namesake emails
+- 5f299c8: Make it easier to add and dismiss placeholders for suggested quests
+- a9ec789: Show the signup screen the first time you visit
+
 ## 0.32.3
 
 ### Patch Changes

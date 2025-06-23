@@ -1,5 +1,3 @@
-import { Checkbox } from "@/components/common";
-import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 import { ChevronUp } from "lucide-react";
 import {
   Cell as AriaCell,
@@ -13,16 +11,18 @@ import {
   Collection,
   type ColumnProps,
   ColumnResizer,
+  composeRenderProps,
   Group,
   ResizableTableContainer,
   type RowProps,
   type TableBodyProps,
   type TableHeaderProps,
   type TableProps,
-  composeRenderProps,
   useTableOptions,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { Checkbox } from "@/components/common";
+import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 
 export function Table(props: TableProps) {
   return (

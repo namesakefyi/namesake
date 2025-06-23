@@ -1,3 +1,7 @@
+import { api } from "@convex/_generated/api";
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "convex/react";
+import { ShieldCheck } from "lucide-react";
 import { PageHeader } from "@/components/app";
 import { Badge } from "@/components/common";
 import {
@@ -5,10 +9,6 @@ import {
   getReadableFieldLabel,
 } from "@/components/settings";
 import type { FieldName } from "@/constants";
-import { api } from "@convex/_generated/api";
-import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "convex/react";
-import { ShieldCheck } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/settings/responses")({
   component: FormResponsesRoute,

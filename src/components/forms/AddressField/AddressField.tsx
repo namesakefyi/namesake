@@ -1,11 +1,10 @@
-import { ComboBox, ComboBoxItem, TextField } from "@/components/common";
-import { type FieldName, JURISDICTIONS } from "@/constants";
-import { maskitoTransform } from "@maskito/core";
 import type { MaskitoOptions } from "@maskito/core";
-import { useEffect } from "react";
-import { useState } from "react";
+import { maskitoTransform } from "@maskito/core";
+import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { usaStatesWithCounties } from "typed-usa-states";
+import { ComboBox, ComboBoxItem, TextField } from "@/components/common";
+import { type FieldName, JURISDICTIONS } from "@/constants";
 
 type AddressType = "residence" | "mailing";
 
@@ -68,8 +67,8 @@ export function AddressField({
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="grid gap-4 grid-cols-[1fr_auto] [grid-template-areas:'street_street''city_city''state_zip''county_county']">
+    <div className="flex flex-col gap-4 @container">
+      <div className="grid gap-4 grid-cols-[1fr_auto] [grid-template-areas:'street_street''city_city''state_state''zip_zip''county_county'] @md:[grid-template-areas:'street_street''city_city''state_zip''county_county']">
         <Controller
           control={control}
           name={names[type].street}

@@ -1,5 +1,5 @@
-import { FormSection, type FormSectionProps } from "@/components/forms";
 import type { Meta } from "@storybook/react-vite";
+import { FormSection, type FormSectionProps } from "@/components/forms";
 
 const meta: Meta<typeof FormSection> = {
   component: FormSection,

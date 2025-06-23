@@ -1,3 +1,9 @@
+import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { HelpCircle, Pencil, Plus } from "lucide-react";
+import { memo, useState } from "react";
+import { toast } from "sonner";
 import {
   Badge,
   BadgeButton,
@@ -18,12 +24,6 @@ import {
   type TimeRequired,
   type TimeUnit,
 } from "@/constants";
-import { api } from "@convex/_generated/api";
-import type { Doc } from "@convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { HelpCircle, Pencil, Plus } from "lucide-react";
-import { memo, useState } from "react";
-import { toast } from "sonner";
 
 const TimeRequiredInput = memo(function TimeRequiredInput({
   timeRequired,
@@ -140,7 +140,7 @@ export const QuestTimeBadge = ({
         questId: quest._id,
       });
       setIsEditing(false);
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to update time required");
     } finally {
       setIsSubmitting(false);

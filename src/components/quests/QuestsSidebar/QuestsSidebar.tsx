@@ -1,3 +1,4 @@
+import { Search, X } from "lucide-react";
 import {
   AppNav,
   AppSidebar,
@@ -8,7 +9,6 @@ import {
 } from "@/components/app";
 import { Button, Tooltip, TooltipTrigger } from "@/components/common";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { Search, X } from "lucide-react";
 import { AllQuests } from "./AllQuests";
 import { MyQuests } from "./MyQuests";
 import {

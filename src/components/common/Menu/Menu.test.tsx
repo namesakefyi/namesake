@@ -1,7 +1,7 @@
-import { Button, DialogTrigger, Menu, MenuItem } from "@/components/common";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
+import { Button, DialogTrigger, Menu, MenuItem } from "@/components/common";
 
 describe("Menu", () => {
   it("renders Menu", async () => {

@@ -1,5 +1,5 @@
-import { EmailField, type EmailFieldProps } from "@/components/forms";
 import type { Meta } from "@storybook/react-vite";
+import { EmailField, type EmailFieldProps } from "@/components/forms";
 
 const meta: Meta<typeof EmailField> = {
   component: EmailField,

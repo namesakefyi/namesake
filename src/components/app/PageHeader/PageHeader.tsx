@@ -1,7 +1,7 @@
-import { Link, type LinkProps } from "@/components/common";
-import { useIsMobile } from "@/hooks/useIsMobile";
 import { ArrowLeft } from "lucide-react";
 import { twMerge } from "tailwind-merge";
+import { Link, type LinkProps } from "@/components/common";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export interface PageHeaderProps {
   /** The title of the page. */

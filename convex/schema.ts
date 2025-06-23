@@ -156,22 +156,7 @@ const userQuestPlaceholders = defineTable({
   .index("userId", ["userId"])
   .index("userIdAndCategory", ["userId", "category"]);
 
-// ----------------------------------------------
-// Early Access
-// ----------------------------------------------
-
-/**
- * Codes to enable early access to the app.
- */
-const earlyAccessCodes = defineTable({
-  /** The user who created the code. */
-  createdBy: v.id("users"),
-  /** The time the code was claimed. */
-  claimedAt: v.optional(v.number()),
-}).index("createdBy", ["createdBy"]);
-
 export default defineSchema({
-  earlyAccessCodes,
   quests,
   users,
   userDocuments,

@@ -1,10 +1,8 @@
-import { useTheme } from "@/components/app";
-import type { Role } from "@/constants";
 import {
+  createRootRouteWithContext,
   type NavigateOptions,
   Outlet,
   type ToOptions,
-  createRootRouteWithContext,
   useLocation,
   useRouter,
 } from "@tanstack/react-router";
@@ -20,6 +18,8 @@ import { usePostHog } from "posthog-js/react";
 import { useEffect } from "react";
 import { RouterProvider } from "react-aria-components";
 import { Toaster } from "sonner";
+import { useTheme } from "@/components/app";
+import type { Role } from "@/constants";
 
 declare module "react-aria-components" {
   interface RouterConfig {

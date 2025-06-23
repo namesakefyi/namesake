@@ -1,26 +1,27 @@
 import "./styles/index.css";
-import { Logo, ThemeProvider } from "@/components/app";
-import { Empty } from "@/components/common";
-import type { Role } from "@/constants";
+import { api } from "@convex/_generated/api";
 import {
   convexClient,
   crossDomainClient,
 } from "@convex-dev/better-auth/client/plugins";
 import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
-import { api } from "@convex/_generated/api";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { createAuthClient } from "better-auth/react";
 import { ConvexReactClient, useQuery } from "convex/react";
 import { ArrowLeft, CircleAlert, TriangleAlert } from "lucide-react";
-import { LazyMotion, domAnimation } from "motion/react";
+import { domAnimation, LazyMotion } from "motion/react";
 import { posthog } from "posthog-js";
 import { PostHogErrorBoundary, PostHogProvider } from "posthog-js/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
+import { Logo, ThemeProvider } from "@/components/app";
+import { Empty } from "@/components/common";
+import type { Role } from "@/constants";
 import { routeTree } from "./routeTree.gen";
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
+const deploymentURL = import.meta.env.VITE_CONVEX_URL;
+const convex = new ConvexReactClient(deploymentURL);
 
 export const authClient = createAuthClient({
   baseURL: import.meta.env.VITE_CONVEX_SITE_URL,

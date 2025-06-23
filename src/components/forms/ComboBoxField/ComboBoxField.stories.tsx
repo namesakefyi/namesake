@@ -1,5 +1,5 @@
-import { SelectField, type SelectFieldProps } from "@/components/forms";
 import type { Meta } from "@storybook/react-vite";
+import { SelectField, type SelectFieldProps } from "@/components/forms";
 
 const meta: Meta<typeof SelectField> = {
   component: SelectField,

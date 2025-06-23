@@ -1,12 +1,12 @@
-import type { FormData, PDFDefinition } from "@/constants";
-import { smartquotes } from "@/utils/smartquotes";
 import {
   PDFDocument,
-  StandardFonts,
   popGraphicsState,
   pushGraphicsState,
+  StandardFonts,
   setCharacterSpacing,
 } from "@cantoo/pdf-lib";
+import type { FormData, PDFDefinition } from "@/constants";
+import { smartquotes } from "@/utils/smartquotes";
 
 /**
  * Fetch a PDF file from the /src/forms.

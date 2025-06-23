@@ -1,12 +1,12 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { FileWarning } from "lucide-react";
+import { tv } from "tailwind-variants";
 import { PageHeader } from "@/components/app";
 import { Badge, Empty } from "@/components/common";
 import { DocumentPreview } from "@/components/documents";
 import type { PDFId } from "@/constants/forms";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { usePDFDetails } from "@/hooks/usePDFDetails";
-import { createFileRoute } from "@tanstack/react-router";
-import { FileWarning } from "lucide-react";
-import { tv } from "tailwind-variants";
 
 export const Route = createFileRoute("/_authenticated/documents/$pdfId")({
   component: RouteComponent,

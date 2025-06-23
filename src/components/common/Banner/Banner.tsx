@@ -53,6 +53,19 @@ const iconStyles = tv({
   },
 });
 
+const DefaultIcon = (variant: BannerProps["variant"]) => {
+  switch (variant) {
+    case "success":
+      return Check;
+    case "danger":
+      return OctagonAlert;
+    case "warning":
+      return TriangleAlert;
+    default:
+      return Info;
+  }
+};
+
 export function Banner({
   children,
   icon: Icon,
@@ -60,20 +73,7 @@ export function Banner({
   variant,
   className,
 }: BannerProps) {
-  const DefaultIcon = () => {
-    switch (variant) {
-      case "success":
-        return Check;
-      case "danger":
-        return OctagonAlert;
-      case "warning":
-        return TriangleAlert;
-      default:
-        return Info;
-    }
-  };
-
-  Icon = Icon ?? DefaultIcon();
+  Icon = Icon ?? DefaultIcon(variant);
 
   return (
     <div role="alert" className={bannerStyles({ variant, size, className })}>

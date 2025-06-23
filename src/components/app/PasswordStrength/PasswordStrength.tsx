@@ -1,10 +1,10 @@
-import { Label } from "@/components/common";
-import { composeTailwindRenderProps } from "@/components/utils";
 import {
   Meter as AriaMeter,
   type MeterProps as AriaMeterProps,
 } from "react-aria-components";
 import { RandomReveal } from "react-random-reveal";
+import { Label } from "@/components/common";
+import { composeTailwindRenderProps } from "@/components/utils";
 
 export interface MeterProps extends AriaMeterProps {
   value: number;
@@ -57,19 +57,23 @@ export const strengthConfig: Record<number, StrengthConfig> = {
 };
 
 const StrengthLabel = ({ value }: { value: number }) => (
-  <span
-    className={`text-sm uppercase font-medium font-mono tracking-wider transition-colors duration-500 ${strengthConfig[value].color.text}`}
-    aria-label={strengthConfig[value].label}
-  >
-    <RandomReveal
-      characters={strengthConfig[value].label}
-      isPlaying={true}
-      duration={0.5}
-      revealEasing="linear"
-      revealDuration={0.2}
-      key={value}
-    />
-  </span>
+  <>
+    <span
+      className={`text-sm uppercase font-medium font-mono tracking-wider transition-colors duration-500 ${strengthConfig[value].color.text}`}
+      aria-hidden={true}
+      data-testid="strength-label"
+    >
+      <RandomReveal
+        characters={strengthConfig[value].label}
+        isPlaying={true}
+        duration={0.5}
+        revealEasing="linear"
+        revealDuration={0.2}
+        key={value}
+      />
+    </span>
+    <span className="sr-only">{strengthConfig[value].label}</span>
+  </>
 );
 
 export function PasswordStrength({ value, ...props }: MeterProps) {

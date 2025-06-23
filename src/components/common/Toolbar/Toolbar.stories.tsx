@@ -1,3 +1,6 @@
+import type { Meta } from "@storybook/react-vite";
+import { Bold, Italic, Underline } from "lucide-react";
+import { Group } from "react-aria-components";
 import {
   Button,
   Checkbox,
@@ -5,10 +8,6 @@ import {
   ToggleButton,
   Toolbar,
 } from "@/components/common";
-import { Bold, Italic, Underline } from "lucide-react";
-import { Group } from "react-aria-components";
-
-import type { Meta } from "@storybook/react-vite";
 
 const meta: Meta<typeof Toolbar> = {
   component: Toolbar,

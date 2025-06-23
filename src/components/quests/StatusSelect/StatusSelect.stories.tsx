@@ -1,5 +1,5 @@
-import type { Status } from "@/constants";
 import type { Meta } from "@storybook/react-vite";
+import type { Status } from "@/constants";
 import { StatusSelect } from "./StatusSelect";
 
 const meta: Meta<typeof StatusSelect> = {

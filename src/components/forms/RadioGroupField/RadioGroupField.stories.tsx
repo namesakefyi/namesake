@@ -1,5 +1,5 @@
-import { RadioGroupField, type RadioGroupFieldProps } from "@/components/forms";
 import type { Meta } from "@storybook/react-vite";
+import { RadioGroupField, type RadioGroupFieldProps } from "@/components/forms";
 
 const meta: Meta<typeof RadioGroupField> = {
   component: RadioGroupField,

@@ -1,2 +1,2 @@
-export * from "./DocumentsNav/DocumentsNav";
 export * from "./DocumentPreview/DocumentPreview";
+export * from "./DocumentsNav/DocumentsNav";

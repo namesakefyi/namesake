@@ -1,8 +1,13 @@
-import { useTheme } from "@/components/app";
-import { Card, ToggleButton, ToggleButtonGroup } from "@/components/common";
-import { THEMES, THEME_COLORS, type Theme, type ThemeColor } from "@/constants";
 import type { Key } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { useTheme } from "@/components/app";
+import {
+  Card,
+  Link,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@/components/common";
+import { THEME_COLORS, THEMES, type Theme, type ThemeColor } from "@/constants";
 
 export const EditThemeSetting = () => {
   const { theme, setTheme, color, setColor } = useTheme();
@@ -33,63 +38,74 @@ export const EditThemeSetting = () => {
   });
 
   return (
-    <Card className="@container px-0 pt-6 pb-4">
-      <div className="flex flex-col @[38rem]:flex-row justify-center gap-6 w-full min-w-0">
-        <div className="flex flex-col gap-2">
-          <ToggleButtonGroup
-            selectionMode="single"
-            disallowEmptySelection
-            selectedKeys={new Set([theme ?? "system"])}
-            onSelectionChange={handleThemeChange}
-            className="w-max mx-auto"
-          >
-            {Object.entries(THEMES).map(([theme, { label, icon }]) => (
-              <ToggleButton
-                aria-label={label}
-                key={theme}
-                id={theme}
-                icon={icon}
-                className="w-16"
-              />
-            ))}
-          </ToggleButtonGroup>
-          <div className="font-medium text-center">
-            {THEMES[theme ?? "system"].label}
-          </div>
-        </div>
-        <div className="flex flex-col gap-2">
-          <div className="overflow-x-auto px-4 @[38rem]:px-0 w-full no-scrollbar">
-            <ToggleButtonGroup
-              selectionMode="single"
-              disallowEmptySelection
-              selectedKeys={new Set([color ?? "violet"])}
-              onSelectionChange={handleColorChange}
-              className="w-max mx-auto rounded-full"
-            >
-              {Object.entries(THEME_COLORS).map(([themeColor, { label }]) => (
-                <ToggleButton
-                  id={themeColor}
-                  key={themeColor}
-                  aria-label={label}
-                  className="rounded-full p-2 w-10"
-                >
-                  <div
-                    className={swatchStyles({
-                      color: themeColor as ThemeColor,
-                    })}
+    <>
+      <Card className="@container px-0 py-6">
+        <div className="flex flex-col gap-2 @[38rem]:flex-row @[38rem]:gap-0 justify-center w-full min-w-0">
+          <div className="flex flex-col">
+            <div className="py-2 px-4">
+              <ToggleButtonGroup
+                selectionMode="single"
+                disallowEmptySelection
+                selectedKeys={new Set([theme ?? "system"])}
+                onSelectionChange={handleThemeChange}
+                className="w-max mx-auto"
+              >
+                {Object.entries(THEMES).map(([theme, { label, icon }]) => (
+                  <ToggleButton
+                    aria-label={label}
+                    key={theme}
+                    id={theme}
+                    icon={icon}
+                    className="w-16"
                   />
-                </ToggleButton>
-              ))}
-            </ToggleButtonGroup>
+                ))}
+              </ToggleButtonGroup>
+            </div>
+            <div className="font-medium text-center">
+              {THEMES[theme ?? "system"].label}
+            </div>
           </div>
-          <div className="font-medium flex gap-2 justify-center">
-            {THEME_COLORS[color ?? "violet"].label}
-            <span className="italic text-dim">
-              {THEME_COLORS[color ?? "violet"].meaning}
-            </span>
+          <div className="flex flex-col">
+            <div className="overflow-x-auto py-2 px-4 @[38rem]:px-2 w-full no-scrollbar">
+              <ToggleButtonGroup
+                selectionMode="single"
+                disallowEmptySelection
+                selectedKeys={new Set([color ?? "violet"])}
+                onSelectionChange={handleColorChange}
+                className="w-max mx-auto rounded-full"
+              >
+                {Object.entries(THEME_COLORS).map(([themeColor, { label }]) => (
+                  <ToggleButton
+                    id={themeColor}
+                    key={themeColor}
+                    aria-label={label}
+                    className="rounded-full p-2 w-10"
+                  >
+                    <div
+                      className={swatchStyles({
+                        color: themeColor as ThemeColor,
+                      })}
+                    />
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+            </div>
+            <div className="font-medium flex gap-2 justify-center">
+              {THEME_COLORS[color ?? "violet"].label}
+              <span className="italic text-dim">
+                {THEME_COLORS[color ?? "violet"].meaning}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+      <p className="text-sm text-dim mt-4 text-pretty">
+        Colors and meanings are from the original{" "}
+        <Link href="https://www.glbthistory.org/rainbow-flag" target="_blank">
+          Gilbert Baker rainbow flag
+        </Link>
+        .
+      </p>
+    </>
   );
 };
