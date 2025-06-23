@@ -1,10 +1,17 @@
+import { api } from "@convex/_generated/api";
+import type { DataModel } from "@convex/_generated/dataModel";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useMutation, useQuery } from "convex/react";
+import { CircleHelp, Ellipsis, Milestone, Plus } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/app";
-import { FormattedDate } from "@/components/common";
 import {
   Badge,
   Button,
   Empty,
   Form,
+  FormattedDate,
   Menu,
   MenuItem,
   MenuTrigger,
@@ -27,13 +34,6 @@ import {
   JURISDICTIONS,
   type Jurisdiction,
 } from "@/constants";
-import { api } from "@convex/_generated/api";
-import type { DataModel } from "@convex/_generated/dataModel";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMutation, useQuery } from "convex/react";
-import { CircleHelp, Ellipsis, Milestone, Plus } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/quests/")({
   component: QuestsRoute,
@@ -151,6 +151,14 @@ const NewQuestModal = ({
   );
 };
 
+const CategoryBadge = ({ category }: { category: Category | undefined }) => {
+  if (!category) return;
+
+  const { icon, label } = CATEGORIES[category];
+
+  return <Badge icon={icon ?? CircleHelp}>{label}</Badge>;
+};
+
 const QuestTableRow = ({
   quest,
 }: {
@@ -162,14 +170,6 @@ const QuestTableRow = ({
   const softDelete = useMutation(api.quests.softDelete);
   const undelete = useMutation(api.quests.undoSoftDelete);
   const deleteForever = useMutation(api.quests.deleteForever);
-
-  const Category = () => {
-    if (!quest.category) return;
-
-    const { icon, label } = CATEGORIES[quest.category as Category];
-
-    return <Badge icon={icon ?? CircleHelp}>{label}</Badge>;
-  };
 
   return (
     <TableRow
@@ -189,7 +189,7 @@ const QuestTableRow = ({
         </div>
       </TableCell>
       <TableCell>
-        <Category />
+        <CategoryBadge category={quest.category as Category} />
       </TableCell>
       <TableCell>{questCount}</TableCell>
       <TableCell>

@@ -1,4 +1,3 @@
-import { FieldGroup } from "@/components/common";
 import Document from "@tiptap/extension-document";
 import {
   EditorContent,
@@ -8,6 +7,7 @@ import {
 } from "@tiptap/react";
 import { useEffect } from "react";
 import { tv } from "tailwind-variants";
+import { FieldGroup } from "@/components/common";
 import { EditorToolbar } from "./EditorToolbar";
 import {
   EXTENSION_GROUPS,

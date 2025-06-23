@@ -1,6 +1,5 @@
-import type { Page, TestInfo } from "@playwright/test";
-
 import AxeBuilder from "@axe-core/playwright";
+import type { Page, TestInfo } from "@playwright/test";
 import { test as baseTest, expect } from "@playwright/test";
 import { createHtmlReport } from "axe-html-reporter";
 

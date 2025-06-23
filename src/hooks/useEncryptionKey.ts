@@ -1,6 +1,6 @@
-import { getEncryptionKey, initializeEncryption } from "@/utils/encryption";
 import { usePostHog } from "posthog-js/react";
 import { useEffect, useState } from "react";
+import { getEncryptionKey, initializeEncryption } from "@/utils/encryption";
 
 export function useEncryptionKey(): CryptoKey | null {
   const [encryptionKey, setEncryptionKey] = useState<CryptoKey | null>(null);

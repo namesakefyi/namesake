@@ -1,3 +1,7 @@
+import { api } from "@convex/_generated/api";
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "convex/react";
+import { UserX } from "lucide-react";
 import { PageHeader } from "@/components/app";
 import { Empty } from "@/components/common";
 import {
@@ -8,10 +12,6 @@ import {
   EditThemeSetting,
   SettingsGroup,
 } from "@/components/settings";
-import { api } from "@convex/_generated/api";
-import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "convex/react";
-import { UserX } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/settings/account")({
   component: SettingsAccountRoute,

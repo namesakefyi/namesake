@@ -1,9 +1,9 @@
-import { Nav, NavItem } from "@/components/common";
-import type { PDFId } from "@/constants";
-import { usePDFDetails } from "@/hooks/usePDFDetails";
 import { api } from "@convex/_generated/api";
 import { useQuery } from "convex/react";
 import { FileText } from "lucide-react";
+import { Nav, NavItem } from "@/components/common";
+import type { PDFId } from "@/constants";
+import { usePDFDetails } from "@/hooks/usePDFDetails";
 
 const DocumentsNavItem = ({ pdfId }: { pdfId: PDFId }) => {
   const { data } = usePDFDetails(pdfId);

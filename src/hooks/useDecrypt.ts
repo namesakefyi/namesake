@@ -1,7 +1,7 @@
-import { useEncryptionKey } from "@/hooks/useEncryptionKey";
-import { decryptData } from "@/utils/encryption";
 import { usePostHog } from "posthog-js/react";
 import { useEffect, useState } from "react";
+import { useEncryptionKey } from "@/hooks/useEncryptionKey";
+import { decryptData } from "@/utils/encryption";
 
 type SingleDecryptResult = {
   decryptedValue: string | undefined;

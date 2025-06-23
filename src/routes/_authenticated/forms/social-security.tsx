@@ -1,3 +1,8 @@
+import { api } from "@convex/_generated/api";
+import { createFileRoute } from "@tanstack/react-router";
+import { useMutation } from "convex/react";
+import type { FormEvent } from "react";
+import { toast } from "sonner";
 import { Banner, Button } from "@/components/common";
 import {
   AddressField,
@@ -23,11 +28,6 @@ import {
 import ss5ApplicationForSocialSecurityCard from "@/forms/federal/ss5-application-for-social-security-card";
 import { downloadMergedPdf } from "@/forms/utils";
 import { useForm } from "@/hooks/useForm";
-import { api } from "@convex/_generated/api";
-import { createFileRoute } from "@tanstack/react-router";
-import { useMutation } from "convex/react";
-import type { FormEvent } from "react";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/forms/social-security")({
   component: RouteComponent,
@@ -100,7 +100,7 @@ function RouteComponent() {
 
       // Save encrypted responses
       await onSubmit();
-    } catch (error) {
+    } catch (_error) {
       toast.error("An error occurred while submitting the form.");
     }
   };

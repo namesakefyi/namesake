@@ -1,5 +1,5 @@
-import { CheckboxField, type CheckboxFieldProps } from "@/components/forms";
 import type { Meta } from "@storybook/react-vite";
+import { CheckboxField, type CheckboxFieldProps } from "@/components/forms";
 
 const meta: Meta<typeof CheckboxField> = {
   component: CheckboxField,

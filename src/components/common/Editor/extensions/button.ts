@@ -1,4 +1,4 @@
-import { Node, findParentNode, mergeAttributes } from "@tiptap/core";
+import { findParentNode, mergeAttributes, Node } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import ButtonComponent from "./ButtonComponent";
 

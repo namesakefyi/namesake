@@ -1,11 +1,11 @@
-import { usePasswordStrength } from "@/hooks/usePasswordStrength";
-import { authClient } from "@/main";
 import { useNavigate } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ZxcvbnResult } from "@zxcvbn-ts/core";
 import { useMutation } from "convex/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { usePasswordStrength } from "@/hooks/usePasswordStrength";
+import { authClient } from "@/main";
 import { RegistrationForm } from "./RegistrationForm";
 
 vi.mock("@/hooks/usePasswordStrength", () => ({

@@ -1,5 +1,5 @@
-import { Nav, NavGroup, NavItem } from "@/components/common";
 import { Milestone } from "lucide-react";
+import { Nav, NavGroup, NavItem } from "@/components/common";
 
 export const AdminNav = ({ className }: { className?: string }) => {
   return (

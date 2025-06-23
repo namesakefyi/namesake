@@ -1,5 +1,5 @@
-import { NameField, type NameFieldProps } from "@/components/forms";
 import type { Meta } from "@storybook/react-vite";
+import { NameField, type NameFieldProps } from "@/components/forms";
 
 const meta: Meta<typeof NameField> = {
   component: NameField,

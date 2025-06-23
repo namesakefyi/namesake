@@ -1,5 +1,5 @@
-import { Switch } from "@/components/common";
 import type { Meta } from "@storybook/react-vite";
+import { Switch } from "@/components/common";
 
 const meta: Meta<typeof Switch> = {
   component: Switch,

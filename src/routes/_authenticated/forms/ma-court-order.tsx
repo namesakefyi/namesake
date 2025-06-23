@@ -1,3 +1,8 @@
+import { api } from "@convex/_generated/api";
+import { createFileRoute } from "@tanstack/react-router";
+import { useMutation, useQuery } from "convex/react";
+import type { FormEvent } from "react";
+import { toast } from "sonner";
 import { Banner, Button } from "@/components/common";
 import {
   AddressField,
@@ -25,11 +30,6 @@ import cjp27PetitionToChangeNameOfAdult from "@/forms/ma/cjp27-petition-to-chang
 import cjp34CoriAndWmsReleaseRequest from "@/forms/ma/cjp34-cori-and-wms-release-request";
 import { downloadMergedPdf } from "@/forms/utils";
 import { useForm } from "@/hooks/useForm";
-import { api } from "@convex/_generated/api";
-import { createFileRoute } from "@tanstack/react-router";
-import { useMutation, useQuery } from "convex/react";
-import type { FormEvent } from "react";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/forms/ma-court-order")({
   component: RouteComponent,
@@ -128,7 +128,7 @@ function RouteComponent() {
 
       // Save encrypted responses
       await onSubmit();
-    } catch (error) {
+    } catch (_error) {
       toast.error("An error occurred while submitting the form.");
     }
   };

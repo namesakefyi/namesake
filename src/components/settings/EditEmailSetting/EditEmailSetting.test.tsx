@@ -1,4 +1,3 @@
-import { DUPLICATE_EMAIL, INVALID_EMAIL } from "@/constants";
 import type { Doc, Id } from "@convex/_generated/dataModel";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -6,6 +5,7 @@ import { useMutation } from "convex/react";
 import { ConvexError } from "convex/values";
 import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { DUPLICATE_EMAIL, INVALID_EMAIL } from "@/constants";
 import { EditEmailSetting } from "./EditEmailSetting";
 
 describe("EditEmailSetting", () => {

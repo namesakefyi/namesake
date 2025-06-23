@@ -1,9 +1,8 @@
-import { ComboBox, ComboBoxItem } from "@/components/common";
-import type { FieldName } from "@/constants";
 import languageNameMap from "language-name-map/map";
 import { Text } from "react-aria-components";
-import { useFormContext } from "react-hook-form";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
+import { ComboBox, ComboBoxItem } from "@/components/common";
+import type { FieldName } from "@/constants";
 
 export interface LanguageSelectFieldProps {
   name: FieldName;

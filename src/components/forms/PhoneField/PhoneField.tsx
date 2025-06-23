@@ -1,7 +1,7 @@
-import { TextField, type TextFieldProps } from "@/components/common";
-import type { FieldName } from "@/constants";
 import { type MaskitoOptions, maskitoTransform } from "@maskito/core";
 import { Controller, useFormContext } from "react-hook-form";
+import { TextField, type TextFieldProps } from "@/components/common";
+import type { FieldName } from "@/constants";
 
 export interface PhoneFieldProps extends Omit<TextFieldProps, "size"> {
   name: FieldName;

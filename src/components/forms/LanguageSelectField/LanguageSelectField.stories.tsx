@@ -1,8 +1,8 @@
+import type { Meta } from "@storybook/react-vite";
 import {
   LanguageSelectField,
   type LanguageSelectFieldProps,
 } from "@/components/forms";
-import type { Meta } from "@storybook/react-vite";
 
 const meta: Meta<typeof LanguageSelectField> = {
   component: LanguageSelectField,

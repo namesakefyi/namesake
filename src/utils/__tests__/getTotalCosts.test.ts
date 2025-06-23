@@ -1,5 +1,5 @@
-import type { Cost } from "@/constants/quests";
 import { describe, expect, it } from "vitest";
+import type { Cost } from "@/constants/quests";
 import { getTotalCosts } from "../getTotalCosts";
 
 describe("getTotalCosts", () => {

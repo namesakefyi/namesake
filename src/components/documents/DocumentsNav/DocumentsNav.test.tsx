@@ -1,8 +1,8 @@
-import { usePDFDetails } from "@/hooks/usePDFDetails";
 import { useMatchRoute } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import { useQuery } from "convex/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { usePDFDetails } from "@/hooks/usePDFDetails";
 import { DocumentsNav } from "./DocumentsNav";
 
 vi.mock("convex/react");

@@ -1,5 +1,4 @@
-import { type ZxcvbnResult, zxcvbnAsync } from "@zxcvbn-ts/core";
-import { zxcvbnOptions } from "@zxcvbn-ts/core";
+import { type ZxcvbnResult, zxcvbnAsync, zxcvbnOptions } from "@zxcvbn-ts/core";
 import { useDeferredValue, useEffect, useState } from "react";
 
 const loadOptions = async () => {

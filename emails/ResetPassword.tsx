@@ -14,7 +14,10 @@ import { styles } from "./styles";
 export function ResetPasswordEmail({
   email,
   url,
-}: { email: string; url: string }) {
+}: {
+  email: string;
+  url: string;
+}) {
   return (
     <Html>
       <Head>

@@ -1,4 +1,3 @@
-import { focusRing } from "@/components/utils";
 import { createContext, use, useContext } from "react";
 import {
   Tab as AriaTab,
@@ -6,13 +5,14 @@ import {
   TabPanel as AriaTabPanel,
   Tabs as AriaTabs,
   type TabsProps as AriaTabsProps,
+  composeRenderProps,
   type TabListProps,
   TabListStateContext,
   type TabPanelProps,
   type TabProps,
-  composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { focusRing } from "@/components/utils";
 import styles from "./Tabs.module.css";
 
 const TabsSizeContext = createContext<"small" | "medium">("medium");

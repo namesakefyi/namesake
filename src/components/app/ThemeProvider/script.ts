@@ -14,7 +14,7 @@ export const script = (
     let theme: string | null = null;
     try {
       theme = localStorage.getItem(key);
-    } catch (e) {
+    } catch (_e) {
       // Unsupported
     }
     return theme || fallback;

@@ -1,3 +1,6 @@
+import { useNavigate } from "@tanstack/react-router";
+import { usePostHog } from "posthog-js/react";
+import { useState } from "react";
 import {
   Banner,
   Button,
@@ -8,9 +11,6 @@ import {
   TooltipTrigger,
 } from "@/components/common";
 import { authClient } from "@/main";
-import { useNavigate } from "@tanstack/react-router";
-import { usePostHog } from "posthog-js/react";
-import { useState } from "react";
 
 export const SignInForm = () => {
   const [email, setEmail] = useState("");

@@ -1,9 +1,9 @@
-import { authClient } from "@/main";
 import type { Doc, Id } from "@convex/_generated/dataModel";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { authClient } from "@/main";
 import { DeleteAccountSetting } from "./DeleteAccountSetting";
 
 const mockUser: Doc<"users"> = {

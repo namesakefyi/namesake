@@ -1,3 +1,7 @@
+import type { Id } from "@convex/_generated/dataModel";
+import { AlertTriangle, FileLock2 } from "lucide-react";
+import { useState } from "react";
+import { type Selection, Text } from "react-aria-components";
 import {
   Badge,
   Button,
@@ -8,10 +12,6 @@ import {
 import { DeleteFormResponseModal } from "@/components/settings";
 import { ALL, FIELD_DEFS, type FieldName } from "@/constants";
 import { useDecrypt } from "@/hooks/useDecrypt";
-import type { Id } from "@convex/_generated/dataModel";
-import { AlertTriangle, FileLock2 } from "lucide-react";
-import { useState } from "react";
-import { type Selection, Text } from "react-aria-components";
 
 /**
  * Get the readable field label for a given field.

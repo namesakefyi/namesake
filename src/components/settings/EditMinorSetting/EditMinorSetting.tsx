@@ -1,8 +1,8 @@
-import { Switch } from "@/components/common";
-import { SettingsItem } from "@/components/settings";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { useMutation } from "convex/react";
+import { Switch } from "@/components/common";
+import { SettingsItem } from "@/components/settings";
 
 type EditMinorSettingProps = {
   user: Doc<"users">;

@@ -1,5 +1,5 @@
-import { Disclosure, DisclosureGroup } from "@/components/common";
 import type { Meta } from "@storybook/react-vite";
+import { Disclosure, DisclosureGroup } from "@/components/common";
 
 const meta: Meta<typeof Disclosure> = {
   component: Disclosure,

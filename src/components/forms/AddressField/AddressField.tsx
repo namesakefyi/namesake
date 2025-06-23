@@ -1,11 +1,10 @@
-import { ComboBox, ComboBoxItem, TextField } from "@/components/common";
-import { type FieldName, JURISDICTIONS } from "@/constants";
-import { maskitoTransform } from "@maskito/core";
 import type { MaskitoOptions } from "@maskito/core";
-import { useEffect } from "react";
-import { useState } from "react";
+import { maskitoTransform } from "@maskito/core";
+import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { usaStatesWithCounties } from "typed-usa-states";
+import { ComboBox, ComboBoxItem, TextField } from "@/components/common";
+import { type FieldName, JURISDICTIONS } from "@/constants";
 
 type AddressType = "residence" | "mailing";
 

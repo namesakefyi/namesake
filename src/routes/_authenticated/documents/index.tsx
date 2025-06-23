@@ -1,11 +1,11 @@
+import { api } from "@convex/_generated/api";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { useQuery } from "convex/react";
+import { FileText } from "lucide-react";
 import { AppContent, PageHeader } from "@/components/app";
 import { Empty } from "@/components/common";
 import { DocumentsNav } from "@/components/documents";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { api } from "@convex/_generated/api";
-import { Navigate, createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "convex/react";
-import { FileText } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/documents/")({
   component: DocumentsIndexRoute,

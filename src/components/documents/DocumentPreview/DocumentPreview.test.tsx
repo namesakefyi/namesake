@@ -1,12 +1,13 @@
-import type { PDFDefinition } from "@/constants";
 import { render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { PDFDefinition } from "@/constants";
 import { DocumentPreview } from "./DocumentPreview";
 
 // Mock useFilledPdf
 vi.mock("@/hooks/useFilledPdf", () => ({
   useFilledPdf: vi.fn(),
 }));
+
 import { useFilledPdf } from "@/hooks/useFilledPdf";
 
 const mockPdf: PDFDefinition = {

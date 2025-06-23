@@ -1,7 +1,7 @@
 import {
   ToggleButtonGroup as AriaToggleButtonGroup,
-  type ToggleButtonGroupProps,
   composeRenderProps,
+  type ToggleButtonGroupProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
 

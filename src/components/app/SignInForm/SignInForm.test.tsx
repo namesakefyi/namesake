@@ -1,8 +1,8 @@
-import { authClient } from "@/main";
 import { useNavigate } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { authClient } from "@/main";
 import { SignInForm } from "./SignInForm";
 
 describe("SignInForm", () => {

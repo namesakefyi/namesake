@@ -1,5 +1,5 @@
-import { Calendar } from "@/components/common";
 import type { Meta } from "@storybook/react-vite";
+import { Calendar } from "@/components/common";
 
 const meta: Meta<typeof Calendar> = {
   component: Calendar,

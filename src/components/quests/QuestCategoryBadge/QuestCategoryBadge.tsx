@@ -1,3 +1,10 @@
+import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { CircleHelp, Pencil } from "lucide-react";
+import { useState } from "react";
+import type { Selection } from "react-aria-components";
+import { toast } from "sonner";
 import {
   Badge,
   BadgeButton,
@@ -9,13 +16,6 @@ import {
   TooltipTrigger,
 } from "@/components/common";
 import { CATEGORIES, type Category } from "@/constants";
-import { api } from "@convex/_generated/api";
-import type { Doc } from "@convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { CircleHelp, Pencil } from "lucide-react";
-import { useState } from "react";
-import type { Selection } from "react-aria-components";
-import { toast } from "sonner";
 
 type QuestCategoryBadgeProps = {
   quest?: Doc<"quests"> | null;
@@ -44,7 +44,7 @@ export const QuestCategoryBadge = ({
         category: [...keys][0] as Category,
       });
       setCategory(keys);
-    } catch (error) {
+    } catch (_error) {
       toast.error("Couldn't update state.");
     }
   };

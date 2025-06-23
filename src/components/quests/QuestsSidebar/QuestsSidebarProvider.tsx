@@ -1,5 +1,5 @@
-import type { Category } from "@/constants";
 import { createContext, useContext, useState } from "react";
+import type { Category } from "@/constants";
 
 type QuestsSidebarContextType = {
   activeTab: "user" | "all";
@@ -24,7 +24,9 @@ export const useQuestsSidebar = () => {
 
 export const QuestsSidebarProvider = ({
   children,
-}: { children: React.ReactNode }) => {
+}: {
+  children: React.ReactNode;
+}) => {
   const [activeTab, setActiveTabState] = useState<"user" | "all">("user");
   const [categoryFilter, setCategoryFilterState] = useState<
     Category | undefined

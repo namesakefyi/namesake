@@ -6,7 +6,12 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignore": ["convex/_generated", "routeTree.gen.ts", "convex.json"]
+    "includes": [
+      "**",
+      "!**/convex/_generated",
+      "!**/routeTree.gen.ts",
+      "!**/convex.json"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -23,18 +28,29 @@
       "correctness": {
         "useExhaustiveDependencies": "off"
       },
+      "nursery": {
+        "useUniqueElementIds": "off"
+      },
       "style": {
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "noParameterAssign": "error",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "noUselessElse": "error"
       },
       "suspicious": {
         "noExplicitAny": "off"
       }
     },
-    "ignore": ["dist"]
+    "includes": ["**", "!**/dist"]
   },
-  "organizeImports": {
-    "enabled": true
-  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "css": {
     "formatter": {
       "enabled": false

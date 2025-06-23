@@ -1,5 +1,3 @@
-import { Checkbox } from "@/components/common";
-import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 import {
   GridList as AriaGridList,
   GridListItem as AriaGridListItem,
@@ -8,6 +6,8 @@ import {
   type GridListProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { Checkbox } from "@/components/common";
+import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 
 export function GridList<T extends object>({
   children,

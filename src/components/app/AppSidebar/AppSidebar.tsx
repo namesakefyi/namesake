@@ -1,8 +1,8 @@
-import { Empty } from "@/components/common";
-import { useIsMobile } from "@/hooks/useIsMobile";
 import { AlertCircle } from "lucide-react";
 import { PostHogErrorBoundary } from "posthog-js/react";
 import { tv } from "tailwind-variants";
+import { Empty } from "@/components/common";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface AppSidebarProps {
   children: React.ReactNode;

@@ -1,9 +1,9 @@
 // Forked from https://github.com/pacocoursey/next-themes/blob/main/next-themes/src/index.tsx
 
-import { THEMES, type Theme, type ThemeColor } from "@/constants";
 import { api } from "@convex/_generated/api";
 import { useMutation } from "convex/react";
 import * as React from "react";
+import { THEMES, type Theme, type ThemeColor } from "@/constants";
 import { script } from "./script";
 
 export type Attribute = "class" | "data-theme" | "data-color";
@@ -66,7 +66,7 @@ const saveToLS = (storageKey: string, value: string) => {
   // Save to storage
   try {
     localStorage.setItem(storageKey, value);
-  } catch (e) {
+  } catch (_e) {
     // Unsupported
   }
 };
@@ -308,7 +308,7 @@ const getTheme = (key: string, fallback: Theme): Theme => {
   let theme: Theme | null = null;
   try {
     theme = localStorage.getItem(key) as Theme;
-  } catch (e) {
+  } catch (_e) {
     // Unsupported
   }
   return theme || fallback;
@@ -319,7 +319,7 @@ const getColor = (key: string, fallback: ThemeColor): ThemeColor => {
   let color: ThemeColor | null = null;
   try {
     color = localStorage.getItem(key) as ThemeColor;
-  } catch (e) {
+  } catch (_e) {
     // Unsupported
   }
   return color || fallback;

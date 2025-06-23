@@ -1,3 +1,5 @@
+import type { Meta } from "@storybook/react-vite";
+import { Ellipsis } from "lucide-react";
 import {
   Button,
   Menu,
@@ -7,8 +9,6 @@ import {
   MenuTrigger,
   SubmenuTrigger,
 } from "@/components/common";
-import type { Meta } from "@storybook/react-vite";
-import { Ellipsis } from "lucide-react";
 
 const meta: Meta<typeof Menu> = {
   component: Menu,

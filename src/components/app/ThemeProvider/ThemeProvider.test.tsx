@@ -1,7 +1,7 @@
-import { THEMES, THEME_COLORS, type ThemeColor } from "@/constants";
 import { act, render, screen } from "@testing-library/react";
 import { useMutation } from "convex/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { THEME_COLORS, THEMES, type ThemeColor } from "@/constants";
 import { ThemeProvider, useTheme } from "./ThemeProvider";
 
 const mockMatchMedia = vi.fn().mockImplementation((query: string) => ({

@@ -1,5 +1,3 @@
-import { AnimateChangeInHeight } from "@/components/common";
-import { focusRing } from "@/components/utils";
 import { ChevronDown } from "lucide-react";
 import {
   Button as AriaButton,
@@ -8,12 +6,14 @@ import {
   type DisclosureGroupProps as AriaDisclosureGroupProps,
   DisclosurePanel as AriaDisclosurePanel,
   type DisclosureProps as AriaDisclosureProps,
+  composeRenderProps,
   Header,
   type Key,
-  composeRenderProps,
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
+import { AnimateChangeInHeight } from "@/components/common";
+import { focusRing } from "@/components/utils";
 
 export interface DisclosureProps
   extends Omit<AriaDisclosureProps, "children" | "id"> {

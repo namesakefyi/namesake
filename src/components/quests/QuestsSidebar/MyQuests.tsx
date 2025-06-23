@@ -1,3 +1,9 @@
+import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
+import type { CategoryItem } from "@convex/model/userQuestsModel";
+import { useMutation, useQuery } from "convex/react";
+import { Milestone, X } from "lucide-react";
+import { toast } from "sonner";
 import {
   Badge,
   Button,
@@ -11,12 +17,6 @@ import {
 } from "@/components/common";
 import { StatusSelect } from "@/components/quests";
 import { CATEGORIES, type Category, type Status } from "@/constants";
-import { api } from "@convex/_generated/api";
-import type { Id } from "@convex/_generated/dataModel";
-import type { CategoryItem } from "@convex/model/userQuestsModel";
-import { useMutation, useQuery } from "convex/react";
-import { Milestone, X } from "lucide-react";
-import { toast } from "sonner";
 import { useQuestsSidebar } from "./QuestsSidebarProvider";
 
 export const MyQuests = () => {
@@ -37,7 +37,7 @@ export const MyQuests = () => {
   const handleRemoveQuest = async (questId: Id<"quests">) => {
     try {
       await removeQuest({ questId });
-    } catch (err) {
+    } catch (_err) {
       toast.error("Couldn't remove quest. Please try again.");
     }
   };
@@ -45,7 +45,7 @@ export const MyQuests = () => {
   const handleStatusChange = async (questId: Id<"quests">, status: Status) => {
     try {
       await updateStatus({ questId, status });
-    } catch (err) {
+    } catch (_err) {
       toast.error("Couldn't update status. Please try again.");
     }
   };
@@ -61,7 +61,7 @@ export const MyQuests = () => {
         },
         duration: 8000,
       });
-    } catch (err) {
+    } catch (_err) {
       toast.error("Couldn't dismiss placeholder. Please try again.");
     }
   };

@@ -1,3 +1,4 @@
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { AdminNav } from "@/components/admin";
 import {
   AppContent,
@@ -9,7 +10,6 @@ import {
   NamesakeHeader,
 } from "@/components/app";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: ({ context }) => {

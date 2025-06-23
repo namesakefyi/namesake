@@ -1,7 +1,7 @@
-import { authClient } from "@/main";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { authClient } from "@/main";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
 
 describe("ForgotPasswordForm", () => {

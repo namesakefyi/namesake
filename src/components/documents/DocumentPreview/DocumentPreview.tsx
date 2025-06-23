@@ -1,8 +1,8 @@
+import { FileWarning } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { Empty } from "@/components/common";
 import type { PDFDefinition } from "@/constants";
 import { useFilledPdf } from "@/hooks/useFilledPdf";
-import { FileWarning } from "lucide-react";
-import { useEffect, useRef } from "react";
 
 interface DocumentPreviewProps {
   pdf: PDFDefinition;

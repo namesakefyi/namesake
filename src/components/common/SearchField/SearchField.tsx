@@ -1,3 +1,9 @@
+import { CircleX, Search } from "lucide-react";
+import {
+  SearchField as AriaSearchField,
+  type SearchFieldProps as AriaSearchFieldProps,
+  type ValidationResult,
+} from "react-aria-components";
 import {
   Button,
   FieldDescription,
@@ -7,12 +13,6 @@ import {
   Label,
 } from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
-import { CircleX, Search } from "lucide-react";
-import {
-  SearchField as AriaSearchField,
-  type SearchFieldProps as AriaSearchFieldProps,
-  type ValidationResult,
-} from "react-aria-components";
 
 export interface SearchFieldProps extends AriaSearchFieldProps {
   label?: string;
