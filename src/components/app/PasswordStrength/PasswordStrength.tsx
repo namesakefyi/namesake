@@ -61,6 +61,7 @@ const StrengthLabel = ({ value }: { value: number }) => (
     <span
       className={`text-sm uppercase font-medium font-mono tracking-wider transition-colors duration-500 ${strengthConfig[value].color.text}`}
       aria-hidden={true}
+      data-testid="strength-label"
     >
       <RandomReveal
         characters={strengthConfig[value].label}
@@ -69,7 +70,6 @@ const StrengthLabel = ({ value }: { value: number }) => (
         revealEasing="linear"
         revealDuration={0.2}
         key={value}
-        aria-hidden={true}
       />
     </span>
     <span className="sr-only">{strengthConfig[value].label}</span>
