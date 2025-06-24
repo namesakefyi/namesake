@@ -1,5 +1,11 @@
 # namesake
 
+## 0.34.6
+
+### Patch Changes
+
+- e39e1ca: Reduce initial bundle size and dynamically load utilities more intelligently to improve app speed
+
 ## 0.34.5
 
 ### Patch Changes
