@@ -1,5 +1,29 @@
 # namesake
 
+## 0.34.7
+
+### Patch Changes
+
+- e8c861c: Fix redirect after sign-in on prod
+
+## 0.34.6
+
+### Patch Changes
+
+- e39e1ca: Reduce initial bundle size and dynamically load utilities more intelligently to improve app speed
+
+## 0.34.5
+
+### Patch Changes
+
+- 8d9a312: Resolve HTTP actions requests to proper subdomain
+
+## 0.34.4
+
+### Patch Changes
+
+- eb64f0d: Fix env config for Better Auth in production
+
 ## 0.34.3
 
 ### Patch Changes

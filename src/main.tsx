@@ -20,11 +20,12 @@ import { Empty } from "@/components/common";
 import type { Role } from "@/constants";
 import { routeTree } from "./routeTree.gen";
 
-const deploymentURL = import.meta.env.VITE_CONVEX_URL;
-const convex = new ConvexReactClient(deploymentURL);
+const apiEndpoint = import.meta.env.VITE_CONVEX_URL;
+const convex = new ConvexReactClient(apiEndpoint);
 
+const actionsEndpoint = import.meta.env.VITE_CONVEX_SITE_URL;
 export const authClient = createAuthClient({
-  baseURL: import.meta.env.VITE_CONVEX_SITE_URL,
+  baseURL: actionsEndpoint,
   plugins: [convexClient(), crossDomainClient()],
 });
 
