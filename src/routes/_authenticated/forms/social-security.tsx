@@ -25,8 +25,7 @@ import {
   type FieldName,
   type FieldType,
 } from "@/constants";
-import ss5ApplicationForSocialSecurityCard from "@/forms/federal/ss5-application-for-social-security-card";
-import { downloadMergedPdf } from "@/forms/utils";
+import { downloadMergedPdf, loadPdfs } from "@/forms/utils";
 import { useForm } from "@/hooks/useForm";
 
 export const Route = createFileRoute("/_authenticated/forms/social-security")({
@@ -77,7 +76,9 @@ function RouteComponent() {
     event.preventDefault();
 
     try {
-      const pdfs = [ss5ApplicationForSocialSecurityCard];
+      const pdfs = await loadPdfs([
+        { pdfId: "ss5-application-for-social-security-card" },
+      ]);
 
       await downloadMergedPdf({
         title: "Social Security Card",
