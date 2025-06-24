@@ -1,5 +1,11 @@
 # namesake
 
+## 0.34.4
+
+### Patch Changes
+
+- eb64f0d: Fix env config for Better Auth in production
+
 ## 0.34.3
 
 ### Patch Changes
