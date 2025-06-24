@@ -2,4 +2,4 @@
 "namesake": patch
 ---
 
-Update env config for Better Auth
+Fix env config for Better Auth in production
