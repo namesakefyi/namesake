@@ -23,12 +23,7 @@ import {
 } from "@/components/forms";
 import { QuestCostsTable } from "@/components/quests";
 import { BIRTHPLACES, type FieldName, type FieldType } from "@/constants";
-import affidavitOfIndigency from "@/forms/ma/affidavit-of-indigency";
-import cjd400MotionToImpound from "@/forms/ma/cjd400-motion-to-impound";
-import cjd400MotionToWaivePublication from "@/forms/ma/cjd400-motion-to-waive-publication";
-import cjp27PetitionToChangeNameOfAdult from "@/forms/ma/cjp27-petition-to-change-name-of-adult";
-import cjp34CoriAndWmsReleaseRequest from "@/forms/ma/cjp34-cori-and-wms-release-request";
-import { downloadMergedPdf } from "@/forms/utils";
+import { downloadMergedPdf, loadPdfs } from "@/forms/utils";
 import { useForm } from "@/hooks/useForm";
 
 export const Route = createFileRoute("/_authenticated/forms/ma-court-order")({
@@ -91,22 +86,22 @@ function RouteComponent() {
     event.preventDefault();
 
     try {
-      const pdfs = [
-        cjp27PetitionToChangeNameOfAdult,
-        cjp34CoriAndWmsReleaseRequest,
-      ];
-
-      if (form.watch("shouldWaivePublicationRequirement") === true) {
-        pdfs.push(cjd400MotionToWaivePublication);
-      }
-
-      if (form.watch("shouldImpoundCourtRecords") === true) {
-        pdfs.push(cjd400MotionToImpound);
-      }
-
-      if (form.watch("shouldApplyForFeeWaiver") === true) {
-        pdfs.push(affidavitOfIndigency);
-      }
+      const pdfs = await loadPdfs([
+        { pdfId: "cjp27-petition-to-change-name-of-adult" },
+        { pdfId: "cjp34-cori-and-wms-release-request" },
+        {
+          pdfId: "cjd400-motion-to-waive-publication",
+          include: form.watch("shouldWaivePublicationRequirement") === true,
+        },
+        {
+          pdfId: "cjd400-motion-to-impound-records",
+          include: form.watch("shouldImpoundCourtRecords") === true,
+        },
+        {
+          pdfId: "affidavit-of-indigency",
+          include: form.watch("shouldApplyForFeeWaiver") === true,
+        },
+      ]);
 
       await downloadMergedPdf({
         title: "Massachusetts Court Order",

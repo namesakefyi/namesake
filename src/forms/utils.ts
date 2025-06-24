@@ -1,12 +1,24 @@
-import {
-  PDFDocument,
-  popGraphicsState,
-  pushGraphicsState,
-  StandardFonts,
-  setCharacterSpacing,
-} from "@cantoo/pdf-lib";
-import type { FormData, PDFDefinition } from "@/constants";
+import type { FormData, PDFDefinition, PDFId } from "@/constants";
+import { getPdfDefinition } from "@/forms";
 import { smartquotes } from "@/utils/smartquotes";
+
+async function loadPdfLib() {
+  const {
+    PDFDocument,
+    popGraphicsState,
+    pushGraphicsState,
+    StandardFonts,
+    setCharacterSpacing,
+  } = await import("@cantoo/pdf-lib");
+
+  return {
+    PDFDocument,
+    popGraphicsState,
+    pushGraphicsState,
+    StandardFonts,
+    setCharacterSpacing,
+  };
+}
 
 /**
  * Fetch a PDF file from the /src/forms.
@@ -41,6 +53,7 @@ export async function fillPdf({
   userData: Partial<FormData>;
 }): Promise<Uint8Array> {
   try {
+    const { PDFDocument } = await loadPdfLib();
     const pdfFields = pdf.fields(userData);
 
     // Fetch the PDF with form fields
@@ -87,6 +100,7 @@ export async function getPdfForm({
   userData: Partial<FormData>;
 }) {
   try {
+    const { PDFDocument } = await loadPdfLib();
     const pdfBytes = await fillPdf({ pdf, userData });
     const pdfDoc = await PDFDocument.load(pdfBytes);
     return pdfDoc.getForm();
@@ -140,6 +154,7 @@ export async function downloadMergedPdf({
   pdfs: PDFDefinition[];
   userData: Partial<FormData>;
 }) {
+  const { PDFDocument } = await loadPdfLib();
   const mergedPdf = await PDFDocument.create();
 
   // Create and add cover page
@@ -194,6 +209,14 @@ export async function createCoverPage({
   instructions: string[];
   documents: Array<{ title: string; code?: string }>;
 }): Promise<Uint8Array> {
+  const {
+    PDFDocument,
+    StandardFonts,
+    pushGraphicsState,
+    popGraphicsState,
+    setCharacterSpacing,
+  } = await loadPdfLib();
+
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([612, 792]); // Standard US Letter size
   const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
@@ -320,4 +343,30 @@ export async function createCoverPage({
   });
 
   return await pdfDoc.save();
+}
+
+/**
+ * Load multiple PDFs.
+ *
+ * @param pdfs - Array of PDF configurations
+ * @param pdfs[].pdfId - The ID of the PDF to load
+ * @param pdfs[].include - Whether to include this PDF (defaults to `true`)
+ * @returns Promise that resolves to an array of PDF definitions
+ *
+ * @example
+ * ```typescript
+ * const pdfs = await loadPdfs([
+ *   { pdfId: "always-included-pdf" },
+ *   { pdfId: "conditional-pdf", include: someCondition },
+ * ]);
+ * ```
+ */
+export async function loadPdfs(
+  pdfs: Array<{ pdfId: PDFId; include?: boolean }>,
+) {
+  const pdfIds = pdfs
+    .filter(({ include = true }) => include)
+    .map(({ pdfId }) => pdfId);
+
+  return await Promise.all(pdfIds.map((pdfId) => getPdfDefinition(pdfId)));
 }
