@@ -1,5 +1,11 @@
 # namesake
 
+## 0.34.7
+
+### Patch Changes
+
+- e8c861c: Fix redirect after sign-in on prod
+
 ## 0.34.6
 
 ### Patch Changes
