@@ -16,14 +16,10 @@ import * as AuthModel from "./model/authModel";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
-const siteUrl =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5173"
-    : "https://app.namesake.fyi";
-
+const siteUrl = process.env.VITE_SITE_URL || "https://app.namesake.fyi";
 const trustedOrigins = [
   "http://localhost:5173",
-  "https://app.namesake.fyi",
+  process.env.VITE_SITE_URL || "https://app.namesake.fyi",
   process.env.CONVEX_CLOUD_URL || "https://api.namesake.fyi",
   process.env.CONVEX_SITE_URL || "https://actions.namesake.fyi",
 ];
