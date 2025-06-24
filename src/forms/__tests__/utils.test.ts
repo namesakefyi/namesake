@@ -11,7 +11,6 @@ import {
   loadPdfs,
 } from "../utils";
 
-// Mock getPdfDefinition from @/forms
 vi.mock("@/forms", () => ({
   getPdfDefinition: vi.fn(),
 }));
