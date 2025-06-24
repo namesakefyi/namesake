@@ -23,6 +23,8 @@ import { routeTree } from "./routeTree.gen";
 const deploymentURL = import.meta.env.VITE_CONVEX_URL;
 const convex = new ConvexReactClient(deploymentURL);
 
+console.log("VITE_CONVEX_SITE_URL", import.meta.env.VITE_CONVEX_SITE_URL);
+
 export const authClient = createAuthClient({
   baseURL: import.meta.env.VITE_CONVEX_SITE_URL,
   plugins: [convexClient(), crossDomainClient()],
