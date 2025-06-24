@@ -16,7 +16,10 @@ import * as AuthModel from "./model/authModel";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
-const siteUrl = process.env.SITE_URL ?? "http://localhost:5173";
+const siteUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5173"
+    : process.env.VITE_CONVEX_SITE_URL || "https://api.namesake.fyi";
 
 // Typesafe way to pass the functions below into the component
 const authFunctions: AuthFunctions = internal.auth;
@@ -41,7 +44,12 @@ export const createAuth = (ctx: GenericCtx) =>
         });
       },
     },
-    trustedOrigins: ["http://localhost:5173", "https://app.namesake.fyi"],
+    trustedOrigins: [
+      "http://localhost:5173",
+      "https://app.namesake.fyi",
+      "https://api.namesake.fyi",
+      "https://convex.namesake.fyi",
+    ],
     user: {
       deleteUser: {
         enabled: true,
