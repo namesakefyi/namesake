@@ -55,7 +55,7 @@ export function AddressField({
       return;
     }
 
-    import(/* webpackChunkName: "usa-states" */ "typed-usa-states")
+    import("typed-usa-states")
       .then((module) => {
         const state = module.usaStatesWithCounties.find(
           (state) => state.abbreviation === selectedState,
