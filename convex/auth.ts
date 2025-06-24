@@ -16,7 +16,10 @@ import * as AuthModel from "./model/authModel";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
-const siteUrl = process.env.CONVEX_SITE_URL ?? "http://localhost:5173";
+const siteUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5173"
+    : process.env.VITE_CONVEX_SITE_URL || "https://api.namesake.fyi";
 
 // Typesafe way to pass the functions below into the component
 const authFunctions: AuthFunctions = internal.auth;
