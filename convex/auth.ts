@@ -16,10 +16,10 @@ import * as AuthModel from "./model/authModel";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
-const actionsEndpoint =
+const siteUrl =
   process.env.NODE_ENV === "development"
     ? "http://localhost:5173"
-    : process.env.CONVEX_SITE_URL || "https://actions.namesake.fyi";
+    : "https://app.namesake.fyi";
 
 const trustedOrigins = [
   "http://localhost:5173",
@@ -37,7 +37,7 @@ export const betterAuthComponent = new BetterAuth(components.betterAuth, {
 export const createAuth = (ctx: GenericCtx) =>
   betterAuth({
     database: convexAdapter(ctx, betterAuthComponent),
-    plugins: [convex(), crossDomain({ siteUrl: actionsEndpoint })],
+    plugins: [convex(), crossDomain({ siteUrl })],
     emailAndPassword: {
       enabled: true,
       sendResetPassword: async ({ user, url }, _request) => {
