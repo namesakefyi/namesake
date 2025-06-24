@@ -19,18 +19,14 @@ const resend = new Resend(process.env.AUTH_RESEND_KEY);
 const siteUrl =
   process.env.NODE_ENV === "development"
     ? "http://localhost:5173"
-    : process.env.CONVEX_SITE_URL || "https://api.namesake.fyi";
-
-console.log("crossDomain siteUrl", siteUrl);
+    : process.env.CONVEX_SITE_URL || "https://actions.namesake.fyi";
 
 const trustedOrigins = [
   "http://localhost:5173",
   "https://app.namesake.fyi",
   process.env.CONVEX_CLOUD_URL || "https://api.namesake.fyi",
-  process.env.CONVEX_SITE_URL || "https://convex.namesake.fyi",
+  process.env.CONVEX_SITE_URL || "https://actions.namesake.fyi",
 ];
-
-console.log("trustedOrigins", trustedOrigins);
 
 // Typesafe way to pass the functions below into the component
 const authFunctions: AuthFunctions = internal.auth;

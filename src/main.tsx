@@ -24,7 +24,6 @@ const deploymentURL = import.meta.env.VITE_CONVEX_URL;
 const convex = new ConvexReactClient(deploymentURL);
 
 const baseURL = import.meta.env.VITE_CONVEX_SITE_URL;
-console.log("authClient baseURL (VITE_CONVEX_SITE_URL)", baseURL);
 
 export const authClient = createAuthClient({
   baseURL,
