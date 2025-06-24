@@ -1,5 +1,11 @@
 # namesake
 
+## 0.34.5
+
+### Patch Changes
+
+- 8d9a312: Resolve HTTP actions requests to proper subdomain
+
 ## 0.34.4
 
 ### Patch Changes
