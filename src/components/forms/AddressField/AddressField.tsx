@@ -55,7 +55,6 @@ export function AddressField({
       return;
     }
 
-    // Dynamically import typed-usa-states only when counties are needed
     import(/* webpackChunkName: "usa-states" */ "typed-usa-states")
       .then((module) => {
         const state = module.usaStatesWithCounties.find(
@@ -66,7 +65,6 @@ export function AddressField({
         }
       })
       .catch(() => {
-        // Handle import error gracefully
         setCounties([]);
       });
   }, [includeCounty, selectedState]);
