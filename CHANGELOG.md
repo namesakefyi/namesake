@@ -1,5 +1,11 @@
 # namesake
 
+## 0.35.1
+
+### Patch Changes
+
+- 9f6b3a7: Fix missing call-to-action button for quests not on a user's list
+
 ## 0.35.0
 
 ### Minor Changes
