@@ -27,12 +27,8 @@ import { useQuestsSidebar } from "./QuestsSidebarProvider";
 export const MyQuests = () => {
   const { setActiveTab, setCategoryFilter } = useQuestsSidebar();
 
-  // Use consolidated progress query
   const progress = useQuery(api.userQuests.getProgress);
-
-  const questsByCategory = useQuery(
-    api.userQuests.getByCategoryWithPlaceholders,
-  );
+  const questsByCategory = useQuery(api.userQuests.getQuestList);
 
   const removeQuest = useMutation(api.userQuests.deleteForever);
   const updateStatus = useMutation(api.userQuests.setStatus);
@@ -94,18 +90,15 @@ export const MyQuests = () => {
     setCategoryFilter(category);
   };
 
-  // Use progress data
   const hasQuests = progress ? progress.totalQuests > 0 : false;
-  const gettingStartedStatus = progress?.gettingStartedStatus ?? "notStarted";
 
-  const renderItem = (item: CategoryItem, category: Category) => {
-    const categoryInfo = CATEGORIES[category];
-
+  const renderItem = (item: CategoryItem) => {
     if (item.type === "placeholder") {
+      const categoryInfo = CATEGORIES[item.category];
       return (
         <NavItem
           key={`placeholder-${item.category}`}
-          onPress={() => handlePlaceholderClick(category)}
+          onPress={() => handlePlaceholderClick(item.category)}
           icon={categoryInfo.icon}
           size="large"
           className="border border-dashed border-dim cursor-pointer"
@@ -115,7 +108,7 @@ export const MyQuests = () => {
                 variant="icon"
                 size="small"
                 icon={X}
-                onPress={() => handleDismissPlaceholder(category)}
+                onPress={() => handleDismissPlaceholder(item.category)}
               />
               <Tooltip placement="right">Dismiss suggestion</Tooltip>
             </TooltipTrigger>
@@ -126,6 +119,29 @@ export const MyQuests = () => {
       );
     }
 
+    if (item.type === "gettingStarted") {
+      return (
+        <NavItem
+          key="getting-started"
+          href={{
+            to: "/quests/getting-started",
+          }}
+          size="large"
+          icon={GETTING_STARTED.icon}
+          actions={
+            <StatusSelect
+              status={item.data.status as Status}
+              onChange={handleGettingStartedStatusChange}
+              condensed
+            />
+          }
+        >
+          {GETTING_STARTED.label}
+        </NavItem>
+      );
+    }
+
+    const categoryInfo = CATEGORIES[item.category];
     const quest = item.data;
     return (
       <NavItem
@@ -147,28 +163,6 @@ export const MyQuests = () => {
       >
         {quest.title}
         {quest.jurisdiction && <Badge size="xs">{quest.jurisdiction}</Badge>}
-      </NavItem>
-    );
-  };
-
-  const renderGettingStartedItem = () => {
-    return (
-      <NavItem
-        key="getting-started"
-        href={{
-          to: "/quests/getting-started",
-        }}
-        size="large"
-        icon={GETTING_STARTED.icon}
-        actions={
-          <StatusSelect
-            status={gettingStartedStatus as Status}
-            onChange={handleGettingStartedStatusChange}
-            condensed
-          />
-        }
-      >
-        {GETTING_STARTED.label}
       </NavItem>
     );
   };
@@ -218,10 +212,7 @@ export const MyQuests = () => {
       <Nav>
         {questsByCategory.map((group) => (
           <NavGroup key={group.category} label={group.label}>
-            {group.label === "Core" &&
-              progress?.hasGettingStarted &&
-              renderGettingStartedItem()}
-            {group.items.map((item) => renderItem(item, item.category))}
+            {group.items.map((item) => renderItem(item))}
           </NavGroup>
         ))}
       </Nav>

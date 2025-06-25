@@ -129,10 +129,10 @@ export const getByCategory = userQuery({
   },
 });
 
-export const getByCategoryWithPlaceholders = userQuery({
+export const getQuestList = userQuery({
   args: {},
   handler: async (ctx) => {
-    return await UserQuests.getByCategoryWithPlaceholdersForUser(ctx, {
+    return await UserQuests.getQuestListForUser(ctx, {
       userId: ctx.userId,
     });
   },
@@ -143,30 +143,8 @@ export const getProgress = userQuery({
   returns: v.object({
     totalQuests: v.number(),
     completedQuests: v.number(),
-    hasGettingStarted: v.boolean(),
-    gettingStartedStatus: v.string(),
   }),
   handler: async (ctx) => {
-    const [userQuestsCount, completedQuestsCount, gettingStarted] =
-      await Promise.all([
-        UserQuests.getCountForUser(ctx, { userId: ctx.userId }),
-        UserQuests.getCompletedCountForUser(ctx, { userId: ctx.userId }),
-        ctx.db
-          .query("userGettingStarted")
-          .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-          .first(),
-      ]);
-
-    const hasGettingStarted = gettingStarted !== null;
-    const gettingStartedStatus = gettingStarted?.status ?? "notStarted";
-    const isGettingStartedComplete = gettingStartedStatus === "complete";
-
-    return {
-      totalQuests: userQuestsCount + (hasGettingStarted ? 1 : 0),
-      completedQuests:
-        completedQuestsCount + (isGettingStartedComplete ? 1 : 0),
-      hasGettingStarted,
-      gettingStartedStatus,
-    };
+    return await UserQuests.getProgressForUser(ctx, { userId: ctx.userId });
   },
 });

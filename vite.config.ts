@@ -103,9 +103,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    tanstackRouter({
-      target: "react",
-    }),
+    tanstackRouter(),
     tsconfigPaths(),
     react(),
     webpackStatsPlugin(),

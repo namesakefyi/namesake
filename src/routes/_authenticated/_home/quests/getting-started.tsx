@@ -19,7 +19,7 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  const gettingStartedData = useQuery(api.userGettingStarted.get);
+  const gettingStarted = useQuery(api.userGettingStarted.get);
   const updateGettingStartedStatus = useMutation(
     api.userGettingStarted.setStatus,
   );
@@ -36,7 +36,7 @@ function RouteComponent() {
     <>
       <PageHeader title="Getting Started" mobileBackLink={{ to: "/" }}>
         <StatusSelect
-          status={gettingStartedData?.status as Status}
+          status={gettingStarted?.status as Status}
           onChange={handleStatusChange}
         />
       </PageHeader>
@@ -50,11 +50,11 @@ function RouteComponent() {
       </Banner>
       <HowToChangeNames />
       <QuestCallToAction
-        gettingStarted={gettingStartedData}
+        data={{ gettingStarted }}
         illustration="birthCertificate"
         onChangeStatus={handleStatusChange}
         className="mt-4 mb-8"
-        isLoading={gettingStartedData === undefined}
+        isLoading={gettingStarted === undefined}
       />
     </>
   );

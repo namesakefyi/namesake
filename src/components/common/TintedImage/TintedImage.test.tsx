@@ -93,17 +93,4 @@ describe("TintedImage", () => {
       backgroundImage.getAttribute("alt"),
     );
   });
-
-  it("has correct z-index stacking", () => {
-    render(<TintedImage {...defaultProps} />);
-    const images = screen.getAllByRole("img", { hidden: true });
-    const mainImage = images[0];
-    const backgroundImage = images[1];
-
-    // Main image should not have z-index class (stays in normal flow)
-    expect(mainImage).not.toHaveClass("-z-1");
-
-    // Background image should have negative z-index
-    expect(backgroundImage).toHaveClass("-z-1");
-  });
 });

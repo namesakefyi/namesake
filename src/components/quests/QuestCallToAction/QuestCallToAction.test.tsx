@@ -41,7 +41,12 @@ describe("QuestCallToAction", () => {
   });
 
   it("shows 'Add to my quests' button when no userQuest exists", () => {
-    render(<QuestCallToAction quest={mockQuest} onAddQuest={mockOnAddQuest} />);
+    render(
+      <QuestCallToAction
+        data={{ quest: mockQuest }}
+        onAddQuest={mockOnAddQuest}
+      />,
+    );
     expect(screen.getByText("Add to my quests")).toBeInTheDocument();
   });
 
@@ -49,7 +54,12 @@ describe("QuestCallToAction", () => {
     const user = userEvent.setup();
     mockOnAddQuest.mockResolvedValueOnce(undefined);
 
-    render(<QuestCallToAction quest={mockQuest} onAddQuest={mockOnAddQuest} />);
+    render(
+      <QuestCallToAction
+        data={{ quest: mockQuest }}
+        onAddQuest={mockOnAddQuest}
+      />,
+    );
     await user.click(screen.getByText("Add to my quests"));
 
     expect(mockOnAddQuest).toHaveBeenCalled();
@@ -58,8 +68,7 @@ describe("QuestCallToAction", () => {
   it("shows 'Mark as in progress' button for not started quests", () => {
     render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("notStarted")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("notStarted") }}
         onChangeStatus={mockOnChangeStatus}
       />,
     );
@@ -69,8 +78,7 @@ describe("QuestCallToAction", () => {
   it("shows 'Mark as done' button for in progress quests", () => {
     render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("inProgress")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("inProgress") }}
         onChangeStatus={mockOnChangeStatus}
       />,
     );
@@ -80,8 +88,7 @@ describe("QuestCallToAction", () => {
   it("shows completion date for completed quests", () => {
     render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("complete")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("complete") }}
       />,
     );
     expect(screen.getByText("Done!")).toBeInTheDocument();
@@ -93,8 +100,7 @@ describe("QuestCallToAction", () => {
 
     render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("notStarted")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("notStarted") }}
         onChangeStatus={mockOnChangeStatus}
       />,
     );
@@ -109,8 +115,7 @@ describe("QuestCallToAction", () => {
 
     render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("inProgress")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("inProgress") }}
         onChangeStatus={mockOnChangeStatus}
       />,
     );
@@ -120,7 +125,7 @@ describe("QuestCallToAction", () => {
   });
 
   it("shows illustration for core quests", () => {
-    render(<QuestCallToAction quest={mockCoreQuest} />);
+    render(<QuestCallToAction data={{ quest: mockCoreQuest }} />);
     const images = screen.getAllByAltText("A snail on a passport");
     const visibleImage = images.find((img) => !img.hasAttribute("aria-hidden"));
     expect(visibleImage).toBeInTheDocument();
@@ -129,8 +134,7 @@ describe("QuestCallToAction", () => {
   it("applies success styling for completed quests", () => {
     const { container } = render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("complete")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("complete") }}
       />,
     );
     expect(container.firstChild).toHaveClass(
@@ -142,8 +146,7 @@ describe("QuestCallToAction", () => {
   it("shows relative completion time", () => {
     render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("complete")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("complete") }}
       />,
     );
     expect(screen.getByText(/ago$/)).toBeInTheDocument();
@@ -151,15 +154,17 @@ describe("QuestCallToAction", () => {
 
   it("maintains consistent button width", () => {
     const { rerender } = render(
-      <QuestCallToAction quest={mockQuest} onAddQuest={mockOnAddQuest} />,
+      <QuestCallToAction
+        data={{ quest: mockQuest }}
+        onAddQuest={mockOnAddQuest}
+      />,
     );
     const addButton = screen.getByRole("button", { name: "Add to my quests" });
     expect(addButton).toHaveClass("w-64");
 
     rerender(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("inProgress")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("inProgress") }}
         onChangeStatus={mockOnChangeStatus}
       />,
     );
@@ -170,7 +175,7 @@ describe("QuestCallToAction", () => {
   });
 
   it("shows loading state when isLoading is true", () => {
-    render(<QuestCallToAction isLoading={true} />);
+    render(<QuestCallToAction data={{ quest: mockQuest }} isLoading={true} />);
     const loadingButton = screen.getByRole("button");
     expect(loadingButton).toBeDisabled();
     expect(loadingButton).toHaveClass("w-64");

@@ -68,17 +68,23 @@ function QuestIllustration({
   );
 }
 
+export type QuestCTAData =
+  | {
+      quest: Doc<"quests"> | null | undefined;
+      userQuest: Doc<"userQuests"> | null | undefined;
+    }
+  | { gettingStarted: Doc<"userGettingStarted"> | null | undefined }
+  | { quest: Doc<"quests"> | null | undefined };
+
 type QuestCTAButtonProps = {
-  userQuest?: Doc<"userQuests"> | null;
-  gettingStarted?: Doc<"userGettingStarted"> | null;
+  data: QuestCTAData;
   onAddQuest?: () => Promise<void>;
   onChangeStatus?: (status: Status) => Promise<void>;
   isLoading?: boolean;
 };
 
 const QuestCTAButton = ({
-  userQuest,
-  gettingStarted,
+  data,
   onAddQuest,
   onChangeStatus,
   isLoading = false,
@@ -109,7 +115,6 @@ const QuestCTAButton = ({
     base: "w-64",
   });
 
-  // Show loading state if explicitly loading
   if (isLoading) {
     return (
       <Button
@@ -122,11 +127,21 @@ const QuestCTAButton = ({
     );
   }
 
-  const currentStatus = userQuest?.status || gettingStarted?.status;
-  const currentCompletedAt =
-    userQuest?.completedAt || gettingStarted?.completedAt;
+  const currentStatus =
+    "gettingStarted" in data
+      ? data.gettingStarted?.status
+      : "userQuest" in data
+        ? data.userQuest?.status
+        : undefined;
 
-  if (!userQuest && !gettingStarted && onAddQuest) {
+  const currentCompletedAt =
+    "gettingStarted" in data
+      ? data.gettingStarted?.completedAt
+      : "userQuest" in data
+        ? data.userQuest?.completedAt
+        : undefined;
+
+  if ("quest" in data && !("userQuest" in data) && onAddQuest) {
     return (
       <Button
         className={sharedButtonStyles()}
@@ -186,9 +201,7 @@ const QuestCTAButton = ({
 };
 
 type QuestCallToActionProps = {
-  quest?: Doc<"quests">;
-  userQuest?: Doc<"userQuests"> | null;
-  gettingStarted?: Doc<"userGettingStarted"> | null;
+  data: QuestCTAData;
   illustration?: IllustrationType;
   onAddQuest?: () => Promise<void>;
   onChangeStatus?: (status: Status) => Promise<void>;
@@ -197,9 +210,7 @@ type QuestCallToActionProps = {
 };
 
 export const QuestCallToAction = ({
-  quest,
-  userQuest,
-  gettingStarted,
+  data,
   illustration,
   onAddQuest,
   onChangeStatus,
@@ -216,7 +227,14 @@ export const QuestCallToAction = ({
     },
   });
 
-  const currentStatus = userQuest?.status || gettingStarted?.status;
+  const currentStatus =
+    "gettingStarted" in data
+      ? data.gettingStarted?.status
+      : "userQuest" in data
+        ? data.userQuest?.status
+        : undefined;
+
+  const quest = "quest" in data ? data.quest : undefined;
 
   const displayIllustration =
     illustration ||
@@ -238,8 +256,7 @@ export const QuestCallToAction = ({
       )}
       <div className="relative z-0">
         <QuestCTAButton
-          userQuest={userQuest}
-          gettingStarted={gettingStarted}
+          data={data}
           onAddQuest={onAddQuest}
           onChangeStatus={onChangeStatus}
           isLoading={isLoading}

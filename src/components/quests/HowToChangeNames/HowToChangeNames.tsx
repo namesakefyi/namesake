@@ -53,7 +53,6 @@ export const HowToChangeNames = () => {
         <Heading className="text-2xl leading-tight font-medium text-pretty">
           How to change your legal name
         </Heading>
-        {/* <p className="text-pretty text-dim">(and/or gender marker)</p> */}
       </header>
       <section className="@container full-bleed overflow-x-auto snap-x scroll-p-8 no-scrollbar">
         <ol className="grid grid-cols-4 gap-8 py-4 px-6 min-w-[min(1200px,280vw)] mx-auto">

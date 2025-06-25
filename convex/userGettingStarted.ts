@@ -9,7 +9,7 @@ export const get = userQuery({
     const userGettingStarted = await ctx.db
       .query("userGettingStarted")
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-      .first();
+      .unique();
 
     return userGettingStarted;
   },
@@ -22,7 +22,7 @@ export const getStatus = userQuery({
     const userGettingStarted = await ctx.db
       .query("userGettingStarted")
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-      .first();
+      .unique();
 
     return userGettingStarted?.status ?? "notStarted";
   },
@@ -35,7 +35,7 @@ export const setStatus = userMutation({
     const existing = await ctx.db
       .query("userGettingStarted")
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-      .first();
+      .unique();
 
     if (!existing) {
       const update = {
@@ -94,15 +94,16 @@ export const create = userMutation({
     const existing = await ctx.db
       .query("userGettingStarted")
       .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-      .first();
+      .unique();
 
     if (existing) {
-      throw new Error("Getting started already exists for user");
+      throw new Error("Getting started quest already exists for user");
     }
 
     await ctx.db.insert("userGettingStarted", {
       userId: ctx.userId,
-      status: "notStarted",
+      status: "inProgress",
+      startedAt: Date.now(),
     });
   },
 });

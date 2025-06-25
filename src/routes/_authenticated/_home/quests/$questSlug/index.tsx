@@ -61,8 +61,7 @@ function QuestDetailRoute() {
       <div className="flex flex-1 flex-col gap-6 py-6">
         <QuestContent quest={quest} editable={false} />
         <QuestCallToAction
-          quest={quest}
-          userQuest={userQuest}
+          data={{ quest, userQuest }}
           onAddQuest={handleAddQuest}
           onChangeStatus={handleChangeStatus}
           isLoading={!questData}
