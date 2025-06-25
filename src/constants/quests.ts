@@ -26,6 +26,7 @@ import {
   Scale,
   ShieldCheck,
   ShoppingBag,
+  Sprout,
   Zap,
 } from "lucide-react";
 import { usaStates } from "typed-usa-states";
@@ -263,4 +264,13 @@ export const DEFAULT_TIME_REQUIRED: TimeRequired = {
   min: 2,
   max: 6,
   unit: "weeks",
+} as const;
+
+/**
+ * Getting Started guide details.
+ */
+export const GETTING_STARTED: GroupDetails = {
+  label: "Getting Started",
+  icon: Sprout,
+  isCore: true,
 } as const;

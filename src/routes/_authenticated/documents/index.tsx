@@ -38,7 +38,7 @@ function DocumentsIndexRoute() {
   return (
     <AppContent>
       <PageHeader title="Documents" />
-      <DocumentsNav className="app-padding" />
+      <DocumentsNav />
     </AppContent>
   );
 }

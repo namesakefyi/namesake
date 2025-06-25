@@ -49,6 +49,7 @@ function RouteComponent() {
         title={data.title ?? "Unknown Document"}
         badge={badges}
         mobileBackLink={{ to: "/documents" }}
+        className="px-4 lg:px-6"
       />
       <DocumentPreview pdf={data} />
     </div>

@@ -16,18 +16,25 @@ import {
   TooltipTrigger,
 } from "@/components/common";
 import { StatusSelect } from "@/components/quests";
-import { CATEGORIES, type Category, type Status } from "@/constants";
+import {
+  CATEGORIES,
+  type Category,
+  GETTING_STARTED,
+  type Status,
+} from "@/constants";
 import { useQuestsSidebar } from "./QuestsSidebarProvider";
 
 export const MyQuests = () => {
   const { setActiveTab, setCategoryFilter } = useQuestsSidebar();
-  const userQuests = useQuery(api.userQuests.count) ?? 0;
-  const completedQuests = useQuery(api.userQuests.countCompleted) ?? 0;
-  const questsByCategory = useQuery(
-    api.userQuests.getByCategoryWithPlaceholders,
-  );
+
+  const progress = useQuery(api.userQuests.getProgress);
+  const questsByCategory = useQuery(api.userQuests.getQuestList);
+
   const removeQuest = useMutation(api.userQuests.deleteForever);
   const updateStatus = useMutation(api.userQuests.setStatus);
+  const updateGettingStartedStatus = useMutation(
+    api.userGettingStarted.setStatus,
+  );
   const addDefaultPlaceholders = useMutation(
     api.userQuestPlaceholders.createDefault,
   );
@@ -47,6 +54,14 @@ export const MyQuests = () => {
       await updateStatus({ questId, status });
     } catch (_err) {
       toast.error("Couldn't update status. Please try again.");
+    }
+  };
+
+  const handleGettingStartedStatusChange = async (status: Status) => {
+    try {
+      await updateGettingStartedStatus({ status });
+    } catch (_err) {
+      toast.error("Couldn't update getting started status. Please try again.");
     }
   };
 
@@ -75,16 +90,15 @@ export const MyQuests = () => {
     setCategoryFilter(category);
   };
 
-  const hasQuests = userQuests > 0;
+  const hasQuests = progress ? progress.totalQuests > 0 : false;
 
-  const renderItem = (item: CategoryItem, category: Category) => {
-    const categoryInfo = CATEGORIES[category];
-
+  const renderItem = (item: CategoryItem) => {
     if (item.type === "placeholder") {
+      const categoryInfo = CATEGORIES[item.category];
       return (
         <NavItem
           key={`placeholder-${item.category}`}
-          onPress={() => handlePlaceholderClick(category)}
+          onPress={() => handlePlaceholderClick(item.category)}
           icon={categoryInfo.icon}
           size="large"
           className="border border-dashed border-dim cursor-pointer"
@@ -94,7 +108,7 @@ export const MyQuests = () => {
                 variant="icon"
                 size="small"
                 icon={X}
-                onPress={() => handleDismissPlaceholder(category)}
+                onPress={() => handleDismissPlaceholder(item.category)}
               />
               <Tooltip placement="right">Dismiss suggestion</Tooltip>
             </TooltipTrigger>
@@ -105,6 +119,29 @@ export const MyQuests = () => {
       );
     }
 
+    if (item.type === "gettingStarted") {
+      return (
+        <NavItem
+          key="getting-started"
+          href={{
+            to: "/quests/getting-started",
+          }}
+          size="large"
+          icon={GETTING_STARTED.icon}
+          actions={
+            <StatusSelect
+              status={item.data.status as Status}
+              onChange={handleGettingStartedStatusChange}
+              condensed
+            />
+          }
+        >
+          {GETTING_STARTED.label}
+        </NavItem>
+      );
+    }
+
+    const categoryInfo = CATEGORIES[item.category];
     const quest = item.data;
     return (
       <NavItem
@@ -152,19 +189,21 @@ export const MyQuests = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      {hasQuests && (
+      {hasQuests && progress && (
         <div className="flex">
           <ProgressBar
             label="Progress"
-            value={completedQuests}
-            maxValue={userQuests}
+            value={progress.completedQuests}
+            maxValue={progress.totalQuests}
             valueLabel={
               <span className="text-normal">
                 <span className="text-normal text-base font-medium mr-0.5 leading-none">
-                  {completedQuests}
+                  {progress.completedQuests}
                 </span>{" "}
                 <span className="text-dim opacity-60">/</span>{" "}
-                <span className="text-dim">{userQuests} complete</span>
+                <span className="text-dim">
+                  {progress.totalQuests} complete
+                </span>
               </span>
             }
           />
@@ -173,7 +212,7 @@ export const MyQuests = () => {
       <Nav>
         {questsByCategory.map((group) => (
           <NavGroup key={group.category} label={group.label}>
-            {group.items.map((item) => renderItem(item, item.category))}
+            {group.items.map((item) => renderItem(item))}
           </NavGroup>
         ))}
       </Nav>

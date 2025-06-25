@@ -23,6 +23,11 @@ export async function createUser(
     color: "rainbow",
   });
 
+  await ctx.db.insert("userGettingStarted", {
+    userId: id,
+    status: "inProgress",
+  });
+
   await UserQuestPlaceholders.createDefaultPlaceholdersForUser(ctx, {
     userId: id,
   });

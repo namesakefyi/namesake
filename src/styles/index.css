@@ -22,8 +22,27 @@ body,
   min-height: 100dvh;
 }
 
-.app-padding {
-  @apply px-4 md:px-6 lg:px-8;
+.app-content {
+  --gutter: 1.25em;
+  
+  @media (width > 1024px) {
+    --gutter: 1.5rem;
+  }
+
+  display: grid;
+  grid-template-columns: 1fr min(960px, calc(100% - 2 * var(--gutter))) 1fr;
+  grid-column-gap: var(--gutter);
+
+  & > * {
+    grid-column: 2;
+    min-width: 0;
+  }
+
+  .full-bleed {
+    width: 100%;
+    grid-column: 1 / -1;
+    padding-inline: 0;
+  }
 }
 
 .h-header {

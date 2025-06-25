@@ -55,7 +55,7 @@ export function StatusBadge({
 interface StatusSelectProps {
   status: Status;
   onChange: (status: Status) => void;
-  onRemove: () => void;
+  onRemove?: () => void;
   condensed?: boolean;
   className?: string;
 }
@@ -81,7 +81,7 @@ export function StatusSelect({
   };
 
   const handleRemove = () => {
-    onRemove();
+    onRemove?.();
   };
 
   const buttonStyles = tv({
@@ -123,9 +123,11 @@ export function StatusSelect({
             </MenuItem>
           ))}
         </MenuSection>
-        <MenuSection>
-          <MenuItem onAction={handleRemove}>Remove from my quests</MenuItem>
-        </MenuSection>
+        {onRemove && (
+          <MenuSection>
+            <MenuItem onAction={handleRemove}>Remove from my quests</MenuItem>
+          </MenuSection>
+        )}
       </Menu>
     </MenuTrigger>
   );

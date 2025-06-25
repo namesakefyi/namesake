@@ -1,6 +1,5 @@
 import { AlertCircle } from "lucide-react";
 import { PostHogErrorBoundary } from "posthog-js/react";
-import { tv } from "tailwind-variants";
 import { Empty } from "@/components/common";
 
 type AppContentProps = {
@@ -9,10 +8,6 @@ type AppContentProps = {
 };
 
 export const AppContent = ({ children, className }: AppContentProps) => {
-  const styles = tv({
-    base: "flex-1 w-full min-w-0 max-w-[960px] mx-auto",
-  });
-
   const fallback = () => {
     return (
       <Empty
@@ -25,7 +20,9 @@ export const AppContent = ({ children, className }: AppContentProps) => {
 
   return (
     <PostHogErrorBoundary fallback={fallback}>
-      <main className={styles({ className })}>{children}</main>
+      <main className="flex-1 w-full min-w-0">
+        <div className={`app-content ${className}`}>{children}</div>
+      </main>
     </PostHogErrorBoundary>
   );
 };

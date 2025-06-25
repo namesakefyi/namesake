@@ -16,12 +16,12 @@ export interface BannerProps {
 }
 
 const bannerStyles = tv({
-  base: "flex items-start w-full rounded-lg bg-theme-a4 text-dim prose",
+  base: "flex items-start w-full rounded-lg bg-primary-3 text-primary-12 [&_a]:text-primary-12 prose",
   variants: {
     variant: {
-      success: "bg-green-a4 text-green-12 [&_a]:text-green-12",
-      danger: "bg-red-a4 text-red-12 [&_a]:text-red-12",
-      warning: "bg-yellow-a4 text-yellow-12 [&_a]:text-yellow-12",
+      success: "bg-green-3 text-green-12 [&_a]:text-green-12",
+      danger: "bg-red-3 text-red-12 [&_a]:text-red-12",
+      warning: "bg-yellow-3 text-yellow-12 [&_a]:text-yellow-12",
     },
     size: {
       medium: "gap-2 p-2.5 px-3 pr-4 !text-sm",
@@ -35,7 +35,7 @@ const bannerStyles = tv({
 });
 
 const iconStyles = tv({
-  base: "text-theme-11 shrink-0",
+  base: "text-primary-11 shrink-0",
   variants: {
     variant: {
       success: "text-green-11",

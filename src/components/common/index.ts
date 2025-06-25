@@ -45,6 +45,7 @@ export * from "./TextArea/TextArea";
 export * from "./TextField/TextField";
 export * from "./TimeAgo/TimeAgo";
 export * from "./TimeField/TimeField";
+export * from "./TintedImage/TintedImage";
 export * from "./ToggleButton/ToggleButton";
 export * from "./ToggleButtonGroup/ToggleButtonGroup";
 export * from "./Toolbar/Toolbar";

@@ -5,8 +5,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { QuestsSidebar } from "./QuestsSidebar";
 
 interface MockQueriesConfig {
-  totalQuests?: number | undefined;
-  completedQuests?: number | undefined;
+  progress?:
+    | {
+        totalQuests: number;
+        completedQuests: number;
+        hasGettingStarted: boolean;
+        gettingStartedStatus: string;
+      }
+    | undefined;
   questsByCategory?:
     | Array<{
         label: string;
@@ -22,19 +28,20 @@ interface MockQueriesConfig {
 }
 
 const mockQueries = ({
-  totalQuests = 0,
-  completedQuests = 0,
+  progress = {
+    totalQuests: 0,
+    completedQuests: 0,
+    hasGettingStarted: false,
+    gettingStartedStatus: "notStarted",
+  },
   questsByCategory = [],
 }: MockQueriesConfig = {}) => {
   const queryMock = useQuery as ReturnType<typeof vi.fn>;
 
-  queryMock
-    .mockReturnValueOnce(totalQuests)
-    .mockReturnValueOnce(completedQuests)
-    .mockReturnValueOnce(questsByCategory);
+  queryMock.mockReturnValueOnce(progress).mockReturnValueOnce(questsByCategory);
 };
 
-describe("QuestsNav", () => {
+describe("QuestsSidebar", () => {
   const mockMatchRoute = vi.fn();
 
   beforeEach(() => {
@@ -46,8 +53,12 @@ describe("QuestsNav", () => {
 
   it("renders progress bar when there are quests", () => {
     mockQueries({
-      totalQuests: 5,
-      completedQuests: 2,
+      progress: {
+        totalQuests: 5,
+        completedQuests: 2,
+        hasGettingStarted: false,
+        gettingStartedStatus: "notStarted",
+      },
       questsByCategory: [
         {
           label: "Core",
@@ -87,7 +98,12 @@ describe("QuestsNav", () => {
 
   it("renders quest items with status badges and jurisdiction", () => {
     mockQueries({
-      totalQuests: 1,
+      progress: {
+        totalQuests: 1,
+        completedQuests: 0,
+        hasGettingStarted: false,
+        gettingStartedStatus: "notStarted",
+      },
       questsByCategory: [
         {
           label: "Core",
@@ -120,7 +136,12 @@ describe("QuestsNav", () => {
 
   it("renders additional quest groups", () => {
     mockQueries({
-      totalQuests: 1,
+      progress: {
+        totalQuests: 1,
+        completedQuests: 0,
+        hasGettingStarted: false,
+        gettingStartedStatus: "notStarted",
+      },
       questsByCategory: [
         {
           label: "Other",
@@ -151,8 +172,7 @@ describe("QuestsNav", () => {
 
   it("handles loading state when queries return undefined", () => {
     mockQueries({
-      totalQuests: undefined,
-      completedQuests: undefined,
+      progress: undefined,
       questsByCategory: undefined,
     });
 

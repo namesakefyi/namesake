@@ -129,11 +129,22 @@ export const getByCategory = userQuery({
   },
 });
 
-export const getByCategoryWithPlaceholders = userQuery({
+export const getQuestList = userQuery({
   args: {},
   handler: async (ctx) => {
-    return await UserQuests.getByCategoryWithPlaceholdersForUser(ctx, {
+    return await UserQuests.getQuestListForUser(ctx, {
       userId: ctx.userId,
     });
+  },
+});
+
+export const getProgress = userQuery({
+  args: {},
+  returns: v.object({
+    totalQuests: v.number(),
+    completedQuests: v.number(),
+  }),
+  handler: async (ctx) => {
+    return await UserQuests.getProgressForUser(ctx, { userId: ctx.userId });
   },
 });

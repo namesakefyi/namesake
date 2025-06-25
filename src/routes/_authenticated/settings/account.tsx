@@ -32,7 +32,7 @@ function SettingsAccountRoute() {
           icon={UserX}
         />
       ) : (
-        <div className="app-padding pb-8">
+        <div className="pb-8">
           <SettingsGroup title="Personal Information">
             <EditNameSetting user={user} />
             <EditEmailSetting user={user} />

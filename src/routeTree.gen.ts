@@ -31,6 +31,7 @@ import { Route as AuthenticatedFormsMaCourtOrderRouteImport } from './routes/_au
 import { Route as AuthenticatedDocumentsPdfIdRouteImport } from './routes/_authenticated/documents/$pdfId'
 import { Route as AuthenticatedAdminQuestsIndexRouteImport } from './routes/_authenticated/admin/quests.index'
 import { Route as AuthenticatedHomeQuestsIndexRouteImport } from './routes/_authenticated/_home/quests/index'
+import { Route as AuthenticatedHomeQuestsGettingStartedRouteImport } from './routes/_authenticated/_home/quests/getting-started'
 import { Route as AuthenticatedHomeQuestsQuestSlugRouteRouteImport } from './routes/_authenticated/_home/quests/$questSlug/route'
 import { Route as AuthenticatedHomeQuestsQuestSlugIndexRouteImport } from './routes/_authenticated/_home/quests/$questSlug/index'
 import { Route as AuthenticatedHomeQuestsQuestSlugEditRouteImport } from './routes/_authenticated/_home/quests/$questSlug/edit'
@@ -154,6 +155,12 @@ const AuthenticatedHomeQuestsIndexRoute =
     path: '/quests/',
     getParentRoute: () => AuthenticatedHomeRoute,
   } as any)
+const AuthenticatedHomeQuestsGettingStartedRoute =
+  AuthenticatedHomeQuestsGettingStartedRouteImport.update({
+    id: '/quests/getting-started',
+    path: '/quests/getting-started',
+    getParentRoute: () => AuthenticatedHomeRoute,
+  } as any)
 const AuthenticatedHomeQuestsQuestSlugRouteRoute =
   AuthenticatedHomeQuestsQuestSlugRouteRouteImport.update({
     id: '/quests/$questSlug',
@@ -192,6 +199,7 @@ export interface FileRoutesByFullPath {
   '/documents/': typeof AuthenticatedDocumentsIndexRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/quests/$questSlug': typeof AuthenticatedHomeQuestsQuestSlugRouteRouteWithChildren
+  '/quests/getting-started': typeof AuthenticatedHomeQuestsGettingStartedRoute
   '/quests': typeof AuthenticatedHomeQuestsIndexRoute
   '/admin/quests': typeof AuthenticatedAdminQuestsIndexRoute
   '/quests/$questSlug/edit': typeof AuthenticatedHomeQuestsQuestSlugEditRoute
@@ -212,6 +220,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/documents': typeof AuthenticatedDocumentsIndexRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
+  '/quests/getting-started': typeof AuthenticatedHomeQuestsGettingStartedRoute
   '/quests': typeof AuthenticatedHomeQuestsIndexRoute
   '/admin/quests': typeof AuthenticatedAdminQuestsIndexRoute
   '/quests/$questSlug/edit': typeof AuthenticatedHomeQuestsQuestSlugEditRoute
@@ -240,6 +249,7 @@ export interface FileRoutesById {
   '/_authenticated/documents/': typeof AuthenticatedDocumentsIndexRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/_home/quests/$questSlug': typeof AuthenticatedHomeQuestsQuestSlugRouteRouteWithChildren
+  '/_authenticated/_home/quests/getting-started': typeof AuthenticatedHomeQuestsGettingStartedRoute
   '/_authenticated/_home/quests/': typeof AuthenticatedHomeQuestsIndexRoute
   '/_authenticated/admin/quests/': typeof AuthenticatedAdminQuestsIndexRoute
   '/_authenticated/_home/quests/$questSlug/edit': typeof AuthenticatedHomeQuestsQuestSlugEditRoute
@@ -266,6 +276,7 @@ export interface FileRouteTypes {
     | '/documents/'
     | '/settings/'
     | '/quests/$questSlug'
+    | '/quests/getting-started'
     | '/quests'
     | '/admin/quests'
     | '/quests/$questSlug/edit'
@@ -286,6 +297,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/documents'
     | '/settings'
+    | '/quests/getting-started'
     | '/quests'
     | '/admin/quests'
     | '/quests/$questSlug/edit'
@@ -313,6 +325,7 @@ export interface FileRouteTypes {
     | '/_authenticated/documents/'
     | '/_authenticated/settings/'
     | '/_authenticated/_home/quests/$questSlug'
+    | '/_authenticated/_home/quests/getting-started'
     | '/_authenticated/_home/quests/'
     | '/_authenticated/admin/quests/'
     | '/_authenticated/_home/quests/$questSlug/edit'
@@ -480,6 +493,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeQuestsIndexRouteImport
       parentRoute: typeof AuthenticatedHomeRoute
     }
+    '/_authenticated/_home/quests/getting-started': {
+      id: '/_authenticated/_home/quests/getting-started'
+      path: '/quests/getting-started'
+      fullPath: '/quests/getting-started'
+      preLoaderRoute: typeof AuthenticatedHomeQuestsGettingStartedRouteImport
+      parentRoute: typeof AuthenticatedHomeRoute
+    }
     '/_authenticated/_home/quests/$questSlug': {
       id: '/_authenticated/_home/quests/$questSlug'
       path: '/quests/$questSlug'
@@ -575,6 +595,7 @@ const AuthenticatedHomeQuestsQuestSlugRouteRouteWithChildren =
 interface AuthenticatedHomeRouteChildren {
   AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
   AuthenticatedHomeQuestsQuestSlugRouteRoute: typeof AuthenticatedHomeQuestsQuestSlugRouteRouteWithChildren
+  AuthenticatedHomeQuestsGettingStartedRoute: typeof AuthenticatedHomeQuestsGettingStartedRoute
   AuthenticatedHomeQuestsIndexRoute: typeof AuthenticatedHomeQuestsIndexRoute
 }
 
@@ -582,6 +603,8 @@ const AuthenticatedHomeRouteChildren: AuthenticatedHomeRouteChildren = {
   AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
   AuthenticatedHomeQuestsQuestSlugRouteRoute:
     AuthenticatedHomeQuestsQuestSlugRouteRouteWithChildren,
+  AuthenticatedHomeQuestsGettingStartedRoute:
+    AuthenticatedHomeQuestsGettingStartedRoute,
   AuthenticatedHomeQuestsIndexRoute: AuthenticatedHomeQuestsIndexRoute,
 }
 

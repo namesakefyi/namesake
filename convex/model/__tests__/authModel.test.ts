@@ -39,6 +39,11 @@ describe("authModel", () => {
       expect(userSettings).toBeDefined();
       expect(userSettings?.theme).toBe("system");
       expect(userSettings?.color).toBe("rainbow");
+
+      const gettingStarted = await asUser.query(api.userGettingStarted.get);
+
+      expect(gettingStarted).toBeDefined();
+      expect(gettingStarted?.status).toBe("inProgress");
     });
 
     it("should create default placeholders for the user", async () => {

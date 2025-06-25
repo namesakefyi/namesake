@@ -32,7 +32,7 @@ function RouteComponent() {
   return (
     <>
       <QuestPageHeader quest={quest} editable={true} />
-      <div className="flex flex-1 flex-col gap-6 app-padding py-8">
+      <div className="flex flex-1 flex-col gap-6 py-8">
         <QuestContent quest={quest} editable={true} />
       </div>
     </>

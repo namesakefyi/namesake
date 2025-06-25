@@ -10,6 +10,7 @@ import * as UserQuestPlaceholders from "./userQuestPlaceholdersModel";
 
 export type QuestData = Omit<Doc<"quests">, "_id"> & Doc<"userQuests">;
 export type PlaceholderData = Doc<"userQuestPlaceholders">;
+export type GettingStartedData = Doc<"userGettingStarted">;
 
 export type QuestItem = {
   type: "quest";
@@ -24,7 +25,12 @@ export type PlaceholderItem = {
   data: PlaceholderData;
 };
 
-export type CategoryItem = QuestItem | PlaceholderItem;
+export type GettingStartedItem = {
+  type: "gettingStarted";
+  data: GettingStartedData;
+};
+
+export type CategoryItem = QuestItem | PlaceholderItem | GettingStartedItem;
 
 export type CategoryGroup = {
   label: string;
@@ -128,6 +134,30 @@ export async function getCompletedCountForUser(
   return completedQuests.length;
 }
 
+export async function getProgressForUser(
+  ctx: QueryCtx,
+  { userId }: { userId: Id<"users"> },
+) {
+  const [userQuestsCount, completedQuestsCount, gettingStarted] =
+    await Promise.all([
+      getCountForUser(ctx, { userId }),
+      getCompletedCountForUser(ctx, { userId }),
+      ctx.db
+        .query("userGettingStarted")
+        .withIndex("userId", (q) => q.eq("userId", userId))
+        .first(),
+    ]);
+
+  const hasGettingStarted = gettingStarted !== null;
+  const gettingStartedStatus = gettingStarted?.status ?? "notStarted";
+  const isGettingStartedComplete = gettingStartedStatus === "complete";
+
+  return {
+    totalQuests: userQuestsCount + (hasGettingStarted ? 1 : 0),
+    completedQuests: completedQuestsCount + (isGettingStartedComplete ? 1 : 0),
+  };
+}
+
 export async function getByCategoryForUser(
   ctx: QueryCtx,
   { userId }: { userId: Id<"users"> },
@@ -158,20 +188,18 @@ export async function getByCategoryForUser(
   );
 }
 
-export async function getByCategoryWithPlaceholdersForUser(
+export async function getQuestListForUser(
   ctx: QueryCtx,
   { userId }: { userId: Id<"users"> },
 ): Promise<CategoryGroup[]> {
-  const questsByCategory = await getByCategoryForUser(ctx, {
-    userId,
-  });
-
-  const placeholders = await UserQuestPlaceholders.getActivePlaceholdersForUser(
-    ctx,
-    {
-      userId,
-    },
-  );
+  const [questsByCategory, placeholders, gettingStarted] = await Promise.all([
+    getByCategoryForUser(ctx, { userId }),
+    UserQuestPlaceholders.getActivePlaceholdersForUser(ctx, { userId }),
+    ctx.db
+      .query("userGettingStarted")
+      .withIndex("userId", (q) => q.eq("userId", userId))
+      .first(),
+  ]);
 
   // Combine quests and placeholders into a single structure
   const result: Record<string, CategoryItem[]> = {};
@@ -220,11 +248,24 @@ export async function getByCategoryWithPlaceholdersForUser(
     (category) => CATEGORIES[category as Category]?.isCore,
   );
 
-  if (coreCategories.length > 0) {
+  if (coreCategories.length > 0 || gettingStarted) {
+    const coreItems: CategoryItem[] = [];
+
+    // Add getting started item first if it exists
+    if (gettingStarted) {
+      coreItems.push({
+        type: "gettingStarted",
+        data: gettingStarted,
+      });
+    }
+
+    // Add core category items
+    coreItems.push(...coreCategories.flatMap((category) => result[category]));
+
     groups.push({
       label: "Core",
       category: null,
-      items: coreCategories.flatMap((category) => result[category]),
+      items: coreItems,
     });
   }
 
