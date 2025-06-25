@@ -7,7 +7,7 @@ interface TintedImageProps {
 // https://oliverspies.blog/articles/using-mix-blend-mode-with-partly-transparent-images
 export const TintedImage = ({ src, alt, className }: TintedImageProps) => {
   return (
-    <div className={`relative dark:bg-theme-12 rounded-2xl ${className}`}>
+    <div className={`relative overflow-hidden select-none ${className}`}>
       <img
         src={src}
         alt={alt}
@@ -17,7 +17,7 @@ export const TintedImage = ({ src, alt, className }: TintedImageProps) => {
         aria-hidden
         src={src}
         alt={alt}
-        className="absolute inset-0 -z-1 [filter:_drop-shadow(0px_10000px_0_var(--color-theme-12))] translate-y-[-10000px]"
+        className="absolute inset-0 -z-1 [filter:_drop-shadow(2000px_0px_0_var(--color-theme-12))] -translate-x-[2000px]"
       />
     </div>
   );

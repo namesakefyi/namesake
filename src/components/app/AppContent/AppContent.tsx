@@ -10,7 +10,7 @@ type AppContentProps = {
 
 export const AppContent = ({ children, className }: AppContentProps) => {
   const styles = tv({
-    base: "flex-1 w-full min-w-0 app-content",
+    base: "app-content",
   });
 
   const fallback = () => {
@@ -25,7 +25,9 @@ export const AppContent = ({ children, className }: AppContentProps) => {
 
   return (
     <PostHogErrorBoundary fallback={fallback}>
-      <main className={styles({ className })}>{children}</main>
+      <main className="flex-1 w-full min-w-0">
+        <div className={styles({ className })}>{children}</div>
+      </main>
     </PostHogErrorBoundary>
   );
 };

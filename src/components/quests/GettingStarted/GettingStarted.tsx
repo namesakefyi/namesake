@@ -24,8 +24,8 @@ const GettingStartedStep = ({
   children,
 }: GettingStartedStepProps) => {
   return (
-    <li className="w-full shrink-0 flex flex-col gap-2">
-      <TintedImage src={image.src} alt={image.alt} className="select-none" />
+    <li className="w-full shrink-0 flex flex-col gap-2 snap-start">
+      <TintedImage src={image.src} alt={image.alt} className="rounded-xl" />
       <div className="flex flex-col items-start gap-2 relative">
         <div
           aria-hidden
@@ -43,8 +43,8 @@ const GettingStartedStep = ({
 
 export const GettingStarted = () => {
   return (
-    <section className="@container full-bleed">
-      <ol className="grid grid-cols-1 @md:grid-cols-2 @xl:grid-cols-4 gap-8 py-4 px-6 max-w-[1260px] mx-auto">
+    <section className="@container full-bleed overflow-x-auto snap-x scroll-p-8 no-scrollbar">
+      <ol className="grid grid-cols-4 gap-8 py-4 px-6 min-w-[1200px] mx-auto">
         <GettingStartedStep
           step={1}
           title="Choose a name"

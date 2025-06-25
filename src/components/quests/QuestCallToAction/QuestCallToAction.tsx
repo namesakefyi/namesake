@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Heading } from "react-aria-components";
 import { toast } from "sonner";
 import { tv } from "tailwind-variants";
-import { Button, IconText, TimeAgo } from "@/components/common";
+import { Button, IconText, TimeAgo, TintedImage } from "@/components/common";
 import type { Category, CoreCategory, Status } from "@/constants";
 import { CATEGORIES, STATUS } from "@/constants";
 import flowerImg from "./flower.png";
@@ -46,7 +46,7 @@ function CoreQuestIllustration({
   };
 
   const illustrationStyles = tv({
-    base: "w-48 absolute invisible sm:visible top-1/2 -translate-y-1/2 -left-4 md:left-8 mix-blend-multiply dark:mix-blend-screen pointer-events-none select-none z-0",
+    base: "w-48 absolute invisible sm:visible top-1/2 -translate-y-1/2 -left-4 md:left-8 z-0",
     variants: {
       isComplete: {
         true: "visible",
@@ -54,11 +54,12 @@ function CoreQuestIllustration({
     },
   });
   return (
-    <img
-      src={illustration[category].src}
-      alt={illustration[category].alt}
-      className={illustrationStyles({ isComplete })}
-    />
+    <div className={illustrationStyles({ isComplete })}>
+      <TintedImage
+        src={illustration[category].src}
+        alt={illustration[category].alt}
+      />
+    </div>
   );
 }
 
