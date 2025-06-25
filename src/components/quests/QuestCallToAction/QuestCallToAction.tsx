@@ -141,7 +141,11 @@ const QuestCTAButton = ({
         ? data.userQuest?.completedAt
         : undefined;
 
-  if ("quest" in data && !("userQuest" in data) && onAddQuest) {
+  if (
+    "quest" in data &&
+    (!("userQuest" in data) || !data.userQuest) &&
+    onAddQuest
+  ) {
     return (
       <Button
         className={sharedButtonStyles()}

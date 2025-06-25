@@ -180,4 +180,39 @@ describe("QuestCallToAction", () => {
     expect(loadingButton).toBeDisabled();
     expect(loadingButton).toHaveClass("w-64");
   });
+
+  it("shows 'Add to my quests' button when userQuest is null", () => {
+    render(
+      <QuestCallToAction
+        data={{ quest: mockQuest, userQuest: null }}
+        onAddQuest={mockOnAddQuest}
+      />,
+    );
+    expect(screen.getByText("Add to my quests")).toBeInTheDocument();
+  });
+
+  it("shows 'Add to my quests' button when userQuest is undefined", () => {
+    render(
+      <QuestCallToAction
+        data={{ quest: mockQuest, userQuest: undefined }}
+        onAddQuest={mockOnAddQuest}
+      />,
+    );
+    expect(screen.getByText("Add to my quests")).toBeInTheDocument();
+  });
+
+  it("handles adding to my quests when userQuest is null", async () => {
+    const user = userEvent.setup();
+    mockOnAddQuest.mockResolvedValueOnce(undefined);
+
+    render(
+      <QuestCallToAction
+        data={{ quest: mockQuest, userQuest: null }}
+        onAddQuest={mockOnAddQuest}
+      />,
+    );
+    await user.click(screen.getByText("Add to my quests"));
+
+    expect(mockOnAddQuest).toHaveBeenCalled();
+  });
 });
