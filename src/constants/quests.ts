@@ -269,7 +269,7 @@ export const DEFAULT_TIME_REQUIRED: TimeRequired = {
 /**
  * Getting Started guide details.
  */
-export const GETTING_STARTED = {
+export const GETTING_STARTED: GroupDetails = {
   label: "Getting Started",
   icon: Sprout,
   isCore: true,
