@@ -70,8 +70,7 @@ function QuestIllustration({
 
 type QuestCTAButtonProps = {
   userQuest?: Doc<"userQuests"> | null;
-  status?: Status; // For getting-started mode
-  completedAt?: number; // For getting-started mode
+  gettingStarted?: Doc<"userGettingStarted"> | null;
   onAddQuest?: () => Promise<void>;
   onChangeStatus?: (status: Status) => Promise<void>;
   isLoading?: boolean;
@@ -79,8 +78,7 @@ type QuestCTAButtonProps = {
 
 const QuestCTAButton = ({
   userQuest,
-  status,
-  completedAt,
+  gettingStarted,
   onAddQuest,
   onChangeStatus,
   isLoading = false,
@@ -92,8 +90,6 @@ const QuestCTAButton = ({
     try {
       setIsSubmitting(true);
       await onAddQuest();
-    } catch (_err) {
-      // Error handling is now the parent's responsibility
     } finally {
       setIsSubmitting(false);
     }
@@ -104,8 +100,6 @@ const QuestCTAButton = ({
     try {
       setIsSubmitting(true);
       await onChangeStatus(newStatus);
-    } catch (_err) {
-      // Error handling is now the parent's responsibility
     } finally {
       setIsSubmitting(false);
     }
@@ -128,12 +122,11 @@ const QuestCTAButton = ({
     );
   }
 
-  // Use either userQuest status or passed status (for getting-started)
-  const currentStatus = userQuest?.status || status;
-  const currentCompletedAt = userQuest?.completedAt || completedAt;
+  const currentStatus = userQuest?.status || gettingStarted?.status;
+  const currentCompletedAt =
+    userQuest?.completedAt || gettingStarted?.completedAt;
 
-  // Show "Add to my quests" button only if onAddQuest is provided and no userQuest exists
-  if (!userQuest && !status && onAddQuest) {
+  if (!userQuest && !gettingStarted && onAddQuest) {
     return (
       <Button
         className={sharedButtonStyles()}
@@ -195,8 +188,7 @@ const QuestCTAButton = ({
 type QuestCallToActionProps = {
   quest?: Doc<"quests">;
   userQuest?: Doc<"userQuests"> | null;
-  status?: Status; // For getting-started mode
-  completedAt?: number; // For getting-started mode
+  gettingStarted?: Doc<"userGettingStarted"> | null;
   illustration?: IllustrationType;
   onAddQuest?: () => Promise<void>;
   onChangeStatus?: (status: Status) => Promise<void>;
@@ -207,8 +199,7 @@ type QuestCallToActionProps = {
 export const QuestCallToAction = ({
   quest,
   userQuest,
-  status,
-  completedAt,
+  gettingStarted,
   illustration,
   onAddQuest,
   onChangeStatus,
@@ -225,10 +216,8 @@ export const QuestCallToAction = ({
     },
   });
 
-  // Use either userQuest status or passed status
-  const currentStatus = userQuest?.status || status;
+  const currentStatus = userQuest?.status || gettingStarted?.status;
 
-  // For core quests, use the quest category as illustration by default
   const displayIllustration =
     illustration ||
     (quest?.category && CATEGORIES[quest.category as Category]?.isCore
@@ -250,8 +239,7 @@ export const QuestCallToAction = ({
       <div className="relative z-0">
         <QuestCTAButton
           userQuest={userQuest}
-          status={status}
-          completedAt={completedAt}
+          gettingStarted={gettingStarted}
           onAddQuest={onAddQuest}
           onChangeStatus={onChangeStatus}
           isLoading={isLoading}

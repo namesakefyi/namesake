@@ -38,7 +38,6 @@ export const setStatus = userMutation({
       .first();
 
     if (!existing) {
-      // Create new record
       const update = {
         userId: ctx.userId,
         status: args.status as Status,
@@ -46,7 +45,6 @@ export const setStatus = userMutation({
         completedAt: undefined as number | undefined,
       };
 
-      // Set timestamps based on status
       if (args.status === "inProgress") {
         update.startedAt = Date.now();
       } else if (args.status === "complete") {
@@ -56,7 +54,6 @@ export const setStatus = userMutation({
 
       await ctx.db.insert("userGettingStarted", update);
     } else {
-      // Update existing record
       const update: {
         status: Status;
         startedAt?: number | undefined;
@@ -65,7 +62,6 @@ export const setStatus = userMutation({
         status: args.status as Status,
       };
 
-      // Handle status transitions
       switch (args.status) {
         case "notStarted":
           update.completedAt = undefined;
@@ -108,18 +104,5 @@ export const create = userMutation({
       userId: ctx.userId,
       status: "notStarted",
     });
-  },
-});
-
-export const exists = userQuery({
-  args: {},
-  returns: v.boolean(),
-  handler: async (ctx) => {
-    const userGettingStarted = await ctx.db
-      .query("userGettingStarted")
-      .withIndex("userId", (q) => q.eq("userId", ctx.userId))
-      .first();
-
-    return userGettingStarted !== null;
   },
 });

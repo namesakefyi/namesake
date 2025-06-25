@@ -17,7 +17,6 @@ import * as AuthModel from "./model/authModel";
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
 
 const siteUrl = process.env.SITE_URL ?? "https://app.namesake.fyi";
-console.log("siteUrl", siteUrl);
 
 const trustedOrigins = [
   "http://localhost:5173",
