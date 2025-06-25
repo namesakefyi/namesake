@@ -7,7 +7,9 @@ interface TintedImageProps {
 // https://oliverspies.blog/articles/using-mix-blend-mode-with-partly-transparent-images
 export const TintedImage = ({ src, alt, className }: TintedImageProps) => {
   return (
-    <div className={`relative overflow-hidden select-none ${className}`}>
+    <div
+      className={`relative overflow-hidden select-none isolate ${className}`}
+    >
       <img
         src={src}
         alt={alt}

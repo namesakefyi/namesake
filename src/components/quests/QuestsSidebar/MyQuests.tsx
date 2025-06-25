@@ -16,18 +16,29 @@ import {
   TooltipTrigger,
 } from "@/components/common";
 import { StatusSelect } from "@/components/quests";
-import { CATEGORIES, type Category, type Status } from "@/constants";
+import {
+  CATEGORIES,
+  type Category,
+  GETTING_STARTED,
+  type Status,
+} from "@/constants";
 import { useQuestsSidebar } from "./QuestsSidebarProvider";
 
 export const MyQuests = () => {
   const { setActiveTab, setCategoryFilter } = useQuestsSidebar();
-  const userQuests = useQuery(api.userQuests.count) ?? 0;
-  const completedQuests = useQuery(api.userQuests.countCompleted) ?? 0;
+
+  // Use consolidated progress query
+  const progress = useQuery(api.userQuests.getProgress);
+
   const questsByCategory = useQuery(
     api.userQuests.getByCategoryWithPlaceholders,
   );
+
   const removeQuest = useMutation(api.userQuests.deleteForever);
   const updateStatus = useMutation(api.userQuests.setStatus);
+  const updateGettingStartedStatus = useMutation(
+    api.userGettingStarted.setStatus,
+  );
   const addDefaultPlaceholders = useMutation(
     api.userQuestPlaceholders.createDefault,
   );
@@ -47,6 +58,14 @@ export const MyQuests = () => {
       await updateStatus({ questId, status });
     } catch (_err) {
       toast.error("Couldn't update status. Please try again.");
+    }
+  };
+
+  const handleGettingStartedStatusChange = async (status: Status) => {
+    try {
+      await updateGettingStartedStatus({ status });
+    } catch (_err) {
+      toast.error("Couldn't update getting started status. Please try again.");
     }
   };
 
@@ -75,7 +94,9 @@ export const MyQuests = () => {
     setCategoryFilter(category);
   };
 
-  const hasQuests = userQuests > 0;
+  // Use progress data
+  const hasQuests = progress ? progress.totalQuests > 0 : false;
+  const gettingStartedStatus = progress?.gettingStartedStatus ?? "notStarted";
 
   const renderItem = (item: CategoryItem, category: Category) => {
     const categoryInfo = CATEGORIES[category];
@@ -130,6 +151,28 @@ export const MyQuests = () => {
     );
   };
 
+  const renderGettingStartedItem = () => {
+    return (
+      <NavItem
+        key="getting-started"
+        href={{
+          to: "/quests/getting-started",
+        }}
+        size="large"
+        icon={GETTING_STARTED.icon}
+        actions={
+          <StatusSelect
+            status={gettingStartedStatus as Status}
+            onChange={handleGettingStartedStatusChange}
+            condensed
+          />
+        }
+      >
+        {GETTING_STARTED.label}
+      </NavItem>
+    );
+  };
+
   if (!questsByCategory || questsByCategory.length === 0) {
     return (
       <Empty
@@ -152,19 +195,21 @@ export const MyQuests = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      {hasQuests && (
+      {hasQuests && progress && (
         <div className="flex">
           <ProgressBar
             label="Progress"
-            value={completedQuests}
-            maxValue={userQuests}
+            value={progress.completedQuests}
+            maxValue={progress.totalQuests}
             valueLabel={
               <span className="text-normal">
                 <span className="text-normal text-base font-medium mr-0.5 leading-none">
-                  {completedQuests}
+                  {progress.completedQuests}
                 </span>{" "}
                 <span className="text-dim opacity-60">/</span>{" "}
-                <span className="text-dim">{userQuests} complete</span>
+                <span className="text-dim">
+                  {progress.totalQuests} complete
+                </span>
               </span>
             }
           />
@@ -173,6 +218,9 @@ export const MyQuests = () => {
       <Nav>
         {questsByCategory.map((group) => (
           <NavGroup key={group.category} label={group.label}>
+            {group.label === "Core" &&
+              progress?.hasGettingStarted &&
+              renderGettingStartedItem()}
             {group.items.map((item) => renderItem(item, item.category))}
           </NavGroup>
         ))}

@@ -22,7 +22,7 @@ describe("AppContent", () => {
     );
 
     const main = screen.getByRole("main");
-    expect(main).toHaveClass("custom-class");
+    expect(main.firstChild).toHaveClass("custom-class");
   });
 
   it("renders error fallback when child component throws", () => {

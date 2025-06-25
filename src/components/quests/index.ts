@@ -1,5 +1,6 @@
 export * from "./EditQuestTitleModal/EditQuestTitleModal";
-export * from "./GettingStarted/GettingStarted";
+export * from "./HowToChangeNames/HowToChangeNames";
+export type { IllustrationType } from "./QuestCallToAction/QuestCallToAction";
 export * from "./QuestCallToAction/QuestCallToAction";
 export * from "./QuestCategoryBadge/QuestCategoryBadge";
 export * from "./QuestContent/QuestContent";

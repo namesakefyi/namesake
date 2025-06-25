@@ -143,6 +143,20 @@ const userQuests = defineTable({
   .index("questId", ["questId"]);
 
 /**
+ * A user's progress in the getting started guide.
+ */
+const userGettingStarted = defineTable({
+  /** The user who is working on getting started. */
+  userId: v.id("users"),
+  /** The status of the getting started guide. */
+  status: status,
+  /** Time in ms since epoch when the user marked getting started as complete. */
+  completedAt: v.optional(v.number()),
+  /** Time in ms since epoch when the user started the getting started guide. */
+  startedAt: v.optional(v.number()),
+}).index("userId", ["userId"]);
+
+/**
  * Placeholders for core quests.
  */
 const userQuestPlaceholders = defineTable({
@@ -163,5 +177,6 @@ export default defineSchema({
   userFormResponses,
   userSettings,
   userQuests,
+  userGettingStarted,
   userQuestPlaceholders,
 });

@@ -25,6 +25,7 @@ import type * as quests from "../quests.js";
 import type * as seed from "../seed.js";
 import type * as userDocuments from "../userDocuments.js";
 import type * as userFormResponses from "../userFormResponses.js";
+import type * as userGettingStarted from "../userGettingStarted.js";
 import type * as userQuestPlaceholders from "../userQuestPlaceholders.js";
 import type * as userQuests from "../userQuests.js";
 import type * as userSettings from "../userSettings.js";
@@ -63,6 +64,7 @@ declare const fullApi: ApiFromModules<{
   seed: typeof seed;
   userDocuments: typeof userDocuments;
   userFormResponses: typeof userFormResponses;
+  userGettingStarted: typeof userGettingStarted;
   userQuestPlaceholders: typeof userQuestPlaceholders;
   userQuests: typeof userQuests;
   userSettings: typeof userSettings;

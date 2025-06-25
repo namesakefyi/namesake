@@ -30,11 +30,18 @@ interface AppSidebarHeaderProps {
 }
 
 export const AppSidebarHeader = ({ children }: AppSidebarHeaderProps) => {
-  return (
-    <div className="flex items-center shrink-0 sticky top-0 px-6 bg-app z-40">
-      {children}
-    </div>
-  );
+  const isMobile = useIsMobile();
+
+  const headerStyles = tv({
+    base: "flex items-center shrink-0 sticky top-0 bg-app z-40",
+    variants: {
+      isMobile: {
+        false: "px-6",
+      },
+    },
+  });
+
+  return <div className={headerStyles({ isMobile })}>{children}</div>;
 };
 
 type AppSidebarContentProps = {
@@ -42,6 +49,8 @@ type AppSidebarContentProps = {
 };
 
 export const AppSidebarContent = ({ children }: AppSidebarContentProps) => {
+  const isMobile = useIsMobile();
+
   const fallback = () => {
     return (
       <Empty
@@ -52,9 +61,18 @@ export const AppSidebarContent = ({ children }: AppSidebarContentProps) => {
     );
   };
 
+  const contentStyles = tv({
+    base: "flex-1 pt-1.5",
+    variants: {
+      isMobile: {
+        false: "px-6",
+      },
+    },
+  });
+
   return (
     <PostHogErrorBoundary fallback={fallback}>
-      <div className="flex-1 pt-1.5 px-6">{children}</div>
+      <div className={contentStyles({ isMobile })}>{children}</div>
     </PostHogErrorBoundary>
   );
 };

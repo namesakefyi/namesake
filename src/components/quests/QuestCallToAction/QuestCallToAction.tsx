@@ -1,13 +1,10 @@
-import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
-import { useMutation } from "convex/react";
 import { Check } from "lucide-react";
 import { useState } from "react";
 import { Heading } from "react-aria-components";
-import { toast } from "sonner";
 import { tv } from "tailwind-variants";
 import { Button, IconText, TimeAgo, TintedImage } from "@/components/common";
-import type { Category, CoreCategory, Status } from "@/constants";
+import type { Category, Status } from "@/constants";
 import { CATEGORIES, STATUS } from "@/constants";
 import flowerImg from "./flower.png";
 import gavelImg from "./gavel.png";
@@ -15,35 +12,43 @@ import idImg from "./id.png";
 import passportImg from "./passport.png";
 import socialSecurityImg from "./social-security.png";
 
-function CoreQuestIllustration({
-  category,
+export type IllustrationType =
+  | "courtOrder"
+  | "passport"
+  | "socialSecurity"
+  | "stateId"
+  | "birthCertificate";
+
+function QuestIllustration({
+  illustration,
   isComplete,
 }: {
-  category: CoreCategory;
+  illustration: IllustrationType;
   isComplete: boolean;
 }) {
-  const illustration: Record<CoreCategory, { alt: string; src: string }> = {
-    courtOrder: {
-      alt: "A gavel with a snail on it",
-      src: gavelImg,
-    },
-    passport: {
-      alt: "A snail on a passport",
-      src: passportImg,
-    },
-    socialSecurity: {
-      alt: "A snail on a social security card",
-      src: socialSecurityImg,
-    },
-    stateId: {
-      alt: "A snail on a Massachusetts ID card",
-      src: idImg,
-    },
-    birthCertificate: {
-      alt: "A snail on a flower",
-      src: flowerImg,
-    },
-  };
+  const illustrations: Record<IllustrationType, { alt: string; src: string }> =
+    {
+      courtOrder: {
+        alt: "A gavel with a snail on it",
+        src: gavelImg,
+      },
+      passport: {
+        alt: "A snail on a passport",
+        src: passportImg,
+      },
+      socialSecurity: {
+        alt: "A snail on a social security card",
+        src: socialSecurityImg,
+      },
+      stateId: {
+        alt: "A snail on a Massachusetts ID card",
+        src: idImg,
+      },
+      birthCertificate: {
+        alt: "A snail on a flower",
+        src: flowerImg,
+      },
+    };
 
   const illustrationStyles = tv({
     base: "w-48 absolute invisible sm:visible top-1/2 -translate-y-1/2 -left-4 md:left-8 z-0",
@@ -56,45 +61,51 @@ function CoreQuestIllustration({
   return (
     <div className={illustrationStyles({ isComplete })}>
       <TintedImage
-        src={illustration[category].src}
-        alt={illustration[category].alt}
+        src={illustrations[illustration].src}
+        alt={illustrations[illustration].alt}
       />
     </div>
   );
 }
 
-function QuestCompletedDate({ userQuest }: { userQuest: Doc<"userQuests"> }) {
-  if (!userQuest || userQuest.status !== "complete" || !userQuest.completedAt)
-    return null;
-
-  const completedDate = new Date(userQuest.completedAt);
-
-  return (
-    <div className="flex flex-col items-end gap-1">
-      <Heading className="text-3xl font-medium">Done!</Heading>
-      <IconText icon={Check} className="text-primary-12">
-        <TimeAgo date={completedDate} />
-      </IconText>
-    </div>
-  );
-}
-
 type QuestCTAButtonProps = {
-  quest: Doc<"quests">;
   userQuest?: Doc<"userQuests"> | null;
+  status?: Status; // For getting-started mode
+  completedAt?: number; // For getting-started mode
+  onAddQuest?: () => Promise<void>;
+  onChangeStatus?: (status: Status) => Promise<void>;
+  isLoading?: boolean;
 };
 
-const QuestCTAButton = ({ quest, userQuest }: QuestCTAButtonProps) => {
+const QuestCTAButton = ({
+  userQuest,
+  status,
+  completedAt,
+  onAddQuest,
+  onChangeStatus,
+  isLoading = false,
+}: QuestCTAButtonProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const addQuest = useMutation(api.userQuests.create);
-  const setStatus = useMutation(api.userQuests.setStatus);
 
   const handleAddQuest = async () => {
+    if (!onAddQuest) return;
     try {
       setIsSubmitting(true);
-      if (quest) await addQuest({ questId: quest._id });
+      await onAddQuest();
     } catch (_err) {
-      toast.error("Failed to add quest. Please try again.");
+      // Error handling is now the parent's responsibility
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChangeStatus = async (newStatus: Status) => {
+    if (!onChangeStatus) return;
+    try {
+      setIsSubmitting(true);
+      await onChangeStatus(newStatus);
+    } catch (_err) {
+      // Error handling is now the parent's responsibility
     } finally {
       setIsSubmitting(false);
     }
@@ -104,7 +115,25 @@ const QuestCTAButton = ({ quest, userQuest }: QuestCTAButtonProps) => {
     base: "w-64",
   });
 
-  if (!userQuest) {
+  // Show loading state if explicitly loading
+  if (isLoading) {
+    return (
+      <Button
+        className={sharedButtonStyles()}
+        size="large"
+        variant="secondary"
+        isDisabled
+        isPending={isLoading}
+      />
+    );
+  }
+
+  // Use either userQuest status or passed status (for getting-started)
+  const currentStatus = userQuest?.status || status;
+  const currentCompletedAt = userQuest?.completedAt || completedAt;
+
+  // Show "Add to my quests" button only if onAddQuest is provided and no userQuest exists
+  if (!userQuest && !status && onAddQuest) {
     return (
       <Button
         className={sharedButtonStyles()}
@@ -118,25 +147,20 @@ const QuestCTAButton = ({ quest, userQuest }: QuestCTAButtonProps) => {
     );
   }
 
-  const handleChangeStatus = async (status: Status) => {
-    try {
-      setIsSubmitting(true);
-      await setStatus({
-        questId: quest._id,
-        status,
-      });
-    } catch (_err) {
-      toast.error("Failed to change status. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  if (userQuest?.status === "complete") {
-    return <QuestCompletedDate userQuest={userQuest} />;
+  if (currentStatus === "complete") {
+    return (
+      <div className="flex flex-col items-end gap-1">
+        <Heading className="text-3xl font-medium">Done!</Heading>
+        {currentCompletedAt && (
+          <IconText icon={Check} className="text-primary-12">
+            <TimeAgo date={new Date(currentCompletedAt)} />
+          </IconText>
+        )}
+      </div>
+    );
   }
 
-  if (userQuest?.status === "inProgress") {
+  if (currentStatus === "inProgress" && onChangeStatus) {
     return (
       <Button
         className={sharedButtonStyles()}
@@ -151,7 +175,7 @@ const QuestCTAButton = ({ quest, userQuest }: QuestCTAButtonProps) => {
     );
   }
 
-  if (userQuest?.status === "notStarted") {
+  if (currentStatus === "notStarted" && onChangeStatus) {
     return (
       <Button
         className={sharedButtonStyles()}
@@ -169,13 +193,27 @@ const QuestCTAButton = ({ quest, userQuest }: QuestCTAButtonProps) => {
 };
 
 type QuestCallToActionProps = {
-  quest: Doc<"quests">;
+  quest?: Doc<"quests">;
   userQuest?: Doc<"userQuests"> | null;
+  status?: Status; // For getting-started mode
+  completedAt?: number; // For getting-started mode
+  illustration?: IllustrationType;
+  onAddQuest?: () => Promise<void>;
+  onChangeStatus?: (status: Status) => Promise<void>;
+  className?: string;
+  isLoading?: boolean;
 };
 
 export const QuestCallToAction = ({
   quest,
   userQuest,
+  status,
+  completedAt,
+  illustration,
+  onAddQuest,
+  onChangeStatus,
+  className,
+  isLoading = false,
 }: QuestCallToActionProps) => {
   const containerStyles = tv({
     base: "flex flex-col justify-center items-center sm:items-end gap-4 py-4 px-6 rounded-xl border overflow-hidden h-24 relative transition-colors",
@@ -187,20 +225,37 @@ export const QuestCallToAction = ({
     },
   });
 
+  // Use either userQuest status or passed status
+  const currentStatus = userQuest?.status || status;
+
+  // For core quests, use the quest category as illustration by default
+  const displayIllustration =
+    illustration ||
+    (quest?.category && CATEGORIES[quest.category as Category]?.isCore
+      ? (quest.category as IllustrationType)
+      : undefined);
+
   return (
     <div
-      className={containerStyles({
-        isComplete: userQuest?.status === "complete",
-      })}
+      className={`${containerStyles({
+        isComplete: currentStatus === "complete",
+      })} ${className || ""}`}
     >
-      {quest?.category && CATEGORIES[quest.category as Category].isCore && (
-        <CoreQuestIllustration
-          category={quest?.category as CoreCategory}
-          isComplete={userQuest?.status === "complete"}
+      {displayIllustration && (
+        <QuestIllustration
+          illustration={displayIllustration}
+          isComplete={currentStatus === "complete"}
         />
       )}
       <div className="relative z-0">
-        <QuestCTAButton quest={quest} userQuest={userQuest} />
+        <QuestCTAButton
+          userQuest={userQuest}
+          status={status}
+          completedAt={completedAt}
+          onAddQuest={onAddQuest}
+          onChangeStatus={onChangeStatus}
+          isLoading={isLoading}
+        />
       </div>
     </div>
   );
