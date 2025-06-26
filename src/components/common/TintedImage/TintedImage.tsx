@@ -4,14 +4,13 @@ interface TintedImageProps {
   className?: string;
 }
 
-// https://oliverspies.blog/articles/using-mix-blend-mode-with-partly-transparent-images
 export const TintedImage = ({ src, alt, className }: TintedImageProps) => {
   return (
-    <div className={`relative ${className}`}>
+    <div className={className}>
       <img
         src={src}
         alt={alt}
-        className="w-full block select-none mix-blend-luminosity"
+        className="w-full block select-none mix-blend-luminosity transform-3d-[0,0,0]"
       />
     </div>
   );
