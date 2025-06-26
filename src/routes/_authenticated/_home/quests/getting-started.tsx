@@ -1,7 +1,7 @@
 import { api } from "@convex/_generated/api";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
-import { Snail } from "lucide-react";
+import { Sprout } from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/app";
 import { Banner, Link } from "@/components/common";
@@ -40,7 +40,7 @@ function RouteComponent() {
           onChange={handleStatusChange}
         />
       </PageHeader>
-      <Banner icon={Snail} size="large" className="mb-6 mt-1">
+      <Banner icon={Sprout} className="mb-6 mt-1">
         <strong>Welcome to Namesake!</strong> We're glad you're here. For help
         with the process or to share how things are going, come join us on{" "}
         <Link href="https:/namesake.fyi/chat" target="_blank">

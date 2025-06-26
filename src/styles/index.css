@@ -7,6 +7,17 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+:root {
+  --app-max-width: 960px;
+  --app-gutter: 1.25em;
+
+  @media (width > 1024px) {
+    --app-gutter: 1.5rem;
+  }
+
+  --container-width: min(var(--app-max-width), 100%);
+}
+
 html {
   scroll-padding-block-start: 3rem;
 }
@@ -22,27 +33,27 @@ body,
   min-height: 100dvh;
 }
 
-.app-content {
-  --gutter: 1.25em;
-  
-  @media (width > 1024px) {
-    --gutter: 1.5rem;
+@utility container {
+  padding-inline: var(--app-gutter);
+  max-width: unset;
+
+  .container {
+    padding-inline: unset;
   }
 
-  display: grid;
-  grid-template-columns: 1fr min(960px, calc(100% - 2 * var(--gutter))) 1fr;
-  grid-column-gap: var(--gutter);
-
-  & > * {
-    grid-column: 2;
-    min-width: 0;
+  & > *:not(.full-bleed) {
+    max-width: var(--container-width);
+    margin-inline: auto;
   }
 
-  .full-bleed {
-    width: 100%;
-    grid-column: 1 / -1;
-    padding-inline: 0;
+  & > .full-bleed {
+    width: calc(100% + var(--app-gutter) * 2);
+    margin-inline: calc(var(--app-gutter) * -1);
   }
+}
+
+.app-gutter {
+  padding-inline: var(--app-gutter);
 }
 
 .h-header {

@@ -23,10 +23,10 @@ function AuthenticatedRoute() {
   return (
     <>
       <Authenticated>
-        <main className={styles({ isMobile })}>
+        <div className={styles({ isMobile })}>
           <Outlet />
           {isMobile && <AppNav />}
-        </main>
+        </div>
       </Authenticated>
       <Unauthenticated>
         <Navigate to="/signin" />
