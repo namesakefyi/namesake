@@ -31,26 +31,30 @@ export const PageHeader = ({
   return (
     <header
       className={twMerge(
-        "h-header flex bg-app shrink-0 items-center justify-between gap-6 text-normal sticky top-0 z-20",
+        "h-header px-(--app-gutter) full-bleed bg-app text-normal sticky top-0 z-20",
         className,
       )}
     >
-      <div className="flex flex-col gap-1 min-w-0">
-        <div className="flex gap-2 items-center">
-          {isMobile && mobileBackLink && (
-            <Link
-              href={mobileBackLink}
-              button={{ variant: "icon" }}
-              className="-ml-2 -mr-1"
-            >
-              <ArrowLeft className="size-5" />
-            </Link>
-          )}
-          <h1 className="text-xl lg:text-2xl truncate font-medium">{title}</h1>
-          {badge}
+      <div className="flex max-w-(--container-width) mx-auto h-full shrink-0 items-center justify-between gap-6">
+        <div className="flex flex-col gap-1 min-w-0">
+          <div className="flex gap-2 items-center">
+            {isMobile && mobileBackLink && (
+              <Link
+                href={mobileBackLink}
+                button={{ variant: "icon" }}
+                className="-ml-2 -mr-1"
+              >
+                <ArrowLeft className="size-5" />
+              </Link>
+            )}
+            <h1 className="text-xl lg:text-2xl truncate font-medium">
+              {title}
+            </h1>
+            {badge}
+          </div>
         </div>
+        <div className="flex items-center gap-2">{children}</div>
       </div>
-      <div className="flex items-center gap-2">{children}</div>
     </header>
   );
 };

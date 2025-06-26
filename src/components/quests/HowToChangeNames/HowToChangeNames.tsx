@@ -29,7 +29,7 @@ const HowToChangeNamesStep = ({
       <TintedImage
         src={image.src}
         alt={image.alt}
-        className="rounded-xl aspect-[0.8/1]"
+        className="rounded-2xl overflow-hidden aspect-[0.8/1]"
       />
       <div className="flex flex-col items-start gap-2 relative">
         <div
@@ -55,11 +55,11 @@ export const HowToChangeNames = () => {
         </Heading>
       </header>
       <section className="@container full-bleed overflow-x-auto snap-x scroll-p-8 no-scrollbar">
-        <ol className="grid grid-cols-4 gap-8 py-4 px-6 min-w-[min(1200px,280vw)] mx-auto">
+        <ol className="grid grid-cols-4 gap-8 py-4 px-6 w-[clamp(900px,300vw,1140px)] mx-auto">
           <HowToChangeNamesStep
             step={1}
             title="Choose a name"
-            description="What name suits you? Maybe you already know, or maybe you need time to experiment. Chart your own pace."
+            description="What name suits you? Maybe you already know, or maybe you need time to experiment. Find your own pace."
             image={{
               src: step1,
               alt: "A hand holding a pen draws various names on a piece of paper, searching for the one that fits.",

@@ -1,4 +1,5 @@
 export * from "./AppContent/AppContent";
+export * from "./AppDesktopWrapper/AppDesktopWrapper";
 export * from "./AppNav/AppNav";
 export * from "./AppSidebar/AppSidebar";
 export * from "./ForgotPasswordForm/ForgotPasswordForm";

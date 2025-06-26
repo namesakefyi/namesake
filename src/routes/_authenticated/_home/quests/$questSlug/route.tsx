@@ -32,9 +32,5 @@ function RouteComponent() {
       />
     );
 
-  return (
-    <div className="flex flex-col">
-      <Outlet />
-    </div>
-  );
+  return <Outlet />;
 }

@@ -1,4 +1,5 @@
 import type { Key } from "react-aria-components";
+import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
 import { useTheme } from "@/components/app";
 import {
@@ -72,14 +73,19 @@ export const EditThemeSetting = () => {
                 disallowEmptySelection
                 selectedKeys={new Set([color ?? "violet"])}
                 onSelectionChange={handleColorChange}
-                className="w-max mx-auto rounded-full"
+                className={twMerge(
+                  "w-max mx-auto rounded-full relative",
+                  // This is a silly fix to account for a bug with rightmost padding on scroll.
+                  // See https://alexandergottlieb.com/2018/02/22/overflow-scroll-and-the-right-padding-problem-a-css-only-solution/
+                  "after:absolute after:w-4 after:h-px after:-right-4 @[34rem]:after:w-2 @[38rem]:after:-right-2",
+                )}
               >
                 {Object.entries(THEME_COLORS).map(([themeColor, { label }]) => (
                   <ToggleButton
                     id={themeColor}
                     key={themeColor}
                     aria-label={label}
-                    className="rounded-full p-2 w-10"
+                    className="rounded-full p-2 w-10 relative"
                   >
                     <div
                       className={swatchStyles({

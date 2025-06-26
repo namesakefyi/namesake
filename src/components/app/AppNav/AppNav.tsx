@@ -88,7 +88,7 @@ export const AppNav = () => {
   });
 
   return (
-    <div className={styles({ isMobile })}>
+    <nav className={styles({ isMobile })}>
       <AppNavItem icon={Home} label="Home" href={{ to: "/" }} />
       <AppNavItem
         icon={FileText}
@@ -99,6 +99,6 @@ export const AppNav = () => {
       {isAdmin && (
         <AppNavItem icon={GlobeLock} label="Admin" href={{ to: "/admin" }} />
       )}
-    </div>
+    </nav>
   );
 };
