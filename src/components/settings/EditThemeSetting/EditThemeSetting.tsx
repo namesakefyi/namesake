@@ -85,7 +85,7 @@ export const EditThemeSetting = () => {
                     id={themeColor}
                     key={themeColor}
                     aria-label={label}
-                    className="rounded-full p-2 w-10 relative"
+                    className="rounded-full p-2 w-10"
                   >
                     <div
                       className={swatchStyles({
