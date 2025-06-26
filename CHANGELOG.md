@@ -1,5 +1,11 @@
 # namesake
 
+## 0.35.2
+
+### Patch Changes
+
+- e4a16c4: Prevent full-bleed image sections from appearing behind page header on mobile
+
 ## 0.35.1
 
 ### Patch Changes
