@@ -1,5 +1,3 @@
-import { Checkbox } from "@/components/common";
-import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 import { ChevronUp } from "lucide-react";
 import {
   Cell as AriaCell,
@@ -13,20 +11,22 @@ import {
   Collection,
   type ColumnProps,
   ColumnResizer,
+  composeRenderProps,
   Group,
   ResizableTableContainer,
   type RowProps,
   type TableBodyProps,
   type TableHeaderProps,
   type TableProps,
-  composeRenderProps,
   useTableOptions,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { Checkbox } from "@/components/common";
+import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 
 export function Table(props: TableProps) {
   return (
-    <ResizableTableContainer className="max-h-full max-w-full overflow-auto scroll-pt-[2.281rem] relative border border-gray-dim rounded-lg">
+    <ResizableTableContainer className="max-h-full max-w-full overflow-auto scroll-pt-[2.281rem] relative border border-dim rounded-lg">
       <AriaTable {...props} className="border-separate border-spacing-0" />
     </ResizableTableContainer>
   );
@@ -39,7 +39,7 @@ const columnStyles = tv({
 
 const resizerStyles = tv({
   extend: focusRing,
-  base: "w-px px-[8px] translate-x-[8px] box-content py-1 h-6 bg-clip-content bg-gray-3 forced-colors:bg-[ButtonBorder] cursor-col-resize rounded-sm resizing:bg-blue-9 forced-colors:resizing:bg-[Highlight] resizing:w-[2px] resizing:pl-[7px] -outline-offset-2",
+  base: "w-px px-[8px] translate-x-[8px] box-content py-1 h-6 bg-clip-content bg-theme-3 forced-colors:bg-[ButtonBorder] cursor-col-resize rounded-sm resizing:bg-blue-9 forced-colors:resizing:bg-[Highlight] resizing:w-[2px] resizing:pl-[7px] -outline-offset-2",
 });
 
 export function TableColumn(props: ColumnProps) {
@@ -48,7 +48,7 @@ export function TableColumn(props: ColumnProps) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "[&:hover]:z-20 focus-within:z-20 text-start text-sm font-semibold text-gray-dim cursor-default border-b border-gray-dim",
+        "[&:hover]:z-20 focus-within:z-20 text-start text-sm font-semibold text-dim cursor-default border-b border-dim",
       )}
     >
       {composeRenderProps(
@@ -66,7 +66,7 @@ export function TableColumn(props: ColumnProps) {
                   {sortDirection && (
                     <ChevronUp
                       aria-hidden
-                      className="w-4 h-4 text-gray-dim forced-colors:text-[ButtonText]"
+                      className="w-4 h-4 text-dim forced-colors:text-[ButtonText]"
                     />
                   )}
                 </span>
@@ -89,7 +89,7 @@ export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
       {...props}
       className={composeTailwindRenderProps(
         props.className,
-        "sticky top-0 z-10 bg-gray forced-colors:bg-[Canvas] rounded-t-lg",
+        "sticky top-0 z-10 bg-theme-1 forced-colors:bg-[Canvas] rounded-t-lg",
       )}
     >
       {/* Add extra columns for drag and drop and selection. */}
@@ -98,7 +98,7 @@ export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
         <AriaColumn
           width={40}
           minWidth={40}
-          className="text-start text-sm font-semibold cursor-default p-2 border-b border-gray-dim"
+          className="text-start text-sm font-semibold cursor-default p-2 border-b border-dim"
         >
           {selectionMode === "multiple" && <Checkbox slot="selection" />}
         </AriaColumn>
@@ -110,7 +110,7 @@ export function TableHeader<T extends object>(props: TableHeaderProps<T>) {
 
 const rowStyles = tv({
   extend: focusRing,
-  base: "group/row relative cursor-default select-none -outline-offset-2 text-sm text-gray-normal selected:bg-purple-subtle",
+  base: "group/row relative cursor-default select-none -outline-offset-2 text-sm text-normal selected:bg-primary-3",
 });
 
 export function TableRow<T extends object>({
@@ -140,7 +140,7 @@ export function TableRow<T extends object>({
 
 const cellStyles = tv({
   extend: focusRing,
-  base: "border-b border-gray-dim group-last/row:border-b-0 group-selected/row:border-purple-dim in-[:has(+[data-selected])]:border-purple-dim p-2 truncate -outline-offset-2",
+  base: "border-b border-dim group-last/row:border-b-0 group-selected/row:border-primary-12/20 in-[:has(+[data-selected])]:border-primary-12/20 p-2 truncate -outline-offset-2",
 });
 
 export function TableCell(props: CellProps) {

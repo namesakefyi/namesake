@@ -1,7 +1,16 @@
-import { AppContent, AppSidebar, AppSidebarHeader } from "@/components/app";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
+import {
+  AppContent,
+  AppDesktopWrapper,
+  AppNav,
+  AppSidebar,
+  AppSidebarContent,
+  AppSidebarFooter,
+  AppSidebarHeader,
+  NamesakeHeader,
+} from "@/components/app";
 import { SettingsNav } from "@/components/settings";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   component: SettingsRoute,
@@ -10,16 +19,30 @@ export const Route = createFileRoute("/_authenticated/settings")({
 function SettingsRoute() {
   const isMobile = useIsMobile();
 
-  return (
-    <div className="flex">
-      {!isMobile && (
-        <AppSidebar header={<AppSidebarHeader />}>
-          <SettingsNav />
-        </AppSidebar>
-      )}
+  if (isMobile) {
+    return (
       <AppContent>
         <Outlet />
       </AppContent>
-    </div>
+    );
+  }
+
+  return (
+    <AppDesktopWrapper>
+      <AppSidebar>
+        <AppSidebarHeader>
+          <NamesakeHeader />
+        </AppSidebarHeader>
+        <AppSidebarContent>
+          <SettingsNav />
+        </AppSidebarContent>
+        <AppSidebarFooter>
+          <AppNav />
+        </AppSidebarFooter>
+      </AppSidebar>
+      <AppContent>
+        <Outlet />
+      </AppContent>
+    </AppDesktopWrapper>
   );
 }

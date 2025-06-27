@@ -1,11 +1,11 @@
-import type { FieldName } from "@/constants";
-import { useEncryptionKey } from "@/hooks/useEncryptionKey";
-import { decryptData, encryptData } from "@/utils/encryption";
 import { renderHook, waitFor } from "@testing-library/react";
 import { useMutation, useQuery } from "convex/react";
 import { usePostHog } from "posthog-js/react";
 import { toast } from "sonner";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { FieldName } from "@/constants";
+import { useEncryptionKey } from "@/hooks/useEncryptionKey";
+import { decryptData, encryptData } from "@/utils/encryption";
 import { useForm } from "../useForm";
 
 // Mock the form fields
@@ -94,7 +94,6 @@ describe("useForm", () => {
 
     expect(encryptData).toHaveBeenCalledTimes(3);
     expect(mockSave).toHaveBeenCalledTimes(3);
-    expect(toast.success).toHaveBeenCalledWith("Form submitted!");
   });
 
   it("should handle submission errors", async () => {

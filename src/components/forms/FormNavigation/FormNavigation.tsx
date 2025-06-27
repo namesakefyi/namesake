@@ -1,4 +1,9 @@
+import { ArrowLeft, MenuIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Heading } from "react-aria-components";
+import { useFormContext } from "react-hook-form";
 import {
+  Badge,
   Button,
   Link,
   Menu,
@@ -8,17 +13,15 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
+import type { Jurisdiction } from "@/constants";
 import { useFormSections } from "@/hooks/useFormSections";
-import { ArrowLeft, MenuIcon } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Heading } from "react-aria-components";
-import { useFormContext } from "react-hook-form";
 
 interface FormNavigationProps {
   title: string;
+  jurisdiction?: Jurisdiction;
 }
 
-export function FormNavigation({ title }: FormNavigationProps) {
+export function FormNavigation({ title, jurisdiction }: FormNavigationProps) {
   const { sections } = useFormSections();
   const [progress, setProgress] = useState(0);
   const { getValues, watch } = useFormContext();
@@ -38,12 +41,15 @@ export function FormNavigation({ title }: FormNavigationProps) {
   }, [watch, getValues]);
 
   return (
-    <nav className="sticky bg-app p-2 top-0 max-w-full flex items-center justify-between gap-3 border-b border-gray-a3">
+    <nav className="sticky bg-app p-2 top-0 max-w-full z-20 flex items-center justify-between gap-3 border-b border-overlay">
       <div className="flex gap-2 items-center min-w-0">
         <Link button={{ variant: "icon" }} href={{ to: "/" }} aria-label="Back">
           <ArrowLeft className="size-5" />
         </Link>
-        <Heading className="text-xl truncate min-w-0 flex-1">{title}</Heading>
+        <Heading className="text-xl lg:text-2xl font-medium truncate min-w-0 flex-1">
+          {title}
+        </Heading>
+        {jurisdiction && <Badge>{jurisdiction}</Badge>}
       </div>
       <div className="flex gap-1 items-center">
         <ProgressBar

@@ -1,7 +1,12 @@
 import type { FieldName } from "@/constants";
 import { ShortTextField } from "../ShortTextField/ShortTextField";
 
-type NameType = "newName" | "oldName";
+type NameType =
+  | "newName"
+  | "oldName"
+  | "mothersName"
+  | "fathersName"
+  | "previousSocialSecurityCardName";
 
 export interface NameFieldProps {
   children?: React.ReactNode;
@@ -27,13 +32,28 @@ export function NameField({ children, type }: NameFieldProps) {
       middle: "oldMiddleName",
       last: "oldLastName",
     },
+    mothersName: {
+      first: "mothersFirstName",
+      middle: "mothersMiddleName",
+      last: "mothersLastName",
+    },
+    fathersName: {
+      first: "fathersFirstName",
+      middle: "fathersMiddleName",
+      last: "fathersLastName",
+    },
+    previousSocialSecurityCardName: {
+      first: "previousSocialSecurityCardFirstName",
+      middle: "previousSocialSecurityCardMiddleName",
+      last: "previousSocialSecurityCardLastName",
+    },
   };
 
   return (
     <div className="@container flex flex-col gap-4">
       <div className="grid grid-cols-1 @lg:grid-cols-3 gap-4">
         <ShortTextField
-          label="First or given name"
+          label="First name"
           name={names[type].first}
           autoComplete="given-name"
         />

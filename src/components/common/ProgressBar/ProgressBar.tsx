@@ -1,10 +1,10 @@
-import { Label } from "@/components/common";
-import { composeTailwindRenderProps } from "@/components/utils";
 import {
   ProgressBar as AriaProgressBar,
   type ProgressBarProps as AriaProgressBarProps,
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
+import { Label } from "@/components/common";
+import { composeTailwindRenderProps } from "@/components/utils";
 
 export interface ProgressBarProps extends AriaProgressBarProps {
   label: string;
@@ -32,14 +32,12 @@ export function ProgressBar({
               labelHidden && "sr-only",
             )}
           >
-            <Label className="text-gray-dim">{label}</Label>
-            <span className="text-xs text-gray-dim tabular-nums">
-              {valueText}
-            </span>
+            <Label className="text-dim">{label}</Label>
+            <span className="text-xs text-dim tabular-nums">{valueText}</span>
           </div>
-          <div className="w-full h-2 rounded-full bg-gray-4 outline-1 -outline-offset-1 outline-transparent relative overflow-hidden">
+          <div className="w-full h-2 rounded-full bg-theme-a4 outline-1 -outline-offset-1 outline-transparent relative overflow-hidden">
             <div
-              className={`absolute top-0 h-full rounded-full bg-purple-9 transition-all forced-colors:bg-[Highlight] ${isIndeterminate ? "left-full animate-in duration-10 [--tw-enter-translate-x:calc(-16rem-1%)] slide-out-to-right-full repeat-infinite ease-out" : "left-0"}`}
+              className={`absolute top-0 h-full rounded-full bg-primary-9 transition-all forced-colors:bg-[Highlight] ${isIndeterminate ? "left-full animate-in duration-10 [--tw-enter-translate-x:calc(-16rem-1%)] slide-out-to-right-full repeat-infinite ease-out" : "left-0"}`}
               style={{ width: `${isIndeterminate ? 40 : percentage}%` }}
             />
           </div>

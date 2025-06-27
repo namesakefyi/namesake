@@ -2,17 +2,17 @@
   @apply text-base lg:text-lg;
 
   a:not([data-type="button"]):not(:where(.not-prose *)) {
-    @apply underline underline-offset-2 hover:decoration-inherit decoration-gray-a8;
+    @apply underline underline-offset-2 hover:decoration-inherit decoration-theme-a8;
   }
 
-  :where(p, h2, h3, blockquote, ul, ol, img, div) + :where(p, h2, h3, blockquote, ul, ol, img, div):not(:where(.not-prose *)) {
+  :where(p, h2, h3, blockquote, ul, ol, img, div, aside) + :where(p, h2, h3, blockquote, ul, ol, img, div, aside):not(:where(.not-prose *)) {
     margin-block-start: 0.75em;
   }
 
   h2:not(:where(.not-prose *)) {
     @apply text-2xl font-medium;
     @apply pb-2;
-    @apply border-b border-gray-6;
+    @apply border-b border-theme-a4;
   }
 
   h3:not(:where(.not-prose *)) {
@@ -20,7 +20,7 @@
   }
 
   blockquote:not(:where(.not-prose *)) {
-    @apply border-l-2 border-gray-9 pl-4;
+    @apply border-l-2 border-theme-9 pl-4;
   }
 
   li:not(:where(.not-prose *)) {
@@ -38,7 +38,7 @@
     &::before {
       position: absolute;
       left: 0;
-      @apply tabular-nums text-gray-11;
+      @apply tabular-nums opacity-60;
     }
   }
 
@@ -47,6 +47,7 @@
     margin-inline-start: 0.25em;
     scale: 1.3;
     translate: 0 -0.05em;
+    @apply text-theme-11;
   }
 
   ol:not([data-type="steps"]):not(:where(.not-prose *)) {
@@ -74,7 +75,7 @@
 
   ol[data-type="steps"]:not(:where(.not-prose *)) {
     counter-reset: steps;
-    @apply flex flex-col;
+    @apply flex flex-col -ml-1;
 
     &:not(:first-child) {
       @apply mt-6;
@@ -101,8 +102,9 @@
       position: absolute;
       left: 0;
       top: 0;
+      font-size: 1.1em;
       content: counter(steps);
-      @apply bg-gray-a4;
+      @apply bg-theme-4;
     }
     
     &::after {
@@ -111,7 +113,7 @@
       top: var(--step-number-size);
       width: 2px;
       bottom: 0;
-      @apply bg-gray-a3;
+      @apply bg-theme-4;
       content: "";
     }
     
@@ -129,7 +131,7 @@
     
     &.is-empty::before {
       content: attr(data-placeholder);
-      @apply text-gray-9;
+      color: color-mix(in srgb, var(--color-theme-12) 40%, transparent);
       float: left;
       height: 0;
       pointer-events: none;
@@ -141,18 +143,89 @@
 
     &.is-empty::before {
       content: attr(data-placeholder);
-      @apply text-gray-9;
+      color: color-mix(in srgb, var(--color-theme-12) 40%, transparent);
       float: left;
       height: 0;
       pointer-events: none;
     }
   }
+
+
+  details[open] + details {
+    margin-block-start: 0.75em;
+  }
+
+  summary {
+    @apply rounded-md font-semibold relative list-none;
+    inline-size: fit-content;
+    padding-inline-start: 1.5em;
+  }
+
+  summary:-webkit-details-marker,
+  summary::marker {
+    display: none;
+  }
+
+  summary:before,
+  summary:after {
+    position: absolute;
+    left: 0;
+    top: 0.25em;
+    width: 1em;
+    height: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+  }
+
+  summary:before {
+    content: "▶︎";
+    scale: 0.75;
+    transition: rotate 0.15s ease-out;
+    opacity: 0.5;
+  }
+
+  summary:after {
+    content: "";
+    @apply rounded-sm;
+  }
+
+  details[open] summary:before {
+    rotate: 90deg;
+  }
+
+  details:not([open]) summary {
+    color: color-mix(in srgb, var(--color-theme-12) 80%, transparent);
+  }
+
+  &:not(:has([contenteditable="true"])) summary {
+    @apply cursor-pointer;
+
+    &:hover {
+      @apply text-theme-12;
+      &:before {
+        opacity: 1;
+      }
+      &:after {
+        @apply bg-theme-a4;
+      }
+    }
+  }
+
+  &:has([contenteditable="true"]) summary {
+    outline: none;
+  }
+
+  div[data-type="disclosure-content"] {
+    padding-inline-start: 1.5em;
+  }
 }
 
 .tiptap {
   &.is-empty :not([data-type="step-content"]) p:first-child::before {
-    @apply text-gray-9;
     content: attr(data-placeholder);
+    color: color-mix(in srgb, var(--color-theme-12) 40%, transparent);
     float: left;
     height: 0;
     pointer-events: none;

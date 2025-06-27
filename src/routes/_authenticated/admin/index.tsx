@@ -1,22 +1,21 @@
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { AdminNav } from "@/components/admin";
 import { PageHeader } from "@/components/app";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   component: AdminIndexRoute,
 });
 
 function AdminIndexRoute() {
-  const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  if (!isMobile) navigate({ to: "/admin/quests" });
+  if (!isMobile) return <Navigate to="/admin/quests" replace />;
 
   return (
     <>
       <PageHeader title="Admin" />
-      <AdminNav className="app-padding" />
+      <AdminNav />
     </>
   );
 }

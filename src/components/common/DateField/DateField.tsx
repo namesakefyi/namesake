@@ -1,11 +1,4 @@
 import {
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  Label,
-} from "@/components/common";
-import { composeTailwindRenderProps, focusRing } from "@/components/utils";
-import {
   DateField as AriaDateField,
   type DateFieldProps as AriaDateFieldProps,
   DateInput as AriaDateInput,
@@ -15,6 +8,13 @@ import {
   type ValidationResult,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import {
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  Label,
+} from "@/components/common";
+import { composeTailwindRenderProps } from "@/components/utils";
 
 export interface DateFieldProps<T extends DateValue>
   extends AriaDateFieldProps<T> {
@@ -54,22 +54,21 @@ export function DateField<T extends DateValue>({
 }
 
 const segmentStyles = tv({
-  base: "inline px-0.5 type-literal:px-1 rounded-sm outline-none forced-color-adjust-none caret-transparent text-gray-normal forced-colors:text-[ButtonText]",
+  base: "inline px-0.5 type-literal:px-1 rounded-sm outline-none forced-color-adjust-none caret-transparent text-normal forced-colors:text-[ButtonText]",
   variants: {
     isPlaceholder: {
-      true: "text-gray-9",
+      true: "text-placeholder",
     },
     isDisabled: {
-      true: "text-gray-2 forced-colors:text-[GrayText]",
+      true: "text-subtle forced-colors:text-[GrayText]",
     },
     isFocused: {
-      true: "bg-purple-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
+      true: "bg-primary-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
     },
   },
 });
 
 const dateFieldStyles = tv({
-  extend: focusRing,
   base: "w-[15ch] tabular-nums group flex items-center overflow-hidden",
   variants: {
     size: {

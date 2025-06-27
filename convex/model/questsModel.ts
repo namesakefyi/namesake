@@ -1,11 +1,6 @@
-import {
-  type Category,
-  DEFAULT_TIME_REQUIRED,
-  type Jurisdiction,
-} from "../../src/constants";
+import type { Category, Jurisdiction } from "../../src/constants";
 import type { Doc, Id } from "../_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
-import * as QuestFaqs from "./questFaqsModel";
 
 export function generateQuestSlug(
   title: string,
@@ -62,6 +57,81 @@ export async function getAllActive(ctx: QueryCtx) {
     .collect();
 }
 
+/**
+ * Get all active quests, but do not show court orders,
+ * state IDs, or birth certificates if the user already
+ * has one. This prevents irrelevant quests (court orders
+ * in 49+ other states, etc.) from appearing.
+ *
+ * @param ctx - The query context.
+ * @param userId - The ID of the user.
+ * @returns The relevant active quests.
+ */
+export async function getRelevantActiveForUser(
+  ctx: QueryCtx,
+  { userId }: { userId: Id<"users"> },
+) {
+  const allActiveQuests = await ctx.db
+    .query("quests")
+    .filter((q) => q.eq(q.field("deletedAt"), undefined))
+    .collect();
+
+  const userQuests = await ctx.db
+    .query("userQuests")
+    .withIndex("userId", (q) => q.eq("userId", userId))
+    .collect();
+
+  const userQuestDetails = await Promise.all(
+    userQuests.map(async (userQuest) => {
+      const quest = await ctx.db.get(userQuest.questId);
+      return quest && quest.deletedAt === undefined ? quest : null;
+    }),
+  );
+
+  const validUserQuests = userQuestDetails.filter(
+    (q): q is NonNullable<typeof q> => q !== null,
+  );
+
+  const filterableCategories: Category[] = [
+    "courtOrder",
+    "birthCertificate",
+    "stateId",
+  ];
+
+  const userQuestIds = new Set(validUserQuests.map((quest) => quest._id));
+
+  // Group user's quests by category to check which filterable categories they have
+  const userQuestsByCategory = validUserQuests.reduce(
+    (acc, quest) => {
+      const category = quest.category as Category;
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(quest);
+      return acc;
+    },
+    {} as Record<Category, typeof validUserQuests>,
+  );
+
+  const relevantQuests = allActiveQuests.filter((quest) => {
+    const category = quest.category as Category;
+
+    // If it's not a filterable category, always include it
+    if (!filterableCategories.includes(category)) return true;
+
+    // If it's a filterable category, check if user has any quests in this category
+    const userQuestsInCategory = userQuestsByCategory[category] || [];
+
+    // If user has no quests in this category, show all quests in this category
+    if (userQuestsInCategory.length === 0) return true;
+
+    // If user has quests in this category, only show the ones they already have
+    return userQuestIds.has(quest._id);
+  });
+
+  return relevantQuests;
+}
+
 export async function getWithUserQuest(
   ctx: QueryCtx,
   { slug, userId }: { slug: string; userId: Id<"users"> },
@@ -102,18 +172,6 @@ export async function getByCategoryAndJurisdiction(
     .first();
 }
 
-export async function getByFaqId(
-  ctx: QueryCtx,
-  { questFaqId }: { questFaqId: Id<"questFaqs"> },
-) {
-  for await (const quest of ctx.db.query("quests")) {
-    if (quest.faqs?.includes(questFaqId)) {
-      return quest;
-    }
-  }
-  return null;
-}
-
 export async function getBySlug(ctx: QueryCtx, { slug }: { slug: string }) {
   return await ctx.db
     .query("quests")
@@ -152,7 +210,6 @@ export async function create(
     category,
     jurisdiction,
     slug: finalSlug,
-    timeRequired: DEFAULT_TIME_REQUIRED,
     creationUser: userId,
     updatedAt: Date.now(),
     updatedBy: userId,
@@ -183,7 +240,7 @@ export async function setCosts(
   }: {
     questId: Id<"quests">;
     userId: Id<"users">;
-    costs?: Array<{ cost: number; description: string }>;
+    costs?: Array<{ cost: number; description: string; isRequired?: boolean }>;
   },
 ) {
   return await update(ctx, questId, userId, { costs });
@@ -207,71 +264,6 @@ export async function setTimeRequired(
   },
 ) {
   return await update(ctx, questId, userId, { timeRequired });
-}
-
-export async function addFaq(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    question,
-    answer,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    question: string;
-    answer: string;
-  },
-) {
-  const quest = await ctx.db.get(questId);
-  if (!quest) throw new Error("Quest not found");
-
-  const questFaqId = await QuestFaqs.create(ctx, { userId, question, answer });
-  const existingFaqs = quest.faqs || [];
-
-  return await update(ctx, questId, userId, {
-    faqs: [...existingFaqs, questFaqId],
-  });
-}
-
-export async function addFaqId(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    questFaqId,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    questFaqId: Id<"questFaqs">;
-  },
-) {
-  const quest = await ctx.db.get(questId);
-  if (!quest) throw new Error("Quest not found");
-
-  const existingFaqs = quest.faqs || [];
-  return await update(ctx, questId, userId, {
-    faqs: [...existingFaqs, questFaqId],
-  });
-}
-
-export async function deleteFaq(
-  ctx: MutationCtx,
-  {
-    questId,
-    userId,
-    questFaqId,
-  }: {
-    questId: Id<"quests">;
-    userId: Id<"users">;
-    questFaqId: Id<"questFaqs">;
-  },
-) {
-  const quest = await ctx.db.get(questId);
-  if (!quest) throw new Error("Quest not found");
-
-  const updatedFaqs = quest.faqs?.filter((id) => id !== questFaqId);
-  return await update(ctx, questId, userId, { faqs: updatedFaqs });
 }
 
 export async function deleteForever(

@@ -1,5 +1,3 @@
-import { type ButtonProps, buttonStyles } from "@/components/common";
-import { focusRing } from "@/components/utils";
 import type { Ref } from "react";
 import {
   Link as AriaLink,
@@ -7,6 +5,8 @@ import {
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { type ButtonProps, buttonStyles } from "@/components/common";
+import { focusRing } from "@/components/utils";
 
 export interface LinkProps extends AriaLinkProps {
   variant?: "primary" | "secondary";
@@ -20,7 +20,7 @@ const linkStyles = tv({
   variants: {
     variant: {
       primary: "text-blue-9",
-      secondary: "text-gray-dim hover:text-gray-normal",
+      secondary: "text-dim hover:text-normal",
     },
   },
   defaultVariants: {

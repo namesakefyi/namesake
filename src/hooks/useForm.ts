@@ -1,6 +1,3 @@
-import type { FieldName } from "@/constants";
-import { useEncryptionKey } from "@/hooks/useEncryptionKey";
-import { decryptData, encryptData } from "@/utils/encryption";
 import { api } from "@convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
 import { usePostHog } from "posthog-js/react";
@@ -13,6 +10,9 @@ import {
   useForm as useReactHookForm,
 } from "react-hook-form";
 import { toast } from "sonner";
+import type { FieldName } from "@/constants";
+import { useEncryptionKey } from "@/hooks/useEncryptionKey";
+import { decryptData, encryptData } from "@/utils/encryption";
 
 export function useForm<TFieldValues extends FieldValues = FieldValues>(
   fields: FieldName[],
@@ -72,8 +72,6 @@ export function useForm<TFieldValues extends FieldValues = FieldValues>(
         const encryptedValue = await encryptData(value, encryptionKey);
         await save({ field, value: encryptedValue });
       }
-
-      toast.success("Form submitted!");
     } catch (error) {
       posthog.captureException(error);
       toast.error(

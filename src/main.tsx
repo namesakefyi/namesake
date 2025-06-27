@@ -1,22 +1,33 @@
 import "./styles/index.css";
-import { Logo } from "@/components/app";
-import { Empty } from "@/components/common";
-import type { Jurisdiction, Role } from "@/constants";
-import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import { api } from "@convex/_generated/api";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import {
+  convexClient,
+  crossDomainClient,
+} from "@convex-dev/better-auth/client/plugins";
+import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { createAuthClient } from "better-auth/react";
 import { ConvexReactClient, useQuery } from "convex/react";
 import { ArrowLeft, CircleAlert, TriangleAlert } from "lucide-react";
-import { LazyMotion, domAnimation } from "motion/react";
-import { ThemeProvider } from "next-themes";
+import { domAnimation, LazyMotion } from "motion/react";
 import { posthog } from "posthog-js";
 import { PostHogErrorBoundary, PostHogProvider } from "posthog-js/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
+import { Logo, ThemeProvider } from "@/components/app";
+import { Empty } from "@/components/common";
+import type { Role } from "@/constants";
 import { routeTree } from "./routeTree.gen";
 
-const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
+const apiEndpoint = import.meta.env.VITE_CONVEX_URL;
+const convex = new ConvexReactClient(apiEndpoint);
+
+const actionsEndpoint = import.meta.env.VITE_CONVEX_SITE_URL;
+export const authClient = createAuthClient({
+  baseURL: actionsEndpoint,
+  plugins: [convexClient(), crossDomainClient()],
+});
 
 const NotFoundComponent = () => (
   <div className="flex flex-col items-center justify-center gap-12 w-full min-h-screen px-4">
@@ -50,8 +61,6 @@ export const router = createRouter({
     convex: undefined!,
     title: undefined!,
     role: undefined!,
-    residence: undefined!,
-    birthplace: undefined!,
   },
   defaultPreload: "intent",
   defaultNotFoundComponent: NotFoundComponent,
@@ -67,15 +76,8 @@ const InnerApp = () => {
   const title = "Namesake";
   const user = useQuery(api.users.getCurrent);
   const role = user?.role as Role;
-  const residence = user?.residence as Jurisdiction;
-  const birthplace = user?.birthplace as Jurisdiction;
 
-  return (
-    <RouterProvider
-      router={router}
-      context={{ convex, title, role, residence, birthplace }}
-    />
-  );
+  return <RouterProvider router={router} context={{ convex, title, role }} />;
 };
 
 posthog.init(import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_KEY, {
@@ -91,7 +93,7 @@ posthog.init(import.meta.env.VITE_REACT_APP_PUBLIC_POSTHOG_KEY, {
 const fallback = () => (
   <Empty
     title="Something went wrong"
-    subtitle="We’ve been notified of the issue. Refresh the page to try again."
+    subtitle="We've been notified of the issue. Refresh the page to try again."
     icon={CircleAlert}
     className="min-h-dvh"
   />
@@ -104,15 +106,15 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <PostHogProvider client={posthog}>
         <HelmetProvider>
-          <ConvexAuthProvider client={convex}>
-            <ThemeProvider attribute="class" disableTransitionOnChange>
+          <ConvexBetterAuthProvider client={convex} authClient={authClient}>
+            <ThemeProvider attribute="class">
               <LazyMotion strict features={domAnimation}>
                 <PostHogErrorBoundary fallback={fallback}>
                   <InnerApp />
                 </PostHogErrorBoundary>
               </LazyMotion>
             </ThemeProvider>
-          </ConvexAuthProvider>
+          </ConvexBetterAuthProvider>
         </HelmetProvider>
       </PostHogProvider>
     </StrictMode>,

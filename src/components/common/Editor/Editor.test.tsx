@@ -22,6 +22,7 @@ vi.mock("@tiptap/react", () => {
         toggleBulletList: () => ({ run: vi.fn() }),
         toggleSteps: () => ({ run: vi.fn() }),
         toggleButton: () => ({ run: vi.fn() }),
+        toggleDisclosures: () => ({ run: vi.fn() }),
       }),
     }),
     can: () => ({
@@ -39,6 +40,7 @@ vi.mock("@tiptap/react", () => {
           toggleBulletList: () => ({ run: () => true }),
           toggleSteps: () => ({ run: () => true }),
           toggleButton: () => ({ run: () => true }),
+          toggleDisclosures: () => ({ run: () => true }),
         }),
       }),
     }),
@@ -85,7 +87,7 @@ describe("Editor", () => {
   it("applies correct styles when not editable", () => {
     const { container } = render(<Editor editable={false} />);
     expect(container.firstChild).toHaveClass(
-      "border-none rounded-none bg-transparent",
+      "border-none rounded-none bg-transparent!",
     );
     expect(screen.getByRole("textbox")).not.toHaveAttribute("contenteditable");
   });

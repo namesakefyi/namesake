@@ -17,10 +17,15 @@ describe("PasswordStrength", () => {
     ({ value, label, textClass, bgClass }) => {
       render(<PasswordStrength value={value} />);
 
-      // Check strength label
-      const strengthLabel = screen.getByLabelText(label);
-      expect(strengthLabel).toBeInTheDocument();
-      expect(strengthLabel).toHaveClass(textClass);
+      // Check screen reader strength label
+      const srLabel = screen.getByText(label);
+      expect(srLabel).toBeInTheDocument();
+      expect(srLabel).toHaveClass("sr-only");
+
+      // Check visible label
+      const visibleLabel = screen.getByTestId("strength-label");
+      expect(visibleLabel).toBeInTheDocument();
+      expect(visibleLabel).toHaveClass(textClass);
 
       // Check meter background
       const progressBar = screen.getByTestId("meter-fill");

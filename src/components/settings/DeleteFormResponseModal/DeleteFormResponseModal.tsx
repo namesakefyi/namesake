@@ -1,3 +1,10 @@
+import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { usePostHog } from "posthog-js/react";
+import { useState } from "react";
+import type { Selection } from "react-aria-components";
+import { toast } from "sonner";
 import {
   Banner,
   Button,
@@ -7,13 +14,6 @@ import {
 } from "@/components/common";
 import { ALL } from "@/constants";
 import { capitalize } from "@/utils/capitalize";
-import { api } from "@convex/_generated/api";
-import type { Id } from "@convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { usePostHog } from "posthog-js/react";
-import { useState } from "react";
-import type { Selection } from "react-aria-components";
-import { toast } from "sonner";
 import { getResponseCountLabel } from "../FormResponsesList/FormResponsesList";
 
 interface DeleteFormResponseModalProps {
@@ -75,7 +75,7 @@ export function DeleteFormResponseModal({
       {selectedRows !== ALL && (
         <>
           <p>The following responses will be deleted:</p>
-          <ul className="list-disc list-inside text-sm leading-6 text-gray-dim">
+          <ul className="list-disc list-inside text-sm leading-6 text-dim">
             {Array.from(selectedRows).map((row) => (
               <li key={row}>{rows?.find((r) => r.id === row)?.field}</li>
             ))}

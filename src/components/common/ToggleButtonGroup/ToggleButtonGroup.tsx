@@ -1,12 +1,12 @@
 import {
   ToggleButtonGroup as AriaToggleButtonGroup,
-  type ToggleButtonGroupProps,
   composeRenderProps,
+  type ToggleButtonGroupProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
 
 const styles = tv({
-  base: "rounded-lg bg-gray-3 grid grid-flow-col auto-cols-fr",
+  base: "rounded-full bg-theme-a3 dark:bg-theme-a2 grid grid-flow-col auto-cols-fr",
   variants: {
     orientation: {
       horizontal: "flex-row",

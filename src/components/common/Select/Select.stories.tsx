@@ -1,3 +1,4 @@
+import type { Meta } from "@storybook/react-vite";
 import {
   Button,
   Form,
@@ -5,7 +6,6 @@ import {
   SelectItem,
   SelectSection,
 } from "@/components/common";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof Select> = {
   component: Select,

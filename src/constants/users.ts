@@ -22,6 +22,59 @@ export const THEMES: Record<Theme, FieldDetails> = {
   },
 } as const;
 
+export type ThemeColor =
+  | "rainbow"
+  | "pink"
+  | "red"
+  | "orange"
+  | "yellow"
+  | "green"
+  | "turquoise"
+  | "indigo"
+  | "violet";
+
+export const THEME_COLORS: Record<
+  ThemeColor,
+  { label: string; meaning?: string }
+> = {
+  rainbow: {
+    label: "Rainbow",
+    meaning: "Pride",
+  },
+  pink: {
+    label: "Pink",
+    meaning: "Sex",
+  },
+  red: {
+    label: "Red",
+    meaning: "Life",
+  },
+  orange: {
+    label: "Orange",
+    meaning: "Healing",
+  },
+  yellow: {
+    label: "Yellow",
+    meaning: "Sunlight",
+  },
+  green: {
+    label: "Green",
+    meaning: "Nature",
+  },
+  turquoise: {
+    label: "Turquoise",
+    meaning: "Magic and Art",
+  },
+  indigo: {
+    label: "Indigo",
+    meaning: "Serenity",
+  },
+  violet: {
+    label: "Violet",
+    meaning: "Spirit",
+  },
+};
+
 export const ROLES = {
   user: "User",
   editor: "Editor",
@@ -29,3 +82,6 @@ export const ROLES = {
 } as const;
 
 export type Role = keyof typeof ROLES;
+
+export const MIN_DISPLAY_NAME_LENGTH = 2;
+export const MAX_DISPLAY_NAME_LENGTH = 24;

@@ -51,9 +51,16 @@ describe("QuestTimeBadge", () => {
     expect(screen.getByText("2–4 weeks")).toBeInTheDocument();
   });
 
-  it("displays 'Unknown' when timeRequired is not set", () => {
-    render(<QuestTimeBadge quest={mockQuestNoTimeRequired} />);
-    expect(screen.getByText("Unknown")).toBeInTheDocument();
+  it("returns null when timeRequired is not set and not editable", () => {
+    const { container } = render(
+      <QuestTimeBadge quest={mockQuestNoTimeRequired} />,
+    );
+    expect(container.firstChild).toBeNull();
+  });
+
+  it("shows 'Add time required' when timeRequired is not set and editable", () => {
+    render(<QuestTimeBadge quest={mockQuestNoTimeRequired} editable={true} />);
+    expect(screen.getByText("Add time required")).toBeInTheDocument();
   });
 
   it("does not show description popover when description is not available", () => {
@@ -154,9 +161,10 @@ describe("QuestTimeBadge", () => {
       screen.getByRole("button", { name: "Edit time required" }),
     );
 
-    const descriptionInput = screen.getByLabelText("Description");
-    await user.clear(descriptionInput);
-    await user.type(descriptionInput, "New description");
+    // Select a different unit
+    const unitSelect = screen.getByLabelText("Unit");
+    await user.click(unitSelect);
+    await user.click(screen.getByRole("option", { name: "Months" }));
 
     await user.click(screen.getByText("Save"));
 
@@ -164,8 +172,8 @@ describe("QuestTimeBadge", () => {
       timeRequired: {
         min: 2,
         max: 4,
-        unit: "weeks",
-        description: "New description",
+        unit: "months",
+        description: "Processing time varies by court",
       },
       questId: "quest123",
     });
@@ -287,6 +295,25 @@ describe("QuestTimeBadge", () => {
 
     // Check if popover was closed without saving
     expect(mockSetTimeRequired).not.toHaveBeenCalled();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("handles removing time required", async () => {
+    const user = userEvent.setup();
+    mockSetTimeRequired.mockResolvedValueOnce(undefined);
+
+    render(<QuestTimeBadge quest={mockQuest} editable={true} />);
+
+    await user.click(
+      screen.getByRole("button", { name: "Edit time required" }),
+    );
+
+    await user.click(screen.getByText("Remove"));
+
+    expect(mockSetTimeRequired).toHaveBeenCalledWith({
+      timeRequired: undefined,
+      questId: "quest123",
+    });
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });

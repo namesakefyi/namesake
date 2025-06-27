@@ -1,7 +1,7 @@
 import {
   Toolbar as AriaToolbar,
-  type ToolbarProps,
   composeRenderProps,
+  type ToolbarProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
 

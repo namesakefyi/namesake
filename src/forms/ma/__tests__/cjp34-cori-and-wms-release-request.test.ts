@@ -1,10 +1,10 @@
-import { getPdfForm } from "@/utils/pdf";
 import { describe, expect, it } from "vitest";
+import { getPdfForm } from "../../utils";
 import coriAndWmsReleaseRequest from "../cjp34-cori-and-wms-release-request";
 
 describe("CJP34 CORI and WMS Release Request", () => {
   const testData = {
-    county: "Suffolk",
+    residenceCounty: "Suffolk",
     oldFirstName: "Old",
     oldMiddleName: "M",
     oldLastName: "Name",
@@ -20,9 +20,10 @@ describe("CJP34 CORI and WMS Release Request", () => {
     });
 
     // Verify fields
+    expect(form.getTextField("caseName").getText()).toBe("Old M Name");
     expect(form.getTextField("county").getText()).toBe("Suffolk");
     expect(form.getTextField("oldName").getText()).toBe("Old M Name");
-    expect(form.getTextField("dateOfBirth").getText()).toBe("1990-01-01");
+    expect(form.getTextField("dateOfBirth").getText()).toBe("01/01/1990");
     expect(form.getTextField("mothersMaidenName").getText()).toBe("Smith");
     expect(form.getTextField("otherNamesOrAliases").getText()).toBe(
       "Nickname, Alias",

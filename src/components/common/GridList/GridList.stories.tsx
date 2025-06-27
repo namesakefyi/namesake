@@ -1,5 +1,5 @@
+import type { Meta } from "@storybook/react-vite";
 import { GridList, GridListItem } from "@/components/common";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof GridList> = {
   component: GridList,

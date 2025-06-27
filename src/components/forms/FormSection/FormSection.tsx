@@ -1,7 +1,7 @@
-import { getFormSectionId } from "@/utils/getFormSectionId";
-import { smartquotes } from "@/utils/smartquotes";
 import { Heading } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
+import { getFormSectionId } from "@/utils/getFormSectionId";
+import { smartquotes } from "@/utils/smartquotes";
 
 export interface FormSectionProps {
   /**
@@ -42,13 +42,13 @@ export function FormSection({
     >
       <header className="flex flex-col gap-2">
         <Heading
-          className="text-2xl md:text-3xl font-medium text-gray-normal text-pretty"
+          className="text-2xl md:text-3xl font-medium text-normal text-pretty"
           data-section-title
         >
           {smartquotes(title)}
         </Heading>
         {description && (
-          <p className="text-base md:text-lg text-gray-dim text-pretty">
+          <p className="text-base md:text-lg text-dim text-pretty">
             {smartquotes(description)}
           </p>
         )}
@@ -76,13 +76,13 @@ export function FormSubsection({
   return (
     <fieldset
       className={twMerge(
-        "flex flex-col gap-8 pl-6 py-2 border-l-3 border-gray-a3 justify-center",
+        "flex flex-col gap-8 pl-6 py-2 border-l-3 border-theme-a3 justify-center",
         className,
       )}
       disabled={!isVisible}
     >
       {title && (
-        <Heading className="text-2xl font-medium text-gray-normal text-pretty">
+        <Heading className="text-2xl font-medium text-normal text-pretty">
           {smartquotes(title)}
         </Heading>
       )}

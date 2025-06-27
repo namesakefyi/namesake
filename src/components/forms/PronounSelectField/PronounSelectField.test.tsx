@@ -1,7 +1,7 @@
-import { COMMON_PRONOUNS } from "@/constants";
 import userEvent from "@testing-library/user-event";
 import { renderWithFormProvider, screen } from "@tests/test-utils";
 import { describe, expect, it } from "vitest";
+import { COMMON_PRONOUNS } from "@/constants";
 import { PronounSelectField } from "./PronounSelectField";
 
 describe("PronounSelectField", () => {

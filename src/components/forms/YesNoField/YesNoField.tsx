@@ -1,15 +1,18 @@
-import { Radio, RadioGroup, type RadioGroupProps } from "@/components/common";
-import type { FieldName } from "@/constants";
-import { smartquotes } from "@/utils/smartquotes";
 import { Controller, useFormContext } from "react-hook-form";
+import { Radio, RadioGroup, type RadioGroupProps } from "@/components/common";
+import { type FieldName, PREFER_NOT_TO_ANSWER } from "@/constants";
+import { smartquotes } from "@/utils/smartquotes";
+
+type YesNoValue = boolean | typeof PREFER_NOT_TO_ANSWER;
 
 /**
  * Converts a boolean value to a string value.
  * @param value - The boolean value to convert.
- * @returns "yes" if the value is true, "no" if the value is false, null if the value is undefined or null.
+ * @returns "yes" if the value is true, "no" if the value is false, "preferNotToAnswer" if the value is null.
  */
-export const getYesNoStringFromBoolean = (value: boolean) => {
+export const getYesNoStringFromBoolean = (value: YesNoValue) => {
   if (value === undefined || value === null) return null;
+  if (value === PREFER_NOT_TO_ANSWER) return PREFER_NOT_TO_ANSWER;
   if (value) return "yes";
   return "no";
 };
@@ -17,9 +20,10 @@ export const getYesNoStringFromBoolean = (value: boolean) => {
 /**
  * Converts a string value to a boolean value.
  * @param value - The string value to convert.
- * @returns true if the value is "yes", false if the value is "no".
+ * @returns true if the value is "yes", false if the value is "no", null if the value is "preferNotToAnswer".
  */
-export const getBooleanValueFromYesNoString = (value: string) => {
+export const getBooleanValueFromYesNoString = (value: string): YesNoValue => {
+  if (value === PREFER_NOT_TO_ANSWER) return PREFER_NOT_TO_ANSWER;
   return value === "yes";
 };
 
@@ -30,6 +34,7 @@ export interface YesNoFieldProps extends RadioGroupProps {
   labelHidden?: boolean;
   yesLabel?: string;
   noLabel?: string;
+  includePreferNotToAnswer?: boolean;
 }
 
 export function YesNoField({
@@ -40,11 +45,12 @@ export function YesNoField({
   noLabel,
   children,
   defaultValue,
+  includePreferNotToAnswer,
 }: YesNoFieldProps) {
   const { control, setValue } = useFormContext();
 
   return (
-    <div className="@container flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <Controller
         control={control}
         name={name}
@@ -69,6 +75,11 @@ export function YesNoField({
             <Radio value="no" size="large" card>
               {smartquotes(noLabel ?? "No")}
             </Radio>
+            {includePreferNotToAnswer && (
+              <Radio value={PREFER_NOT_TO_ANSWER} size="large" card>
+                Prefer not to answer
+              </Radio>
+            )}
           </RadioGroup>
         )}
       />

@@ -1,8 +1,8 @@
+import type { Meta } from "@storybook/react-vite";
 import {
   MemorableDateField,
   type MemorableDateFieldProps,
 } from "@/components/forms";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof MemorableDateField> = {
   component: MemorableDateField,
@@ -21,8 +21,6 @@ Example.args = {
   name: "dateOfBirth",
   label: "Birthdate",
   children: (
-    <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
-      Children
-    </div>
+    <div className="border border-dim p-3 rounded-lg text-dim">Children</div>
   ),
 };

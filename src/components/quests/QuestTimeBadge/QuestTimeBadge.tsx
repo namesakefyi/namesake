@@ -1,3 +1,9 @@
+import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { HelpCircle, Pencil, Plus } from "lucide-react";
+import { memo, useState } from "react";
+import { toast } from "sonner";
 import {
   Badge,
   BadgeButton,
@@ -12,13 +18,12 @@ import {
   Tooltip,
   TooltipTrigger,
 } from "@/components/common";
-import { TIME_UNITS, type TimeRequired, type TimeUnit } from "@/constants";
-import { api } from "@convex/_generated/api";
-import type { Doc } from "@convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { HelpCircle, Pencil } from "lucide-react";
-import { memo, useState } from "react";
-import { toast } from "sonner";
+import {
+  DEFAULT_TIME_REQUIRED,
+  TIME_UNITS,
+  type TimeRequired,
+  type TimeUnit,
+} from "@/constants";
 
 const TimeRequiredInput = memo(function TimeRequiredInput({
   timeRequired,
@@ -103,13 +108,21 @@ export const QuestTimeBadge = ({
   editable = false,
 }: QuestTimeBadgeProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [timeInput, setTimeInput] = useState<TimeRequired | null>(
-    (quest?.timeRequired as TimeRequired) ?? null,
+  const [timeInput, setTimeInput] = useState<TimeRequired>(
+    (quest?.timeRequired as TimeRequired) ?? DEFAULT_TIME_REQUIRED,
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const setTimeRequired = useMutation(api.quests.setTimeRequired);
 
   if (!quest) return null;
+
+  const handleRemove = () => {
+    setTimeRequired({
+      timeRequired: undefined,
+      questId: quest._id,
+    });
+    setIsEditing(false);
+  };
 
   const handleCancel = () => {
     setTimeInput((quest.timeRequired as TimeRequired) ?? null);
@@ -127,7 +140,7 @@ export const QuestTimeBadge = ({
         questId: quest._id,
       });
       setIsEditing(false);
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to update time required");
     } finally {
       setIsSubmitting(false);
@@ -146,36 +159,49 @@ export const QuestTimeBadge = ({
 
   const formattedTime = getFormattedTime(timeRequired as TimeRequired);
 
+  if (!timeRequired && !editable) return null;
+
   return (
     <Badge size="lg">
-      {formattedTime}
+      {timeRequired ? formattedTime : "Add time required"}
       {timeRequired?.description && (
-        <TooltipTrigger>
-          <BadgeButton label="Details" icon={HelpCircle} />
-          <Tooltip placement="bottom">
+        <DialogTrigger>
+          <TooltipTrigger>
+            <BadgeButton label="Details" icon={HelpCircle} />
+            <Tooltip>See details</Tooltip>
+          </TooltipTrigger>
+          <Popover placement="bottom" className="p-3">
             <p className="text-sm max-w-xs">{timeRequired.description}</p>
-          </Tooltip>
-        </TooltipTrigger>
+          </Popover>
+        </DialogTrigger>
       )}
       {editable && (
         <DialogTrigger>
           <TooltipTrigger>
             <BadgeButton
-              icon={Pencil}
+              icon={timeRequired ? Pencil : Plus}
               onPress={() => setIsEditing(true)}
-              label="Edit time required"
+              label={timeRequired ? "Edit time required" : "Add time required"}
             />
-            <Tooltip>Edit time required</Tooltip>
+            <Tooltip>
+              {timeRequired ? "Edit time required" : "Add time required"}
+            </Tooltip>
           </TooltipTrigger>
           <Popover isOpen={isEditing} className="p-4">
             <Form onSubmit={handleSubmit} className="w-full">
-              {timeInput && (
-                <TimeRequiredInput
-                  timeRequired={timeInput}
-                  onChange={setTimeInput}
-                />
-              )}
+              <TimeRequiredInput
+                timeRequired={timeInput}
+                onChange={setTimeInput}
+              />
               <div className="flex w-full justify-end gap-2">
+                <Button
+                  variant="secondary"
+                  size="small"
+                  onPress={handleRemove}
+                  className="mr-auto"
+                >
+                  Remove
+                </Button>
                 <Button variant="secondary" size="small" onPress={handleCancel}>
                   Cancel
                 </Button>

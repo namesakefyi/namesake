@@ -26,6 +26,7 @@ import {
   Scale,
   ShieldCheck,
   ShoppingBag,
+  Sprout,
   Zap,
 } from "lucide-react";
 import { usaStates } from "typed-usa-states";
@@ -44,7 +45,7 @@ export type Jurisdiction = keyof typeof JURISDICTIONS;
 
 export const BIRTHPLACES: Record<Jurisdiction | "other", string> = {
   ...JURISDICTIONS,
-  other: "I was born outside the US",
+  other: "Outside the US",
 };
 export type Birthplace = keyof typeof BIRTHPLACES;
 
@@ -76,10 +77,12 @@ export type Category =
   | "travel"
   | "other";
 
-export type CoreCategory = keyof Pick<
-  typeof CATEGORIES,
-  "courtOrder" | "stateId" | "socialSecurity" | "passport" | "birthCertificate"
->;
+export type CoreCategory =
+  | "courtOrder"
+  | "socialSecurity"
+  | "stateId"
+  | "passport"
+  | "birthCertificate";
 
 /**
  * Generic group details.
@@ -173,7 +176,7 @@ export const CATEGORIES: Record<Category, GroupDetails> = {
     label: "Other",
     icon: CircleHelp,
   },
-};
+} as const;
 
 /**
  * User quest statuses.
@@ -181,7 +184,7 @@ export const CATEGORIES: Record<Category, GroupDetails> = {
 export type Status = "notStarted" | "inProgress" | "complete";
 
 interface StatusDetails extends GroupDetails {
-  variant?: "info" | "warning" | "danger" | "waiting" | "success";
+  variant?: "warning" | "danger" | "success";
 }
 
 export const STATUS: Record<Status, StatusDetails> = {
@@ -206,7 +209,16 @@ export const STATUS_ORDER: Status[] = Object.keys(STATUS) as Status[];
 export type Cost = {
   cost: number;
   description: string;
+  isRequired?: boolean;
 };
+
+export const DEFAULT_COSTS: Cost[] = [
+  {
+    cost: 0,
+    description: "",
+    isRequired: true,
+  },
+];
 
 /**
  * Time units.
@@ -235,7 +247,7 @@ export const TIME_UNITS: Record<TimeUnit, GroupDetails> = {
     label: "Months",
     icon: CalendarClock,
   },
-};
+} as const;
 
 export const TIME_UNITS_ORDER: TimeUnit[] = Object.keys(
   TIME_UNITS,
@@ -249,7 +261,16 @@ export type TimeRequired = {
 };
 
 export const DEFAULT_TIME_REQUIRED: TimeRequired = {
-  min: 5,
-  max: 10,
-  unit: "minutes",
-};
+  min: 2,
+  max: 6,
+  unit: "weeks",
+} as const;
+
+/**
+ * Getting Started guide details.
+ */
+export const GETTING_STARTED: GroupDetails = {
+  label: "Getting Started",
+  icon: Sprout,
+  isCore: true,
+} as const;

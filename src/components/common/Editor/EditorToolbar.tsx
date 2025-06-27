@@ -5,6 +5,7 @@ import {
   Heading2,
   ItalicIcon,
   List,
+  ListCollapse,
   ListOrdered,
   type LucideIcon,
   Milestone,
@@ -73,7 +74,7 @@ export const EditorToolbar = ({ editor, extensions }: EditorToolbarProps) => {
   return (
     <Toolbar
       orientation="horizontal"
-      className="px-3 py-2 shadow-[0_1px_0_0_var(--color-gray-a5)] sticky bg-element rounded-t-lg top-0 z-10"
+      className="px-3 py-2 shadow-[0_1px_0_0_var(--color-theme-a5)] sticky bg-element rounded-t-lg top-0 z-10"
     >
       <EditorToggleButton
         icon={Undo}
@@ -174,6 +175,13 @@ export const EditorToolbar = ({ editor, extensions }: EditorToolbarProps) => {
             onPress={() => editor.chain().focus().toggleSteps().run()}
             isDisabled={!editor.can().chain().focus().toggleSteps().run()}
             isSelected={editor.isActive("steps")}
+          />
+          <EditorToggleButton
+            icon={ListCollapse}
+            label="Disclosure"
+            onPress={() => editor.chain().focus().toggleDisclosures().run()}
+            isDisabled={!editor.can().chain().focus().toggleDisclosures().run()}
+            isSelected={editor.isActive("disclosures")}
           />
           <EditorToggleButton
             icon={MousePointerClick}

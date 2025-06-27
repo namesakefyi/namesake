@@ -1,7 +1,7 @@
-import { STATUS } from "@/constants";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { STATUS } from "@/constants";
 import { StatusBadge, StatusSelect } from "./StatusSelect";
 
 describe("StatusSelect", () => {
@@ -62,6 +62,27 @@ describe("StatusSelect", () => {
     expect(mockOnChange).toHaveBeenCalledWith("notStarted");
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
+
+  it("allows removing the quest", async () => {
+    const mockOnChange = vi.fn();
+    const mockOnRemove = vi.fn();
+    render(
+      <StatusSelect
+        status="inProgress"
+        onChange={mockOnChange}
+        onRemove={mockOnRemove}
+      />,
+    );
+
+    const triggerButton = screen.getByRole("button");
+    await userEvent.click(triggerButton);
+
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+    await userEvent.click(screen.getByText("Remove from my quests"));
+
+    expect(mockOnRemove).toHaveBeenCalled();
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
 });
 
 describe("StatusBadge", () => {
@@ -73,7 +94,7 @@ describe("StatusBadge", () => {
 
     // Should show the icon only
     const badge = screen.getByTestId("badge");
-    expect(badge).toHaveClass("size-5");
+    expect(badge).toHaveClass("size-6");
   });
 
   it("returns null when status is undefined", () => {

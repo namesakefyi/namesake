@@ -1,5 +1,3 @@
-import { FieldDescription, FieldError, Label } from "@/components/common";
-import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 import type { ReactNode, Ref } from "react";
 import {
   Radio as AriaRadio,
@@ -9,6 +7,8 @@ import {
   type ValidationResult,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { FieldDescription, FieldError, Label } from "@/components/common";
+import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 
 export interface RadioGroupProps extends Omit<AriaRadioGroupProps, "children"> {
   label?: string;
@@ -50,14 +50,14 @@ export function RadioGroup({
 
 const radioItemStyles = tv({
   extend: focusRing,
-  base: "flex shrink-0 items-center group text-gray-normal disabled:opacity-50 forced-colors:disabled:text-[GrayText] transition",
+  base: "flex shrink-0 items-center group text-normal disabled:opacity-50 forced-colors:disabled:text-[GrayText] transition",
   variants: {
     size: {
       medium: "gap-2",
       large: "gap-3",
     },
     card: {
-      true: "border border-gray-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-gray-a2 selected:bg-purple-a3 selected:border-purple-6",
+      true: "border border-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-theme-a2 selected:bg-primary-a3 selected:border-primary-6",
     },
   },
 });
@@ -67,14 +67,14 @@ const radioStyles = tv({
   base: "rounded-full border bg-app transition-all ease-out duration-150 cursor-pointer shrink-0",
   variants: {
     isSelected: {
-      false: "border-gray-dim",
-      true: "bg-white border-[6px] border-purple-9 forced-colors:border-[Highlight]",
+      false: "border-dim",
+      true: "bg-white border-[6px] border-primary-9 forced-colors:border-[Highlight]",
     },
     isInvalid: {
       true: "border-red-9 forced-colors:border-[Mark]!",
     },
     isDisabled: {
-      true: "border-gray-2 cursor-default forced-colors:border-[GrayText]!",
+      true: "border-dim cursor-default forced-colors:border-[GrayText]!",
     },
     size: {
       medium: "size-5",
@@ -115,12 +115,32 @@ export function Radio({
         radioItemStyles({ size, card }),
       )}
     >
-      {(renderProps) => (
+      {({
+        isSelected,
+        isInvalid,
+        isDisabled,
+        isFocusVisible,
+        ...renderProps
+      }) => (
         <>
-          <div className={radioStyles({ ...renderProps, size })} />
+          <div
+            className={radioStyles({
+              isSelected,
+              isInvalid,
+              isDisabled,
+              isFocusVisible,
+              size,
+            })}
+          />
           {/* Types workaround: https://github.com/adobe/react-spectrum/issues/7434 */}
           {typeof props.children === "function"
-            ? props.children(renderProps)
+            ? props.children({
+                isFocusVisible,
+                isSelected,
+                isInvalid,
+                isDisabled,
+                ...renderProps,
+              })
             : props.children}
         </>
       )}

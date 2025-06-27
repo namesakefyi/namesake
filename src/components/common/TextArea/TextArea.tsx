@@ -1,3 +1,9 @@
+import type { Ref } from "react";
+import {
+  TextField as AriaTextField,
+  type TextFieldProps as AriaTextFieldProps,
+  type ValidationResult,
+} from "react-aria-components";
 import {
   FieldDescription,
   FieldError,
@@ -6,12 +12,6 @@ import {
   Label,
 } from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
-import type { Ref } from "react";
-import {
-  TextField as AriaTextField,
-  type TextFieldProps as AriaTextFieldProps,
-  type ValidationResult,
-} from "react-aria-components";
 
 export interface TextAreaProps extends AriaTextFieldProps {
   label?: string;
@@ -19,6 +19,7 @@ export interface TextAreaProps extends AriaTextFieldProps {
   errorMessage?: string | ((validation: ValidationResult) => string);
   size?: "medium" | "large";
   ref?: Ref<HTMLTextAreaElement>;
+  inputClassName?: string;
 }
 
 export function TextArea({
@@ -27,6 +28,7 @@ export function TextArea({
   description,
   errorMessage,
   size,
+  inputClassName,
   ...props
 }: TextAreaProps) {
   return (
@@ -41,7 +43,7 @@ export function TextArea({
         <>
           {label && <Label size={size}>{label}</Label>}
           <FieldGroup isDisabled={isDisabled} isInvalid={isInvalid} size={size}>
-            <InputTextArea ref={ref} size={size} />
+            <InputTextArea ref={ref} size={size} className={inputClassName} />
           </FieldGroup>
           {description && <FieldDescription>{description}</FieldDescription>}
           <FieldError>{errorMessage}</FieldError>

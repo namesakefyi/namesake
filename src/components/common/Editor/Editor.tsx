@@ -1,4 +1,3 @@
-import { FieldGroup } from "@/components/common";
 import Document from "@tiptap/extension-document";
 import {
   EditorContent,
@@ -8,6 +7,7 @@ import {
 } from "@tiptap/react";
 import { useEffect } from "react";
 import { tv } from "tailwind-variants";
+import { FieldGroup } from "@/components/common";
 import { EditorToolbar } from "./EditorToolbar";
 import {
   EXTENSION_GROUPS,
@@ -88,12 +88,11 @@ export function Editor({
   }
 
   const wrapperStyles = tv({
-    base: "w-full flex-col outline-none",
+    base: "w-full flex-col outline-none bg-transparent!",
     variants: {
       editable: {
         true: "[&_.tiptap]:outline-none",
-        false:
-          "border-none rounded-none bg-transparent focus-within:outline-none!",
+        false: "border-none rounded-none focus-within:outline-none!",
       },
     },
   });

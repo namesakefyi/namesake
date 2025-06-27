@@ -1,9 +1,8 @@
-import type { Jurisdiction, Role } from "@/constants";
 import {
+  createRootRouteWithContext,
   type NavigateOptions,
   Outlet,
   type ToOptions,
-  createRootRouteWithContext,
   useLocation,
   useRouter,
 } from "@tanstack/react-router";
@@ -15,11 +14,12 @@ import {
   LoaderCircle,
   OctagonAlert,
 } from "lucide-react";
-import { useTheme } from "next-themes";
 import { usePostHog } from "posthog-js/react";
 import { useEffect } from "react";
 import { RouterProvider } from "react-aria-components";
 import { Toaster } from "sonner";
+import { useTheme } from "@/components/app";
+import type { Role } from "@/constants";
 
 declare module "react-aria-components" {
   interface RouterConfig {
@@ -47,8 +47,6 @@ interface RouterContext {
   convex: ConvexReactClient;
   title: string;
   role: Role;
-  residence: Jurisdiction;
-  birthplace: Jurisdiction;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
@@ -60,16 +58,16 @@ function RootRoute() {
   const { theme } = useTheme();
 
   return (
-    // TODO: Improve this API
-    // https://github.com/adobe/react-spectrum/issues/6587
     <RouterProvider
       navigate={(path, options) =>
         router.navigate(
-          typeof path === "string" ? { ...options } : { ...path, ...options },
+          typeof path === "string"
+            ? { href: path, ...options }
+            : { ...path, ...options },
         )
       }
-      useHref={(path) =>
-        typeof path === "string" ? path : router.buildLocation(path).href
+      useHref={(href) =>
+        typeof href === "string" ? href : router.buildLocation(href).href
       }
     >
       <Outlet />
@@ -77,16 +75,18 @@ function RootRoute() {
       <Toaster
         theme={theme as "light" | "dark" | "system"}
         offset={16}
+        mobileOffset={{ bottom: "68px" }}
         gap={8}
-        position="bottom-left"
+        position="bottom-right"
         toastOptions={{
           unstyled: true,
           classNames: {
             toast:
-              "bg-gray-12 rounded-lg p-4 w-full font-sans text-sm shadow-md flex items-center gap-2 text-gray-1",
-            title: "text-gray-1",
-            description: "text-gray-3",
-            icon: "text-gray-5",
+              "bg-theme-12 rounded-lg p-4 w-full font-sans text-sm shadow-md flex items-center gap-2 text-theme-1",
+            title: "text-theme-1",
+            description: "text-theme-3",
+            icon: "text-theme-5",
+            actionButton: "ml-auto cursor-pointer",
           },
         }}
         icons={{

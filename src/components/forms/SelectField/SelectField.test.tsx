@@ -9,8 +9,8 @@ const mockOptions = [
   { label: "Option 3", value: "option3" },
 ];
 
-describe("RadioGroupField", () => {
-  it("renders radio group with correct label", () => {
+describe("SelectField", () => {
+  it("renders select with correct label", () => {
     const testLabel = "Select an option";
 
     renderWithFormProvider(
@@ -21,7 +21,7 @@ describe("RadioGroupField", () => {
     expect(groupLabel).toBeInTheDocument();
   });
 
-  it("renders all radio options", () => {
+  it("renders all options in the dropdown", async () => {
     renderWithFormProvider(
       <SelectField name="pronouns" label="Test Label" options={mockOptions} />,
     );

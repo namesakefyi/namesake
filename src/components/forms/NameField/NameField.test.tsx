@@ -7,7 +7,7 @@ describe("NameField", () => {
   it("renders all name input fields", () => {
     renderWithFormProvider(<NameField type="newName" />);
 
-    const firstNameInput = screen.getByLabelText("First or given name");
+    const firstNameInput = screen.getByLabelText("First name");
     const middleNameInput = screen.getByLabelText("Middle name");
     const lastNameInput = screen.getByLabelText("Last or family name");
 
@@ -19,7 +19,7 @@ describe("NameField", () => {
   it("has correct autocomplete attributes", () => {
     renderWithFormProvider(<NameField type="newName" />);
 
-    const firstNameInput = screen.getByLabelText("First or given name");
+    const firstNameInput = screen.getByLabelText("First name");
     const middleNameInput = screen.getByLabelText("Middle name");
     const lastNameInput = screen.getByLabelText("Last or family name");
 
@@ -31,9 +31,8 @@ describe("NameField", () => {
   it("allows entering text in all name fields", async () => {
     renderWithFormProvider(<NameField type="newName" />);
 
-    const firstNameInput: HTMLInputElement = screen.getByLabelText(
-      "First or given name",
-    );
+    const firstNameInput: HTMLInputElement =
+      screen.getByLabelText("First name");
     const middleNameInput: HTMLInputElement =
       screen.getByLabelText("Middle name");
     const lastNameInput: HTMLInputElement = screen.getByLabelText(

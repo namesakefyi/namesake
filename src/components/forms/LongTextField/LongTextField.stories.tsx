@@ -1,5 +1,5 @@
+import type { Meta } from "@storybook/react-vite";
 import { LongTextField, type LongTextFieldProps } from "@/components/forms";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof LongTextField> = {
   component: LongTextField,
@@ -18,8 +18,6 @@ Example.args = {
   label: "Free text",
   name: "freeText",
   children: (
-    <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
-      Children
-    </div>
+    <div className="border border-dim p-3 rounded-lg text-dim">Children</div>
   ),
 };

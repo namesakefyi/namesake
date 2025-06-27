@@ -1,14 +1,15 @@
-import type { FormData } from "@/constants";
-import { definePdf } from "@/utils/pdf";
-import { joinPronouns } from "@/utils/pdf-helpers";
+import languageNameMap from "language-name-map/map";
+import { definePdf } from "@/forms/utils";
+import { formatDateMMDDYYYY, joinPronouns } from "@/utils/pdf-helpers";
 import pdf from "./cjp27-petition-to-change-name-of-adult.pdf";
 
 export default definePdf({
+  id: "cjp27-petition-to-change-name-of-adult",
   title: "Petition to Change Name of Adult",
   code: "CJP 27",
-  pdfPath: pdf,
   jurisdiction: "MA",
-  fields: (data: Partial<FormData>) => ({
+  pdfPath: pdf,
+  fields: (data) => ({
     // Petitioner
     petitionerFirstName: data.oldFirstName,
     petitionerMiddleName: data.oldMiddleName,
@@ -25,7 +26,7 @@ export default definePdf({
     // I was born in:
     birthplaceCity: data.birthplaceCity,
     birthplaceState: data.birthplaceState,
-    dateOfBirth: data.dateOfBirth,
+    dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
 
     // I currently reside at:
     residenceStreetAddress: data.residenceStreetAddress,
@@ -76,7 +77,7 @@ export default definePdf({
     ...(data.isInterpreterNeeded
       ? {
           isInterpreterNeeded: data.isInterpreterNeeded,
-          language: data.language,
+          language: data.language ? languageNameMap[data.language].name : "",
         }
       : {}),
 

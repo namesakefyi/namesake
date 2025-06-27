@@ -1,5 +1,5 @@
+import type { Meta } from "@storybook/react-vite";
 import { ShortTextField, type ShortTextFieldProps } from "@/components/forms";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof ShortTextField> = {
   component: ShortTextField,
@@ -19,8 +19,6 @@ Example.args = {
   name: "customField",
   description: "A custom description",
   children: (
-    <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
-      Children
-    </div>
+    <div className="border border-dim p-3 rounded-lg text-dim">Children</div>
   ),
 };

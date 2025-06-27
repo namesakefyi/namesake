@@ -1,3 +1,10 @@
+import { Calendar as CalendarIcon } from "lucide-react";
+import {
+  DateRangePicker as AriaDateRangePicker,
+  type DateRangePickerProps as AriaDateRangePickerProps,
+  type DateValue,
+  type ValidationResult,
+} from "react-aria-components";
 import {
   Button,
   DateInput,
@@ -9,13 +16,6 @@ import {
   RangeCalendar,
 } from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
-import { Calendar as CalendarIcon } from "lucide-react";
-import {
-  DateRangePicker as AriaDateRangePicker,
-  type DateRangePickerProps as AriaDateRangePickerProps,
-  type DateValue,
-  type ValidationResult,
-} from "react-aria-components";
 
 export interface DateRangePickerProps<T extends DateValue>
   extends AriaDateRangePickerProps<T> {
@@ -49,7 +49,7 @@ export function DateRangePicker<T extends DateValue>({
             <DateInput slot="start" className="px-3 py-2" />
             <span
               aria-hidden="true"
-              className="text-gray-dim forced-colors:text-[ButtonText] group-disabled:text-gray-2 forced-colors:group-disabled:text-[GrayText]"
+              className="text-dim forced-colors:text-[ButtonText] group-disabled:text-theme-2 forced-colors:group-disabled:text-[GrayText]"
             >
               –
             </span>

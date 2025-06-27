@@ -1,13 +1,13 @@
-import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import {
-  birthplace,
   category,
   jurisdiction,
+  pdfId,
   role,
   status,
   theme,
+  themeColor,
   timeRequiredUnit,
 } from "./validators";
 
@@ -36,6 +36,7 @@ const quests = defineTable({
       v.object({
         cost: v.number(),
         description: v.string(),
+        isRequired: v.optional(v.boolean()),
       }),
     ),
   ),
@@ -52,8 +53,6 @@ const quests = defineTable({
   deletedAt: v.optional(v.number()),
   /** Rich text comprising the contents of the quest, stored as HTML. */
   content: v.optional(v.string()),
-  /** Questions related to the quest. */
-  faqs: v.optional(v.array(v.id("questFaqs"))),
   /** Time in ms since epoch when the quest was last updated. */
   updatedAt: v.number(),
   /** The user who last updated the quest. */
@@ -62,43 +61,8 @@ const quests = defineTable({
   .index("slug", ["slug"])
   .index("category", ["category"])
   .index("categoryAndJurisdiction", ["category", "jurisdiction"])
-  .index("faqs", ["faqs"])
   .index("updatedAt", ["updatedAt"])
   .index("updatedBy", ["updatedBy"]);
-
-/**
- * A frequently asked question and its answer.
- */
-const questFaqs = defineTable({
-  /** A frequently asked question. */
-  question: v.string(),
-  /** The rich text answer to the question, stored as HTML. */
-  answer: v.string(),
-  /** The user who published the FAQ. */
-  author: v.id("users"),
-  /** Date the FAQ was updated, in ms since epoch. */
-  updatedAt: v.number(),
-})
-  .index("author", ["author"])
-  .index("updatedAt", ["updatedAt"]);
-
-/**
- * A PDF document that can be filled out by users.
- */
-const documents = defineTable({
-  /** The quest this document belongs to. */
-  questId: v.id("quests"),
-  /** The title of the document. (e.g. "Petition to Change Name of Adult") */
-  title: v.string(),
-  /** The legal code for the document. (e.g. "CJP 27") */
-  code: v.optional(v.string()),
-  /** The user who created the document. */
-  creationUser: v.id("users"),
-  /** The storageId for the PDF file. */
-  file: v.optional(v.id("_storage")),
-  /** Time in ms since epoch when the document was deleted. */
-  deletedAt: v.optional(v.number()),
-}).index("quest", ["questId"]);
 
 // ----------------------------------------------
 // Users
@@ -118,10 +82,6 @@ const users = defineTable({
   email: v.optional(v.string()),
   /** Whether the user's email address has been verified. */
   emailVerified: v.optional(v.boolean()),
-  /** The US State where the user resides. */
-  residence: v.optional(jurisdiction),
-  /** The US State where the user was born, or "other" if they were born outside the US. */
-  birthplace: v.optional(birthplace),
   /** Whether the user is a minor. */
   isMinor: v.optional(v.boolean()),
 }).index("email", ["email"]);
@@ -141,6 +101,18 @@ const userFormResponses = defineTable({
   .index("userIdAndField", ["userId", "field"]);
 
 /**
+ * A specific PDF form connected to a user.
+ */
+const userDocuments = defineTable({
+  /** The user who owns the document. */
+  userId: v.id("users"),
+  /** A reference to the PDF ID. */
+  pdfId: pdfId,
+})
+  .index("userId", ["userId"])
+  .index("userIdAndPdfId", ["userId", "pdfId"]);
+
+/**
  * A user's preferences.
  */
 const userSettings = defineTable({
@@ -148,6 +120,8 @@ const userSettings = defineTable({
   userId: v.id("users"),
   /** The user's preferred color scheme. (e.g. "system", "light", "dark") */
   theme: v.optional(theme),
+  /** The user's preferred color. */
+  color: v.optional(themeColor),
 }).index("userId", ["userId"]);
 
 /**
@@ -168,28 +142,41 @@ const userQuests = defineTable({
   .index("userId", ["userId"])
   .index("questId", ["questId"]);
 
-// ----------------------------------------------
-// Early Access
-// ----------------------------------------------
+/**
+ * A user's progress in the getting started guide.
+ */
+const userGettingStarted = defineTable({
+  /** The user who is working on getting started. */
+  userId: v.id("users"),
+  /** The status of the getting started guide. */
+  status: status,
+  /** Time in ms since epoch when the user marked getting started as complete. */
+  completedAt: v.optional(v.number()),
+  /** Time in ms since epoch when the user started the getting started guide. */
+  startedAt: v.optional(v.number()),
+}).index("userId", ["userId"]);
 
 /**
- * Codes to enable early access to the app.
+ * Placeholders for core quests.
  */
-const earlyAccessCodes = defineTable({
-  /** The user who created the code. */
-  createdBy: v.id("users"),
-  /** The time the code was claimed. */
-  claimedAt: v.optional(v.number()),
-}).index("createdBy", ["createdBy"]);
+const userQuestPlaceholders = defineTable({
+  /** The user who owns the placeholder. */
+  userId: v.id("users"),
+  /** The category of the placeholder. */
+  category: category,
+  /** Time the placeholder was dismissed. */
+  dismissedAt: v.optional(v.number()),
+})
+  .index("userId", ["userId"])
+  .index("userIdAndCategory", ["userId", "category"]);
 
 export default defineSchema({
-  ...authTables,
-  earlyAccessCodes,
-  documents,
   quests,
-  questFaqs,
   users,
+  userDocuments,
   userFormResponses,
   userSettings,
   userQuests,
+  userGettingStarted,
+  userQuestPlaceholders,
 });

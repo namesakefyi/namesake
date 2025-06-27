@@ -1,8 +1,8 @@
+import type { Meta } from "@storybook/react-vite";
 import {
   CheckboxGroupField,
   type CheckboxGroupFieldProps,
 } from "@/components/forms";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof CheckboxGroupField> = {
   component: CheckboxGroupField,
@@ -26,8 +26,6 @@ Example.args = {
     { label: "Option 3", value: "option-3" },
   ],
   children: (
-    <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
-      Children
-    </div>
+    <div className="border border-dim p-3 rounded-lg text-dim">Children</div>
   ),
 };

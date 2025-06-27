@@ -1,3 +1,10 @@
+import { api } from "@convex/_generated/api";
+import type { Doc, Id } from "@convex/_generated/dataModel";
+import { useNavigate } from "@tanstack/react-router";
+import { useMutation } from "convex/react";
+import { Pencil } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { PageHeader, type PageHeaderProps } from "@/components/app";
 import { Button, Link, Tooltip, TooltipTrigger } from "@/components/common";
 import {
@@ -7,13 +14,6 @@ import {
   StatusSelect,
 } from "@/components/quests";
 import type { Status } from "@/constants";
-import { api } from "@convex/_generated/api";
-import type { Doc, Id } from "@convex/_generated/dataModel";
-import { useNavigate } from "@tanstack/react-router";
-import { useMutation } from "convex/react";
-import { Pencil } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
 
 interface QuestPageHeaderProps extends Omit<PageHeaderProps, "title"> {
   quest?: Doc<"quests"> | null;
@@ -39,7 +39,7 @@ export function QuestPageHeader({
     try {
       setIsSubmitting(true);
       if (quest) await addQuest({ questId: quest._id });
-    } catch (err) {
+    } catch (_err) {
       toast.error("Failed to add quest. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -97,7 +97,7 @@ export function QuestPageHeader({
             size="small"
             isSubmitting={isSubmitting}
           >
-            Add to my list
+            Add to my quests
           </Button>
         )}
         {editable && (

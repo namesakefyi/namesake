@@ -1,5 +1,3 @@
-import { Label } from "@/components/common";
-import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 import {
   Slider as AriaSlider,
   type SliderProps as AriaSliderProps,
@@ -9,6 +7,8 @@ import {
   SliderTrack,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { Label } from "@/components/common";
+import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 
 const trackStyles = tv({
   base: "rounded-full",
@@ -18,21 +18,21 @@ const trackStyles = tv({
       vertical: "h-full w-[6px] ml-[50%] -translate-x-[50%]",
     },
     isDisabled: {
-      false: "bg-gray-5 forced-colors:bg-[ButtonBorder]",
-      true: "bg-gray-1 forced-colors:bg-[GrayText]",
+      false: "bg-theme-5 forced-colors:bg-[ButtonBorder]",
+      true: "opacity-50 forced-colors:bg-[GrayText]",
     },
   },
 });
 
 const thumbStyles = tv({
   extend: focusRing,
-  base: "w-6 h-6 group-orientation-horizontal:mt-6 group-orientation-vertical:ml-3 rounded-full bg-purple-9 shadow-sm",
+  base: "size-6 group-orientation-horizontal:mt-6 group-orientation-vertical:ml-3 rounded-full bg-primary-9 shadow-sm",
   variants: {
     isDragging: {
-      true: "bg-purple-10 forced-colors:bg-[ButtonBorder]",
+      true: "bg-primary-10 forced-colors:bg-[ButtonBorder]",
     },
     isDisabled: {
-      true: "border-gray-3 forced-colors:border-[GrayText]",
+      true: "forced-colors:border-[GrayText]",
     },
   },
 });
@@ -67,17 +67,17 @@ export function Slider<T extends number | number[]>({
       )}
     >
       <Label>{label}</Label>
-      <SliderOutput className="text-sm text-gray-4 font-medium orientation-vertical:hidden">
+      <SliderOutput className="text-sm text-subtle font-medium orientation-vertical:hidden">
         {({ state }) =>
           state.values.map((_, i) => state.getThumbValueLabel(i)).join(" – ")
         }
       </SliderOutput>
       <SliderTrack className="group col-span-2 orientation-horizontal:h-6 orientation-vertical:w-6 orientation-vertical:h-64 flex items-center">
-        {({ state, ...renderProps }) => (
+        {({ state, orientation, isDisabled }) => (
           <>
-            <div className={trackStyles(renderProps)} />
+            <div className={trackStyles({ orientation, isDisabled })} />
             <div
-              className="absolute h-[6px] top-[50%] translate-y-[-50%] rounded-full bg-purple-6"
+              className="absolute h-[6px] top-[50%] translate-y-[-50%] rounded-full bg-primary-6"
               style={getThumbTrackFillStyle(state)}
             />
             {state.values.map((_, i) => (

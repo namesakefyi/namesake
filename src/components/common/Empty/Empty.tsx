@@ -1,3 +1,7 @@
+import type { LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
+import { Heading } from "react-aria-components";
+import { twMerge } from "tailwind-merge";
 import {
   Button,
   type ButtonProps,
@@ -5,10 +9,6 @@ import {
   type LinkProps,
 } from "@/components/common";
 import { smartquotes } from "@/utils/smartquotes";
-import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
-import { Heading } from "react-aria-components";
-import { twMerge } from "tailwind-merge";
 
 interface EmptyProps {
   icon: LucideIcon;
@@ -32,16 +32,14 @@ export function Empty({
   return (
     <div
       className={twMerge(
-        "flex flex-1 flex-col items-center justify-center gap-4 w-full min-h-60 text-gray-normal",
+        "flex flex-1 flex-col items-center justify-center gap-4 w-full min-h-60 text-normal",
         className,
       )}
     >
-      <Icon size={40} className="text-gray-9 shrink-0 stroke-2" />
+      <Icon size={40} className="text-theme-9 shrink-0 stroke-[1.5]" />
       <Heading className="font-semibold text-xl">{smartquotes(title)}</Heading>
       {subtitle && (
-        <p className="text-gray-dim -mt-3 text-center">
-          {smartquotes(subtitle)}
-        </p>
+        <p className="text-dim -mt-3 text-center">{smartquotes(subtitle)}</p>
       )}
       <div className="flex gap-2">
         {button && <Button {...button} />}

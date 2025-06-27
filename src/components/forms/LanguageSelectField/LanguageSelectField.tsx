@@ -1,9 +1,8 @@
-import { Select, SelectItem } from "@/components/common";
-import type { FieldName } from "@/constants";
 import languageNameMap from "language-name-map/map";
 import { Text } from "react-aria-components";
-import { useFormContext } from "react-hook-form";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
+import { ComboBox, ComboBoxItem } from "@/components/common";
+import type { FieldName } from "@/constants";
 
 export interface LanguageSelectFieldProps {
   name: FieldName;
@@ -27,7 +26,7 @@ export function LanguageSelectField({
         defaultValue={defaultValue ?? null}
         shouldUnregister={true}
         render={({ field, fieldState: { invalid, error } }) => (
-          <Select
+          <ComboBox
             {...field}
             label="Language"
             size="large"
@@ -46,18 +45,22 @@ export function LanguageSelectField({
                 aName.localeCompare(bName),
               )
               .map(([language, { name, native }]) => (
-                <SelectItem key={language} id={language} textValue={name}>
+                <ComboBoxItem
+                  key={language}
+                  id={language}
+                  textValue={`${name} (${native})`}
+                >
                   {name}
                   <Text
                     slot="description"
-                    className="text-gray-dim"
+                    className="text-dim"
                     data-testid="native-name"
                   >
                     {native}
                   </Text>
-                </SelectItem>
+                </ComboBoxItem>
               ))}
-          </Select>
+          </ComboBox>
         )}
       />
       {children}

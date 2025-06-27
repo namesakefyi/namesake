@@ -1,5 +1,3 @@
-import { Button } from "@/components/common";
-import { focusRing } from "@/components/utils";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
   Calendar as AriaCalendar,
@@ -15,17 +13,19 @@ import {
   useLocale,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { Button } from "@/components/common";
+import { focusRing } from "@/components/utils";
 
 const cellStyles = tv({
   extend: focusRing,
   base: "w-9 h-9 text-sm cursor-default rounded-full flex items-center justify-center forced-color-adjust-none",
   variants: {
     isSelected: {
-      false: "text-gray-12 hover:bg-gray-3 pressed:bg-gray-3",
-      true: "bg-blue-9 invalid:bg-red-9 text-white forced-colors:bg-[Highlight] forced-colors:invalid:bg-[Mark] forced-colors:text-[HighlightText]",
+      false: "text-normal hover:bg-primary-3 pressed:bg-primary-3",
+      true: "bg-primary-9 invalid:bg-red-9 text-white forced-colors:bg-[Highlight] forced-colors:invalid:bg-[Mark] forced-colors:text-[HighlightText]",
     },
     isDisabled: {
-      true: "text-gray-9 forced-colors:text-[GrayText]",
+      true: "text-subtle forced-colors:text-[GrayText]",
     },
   },
 });
@@ -67,7 +67,7 @@ export function CalendarHeader() {
         slot="previous"
         icon={direction === "rtl" ? ArrowRight : ArrowLeft}
       />
-      <Heading className="flex-1 font-medium text-xl text-center mx-2 text-gray-normal" />
+      <Heading className="flex-1 font-medium text-xl text-center mx-2 text-normal" />
       <Button
         variant="icon"
         slot="next"
@@ -81,7 +81,7 @@ export function CalendarGridHeader() {
   return (
     <AriaCalendarGridHeader>
       {(day) => (
-        <CalendarHeaderCell className="text-xs text-gray-9 font-semibold">
+        <CalendarHeaderCell className="text-xs text-subtle font-semibold pb-2">
           {day}
         </CalendarHeaderCell>
       )}

@@ -1,5 +1,5 @@
+import type { Meta } from "@storybook/react-vite";
 import { RangeCalendar } from "@/components/common";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof RangeCalendar> = {
   component: RangeCalendar,

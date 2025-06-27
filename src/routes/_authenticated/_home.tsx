@@ -1,12 +1,7 @@
-import {
-  AppContent,
-  AppSidebar,
-  AppSidebarFooter,
-  AppSidebarHeader,
-} from "@/components/app";
-import { QuestsNav } from "@/components/quests";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { AppContent, AppDesktopWrapper } from "@/components/app";
+import { QuestsSidebar } from "@/components/quests";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/_home")({
   component: IndexRoute,
@@ -15,16 +10,20 @@ export const Route = createFileRoute("/_authenticated/_home")({
 function IndexRoute() {
   const isMobile = useIsMobile();
 
-  return (
-    <div className="flex">
-      {!isMobile && (
-        <AppSidebar header={<AppSidebarHeader />} footer={<AppSidebarFooter />}>
-          <QuestsNav />
-        </AppSidebar>
-      )}
+  if (isMobile) {
+    return (
       <AppContent>
         <Outlet />
       </AppContent>
-    </div>
+    );
+  }
+
+  return (
+    <AppDesktopWrapper>
+      <QuestsSidebar />
+      <AppContent>
+        <Outlet />
+      </AppContent>
+    </AppDesktopWrapper>
   );
 }

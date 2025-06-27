@@ -3,8 +3,10 @@ import {
   BIRTHPLACES,
   CATEGORIES,
   JURISDICTIONS,
+  PDF_IDS,
   ROLES,
   STATUS,
+  THEME_COLORS,
   THEMES,
   TIME_UNITS,
 } from "../src/constants";
@@ -25,6 +27,10 @@ export const theme = v.union(
   ...Object.keys(THEMES).map((theme) => v.literal(theme)),
 );
 
+export const themeColor = v.union(
+  ...Object.keys(THEME_COLORS).map((color) => v.literal(color)),
+);
+
 export const role = v.union(
   ...Object.keys(ROLES).map((role) => v.literal(role)),
 );
@@ -35,4 +41,8 @@ export const category = v.union(
 
 export const timeRequiredUnit = v.union(
   ...Object.keys(TIME_UNITS).map((unit) => v.literal(unit)),
+);
+
+export const pdfId = v.union(
+  ...Object.values(PDF_IDS).map((id) => v.literal(id)),
 );

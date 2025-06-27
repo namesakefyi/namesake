@@ -1,3 +1,9 @@
+import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { Milestone } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import {
   Button,
   Editor,
@@ -5,12 +11,6 @@ import {
   Empty,
   Form,
 } from "@/components/common";
-import { api } from "@convex/_generated/api";
-import type { Doc } from "@convex/_generated/dataModel";
-import { useMutation } from "convex/react";
-import { Milestone } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
 
 interface QuestContentProps extends EditorProps {
   quest: Doc<"quests">;

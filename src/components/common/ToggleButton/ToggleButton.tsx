@@ -1,5 +1,3 @@
-import { buttonStyles } from "@/components/common";
-import { focusRing } from "@/components/utils";
 import type { LucideIcon } from "lucide-react";
 import {
   ToggleButton as AriaToggleButton,
@@ -7,6 +5,8 @@ import {
   composeRenderProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { buttonStyles } from "@/components/common";
+import { focusRing } from "@/components/utils";
 
 export interface ToggleButtonProps extends AriaToggleButtonProps {
   children?: React.ReactNode;
@@ -16,16 +16,17 @@ export interface ToggleButtonProps extends AriaToggleButtonProps {
 
 const styles = tv({
   extend: focusRing,
-  base: "px-3.5 [&:has(svg:only-child)]:px-2 text-sm text-center font-medium transition rounded-lg border border-transparent relative isolate shrink-0",
+  base: "px-3.5 [&:has(svg:only-child)]:px-2 text-sm text-center font-medium transition rounded-full border border-transparent relative isolate shrink-0 flex items-center justify-center gap-2",
   variants: {
     isSelected: {
-      false: "bg-transparent text-gray-dim hover:text-gray-normal",
-      true: "bg-app text-gray-normal shadow-xs border border-gray-dim",
+      false:
+        "bg-transparent text-dim hover:text-normal before:absolute before:-z-1 before:inset-1 before:rounded-full before:bg-transparent hover:before:bg-theme-2/80 dark:hover:before:bg-theme-11/15",
+      true: "bg-theme-1 dark:bg-theme-3 text-normal shadow-xs border border-dim",
     },
     isDisabled: buttonStyles.variants.isDisabled,
     size: {
-      small: "h-8",
-      medium: "h-10",
+      small: "h-8 min-w-8",
+      medium: "h-10 min-w-10",
     },
   },
   defaultVariants: {
@@ -47,7 +48,7 @@ export function ToggleButton({
         styles({ ...renderProps, size, className }),
       )}
     >
-      {Icon && <Icon size={size === "small" ? 16 : 20} />}
+      {Icon && <Icon size={size === "small" ? 16 : 20} className="shrink-0" />}
       {children}
     </AriaToggleButton>
   );

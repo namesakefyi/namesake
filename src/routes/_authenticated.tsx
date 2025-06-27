@@ -1,8 +1,8 @@
-import { AppMobileNav } from "@/components/app";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { Navigate, Outlet, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate, Outlet } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { tv } from "tailwind-variants";
+import { AppNav } from "@/components/app";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export const Route = createFileRoute("/_authenticated")({
   component: AuthenticatedRoute,
@@ -23,10 +23,10 @@ function AuthenticatedRoute() {
   return (
     <>
       <Authenticated>
-        <main className={styles({ isMobile })}>
+        <div className={styles({ isMobile })}>
           <Outlet />
-          {isMobile && <AppMobileNav />}
-        </main>
+          {isMobile && <AppNav />}
+        </div>
       </Authenticated>
       <Unauthenticated>
         <Navigate to="/signin" />

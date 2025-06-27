@@ -1,14 +1,13 @@
-import type { Status } from "@/constants";
 import type { Doc, Id } from "@convex/_generated/dataModel";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useMutation } from "convex/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { Status } from "@/constants";
 import { QuestCallToAction } from "./QuestCallToAction";
 
 describe("QuestCallToAction", () => {
-  const mockCreate = vi.fn();
-  const mockSetStatus = vi.fn();
+  const mockOnAddQuest = vi.fn();
+  const mockOnChangeStatus = vi.fn();
 
   const mockQuest = {
     _id: "quest123" as Id<"quests">,
@@ -39,31 +38,38 @@ describe("QuestCallToAction", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useMutation as unknown as ReturnType<typeof vi.fn>)
-      .mockReturnValueOnce(mockCreate) // First call for create
-      .mockReturnValueOnce(mockSetStatus); // Second call for setStatus
   });
 
-  it("shows 'Add to my list' button when no userQuest exists", () => {
-    render(<QuestCallToAction quest={mockQuest} />);
-    expect(screen.getByText("Add to my list")).toBeInTheDocument();
+  it("shows 'Add to my quests' button when no userQuest exists", () => {
+    render(
+      <QuestCallToAction
+        data={{ quest: mockQuest }}
+        onAddQuest={mockOnAddQuest}
+      />,
+    );
+    expect(screen.getByText("Add to my quests")).toBeInTheDocument();
   });
 
-  it("handles adding quest to list", async () => {
+  it("handles adding to my quests", async () => {
     const user = userEvent.setup();
-    mockCreate.mockResolvedValueOnce(undefined);
+    mockOnAddQuest.mockResolvedValueOnce(undefined);
 
-    render(<QuestCallToAction quest={mockQuest} />);
-    await user.click(screen.getByText("Add to my list"));
+    render(
+      <QuestCallToAction
+        data={{ quest: mockQuest }}
+        onAddQuest={mockOnAddQuest}
+      />,
+    );
+    await user.click(screen.getByText("Add to my quests"));
 
-    expect(mockCreate).toHaveBeenCalledWith({ questId: mockQuest._id });
+    expect(mockOnAddQuest).toHaveBeenCalled();
   });
 
   it("shows 'Mark as in progress' button for not started quests", () => {
     render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("notStarted")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("notStarted") }}
+        onChangeStatus={mockOnChangeStatus}
       />,
     );
     expect(screen.getByText("Mark as in progress")).toBeInTheDocument();
@@ -72,8 +78,8 @@ describe("QuestCallToAction", () => {
   it("shows 'Mark as done' button for in progress quests", () => {
     render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("inProgress")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("inProgress") }}
+        onChangeStatus={mockOnChangeStatus}
       />,
     );
     expect(screen.getByText("Mark as done")).toBeInTheDocument();
@@ -82,8 +88,7 @@ describe("QuestCallToAction", () => {
   it("shows completion date for completed quests", () => {
     render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("complete")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("complete") }}
       />,
     );
     expect(screen.getByText("Done!")).toBeInTheDocument();
@@ -91,79 +96,123 @@ describe("QuestCallToAction", () => {
 
   it("handles status change to in progress", async () => {
     const user = userEvent.setup();
-    mockSetStatus.mockResolvedValueOnce(undefined);
+    mockOnChangeStatus.mockResolvedValueOnce(undefined);
 
     render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("notStarted")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("notStarted") }}
+        onChangeStatus={mockOnChangeStatus}
       />,
     );
     await user.click(screen.getByText("Mark as in progress"));
 
-    expect(mockSetStatus).toHaveBeenCalledWith({
-      questId: mockQuest._id,
-      status: "inProgress",
-    });
+    expect(mockOnChangeStatus).toHaveBeenCalledWith("inProgress");
   });
 
   it("handles status change to complete", async () => {
     const user = userEvent.setup();
-    mockSetStatus.mockResolvedValueOnce(undefined);
+    mockOnChangeStatus.mockResolvedValueOnce(undefined);
 
     render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("inProgress")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("inProgress") }}
+        onChangeStatus={mockOnChangeStatus}
       />,
     );
     await user.click(screen.getByText("Mark as done"));
 
-    expect(mockSetStatus).toHaveBeenCalledWith({
-      questId: mockQuest._id,
-      status: "complete",
-    });
+    expect(mockOnChangeStatus).toHaveBeenCalledWith("complete");
   });
 
   it("shows illustration for core quests", () => {
-    render(<QuestCallToAction quest={mockCoreQuest} />);
-    expect(screen.getByAltText("A snail on a passport")).toBeInTheDocument();
+    render(<QuestCallToAction data={{ quest: mockCoreQuest }} />);
+    const images = screen.getAllByAltText("A snail on a passport");
+    const visibleImage = images.find((img) => !img.hasAttribute("aria-hidden"));
+    expect(visibleImage).toBeInTheDocument();
   });
 
   it("applies success styling for completed quests", () => {
     const { container } = render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("complete")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("complete") }}
       />,
     );
-    expect(container.firstChild).toHaveClass("bg-green-3", "border-green-5");
+    expect(container.firstChild).toHaveClass(
+      "bg-primary-3",
+      "border-primary-5",
+    );
   });
 
   it("shows relative completion time", () => {
     render(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("complete")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("complete") }}
       />,
     );
     expect(screen.getByText(/ago$/)).toBeInTheDocument();
   });
 
   it("maintains consistent button width", () => {
-    const { rerender } = render(<QuestCallToAction quest={mockQuest} />);
-    const addButton = screen.getByRole("button", { name: "Add to my list" });
+    const { rerender } = render(
+      <QuestCallToAction
+        data={{ quest: mockQuest }}
+        onAddQuest={mockOnAddQuest}
+      />,
+    );
+    const addButton = screen.getByRole("button", { name: "Add to my quests" });
     expect(addButton).toHaveClass("w-64");
 
     rerender(
       <QuestCallToAction
-        quest={mockQuest}
-        userQuest={mockUserQuest("inProgress")}
+        data={{ quest: mockQuest, userQuest: mockUserQuest("inProgress") }}
+        onChangeStatus={mockOnChangeStatus}
       />,
     );
     const completeButton = screen.getByRole("button", {
       name: "Mark as done",
     });
     expect(completeButton).toHaveClass("w-64");
+  });
+
+  it("shows loading state when isLoading is true", () => {
+    render(<QuestCallToAction data={{ quest: mockQuest }} isLoading={true} />);
+    const loadingButton = screen.getByRole("button");
+    expect(loadingButton).toBeDisabled();
+    expect(loadingButton).toHaveClass("w-64");
+  });
+
+  it("shows 'Add to my quests' button when userQuest is null", () => {
+    render(
+      <QuestCallToAction
+        data={{ quest: mockQuest, userQuest: null }}
+        onAddQuest={mockOnAddQuest}
+      />,
+    );
+    expect(screen.getByText("Add to my quests")).toBeInTheDocument();
+  });
+
+  it("shows 'Add to my quests' button when userQuest is undefined", () => {
+    render(
+      <QuestCallToAction
+        data={{ quest: mockQuest, userQuest: undefined }}
+        onAddQuest={mockOnAddQuest}
+      />,
+    );
+    expect(screen.getByText("Add to my quests")).toBeInTheDocument();
+  });
+
+  it("handles adding to my quests when userQuest is null", async () => {
+    const user = userEvent.setup();
+    mockOnAddQuest.mockResolvedValueOnce(undefined);
+
+    render(
+      <QuestCallToAction
+        data={{ quest: mockQuest, userQuest: null }}
+        onAddQuest={mockOnAddQuest}
+      />,
+    );
+    await user.click(screen.getByText("Add to my quests"));
+
+    expect(mockOnAddQuest).toHaveBeenCalled();
   });
 });

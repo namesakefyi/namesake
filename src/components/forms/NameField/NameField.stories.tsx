@@ -1,5 +1,5 @@
+import type { Meta } from "@storybook/react-vite";
 import { NameField, type NameFieldProps } from "@/components/forms";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof NameField> = {
   component: NameField,
@@ -15,8 +15,6 @@ export const Example = (args: NameFieldProps) => <NameField {...args} />;
 Example.args = {
   type: "newName",
   children: (
-    <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
-      Children
-    </div>
+    <div className="border border-dim p-3 rounded-lg text-dim">Children</div>
   ),
 };

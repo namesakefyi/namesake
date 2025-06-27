@@ -1,4 +1,3 @@
-import { useAuthActions } from "@convex-dev/auth/react";
 import { useMatchRoute, useNavigate } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -7,14 +6,10 @@ import { SettingsNav } from "./SettingsNav";
 const mockMatchRoute = vi.fn();
 
 describe("SettingsNav", () => {
-  const mockSignOut = vi.fn();
   const mockNavigate = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useAuthActions as ReturnType<typeof vi.fn>).mockReturnValue({
-      signOut: mockSignOut,
-    });
     (useNavigate as ReturnType<typeof vi.fn>).mockReturnValue(mockNavigate);
     (useMatchRoute as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
       mockMatchRoute,

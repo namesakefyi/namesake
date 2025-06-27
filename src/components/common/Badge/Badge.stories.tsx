@@ -1,6 +1,6 @@
-import { Badge, BadgeButton } from "@/components/common";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Info } from "lucide-react";
+import { Badge, BadgeButton } from "@/components/common";
 
 const meta = {
   component: Badge,
@@ -10,7 +10,7 @@ const meta = {
       control: { type: "radio" },
     },
     variant: {
-      options: ["info", "warning", "danger", "waiting", "success"],
+      options: ["default", "warning", "danger", "success"],
       control: { type: "radio" },
     },
   },

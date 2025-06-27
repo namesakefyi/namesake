@@ -1,4 +1,3 @@
-import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 import type { Ref } from "react";
 import {
   FieldError as AriaFieldError,
@@ -9,14 +8,15 @@ import {
   type LabelProps as AriaLabelProps,
   TextArea as AriaTextArea,
   type TextAreaProps as AriaTextAreaProps,
+  composeRenderProps,
   type FieldErrorProps,
   Group,
   Text,
   type TextProps,
-  composeRenderProps,
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
+import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 
 export type FieldSize = "small" | "medium" | "large";
 
@@ -25,7 +25,7 @@ interface LabelProps extends AriaLabelProps {
 }
 
 const labelStyles = tv({
-  base: "text-sm text-gray-dim cursor-default w-fit",
+  base: "text-sm text-dim cursor-default w-fit",
   variants: {
     size: {
       small: "text-xs",
@@ -52,7 +52,7 @@ export function FieldDescription(props: TextProps) {
     <Text
       {...props}
       slot="description"
-      className={twMerge("text-sm text-gray-dim", props.className)}
+      className={twMerge("text-sm text-dim", props.className)}
     />
   );
 }
@@ -73,14 +73,14 @@ export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
       false:
-        "border-gray-6 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
-      true: "border-gray-7 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
+        "border-dim has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
+      true: "border-normal has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
     },
     isInvalid: {
       true: "border-red-9",
     },
     isDisabled: {
-      true: "border-gray-4",
+      true: "border-dim",
     },
   },
 });
@@ -89,21 +89,21 @@ export const innerBorderStyles = tv({
   variants: {
     isFocusWithin: {
       false:
-        "border-gray-6 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
-      true: "border-gray-7 has-autofill:border-amber-6 dark:has-autofill:border-purple-6",
+        "border-dim has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
+      true: "border-normal has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
     },
     isInvalid: {
       true: "border-red-9",
     },
     isDisabled: {
-      true: "border-gray-4",
+      true: "border-dim",
     },
   },
 });
 
 const fieldGroupStyles = tv({
   extend: focusRing,
-  base: "border text-sm group has-autofill:bg-amber-a3 dark:has-autofill:bg-purple-a3 flex items-center bg-element forced-colors:bg-[Field] rounded-lg",
+  base: "border bg-theme-1 dark:bg-theme-2 text-sm group has-autofill:bg-yellow-3 dark:has-autofill:bg-violet-3 flex items-center forced-colors:bg-[Field] rounded-lg",
   variants: {
     ...fieldBorderStyles.variants,
     size: {
@@ -138,7 +138,7 @@ interface InputProps extends Omit<AriaInputProps, "size"> {
 }
 
 export const inputStyles = tv({
-  base: "flex-1 min-w-0 outline outline-none bg-transparent disable-native-autofill text-gray-normal disabled:text-gray-dim",
+  base: "flex-1 min-w-0 outline outline-none !bg-transparent disable-native-autofill disabled:text-dim",
   variants: {
     size: {
       // Since the input is wrapped in a fieldGroup which has a border, subtract 2px from the
@@ -166,7 +166,7 @@ export function Input({ ref, size, ...props }: InputProps) {
 }
 
 export const inputTextAreaStyles = tv({
-  base: "flex-1 min-w-0 leading-snug outline-none bg-transparent disable-native-autofill text-gray-normal disabled:text-gray-dim",
+  base: "flex-1 min-w-0 leading-snug outline-none bg-transparent disable-native-autofill text-normal disabled:text-dim",
   variants: {
     size: {
       small: "px-2 py-1",

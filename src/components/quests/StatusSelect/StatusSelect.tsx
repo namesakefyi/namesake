@@ -1,3 +1,7 @@
+import { ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import type { Selection } from "react-aria-components";
+import { tv } from "tailwind-variants";
 import {
   Badge,
   type BadgeProps,
@@ -8,10 +12,6 @@ import {
   MenuTrigger,
 } from "@/components/common";
 import { STATUS, type Status } from "@/constants";
-import { ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
-import type { Selection } from "react-aria-components";
-import { tv } from "tailwind-variants";
 
 interface StatusBadgeProps extends Omit<BadgeProps, "children"> {
   status: Status;
@@ -23,7 +23,7 @@ const badgeStyles = tv({
   base: "flex items-center transition-colors rounded-full select-none",
   variants: {
     condensed: {
-      true: "size-5 p-0 lg:size-6",
+      true: "p-0 size-6",
       false: "pr-2",
     },
   },
@@ -55,11 +55,15 @@ export function StatusBadge({
 interface StatusSelectProps {
   status: Status;
   onChange: (status: Status) => void;
-  onRemove: () => void;
+  onRemove?: () => void;
+  condensed?: boolean;
+  className?: string;
 }
 
 export function StatusSelect({
   status,
+  condensed,
+  className,
   onChange,
   onRemove,
 }: StatusSelectProps) {
@@ -77,18 +81,28 @@ export function StatusSelect({
   };
 
   const handleRemove = () => {
-    onRemove();
+    onRemove?.();
   };
+
+  const buttonStyles = tv({
+    base: "gap-1 rounded-full",
+    variants: {
+      condensed: {
+        true: "p-1",
+        false: "pl-1",
+      },
+    },
+  });
 
   return (
     <MenuTrigger>
       <Button
         variant="ghost"
         size="small"
-        className="gap-1 pl-1 rounded-full"
-        endIcon={ChevronDown}
+        className={buttonStyles({ condensed, className })}
+        endIcon={!condensed ? ChevronDown : undefined}
       >
-        <StatusBadge status={status} size="lg" />
+        <StatusBadge status={status} size="lg" condensed={condensed} />
       </Button>
       <Menu placement="bottom end">
         <MenuSection
@@ -109,9 +123,11 @@ export function StatusSelect({
             </MenuItem>
           ))}
         </MenuSection>
-        <MenuSection>
-          <MenuItem onAction={handleRemove}>Remove from my list</MenuItem>
-        </MenuSection>
+        {onRemove && (
+          <MenuSection>
+            <MenuItem onAction={handleRemove}>Remove from my quests</MenuItem>
+          </MenuSection>
+        )}
       </Menu>
     </MenuTrigger>
   );

@@ -1,5 +1,3 @@
-import { FieldDescription, FieldError, Label } from "@/components/common";
-import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 import { Check, Minus } from "lucide-react";
 import type { ReactNode } from "react";
 import {
@@ -7,10 +5,12 @@ import {
   CheckboxGroup as AriaCheckboxGroup,
   type CheckboxGroupProps as AriaCheckboxGroupProps,
   type CheckboxProps as AriaCheckboxProps,
-  type ValidationResult,
   composeRenderProps,
+  type ValidationResult,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
+import { FieldDescription, FieldError, Label } from "@/components/common";
+import { composeTailwindRenderProps, focusRing } from "@/components/utils";
 
 export interface CheckboxGroupProps
   extends Omit<AriaCheckboxGroupProps, "children"> {
@@ -49,7 +49,7 @@ const checkboxStyles = tv({
   base: "flex items-center group transition",
   variants: {
     isDisabled: {
-      false: "text-gray-normal cursor-pointer",
+      false: "text-normal cursor-pointer",
       true: "opacity-50 forced-colors:text-[GrayText] cursor-default",
     },
     size: {
@@ -57,7 +57,7 @@ const checkboxStyles = tv({
       large: "gap-3",
     },
     card: {
-      true: "border border-gray-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-gray-a2 selected:bg-purple-a3 selected:border-purple-6",
+      true: "border border-dim rounded-lg p-3 pr-4 cursor-pointer hover:bg-theme-a2 selected:bg-primary-a3 selected:border-primary-6",
       false: "w-max",
     },
   },
@@ -71,14 +71,14 @@ const boxStyles = tv({
   base: "size-6 shrink-0 rounded-sm flex items-center justify-center border transition",
   variants: {
     isSelected: {
-      false: "bg-element border-gray-dim",
-      true: "bg-purple-9 border-transparent",
+      false: "bg-element border-dim",
+      true: "bg-primary-9 border-transparent",
     },
     isInvalid: {
       true: "text-red-9",
     },
     isDisabled: {
-      true: "text-gray-7",
+      true: "text-theme-7",
     },
     size: {
       medium: "size-5",
@@ -88,7 +88,7 @@ const boxStyles = tv({
 });
 
 const iconStyles = tv({
-  base: "text-white group-disabled:text-gray-4",
+  base: "text-white group-disabled:text-theme-4",
   variants: {
     size: {
       medium: "size-4",
@@ -122,13 +122,22 @@ export function Checkbox({
           checkboxStyles({ ...renderProps, size, card, className }),
         )}
       >
-        {({ isSelected, isIndeterminate, ...renderProps }) => (
+        {({
+          isFocusVisible,
+          isSelected,
+          isIndeterminate,
+          isDisabled,
+          isInvalid,
+          defaultChildren,
+        }) => (
           <>
             <div
               className={boxStyles({
+                isFocusVisible,
                 isSelected: isSelected || isIndeterminate,
                 size,
-                ...renderProps,
+                isDisabled,
+                isInvalid,
               })}
             >
               {isIndeterminate ? (
@@ -138,7 +147,7 @@ export function Checkbox({
               ) : null}
             </div>
             {label}
-            {renderProps.defaultChildren}
+            {defaultChildren}
           </>
         )}
       </AriaCheckbox>

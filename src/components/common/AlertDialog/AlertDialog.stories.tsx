@@ -1,5 +1,5 @@
+import type { Meta } from "@storybook/react-vite";
 import { AlertDialog, Button, DialogTrigger, Modal } from "@/components/common";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof AlertDialog> = {
   component: AlertDialog,

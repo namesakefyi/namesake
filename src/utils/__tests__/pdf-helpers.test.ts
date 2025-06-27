@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { joinNames, joinPronouns } from "../pdf-helpers";
+import { BIRTHPLACES, COUNTRIES } from "@/constants";
+import {
+  formatBirthplaceStateOrCountry,
+  formatDateMMDDYYYY,
+  joinNames,
+  joinPronouns,
+} from "../pdf-helpers";
 
 describe("PDF helpers", () => {
   describe("joinNames", () => {
@@ -60,6 +66,46 @@ describe("PDF helpers", () => {
     it("handles mix of empty string and undefined", () => {
       expect(joinPronouns([], undefined)).toBe("");
       expect(joinPronouns(undefined, "")).toBe("");
+    });
+  });
+
+  describe("formatDateMMDDYYYY", () => {
+    it("formats date correctly", () => {
+      expect(formatDateMMDDYYYY("2021-01-01")).toBe("01/01/2021");
+    });
+
+    it("returns empty string when date is undefined", () => {
+      expect(formatDateMMDDYYYY(undefined)).toBe("");
+    });
+
+    it("handles malformed dates", () => {
+      expect(formatDateMMDDYYYY("invalid-date")).toBe("");
+      expect(formatDateMMDDYYYY("2021-1-1-1")).toBe("");
+      expect(formatDateMMDDYYYY("2021-13-40")).toBe("");
+    });
+  });
+
+  describe("formatBirthplaceStateOrCountry", () => {
+    it("returns state name when valid state is provided", () => {
+      expect(formatBirthplaceStateOrCountry("CA", undefined)).toBe(
+        BIRTHPLACES.CA,
+      );
+    });
+
+    it("returns country name when state is 'other' and country is provided", () => {
+      expect(formatBirthplaceStateOrCountry("other", "US")).toBe(COUNTRIES.US);
+    });
+
+    it("returns empty string when no state or country is provided", () => {
+      expect(formatBirthplaceStateOrCountry(undefined, undefined)).toBe("");
+    });
+
+    it("returns empty string when state is 'other' but no country is provided", () => {
+      expect(formatBirthplaceStateOrCountry("other", undefined)).toBe("");
+    });
+
+    it("returns state name when both state and country are provided but state is not 'other'", () => {
+      expect(formatBirthplaceStateOrCountry("NY", "US")).toBe(BIRTHPLACES.NY);
     });
   });
 });

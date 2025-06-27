@@ -1,14 +1,9 @@
-import { type ZxcvbnResult, zxcvbnAsync } from "@zxcvbn-ts/core";
-import { zxcvbnOptions } from "@zxcvbn-ts/core";
+import { type ZxcvbnResult, zxcvbnAsync, zxcvbnOptions } from "@zxcvbn-ts/core";
 import { useDeferredValue, useEffect, useState } from "react";
 
 const loadOptions = async () => {
-  const zxcvbnCommonPackage = await import(
-    /* webpackChunkName: "zxcvbnCommonPackage" */ "@zxcvbn-ts/language-common"
-  );
-  const zxcvbnEnPackage = await import(
-    /* webpackChunkName: "zxcvbnEnPackage" */ "@zxcvbn-ts/language-en"
-  );
+  const zxcvbnCommonPackage = await import("@zxcvbn-ts/language-common");
+  const zxcvbnEnPackage = await import("@zxcvbn-ts/language-en");
   return {
     dictionary: {
       ...zxcvbnCommonPackage.dictionary,

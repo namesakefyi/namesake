@@ -15,8 +15,8 @@ describe("QuestCostsBadge", () => {
     slug: "test-quest",
     updatedAt: 1234567890,
     costs: [
-      { cost: 100, description: "Application fee" },
-      { cost: 50, description: "Certified copies" },
+      { cost: 100, description: "Application fee", isRequired: true },
+      { cost: 50, description: "Certified copies", isRequired: true },
     ],
   } as Doc<"quests">;
 
@@ -38,8 +38,23 @@ describe("QuestCostsBadge", () => {
     slug: "zero-cost-quest",
     updatedAt: 1234567890,
     costs: [
-      { cost: 0, description: "Free application" },
-      { cost: 0, description: "No filing fee" },
+      { cost: 0, description: "Free application", isRequired: true },
+      { cost: 0, description: "No filing fee", isRequired: true },
+    ],
+  } as Doc<"quests">;
+
+  const mockQuestWithOptionalCosts = {
+    _id: "quest234" as Id<"quests">,
+    _creationTime: 1234567890,
+    title: "Quest With Optional Costs",
+    creationUser: "user123" as Id<"users">,
+    slug: "quest-with-optional-costs",
+    updatedAt: 1234567890,
+    costs: [
+      { cost: 100, description: "Application fee", isRequired: true },
+      { cost: 50, description: "Certified copies", isRequired: true },
+      { cost: 75, description: "Expedited processing", isRequired: false },
+      { cost: 25, description: "Optional notary", isRequired: false },
     ],
   } as Doc<"quests">;
 
@@ -69,35 +84,44 @@ describe("QuestCostsBadge", () => {
     expect(screen.getByText("Free")).toBeInTheDocument();
   });
 
-  it("formats and displays costs correctly", () => {
+  it("formats and displays costs correctly with only required costs", () => {
     render(<QuestCostsBadge quest={mockQuest} />);
     expect(screen.getByText("$150")).toBeInTheDocument();
   });
 
-  it("shows cost breakdown in tooltip", async () => {
-    const user = userEvent.setup();
-    render(<QuestCostsBadge quest={mockQuest} />);
+  it("formats and displays costs correctly with optional costs", () => {
+    render(<QuestCostsBadge quest={mockQuestWithOptionalCosts} />);
+    expect(screen.getByText("$150–$250")).toBeInTheDocument();
+  });
 
-    await user.tab();
+  it("shows cost breakdown in tooltip with optional costs", async () => {
+    const user = userEvent.setup();
+    render(<QuestCostsBadge quest={mockQuestWithOptionalCosts} />);
+
+    await user.click(screen.getByRole("button", { name: "Cost details" }));
 
     await waitFor(() => {
-      expect(screen.getByRole("tooltip")).toBeInTheDocument();
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
 
     // Check if costs are displayed in description list
-    const descriptions = screen.getAllByRole("term");
-    const values = screen.getAllByRole("definition");
+    const rows = screen.getAllByRole("row");
+    const cells = screen.getAllByRole("cell");
 
-    expect(descriptions).toHaveLength(3); // 2 items + total
-    expect(values).toHaveLength(3);
+    expect(rows).toHaveLength(6); // 4 items + header + footer
+    expect(cells).toHaveLength(10);
 
     // Check individual costs
-    expect(descriptions[0]).toHaveTextContent("Application fee");
-    expect(values[0]).toHaveTextContent("$100");
-    expect(descriptions[1]).toHaveTextContent("Certified copies");
-    expect(values[1]).toHaveTextContent("$50");
-    expect(descriptions[2]).toHaveTextContent("Total");
-    expect(values[2]).toHaveTextContent("$150");
+    expect(screen.getByText("Application fee")).toBeInTheDocument();
+    expect(screen.getByText("$100")).toBeInTheDocument();
+    expect(screen.getByText("Certified copies")).toBeInTheDocument();
+    expect(screen.getByText("$50")).toBeInTheDocument();
+    expect(screen.getByText("Expedited processing")).toBeInTheDocument();
+    expect(screen.getByText("$75")).toBeInTheDocument();
+    expect(screen.getByText("Optional notary")).toBeInTheDocument();
+    expect(screen.getByText("$25")).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: "Total" })).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: "$150–$250" })).toBeInTheDocument();
   });
 
   it("shows edit button when editable prop is true", async () => {
@@ -138,26 +162,6 @@ describe("QuestCostsBadge", () => {
     expect(descriptionInputs).toHaveLength(2);
     expect(descriptionInputs[0].value).toBe("Application fee");
     expect(descriptionInputs[1].value).toBe("Certified copies");
-  });
-
-  it("toggles between free and paid costs", async () => {
-    const user = userEvent.setup();
-    render(<QuestCostsBadge quest={mockQuest} editable={true} />);
-
-    await user.click(screen.getByRole("button", { name: "Edit costs" }));
-
-    // Toggle to free
-    const freeSwitch = screen.getByRole("switch", { name: "Free" });
-    await user.click(freeSwitch);
-
-    // Cost inputs should be removed
-    expect(screen.queryByLabelText("Cost")).not.toBeInTheDocument();
-    expect(screen.queryByLabelText("For")).not.toBeInTheDocument();
-
-    // Toggle back to paid
-    await user.click(freeSwitch);
-    expect(screen.getByLabelText("Cost")).toBeInTheDocument();
-    expect(screen.getByLabelText("For")).toBeInTheDocument();
   });
 
   it("adds and removes cost items", async () => {
@@ -201,11 +205,13 @@ describe("QuestCostsBadge", () => {
     expect(descriptionInputs[0].maxLength).toBe(32);
   });
 
-  it("handles successful save", async () => {
+  it("handles successful save with optional costs", async () => {
     const user = userEvent.setup();
     mockSetCosts.mockResolvedValueOnce(undefined);
 
-    render(<QuestCostsBadge quest={mockQuest} editable={true} />);
+    render(
+      <QuestCostsBadge quest={mockQuestWithOptionalCosts} editable={true} />,
+    );
 
     await user.click(screen.getByRole("button", { name: "Edit costs" }));
 
@@ -217,13 +223,15 @@ describe("QuestCostsBadge", () => {
     // Save changes
     await user.click(screen.getByText("Save"));
 
-    // Verify mutation was called
+    // Verify mutation was called with correct isRequired values
     expect(mockSetCosts).toHaveBeenCalledWith({
       costs: [
-        { cost: 200, description: "Application fee" },
-        { cost: 50, description: "Certified copies" },
+        { cost: 200, description: "Application fee", isRequired: true },
+        { cost: 50, description: "Certified copies", isRequired: true },
+        { cost: 75, description: "Expedited processing", isRequired: false },
+        { cost: 25, description: "Optional notary", isRequired: false },
       ],
-      questId: mockQuest._id,
+      questId: mockQuestWithOptionalCosts._id,
     });
 
     // Check if popover was closed
@@ -259,5 +267,54 @@ describe("QuestCostsBadge", () => {
     // Check if popover was closed without saving
     expect(mockSetCosts).not.toHaveBeenCalled();
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("handles remove costs", async () => {
+    const user = userEvent.setup();
+    render(<QuestCostsBadge quest={mockQuest} editable={true} />);
+
+    await user.click(screen.getByRole("button", { name: "Edit costs" }));
+    await user.click(screen.getByText("Remove"));
+
+    expect(mockSetCosts).toHaveBeenCalledWith({
+      costs: undefined,
+      questId: mockQuest._id,
+    });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("toggles cost required/optional status correctly", async () => {
+    const user = userEvent.setup();
+    render(<QuestCostsBadge quest={mockQuest} editable={true} />);
+
+    await user.click(screen.getByRole("button", { name: "Edit costs" }));
+
+    // Find the toggle button group for the first cost
+    const toggleButtons = screen.getAllByRole("radio", {
+      name: /Required cost|Optional cost/,
+    });
+
+    // Initially, the first cost should be required
+    expect(toggleButtons[0]).toBeChecked();
+    expect(toggleButtons[1]).not.toBeChecked();
+
+    // Click the optional button
+    await user.click(toggleButtons[1]);
+
+    // Verify the toggle state changed
+    expect(toggleButtons[0]).not.toBeChecked();
+    expect(toggleButtons[1]).toBeChecked();
+
+    // Save the changes
+    await user.click(screen.getByText("Save"));
+
+    // Verify the mutation was called with the updated cost
+    expect(mockSetCosts).toHaveBeenCalledWith({
+      costs: [
+        { cost: 100, description: "Application fee", isRequired: false },
+        { cost: 50, description: "Certified copies", isRequired: true },
+      ],
+      questId: mockQuest._id,
+    });
   });
 });

@@ -1,5 +1,5 @@
-import { getPdfForm } from "@/utils/pdf";
 import { describe, expect, it } from "vitest";
+import { getPdfForm } from "../../utils";
 import petitionToChangeNameOfAdult from "../cjp27-petition-to-change-name-of-adult";
 
 describe("CJP27 Petition to Change Name of Adult", () => {
@@ -47,6 +47,7 @@ describe("CJP27 Petition to Change Name of Adult", () => {
     expect(form.getTextField("oldLastName").getText()).toBe("Name");
     expect(form.getTextField("birthplaceCity").getText()).toBe("Boston");
     expect(form.getTextField("birthplaceState").getText()).toBe("MA");
+    expect(form.getTextField("dateOfBirth").getText()).toBe("01/01/1990");
 
     // Address fields
     expect(form.getTextField("residenceStreetAddress").getText()).toBe(
@@ -101,7 +102,7 @@ describe("CJP27 Petition to Change Name of Adult", () => {
     const dataWithInterpreter = {
       ...testData,
       isInterpreterNeeded: true,
-      language: "Spanish",
+      language: "es",
     };
 
     const form = await getPdfForm({

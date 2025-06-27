@@ -1,3 +1,7 @@
+import type { Id } from "@convex/_generated/dataModel";
+import { AlertTriangle, FileLock2 } from "lucide-react";
+import { useState } from "react";
+import { type Selection, Text } from "react-aria-components";
 import {
   Badge,
   Button,
@@ -8,10 +12,6 @@ import {
 import { DeleteFormResponseModal } from "@/components/settings";
 import { ALL, FIELD_DEFS, type FieldName } from "@/constants";
 import { useDecrypt } from "@/hooks/useDecrypt";
-import type { Id } from "@convex/_generated/dataModel";
-import { AlertTriangle, FileLock2 } from "lucide-react";
-import { useState } from "react";
-import { type Selection, Text } from "react-aria-components";
 
 /**
  * Get the readable field label for a given field.
@@ -42,9 +42,7 @@ export function FormResponseItem({
       {decryptedValue && (
         <Text slot="description">
           {error ? (
-            <Badge variant="danger" icon={AlertTriangle}>
-              Error
-            </Badge>
+            <Badge icon={AlertTriangle}>Error</Badge>
           ) : (
             <span className="opacity-70 font-mono text-sm">
               {decryptedValue.toString()}
@@ -103,7 +101,7 @@ export function FormResponsesList({ rows }: FormResponsesListProps) {
     hasSelectedAll ? setSelectedRows(new Set()) : setSelectedRows(ALL);
 
   return (
-    <div className="flex flex-col pb-8 app-padding">
+    <div className="flex flex-col pb-8">
       {shouldShowControls && (
         <div className="flex gap-2 pb-4 items-center justify-between bg-app sticky sticky-top-header z-10">
           <Button variant="secondary" size="small" onPress={handleSelectAll}>

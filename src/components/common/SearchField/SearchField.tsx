@@ -1,3 +1,9 @@
+import { CircleX, Search } from "lucide-react";
+import {
+  SearchField as AriaSearchField,
+  type SearchFieldProps as AriaSearchFieldProps,
+  type ValidationResult,
+} from "react-aria-components";
 import {
   Button,
   FieldDescription,
@@ -7,12 +13,6 @@ import {
   Label,
 } from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
-import { CircleX, Search } from "lucide-react";
-import {
-  SearchField as AriaSearchField,
-  type SearchFieldProps as AriaSearchFieldProps,
-  type ValidationResult,
-} from "react-aria-components";
 
 export interface SearchFieldProps extends AriaSearchFieldProps {
   label?: string;
@@ -42,7 +42,7 @@ export function SearchField({
           <FieldGroup isDisabled={isDisabled} isInvalid={isInvalid}>
             <Search
               aria-hidden
-              className="w-4 h-4 ml-3 text-gray-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText]"
+              className="w-4 h-4 ml-3 text-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText]"
             />
             <Input
               placeholder={placeholder}
@@ -50,7 +50,7 @@ export function SearchField({
             />
             <Button
               variant="icon"
-              className="mr-1 w-7 h-7 p-0 group-empty:invisible"
+              className="mr-1 w-7 h-7 p-0 group-empty:hidden"
               size="small"
               icon={CircleX}
               aria-label="Clear search"

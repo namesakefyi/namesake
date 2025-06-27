@@ -1,6 +1,6 @@
-import { useIsMobile } from "@/hooks/useIsMobile";
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { PageHeader } from "./PageHeader";
 
 // Mock the useIsMobile hook

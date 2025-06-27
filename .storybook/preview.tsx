@@ -1,9 +1,8 @@
-import { withThemeByClassName } from "@storybook/addon-themes";
-import type { Preview } from "@storybook/react";
+import { withThemeByDataAttribute } from "@storybook/addon-themes";
+import type { Preview } from "@storybook/react-vite";
 import { FormProvider, useForm } from "react-hook-form";
 
 import "../src/styles/index.css";
-import React from "react";
 
 const preview: Preview = {
   parameters: {
@@ -17,15 +16,27 @@ const preview: Preview = {
       },
     },
     layout: "centered",
+    darkMode: {
+      classTarget: "html",
+      darkClass: "dark",
+      stylePreview: true,
+    },
   },
   decorators: [
-    withThemeByClassName({
-      parentSelector: "html",
+    withThemeByDataAttribute({
+      attributeName: "data-color",
       themes: {
-        light: "",
-        dark: "dark",
+        rainbow: "rainbow",
+        pink: "pink",
+        red: "red",
+        orange: "orange",
+        yellow: "yellow",
+        green: "green",
+        turquoise: "turquoise",
+        indigo: "indigo",
+        violet: "violet",
       },
-      defaultTheme: "light",
+      defaultTheme: "rainbow",
     }),
     (Story) => {
       const form = useForm();

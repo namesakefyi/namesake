@@ -1,8 +1,8 @@
-import { IconText, Link, TimeAgo } from "@/components/common";
 import { api } from "@convex/_generated/api";
 import type { Doc } from "@convex/_generated/dataModel";
 import { Authenticated, useQuery } from "convex/react";
 import { Clock, Pencil } from "lucide-react";
+import { IconText, Link, TimeAgo } from "@/components/common";
 
 interface QuestPageToolbarProps {
   quest?: Doc<"quests"> | null;
@@ -25,7 +25,7 @@ export const QuestPageToolbar = ({
 
   return (
     <div
-      className="flex app-padding items-center justify-between h-12 py-1 -mt-2 w-full overflow-x-auto border-b border-gray-dim"
+      className="flex items-center justify-between h-12 py-1 -mt-2 w-full overflow-x-auto border-b border-dim"
       role="toolbar"
     >
       <IconText icon={Clock}>Last edited {updatedTime}</IconText>

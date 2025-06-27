@@ -1,11 +1,9 @@
-import { Select, SelectItem, TextField } from "@/components/common";
-import { type FieldName, JURISDICTIONS } from "@/constants";
-import { maskitoTransform } from "@maskito/core";
 import type { MaskitoOptions } from "@maskito/core";
-import { useEffect } from "react";
-import { useState } from "react";
+import { maskitoTransform } from "@maskito/core";
+import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { usaStatesWithCounties } from "typed-usa-states";
+import { ComboBox, ComboBoxItem, TextField } from "@/components/common";
+import { type FieldName, JURISDICTIONS } from "@/constants";
 
 type AddressType = "residence" | "mailing";
 
@@ -52,14 +50,23 @@ export function AddressField({
   const selectedState = watch(names[type].state);
 
   useEffect(() => {
-    if (!includeCounty || !selectedState) setCounties([]);
-
-    const state = usaStatesWithCounties.find(
-      (state) => state.abbreviation === selectedState,
-    );
-    if (state) {
-      setCounties(state.counties ?? []);
+    if (!includeCounty || !selectedState) {
+      setCounties([]);
+      return;
     }
+
+    import("typed-usa-states")
+      .then((module) => {
+        const state = module.usaStatesWithCounties.find(
+          (state) => state.abbreviation === selectedState,
+        );
+        if (state) {
+          setCounties(state.counties ?? []);
+        }
+      })
+      .catch(() => {
+        setCounties([]);
+      });
   }, [includeCounty, selectedState]);
 
   // Input mask: enforce ZIP code format of 12345-1234
@@ -68,8 +75,8 @@ export function AddressField({
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="grid gap-4 grid-cols-[1fr_auto] [grid-template-areas:'street_street''city_city''state_zip''county_county']">
+    <div className="flex flex-col gap-4 @container">
+      <div className="grid gap-4 grid-cols-[1fr_auto] [grid-template-areas:'street_street''city_city''state_state''zip_zip''county_county'] @md:[grid-template-areas:'street_street''city_city''state_zip''county_county']">
         <Controller
           control={control}
           name={names[type].street}
@@ -112,7 +119,7 @@ export function AddressField({
           defaultValue={""}
           shouldUnregister={true}
           render={({ field, fieldState: { invalid, error } }) => (
-            <Select
+            <ComboBox
               {...field}
               label="State"
               placeholder="Select state"
@@ -125,13 +132,14 @@ export function AddressField({
               size="large"
               isInvalid={invalid}
               errorMessage={error?.message}
+              menuTrigger="focus"
             >
               {Object.entries(JURISDICTIONS).map(([value, label]) => (
-                <SelectItem key={value} id={value}>
+                <ComboBoxItem key={value} id={value}>
                   {label}
-                </SelectItem>
+                </ComboBoxItem>
               ))}
-            </Select>
+            </ComboBox>
           )}
         />
         {includeCounty && counties.length > 0 && (
@@ -141,7 +149,7 @@ export function AddressField({
             defaultValue={""}
             shouldUnregister={true}
             render={({ field, fieldState: { invalid, error } }) => (
-              <Select
+              <ComboBox
                 {...field}
                 label="County"
                 placeholder="Select county"
@@ -153,13 +161,14 @@ export function AddressField({
                 size="large"
                 isInvalid={invalid}
                 errorMessage={error?.message}
+                menuTrigger="focus"
               >
                 {counties.map((county) => (
-                  <SelectItem key={county} id={county}>
+                  <ComboBoxItem key={county} id={county}>
                     {county}
-                  </SelectItem>
+                  </ComboBoxItem>
                 ))}
-              </Select>
+              </ComboBox>
             )}
           />
         )}

@@ -1,5 +1,222 @@
 # namesake
 
+## 0.35.2
+
+### Patch Changes
+
+- e4a16c4: Prevent full-bleed image sections from appearing behind page header on mobile
+
+## 0.35.1
+
+### Patch Changes
+
+- 9f6b3a7: Fix missing call-to-action button for quests not on a user's list
+
+## 0.35.0
+
+### Minor Changes
+
+- ce914d5: Make it easier to get oriented with a new "getting started" quest featuring illustrations about the name change process
+
+## 0.34.7
+
+### Patch Changes
+
+- e8c861c: Fix redirect after sign-in on prod
+
+## 0.34.6
+
+### Patch Changes
+
+- e39e1ca: Reduce initial bundle size and dynamically load utilities more intelligently to improve app speed
+
+## 0.34.5
+
+### Patch Changes
+
+- 8d9a312: Resolve HTTP actions requests to proper subdomain
+
+## 0.34.4
+
+### Patch Changes
+
+- eb64f0d: Fix env config for Better Auth in production
+
+## 0.34.3
+
+### Patch Changes
+
+- 03219f2: Prevent multi-column address fields from overflowing width on mobile
+
+## 0.34.2
+
+### Patch Changes
+
+- 3573d02: Handle auth environments appropriately
+
+## 0.34.1
+
+### Patch Changes
+
+- 414007d: Fix trusted origins and cors setup for Better Auth
+
+## 0.34.0
+
+### Minor Changes
+
+- 3d7c236: Remove early access codes and open registration to all
+
+### Patch Changes
+
+- b178fd2: Fix incorrect sizing of tab indicator
+- 803597f: Add description and link to history of color meanings from original Gilbert Baker flag
+
+## 0.33.0
+
+### Minor Changes
+
+- a21d95a: Send email verification before account deletion
+- a21d95a: Improve authentication and Namesake emails
+- 5f299c8: Make it easier to add and dismiss placeholders for suggested quests
+- a9ec789: Show the signup screen the first time you visit
+
+## 0.32.3
+
+### Patch Changes
+
+- 7b7dae3: Clarify instructions for MA Court Order on cover pages
+
+## 0.32.2
+
+### Patch Changes
+
+- 6f2b56c: Fix swatch controls overflow on mobile
+
+## 0.32.1
+
+### Patch Changes
+
+- 4b3449d: Fix issues with scrolling nav z-index
+
+## 0.32.0
+
+### Minor Changes
+
+- bb27a66: Add user-selectable color themes
+- cb94e09: Make it easier to browse all available quests
+
+### Patch Changes
+
+- bb27a66: Fix focus ring not displaying around text fields
+
+## 0.31.0
+
+### Minor Changes
+
+- d07ffb3: Add cover page to pdf packet downloads
+
+### Patch Changes
+
+- 39287d0: Add safeguards for certain queries and mutations to make sure only admins can access them
+
+## 0.30.0
+
+### Minor Changes
+
+- 0bba6ab: Improve ease of selection by replacing select elements with comboboxes to allow typing and filtering results for state, county, language, and more
+
+### Patch Changes
+
+- 7f804bd: Clarify language around fee waivers and display costs within form
+- 7945b02: Support selecting 'prefer not to answer' for certain optional questions
+
+## 0.29.2
+
+### Patch Changes
+
+- d21f548: Toast placement improved
+
+## 0.29.1
+
+### Patch Changes
+
+- 8f54af9: Fix low-contrast highlight color when viewing dark theme using light OS theme
+- 4ef20d2: Fix links from quests to forms and make it easier to select internal links
+- f3d9fcb: Fix unintended 'null' string in password error banner
+- f91ffe8: Fix docs from scrolling horizontally on mobile
+- 4698222: Prevent "continue" button from scrolling off screen on mobile when asking for state
+
+## 0.29.0
+
+### Minor Changes
+
+- 82c6413: Allow removing quest badges for costs, time required, and state
+
+## 0.28.2
+
+### Patch Changes
+
+- 757361c: Revert link change
+
+## 0.28.1
+
+### Patch Changes
+
+- ce50655: Fix router provider appending link to self
+
+## 0.28.0
+
+### Minor Changes
+
+- e5a8ebd: Add form for Social Security application
+
+### Patch Changes
+
+- 265caff: Fix router link handling when passing in full strings
+
+## 0.27.1
+
+### Patch Changes
+
+- f225cbb: Fix alignment of disclosures and keep disclosues closed by default when viewing quests
+
+## 0.27.0
+
+### Minor Changes
+
+- 7fe61d0: Integrate quest questions directly into the content instead of separating section
+- 5703bde: Display optional costs within cost breakdown
+- 9f6d86d: Support displaying frequently asked questions as details elements within the content of a quest
+
+### Patch Changes
+
+- 5703bde: Fix cost and time tooltips not displaying on mobile devices
+
+## 0.26.3
+
+### Patch Changes
+
+- 24a1539: Update guidance for listing reason to change name, update other content
+
+## 0.26.2
+
+### Patch Changes
+
+- d7bb027: Fix display of form titles and include jurisdiction badge alongside name
+
+## 0.26.1
+
+### Patch Changes
+
+- ec1d042: Include Motion to Impound in final court order PDF when required, provide guidance for filling out fields
+
+## 0.26.0
+
+### Minor Changes
+
+- d30cbca: Download required PDFs after form completion
+- d30cbca: See all your documents and download PDFs in one place
+
 ## 0.25.3
 
 ### Patch Changes

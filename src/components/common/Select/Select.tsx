@@ -1,3 +1,13 @@
+import { ChevronDown } from "lucide-react";
+import type React from "react";
+import {
+  Select as AriaSelect,
+  type SelectProps as AriaSelectProps,
+  ListBox,
+  type ListBoxItemProps,
+  SelectValue,
+  type ValidationResult,
+} from "react-aria-components";
 import {
   Button,
   DropdownItem,
@@ -9,16 +19,6 @@ import {
   Popover,
 } from "@/components/common";
 import { composeTailwindRenderProps } from "@/components/utils";
-import { ChevronDown } from "lucide-react";
-import type React from "react";
-import {
-  Select as AriaSelect,
-  type SelectProps as AriaSelectProps,
-  ListBox,
-  type ListBoxItemProps,
-  SelectValue,
-  type ValidationResult,
-} from "react-aria-components";
 
 export interface SelectProps<T extends object>
   extends Omit<AriaSelectProps<T>, "children"> {
@@ -54,10 +54,10 @@ export function Select<T extends object>({
         endIcon={ChevronDown}
         endIconProps={{
           className:
-            "size-4 text-gray-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText] shrink-0",
+            "size-4 text-dim forced-colors:text-[ButtonText] group-disabled:opacity-50 forced-colors:group-disabled:text-[GrayText] shrink-0",
         }}
       >
-        <SelectValue className="flex-1 text-gray-normal placeholder-shown:font-normal placeholder-shown:text-gray-9" />
+        <SelectValue className="flex-1 text-normal placeholder-shown:font-normal placeholder-shown:opacity-60" />
       </Button>
       {description && <FieldDescription>{description}</FieldDescription>}
       <FieldError>{errorMessage}</FieldError>

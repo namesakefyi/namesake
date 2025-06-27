@@ -1,10 +1,10 @@
-import { Label } from "@/components/common";
-import { composeTailwindRenderProps } from "@/components/utils";
 import {
   Meter as AriaMeter,
   type MeterProps as AriaMeterProps,
 } from "react-aria-components";
 import { RandomReveal } from "react-random-reveal";
+import { Label } from "@/components/common";
+import { composeTailwindRenderProps } from "@/components/utils";
 
 export interface MeterProps extends AriaMeterProps {
   value: number;
@@ -36,8 +36,8 @@ export const strengthConfig: Record<number, StrengthConfig> = {
   2: {
     label: "Okay",
     color: {
-      text: "text-amber-normal",
-      bg: "bg-amber-9",
+      text: "text-yellow-normal",
+      bg: "bg-yellow-9",
     },
   },
   3: {
@@ -57,20 +57,23 @@ export const strengthConfig: Record<number, StrengthConfig> = {
 };
 
 const StrengthLabel = ({ value }: { value: number }) => (
-  <span
-    className={`text-sm uppercase font-medium font-mono tracking-wider transition-colors duration-500 ${strengthConfig[value].color.text}`}
-    aria-label={strengthConfig[value].label}
-    data-testid="password-strength-label"
-  >
-    <RandomReveal
-      characters={strengthConfig[value].label}
-      isPlaying={true}
-      duration={0.5}
-      revealEasing="linear"
-      revealDuration={0.2}
-      key={value}
-    />
-  </span>
+  <>
+    <span
+      className={`text-sm uppercase font-medium font-mono tracking-wider transition-colors duration-500 ${strengthConfig[value].color.text}`}
+      aria-hidden={true}
+      data-testid="strength-label"
+    >
+      <RandomReveal
+        characters={strengthConfig[value].label}
+        isPlaying={true}
+        duration={0.5}
+        revealEasing="linear"
+        revealDuration={0.2}
+        key={value}
+      />
+    </span>
+    <span className="sr-only">{strengthConfig[value].label}</span>
+  </>
 );
 
 export function PasswordStrength({ value, ...props }: MeterProps) {
@@ -91,7 +94,7 @@ export function PasswordStrength({ value, ...props }: MeterProps) {
     >
       {({ percentage }) => (
         <>
-          <div className="w-full min-w-64 h-1 rounded-full bg-gray-4 outline-1 -outline-offset-1 outline-transparent relative overflow-hidden">
+          <div className="w-full min-w-64 h-1 rounded-full bg-theme-4 outline-1 -outline-offset-1 outline-transparent relative overflow-hidden">
             <div
               className={`absolute top-0 left-0 h-full w-full rounded-full ${strengthConfig[value].color.bg} transition-all duration-300 forced-colors:bg-[Highlight]`}
               style={{ translate: `-${100 - percentage}%` }}
@@ -99,7 +102,7 @@ export function PasswordStrength({ value, ...props }: MeterProps) {
             />
           </div>
           <div className="flex justify-between gap-2">
-            <Label className="text-gray-dim font-mono">Password Strength</Label>
+            <Label className="text-dim font-mono">Password Strength</Label>
             <StrengthLabel value={value} />
           </div>
         </>

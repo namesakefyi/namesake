@@ -1,9 +1,9 @@
 import { convexTest } from "convex-test";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { api } from "../_generated/api";
 import schema from "../schema";
 import { modules } from "../test.setup";
+import { createTestUser } from "./helpers";
 
 const UPDATE_TIMESTAMP = Date.now();
 
@@ -20,15 +20,7 @@ describe("userQuests", () => {
   describe("getAll", () => {
     it("should return all user quests", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createTestUser(t);
 
       await t.run(async (ctx) => {
         // Create quests
@@ -72,15 +64,7 @@ describe("userQuests", () => {
 
     it("should not return deleted quests", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createTestUser(t);
 
       await t.run(async (ctx) => {
         const questId = await ctx.db.insert("quests", {
@@ -108,15 +92,7 @@ describe("userQuests", () => {
   describe("count", () => {
     it("should return count of user quests", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createTestUser(t);
 
       await t.run(async (ctx) => {
         const questId = await ctx.db.insert("quests", {
@@ -143,15 +119,7 @@ describe("userQuests", () => {
   describe("create", () => {
     it("should create a user quest", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createTestUser(t);
 
       const questId = await asUser.run(async (ctx) => {
         return await ctx.db.insert("quests", {
@@ -177,15 +145,7 @@ describe("userQuests", () => {
 
     it("should set a default status", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createTestUser(t);
 
       const questId = await asUser.run(async (ctx) => {
         return await ctx.db.insert("quests", {
@@ -206,15 +166,7 @@ describe("userQuests", () => {
 
     it("should throw if quest already exists", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createTestUser(t);
 
       const questId = await t.run(async (ctx) => {
         return await ctx.db.insert("quests", {
@@ -238,15 +190,7 @@ describe("userQuests", () => {
   describe("setStatus", async () => {
     it("should update quest status", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createTestUser(t);
 
       const questId = await t.run(async (ctx) => {
         return ctx.db.insert("quests", {
@@ -272,15 +216,7 @@ describe("userQuests", () => {
 
     it("should throw error if status is invalid", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createTestUser(t);
 
       const questId = await t.run(async (ctx) => {
         return ctx.db.insert("quests", {
@@ -305,15 +241,7 @@ describe("userQuests", () => {
 
     it("should properly manage timestamps through status transitions", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createTestUser(t);
 
       const questId = await t.run(async (ctx) => {
         return ctx.db.insert("quests", {
@@ -361,15 +289,7 @@ describe("userQuests", () => {
 
     it("should remove completedAt when status changed away from complete", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createTestUser(t);
 
       const questId = await t.run(async (ctx) => {
         return ctx.db.insert("quests", {
@@ -413,15 +333,7 @@ describe("userQuests", () => {
   describe("deleteForever", () => {
     it("should delete a user quest", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createTestUser(t);
 
       const questId = await t.run(async (ctx) => {
         return await ctx.db.insert("quests", {
@@ -451,15 +363,7 @@ describe("userQuests", () => {
   describe("getByCategory", () => {
     it("should return quests grouped by category", async () => {
       const t = convexTest(schema, modules);
-
-      const userId = await t.run(async (ctx) => {
-        return await ctx.db.insert("users", {
-          email: "test@example.com",
-          role: "user",
-        });
-      });
-
-      const asUser = t.withIdentity({ subject: userId });
+      const { asUser, userId } = await createTestUser(t);
 
       await t.run(async (ctx) => {
         const quest1Id = await ctx.db.insert("quests", {

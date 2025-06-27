@@ -1,5 +1,5 @@
+import type { Meta } from "@storybook/react-vite";
 import { RadioGroupField, type RadioGroupFieldProps } from "@/components/forms";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof RadioGroupField> = {
   component: RadioGroupField,
@@ -23,8 +23,6 @@ Example.args = {
     { label: "Option 3", value: "option-3" },
   ],
   children: (
-    <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
-      Children
-    </div>
+    <div className="border border-dim p-3 rounded-lg text-dim">Children</div>
   ),
 };

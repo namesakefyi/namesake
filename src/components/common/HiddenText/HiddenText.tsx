@@ -1,6 +1,6 @@
-import { focusRing } from "@/components/utils";
 import { type FocusEventHandler, useState } from "react";
 import { tv } from "tailwind-variants";
+import { focusRing } from "@/components/utils";
 
 export interface HiddenTextProps {
   children: string;
@@ -23,7 +23,7 @@ const contentStyles = tv({
   variants: {
     isRevealed: {
       true: "bg-transparent",
-      false: "text-transparent bg-gray-a5",
+      false: "text-transparent bg-theme-4",
     },
   },
 });

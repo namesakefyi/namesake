@@ -1,5 +1,5 @@
+import type { Meta } from "@storybook/react-vite";
 import { AddressField, type AddressFieldProps } from "@/components/forms";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof AddressField> = {
   component: AddressField,
@@ -15,9 +15,7 @@ export const Example = (args: AddressFieldProps) => <AddressField {...args} />;
 Example.args = {
   type: "residence",
   children: (
-    <div className="border border-gray-dim p-3 rounded-lg text-gray-dim">
-      Children
-    </div>
+    <div className="border border-dim p-3 rounded-lg text-dim">Children</div>
   ),
 };
 

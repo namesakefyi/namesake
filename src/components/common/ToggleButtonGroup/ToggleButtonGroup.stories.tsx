@@ -1,5 +1,5 @@
+import type { Meta } from "@storybook/react-vite";
 import { ToggleButton, ToggleButtonGroup } from "@/components/common";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof ToggleButtonGroup> = {
   component: ToggleButtonGroup,

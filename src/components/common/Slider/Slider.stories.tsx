@@ -1,5 +1,5 @@
+import type { Meta } from "@storybook/react-vite";
 import { Slider } from "@/components/common";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof Slider> = {
   component: Slider,

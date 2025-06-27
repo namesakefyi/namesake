@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Editor } from "./Editor";
 
@@ -79,6 +79,38 @@ export const WithButton: Story = {
       <a href="https://www.mass.gov/" data-type="button">Go to Mass.gov</a>
       <p>When first inserted, buttons will not have an href. Click the button to add one.</p>
       <a href="" data-type="button">Click here</a>
+    `,
+  },
+};
+
+export const WithDisclosure: Story = {
+  args: {
+    editable: false,
+    initialContent: `
+      <aside data-type="disclosures">
+        <details data-type="disclosure">
+          <summary data-type="disclosure-title">Disclosure Title</summary>
+          <div data-type="disclosure-content">
+            <p>This is the content of the disclosure.</p>
+          </div>
+        </details>
+      </aside>
+    `,
+  },
+};
+
+export const WithEditableDisclosure: Story = {
+  args: {
+    editable: true,
+    initialContent: `
+      <aside data-type="disclosures">
+        <details data-type="disclosure">
+          <summary data-type="disclosure-title">Disclosure Title</summary>
+          <div data-type="disclosure-content">
+            <p>This is the content of the disclosure.</p>
+          </div>
+        </details>
+      </aside>
     `,
   },
 };

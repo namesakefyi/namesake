@@ -1,5 +1,5 @@
+import type { Meta } from "@storybook/react-vite";
 import { Button, Form, TimeField } from "@/components/common";
-import type { Meta } from "@storybook/react";
 
 const meta: Meta<typeof TimeField> = {
   component: TimeField,

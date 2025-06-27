@@ -1,7 +1,16 @@
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { AdminNav } from "@/components/admin";
-import { AppContent, AppSidebar, AppSidebarHeader } from "@/components/app";
+import {
+  AppContent,
+  AppDesktopWrapper,
+  AppNav,
+  AppSidebar,
+  AppSidebarContent,
+  AppSidebarFooter,
+  AppSidebarHeader,
+  NamesakeHeader,
+} from "@/components/app";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: ({ context }) => {
@@ -21,16 +30,30 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminRoute() {
   const isMobile = useIsMobile();
 
-  return (
-    <div className="flex">
-      {!isMobile && (
-        <AppSidebar header={<AppSidebarHeader />}>
-          <AdminNav />
-        </AppSidebar>
-      )}
+  if (isMobile) {
+    return (
       <AppContent>
         <Outlet />
       </AppContent>
-    </div>
+    );
+  }
+
+  return (
+    <AppDesktopWrapper>
+      <AppSidebar>
+        <AppSidebarHeader>
+          <NamesakeHeader />
+        </AppSidebarHeader>
+        <AppSidebarContent>
+          <AdminNav />
+        </AppSidebarContent>
+        <AppSidebarFooter>
+          <AppNav />
+        </AppSidebarFooter>
+      </AppSidebar>
+      <AppContent>
+        <Outlet />
+      </AppContent>
+    </AppDesktopWrapper>
   );
 }
