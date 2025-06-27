@@ -1,3 +1,4 @@
+import { Heading } from "react-aria-components";
 import { Logo } from "@/components/app";
 import { AnimateChangeInHeight, Card, Link } from "@/components/common";
 
@@ -8,9 +9,11 @@ interface SignInWrapperProps {
 
 export const SignInWrapper = ({ children, className }: SignInWrapperProps) => {
   return (
-    <div className="flex flex-col w-96 max-w-full mx-auto min-h-dvh items-center justify-center gap-8 px-6 py-12">
+    <main className="flex flex-col w-96 max-w-full mx-auto min-h-dvh items-center justify-center gap-8 px-6 py-12">
       <Link href="https://namesake.fyi">
-        <Logo />
+        <Heading level={1}>
+          <Logo />
+        </Heading>
       </Link>
       <AnimateChangeInHeight className="w-full">
         <Card className={className}>{children}</Card>
@@ -20,6 +23,6 @@ export const SignInWrapper = ({ children, className }: SignInWrapperProps) => {
         <Link href="https://namesake.fyi/chat">Support</Link>
         <Link href="https://status.namesake.fyi">Status</Link>
       </div>
-    </div>
+    </main>
   );
 };

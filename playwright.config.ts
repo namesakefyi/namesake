@@ -7,27 +7,42 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
-  use: {
-    baseURL: "http://localhost:5173",
-    trace: "on-first-retry",
-  },
   projects: [
+    {
+      name: "Setup",
+      testMatch: /global\.setup\.ts/,
+    },
     {
       name: "Chromium",
       use: { ...devices["Desktop Chrome"] },
+      dependencies: ["Setup"],
     },
     {
       name: "Firefox",
       use: { ...devices["Desktop Firefox"] },
+      dependencies: ["Setup"],
     },
     {
       name: "Mobile Safari",
       use: { ...devices["iPhone 12"] },
+      dependencies: ["Setup"],
     },
   ],
-  webServer: {
-    command: "npm run dev",
-    url: "http://localhost:5173",
-    reuseExistingServer: !process.env.CI,
+  webServer: [
+    {
+      command: "npm run dev:backend",
+      name: "Backend",
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command: "npm run dev:frontend",
+      name: "Frontend",
+      url: "http://localhost:5173",
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
+  use: {
+    baseURL: "http://localhost:5173",
+    trace: "on-first-retry",
   },
 });
