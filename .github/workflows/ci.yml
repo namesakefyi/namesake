@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request:
-    branches: main
+    branches: [main]
     paths-ignore:
       - ".changeset/**"
       - ".husky/**"
@@ -12,11 +12,15 @@ on:
       - "public/**"
       - "CHANGELOG.md"
   push:
-    branches: main
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   format:
@@ -69,36 +73,3 @@ jobs:
 
       - name: Run tests
         run: pnpm test
-
-  # Enable this once preview deploys are working and we can run on the preview directly
-  # e2e:
-  #   name: End-to-end Test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-
-  #     - name: Setup PNPM
-  #       uses: pnpm/action-setup@v4
-
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 20
-  #         cache: "pnpm"
-
-  #     - name: Install dependencies
-  #       run: pnpm install
-
-  #     - name: Install Playwright
-  #       run: pnpm exec playwright install --with-deps
-
-  #     - name: Run Playwright end-to-end tests
-  #       run: pnpm test:e2e
-
-  #     - uses: actions/upload-artifact@v4
-  #       if: always()
-  #       with:
-  #         name: playwright-report
-  #         path: playwright-report/
-  #         retention-days: 30
