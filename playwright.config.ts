@@ -30,12 +30,12 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: "npm run dev:backend",
+      command: "pnpm dev:backend",
       name: "Backend",
       reuseExistingServer: !process.env.CI,
     },
     {
-      command: "npm run dev:frontend",
+      command: "pnpm dev:frontend",
       name: "Frontend",
       url: "http://localhost:5173",
       reuseExistingServer: !process.env.CI,
