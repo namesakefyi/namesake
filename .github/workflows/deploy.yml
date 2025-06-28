@@ -40,10 +40,9 @@ jobs:
           VITE_REACT_APP_PUBLIC_POSTHOG_HOST: ${{ secrets.VITE_REACT_APP_PUBLIC_POSTHOG_HOST }}
         run: npx convex deploy --cmd 'pnpm build'
 
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          command: pages deploy --project-name=namesake --directory=dist
