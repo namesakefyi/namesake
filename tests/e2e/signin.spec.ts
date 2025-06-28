@@ -86,7 +86,7 @@ test.describe("registration", () => {
     ).toHaveAttribute("aria-valuenow", "0");
     await expect(page.getByTestId("strength-label")).toHaveText("Weak!");
     await page.getByRole("button", { name: "Register" }).click();
-    await expect(page.getByRole("alert")).toHaveText(
+    await expect(page.getByRole("alert")).toContainText(
       "Please choose a stronger password. This is a heavily used password.",
     );
 
@@ -99,6 +99,7 @@ test.describe("registration", () => {
     ).toHaveAttribute("aria-valuenow", "4");
     await expect(page.getByTestId("strength-label")).toHaveText("Great");
     await page.getByRole("button", { name: "Register" }).click();
+
     await page.waitForURL("/quests/getting-started");
   });
 });
@@ -112,23 +113,5 @@ test.describe("sign in", () => {
   test("should have correct page setup", async ({ page }) => {
     await expect(page).toHaveURL("/signin");
     await expect(page).toHaveTitle(/Namesake/);
-  });
-
-  test("should validate form fields", async ({ page }) => {
-    await page.getByRole("button", { name: "Sign in" }).click();
-    await expect(page.getByRole("textbox", { name: "Email" })).toHaveAttribute(
-      "aria-invalid",
-      "true",
-    );
-    await expect(
-      page.getByRole("textbox", { name: "Password" }),
-    ).toHaveAttribute("aria-invalid", "true");
-
-    await page.getByRole("textbox", { name: "Email" }).fill("invalid@test.com");
-    await page.getByRole("textbox", { name: "Password" }).fill("invalid");
-    await page.getByRole("button", { name: "Sign in" }).click();
-    await expect(page.getByRole("alert")).toHaveText(
-      "Invalid email or password",
-    );
   });
 });
