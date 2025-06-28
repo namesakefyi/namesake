@@ -44,3 +44,7 @@ node_modules
 
 # Local files
 *.local
+
+# Wrangler cache
+.cache
+.wrangler
