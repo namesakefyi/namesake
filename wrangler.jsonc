@@ -1,7 +1,6 @@
 {
   "name": "namesake",
   "compatibility_date": "2025-06-28",
-  "main": "dist/index.html",
   "assets": {
     "directory": "./dist",
     "not_found_handling": "single-page-application"
