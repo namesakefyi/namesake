@@ -8,7 +8,6 @@ setup("clean database", async () => {
   console.log("🧹 Cleaning Convex database before tests...");
 
   try {
-    await execAsync("npx convex dev");
     await execAsync("bash scripts/deleteConvexTables.sh");
     console.log("✅ Database cleaned successfully");
   } catch (error) {
