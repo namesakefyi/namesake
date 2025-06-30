@@ -1,2 +1,2 @@
-# https://stack.convex.dev/yolo-fast-mvp#delete-dev-data-liberally-and-maintain-a-seed-script-to-re-initialize
-for tableName in `npx convex data`; do npx convex import --table $tableName --replace -y --format jsonLines /dev/null; done
+# https://discord.com/channels/1019350475847499849/1385636679624294531/1387462319797309541
+npx convex import --replace-all --table empty --format jsonLines /dev/null -y;
