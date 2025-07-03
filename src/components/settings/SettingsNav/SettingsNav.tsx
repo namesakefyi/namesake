@@ -9,6 +9,7 @@ import {
   Snail,
 } from "lucide-react";
 import { Nav, NavGroup, NavItem } from "@/components/common";
+import { authClient } from "@/main";
 
 export const SettingsNav = ({ className }: { className?: string }) => {
   return (
@@ -80,7 +81,7 @@ export const SettingsNav = ({ className }: { className?: string }) => {
         </NavItem>
       </NavGroup>
       <NavGroup>
-        <NavItem href={{ to: "/signout" }} icon={LogOut}>
+        <NavItem onClick={() => authClient.signOut()} icon={LogOut}>
           Sign out
         </NavItem>
       </NavGroup>

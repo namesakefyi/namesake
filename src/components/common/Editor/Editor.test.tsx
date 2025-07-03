@@ -51,9 +51,9 @@ vi.mock("@tiptap/react", () => {
   return {
     useEditor: vi.fn(() => mockEditor),
     EditorContent: ({ className }: any) => (
+      // biome-ignore lint/a11y/useSemanticElements: contentEditable div matches implementation
       <div
         aria-label="Editor"
-        // biome-ignore lint/a11y/useSemanticElements: contentEditable div matches implementation
         role="textbox"
         className={className}
         tabIndex={0}
