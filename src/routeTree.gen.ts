@@ -15,7 +15,6 @@ import { Route as UnauthenticatedSigninRouteImport } from './routes/_unauthentic
 import { Route as UnauthenticatedResetPasswordRouteImport } from './routes/_unauthenticated/reset-password'
 import { Route as UnauthenticatedGoodbyeRouteImport } from './routes/_unauthenticated/goodbye'
 import { Route as UnauthenticatedForgotRouteImport } from './routes/_unauthenticated/forgot'
-import { Route as AuthenticatedSignoutRouteImport } from './routes/_authenticated/signout'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/_home'
 import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedDocumentsRouteRouteImport } from './routes/_authenticated/documents/route'
@@ -64,11 +63,6 @@ const UnauthenticatedForgotRoute = UnauthenticatedForgotRouteImport.update({
   id: '/forgot',
   path: '/forgot',
   getParentRoute: () => UnauthenticatedRoute,
-} as any)
-const AuthenticatedSignoutRoute = AuthenticatedSignoutRouteImport.update({
-  id: '/signout',
-  path: '/signout',
-  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   id: '/_home',
@@ -184,7 +178,6 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/documents': typeof AuthenticatedDocumentsRouteRouteWithChildren
   '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
-  '/signout': typeof AuthenticatedSignoutRoute
   '/forgot': typeof UnauthenticatedForgotRoute
   '/goodbye': typeof UnauthenticatedGoodbyeRoute
   '/reset-password': typeof UnauthenticatedResetPasswordRoute
@@ -206,7 +199,6 @@ export interface FileRoutesByFullPath {
   '/quests/$questSlug/': typeof AuthenticatedHomeQuestsQuestSlugIndexRoute
 }
 export interface FileRoutesByTo {
-  '/signout': typeof AuthenticatedSignoutRoute
   '/forgot': typeof UnauthenticatedForgotRoute
   '/goodbye': typeof UnauthenticatedGoodbyeRoute
   '/reset-password': typeof UnauthenticatedResetPasswordRoute
@@ -234,7 +226,6 @@ export interface FileRoutesById {
   '/_authenticated/documents': typeof AuthenticatedDocumentsRouteRouteWithChildren
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/_authenticated/_home': typeof AuthenticatedHomeRouteWithChildren
-  '/_authenticated/signout': typeof AuthenticatedSignoutRoute
   '/_unauthenticated/forgot': typeof UnauthenticatedForgotRoute
   '/_unauthenticated/goodbye': typeof UnauthenticatedGoodbyeRoute
   '/_unauthenticated/reset-password': typeof UnauthenticatedResetPasswordRoute
@@ -261,7 +252,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/documents'
     | '/settings'
-    | '/signout'
     | '/forgot'
     | '/goodbye'
     | '/reset-password'
@@ -283,7 +273,6 @@ export interface FileRouteTypes {
     | '/quests/$questSlug/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/signout'
     | '/forgot'
     | '/goodbye'
     | '/reset-password'
@@ -310,7 +299,6 @@ export interface FileRouteTypes {
     | '/_authenticated/documents'
     | '/_authenticated/settings'
     | '/_authenticated/_home'
-    | '/_authenticated/signout'
     | '/_unauthenticated/forgot'
     | '/_unauthenticated/goodbye'
     | '/_unauthenticated/reset-password'
@@ -380,13 +368,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/forgot'
       preLoaderRoute: typeof UnauthenticatedForgotRouteImport
       parentRoute: typeof UnauthenticatedRoute
-    }
-    '/_authenticated/signout': {
-      id: '/_authenticated/signout'
-      path: '/signout'
-      fullPath: '/signout'
-      preLoaderRoute: typeof AuthenticatedSignoutRouteImport
-      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/_home': {
       id: '/_authenticated/_home'
@@ -616,7 +597,6 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDocumentsRouteRoute: typeof AuthenticatedDocumentsRouteRouteWithChildren
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRouteWithChildren
-  AuthenticatedSignoutRoute: typeof AuthenticatedSignoutRoute
   AuthenticatedFormsMaCourtOrderRoute: typeof AuthenticatedFormsMaCourtOrderRoute
   AuthenticatedFormsSocialSecurityRoute: typeof AuthenticatedFormsSocialSecurityRoute
 }
@@ -627,7 +607,6 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
     AuthenticatedDocumentsRouteRouteWithChildren,
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedHomeRoute: AuthenticatedHomeRouteWithChildren,
-  AuthenticatedSignoutRoute: AuthenticatedSignoutRoute,
   AuthenticatedFormsMaCourtOrderRoute: AuthenticatedFormsMaCourtOrderRoute,
   AuthenticatedFormsSocialSecurityRoute: AuthenticatedFormsSocialSecurityRoute,
 }
