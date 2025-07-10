@@ -12,6 +12,7 @@ import {
 } from "react-aria-components";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
+import { AnimateChangeInHeight } from "@/components/common";
 import { focusRing } from "@/components/utils";
 
 export interface DisclosureProps
@@ -29,7 +30,7 @@ const disclosureTriggerStyles = tv({
 });
 
 const disclosurePanelStyles = tv({
-  base: "transition-all duration-800 opacity-0 h-0 group-data-expanded:h-auto group-data-expanded:opacity-100 group-data-expanded:pb-4",
+  base: "transition-opacity duration-800 opacity-0 group-data-expanded:opacity-100 group-data-expanded:pb-4",
 });
 
 export function Disclosure({
@@ -63,9 +64,11 @@ export function Disclosure({
         </AriaButton>
         {actions && <div className="shrink-0 mt-2">{actions}</div>}
       </Header>
-      <AriaDisclosurePanel className={disclosurePanelStyles()}>
-        {children}
-      </AriaDisclosurePanel>
+      <AnimateChangeInHeight className="w-full">
+        <AriaDisclosurePanel className={disclosurePanelStyles()}>
+          {children}
+        </AriaDisclosurePanel>
+      </AnimateChangeInHeight>
     </AriaDisclosure>
   );
 }
