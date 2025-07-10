@@ -150,6 +150,31 @@
     }
   }
 
+  details {
+    --details-transition-duration: 0.2s;
+
+    transition-property: margin-block-start;
+    transition-duration: var(--details-transition-duration);
+    transition-timing-function: ease;
+
+    @media (prefers-reduced-motion: no-preference) {
+      interpolate-size: allow-keywords;
+    }
+
+    &::details-content {
+      block-size: 0;
+      opacity: 0;
+      overflow-y: clip;
+      transition-property: content-visibility, block-size, opacity;
+      transition-duration: var(--details-transition-duration);
+      transition-timing-function: ease;
+    }
+
+    &[open]::details-content {
+      block-size: auto;
+      opacity: 1;
+    }
+  }
 
   details[open] + details {
     margin-block-start: 0.75em;

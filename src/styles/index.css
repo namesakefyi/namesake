@@ -8,6 +8,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  interpolate-size: allow-keywords;
+
   --app-max-width: 960px;
   --app-gutter: 1.25em;
 
