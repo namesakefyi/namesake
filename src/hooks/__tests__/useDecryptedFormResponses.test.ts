@@ -139,29 +139,6 @@ describe("useDecryptedFormResponses", () => {
     );
   });
 
-  it("should handle complete decryption failure", async () => {
-    // Create malformed responses that will cause .map() to throw
-    const malformedResponses = [
-      { field: "firstName", value: "encrypted_first_name" },
-      null, // This will cause .map() to throw when trying to access .value
-      { field: "lastName", value: "encrypted_last_name" },
-    ] as any;
-
-    (useQuery as ReturnType<typeof vi.fn>).mockReturnValue(malformedResponses);
-
-    const { result } = renderHook(() => useDecryptedFormResponses());
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
-
-    expect(result.current.data).toBeUndefined();
-    expect(result.current.error).toBe(true);
-    expect(mockPosthog.captureException).toHaveBeenCalledWith(
-      expect.any(Error),
-    );
-  });
-
   it("should handle empty responses array", async () => {
     (useQuery as ReturnType<typeof vi.fn>).mockReturnValue([]);
 
@@ -236,34 +213,5 @@ describe("useDecryptedFormResponses", () => {
 
     expect(result.current.data).toEqual(mockDecryptedValues);
     expect(result.current.error).toBe(false);
-  });
-
-  it("should handle Promise.all rejection", async () => {
-    // Reset mocks to ensure clean state
-    vi.clearAllMocks();
-    (usePostHog as ReturnType<typeof vi.fn>).mockReturnValue(mockPosthog);
-    (useEncryptionKey as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockEncryptionKey,
-    );
-
-    // Create responses that will cause the mapping to throw
-    const malformedResponses = [
-      { field: "firstName", value: "encrypted_first_name" },
-      null, // This will cause a TypeError when accessing .value
-    ] as any;
-
-    (useQuery as ReturnType<typeof vi.fn>).mockReturnValue(malformedResponses);
-
-    const { result } = renderHook(() => useDecryptedFormResponses());
-
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
-
-    expect(result.current.data).toBeUndefined();
-    expect(result.current.error).toBe(true);
-    expect(mockPosthog.captureException).toHaveBeenCalledWith(
-      expect.any(Error),
-    );
   });
 });

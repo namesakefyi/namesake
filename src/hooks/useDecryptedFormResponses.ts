@@ -59,6 +59,7 @@ export function useDecryptedFormResponses(): {
       } catch (error) {
         posthog.captureException(error);
         setError(true);
+        setDecryptedData(undefined);
       } finally {
         setIsLoading(false);
       }
