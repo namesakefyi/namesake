@@ -43,7 +43,7 @@ export const fetchPdf = async (path: string) => {
 
 /**
  * Fill out a PDF form with the given user data.
- * @returns A PDF bytes for the filled form.
+ * @returns PDF bytes for the filled form.
  */
 export async function fillPdf({
   pdf,
