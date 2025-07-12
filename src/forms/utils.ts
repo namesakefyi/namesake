@@ -43,7 +43,7 @@ export const fetchPdf = async (path: string) => {
 
 /**
  * Fill out a PDF form with the given user data.
- * @returns A URL to the filled PDF.
+ * @returns A PDF bytes for the filled form.
  */
 export async function fillPdf({
   pdf,
@@ -111,24 +111,24 @@ export async function getPdfForm({
 }
 
 /**
- * Fill out a PDF form and download it.
+ * Given PDF bytes and a title, download the PDF.
+ * @param pdfBytes - The PDF bytes to download.
+ * @param title - The title of the PDF.
+ * @returns A promise that resolves when the PDF is downloaded.
  */
 export async function downloadPdf({
-  pdf,
-  userData,
+  pdfBytes,
+  title,
 }: {
-  pdf: PDFDefinition;
-  userData: Partial<FormData>;
+  pdfBytes: Uint8Array;
+  title: string;
 }) {
-  const pdfBytes = await fillPdf({ pdf, userData });
-  if (!pdfBytes) return;
-
   const url = URL.createObjectURL(new Blob([pdfBytes]));
 
   try {
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${pdf.title}.pdf`;
+    a.download = `${title}.pdf`;
     a.click();
   } catch (error) {
     console.error(error);
@@ -185,16 +185,7 @@ export async function downloadMergedPdf({
   }
 
   const mergedPdfBytes = await mergedPdf.save();
-  const url = URL.createObjectURL(new Blob([mergedPdfBytes]));
-
-  try {
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${title}.pdf`;
-    a.click();
-  } catch (error) {
-    console.error(error);
-  }
+  downloadPdf({ pdfBytes: mergedPdfBytes, title });
 }
 
 /**

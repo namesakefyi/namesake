@@ -208,13 +208,18 @@ describe("PDF utilities", () => {
       };
       document.createElement = vi.fn().mockReturnValue(mockAnchor);
 
-      await downloadPdf({
+      const pdfBytes = await fillPdf({
         pdf: testPdfDefinition,
         userData: {
           newFirstName: "Test",
           oldFirstName: "Old",
           shouldReturnOriginalDocuments: true,
         },
+      });
+
+      await downloadPdf({
+        pdfBytes,
+        title: "Test Form",
       });
 
       // Verify Blob URL was created
@@ -232,13 +237,18 @@ describe("PDF utilities", () => {
         throw new Error("Failed to create element");
       });
 
-      await downloadPdf({
+      const pdfBytes = await fillPdf({
         pdf: testPdfDefinition,
         userData: {
           newFirstName: "Test",
           oldFirstName: "Old",
           shouldReturnOriginalDocuments: true,
         },
+      });
+
+      await downloadPdf({
+        pdfBytes,
+        title: "Test Form",
       });
 
       expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
@@ -260,9 +270,14 @@ describe("PDF utilities", () => {
         fields: () => ({}),
       });
 
-      await downloadPdf({
+      const pdfBytes = await fillPdf({
         pdf: customPdf,
         userData: {},
+      });
+
+      await downloadPdf({
+        pdfBytes,
+        title: "Custom Form Name",
       });
 
       expect(mockAnchor.download).toBe("Custom Form Name.pdf");

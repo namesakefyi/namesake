@@ -1,5 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import { twMerge } from "tailwind-merge";
+import { tv } from "tailwind-variants";
 import { Link, type LinkProps } from "@/components/common";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
@@ -17,6 +18,10 @@ export interface PageHeaderProps {
   children?: React.ReactNode;
   /** Additional classes to apply to the header. */
   className?: string;
+  /** Whether the contents of the header should stretch to fill the width of the container.
+   * @default false
+   */
+  fullWidth?: boolean;
 }
 
 export const PageHeader = ({
@@ -25,8 +30,19 @@ export const PageHeader = ({
   badge,
   children,
   className,
+  fullWidth = false,
 }: PageHeaderProps) => {
   const isMobile = useIsMobile();
+
+  const containerStyles = tv({
+    base: "flex mx-auto h-full shrink-0 items-center justify-between gap-6",
+    variants: {
+      fullWidth: {
+        true: "max-w-full",
+        false: "max-w-(--container-width)",
+      },
+    },
+  });
 
   return (
     <header
@@ -35,7 +51,7 @@ export const PageHeader = ({
         className,
       )}
     >
-      <div className="flex max-w-(--container-width) mx-auto h-full shrink-0 items-center justify-between gap-6">
+      <div className={containerStyles({ fullWidth })}>
         <div className="flex flex-col gap-1 min-w-0">
           <div className="flex gap-2 items-center">
             {isMobile && mobileBackLink && (

@@ -1,52 +1,24 @@
-import { FileWarning } from "lucide-react";
-import { useEffect, useRef } from "react";
-import { Empty } from "@/components/common";
-import type { PDFDefinition } from "@/constants";
-import { useFilledPdf } from "@/hooks/useFilledPdf";
-
 interface DocumentPreviewProps {
-  pdf: PDFDefinition;
+  pdfBytes: Uint8Array | null;
 }
 
-export const DocumentPreview = ({ pdf }: DocumentPreviewProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
-  const { pdfBytes, loading, error } = useFilledPdf(pdf);
+export const DocumentPreview = ({ pdfBytes }: DocumentPreviewProps) => {
+  if (!pdfBytes) return;
 
-  useEffect(() => {
-    if (!loading && !error && pdfBytes && containerRef.current) {
-      containerRef.current.innerHTML = "";
-      const url = URL.createObjectURL(
-        new Blob([pdfBytes], { type: "application/pdf" }),
-      );
-      const iframe = document.createElement("iframe");
-      iframe.src = url;
-      iframe.style.width = "100%";
-      iframe.style.height = "100%";
-      iframe.style.border = "none";
-      iframe.style.display = "block";
-      iframeRef.current = iframe;
-      containerRef.current.appendChild(iframe);
-    }
-  }, [pdfBytes, loading, error]);
-
-  if (loading) {
-    return (
-      <div className="flex-1 w-full flex items-center justify-center">
-        Loading PDF…
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <Empty
-        icon={FileWarning}
-        title="Error loading PDF"
-        subtitle="Something went wrong."
+  return (
+    <div className="flex-1 w-full">
+      <iframe
+        title="PDF Viewer"
+        src={URL.createObjectURL(
+          new Blob([pdfBytes], { type: "application/pdf" }),
+        )}
+        style={{
+          width: "100%",
+          height: "100%",
+          border: "none",
+          display: "block",
+        }}
       />
-    );
-  }
-
-  return <div ref={containerRef} className="flex-1 w-full" />;
+    </div>
+  );
 };
