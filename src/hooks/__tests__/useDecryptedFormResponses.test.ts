@@ -6,8 +6,20 @@ import { useEncryptionKey } from "@/hooks/useEncryptionKey";
 import { decryptData } from "@/utils/encryption";
 import { useDecryptedFormResponses } from "../useDecryptedFormResponses";
 
+vi.mock("convex/react", () => ({
+  useQuery: vi.fn(),
+}));
+
+vi.mock("posthog-js/react", () => ({
+  usePostHog: vi.fn(),
+}));
+
 vi.mock("@/hooks/useEncryptionKey", () => ({
   useEncryptionKey: vi.fn(),
+}));
+
+vi.mock("@/utils/encryption", () => ({
+  decryptData: vi.fn(),
 }));
 
 describe("useDecryptedFormResponses", () => {
@@ -128,13 +140,14 @@ describe("useDecryptedFormResponses", () => {
   });
 
   it("should handle complete decryption failure", async () => {
-    (useQuery as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockEncryptedResponses,
-    );
+    // Create malformed responses that will cause .map() to throw
+    const malformedResponses = [
+      { field: "firstName", value: "encrypted_first_name" },
+      null, // This will cause .map() to throw when trying to access .value
+      { field: "lastName", value: "encrypted_last_name" },
+    ] as any;
 
-    // Mock Promise.all to fail by making the array mapping throw
-    const originalPromiseAll = Promise.all;
-    Promise.all = vi.fn().mockRejectedValue(new Error("Promise.all failed"));
+    (useQuery as ReturnType<typeof vi.fn>).mockReturnValue(malformedResponses);
 
     const { result } = renderHook(() => useDecryptedFormResponses());
 
@@ -147,9 +160,6 @@ describe("useDecryptedFormResponses", () => {
     expect(mockPosthog.captureException).toHaveBeenCalledWith(
       expect.any(Error),
     );
-
-    // Restore Promise.all
-    Promise.all = originalPromiseAll;
   });
 
   it("should handle empty responses array", async () => {
@@ -235,13 +245,14 @@ describe("useDecryptedFormResponses", () => {
     (useEncryptionKey as ReturnType<typeof vi.fn>).mockReturnValue(
       mockEncryptionKey,
     );
-    (useQuery as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockEncryptedResponses,
-    );
 
-    // Mock Promise.all to reject directly
-    const originalPromiseAll = Promise.all;
-    Promise.all = vi.fn().mockRejectedValue(new Error("Promise.all rejected"));
+    // Create responses that will cause the mapping to throw
+    const malformedResponses = [
+      { field: "firstName", value: "encrypted_first_name" },
+      null, // This will cause a TypeError when accessing .value
+    ] as any;
+
+    (useQuery as ReturnType<typeof vi.fn>).mockReturnValue(malformedResponses);
 
     const { result } = renderHook(() => useDecryptedFormResponses());
 
@@ -254,8 +265,5 @@ describe("useDecryptedFormResponses", () => {
     expect(mockPosthog.captureException).toHaveBeenCalledWith(
       expect.any(Error),
     );
-
-    // Restore Promise.all
-    Promise.all = originalPromiseAll;
   });
 });

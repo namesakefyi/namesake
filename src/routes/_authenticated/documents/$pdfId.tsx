@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Download, FileWarning } from "lucide-react";
+import { Download } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { tv } from "tailwind-variants";
 import { PageHeader } from "@/components/app";
-import { Badge, Button, Empty } from "@/components/common";
+import { Badge, Button } from "@/components/common";
 import { DocumentPreview } from "@/components/documents";
 import type { PDFId } from "@/constants/forms";
 import { downloadPdf, fillPdf } from "@/forms/utils";
@@ -31,7 +31,6 @@ function RouteComponent() {
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
   const [isFillingPdf, setIsFillingPdf] = useState(false);
 
-  // Generate PDF when we have both PDF definition and user data (or when user data loading is complete)
   useEffect(() => {
     if (!pdf || isLoadingUserData) return;
 
@@ -54,29 +53,12 @@ function RouteComponent() {
     generatePdf();
   }, [pdf, userData, isLoadingUserData, postHog]);
 
-  // Show loading state while PDF details are loading or user data is loading or PDF is being filled
   if (!pdf || isLoadingUserData || isFillingPdf) {
-    return (
-      <div className="flex-1 w-full flex items-center justify-center">
-        Loading document...
-      </div>
-    );
+    return;
   }
 
-  // Show error state if user data failed to load
   if (userDataError) {
     toast.error("We couldn't load your form responses.");
-  }
-
-  // Show error if PDF bytes couldn't be generated
-  if (!pdfBytes) {
-    return (
-      <Empty
-        icon={FileWarning}
-        title="Something went wrong"
-        subtitle="We couldn't load the document."
-      />
-    );
   }
 
   const badgeData = [];
