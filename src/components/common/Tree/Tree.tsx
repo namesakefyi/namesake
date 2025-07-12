@@ -29,9 +29,14 @@ const itemStyles = tv({
   },
 });
 
-export function Tree<T extends object>({ children, ...props }: TreeProps<T>) {
+export function Tree<T extends object>({
+  children,
+  title,
+  ...props
+}: TreeProps<T> & { title: string }) {
   return (
     <AriaTree
+      aria-label={title}
       {...props}
       className={composeTailwindRenderProps(props.className, "relative")}
     >
@@ -67,8 +72,9 @@ const chevron = tv({
   },
 });
 
-// Single icon or [default, expanded]
-type TreeItemIcon = LucideIcon | [LucideIcon, LucideIcon];
+type TreeItemIcon =
+  | LucideIcon // Single icon
+  | [LucideIcon, LucideIcon]; // [default, expanded]
 
 interface TreeItemContentProps
   extends Omit<AriaTreeItemContentProps, "children"> {
@@ -113,7 +119,7 @@ function TreeItemContent({ children, icon, ...props }: TreeItemContentProps) {
                 />
               </Button>
             ) : (
-              <div className="shrink-0 h-5 w-8" />
+              <div className="shrink-0 h-5 w-6.5" />
             )}
             {Icon && <Icon className="size-5 text-dim p-0.5 mr-1.5" />}
             {children}

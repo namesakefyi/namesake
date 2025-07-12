@@ -22,11 +22,7 @@ const meta: Meta<typeof Tree> = {
 export default meta;
 
 export const Example = (args: any) => (
-  <Tree
-    aria-label="Files"
-    style={{ height: "400px", width: "300px" }}
-    {...args}
-  >
+  <Tree title="Files" style={{ height: "400px", width: "300px" }} {...args}>
     <TreeItem id="documents" label="Documents">
       <TreeItem id="project" label="Project" />
     </TreeItem>
@@ -52,31 +48,41 @@ DisabledItems.args = {
 
 export const WithIcons = (args: any) => (
   <Tree
-    aria-label="File Explorer"
+    title="File Explorer"
     style={{ height: "400px", width: "350px" }}
     {...args}
   >
-    <TreeItem id="documents" label="Documents" icon={[Folder, FolderOpen]}>
-      <TreeItem id="readme" label="README.md" icon={FileText} />
-      <TreeItem id="config" label="config.json" icon={Code} />
+    <TreeItem
+      id="documents"
+      label="Documents"
+      icon={[Folder, FolderOpen]}
+      href="/"
+    >
+      <TreeItem id="readme" label="README.md" icon={FileText} href="/" />
+      <TreeItem id="config" label="config.json" icon={Code} href="/" />
     </TreeItem>
-    <TreeItem id="media" label="Media" icon={[Folder, FolderOpen]}>
-      <TreeItem id="images" label="Images" icon={[Folder, FolderOpen]}>
-        <TreeItem id="photo1" label="vacation.jpg" icon={Image} />
-        <TreeItem id="photo2" label="portrait.png" icon={Image} />
+    <TreeItem id="media" label="Media" icon={[Folder, FolderOpen]} href="/">
+      <TreeItem id="images" label="Images" icon={[Folder, FolderOpen]} href="/">
+        <TreeItem id="photo1" label="vacation.jpg" icon={Image} href="/" />
+        <TreeItem id="photo2" label="portrait.png" icon={Image} href="/" />
       </TreeItem>
-      <TreeItem id="audio" label="Audio" icon={[Folder, FolderOpen]}>
-        <TreeItem id="song1" label="favorite.mp3" icon={Music} />
-        <TreeItem id="song2" label="podcast.wav" icon={Music} />
+      <TreeItem id="audio" label="Audio" icon={[Folder, FolderOpen]} href="/">
+        <TreeItem id="song1" label="favorite.mp3" icon={Music} href="/" />
+        <TreeItem id="song2" label="podcast.wav" icon={Music} href="/" />
       </TreeItem>
-      <TreeItem id="video1" label="presentation.mp4" icon={Video} />
+      <TreeItem id="video1" label="presentation.mp4" icon={Video} href="/" />
     </TreeItem>
-    <TreeItem id="project" label="Project Files" icon={[Folder, FolderOpen]}>
-      <TreeItem id="src" label="src" icon={[Folder, FolderOpen]}>
-        <TreeItem id="main" label="main.tsx" icon={Code} />
-        <TreeItem id="utils" label="utils.ts" icon={Code} />
+    <TreeItem
+      id="project"
+      label="Project Files"
+      icon={[Folder, FolderOpen]}
+      href="/"
+    >
+      <TreeItem id="src" label="src" icon={[Folder, FolderOpen]} href="/">
+        <TreeItem id="main" label="main.tsx" icon={Code} href="/" />
+        <TreeItem id="utils" label="utils.ts" icon={Code} href="/" />
       </TreeItem>
-      <TreeItem id="package" label="package.json" icon={File} />
+      <TreeItem id="package" label="package.json" icon={File} href="/" />
     </TreeItem>
   </Tree>
 );
