@@ -1,4 +1,22 @@
-import Document from "@tiptap/extension-document";
+import { DisclosuresKit, StepsKit } from "@namesake/tiptap-extensions";
+import type { Extensions } from "@tiptap/core";
+import { Blockquote } from "@tiptap/extension-blockquote";
+import { Bold } from "@tiptap/extension-bold";
+import { Document } from "@tiptap/extension-document";
+import { HardBreak } from "@tiptap/extension-hard-break";
+import { Heading } from "@tiptap/extension-heading";
+import { Italic } from "@tiptap/extension-italic";
+import { Link } from "@tiptap/extension-link";
+import {
+  BulletList,
+  ListItem,
+  ListKeymap,
+  OrderedList,
+} from "@tiptap/extension-list";
+import { Paragraph } from "@tiptap/extension-paragraph";
+import { Text } from "@tiptap/extension-text";
+import { Typography } from "@tiptap/extension-typography";
+import { Gapcursor, Placeholder, UndoRedo } from "@tiptap/extensions";
 import {
   EditorContent,
   type EditorContentProps,
@@ -9,11 +27,68 @@ import { useEffect } from "react";
 import { tv } from "tailwind-variants";
 import { FieldGroup } from "@/components/common";
 import { EditorToolbar } from "./EditorToolbar";
-import {
-  EXTENSION_GROUPS,
-  type ExtensionGroup,
-  REQUIRED_EXTENSIONS,
-} from "./extensions/constants";
+import { Button } from "./extensions/button";
+
+const REQUIRED_EXTENSIONS = [
+  Text,
+  Paragraph,
+  HardBreak,
+  Typography,
+  UndoRedo,
+  Gapcursor,
+  Placeholder.configure({
+    includeChildren: true,
+    showOnlyCurrent: false,
+    placeholder: ({ node }) => {
+      if (node.type.name === "stepTitle") {
+        return "Step title";
+      }
+
+      if (node.type.name === "stepContent") {
+        return "Step instructions";
+      }
+
+      return "Write something…";
+    },
+  }),
+] as const;
+
+export type ExtensionGroup = "headings" | "basic" | "lists" | "advanced";
+
+const EXTENSION_GROUPS: Record<ExtensionGroup, Extensions> = {
+  headings: [
+    Heading.configure({
+      levels: [2, 3],
+    }),
+  ],
+  basic: [
+    Bold,
+    Italic,
+    Link.configure({
+      openOnClick: false,
+      defaultProtocol: "https",
+    }),
+    Blockquote,
+  ],
+  lists: [
+    ListKeymap.configure({
+      listTypes: [
+        {
+          itemName: "listItem",
+          wrapperNames: ["bulletList", "orderedList"],
+        },
+        {
+          itemName: "stepItem",
+          wrapperNames: ["steps"],
+        },
+      ],
+    }),
+    BulletList,
+    ListItem,
+    OrderedList,
+  ],
+  advanced: [StepsKit, DisclosuresKit, Button],
+} as const;
 
 const DocumentWithSteps = Document.extend({
   content: "(block | steps)+",
@@ -98,7 +173,7 @@ export function Editor({
   });
 
   const contentStyles = tv({
-    base: "w-full prose",
+    base: "w-full prose whitespace-pre-wrap",
     variants: {
       editable: {
         true: "p-5",

@@ -16,15 +16,30 @@ import {
   Unlink,
 } from "lucide-react";
 import {
-  Separator,
+  composeRenderProps,
   ToggleButton,
   type ToggleButtonProps,
-  Toolbar,
-  Tooltip,
-  TooltipTrigger,
-} from "..";
+} from "react-aria-components";
+import { tv } from "tailwind-variants";
+import { focusRing } from "@/components/utils";
+import { Separator, Toolbar, Tooltip, TooltipTrigger } from "..";
+import type { ExtensionGroup } from "./Editor";
 import { EditorLinkButton } from "./EditorLinkButton";
-import type { ExtensionGroup } from "./extensions/constants";
+
+const toggleStyles = tv({
+  extend: focusRing,
+  base: "h-8 min-w-8 transition rounded-md shrink-0 flex items-center justify-center gap-2",
+  variants: {
+    isSelected: {
+      false: "bg-transparent text-dim hover:text-normal hover:bg-theme-a3",
+      true: "bg-theme-1 dark:bg-theme-4 text-normal",
+    },
+    isDisabled: {
+      false: "cursor-pointer",
+      true: "opacity-40",
+    },
+  },
+});
 
 type EditorToggleButtonProps = {
   icon: LucideIcon;
@@ -32,7 +47,7 @@ type EditorToggleButtonProps = {
 } & Omit<ToggleButtonProps, "icon" | "size">;
 
 export const EditorToggleButton = ({
-  icon,
+  icon: Icon,
   label,
   onPress,
   ...props
@@ -42,10 +57,15 @@ export const EditorToggleButton = ({
       <ToggleButton
         aria-label={label}
         onPress={onPress}
-        icon={icon}
-        size="small"
         {...props}
-      />
+        className={composeRenderProps(
+          props.className,
+          (className, renderProps) =>
+            toggleStyles({ ...renderProps, className }),
+        )}
+      >
+        <Icon className="size-4 shrink-0" />
+      </ToggleButton>
       <Tooltip placement="top">{label}</Tooltip>
     </TooltipTrigger>
   );
