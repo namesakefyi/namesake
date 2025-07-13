@@ -37,14 +37,6 @@ export const Default: Story = {
   },
 };
 
-export const FewerControls: Story = {
-  args: {
-    extensions: ["basic"],
-    initialContent:
-      "This editor only allows basic formatting. Even if you try to get around it (like adding a header with `##`), it won't let you.",
-  },
-};
-
 export const WithSteps: Story = {
   args: {
     initialContent: `
