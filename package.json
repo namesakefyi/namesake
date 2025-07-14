@@ -55,7 +55,7 @@
     "@tiptap/extension-document": "^2.25.0",
     "@tiptap/extension-gapcursor": "^2.25.0",
     "@tiptap/extension-hard-break": "^2.25.0",
-    "@tiptap/extension-heading": "^2.25.0",
+    "@tiptap/extension-heading": "^2.26.1",
     "@tiptap/extension-history": "^2.25.0",
     "@tiptap/extension-italic": "^2.25.0",
     "@tiptap/extension-link": "^2.25.0",
