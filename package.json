@@ -58,7 +58,7 @@
     "@tiptap/extension-heading": "^2.25.0",
     "@tiptap/extension-history": "^2.25.0",
     "@tiptap/extension-italic": "^2.25.0",
-    "@tiptap/extension-link": "^2.25.0",
+    "@tiptap/extension-link": "^2.26.1",
     "@tiptap/extension-list-item": "^2.25.0",
     "@tiptap/extension-list-keymap": "^2.25.0",
     "@tiptap/extension-ordered-list": "^2.25.0",
