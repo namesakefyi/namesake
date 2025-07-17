@@ -14,7 +14,6 @@ import { posthog } from "posthog-js";
 import { PostHogErrorBoundary, PostHogProvider } from "posthog-js/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { HelmetProvider } from "react-helmet-async";
 import { Logo, ThemeProvider } from "@/components/app";
 import { Empty } from "@/components/common";
 import type { Role } from "@/constants";
@@ -105,17 +104,15 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <PostHogProvider client={posthog}>
-        <HelmetProvider>
-          <ConvexBetterAuthProvider client={convex} authClient={authClient}>
-            <ThemeProvider attribute="class">
-              <LazyMotion strict features={domAnimation}>
-                <PostHogErrorBoundary fallback={fallback}>
-                  <InnerApp />
-                </PostHogErrorBoundary>
-              </LazyMotion>
-            </ThemeProvider>
-          </ConvexBetterAuthProvider>
-        </HelmetProvider>
+        <ConvexBetterAuthProvider client={convex} authClient={authClient}>
+          <ThemeProvider attribute="class">
+            <LazyMotion strict features={domAnimation}>
+              <PostHogErrorBoundary fallback={fallback}>
+                <InnerApp />
+              </PostHogErrorBoundary>
+            </LazyMotion>
+          </ThemeProvider>
+        </ConvexBetterAuthProvider>
       </PostHogProvider>
     </StrictMode>,
   );

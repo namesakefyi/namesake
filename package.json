@@ -78,7 +78,6 @@
     "react-aria": "^3.41.1",
     "react-aria-components": "^1.10.1",
     "react-dom": "^19.1.0",
-    "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.60.0",
     "react-random-reveal": "^2.0.1",
     "resend": "4.6.0",
