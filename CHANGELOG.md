@@ -1,5 +1,13 @@
 # namesake
 
+## 1.0.1
+
+### Patch Changes
+
+- 0db9e62: Smoothly transition accordion elements for frequently asked questions on browsers which support it
+- 03ba237: Display a download button at the top of all document pages, and fall back to a blank form if encrypted responses cannot be decrypted on the current device
+- b784ae6: Restyle editor toolbar
+
 ## 1.0.0
 
 Namesake is a free and open source app which simplifies legal name changes and gender marker changes in the US. 🏳️‍⚧️ 📝 🌈 🪪
