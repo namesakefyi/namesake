@@ -37,6 +37,7 @@ export const createAuth = (ctx: GenericCtx) =>
     plugins: [convex(), crossDomain({ siteUrl })],
     emailAndPassword: {
       enabled: true,
+      requireEmailVerification: false,
       sendResetPassword: async ({ user, url }, _request) => {
         await resend.emails.send({
           from: "hey@namesake.fyi",
