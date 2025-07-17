@@ -1,4 +1,21 @@
-import Document from "@tiptap/extension-document";
+import { DisclosuresKit, StepsKit } from "@namesake/tiptap-extensions";
+import { Blockquote } from "@tiptap/extension-blockquote";
+import { Bold } from "@tiptap/extension-bold";
+import { Document } from "@tiptap/extension-document";
+import { HardBreak } from "@tiptap/extension-hard-break";
+import { Heading } from "@tiptap/extension-heading";
+import { Italic } from "@tiptap/extension-italic";
+import { Link } from "@tiptap/extension-link";
+import {
+  BulletList,
+  ListItem,
+  ListKeymap,
+  OrderedList,
+} from "@tiptap/extension-list";
+import { Paragraph } from "@tiptap/extension-paragraph";
+import { Text } from "@tiptap/extension-text";
+import { Typography } from "@tiptap/extension-typography";
+import { Gapcursor, Placeholder, UndoRedo } from "@tiptap/extensions";
 import {
   EditorContent,
   type EditorContentProps,
@@ -9,15 +26,7 @@ import { useEffect } from "react";
 import { tv } from "tailwind-variants";
 import { FieldGroup } from "@/components/common";
 import { EditorToolbar } from "./EditorToolbar";
-import {
-  EXTENSION_GROUPS,
-  type ExtensionGroup,
-  REQUIRED_EXTENSIONS,
-} from "./extensions/constants";
-
-const DocumentWithSteps = Document.extend({
-  content: "(block | steps)+",
-});
+import { Button } from "./extensions/button";
 
 export interface EditorProps
   extends Omit<EditorContentProps, "onChange" | "editor" | "placeholder"> {
@@ -50,12 +59,6 @@ export interface EditorProps
    * @default true
    */
   editable?: boolean;
-
-  /**
-   * Which formatting extensions are available to the editor?
-   * @default ["headings", "basic", "lists", "advanced"]
-   */
-  extensions?: ExtensionGroup[];
 }
 
 export function Editor({
@@ -63,14 +66,62 @@ export function Editor({
   initialContent,
   onUpdate,
   editable = true,
-  extensions = ["headings", "basic", "lists", "advanced"],
   ...props
 }: EditorProps) {
   const editor = useEditor({
     extensions: [
-      extensions.includes("advanced") ? DocumentWithSteps : Document,
-      ...REQUIRED_EXTENSIONS,
-      ...extensions.flatMap((group) => EXTENSION_GROUPS[group]),
+      Document.extend({
+        content: "(block | steps)+",
+      }),
+      Text,
+      Paragraph,
+      HardBreak,
+      Typography,
+      UndoRedo,
+      Gapcursor,
+      Placeholder.configure({
+        includeChildren: true,
+        showOnlyCurrent: false,
+        placeholder: ({ node }) => {
+          if (node.type.name === "stepTitle") {
+            return "Step title";
+          }
+
+          if (node.type.name === "stepContent") {
+            return "Step instructions";
+          }
+
+          return "Write something…";
+        },
+      }),
+      Heading.configure({
+        levels: [2, 3],
+      }),
+      Bold,
+      Italic,
+      Link.configure({
+        openOnClick: false,
+        defaultProtocol: "https",
+      }),
+      Blockquote,
+      ListKeymap.configure({
+        listTypes: [
+          {
+            itemName: "listItem",
+            wrapperNames: ["bulletList", "orderedList"],
+          },
+          {
+            itemName: "stepItem",
+            wrapperNames: ["steps"],
+          },
+        ],
+      }),
+      BulletList,
+      ListItem,
+      OrderedList,
+      StepsKit,
+      DisclosuresKit,
+      Button,
     ],
     content: initialContent,
     editable,
@@ -98,7 +149,7 @@ export function Editor({
   });
 
   const contentStyles = tv({
-    base: "w-full prose",
+    base: "w-full prose whitespace-pre-wrap",
     variants: {
       editable: {
         true: "p-5",
@@ -108,7 +159,7 @@ export function Editor({
 
   return (
     <FieldGroup className={wrapperStyles({ editable })}>
-      {editable && <EditorToolbar editor={editor} extensions={extensions} />}
+      {editable && <EditorToolbar editor={editor} />}
       <EditorContent
         editor={editor}
         className={contentStyles({ className, editable })}
