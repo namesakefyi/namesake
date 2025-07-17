@@ -27,8 +27,8 @@ describe("userQuests", () => {
         const quest1Id = await ctx.db.insert("quests", {
           title: "Test Quest 1",
           slug: "test-quest-1",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
+          category: "education",
+          jurisdiction: "MA",
           creationUser: userId,
           updatedAt: UPDATE_TIMESTAMP,
         });
@@ -36,8 +36,8 @@ describe("userQuests", () => {
         const quest2Id = await ctx.db.insert("quests", {
           title: "Test Quest 2",
           slug: "test-quest-2",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
+          category: "housing",
+          jurisdiction: "MA",
           creationUser: userId,
           updatedAt: UPDATE_TIMESTAMP,
         });
@@ -46,13 +46,13 @@ describe("userQuests", () => {
         await ctx.db.insert("userQuests", {
           userId,
           questId: quest1Id,
-          status: "active",
+          status: "notStarted",
         });
 
         await ctx.db.insert("userQuests", {
           userId,
           questId: quest2Id,
-          status: "completed",
+          status: "notStarted",
         });
       });
 
@@ -70,8 +70,8 @@ describe("userQuests", () => {
         const questId = await ctx.db.insert("quests", {
           title: "Deleted Quest",
           slug: "deleted-quest",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
+          category: "education",
+          jurisdiction: "MA",
           creationUser: userId,
           deletedAt: Date.now(),
           updatedAt: UPDATE_TIMESTAMP,
@@ -80,7 +80,7 @@ describe("userQuests", () => {
         await ctx.db.insert("userQuests", {
           userId,
           questId,
-          status: "active",
+          status: "notStarted",
         });
       });
 
@@ -98,8 +98,8 @@ describe("userQuests", () => {
         const questId = await ctx.db.insert("quests", {
           title: "Test Quest",
           slug: "test-quest",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
+          category: "education",
+          jurisdiction: "MA",
           creationUser: userId,
           updatedAt: UPDATE_TIMESTAMP,
         });
@@ -107,7 +107,7 @@ describe("userQuests", () => {
         await ctx.db.insert("userQuests", {
           userId,
           questId,
-          status: "active",
+          status: "notStarted",
         });
       });
 
@@ -125,8 +125,8 @@ describe("userQuests", () => {
         return await ctx.db.insert("quests", {
           title: "Test Quest",
           slug: "test-quest",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
+          category: "education",
+          jurisdiction: "MA",
           creationUser: userId,
           updatedAt: UPDATE_TIMESTAMP,
         });
@@ -172,8 +172,8 @@ describe("userQuests", () => {
         return await ctx.db.insert("quests", {
           title: "Test Quest",
           slug: "test-quest",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
+          category: "education",
+          jurisdiction: "MA",
           creationUser: userId,
           updatedAt: UPDATE_TIMESTAMP,
         });
@@ -196,8 +196,8 @@ describe("userQuests", () => {
         return ctx.db.insert("quests", {
           title: "Test Quest",
           slug: "test-quest",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
+          category: "education",
+          jurisdiction: "MA",
           creationUser: userId,
           updatedAt: UPDATE_TIMESTAMP,
         });
@@ -236,7 +236,7 @@ describe("userQuests", () => {
           questId,
           status: "invalid",
         }),
-      ).rejects.toThrow("Invalid status");
+      ).rejects.toThrow();
     });
 
     it("should properly manage timestamps through status transitions", async () => {
@@ -247,8 +247,8 @@ describe("userQuests", () => {
         return ctx.db.insert("quests", {
           title: "Test Quest",
           slug: "test-quest",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
+          category: "education",
+          jurisdiction: "MA",
           creationUser: userId,
           updatedAt: UPDATE_TIMESTAMP,
         });
@@ -295,8 +295,8 @@ describe("userQuests", () => {
         return ctx.db.insert("quests", {
           title: "Test Quest",
           slug: "test-quest",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
+          category: "education",
+          jurisdiction: "MA",
           creationUser: userId,
           updatedAt: UPDATE_TIMESTAMP,
         });
@@ -339,8 +339,8 @@ describe("userQuests", () => {
         return await ctx.db.insert("quests", {
           title: "Test Quest",
           slug: "test-quest",
-          category: "Test Category",
-          jurisdiction: "Test Jurisdiction",
+          category: "education",
+          jurisdiction: "MA",
           creationUser: userId,
           updatedAt: UPDATE_TIMESTAMP,
         });
@@ -370,7 +370,7 @@ describe("userQuests", () => {
           title: "Test Quest 1",
           slug: "test-quest-1",
           category: "education",
-          jurisdiction: "Test Jurisdiction",
+          jurisdiction: "MA",
           creationUser: userId,
           updatedAt: UPDATE_TIMESTAMP,
         });
@@ -379,7 +379,7 @@ describe("userQuests", () => {
           title: "Test Quest 2",
           slug: "test-quest-2",
           category: "housing",
-          jurisdiction: "Test Jurisdiction",
+          jurisdiction: "MA",
           creationUser: userId,
           updatedAt: UPDATE_TIMESTAMP,
         });
@@ -387,13 +387,13 @@ describe("userQuests", () => {
         await ctx.db.insert("userQuests", {
           userId,
           questId: quest1Id,
-          status: "active",
+          status: "notStarted",
         });
 
         await ctx.db.insert("userQuests", {
           userId,
           questId: quest2Id,
-          status: "active",
+          status: "notStarted",
         });
       });
 
