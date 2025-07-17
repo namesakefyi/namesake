@@ -38,13 +38,13 @@ export async function createUser(
 export async function updateUser(
   ctx: MutationCtx,
   user: {
-    userId: string;
-    name: string;
-    email: string;
-    emailVerified: boolean;
+    userId?: string;
+    name?: string;
+    email?: string;
+    emailVerified?: boolean;
     image?: string;
     twoFactorEnabled?: boolean;
-    createdAt: number;
+    createdAt?: number;
     updatedAt: number;
   },
 ) {
