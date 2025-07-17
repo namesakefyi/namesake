@@ -514,7 +514,7 @@ describe("quests", () => {
         await ctx.db.insert("userQuests", {
           userId,
           questId,
-          status: "active",
+          status: "notStarted",
         });
       });
 
@@ -524,7 +524,7 @@ describe("quests", () => {
       expect(quest).not.toBeNull();
       expect(quest?.quest?.title).toBe("Test Quest");
       expect(quest?.userQuest).toBeDefined();
-      expect(quest?.userQuest?.status).toBe("active");
+      expect(quest?.userQuest?.status).toBe("notStarted");
     });
   });
 
@@ -856,7 +856,7 @@ describe("quests", () => {
         await ctx.db.insert("userQuests", {
           userId: adminId,
           questId,
-          status: "active",
+          status: "notStarted",
         });
       });
 
