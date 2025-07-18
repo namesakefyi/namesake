@@ -1,6 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { tv } from "tailwind-variants";
+import { PageTitle } from "@/components/app";
 import { Link, type LinkProps } from "@/components/common";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
@@ -51,6 +52,7 @@ export const PageHeader = ({
         className,
       )}
     >
+      <PageTitle title={title} />
       <div className={containerStyles({ fullWidth })}>
         <div className="flex flex-col gap-1 min-w-0">
           <div className="flex gap-2 items-center">

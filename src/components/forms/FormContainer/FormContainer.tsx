@@ -2,6 +2,7 @@ import { ShieldCheck } from "lucide-react";
 import { Children, isValidElement, useMemo } from "react";
 import { Heading } from "react-aria-components";
 import { FormProvider, type UseFormReturn } from "react-hook-form";
+import { PageTitle } from "@/components/app";
 import { Badge, Banner, Container, Form } from "@/components/common";
 import { FormNavigation, FormSection } from "@/components/forms";
 import { JURISDICTIONS, type Jurisdiction } from "@/constants";
@@ -64,6 +65,7 @@ export function FormContainer({
 
   return (
     <FormProvider {...form}>
+      <PageTitle title={title} />
       <FormSectionContext value={{ sections }}>
         <FormNavigation title={title} jurisdiction={jurisdiction} />
         <Container className="w-full max-w-[720px] flex-1 py-16 px-6">
