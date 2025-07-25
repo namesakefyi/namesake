@@ -21,7 +21,7 @@ describe("ResetPasswordForm", () => {
     vi.clearAllMocks();
 
     // Mock router.navigate
-    vi.mocked(router.navigate).mockImplementation(() => {});
+    vi.mocked(router.navigate).mockImplementation(() => Promise.resolve());
 
     // Mock authClient.resetPassword
     vi.mocked(authClient.resetPassword).mockImplementation(mockResetPassword);
