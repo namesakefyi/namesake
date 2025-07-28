@@ -193,8 +193,8 @@ importers:
         specifier: ^1.54.1
         version: 1.54.1
       '@react-aria/test-utils':
-        specifier: 1.0.0-alpha.8
-        version: 1.0.0-alpha.8(@testing-library/react@16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 1.0.0-beta.0
+        version: 1.0.0-beta.0(@testing-library/react@16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@storybook/addon-themes':
         specifier: ^9.0.16
         version: 9.0.16(storybook@9.0.16(@testing-library/dom@10.4.0)(prettier@3.6.2))
@@ -1788,8 +1788,8 @@ packages:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
       react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
-  '@react-aria/test-utils@1.0.0-alpha.8':
-    resolution: {integrity: sha512-NGXZzN/8O7DbTdIhivD1d8NRuXWl8rW/TSML9KBAxF9cHHVDpEOx6douOLGowi78KioFUI06Wr/DOlok1Ok4XA==}
+  '@react-aria/test-utils@1.0.0-beta.0':
+    resolution: {integrity: sha512-aQ1hwI2DknC++/HdYtpNAcx20pmS44iayUAtB7H/kQ9MVvKDRidUCJbcIO0G1Ei4SYc9VoA+iZ6+K72aZcIlmg==}
     peerDependencies:
       '@testing-library/react': ^16.0.0
       '@testing-library/user-event': ^14.0.0
@@ -6761,7 +6761,7 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@react-aria/test-utils@1.0.0-alpha.8(@testing-library/react@16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@react-aria/test-utils@1.0.0-beta.0(@testing-library/react@16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@swc/helpers': 0.5.17
       '@testing-library/react': 16.3.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
