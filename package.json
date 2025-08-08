@@ -7,7 +7,7 @@
     "preinstall": "npx only-allow pnpm",
     "predev": "convex dev --run seed --until-success",
     "dev": "pnpm dev:frontend & pnpm dev:backend",
-    "dev:frontend": "vite",
+    "dev:frontend": "vite --open",
     "dev:backend": "convex dev",
     "dev:delete": "bash scripts/deleteConvexTables.sh",
     "dev:email": "email dev",
@@ -25,6 +25,9 @@
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright test show-report",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
