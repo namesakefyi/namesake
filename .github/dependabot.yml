@@ -36,13 +36,12 @@ updates:
         patterns:
           - "@maskito/*"
           - "@radix-ui/*"
-          - "react-aria-components"
           - "@tailwindcss/*"
           - "@zxcvbn-ts/*"
           - "lucide-react"
           - "motion"
           - "postcss"
-          - "react-random-reveal"
+          - "react*"
           - "sonner"
           - "tailwind*"
           - "tw-*"
@@ -52,8 +51,7 @@ updates:
         patterns:
           - "@convex-dev/*"
           - "better-auth"
-          - "convex"
-          - "convex-*"
+          - "convex*"
         update-types: ["patch", "minor"]
 
       misc:
