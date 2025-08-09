@@ -56,7 +56,7 @@ updates:
           - "convex-*"
         update-types: ["patch", "minor"]
 
-      patch-minor:
+      misc:
         dependency-type: "production"
         patterns:
           - "*"
