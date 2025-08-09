@@ -14,5 +14,50 @@ updates:
     schedule:
       interval: "weekly"
     groups:
+      dev:
+        dependency-type: "development"
+        patterns:
+          - "*"
+        update-types: ["patch", "minor"]
+
+      tiptap:
+        patterns:
+          - "@tiptap/*"
+          - "@namesake/tiptap-extensions"
+        update-types: ["patch", "minor"]
+
+      email:
+        patterns:
+          - "@react-email/*"
+          - "resend"
+        update-types: ["patch", "minor"]
+
+      components:
+        patterns:
+          - "@maskito/*"
+          - "@radix-ui/*"
+          - "react-aria-components"
+          - "@tailwindcss/*"
+          - "@zxcvbn-ts/*"
+          - "lucide-react"
+          - "motion"
+          - "postcss"
+          - "react-random-reveal"
+          - "sonner"
+          - "tailwind*"
+          - "tw-*"
+        update-types: ["patch", "minor"]
+
+      convex:
+        patterns:
+          - "@convex-dev/*"
+          - "better-auth"
+          - "convex"
+          - "convex-*"
+        update-types: ["patch", "minor"]
+
       patch-minor:
+        dependency-type: "production"
+        patterns:
+          - "*"
         update-types: ["patch", "minor"]
