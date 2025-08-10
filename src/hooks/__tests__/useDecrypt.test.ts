@@ -23,7 +23,11 @@ describe("useDecrypt", () => {
 
     // Override decrypt implementation for useDecrypt tests
     vi.spyOn(window.crypto.subtle, "decrypt").mockImplementation(async () => {
-      return new TextEncoder().encode(JSON.stringify("decrypted"));
+      const uint8Array = new TextEncoder().encode(JSON.stringify("decrypted"));
+      return uint8Array.buffer.slice(
+        uint8Array.byteOffset,
+        uint8Array.byteOffset + uint8Array.byteLength,
+      );
     });
   });
 

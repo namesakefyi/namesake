@@ -13,7 +13,7 @@ export const DocumentPreview = ({
     if (!pdfBytes) return null;
 
     const blobUrl = URL.createObjectURL(
-      new Blob([pdfBytes], { type: "application/pdf" }),
+      new Blob([pdfBytes as BlobPart], { type: "application/pdf" }),
     );
 
     const urlParams = hideDefaultToolbar ? "#toolbar=0&navpanes=0" : "";

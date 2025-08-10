@@ -38,12 +38,12 @@ export async function createUser(
 export async function updateUser(
   ctx: MutationCtx,
   user: {
-    userId?: string;
+    userId?: string | null;
     name?: string;
     email?: string;
     emailVerified?: boolean;
-    image?: string;
-    twoFactorEnabled?: boolean;
+    image?: string | null;
+    twoFactorEnabled?: boolean | null;
     createdAt?: number;
     updatedAt: number;
   },

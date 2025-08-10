@@ -123,7 +123,7 @@ export async function downloadPdf({
   pdfBytes: Uint8Array;
   title: string;
 }) {
-  const url = URL.createObjectURL(new Blob([pdfBytes]));
+  const url = URL.createObjectURL(new Blob([pdfBytes as BlobPart]));
 
   try {
     const a = document.createElement("a");
