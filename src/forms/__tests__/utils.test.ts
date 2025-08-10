@@ -357,7 +357,7 @@ describe("PDF utilities", () => {
           url === "public/forms/test-form-2.pdf"
         ) {
           return Promise.resolve(
-            new Response(mockPdfBytes, {
+            new Response(mockPdfBytes as BodyInit, {
               headers: { "content-type": "application/pdf" },
             }),
           );
