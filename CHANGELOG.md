@@ -1,5 +1,11 @@
 # namesake
 
+## 1.1.0
+
+### Minor Changes
+
+- f91b717: Display the current page name in the tab title instead of just 'Namesake'
+
 ## 1.0.1
 
 ### Patch Changes
