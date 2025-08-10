@@ -14,10 +14,11 @@ updates:
     schedule:
       interval: "weekly"
     groups:
-      dev:
-        dependency-type: "development"
+      storybook:
         patterns:
-          - "*"
+          - "storybook"
+          - "@storybook/*"
+          - "@vueless/storybook-dark-mode"
         update-types: ["patch", "minor"]
 
       tiptap:
@@ -52,6 +53,12 @@ updates:
           - "@convex-dev/*"
           - "better-auth"
           - "convex*"
+        update-types: ["patch", "minor"]
+      
+      dev:
+        dependency-type: "development"
+        patterns:
+          - "*"
         update-types: ["patch", "minor"]
 
       misc:
