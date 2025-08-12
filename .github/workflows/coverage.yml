@@ -39,7 +39,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ matrix.branch }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -88,7 +88,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
   
       - name: Download coverage (${{ needs.test-coverage.outputs.artifact_branch }})
         uses: actions/download-artifact@v5
