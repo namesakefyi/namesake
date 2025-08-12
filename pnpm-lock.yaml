@@ -109,7 +109,7 @@ importers:
         version: 1.25.4(react@19.1.0)
       convex-helpers:
         specifier: 0.1.101
-        version: 0.1.101(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.9.2)(zod@3.25.74)
+        version: 0.1.101(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.9.2)(zod@3.25.76)
       language-name-map:
         specifier: 0.3.0
         version: 0.3.0
@@ -168,8 +168,8 @@ importers:
         specifier: 10.0.5
         version: 10.0.5(react@19.1.0)
       zod:
-        specifier: 3.25.74
-        version: 3.25.74
+        specifier: 3.25.76
+        version: 3.25.76
     devDependencies:
       '@axe-core/playwright':
         specifier: 4.10.2
@@ -5092,8 +5092,8 @@ packages:
     resolution: {integrity: sha512-GQHQqAopRhwU8Kt1DDM8NjibDXHC8eoh1erhGAJPEyveY9qqVeXvVikNKrDz69sHowPMorbPUrH/mx8c50eiBQ==}
     engines: {node: '>=18'}
 
-  zod@3.25.74:
-    resolution: {integrity: sha512-J8poo92VuhKjNknViHRAIuuN6li/EwFbAC8OedzI8uxpEPGiXHGQu9wemIAioIpqgfB4SySaJhdk0mH5Y4ICBg==}
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
   zod@4.0.17:
     resolution: {integrity: sha512-1PHjlYRevNxxdy2JZ8JcNAw7rX8V9P1AKkP+x/xZfxB0K5FYfuV+Ug6P/6NVSR2jHQ+FzDDoDHS04nYUsOIyLQ==}
@@ -5550,12 +5550,12 @@ snapshots:
       better-auth: 1.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       common-tags: 1.8.2
       convex: 1.25.4(react@19.1.0)
-      convex-helpers: 0.1.101(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.9.2)(zod@3.25.74)
+      convex-helpers: 0.1.101(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.9.2)(zod@3.25.76)
       is-network-error: 1.1.0
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
       type-fest: 4.41.0
-      zod: 3.25.74
+      zod: 3.25.76
     transitivePeerDependencies:
       - '@standard-schema/spec'
       - hono
@@ -7721,7 +7721,7 @@ snapshots:
       recast: 0.23.11
       source-map: 0.7.6
       tsx: 4.20.3
-      zod: 3.25.74
+      zod: 3.25.76
     transitivePeerDependencies:
       - supports-color
 
@@ -7740,7 +7740,7 @@ snapshots:
       babel-dead-code-elimination: 1.0.10
       chokidar: 3.6.0
       unplugin: 2.3.5
-      zod: 3.25.74
+      zod: 3.25.76
     optionalDependencies:
       '@tanstack/react-router': 1.127.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       vite: 7.1.1(@types/node@24.2.1)(jiti@2.4.2)(lightningcss@1.30.1)(tsx@4.20.3)(yaml@2.8.1)
@@ -8313,13 +8313,13 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  convex-helpers@0.1.101(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.9.2)(zod@3.25.74):
+  convex-helpers@0.1.101(convex@1.25.4(react@19.1.0))(react@19.1.0)(typescript@5.9.2)(zod@3.25.76):
     dependencies:
       convex: 1.25.4(react@19.1.0)
     optionalDependencies:
       react: 19.1.0
       typescript: 5.9.2
-      zod: 3.25.74
+      zod: 3.25.76
 
   convex-test@0.0.38(convex@1.25.4(react@19.1.0)):
     dependencies:
@@ -10336,6 +10336,6 @@ snapshots:
 
   yoctocolors@2.1.1: {}
 
-  zod@3.25.74: {}
+  zod@3.25.76: {}
 
   zod@4.0.17: {}
