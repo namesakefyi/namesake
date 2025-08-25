@@ -56,7 +56,7 @@ export const script = (
     if (enableColorScheme) {
       const fallback = themes?.includes(defaultTheme) ? defaultTheme : null;
       const colorScheme = themes?.includes(resolved) ? resolved : fallback;
-      // @ts-ignore
+      // @ts-expect-error
       d.style.colorScheme = colorScheme;
     }
 
