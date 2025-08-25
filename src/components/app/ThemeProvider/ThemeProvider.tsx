@@ -138,7 +138,7 @@ const ThemeComponent = ({
       const colorScheme = colorSchemes.includes(resolved as "light" | "dark")
         ? resolved
         : fallback;
-      // @ts-ignore
+      // @ts-expect-error
       d.style.colorScheme = colorScheme;
     }
   }, []);
@@ -185,7 +185,6 @@ const ThemeComponent = ({
     const media = window.matchMedia(MEDIA);
 
     // Intentionally use deprecated listener methods to support iOS & old browsers
-    // @ts-ignore
     media.addListener(handleMediaQuery);
     handleMediaQuery(media);
 
