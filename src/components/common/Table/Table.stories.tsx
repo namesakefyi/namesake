@@ -35,7 +35,7 @@ export const Example = (args: any) => {
 
   const items = useMemo(() => {
     const items = rows.slice().sort((a, b) =>
-      // @ts-ignore
+      // @ts-expect-error
       a[sortDescriptor.column].localeCompare(b[sortDescriptor.column]),
     );
     if (sortDescriptor.direction === "descending") {

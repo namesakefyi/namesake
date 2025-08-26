@@ -26,11 +26,10 @@
         "noSvgWithoutTitle": "off"
       },
       "correctness": {
-        "useExhaustiveDependencies": "off"
-      },
-      "nursery": {
+        "useExhaustiveDependencies": "off",
         "useUniqueElementIds": "off"
       },
+      "nursery": {},
       "style": {
         "noNonNullAssertion": "off",
         "noParameterAssign": "error",

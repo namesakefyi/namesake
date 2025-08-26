@@ -73,7 +73,7 @@ describe("SkeletonText", () => {
     const widths = skeletonLines.map((line) => line.getAttribute("style"));
     // Check that each line has a width between 70% and 90%
     for (const width of widths) {
-      const percentage = Number.parseInt(width?.match(/\d+/)?.[0] ?? "0");
+      const percentage = Number.parseInt(width?.match(/\d+/)?.[0] ?? "0", 10);
       expect(percentage).toBeGreaterThanOrEqual(70);
       expect(percentage).toBeLessThanOrEqual(90);
     }
