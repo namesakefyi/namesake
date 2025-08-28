@@ -294,13 +294,14 @@ function RouteComponent() {
           ]}
         />
       </FormSection>
-      <FormSection title="What are your parents' names?">
-        <FormSubsection title="What is your mother's (or first parent's) name at birth?">
-          <NameField type="mothersName" />
-        </FormSubsection>
-        <FormSubsection title="What is your father's (or second parent's) name at birth?">
-          <NameField type="fathersName" />
-        </FormSubsection>
+      <FormSection
+        title="What is your mother's (or first parent's) name at her birth?"
+        description="This is also known as a maiden name."
+      >
+        <NameField type="mothersName" />
+      </FormSection>
+      <FormSection title="What is your father's (or second parent's) name?">
+        <NameField type="fathersName" />
       </FormSection>
       <FormSection
         title="Do you have a previous Social Security card?"
