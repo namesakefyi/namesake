@@ -19,7 +19,7 @@ describe("formatPageTitle", () => {
 	});
 
 	it("hides the divider when site title is not provided", () => {
-		expect(formatPageTitle("Test Page", " · ", undefined)).toEqual("Test Page");
+		expect(formatPageTitle("Test Page", " · ", null)).toEqual("Test Page");
 	});
 
 	it("trims whitespace from title and site title", () => {

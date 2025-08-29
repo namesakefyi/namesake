@@ -1,9 +1,9 @@
 export function formatPageTitle(
 	title: string,
 	divider = " · ",
-	siteTitle = "Namesake",
+	siteTitle: string | null | undefined = "Namesake",
 ) {
-	const suffix = siteTitle ? `${divider}${siteTitle}` : "";
+	const suffix = siteTitle ? `${divider}${siteTitle.trim()}` : "";
 
 	return `${title.trim()}${suffix}`;
 }
