@@ -1,5 +1,12 @@
 # namesake
 
+## 1.1.1
+
+### Patch Changes
+
+- 3f8a40b: Clarify language asking for parents names on Social Security form
+- e3530ae: Darken input borders to increase default contrast
+
 ## 1.1.0
 
 ### Minor Changes
