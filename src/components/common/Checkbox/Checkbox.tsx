@@ -71,7 +71,7 @@ const boxStyles = tv({
   base: "size-6 shrink-0 rounded-md flex items-center justify-center border transition",
   variants: {
     isSelected: {
-      false: "bg-element border-dim",
+      false: "bg-element border-normal",
       true: "bg-primary-9 border-transparent",
     },
     isInvalid: {

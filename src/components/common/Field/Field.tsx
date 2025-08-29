@@ -72,9 +72,9 @@ export function FieldError(props: FieldErrorProps) {
 export const fieldBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false:
-        "border-dim has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
       true: "border-normal has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
+      false:
+        "border-normal has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
     },
     isInvalid: {
       true: "border-red-9",
@@ -88,9 +88,9 @@ export const fieldBorderStyles = tv({
 export const innerBorderStyles = tv({
   variants: {
     isFocusWithin: {
-      false:
-        "border-dim has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
       true: "border-normal has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
+      false:
+        "border-normal has-autofill:border-yellow-6 dark:has-autofill:border-violet-6",
     },
     isInvalid: {
       true: "border-red-9",
