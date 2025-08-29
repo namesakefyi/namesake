@@ -1,5 +1,7 @@
 import { withThemeByDataAttribute } from "@storybook/addon-themes";
 import type { Preview } from "@storybook/react-vite";
+// biome-ignore lint/correctness/noUnusedImports: We need to import React for Storybook previews
+import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import "../src/styles/index.css";

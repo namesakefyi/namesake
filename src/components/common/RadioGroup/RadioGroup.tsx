@@ -67,7 +67,7 @@ const radioStyles = tv({
   base: "rounded-full border bg-app transition-all ease-out duration-150 cursor-pointer shrink-0",
   variants: {
     isSelected: {
-      false: "border-dim",
+      false: "border-normal",
       true: "bg-white border-[6px] border-primary-9 forced-colors:border-[Highlight]",
     },
     isInvalid: {
