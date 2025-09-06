@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ZxcvbnResult } from "@zxcvbn-ts/core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -102,7 +102,7 @@ describe("ResetPasswordForm", () => {
       },
     });
 
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(router.navigate).toHaveBeenCalledWith({ to: "/signin" });
     });
   });

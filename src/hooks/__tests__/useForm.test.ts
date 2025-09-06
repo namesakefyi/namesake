@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from "@testing-library/react";
+import { act, renderHook, waitFor } from "@testing-library/react";
 import { useMutation, useQuery } from "convex/react";
 import { usePostHog } from "posthog-js/react";
 import { toast } from "sonner";
@@ -90,7 +90,9 @@ describe("useForm", () => {
       email: "jane@example.com",
     };
 
-    await submitForm(result.current, testData);
+    await act(async () => {
+      await submitForm(result.current, testData);
+    });
 
     expect(encryptData).toHaveBeenCalledTimes(3);
     expect(mockSave).toHaveBeenCalledTimes(3);
@@ -103,7 +105,9 @@ describe("useForm", () => {
     const { result } = renderHook(() => useForm(mockFields));
     const testData = { newFirstName: "Jane" };
 
-    await submitForm(result.current, testData);
+    await act(async () => {
+      await submitForm(result.current, testData);
+    });
 
     expect(toast.error).toHaveBeenCalled();
     expect(mockPosthog.captureException).toHaveBeenCalled();
@@ -115,7 +119,9 @@ describe("useForm", () => {
     const { result } = renderHook(() => useForm(mockFields));
     const testData = { firstName: "Jane" };
 
-    await submitForm(result.current, testData);
+    await act(async () => {
+      await submitForm(result.current, testData);
+    });
 
     expect(toast.error).toHaveBeenCalledWith("No encryption key available.");
     expect(mockPosthog.captureException).toHaveBeenCalledWith(

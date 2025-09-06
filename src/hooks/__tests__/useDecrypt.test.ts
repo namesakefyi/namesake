@@ -1,4 +1,4 @@
-import { renderHook } from "@testing-library/react";
+import { renderHook, waitFor } from "@testing-library/react";
 import {
   mockDEK,
   setupEncryptionMocks,
@@ -41,9 +41,9 @@ describe("useDecrypt", () => {
 
     const { result } = renderHook(() => useDecrypt(encryptedValue));
 
-    await vi.waitFor(() => {
-      expect(result.current.decryptedValue).toBe("decrypted");
-    });
+    await waitFor(() =>
+      expect(result.current.decryptedValue).toBe("decrypted"),
+    );
     expect(result.current.error).toBe(false);
   });
 
@@ -53,19 +53,22 @@ describe("useDecrypt", () => {
 
     const { result } = renderHook(() => useDecrypt(encryptedValues));
 
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(result.current.decryptedValues).toEqual([
         "decrypted",
         "decrypted",
       ]);
     });
+
     expect(result.current.error).toBe(false);
   });
 
-  it("should handle undefined input", () => {
+  it("should handle undefined input", async () => {
     const { result } = renderHook(() => useDecrypt(undefined));
-    expect(result.current.decryptedValue).toBeUndefined();
-    expect(result.current.error).toBe(false);
+    await waitFor(() => {
+      expect(result.current.decryptedValue).toBeUndefined();
+      expect(result.current.error).toBe(false);
+    });
   });
 
   it("should handle decryption errors", async () => {
@@ -78,10 +81,10 @@ describe("useDecrypt", () => {
 
     const { result } = renderHook(() => useDecrypt(encryptedValue));
 
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(result.current.error).toBe(true);
+      expect(mockPosthog.captureException).toHaveBeenCalled();
     });
-    expect(mockPosthog.captureException).toHaveBeenCalled();
   });
 
   it("should handle missing encryption key", async () => {
@@ -102,14 +105,14 @@ describe("useDecrypt", () => {
       initialProps: initialValue,
     });
 
-    await vi.waitFor(() => {
-      expect(result.current.decryptedValue).toBe("decrypted");
-    });
+    await waitFor(() =>
+      expect(result.current.decryptedValue).toBe("decrypted"),
+    );
 
     rerender(updatedValue);
 
-    await vi.waitFor(() => {
-      expect(result.current.decryptedValue).toBe("decrypted");
-    });
+    await waitFor(() =>
+      expect(result.current.decryptedValue).toBe("decrypted"),
+    );
   });
 });

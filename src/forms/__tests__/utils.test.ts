@@ -37,9 +37,15 @@ describe("PDF utilities", () => {
     });
 
     it("should throw error for non-existent PDF", async () => {
+      const consoleSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+
       await expect(fetchPdf("/nonexistent.pdf")).rejects.toThrow(
         "Failed to fetch PDF",
       );
+
+      consoleSpy.mockRestore();
     });
 
     it("should throw error for non-PDF content", async () => {
@@ -132,6 +138,10 @@ describe("PDF utilities", () => {
     });
 
     it("should throw error for invalid PDF path", async () => {
+      const consoleSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+
       const invalidPdf = {
         ...testPdfDefinition,
         pdfPath: "/nonexistent.pdf",
@@ -147,6 +157,9 @@ describe("PDF utilities", () => {
           },
         }),
       ).rejects.toThrow();
+
+      expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
+      consoleSpy.mockRestore();
     });
   });
 
@@ -232,7 +245,10 @@ describe("PDF utilities", () => {
     });
 
     it("should handle errors gracefully", async () => {
-      const consoleSpy = vi.spyOn(console, "error");
+      const consoleSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+
       document.createElement = vi.fn().mockImplementation(() => {
         throw new Error("Failed to create element");
       });
@@ -252,6 +268,8 @@ describe("PDF utilities", () => {
       });
 
       expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
+
+      consoleSpy.mockRestore();
     });
 
     it("should use PDF title for filename", async () => {
@@ -286,6 +304,9 @@ describe("PDF utilities", () => {
 
   describe("createCoverPage", () => {
     it("should create a cover page with all required elements", async () => {
+      // Silence console.warn for expected UPNG.decode error
+      const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
       const result = await createCoverPage({
         title: "Massachusetts Court Order",
         instructions: [
@@ -312,6 +333,8 @@ describe("PDF utilities", () => {
       const { width, height } = page.getSize();
       expect(width).toBe(612); // Standard US Letter width
       expect(height).toBe(792); // Standard US Letter height
+
+      consoleSpy.mockRestore();
     });
   });
 
@@ -319,8 +342,12 @@ describe("PDF utilities", () => {
     let createObjectURL: typeof URL.createObjectURL;
     let revokeObjectURL: typeof URL.revokeObjectURL;
     let mockPdfBytes: Uint8Array;
+    let consoleSpy: ReturnType<typeof vi.spyOn>;
 
     beforeEach(async () => {
+      // Silence console.warn for expected UPNG.decode error
+      consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
       // Create a minimal valid PDF for testing
       const pdfDoc = await PDFDocument.create();
       const page = pdfDoc.addPage();
@@ -370,6 +397,9 @@ describe("PDF utilities", () => {
       // Restore original functions
       URL.createObjectURL = createObjectURL;
       URL.revokeObjectURL = revokeObjectURL;
+
+      // Restore console.warn
+      consoleSpy.mockRestore();
     });
 
     it("should create and download merged PDF with cover page and filled PDFs", async () => {

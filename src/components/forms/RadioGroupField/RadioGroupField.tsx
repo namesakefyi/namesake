@@ -39,6 +39,7 @@ export function RadioGroupField({
         control={control}
         name={name}
         shouldUnregister={true}
+        defaultValue={[]}
         render={({ field, fieldState: { invalid, error } }) => (
           <RadioGroup
             {...field}
