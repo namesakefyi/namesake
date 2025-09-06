@@ -1,5 +1,11 @@
 # namesake
 
+## 1.1.2
+
+### Patch Changes
+
+- 4cf89d8: Block navigation when attempting to exit an unsaved form
+
 ## 1.1.1
 
 ### Patch Changes
