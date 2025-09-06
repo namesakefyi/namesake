@@ -1,3 +1,4 @@
+import { useBlocker } from "@tanstack/react-router";
 import { ShieldCheck } from "lucide-react";
 import { Children, isValidElement, useMemo } from "react";
 import { Heading } from "react-aria-components";
@@ -48,6 +49,11 @@ export function FormContainer({
   form,
   onSubmit,
 }: FormContainerProps) {
+  useBlocker({
+    shouldBlockFn: () => form.formState.isDirty,
+    enableBeforeUnload: form.formState.isDirty,
+  });
+
   // Scan children for form sections
   const sections = useMemo(() => {
     const foundSections: FormSectionData[] = [];
