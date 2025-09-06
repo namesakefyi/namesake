@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ZxcvbnResult } from "@zxcvbn-ts/core";
 import { useMutation } from "convex/react";
@@ -76,7 +76,7 @@ describe("RegistrationForm", () => {
     await user.click(screen.getByRole("button", { name: "Register" }));
 
     // Wait for the navigation to occur
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith({ to: "/" });
     });
 
