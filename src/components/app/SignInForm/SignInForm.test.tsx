@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { authClient } from "@/main";
@@ -48,7 +48,7 @@ describe("SignInForm", () => {
     await user.click(screen.getByRole("button", { name: "Sign in" }));
 
     // Wait for the navigation to occur
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith({ to: "/" });
     });
 

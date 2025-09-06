@@ -1,9 +1,10 @@
 import type { Doc, Id } from "@convex/_generated/dataModel";
-import { render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useMutation } from "convex/react";
 import { toast } from "sonner";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { MAX_DISPLAY_NAME_LENGTH } from "@/constants";
 import { EditNameSetting } from "./EditNameSetting";
 
 describe("EditNameSetting", () => {
@@ -16,6 +17,11 @@ describe("EditNameSetting", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    cleanup();
   });
 
   it("renders correct username if exists", () => {
@@ -67,7 +73,7 @@ describe("EditNameSetting", () => {
     const input = screen.getByRole("textbox", { name: "Name" });
 
     await user.clear(input);
-    await user.type(input, "a".repeat(101));
+    await user.type(input, "a".repeat(MAX_DISPLAY_NAME_LENGTH + 1));
     await user.click(screen.getByRole("button", { name: "Save" }));
 
     expect(screen.getByRole("alert")).toBeInTheDocument();

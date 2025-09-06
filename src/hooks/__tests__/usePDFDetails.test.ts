@@ -24,13 +24,15 @@ describe("usePDFDetails", () => {
     vi.clearAllMocks();
   });
 
-  it("returns null and no errors initially", () => {
+  it("returns null and no errors initially", async () => {
     (getPdfDefinition as ReturnType<typeof vi.fn>).mockResolvedValue(mockPDF);
     const { result } = renderHook(() =>
       usePDFDetails("cjp27-petition-to-change-name-of-adult" as PDFId),
     );
-    expect(result.current.data).toBeNull();
-    expect(result.current.errors).toEqual([]);
+    await waitFor(() => {
+      expect(result.current.data).toBeNull();
+      expect(result.current.errors).toEqual([]);
+    });
   });
 
   it("fetches and returns PDF details for a single PDFId", async () => {

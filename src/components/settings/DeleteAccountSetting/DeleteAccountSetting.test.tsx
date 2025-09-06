@@ -90,7 +90,7 @@ describe("DeleteAccountSetting", () => {
     await user.click(submitButton);
 
     // Wait for error message to appear and button to be re-enabled
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(screen.getByText(errorMessage)).toBeInTheDocument();
       expect(submitButton).not.toBeDisabled();
     });

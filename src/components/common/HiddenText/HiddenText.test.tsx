@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { HiddenText } from "./HiddenText";
@@ -55,8 +55,10 @@ describe("HiddenText", () => {
     render(<HiddenText>Secret text</HiddenText>);
 
     const checkbox = screen.getByRole("checkbox");
-    checkbox.focus();
-    await user.keyboard(" ");
+    await act(async () => {
+      checkbox.focus();
+      await user.keyboard(" ");
+    });
 
     const text = screen.getByText("Secret text");
     expect(text).toHaveAttribute("aria-hidden", "false");

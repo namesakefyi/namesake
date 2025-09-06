@@ -8,7 +8,7 @@ describe("Menu", () => {
     render(
       <DialogTrigger>
         <Button>Open Menu</Button>
-        <Menu>
+        <Menu aria-label="Menu">
           <MenuItem id="item1">Item 1</MenuItem>
           <MenuItem id="item2">Item 2</MenuItem>
         </Menu>
