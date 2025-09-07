@@ -105,6 +105,11 @@
       font-size: 1.1em;
       content: counter(steps);
       @apply bg-theme-4;
+      
+      @media (forced-colors: active) {
+        background-color: Canvas;
+        border: 1px ButtonBorder solid;
+      }
     }
     
     &::after {
@@ -115,6 +120,10 @@
       bottom: 0;
       @apply bg-theme-4;
       content: "";
+
+      @media (forced-colors: active) {
+        background-color: ButtonBorder;
+      }
     }
     
     &:last-child::after {

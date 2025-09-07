@@ -72,7 +72,7 @@ const boxStyles = tv({
   variants: {
     isSelected: {
       false: "bg-element border-normal",
-      true: "bg-primary-9 border-transparent",
+      true: "bg-primary-9 border-transparent forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
     },
     isInvalid: {
       true: "text-red-9",
