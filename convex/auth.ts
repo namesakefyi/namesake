@@ -1,4 +1,3 @@
-import "./polyfills";
 import {
   type AuthFunctions,
   BetterAuth,
@@ -47,6 +46,7 @@ export const createAuth = (ctx: GenericCtx) =>
         });
       },
     },
+    telemetry: { enabled: false },
     trustedOrigins,
     user: {
       deleteUser: {

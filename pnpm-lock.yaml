@@ -42,8 +42,8 @@ importers:
         specifier: 0.5.2
         version: 0.5.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@react-email/render':
-        specifier: 1.2.2
-        version: 1.2.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: 1.2.3
+        version: 1.2.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@tailwindcss/vite':
         specifier: 4.1.13
         version: 4.1.13(vite@7.1.5(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(tsx@4.20.5)(yaml@2.8.1))
@@ -148,7 +148,7 @@ importers:
         version: 2.0.1(react@19.1.1)
       resend:
         specifier: 6.0.2
-        version: 6.0.2(@react-email/render@1.2.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))
+        version: 6.0.2(@react-email/render@1.2.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))
       sonner:
         specifier: 2.0.7
         version: 2.0.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -2024,6 +2024,13 @@ packages:
 
   '@react-email/render@1.2.2':
     resolution: {integrity: sha512-9MOMX7bGUvb3a7hNtoPguxyQUg38PuL88jhXmAgpWlF93yn0spj6pmVHkngLDlJYwYeBEQusPsQyyBv622Kdnw==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^18.0 || ^19.0 || ^19.0.0-rc
+
+  '@react-email/render@1.2.3':
+    resolution: {integrity: sha512-qu3XYNkHGao3teJexVD5CrcgFkNLrzbZvpZN17a7EyQYUN3kHkTkE9saqY4VbvGx6QoNU3p8rsk/Xm++D/+pTw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
@@ -7280,6 +7287,14 @@ snapshots:
       react-dom: 19.1.1(react@19.1.1)
       react-promise-suspense: 0.3.4
 
+  '@react-email/render@1.2.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+    dependencies:
+      html-to-text: 9.0.5
+      prettier: 3.6.2
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+      react-promise-suspense: 0.3.4
+
   '@react-email/row@0.0.12(react@19.1.1)':
     dependencies:
       react: 19.1.1
@@ -10124,9 +10139,9 @@ snapshots:
       indent-string: 4.0.0
       strip-indent: 3.0.0
 
-  resend@6.0.2(@react-email/render@1.2.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)):
+  resend@6.0.2(@react-email/render@1.2.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)):
     optionalDependencies:
-      '@react-email/render': 1.2.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@react-email/render': 1.2.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
 
   resolve-from@5.0.0: {}
 
