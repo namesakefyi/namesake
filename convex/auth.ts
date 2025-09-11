@@ -47,6 +47,7 @@ export const createAuth = (ctx: GenericCtx) =>
         });
       },
     },
+    telemetry: { enabled: false },
     trustedOrigins,
     user: {
       deleteUser: {
