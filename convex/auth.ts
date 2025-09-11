@@ -1,4 +1,3 @@
-import "./polyfills";
 import {
   type AuthFunctions,
   BetterAuth,
