@@ -67,7 +67,7 @@ const chevron = tv({
     },
     isDisabled: {
       true: "text-dim forced-colors:text-[GrayText]",
-      false: "pointer-events-none",
+      false: "pointer-events-none forced-colors:text-[ButtonText]",
     },
   },
 });
@@ -121,7 +121,9 @@ function TreeItemContent({ children, icon, ...props }: TreeItemContentProps) {
             ) : (
               <div className="shrink-0 h-5 w-6.5" />
             )}
-            {Icon && <Icon className="size-5 text-dim p-0.5 mr-1.5" />}
+            {Icon && (
+              <Icon className="size-5 text-dim p-0.5 mr-1.5 forced-colors:text-[ButtonText]" />
+            )}
             {children}
           </div>
         );

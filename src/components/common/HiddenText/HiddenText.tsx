@@ -23,7 +23,8 @@ const contentStyles = tv({
   variants: {
     isRevealed: {
       true: "bg-transparent",
-      false: "text-transparent bg-theme-4",
+      false:
+        "text-transparent bg-theme-4 forced-colors:bg-[CanvasText] forced-colors:text-[CanvasText]",
     },
   },
 });

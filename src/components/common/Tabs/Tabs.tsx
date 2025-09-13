@@ -45,7 +45,7 @@ export function Tabs({ size = "medium", className, ...props }: TabsProps) {
 }
 
 const tabListStyles = tv({
-  base: "grid bg-theme-a3 dark:bg-theme-a2 rounded-lg p-1 relative isolate after:absolute after:inset-0 after:bg-white dark:after:bg-theme-a3 after:-z-10 after:rounded-md after:shadow-sm",
+  base: "grid bg-theme-a3 dark:bg-theme-a2 rounded-lg p-1 relative isolate after:absolute after:inset-0 after:bg-white dark:after:bg-theme-a3 after:-z-10 after:rounded-md after:shadow-sm forced-colors:border forced-colors:border-[ButtonBorder]",
   variants: {
     orientation: {
       horizontal: "grid-flow-col auto-cols-fr",
@@ -87,7 +87,7 @@ const tabProps = tv({
   base: "flex items-center justify-center cursor-pointer rounded-md text-sm text-center transition forced-color-adjust-none",
   variants: {
     isSelected: {
-      false: "text-dim hover:text-normal",
+      false: "text-dim hover:text-normal forced-colors:text-[ButtonText]",
       true: "forced-colors:text-[HighlightText] forced-colors:bg-[Highlight]",
     },
     isDisabled: {

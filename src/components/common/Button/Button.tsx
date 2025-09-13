@@ -31,18 +31,19 @@ export interface ButtonProps extends AriaButtonProps {
 
 export const buttonStyles = tv({
   extend: focusRing,
-  base: "py-2 text-sm shadow-sm font-medium relative whitespace-nowrap rounded-lg border-0 transition-all duration-200 ease-in-out flex items-center justify-center tabular-nums",
+  base: "py-2 text-sm shadow-sm font-medium relative whitespace-nowrap rounded-lg border transition-all duration-200 ease-in-out flex items-center justify-center tabular-nums",
   variants: {
     variant: {
-      primary: "bg-primary-9 hover:bg-primary-10 text-primary-contrast",
+      primary:
+        "bg-primary-9 border-primary-9 hover:bg-primary-10 text-primary-contrast",
       secondary:
-        "bg-white dark:bg-theme-4 dark:hover:bg-theme-5 text-normal hover:text-theme-11 dark:hover:text-white",
+        "bg-white border-dim dark:bg-theme-4 dark:hover:bg-theme-5 text-normal hover:text-theme-11 dark:hover:text-white",
       destructive:
-        "bg-red-9 text-white hover:bg-red-10 outline-0 !outline-red-a8",
-      success: "bg-green-9 text-white hover:bg-green-10",
-      icon: "bg-transparent hover:bg-theme-a3 text-dim shadow-none hover:text-normal flex shrink-0 items-center justify-center rounded-full",
+        "bg-red-9 border-red-9 text-white hover:bg-red-10 !outline-red-a8",
+      success: "bg-green-9 border-green-9 text-white hover:bg-green-10",
+      icon: "bg-transparent border-transparent hover:bg-theme-a3 text-dim shadow-none hover:text-normal flex shrink-0 items-center justify-center rounded-full",
       ghost:
-        "bg-transparent hover:bg-theme-a3 text-dim shadow-none hover:text-normal",
+        "bg-transparent border-transparent hover:bg-theme-a3 text-dim shadow-none hover:text-normal",
     },
     size: {
       small: "h-8 px-2 gap-1.5",
@@ -51,7 +52,7 @@ export const buttonStyles = tv({
     },
     isDisabled: {
       false: "cursor-pointer",
-      true: "cursor-default opacity-40",
+      true: "cursor-default opacity-40 forced-colors:text-[GrayText]",
     },
   },
   compoundVariants: [
