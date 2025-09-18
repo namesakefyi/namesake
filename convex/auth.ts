@@ -1,7 +1,7 @@
 import {
   type AuthFunctions,
-  BetterAuth,
-  convexAdapter,
+  createClient,
+  type GenericCtx,
 } from "@convex-dev/better-auth";
 import { convex, crossDomain } from "@convex-dev/better-auth/plugins";
 import { betterAuth } from "better-auth";
@@ -10,7 +10,6 @@ import { DeleteAccountEmail } from "../emails/DeleteAccount";
 import { ResetPasswordEmail } from "../emails/ResetPassword";
 import { components, internal } from "./_generated/api";
 import type { DataModel } from "./_generated/dataModel";
-import type { GenericCtx } from "./_generated/server";
 import * as AuthModel from "./model/authModel";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
@@ -26,14 +25,45 @@ const trustedOrigins = [
 
 const authFunctions: AuthFunctions = internal.auth;
 
-export const betterAuthComponent = new BetterAuth(components.betterAuth, {
+export const authComponent = createClient<DataModel>(components.betterAuth, {
   authFunctions,
+  triggers: {
+    user: {
+      onCreate: async (ctx, authUser) => {
+        const userId = await AuthModel.createUser(ctx, {
+          name: authUser.name,
+          email: authUser.email,
+          emailVerified: authUser.emailVerified,
+        });
+
+        // Facilitate migration to convex-better-auth 0.8
+        await authComponent.setUserId(ctx, authUser._id, userId);
+      },
+
+      onUpdate: async (ctx, oldUser, newUser) => {
+        await AuthModel.updateUser(ctx, {
+          userId: oldUser._id,
+          ...newUser,
+          updatedAt: Date.now(),
+        });
+      },
+
+      onDelete: async (ctx, authUser) => {
+        await AuthModel.deleteUser(ctx, authUser._id);
+      },
+    },
+  },
 });
 
-export const createAuth = (ctx: GenericCtx) =>
-  betterAuth({
-    database: convexAdapter(ctx, betterAuthComponent),
-    plugins: [convex(), crossDomain({ siteUrl })],
+export const { onCreate, onUpdate, onDelete } = authComponent.triggersApi();
+
+export const createAuth = (
+  ctx: GenericCtx<DataModel>,
+  { optionsOnly } = { optionsOnly: false },
+) => {
+  return betterAuth({
+    database: authComponent.adapter(ctx),
+    plugins: [crossDomain({ siteUrl }), convex()],
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: false,
@@ -45,6 +75,10 @@ export const createAuth = (ctx: GenericCtx) =>
           react: ResetPasswordEmail({ email: user.email, url }),
         });
       },
+    },
+    logger: {
+      // Reduce noise in the logs
+      disabled: optionsOnly,
     },
     telemetry: { enabled: false },
     trustedOrigins,
@@ -62,10 +96,4 @@ export const createAuth = (ctx: GenericCtx) =>
       },
     },
   });
-
-export const { createUser, updateUser, deleteUser, createSession } =
-  betterAuthComponent.createAuthFunctions<DataModel>({
-    onCreateUser: AuthModel.createUser,
-    onUpdateUser: AuthModel.updateUser,
-    onDeleteUser: AuthModel.deleteUser,
-  });
+};
