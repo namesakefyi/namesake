@@ -10,26 +10,29 @@ import { authComponent } from "./auth";
 export const userQuery = customQuery(
   query,
   customCtx(async (ctx) => {
-    const userId = (await authComponent.getAuthUser(ctx))?.userId;
-    return { userId: userId as Id<"users">, ctx };
+    const userId = (await authComponent.safeGetAuthUser(ctx))
+      ?.userId as Id<"users">;
+    return { userId, ctx };
   }),
 );
 
 export const userMutation = customMutation(mutation, {
   args: {},
   input: async (ctx) => {
-    const userId = (await authComponent.getAuthUser(ctx))?.userId;
-    return { ctx: { userId: userId as Id<"users"> }, args: {} };
+    const userId = (await authComponent.safeGetAuthUser(ctx))
+      ?.userId as Id<"users">;
+    return { ctx: { userId }, args: {} };
   },
 });
 
 export const adminQuery = customQuery(query, {
   args: {},
   input: async (ctx) => {
-    const userId = (await authComponent.getAuthUser(ctx))?.userId;
+    const userId = (await authComponent.safeGetAuthUser(ctx))
+      ?.userId as Id<"users">;
     const user = await ctx.db
       .query("users")
-      .withIndex("by_id", (q) => q.eq("_id", userId as Id<"users">))
+      .withIndex("by_id", (q) => q.eq("_id", userId))
       .unique();
     if (!user) throw new Error("Not authenticated");
     if (user.role !== "admin") throw new Error("Insufficient permissions");
@@ -40,10 +43,11 @@ export const adminQuery = customQuery(query, {
 export const adminMutation = customMutation(mutation, {
   args: {},
   input: async (ctx) => {
-    const userId = (await authComponent.getAuthUser(ctx))?.userId;
+    const userId = (await authComponent.safeGetAuthUser(ctx))
+      ?.userId as Id<"users">;
     const user = await ctx.db
       .query("users")
-      .withIndex("by_id", (q) => q.eq("_id", userId as Id<"users">))
+      .withIndex("by_id", (q) => q.eq("_id", userId))
       .unique();
     if (!user) throw new Error("Not authenticated");
     if (user.role !== "admin") throw new Error("Insufficient permissions");
