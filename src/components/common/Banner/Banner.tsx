@@ -16,7 +16,7 @@ export interface BannerProps {
 }
 
 const bannerStyles = tv({
-  base: "flex items-start w-full rounded-lg bg-primary-3 text-primary-12 [&_a]:text-primary-12 prose",
+  base: "flex items-start w-full rounded-lg bg-primary-3 text-primary-12 [&_a]:text-primary-12 prose forced-colors:border forced-colors:border-[ButtonBorder]",
   variants: {
     variant: {
       success: "bg-green-3 text-green-12 [&_a]:text-green-12",
@@ -35,7 +35,7 @@ const bannerStyles = tv({
 });
 
 const iconStyles = tv({
-  base: "text-primary-11 shrink-0",
+  base: "text-primary-11 shrink-0 forced-colors:text-[ButtonText]",
   variants: {
     variant: {
       success: "text-green-11",

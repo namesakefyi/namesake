@@ -30,7 +30,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const badge = tv({
-  base: "px-1 font-medium w-max tabular-nums text-center inline-flex justify-center gap-1 items-center shrink-0 bg-theme-a3 text-dim",
+  base: "px-1 font-medium w-max tabular-nums text-center inline-flex justify-center gap-1 items-center shrink-0 bg-theme-a3 text-dim forced-colors:border forced-colors:bg-transparent forced-colors:border-[ButtonBorder] forced-colors:text-[CanvasText]",
   variants: {
     size: {
       xs: "text-[10px] rounded-sm h-4 px-1 min-w-4 leading-none",
@@ -50,7 +50,7 @@ const badge = tv({
 });
 
 const icon = tv({
-  base: "shrink-0 size-4",
+  base: "shrink-0 size-4 forced-colors:text-[CanvasText]",
   variants: {
     size: {
       xs: "size-3",

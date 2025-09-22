@@ -37,7 +37,7 @@ export const itemStyles = tv({
   base: "group relative flex items-center gap-8 cursor-pointer select-none py-1.5 px-2.5 rounded-md will-change-transform forced-color-adjust-none",
   variants: {
     isSelected: {
-      false: "text-normal -outline-offset-2",
+      false: "text-normal -outline-offset-2 forced-colors:text-[ButtonText]",
       true: "bg-primary-9 text-white forced-colors:bg-[Highlight] forced-colors:text-[HighlightText] [&:has(+[data-selected])]:rounded-b-none [&+[data-selected]]:rounded-t-none -outline-offset-4 outline-white forced-colors:outline-[HighlightText]",
     },
     isDisabled: {
@@ -56,7 +56,7 @@ export function ListBoxItem(props: ListBoxItemProps) {
       {composeRenderProps(props.children, (children) => (
         <>
           {children}
-          <div className="absolute left-4 right-4 bottom-0 h-px bg-white/20 forced-colors:bg-[HighlightText] hidden [.group[data-selected]:has(+[data-selected])_&]:block" />
+          <div className="absolute left-4 right-4 bottom-0 h-px bg-white/20 hidden [.group[data-selected]:has(+[data-selected])_&]:block forced-colors:hidden" />
         </>
       ))}
     </AriaListBoxItem>
@@ -67,7 +67,7 @@ export const dropdownItemStyles = tv({
   base: "group flex items-center gap-3 cursor-pointer select-none py-2 px-2.5 pr-3 rounded-lg outline-none text-sm forced-color-adjust-none",
   variants: {
     isDisabled: {
-      false: "text-normal",
+      false: "text-normal forced-colors:text-[ButtonText]",
       true: "text-dim opacity-50 forced-colors:text-[GrayText] cursor-default",
     },
     isFocused: {
