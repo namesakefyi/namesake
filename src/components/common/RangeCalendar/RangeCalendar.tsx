@@ -21,9 +21,9 @@ const cell = tv({
   base: "w-full h-full flex items-center justify-center rounded-full cursor-pointer forced-color-adjust-none text-normal",
   variants: {
     selectionState: {
-      none: "group-hover:bg-primary-3 group-pressed:bg-primary-2",
+      none: "group-hover:bg-primary-3 group-pressed:bg-primary-2 forced-colors:text-[ButtonText] forced-colors:hover:bg-[Highlight] forced-colors:pressed:text-[HighlightText]",
       middle: [
-        "group-hover:bg-primary-4 forced-colors:group-hover:bg-[Highlight]",
+        "group-hover:bg-primary-4 forced-colors:group-hover:bg-[Highlight] forced-colors:group-hover:text-[HighlightText]",
         "group-hover:group-invalid:bg-red-4 forced-colors:group-hover:group-invalid:bg-[Mark]",
       ],
       cap: "bg-primary-9 group-invalid:bg-red-9 forced-colors:bg-[Highlight] forced-colors:group-invalid:bg-[Mark] text-white forced-colors:text-[HighlightText]",

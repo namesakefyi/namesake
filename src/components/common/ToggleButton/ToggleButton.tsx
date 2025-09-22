@@ -21,7 +21,7 @@ const styles = tv({
     isSelected: {
       false:
         "bg-transparent text-dim hover:text-normal before:absolute before:-z-1 before:inset-1 before:rounded-full before:bg-transparent hover:before:bg-theme-2/80 dark:hover:before:bg-theme-11/15",
-      true: "bg-theme-1 dark:bg-theme-3 text-normal shadow-xs border border-dim",
+      true: "bg-theme-1 dark:bg-theme-3 text-normal shadow-xs border border-dim forced-colors:bg-[Highlight] forced-colors:text-[HighlightText]",
     },
     isDisabled: buttonStyles.variants.isDisabled,
     size: {

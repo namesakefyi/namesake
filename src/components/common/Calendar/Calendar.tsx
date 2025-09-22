@@ -18,10 +18,11 @@ import { focusRing } from "@/components/utils";
 
 const cellStyles = tv({
   extend: focusRing,
-  base: "w-9 h-9 text-sm cursor-default rounded-full flex items-center justify-center forced-color-adjust-none",
+  base: "size-9 text-sm cursor-default rounded-full flex items-center justify-center forced-color-adjust-none",
   variants: {
     isSelected: {
-      false: "text-normal hover:bg-primary-3 pressed:bg-primary-3",
+      false:
+        "text-normal hover:bg-primary-3 pressed:bg-primary-3 forced-colors:text-[ButtonText] hover:forced-colors:bg-[Highlight] pressed:forced-colors:text-[HighlightText]",
       true: "bg-primary-9 invalid:bg-red-9 text-white forced-colors:bg-[Highlight] forced-colors:invalid:bg-[Mark] forced-colors:text-[HighlightText]",
     },
     isDisabled: {

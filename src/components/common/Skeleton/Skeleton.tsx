@@ -1,7 +1,7 @@
 import { tv } from "tailwind-variants";
 
 const skeletonStyles = tv({
-  base: "w-full h-full relative animate-fade-in before:inset-0 before:absolute before:bg-theme-a3 before:rounded-sm before:animate-pulse",
+  base: "w-full h-full relative animate-fade-in before:inset-0 before:absolute before:bg-theme-a3 before:rounded-sm before:animate-pulse forced-colors:before:bg-[ButtonBorder]",
   variants: {
     type: {
       circle: "before:rounded-full",
