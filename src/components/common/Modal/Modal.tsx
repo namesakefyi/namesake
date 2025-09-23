@@ -37,7 +37,6 @@ export function Modal({ className, ...props }: ModalOverlayProps) {
     <ModalOverlay {...props} className={overlayStyles}>
       <Dialog>
         <AriaModal
-          {...props}
           className={composeRenderProps(className, (className, renderProps) =>
             modalStyles({ ...renderProps, className }),
           )}
