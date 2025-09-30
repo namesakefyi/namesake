@@ -27,11 +27,11 @@ importers:
         specifier: 10.0.0
         version: 10.0.0
       '@maskito/core':
-        specifier: 3.10.3
-        version: 3.10.3
+        specifier: 3.11.1
+        version: 3.11.1
       '@maskito/react':
-        specifier: 3.10.3
-        version: 3.10.3(@maskito/core@3.10.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: 3.11.1
+        version: 3.11.1(@maskito/core@3.11.1)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@namesake/tiptap-extensions':
         specifier: 3.0.2
         version: 3.0.2(@tiptap/core@3.4.5(@tiptap/pm@3.4.5))
@@ -120,8 +120,8 @@ importers:
         specifier: 0.544.0
         version: 0.544.0(react@19.1.1)
       motion:
-        specifier: 12.23.18
-        version: 12.23.18(@emotion/is-prop-valid@1.4.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: 12.23.22
+        version: 12.23.22(@emotion/is-prop-valid@1.4.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       postcss:
         specifier: 8.5.6
         version: 8.5.6
@@ -162,8 +162,8 @@ importers:
         specifier: 4.0.14
         version: 4.0.14
       tw-animate-css:
-        specifier: 1.3.8
-        version: 1.3.8
+        specifier: 1.4.0
+        version: 1.4.0
       typed-usa-states:
         specifier: 2.1.0
         version: 2.1.0
@@ -268,8 +268,8 @@ importers:
         specifier: 15.8.1
         version: 15.8.1
       react-email:
-        specifier: 4.2.11
-        version: 4.2.11
+        specifier: 4.2.12
+        version: 4.2.12
       rollup-plugin-webpack-stats:
         specifier: 2.1.4
         version: 2.1.4(rolldown@1.0.0-beta.39)(rollup@4.44.2)(vite@7.1.7(@types/node@24.5.2)(jiti@2.6.0)(lightningcss@1.30.1)(tsx@4.20.5)(yaml@2.8.1))
@@ -1350,13 +1350,13 @@ packages:
   '@manypkg/get-packages@1.1.3':
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
 
-  '@maskito/core@3.10.3':
-    resolution: {integrity: sha512-4SZeEF6PjDHC+J5ADrJaSrFmgqmGkqfE5Yi6BrNXze9TGvVRy9aHJCizShFvheqCEu6MsK0XprZot28wH9AhjQ==}
+  '@maskito/core@3.11.1':
+    resolution: {integrity: sha512-zN5k/BiZXblo8mEFhsGnnXBCqKMkjEGArorOOcpB1/ymZyqF12Dk6IipEsSE6abMnWw4YF2tukzfq73BFZKz8A==}
 
-  '@maskito/react@3.10.3':
-    resolution: {integrity: sha512-H8UDtfunReHeybozzp0O0zboVI044anQ4h9bwctI88QB0fVlhJBPTR3R4Xky1BT8D5+bICNEF2SlsaZq9UKEbg==}
+  '@maskito/react@3.11.1':
+    resolution: {integrity: sha512-Euqlm2mafBs1h9SPME0UEm8S/7CY1WwGusZSLScQoHx1dNCU+XVZl9cTDhnNI2/Ly+CnmcG/plgsGoeprabBHQ==}
     peerDependencies:
-      '@maskito/core': ^3.10.3
+      '@maskito/core': ^3.11.1
       react: '>=16.8'
       react-dom: '>=16.8'
 
@@ -2867,8 +2867,8 @@ packages:
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
 
-  '@types/node@20.19.17':
-    resolution: {integrity: sha512-gfehUI8N1z92kygssiuWvLiwcbOB3IRktR6hTDgJlXMYh5OvkPSRmgfoBUmfZt+vhwJtX7v1Yw4KvvAf7c5QKQ==}
+  '@types/node@20.19.18':
+    resolution: {integrity: sha512-KeYVbfnbsBCyKG8e3gmUqAfyZNcoj/qpEbHRkQkfZdKOBrU7QQ+BsTdfqLSWX9/m1ytYreMhpKvp+EZi3UFYAg==}
 
   '@types/node@24.5.2':
     resolution: {integrity: sha512-FYxk1I7wPv3K2XBaoyH2cTnocQEu8AOZ60hPbsyukMPLv5/5qr7V1i8PLHdl6Zf87I+xZXFvPCXYjiTFq+YSDQ==}
@@ -3539,8 +3539,8 @@ packages:
     resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
     engines: {node: '>=14'}
 
-  framer-motion@12.23.18:
-    resolution: {integrity: sha512-HBVXBL5x3nk/0WrYM5G4VgjBey99ytVYET5AX17s/pcnlH90cyaxVUqgoN8cpF4+PqZRVOhwWsv28F+hxA9Tzg==}
+  framer-motion@12.23.22:
+    resolution: {integrity: sha512-ZgGvdxXCw55ZYvhoZChTlG6pUuehecgvEAJz0BHoC5pQKW1EC5xf1Mul1ej5+ai+pVY0pylyFfdl45qnM1/GsA==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -3949,8 +3949,8 @@ packages:
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
-  lru-cache@11.2.1:
-    resolution: {integrity: sha512-r8LA6i4LP4EeWOhqBaZZjDWwehd1xUJPCJd9Sv300H0ZmcUER4+JPh7bqqZeqs1o5pgtgvXm+d9UGrB5zZGDiQ==}
+  lru-cache@11.2.2:
+    resolution: {integrity: sha512-F9ODfyqML2coTIsQpSkRHnLSZMtkU8Q+mSfcaIyKwy58u+8k5nvAYeiNhsyMARvzNcXJ9QfWVrcPsC9e9rAxtg==}
     engines: {node: 20 || >=22}
 
   lru-cache@5.1.1:
@@ -4055,14 +4055,14 @@ packages:
     resolution: {integrity: sha512-KZxYo1BUkWD2TVFLr0MQoM8vUUigWD3LlD83a/75BqC+4qE0Hb1Vo5v1FgcfaNXvfXzr+5EhQ6ing/CaBijTlw==}
     engines: {node: '>= 18'}
 
-  motion-dom@12.23.18:
-    resolution: {integrity: sha512-9piw3uOcP6DpS0qpnDF95bLDzmgMxLOg/jghLnHwYJ0YFizzuvbH/L8106dy39JNgHYmXFUTztoP9JQvUqlBwQ==}
+  motion-dom@12.23.21:
+    resolution: {integrity: sha512-5xDXx/AbhrfgsQmSE7YESMn4Dpo6x5/DTZ4Iyy4xqDvVHWvFVoV+V2Ri2S/ksx+D40wrZ7gPYiMWshkdoqNgNQ==}
 
   motion-utils@12.23.6:
     resolution: {integrity: sha512-eAWoPgr4eFEOFfg2WjIsMoqJTW6Z8MTUCgn/GZ3VRpClWBdnbjryiA3ZSNLyxCTmCQx4RmYX6jX1iWHbenUPNQ==}
 
-  motion@12.23.18:
-    resolution: {integrity: sha512-uzcEs9eInMnOL2Tm8z6Akje/vETSFUzAlGQyKV58+8vlEFDOKx8jNR/asKei4ETi+8wH6vTyf6gCKgu580x4+w==}
+  motion@12.23.22:
+    resolution: {integrity: sha512-iSq6X9vLHbeYwmHvhK//+U74ROaPnZmBuy60XZzqNl0QtZkWfoZyMDHYnpKuWFv0sNMqHgED8aCXk94LCoQPGg==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -4411,8 +4411,8 @@ packages:
     peerDependencies:
       react: ^19.1.1
 
-  react-email@4.2.11:
-    resolution: {integrity: sha512-/7TXRgsTrXcV1u7kc5ZXDVlPvZqEBaYcflMhE2FgWIJh3OHLjj2FqctFTgYcp0iwzbR59a7gzJLmSKyD0wYJEQ==}
+  react-email@4.2.12:
+    resolution: {integrity: sha512-Cp6nYAG9uL4//X/96wDSKxGqVTXsaRMuD1ub0G0iBcfTqLel4VVre3kicq7RraplDuj+ATlqSZu47d7P2ULP5w==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -4861,8 +4861,8 @@ packages:
     resolution: {integrity: sha512-axr3IdNuVIxnaK5XGEUFTu3YmAQ6lllgrvqfEoR16g/HGnYY/6We4oWENtAnzK6/LpJ2ur9PAb80RBt7/U4ugw==}
     engines: {node: '>= 6.0.0'}
 
-  tw-animate-css@1.3.8:
-    resolution: {integrity: sha512-Qrk3PZ7l7wUcGYhwZloqfkWCmaXZAoqjkdbIDvzfGshwGtexa/DAs9koXxIkrpEasyevandomzCBAV1Yyop5rw==}
+  tw-animate-css@1.4.0:
+    resolution: {integrity: sha512-7bziOlRqH0hJx80h/3mbicLW7o8qLsH5+RaLR2t+OHM3D0JlWGODQKQ4cxbK7WlvmUxpcj6Kgu6EKqjrGFe3QQ==}
 
   type-fest@4.41.0:
     resolution: {integrity: sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==}
@@ -6090,11 +6090,11 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
-  '@maskito/core@3.10.3': {}
+  '@maskito/core@3.11.1': {}
 
-  '@maskito/react@3.10.3(@maskito/core@3.10.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+  '@maskito/react@3.11.1(@maskito/core@3.11.1)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
-      '@maskito/core': 3.10.3
+      '@maskito/core': 3.11.1
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
 
@@ -8054,7 +8054,7 @@ snapshots:
 
   '@types/node@12.20.55': {}
 
-  '@types/node@20.19.17':
+  '@types/node@20.19.18':
     dependencies:
       undici-types: 6.21.0
     optional: true
@@ -8755,9 +8755,9 @@ snapshots:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
 
-  framer-motion@12.23.18(@emotion/is-prop-valid@1.4.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+  framer-motion@12.23.22(@emotion/is-prop-valid@1.4.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
-      motion-dom: 12.23.18
+      motion-dom: 12.23.21
       motion-utils: 12.23.6
       tslib: 2.8.1
     optionalDependencies:
@@ -8836,7 +8836,7 @@ snapshots:
 
   happy-dom@18.0.1:
     dependencies:
-      '@types/node': 20.19.17
+      '@types/node': 20.19.18
       '@types/whatwg-mimetype': 3.0.2
       whatwg-mimetype: 3.0.0
     optional: true
@@ -9150,7 +9150,7 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
-  lru-cache@11.2.1: {}
+  lru-cache@11.2.2: {}
 
   lru-cache@5.1.1:
     dependencies:
@@ -9243,15 +9243,15 @@ snapshots:
     dependencies:
       minipass: 7.1.2
 
-  motion-dom@12.23.18:
+  motion-dom@12.23.21:
     dependencies:
       motion-utils: 12.23.6
 
   motion-utils@12.23.6: {}
 
-  motion@12.23.18(@emotion/is-prop-valid@1.4.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+  motion@12.23.22(@emotion/is-prop-valid@1.4.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
-      framer-motion: 12.23.18(@emotion/is-prop-valid@1.4.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      framer-motion: 12.23.22(@emotion/is-prop-valid@1.4.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       tslib: 2.8.1
     optionalDependencies:
       '@emotion/is-prop-valid': 1.4.0
@@ -9380,7 +9380,7 @@ snapshots:
 
   path-scurry@2.0.0:
     dependencies:
-      lru-cache: 11.2.1
+      lru-cache: 11.2.2
       minipass: 7.1.2
 
   path-type@4.0.0: {}
@@ -9675,7 +9675,7 @@ snapshots:
       react: 19.1.1
       scheduler: 0.26.0
 
-  react-email@4.2.11:
+  react-email@4.2.12:
     dependencies:
       '@babel/parser': 7.28.4
       '@babel/traverse': 7.28.4
@@ -10194,7 +10194,7 @@ snapshots:
     dependencies:
       tslib: 1.14.1
 
-  tw-animate-css@1.3.8: {}
+  tw-animate-css@1.4.0: {}
 
   type-fest@4.41.0: {}
 
