@@ -2,6 +2,7 @@ import { v } from "convex/values";
 import type { Role } from "../src/constants";
 import type { Id } from "./_generated/dataModel";
 import { query } from "./_generated/server";
+import { authComponent } from "./auth";
 import { adminQuery, userMutation } from "./helpers";
 import * as Users from "./model/usersModel";
 
@@ -18,10 +19,10 @@ export const getById = adminQuery({
 export const getCurrent = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return null;
+    const userId = (await authComponent.safeGetAuthUser(ctx))?.userId;
+    if (!userId) return null;
     return await Users.getById(ctx, {
-      userId: identity.subject as Id<"users">,
+      userId: userId as Id<"users">,
     });
   },
 });
@@ -29,10 +30,10 @@ export const getCurrent = query({
 export const getCurrentRole = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return null;
+    const userId = (await authComponent.safeGetAuthUser(ctx))?.userId;
+    if (!userId) return null;
     const user = await Users.getById(ctx, {
-      userId: identity.subject as Id<"users">,
+      userId: userId as Id<"users">,
     });
     return user?.role as Role;
   },
