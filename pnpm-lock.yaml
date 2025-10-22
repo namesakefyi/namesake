@@ -176,7 +176,7 @@ importers:
     devDependencies:
       '@axe-core/playwright':
         specifier: 4.10.2
-        version: 4.10.2(playwright-core@1.55.0)
+        version: 4.10.2(playwright-core@1.55.1)
       '@babel/preset-react':
         specifier: 7.27.1
         version: 7.27.1(@babel/core@7.28.4)
@@ -262,8 +262,8 @@ importers:
         specifier: 16.2.0
         version: 16.2.0
       playwright:
-        specifier: 1.55.0
-        version: 1.55.0
+        specifier: 1.55.1
+        version: 1.55.1
       prop-types:
         specifier: 15.8.1
         version: 15.8.1
@@ -4425,8 +4425,18 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  playwright-core@1.55.1:
+    resolution: {integrity: sha512-Z6Mh9mkwX+zxSlHqdr5AOcJnfp+xUWLCt9uKV18fhzA8eyxUd8NUWzAjxUh55RZKSYwDGX0cfaySdhZJGMoJ+w==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   playwright@1.55.0:
     resolution: {integrity: sha512-sdCWStblvV1YU909Xqx0DhOjPZE4/5lJsIS84IfN9dAZfcl/CIZ5O8l3o0j7hPMjDvqoTF8ZUcc+i/GL5erstA==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.55.1:
+    resolution: {integrity: sha512-cJW4Xd/G3v5ovXtJJ52MAOclqeac9S/aGGgRzLabuF8TnIb6xHvMzKIa6JmrRzUkeXJgfL1MhukP0NK6l39h3A==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -5321,10 +5331,10 @@ snapshots:
       '@csstools/css-tokenizer': 3.0.4
       lru-cache: 10.4.3
 
-  '@axe-core/playwright@4.10.2(playwright-core@1.55.0)':
+  '@axe-core/playwright@4.10.2(playwright-core@1.55.1)':
     dependencies:
       axe-core: 4.10.3
-      playwright-core: 1.55.0
+      playwright-core: 1.55.1
 
   '@babel/code-frame@7.27.1':
     dependencies:
@@ -9698,9 +9708,17 @@ snapshots:
 
   playwright-core@1.55.0: {}
 
+  playwright-core@1.55.1: {}
+
   playwright@1.55.0:
     dependencies:
       playwright-core: 1.55.0
+    optionalDependencies:
+      fsevents: 2.3.2
+
+  playwright@1.55.1:
+    dependencies:
+      playwright-core: 1.55.1
     optionalDependencies:
       fsevents: 2.3.2
 
