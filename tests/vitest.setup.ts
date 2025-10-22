@@ -83,14 +83,14 @@ vi.mock("@convex-dev/better-auth/convex.config", () => ({
 }));
 
 vi.mock("@convex-dev/better-auth", () => ({
-  BetterAuth: vi.fn(() => ({
-    createAuthFunctions: vi.fn(() => ({
-      createUser: vi.fn(),
-      updateUser: vi.fn(),
-      deleteUser: vi.fn(),
-      createSession: vi.fn(),
+  createClient: vi.fn(() => ({
+    triggersApi: vi.fn(() => ({
+      onCreate: vi.fn(),
+      onUpdate: vi.fn(),
+      onDelete: vi.fn(),
     })),
-    getHeaders: vi.fn(),
+    getAuthUser: vi.fn(),
+    safeGetAuthUser: vi.fn(),
   })),
   convexAdapter: vi.fn(),
   AuthFunctions: {},

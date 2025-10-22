@@ -18,11 +18,11 @@ importers:
         specifier: 2.4.2
         version: 2.4.2
       '@convex-dev/better-auth':
-        specifier: 0.7.18
-        version: 0.7.18(better-auth@1.3.8(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(convex@1.26.2(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.9.2)
+        specifier: 0.8.6
+        version: 0.8.6(better-auth@1.3.8(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(convex@1.27.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.9.2)
       '@convex-dev/migrations':
         specifier: 0.2.9
-        version: 0.2.9(convex@1.26.2(react@19.1.1))
+        version: 0.2.9(convex@1.27.0(react@19.1.1))
       '@faker-js/faker':
         specifier: 10.0.0
         version: 10.0.0
@@ -108,11 +108,11 @@ importers:
         specifier: 1.3.8
         version: 1.3.8(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       convex:
-        specifier: 1.26.2
-        version: 1.26.2(react@19.1.1)
+        specifier: 1.27.0
+        version: 1.27.0(react@19.1.1)
       convex-helpers:
         specifier: 0.1.104
-        version: 0.1.104(convex@1.26.2(react@19.1.1))(react@19.1.1)(typescript@5.9.2)(zod@3.25.76)
+        version: 0.1.104(convex@1.27.0(react@19.1.1))(react@19.1.1)(typescript@5.9.2)(zod@3.25.76)
       language-name-map:
         specifier: 0.3.0
         version: 0.3.0
@@ -248,7 +248,7 @@ importers:
         version: 2.2.11(axe-core@4.10.3)
       convex-test:
         specifier: 0.0.38
-        version: 0.0.38(convex@1.26.2(react@19.1.1))
+        version: 0.0.38(convex@1.27.0(react@19.1.1))
       globals:
         specifier: 16.4.0
         version: 16.4.0
@@ -602,8 +602,8 @@ packages:
   '@changesets/write@0.4.0':
     resolution: {integrity: sha512-CdTLvIOPiCNuH71pyDu3rA+Q0n65cmAbXnwWH84rKGiFumFzkmHNT8KHTMEchcxN+Kl8I54xGUhJ7l3E7X396Q==}
 
-  '@convex-dev/better-auth@0.7.18':
-    resolution: {integrity: sha512-lZwJcRJncmeKZfDQk7PJrJ+8z/S8rmO5rUfPWZd2gOjC+1sbd/JUZiTVPGLxeP5VEGG74TkRTUavK7s+wmKhwg==}
+  '@convex-dev/better-auth@0.8.6':
+    resolution: {integrity: sha512-iP2erc4YKz0HzrWSdaSRv2ck3gsdb2yBwUdSOsM0ebvNMcTsoWEBuu07cq6lUGMyJ97qxOnZDtN7CemTXKpSpA==}
     peerDependencies:
       better-auth: 1.3.8
       convex: ^1.26.2
@@ -3398,8 +3398,8 @@ packages:
     peerDependencies:
       convex: ^1.16.4
 
-  convex@1.26.2:
-    resolution: {integrity: sha512-QG3zvZ9GTTeeBS+N5PJj73TULHYu99eVSOI3KU2hMnB9q40fHxkMFJ+AYox+K81roTakciBvNTvGlhfz+M10fQ==}
+  convex@1.27.0:
+    resolution: {integrity: sha512-IHkqZX3GtY4nKFPTAR4mvWHHhDiQX9PM7EjpEv0pJWoMoq0On6oOL3iZ7Xz4Ls96dF7WJd4AjfitJsg2hUnLSQ==}
     engines: {node: '>=18.0.0', npm: '>=7.0.0'}
     hasBin: true
     peerDependencies:
@@ -5752,12 +5752,13 @@ snapshots:
       human-id: 4.1.1
       prettier: 2.8.8
 
-  '@convex-dev/better-auth@0.7.18(better-auth@1.3.8(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(convex@1.26.2(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.9.2)':
+  '@convex-dev/better-auth@0.8.6(better-auth@1.3.8(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(convex@1.27.0(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.9.2)':
     dependencies:
+      '@better-fetch/fetch': 1.1.18
       better-auth: 1.3.8(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       common-tags: 1.8.2
-      convex: 1.26.2(react@19.1.1)
-      convex-helpers: 0.1.104(convex@1.26.2(react@19.1.1))(react@19.1.1)(typescript@5.9.2)(zod@3.25.76)
+      convex: 1.27.0(react@19.1.1)
+      convex-helpers: 0.1.104(convex@1.27.0(react@19.1.1))(react@19.1.1)(typescript@5.9.2)(zod@3.25.76)
       is-network-error: 1.3.0
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
@@ -5768,9 +5769,9 @@ snapshots:
       - hono
       - typescript
 
-  '@convex-dev/migrations@0.2.9(convex@1.26.2(react@19.1.1))':
+  '@convex-dev/migrations@0.2.9(convex@1.27.0(react@19.1.1))':
     dependencies:
-      convex: 1.26.2(react@19.1.1)
+      convex: 1.27.0(react@19.1.1)
 
   '@csstools/color-helpers@5.1.0': {}
 
@@ -8674,19 +8675,19 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  convex-helpers@0.1.104(convex@1.26.2(react@19.1.1))(react@19.1.1)(typescript@5.9.2)(zod@3.25.76):
+  convex-helpers@0.1.104(convex@1.27.0(react@19.1.1))(react@19.1.1)(typescript@5.9.2)(zod@3.25.76):
     dependencies:
-      convex: 1.26.2(react@19.1.1)
+      convex: 1.27.0(react@19.1.1)
     optionalDependencies:
       react: 19.1.1
       typescript: 5.9.2
       zod: 3.25.76
 
-  convex-test@0.0.38(convex@1.26.2(react@19.1.1)):
+  convex-test@0.0.38(convex@1.27.0(react@19.1.1)):
     dependencies:
-      convex: 1.26.2(react@19.1.1)
+      convex: 1.27.0(react@19.1.1)
 
-  convex@1.26.2(react@19.1.1):
+  convex@1.27.0(react@19.1.1):
     dependencies:
       esbuild: 0.25.4
       jwt-decode: 4.0.0
