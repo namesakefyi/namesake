@@ -5,7 +5,6 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import sanity from "@sanity/astro";
 import { defineConfig, passthroughImageService } from "astro/config";
-import { visualizer } from "rollup-plugin-visualizer";
 
 // https://github.com/withastro/astro/issues/12824
 const alias = import.meta.env.PROD
@@ -44,12 +43,6 @@ export default defineConfig({
     format: "file",
   },
   vite: {
-    plugins: [
-      visualizer({
-        emitFile: true,
-        filename: "stats.html",
-      }),
-    ],
     resolve: {
       alias: {
         "@": path.resolve("src"),
