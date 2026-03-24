@@ -123,7 +123,6 @@
     "postcss-media-minmax": "^5.0.0",
     "postcss-utopia": "^1.1.0",
     "react-compiler-runtime": "^1.0.0",
-    "rollup-plugin-visualizer": "^6.0.5",
     "sharp": "^0.34.5",
     "storybook": "^10.2.19",
     "vitest": "4.0.18",
