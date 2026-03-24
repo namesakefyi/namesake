@@ -30,7 +30,8 @@
     "pdf:remove-fields": "node scripts/remove-pdf-fields.mjs",
     "pdf:rename-fields": "node scripts/rename-pdf-fields.mjs",
     "pdf:schema": "node scripts/extract-pdf-schema.mjs",
-    "pdf:define": "node scripts/define-pdf.mjs"
+    "pdf:define": "node scripts/define-pdf.mjs",
+    "pdf:nudge-fields": "node scripts/nudge-pdf-fields.mjs"
   },
   "lint-staged": {
     "*": "pnpm check:fix"
@@ -72,13 +73,13 @@
     "react": "^19.2.4",
     "react-aria-components": "^1.16.0",
     "react-dom": "^19.2.4",
-    "react-hook-form": "^7.71.2",
+    "react-hook-form": "^7.72.0",
     "react-is": "^19.2.4",
     "react-lite-youtube-embed": "^3.5.1",
     "rough-notation": "^0.5.1",
     "sanitize-html": "^2.17.0",
     "sanity": "^5.18.0",
-    "styled-components": "^6.3.11",
+    "styled-components": "^6.3.12",
     "topojson-client": "^3.1.0",
     "typescript": "^5.9.3",
     "ua-parser-js": "^2.0.6",

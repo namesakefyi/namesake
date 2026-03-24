@@ -53,7 +53,7 @@ export const FIELD_DEFS = [
   },
   {
     name: "areBothParentsListedOnBirthCertificate",
-    label: "Are both parents listed on the birth certificate?",
+    label: "Both parents listed on the minor's birth certificate?",
     type: "boolean",
   },
   {
@@ -206,6 +206,16 @@ export const FIELD_DEFS = [
     name: "parent2ZipCode",
     label: "Parent 2 zip code",
     type: "string",
+  },
+  {
+    name: "parentsHaveUnknownAddresses",
+    label: "Parents' addresses are unknown?",
+    type: "boolean",
+  },
+  {
+    name: "parentsHaveDifferentAddresses",
+    label: "Parents have different addresses?",
+    type: "boolean",
   },
   {
     name: "hasOtherLegalNames",
@@ -381,6 +391,11 @@ export const FIELD_DEFS = [
     name: "guardianZipCode",
     label: "Guardian zip code",
     type: "string",
+  },
+  {
+    name: "hasCourtAppointedCoGuardian",
+    label: "Court-appointed co-guardian?",
+    type: "boolean",
   },
   {
     name: "hasCourtAppointedGuardian",

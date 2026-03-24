@@ -6,9 +6,9 @@ import { getFormPdfMetadata } from "@/forms/getFormPdfMetadata";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { loadQuery } from "@/sanity/lib/loadQuery";
 
-const formSlug: FormSlug = "court-order-ma";
+const formSlug: FormSlug = "court-order-ma-minor";
 
-const { data: form } = await loadQuery<SanityDocument>({
+const { data: form } = await loadQuery<SanityDocument | null>({
   query: `*[_type == "form" && slug.current == $slug][0]{
     title,
     description,
@@ -24,17 +24,22 @@ const { data: form } = await loadQuery<SanityDocument>({
 });
 
 const pdfs = await getFormPdfMetadata(formSlug);
+
+const title = form?.title ?? "Court Order: Massachusetts (Under 18)";
+const description =
+  form?.description ??
+  "If you live in Massachusetts, are under 18, and want to legally update your name, this is the place to start.";
 ---
 
-<BaseLayout title={form.title} description={form.description} color="white">
+<BaseLayout title={title} description={description} color="white">
   <FormContainer
     client:load
     slug={formSlug}
-    title={form.title}
-    description={form.description}
-    banner={form.banner}
-    updatedAt={form._updatedAt}
+    title={title}
+    description={description}
+    banner={form?.banner}
+    updatedAt={form?._updatedAt}
     pdfs={pdfs}
-    costs={form.costs}
+    costs={form?.costs}
   />
 </BaseLayout>

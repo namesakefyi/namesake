@@ -59,8 +59,8 @@ export const pdfSchema = {
   isFatherSSNUnknown: PDFCheckBox,
   differentDateOfBirthOnPreviousApplication: PDFTextField,
   previousSSN1: PDFTextField,
-  previousSSN2: PDFTextField,
   previousSSN3: PDFTextField,
+  previousSSN2: PDFTextField,
 } as const;
 
 export type PdfFieldName = keyof typeof pdfSchema;

@@ -63,10 +63,22 @@ export default definePdf<PdfFieldName>({
     parent1Email: data.parent1Email,
 
     parent2FullName: data.parent2FullName,
-    parent2StreetAddress: data.parent2StreetAddress,
-    parent2City: data.parent2City,
-    parent2State: data.parent2State,
-    parent2ZipCode: data.parent2ZipCode,
+    parent2StreetAddress:
+      data.parentsHaveDifferentAddresses === true
+        ? data.parent2StreetAddress
+        : data.parent1StreetAddress,
+    parent2City:
+      data.parentsHaveDifferentAddresses === true
+        ? data.parent2City
+        : data.parent1City,
+    parent2State:
+      data.parentsHaveDifferentAddresses === true
+        ? data.parent2State
+        : data.parent1State,
+    parent2ZipCode:
+      data.parentsHaveDifferentAddresses === true
+        ? data.parent2ZipCode
+        : data.parent1ZipCode,
     parent2Phone: data.parent2Phone,
     parent2Email: data.parent2Email,
 

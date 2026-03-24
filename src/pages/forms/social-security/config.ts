@@ -36,15 +36,16 @@ export const socialSecurityConfig: FormConfig = {
   ],
   pdfs: [{ pdfId: "ss5-application-for-social-security-card" }],
   downloadTitle: "Social Security Card",
-  instructions: (data) =>
-    [
-      "Please review all documents carefully.",
-      "Fill in your social security number—for security, Namesake never asks for this.",
-      "Make an Appointment with a Social Security Administration Office.",
-      "Remember to bring certified copies of your completed court order, along with other required supporting documents.",
-      data.citizenshipStatus === "legalAlienNotAllowedToWork" ||
-      data.citizenshipStatus === "other"
-        ? "You must provide a document from a U.S. Federal, State, or local government agency that explains why you need a Social Security number and that you meet all the requirements for the government benefit."
-        : "",
-    ].filter(Boolean),
+  instructions: [
+    "Please review all documents carefully.",
+    "Fill in your social security number—for security, Namesake never asks for this.",
+    "Make an Appointment with a Social Security Administration Office.",
+    "Remember to bring certified copies of your completed court order, along with other required supporting documents.",
+    {
+      text: "You must provide a document from a U.S. Federal, State, or local government agency that explains why you need a Social Security number and that you meet all the requirements for the government benefit.",
+      when: (data) =>
+        data.citizenshipStatus === "legalAlienNotAllowedToWork" ||
+        data.citizenshipStatus === "other",
+    },
+  ],
 };

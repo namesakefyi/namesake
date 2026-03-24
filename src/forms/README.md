@@ -48,14 +48,14 @@ The `fields` array tells the form which database fields belong to this step. It 
 
 ### Conditional steps
 
-Add a `guard` to skip a step entirely when a condition isn't met. The step is excluded from the forward and backward flow when its guard returns false.
+Add a `when` predicate to skip a step entirely when a condition isn't met. The step is excluded from the forward and backward flow when `when` returns false.
 
 ```ts
 export const feeWaiverDocumentsStep: Step = {
   id: "fee-waiver-documents",
+  when: (data) => data.shouldApplyForFeeWaiver === true,
   title: "Upload your fee waiver documents",
   fields: ["feeWaiverDocument"],
-  guard: (data) => data.shouldApplyForFeeWaiver === true,
   component: ({ stepConfig }) => (
     <FormStep stepConfig={stepConfig}>...</FormStep>
   ),
@@ -166,7 +166,7 @@ When a user returns to a completed form, they land on the completion page rather
 
 `resolveFormVisibility` (in `formVisibility.ts`) is the single source of truth for what's visible. It takes steps, form data, and PDFs, and returns:
 
-- `visibleStepIds` — steps not excluded by guards
+- `visibleStepIds` — steps not excluded by `when` predicates
 - `visibleFields` — field values for visible fields only
 - `sections` — per-step arrays of visible field names (used by the review table)
 - `pdfsToInclude` — which PDFs to include based on their `include` predicates
@@ -186,4 +186,4 @@ Restarting a form clears the progress (returning to the title page) but keeps al
 
 ## Submission
 
-`FormContainer` calls `createFormSubmitHandler` internally. It collects the current form values, resolves visibility, generates the PDFs, and triggers a download. Only fields visible to the user (respecting guards and per-field `when` callbacks) are written to the PDFs.
+`FormContainer` calls `createFormSubmitHandler` internally. It collects the current form values, resolves visibility, generates the PDFs, and triggers a download. Only fields visible to the user (respecting step and field `when` predicates) are written to the PDFs.

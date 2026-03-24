@@ -63,7 +63,7 @@ describe("getFormPdfMetadata", () => {
       pdfs: [
         {
           pdfId: "cjp25-petition-to-change-name-of-minor",
-          include: () => true,
+          when: () => true,
         },
       ],
     } as never);
@@ -98,7 +98,7 @@ describe("getFormPdfMetadata", () => {
     vi.mocked(forms.getFormConfig).mockReturnValue({
       pdfs: [
         { pdfId: "cjp27-petition-to-change-name-of-adult" },
-        { pdfId: "affidavit-of-indigency", include: () => true },
+        { pdfId: "affidavit-of-indigency", when: () => true },
       ],
     } as never);
 

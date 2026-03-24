@@ -34,10 +34,10 @@ export interface Step {
   id: string;
 
   /** Displayed in the navigation bar and review table. */
-  title: string;
+  title: string | ((data: Partial<FormData>) => string);
 
   /** Optional subtitle shown beneath the title on the step. */
-  description?: string;
+  description?: string | ((data: Partial<FormData>) => string);
 
   /**
    * All fields this step writes to. Plain string = always visible.
@@ -51,9 +51,9 @@ export interface Step {
    * true. Evaluated with live form data on every navigation.
    *
    * @example
-   * guard: (data) => data.isFilingForSomeoneElse === true,
+   * when: (data) => data.isFilingForSomeoneElse === true,
    */
-  guard?: (data: Partial<FormData>) => boolean;
+  when?: (data: Partial<FormData>) => boolean;
 
   /** The React component rendered when this step is active. */
   component: React.ComponentType<{ stepConfig: Step }>;
