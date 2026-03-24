@@ -45,7 +45,6 @@ const config: StorybookConfig = {
   viteFinal: (config) => {
     if (!config.resolve) return config;
     config.resolve.alias = {
-      ...config.resolve.alias,
       "@": path.resolve(import.meta.dirname, "../src"),
     };
     return config;

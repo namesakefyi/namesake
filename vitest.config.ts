@@ -3,7 +3,6 @@ import { getViteConfig } from "astro/config";
 import { configDefaults, coverageConfigDefaults } from "vitest/config";
 
 export default getViteConfig({
-  // @ts-expect-error - Might be fixed after upgrading to Astro v6
   test: {
     globals: true,
     include: ["src/**/*.test.{ts,tsx}"],
