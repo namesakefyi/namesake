@@ -37,14 +37,14 @@
     "*": "pnpm check:fix"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.6",
+    "@astrojs/check": "^0.9.8",
     "@astrojs/cloudflare": "12.6.12",
     "@astrojs/markdoc": "^0.15.10",
     "@astrojs/markdown-remark": "6.3.10",
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/react": "^4.4.2",
-    "@astrojs/rss": "^4.0.15",
-    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/rss": "^4.0.17",
+    "@astrojs/sitemap": "^3.7.1",
     "@axe-core/playwright": "^4.11.1",
     "@cantoo/pdf-lib": "^2.5.3",
     "@internationalized/date": "^3.10.0",
