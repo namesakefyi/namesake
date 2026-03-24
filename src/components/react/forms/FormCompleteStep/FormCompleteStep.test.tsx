@@ -1,7 +1,10 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { FormCompleteStep } from "./FormCompleteStep";
+import {
+  FormCompleteStep,
+  type FormCompleteStepProps,
+} from "./FormCompleteStep";
 
 vi.mock("@/db/database", () => ({
   clearFormProgress: vi.fn().mockResolvedValue(undefined),
@@ -17,9 +20,9 @@ vi.mock("../FormFeedback/FormFeedback", () => ({
 }));
 
 describe("FormCompleteStep", () => {
-  const defaultProps = {
+  const defaultProps: FormCompleteStepProps = {
     title: "Massachusetts Court Order",
-    formSlug: "court-order-ma",
+    slug: "court-order-ma",
     onRedownload: vi.fn(),
   };
 

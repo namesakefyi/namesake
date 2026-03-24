@@ -8,6 +8,13 @@ import {
 } from "@/components/react/forms/FormStep";
 import type { Step } from "@/forms/types";
 
+const whenNotUnhoused = (data: Record<string, unknown>) =>
+  data.isCurrentlyUnhoused !== true;
+
+const whenMailing = (data: Record<string, unknown>) =>
+  data.isCurrentlyUnhoused !== true &&
+  data.isMailingAddressDifferentFromResidence === true;
+
 export const addressStep: Step = {
   id: "address",
   title: "What is your residential address?",
@@ -15,48 +22,28 @@ export const addressStep: Step = {
     "You must file your name change in the county where you live. We'll help you find where to file.",
   fields: [
     "isCurrentlyUnhoused",
-    "residenceStreetAddress",
-    "residenceCity",
-    "residenceCounty",
-    "residenceState",
-    "residenceZipCode",
-    "isMailingAddressDifferentFromResidence",
-    "mailingStreetAddress",
-    "mailingCity",
-    "mailingCounty",
-    "mailingState",
-    "mailingZipCode",
+    {
+      ids: [
+        "residenceStreetAddress",
+        "residenceCity",
+        "residenceCounty",
+        "residenceState",
+        "residenceZipCode",
+        "isMailingAddressDifferentFromResidence",
+      ],
+      when: whenNotUnhoused,
+    },
+    {
+      ids: [
+        "mailingStreetAddress",
+        "mailingCity",
+        "mailingCounty",
+        "mailingState",
+        "mailingZipCode",
+      ],
+      when: whenMailing,
+    },
   ],
-  isFieldVisible: (fieldName, data) => {
-    // Residence fields hidden if currently unhoused
-    if (
-      fieldName === "residenceStreetAddress" ||
-      fieldName === "residenceCity" ||
-      fieldName === "residenceCounty" ||
-      fieldName === "residenceState" ||
-      fieldName === "residenceZipCode"
-    ) {
-      return data.isCurrentlyUnhoused !== true;
-    }
-    // isMailingAddressDifferentFromResidence also hidden if unhoused
-    if (fieldName === "isMailingAddressDifferentFromResidence") {
-      return data.isCurrentlyUnhoused !== true;
-    }
-    // Mailing address fields only visible if different from residence and not unhoused
-    if (
-      fieldName === "mailingStreetAddress" ||
-      fieldName === "mailingCity" ||
-      fieldName === "mailingCounty" ||
-      fieldName === "mailingState" ||
-      fieldName === "mailingZipCode"
-    ) {
-      return (
-        data.isCurrentlyUnhoused !== true &&
-        data.isMailingAddressDifferentFromResidence === true
-      );
-    }
-    return true;
-  },
   component: ({ stepConfig }) => {
     const residenceVisible = useFieldVisible(
       stepConfig,

@@ -14,20 +14,15 @@ export const previousSocialSecurityCardStep: Step = {
     "Or, have you ever filed for a Social Security number in the past?",
   fields: [
     "hasPreviousSocialSecurityCard",
-    "previousSocialSecurityCardFirstName",
-    "previousSocialSecurityCardMiddleName",
-    "previousSocialSecurityCardLastName",
+    {
+      ids: [
+        "previousSocialSecurityCardFirstName",
+        "previousSocialSecurityCardMiddleName",
+        "previousSocialSecurityCardLastName",
+      ],
+      when: (data) => data.hasPreviousSocialSecurityCard === true,
+    },
   ],
-  isFieldVisible: (fieldName, data) => {
-    // Name fields only visible if user has previous card
-    if (
-      fieldName.startsWith("previousSocialSecurityCard") &&
-      fieldName !== "hasPreviousSocialSecurityCard"
-    ) {
-      return data.hasPreviousSocialSecurityCard === true;
-    }
-    return true;
-  },
   component: ({ stepConfig }) => {
     const previousCardVisible = useFieldVisible(
       stepConfig,

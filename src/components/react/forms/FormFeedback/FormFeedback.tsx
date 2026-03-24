@@ -11,13 +11,13 @@ import { Button } from "@/components/react/common/Button";
 import { Form } from "@/components/react/common/Form";
 import { Radio, RadioGroup } from "@/components/react/common/RadioGroup";
 import { TextArea } from "@/components/react/common/TextArea";
-import type { FormFeedbackSentiment } from "@/constants/forms";
+import type { FormFeedbackSentiment, FormSlug } from "@/constants/forms";
 import "./FormFeedback.css";
 import { Banner } from "../../common/Banner";
 import { Heading } from "../../common/Content";
 
 interface FormFeedbackProps {
-  formSlug: string;
+  slug: FormSlug;
 }
 
 const ERROR_MESSAGES: Record<number, string> = {
@@ -32,7 +32,7 @@ function isSubmitError(state: SubmitState): state is SubmitError {
   return typeof state === "object";
 }
 
-export function FormFeedback({ formSlug }: FormFeedbackProps) {
+export function FormFeedback({ slug }: FormFeedbackProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const [state, submitAction, isPending] = useActionState<
@@ -47,7 +47,7 @@ export function FormFeedback({ formSlug }: FormFeedbackProps) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          form_slug: formSlug,
+          form_slug: slug,
           sentiment,
           comment: comment.trim() || undefined,
         }),

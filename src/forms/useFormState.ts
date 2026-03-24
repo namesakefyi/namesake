@@ -1,12 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createActor } from "xstate";
 import { getFormProgress, saveFormProgress } from "@/db/database";
-import { type FormMachine, getPhase } from "@/forms/createFormMachine";
+import {
+  createFormMachine,
+  type FormMachine,
+  getPhase,
+} from "@/forms/createFormMachine";
 import {
   findNextStepIndex,
   findPrevStepIndex,
   getVisibleStepIds,
-} from "@/forms/stepNavigation";
+} from "@/forms/formVisibility";
 import type { FormMachineContext, FormPhase, Step } from "@/forms/types";
 
 type FormActor = ReturnType<typeof createActor<FormMachine>>;
@@ -125,11 +129,14 @@ function useFormActor(
 }
 
 export function useFormState(
-  machine: FormMachine,
+  formSlug: string,
   steps: readonly Step[],
   getFormData: () => Record<string, any>,
 ): UseFormStateReturn {
-  const formSlug = machine.id;
+  const machine = useMemo(
+    () => createFormMachine({ id: formSlug, steps }),
+    [formSlug, steps],
+  );
 
   const { isLoading, savedSnapshot } = usePersistedSnapshot(formSlug);
   const { actorRef, state, send } = useFormActor(
@@ -149,11 +156,7 @@ export function useFormState(
 
   const activeStep = steps.find((s) => s.id === activeStepId) ?? null;
 
-  const formData = getFormData();
-  const visibleStepIds = useMemo(
-    () => getVisibleStepIds(steps, formData),
-    [steps, formData],
-  );
+  const visibleStepIds = getVisibleStepIds(steps, getFormData());
 
   const currentStepIndex = activeStepId
     ? visibleStepIds.indexOf(activeStepId) + 1
@@ -167,7 +170,8 @@ export function useFormState(
     const currentIndex = steps.findIndex((s) => s.id === currentId);
     if (currentIndex === -1) return;
 
-    const nextIndex = findNextStepIndex(steps, currentIndex, getFormData());
+    const visible = getVisibleStepIds(steps, getFormData());
+    const nextIndex = findNextStepIndex(steps, currentIndex, visible);
     const isLastStep = nextIndex === -1;
     if (isLastStep) {
       send({ type: "GOTO_REVIEW" });
@@ -189,7 +193,8 @@ export function useFormState(
     const currentIndex = steps.findIndex((s) => s.id === currentId);
     if (currentIndex === -1) return;
 
-    const prevIndex = findPrevStepIndex(steps, currentIndex, getFormData());
+    const visible = getVisibleStepIds(steps, getFormData());
+    const prevIndex = findPrevStepIndex(steps, currentIndex, visible);
     const isFirstStep = prevIndex === -1;
     if (isFirstStep) {
       send({ type: "GOTO_TITLE" });

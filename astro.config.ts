@@ -16,7 +16,6 @@ export default defineConfig({
   adapter: isTest
     ? undefined
     : cloudflare({
-        prerenderEnvironment: "node",
         imageService: "compile",
       }),
   site: "https://namesake.fyi",

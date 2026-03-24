@@ -13,21 +13,11 @@ export const previousNameChangeStep: Step = {
   title: "Have you ever changed your name before?",
   fields: [
     "hasPreviousNameChange",
-    "previousNameFrom",
-    "previousNameTo",
-    "previousNameReason",
+    {
+      ids: ["previousNameFrom", "previousNameTo", "previousNameReason"],
+      when: (data) => data.hasPreviousNameChange === true,
+    },
   ],
-  isFieldVisible: (fieldName, data) => {
-    // Previous name details only visible if hasPreviousNameChange is true
-    if (
-      fieldName === "previousNameFrom" ||
-      fieldName === "previousNameTo" ||
-      fieldName === "previousNameReason"
-    ) {
-      return data.hasPreviousNameChange === true;
-    }
-    return true;
-  },
   component: ({ stepConfig }) => {
     const previousNameVisible = useFieldVisible(stepConfig, "previousNameFrom");
     return (

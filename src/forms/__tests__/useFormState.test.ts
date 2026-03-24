@@ -11,7 +11,6 @@ import {
 import { createActor } from "xstate";
 import * as db from "@/db/database";
 import { createFormMachine } from "@/forms/createFormMachine";
-import { step } from "@/forms/defineFormConfig";
 import type { Step } from "@/forms/types";
 import { useFormState } from "../useFormState";
 
@@ -24,8 +23,7 @@ function makeStep(id: string): Step {
   return { id, title: `Step ${id}`, fields: [], component: () => null };
 }
 
-const flow = [step(makeStep("a")), step(makeStep("b"))];
-const machine = createFormMachine({ id: "test-form", steps: flow });
+const flow = [makeStep("a"), makeStep("b")];
 
 const getFormData = () => ({});
 
@@ -55,7 +53,7 @@ describe("useFormState", () => {
       globalThis.indexedDB = undefined;
 
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => {
@@ -69,7 +67,7 @@ describe("useFormState", () => {
   describe("initial loading", () => {
     it("starts with isLoading true", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       expect(result.current.isLoading).toBe(true);
@@ -79,7 +77,7 @@ describe("useFormState", () => {
 
     it("sets isLoading to false after progress check completes", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => {
@@ -89,7 +87,7 @@ describe("useFormState", () => {
 
     it("starts in the title phase when no saved progress exists", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -100,7 +98,8 @@ describe("useFormState", () => {
 
   describe("restoring progress", () => {
     it("restores machine to a persisted filling state", async () => {
-      const actor = createActor(machine);
+      const m = createFormMachine({ id: "test-form", steps: flow });
+      const actor = createActor(m);
       actor.start();
       actor.send({ type: "START" });
       const snapshot = actor.getPersistedSnapshot();
@@ -109,7 +108,7 @@ describe("useFormState", () => {
       vi.mocked(db.getFormProgress).mockResolvedValueOnce(snapshot);
 
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -119,7 +118,8 @@ describe("useFormState", () => {
     });
 
     it("restores machine to the review phase", async () => {
-      const actor = createActor(machine);
+      const m = createFormMachine({ id: "test-form", steps: flow });
+      const actor = createActor(m);
       actor.start();
       actor.send({ type: "START" });
       actor.send({ type: "GOTO_REVIEW" });
@@ -129,7 +129,7 @@ describe("useFormState", () => {
       vi.mocked(db.getFormProgress).mockResolvedValueOnce(snapshot);
 
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -147,7 +147,7 @@ describe("useFormState", () => {
         .mockImplementation(() => {});
 
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -164,7 +164,7 @@ describe("useFormState", () => {
   describe("saving progress", () => {
     it("persists the initial state on mount", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -179,7 +179,7 @@ describe("useFormState", () => {
 
     it("persists state after a transition", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -199,7 +199,7 @@ describe("useFormState", () => {
 
     it("persists state when navigating with goNext", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -223,13 +223,10 @@ describe("useFormState", () => {
 
   describe("persisting complete state", () => {
     it("persists the complete state so the user returns to the completion page", async () => {
-      const singleFlow = [step(makeStep("only"))];
-      const singleMachine = createFormMachine({
-        id: "complete-test",
-        steps: singleFlow,
-      });
+      const singleFlow = [makeStep("only")];
+      const m = createFormMachine({ id: "complete-test", steps: singleFlow });
 
-      const actor = createActor(singleMachine);
+      const actor = createActor(m);
       actor.start();
       actor.send({ type: "START" });
       actor.send({ type: "GOTO_REVIEW" });
@@ -240,7 +237,7 @@ describe("useFormState", () => {
       vi.mocked(db.getFormProgress).mockResolvedValueOnce(submittingSnapshot);
 
       const { result } = renderHook(() =>
-        useFormState(singleMachine, singleFlow, getFormData),
+        useFormState("complete-test", singleFlow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -264,7 +261,7 @@ describe("useFormState", () => {
   describe("navigation helpers", () => {
     it("goNext advances to the next step", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -282,7 +279,7 @@ describe("useFormState", () => {
 
     it("goNext goes to review when at the last step", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -302,14 +299,10 @@ describe("useFormState", () => {
     });
 
     it("goNext goes directly to review from a single-step flow (isLastStep = true)", async () => {
-      const singleFlow = [step(makeStep("only"))];
-      const singleMachine = createFormMachine({
-        id: "single-step",
-        steps: singleFlow,
-      });
+      const singleFlow = [makeStep("only")];
 
       const { result } = renderHook(() =>
-        useFormState(singleMachine, singleFlow, getFormData),
+        useFormState("single-step", singleFlow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -327,7 +320,7 @@ describe("useFormState", () => {
 
     it("goBack goes to the previous step", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -348,7 +341,7 @@ describe("useFormState", () => {
 
     it("goBack goes to title when at the first step", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -366,7 +359,7 @@ describe("useFormState", () => {
 
     it("goBack from review returns to the last filling step", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -389,19 +382,15 @@ describe("useFormState", () => {
       expect(result.current.activeStepId).toBe("b");
     });
 
-    it("goNext skips guarded steps", async () => {
+    it("goNext skips steps with failing `when` predicate", async () => {
       const guardedFlow = [
-        step(makeStep("a")),
-        step({ ...makeStep("b"), guard: () => false }),
-        step(makeStep("c")),
+        makeStep("a"),
+        { ...makeStep("b"), when: () => false },
+        makeStep("c"),
       ];
-      const guardedMachine = createFormMachine({
-        id: "guarded",
-        steps: guardedFlow,
-      });
 
       const { result } = renderHook(() =>
-        useFormState(guardedMachine, guardedFlow, getFormData),
+        useFormState("guarded", guardedFlow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -421,7 +410,7 @@ describe("useFormState", () => {
   describe("editing phase", () => {
     it("returns editingStepId as activeStepId when in editing phase", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -444,7 +433,7 @@ describe("useFormState", () => {
   describe("derived state", () => {
     it("returns activeStepId as null and currentStepIndex as 0 before START", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -455,7 +444,7 @@ describe("useFormState", () => {
 
     it("computes visibleStepIds", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -467,7 +456,7 @@ describe("useFormState", () => {
 
     it("returns totalSteps matching visible step count", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -477,7 +466,7 @@ describe("useFormState", () => {
 
     it("returns currentStepIndex 0 on title", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -487,7 +476,7 @@ describe("useFormState", () => {
 
     it("returns 1-based currentStepIndex when filling", async () => {
       const { result } = renderHook(() =>
-        useFormState(machine, flow, getFormData),
+        useFormState("test-form", flow, getFormData),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));

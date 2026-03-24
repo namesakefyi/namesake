@@ -11,7 +11,7 @@ import { isRateLimited } from "@/utils/rateLimitByIp";
 const ALLOWED_ORIGINS = ["https://namesake.fyi"];
 
 const FeedbackSchema = z.object({
-  form_slug: z.enum(FORM_SLUGS as [string, ...string[]]),
+  form_slug: z.enum(FORM_SLUGS),
   sentiment: z.enum(
     Object.keys(FORM_FEEDBACK_SENTIMENT) as [
       FormFeedbackSentiment,

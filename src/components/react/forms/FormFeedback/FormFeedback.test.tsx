@@ -20,7 +20,7 @@ describe("FormFeedback", () => {
   });
 
   it("renders form fields", () => {
-    render(<FormFeedback formSlug="court-order-ma" />);
+    render(<FormFeedback slug="court-order-ma" />);
 
     expect(
       screen.getByRole("radiogroup", { name: /form rating/i }),
@@ -37,7 +37,7 @@ describe("FormFeedback", () => {
 
   it("allows selecting a sentiment option", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback formSlug="court-order-ma" />);
+    render(<FormFeedback slug="court-order-ma" />);
 
     const positive = screen.getByRole("radio", { name: /easy/i });
     const negative = screen.getByRole("radio", { name: /problems/i });
@@ -56,7 +56,7 @@ describe("FormFeedback", () => {
     const scrollIntoView = vi.fn();
     window.HTMLElement.prototype.scrollIntoView = scrollIntoView;
 
-    render(<FormFeedback formSlug="court-order-ma" />);
+    render(<FormFeedback slug="court-order-ma" />);
 
     await user.click(screen.getByRole("radio", { name: /easy/i }));
     await user.click(screen.getByRole("button", { name: /submit/i }));
@@ -71,7 +71,7 @@ describe("FormFeedback", () => {
 
   it("shows a success message after submission", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback formSlug="court-order-ma" />);
+    render(<FormFeedback slug="court-order-ma" />);
 
     await user.click(screen.getByRole("radio", { name: /easy/i }));
     await user.click(screen.getByRole("button", { name: /submit/i }));
@@ -85,7 +85,7 @@ describe("FormFeedback", () => {
 
   it("submits the correct form_slug and sentiment to the API", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback formSlug="court-order-ma" />);
+    render(<FormFeedback slug="court-order-ma" />);
 
     await user.click(screen.getByRole("radio", { name: /easy/i }));
     await user.click(screen.getByRole("button", { name: /submit/i }));
@@ -100,7 +100,7 @@ describe("FormFeedback", () => {
 
   it("includes the comment in the submission when provided", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback formSlug="court-order-ma" />);
+    render(<FormFeedback slug="court-order-ma" />);
 
     await user.click(screen.getByRole("radio", { name: /easy/i }));
     await user.type(
@@ -116,7 +116,7 @@ describe("FormFeedback", () => {
 
   it("omits the comment from the submission when left blank", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback formSlug="court-order-ma" />);
+    render(<FormFeedback slug="court-order-ma" />);
 
     await user.click(screen.getByRole("radio", { name: /easy/i }));
     await user.click(screen.getByRole("button", { name: /submit/i }));
@@ -128,7 +128,7 @@ describe("FormFeedback", () => {
 
   it("preserves field values after a submission error", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback formSlug="court-order-ma" />);
+    render(<FormFeedback slug="court-order-ma" />);
 
     await user.click(screen.getByRole("radio", { name: /easy/i }));
     await user.type(
@@ -150,7 +150,7 @@ describe("FormFeedback", () => {
 
   it("shows an error message when the API request fails", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback formSlug="court-order-ma" />);
+    render(<FormFeedback slug="court-order-ma" />);
 
     await user.click(screen.getByRole("radio", { name: /problems/i }));
     vi.mocked(fetch).mockResolvedValueOnce(errorResponse());
@@ -165,7 +165,7 @@ describe("FormFeedback", () => {
 
   it("shows a generic error when fetch throws a network error", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback formSlug="court-order-ma" />);
+    render(<FormFeedback slug="court-order-ma" />);
 
     await user.click(screen.getByRole("radio", { name: /easy/i }));
     vi.mocked(fetch).mockRejectedValueOnce(new Error("Network error"));
@@ -188,7 +188,7 @@ describe("FormFeedback", () => {
 
     it("calls navigator.share with the current page title and URL", async () => {
       const user = userEvent.setup();
-      render(<FormFeedback formSlug="court-order-ma" />);
+      render(<FormFeedback slug="court-order-ma" />);
 
       await user.click(screen.getByRole("radio", { name: /easy/i }));
       await user.click(screen.getByRole("button", { name: /submit/i }));

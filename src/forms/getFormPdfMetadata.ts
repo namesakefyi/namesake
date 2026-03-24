@@ -1,4 +1,4 @@
-import { getFormConfig } from "@/constants/forms";
+import { type FormSlug, getFormConfig } from "@/constants/forms";
 import type { PDFId } from "@/constants/pdf";
 import { getPdfDefinition } from "@/pdfs";
 
@@ -23,7 +23,7 @@ export interface FormPdfMetadata {
  * @returns Array of PDF metadata including title, code, and whether it's conditional
  */
 export async function getFormPdfMetadata(
-  formSlug: string,
+  formSlug: FormSlug,
 ): Promise<FormPdfMetadata[]> {
   const config = getFormConfig(formSlug);
   if (!config) return [];
@@ -35,7 +35,7 @@ export async function getFormPdfMetadata(
         pdfId: pdf.pdfId,
         title: definition.title,
         code: definition.code,
-        conditional: !!pdf.include,
+        conditional: !!pdf.when,
       };
     }),
   );

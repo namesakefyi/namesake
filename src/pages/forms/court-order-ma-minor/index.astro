@@ -1,0 +1,45 @@
+---
+import type { SanityDocument } from "@sanity/client";
+import { FormContainer } from "@/components/react/forms/FormContainer/FormContainer";
+import type { FormSlug } from "@/constants/forms";
+import { getFormPdfMetadata } from "@/forms/getFormPdfMetadata";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { loadQuery } from "@/sanity/lib/loadQuery";
+
+const formSlug: FormSlug = "court-order-ma-minor";
+
+const { data: form } = await loadQuery<SanityDocument | null>({
+  query: `*[_type == "form" && slug.current == $slug][0]{
+    title,
+    description,
+    banner,
+    _updatedAt,
+    state,
+    category,
+    "costs": *[_type == "guide" && state._ref == ^.state._ref && category._ref == ^.category._ref][0].costs
+  }`,
+  params: {
+    slug: formSlug,
+  },
+});
+
+const pdfs = await getFormPdfMetadata(formSlug);
+
+const title = form?.title ?? "Court Order: Massachusetts (Under 18)";
+const description =
+  form?.description ??
+  "If you live in Massachusetts, are under 18, and want to legally update your name, this is the place to start.";
+---
+
+<BaseLayout title={title} description={description} color="white">
+  <FormContainer
+    client:load
+    slug={formSlug}
+    title={title}
+    description={description}
+    banner={form?.banner}
+    updatedAt={form?._updatedAt}
+    pdfs={pdfs}
+    costs={form?.costs}
+  />
+</BaseLayout>

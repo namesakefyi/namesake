@@ -1,16 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { createActor } from "xstate";
 import { createFormMachine, getPhase } from "@/forms/createFormMachine";
-import { step } from "@/forms/defineFormConfig";
 import { makeStep } from "./testHelpers";
 
 describe("createFormMachine", () => {
   describe("linear flow", () => {
-    const flow = [
-      step(makeStep("a")),
-      step(makeStep("b")),
-      step(makeStep("c")),
-    ];
+    const flow = [makeStep("a"), makeStep("b"), makeStep("c")];
     const machine = createFormMachine({ id: "test-linear", steps: flow });
 
     it("starts in title state", () => {
@@ -60,7 +55,7 @@ describe("createFormMachine", () => {
   });
 
   describe("review-edit flow", () => {
-    const flow = [step(makeStep("a")), step(makeStep("b"))];
+    const flow = [makeStep("a"), makeStep("b")];
     const machine = createFormMachine({ id: "test-review", steps: flow });
 
     it("EDIT_STEP from review transitions to editing with stepId in context", () => {
@@ -99,7 +94,7 @@ describe("createFormMachine", () => {
   });
 
   describe("submission flow", () => {
-    const flow = [step(makeStep("a"))];
+    const flow = [makeStep("a")];
     const machine = createFormMachine({ id: "test-submit", steps: flow });
 
     it("SUBMIT from review transitions to submitting", () => {

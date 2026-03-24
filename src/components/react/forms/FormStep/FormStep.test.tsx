@@ -20,17 +20,23 @@ const defaultContextValue = {
 
 function makeWrapper(
   overrides: Partial<typeof defaultContextValue> = {},
+  formDefaultValues: Record<string, unknown> = {},
 ): ({ children }: { children: ReactNode }) => ReactNode {
-  return ({ children }) => (
-    <FormStepContext.Provider value={{ ...defaultContextValue, ...overrides }}>
-      {children}
-    </FormStepContext.Provider>
-  );
+  return ({ children }) => {
+    const form = useForm({ defaultValues: formDefaultValues });
+    return (
+      <FormProvider {...form}>
+        <FormStepContext.Provider
+          value={{ ...defaultContextValue, ...overrides }}
+        >
+          {children}
+        </FormStepContext.Provider>
+      </FormProvider>
+    );
+  };
 }
 
-function TestWrapper({ children }: { children: ReactNode }) {
-  return makeWrapper()({ children });
-}
+const TestWrapper = makeWrapper();
 
 describe("FormStep", () => {
   const formStep: Step = {
@@ -39,13 +45,12 @@ describe("FormStep", () => {
     title: "What is your legal name?",
     description: "Type your name exactly as it appears on your ID.",
     fields: [],
-    isFieldVisible: () => true,
   };
 
   it("renders title correctly", () => {
     render(<FormStep stepConfig={formStep} />, { wrapper: TestWrapper });
 
-    const titleElement = screen.getByText(formStep.title);
+    const titleElement = screen.getByText(formStep.title as string);
     expect(titleElement).toBeInTheDocument();
     expect(titleElement).toHaveClass("form-step-title");
   });
@@ -53,8 +58,61 @@ describe("FormStep", () => {
   it("renders optional description", () => {
     render(<FormStep stepConfig={formStep} />, { wrapper: TestWrapper });
 
-    const descriptionElement = screen.getByText(formStep.description ?? "");
+    const descriptionElement = screen.getByText(formStep.description as string);
     expect(descriptionElement).toBeInTheDocument();
+  });
+
+  it("renders dynamic title and description from form data", () => {
+    const stepWithDynamicContent: Step = {
+      ...formStep,
+      title: (data) =>
+        `Where do ${(data as { oldFirstName?: string }).oldFirstName ?? "the minor"}'s parents live?`,
+      description: (data) =>
+        `Enter the address for ${(data as { oldFirstName?: string }).oldFirstName ?? "the minor"}'s legal parents.`,
+    };
+    const WrapperWithData = makeWrapper({}, { oldFirstName: "Erika" });
+
+    render(<FormStep stepConfig={stepWithDynamicContent} />, {
+      wrapper: WrapperWithData,
+    });
+
+    expect(
+      screen.getByText(
+        (content) =>
+          content.includes("Where do") &&
+          content.includes("Erika") &&
+          content.includes("parents live"),
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        (content) =>
+          content.includes("Enter the address for") &&
+          content.includes("Erika") &&
+          content.includes("legal parents"),
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("uses fallback when form data is empty for dynamic title", () => {
+    const stepWithDynamicContent: Step = {
+      ...formStep,
+      title: (data) =>
+        `Where do ${(data as { oldFirstName?: string }).oldFirstName ?? "the minor"}'s parents live?`,
+    };
+
+    render(<FormStep stepConfig={stepWithDynamicContent} />, {
+      wrapper: TestWrapper,
+    });
+
+    expect(
+      screen.getByText(
+        (content) =>
+          content.includes("Where do") &&
+          content.includes("the minor") &&
+          content.includes("parents live"),
+      ),
+    ).toBeInTheDocument();
   });
 
   it("does not render description when not provided", () => {
@@ -67,7 +125,7 @@ describe("FormStep", () => {
       wrapper: TestWrapper,
     });
 
-    const titleElement = screen.getByText(formStep.title);
+    const titleElement = screen.getByText(formStep.title as string);
     expect(titleElement).toBeInTheDocument();
 
     const descriptionQuery = screen.queryByRole("paragraph");
@@ -105,7 +163,7 @@ describe("FormStep", () => {
     render(<FormStep stepConfig={formStep} />, { wrapper: TestWrapper });
 
     const form = screen.getByRole("form", {
-      description: formStep.description,
+      description: formStep.description as string,
     });
     expect(form).toBeInTheDocument();
   });
@@ -121,7 +179,7 @@ describe("FormStep", () => {
     });
 
     const form = screen.getByRole("form", {
-      name: formStep.title,
+      name: formStep.title as string,
     });
     expect(form).toBeInTheDocument();
     expect(form).not.toHaveAccessibleDescription();
@@ -173,7 +231,7 @@ describe("useFieldVisible", () => {
     component: () => null,
   };
 
-  it("returns true when isFieldVisible is not defined", () => {
+  it("returns true when field has no when callback", () => {
     const { result } = renderHook(
       () => useFieldVisible(stepConfig, "middleName" as any),
       { wrapper: TestWrapper },
@@ -181,8 +239,11 @@ describe("useFieldVisible", () => {
     expect(result.current).toBe(true);
   });
 
-  it("returns true when isFieldVisible returns true for the field", () => {
-    const config = { ...stepConfig, isFieldVisible: () => true };
+  it("returns true when when callback returns true", () => {
+    const config: Step = {
+      ...stepConfig,
+      fields: [{ id: "middleName" as any, when: () => true }],
+    };
     const { result } = renderHook(
       () => useFieldVisible(config, "middleName" as any),
       { wrapper: TestWrapper },
@@ -190,8 +251,11 @@ describe("useFieldVisible", () => {
     expect(result.current).toBe(true);
   });
 
-  it("returns false when isFieldVisible returns false for the field", () => {
-    const config = { ...stepConfig, isFieldVisible: () => false };
+  it("returns false when when callback returns false", () => {
+    const config: Step = {
+      ...stepConfig,
+      fields: [{ id: "middleName" as any, when: () => false }],
+    };
     const { result } = renderHook(
       () => useFieldVisible(config, "middleName" as any),
       { wrapper: TestWrapper },
@@ -199,16 +263,26 @@ describe("useFieldVisible", () => {
     expect(result.current).toBe(false);
   });
 
-  it("passes live form data to isFieldVisible", () => {
-    const isFieldVisible = vi.fn(() => true);
-    const config = { ...stepConfig, isFieldVisible };
+  it("passes live form data to the when callback", () => {
+    const when = vi.fn(() => true);
+    const config: Step = {
+      ...stepConfig,
+      fields: [{ id: "middleName" as any, when }],
+    };
     renderHook(() => useFieldVisible(config, "middleName" as any), {
       wrapper: TestWrapper,
     });
-    expect(isFieldVisible).toHaveBeenCalledWith(
-      "middleName",
+    expect(when).toHaveBeenCalledWith(
       expect.objectContaining({ middleName: "Lee" }),
     );
+  });
+
+  it("returns false for a field not listed in the step fields", () => {
+    const { result } = renderHook(
+      () => useFieldVisible(stepConfig, "unknownField" as any),
+      { wrapper: TestWrapper },
+    );
+    expect(result.current).toBe(false);
   });
 });
 

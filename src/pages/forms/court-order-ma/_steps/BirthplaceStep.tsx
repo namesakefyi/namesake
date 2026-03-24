@@ -8,14 +8,14 @@ import type { Step } from "@/forms/types";
 export const birthplaceStep: Step = {
   id: "birthplace",
   title: "Where were you born?",
-  fields: ["birthplaceCity", "birthplaceCountry", "birthplaceState"],
-  isFieldVisible: (fieldName, data) => {
-    // birthplaceState is only visible if birthplaceCountry is the US
-    if (fieldName === "birthplaceState") {
-      return data.birthplaceCountry === "US";
-    }
-    return true;
-  },
+  fields: [
+    "birthplaceCity",
+    "birthplaceCountry",
+    {
+      id: "birthplaceState",
+      when: (data) => data.birthplaceCountry === "US",
+    },
+  ],
   component: ({ stepConfig }) => {
     const stateVisible = useFieldVisible(stepConfig, "birthplaceState");
     return (

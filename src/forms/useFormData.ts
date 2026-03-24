@@ -6,16 +6,20 @@ import {
   type UseFormProps,
   useForm,
 } from "react-hook-form";
-import type { FieldName } from "@/constants/fields";
+import type { FormConfig } from "@/constants/forms";
 import { deleteField, getFieldsByNames, saveField } from "@/db/database";
+import { getFormFields } from "./formVisibility";
 
 export function useFormData<TFieldValues extends FieldValues = FieldValues>(
-  fields: readonly FieldName[],
+  config: FormConfig,
   options?: Omit<UseFormProps<TFieldValues>, "values" | "defaultValues">,
 ) {
   const [isLoading, setIsLoading] = useState(true);
 
-  const fieldsList = useMemo(() => [...fields] as string[], [fields]);
+  const fieldsList = useMemo(
+    () => [...getFormFields(config.steps)] as string[],
+    [config.steps],
+  );
 
   const form = useForm<TFieldValues>({
     mode: "onBlur",

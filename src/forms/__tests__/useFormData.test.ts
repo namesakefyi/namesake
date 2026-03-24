@@ -1,5 +1,6 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { FormConfig, FormSlug } from "@/constants/forms";
 import * as database from "@/db/database";
 import { useFormData } from "../useFormData";
 
@@ -8,6 +9,23 @@ vi.mock("@/db/database", () => ({
   saveField: vi.fn(),
   deleteField: vi.fn(),
 }));
+
+function makeConfig(fields: string[]): FormConfig {
+  return {
+    slug: "test" as FormSlug,
+    steps: [
+      {
+        id: "s",
+        title: "S",
+        fields: fields as any,
+        component: () => null,
+      },
+    ],
+    pdfs: [],
+    downloadTitle: "Test",
+    instructions: [],
+  };
+}
 
 describe("useFormData", () => {
   beforeEach(() => {
@@ -24,7 +42,9 @@ describe("useFormData", () => {
 
   describe("initial state", () => {
     it("starts with isLoading true", async () => {
-      const { result } = renderHook(() => useFormData(["oldFirstName"]));
+      const { result } = renderHook(() =>
+        useFormData(makeConfig(["oldFirstName"])),
+      );
 
       expect(result.current.isLoading).toBe(true);
 
@@ -32,7 +52,9 @@ describe("useFormData", () => {
     });
 
     it("exposes react-hook-form methods alongside custom properties", async () => {
-      const { result } = renderHook(() => useFormData(["oldFirstName"]));
+      const { result } = renderHook(() =>
+        useFormData(makeConfig(["oldFirstName"])),
+      );
 
       expect(result.current).toHaveProperty("register");
       expect(result.current).toHaveProperty("handleSubmit");
@@ -46,7 +68,9 @@ describe("useFormData", () => {
 
   describe("loading saved data", () => {
     it("sets isLoading to false after loading completes", async () => {
-      const { result } = renderHook(() => useFormData(["oldFirstName"]));
+      const { result } = renderHook(() =>
+        useFormData(makeConfig(["oldFirstName"])),
+      );
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
@@ -55,7 +79,7 @@ describe("useFormData", () => {
 
     it("calls getFieldsByNames with the provided field names", async () => {
       const { result } = renderHook(() =>
-        useFormData(["oldFirstName", "oldLastName"]),
+        useFormData(makeConfig(["oldFirstName", "oldLastName"])),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -73,7 +97,7 @@ describe("useFormData", () => {
       ]);
 
       const { result } = renderHook(() =>
-        useFormData(["oldFirstName", "oldLastName"]),
+        useFormData(makeConfig(["oldFirstName", "oldLastName"])),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -87,7 +111,9 @@ describe("useFormData", () => {
         new Error("DB unavailable"),
       );
 
-      const { result } = renderHook(() => useFormData(["oldFirstName"]));
+      const { result } = renderHook(() =>
+        useFormData(makeConfig(["oldFirstName"])),
+      );
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
@@ -97,7 +123,9 @@ describe("useFormData", () => {
 
   describe("auto-save on change", () => {
     it("saves a field when its value changes after loading", async () => {
-      const { result } = renderHook(() => useFormData(["oldFirstName"]));
+      const { result } = renderHook(() =>
+        useFormData(makeConfig(["oldFirstName"])),
+      );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
 
@@ -111,7 +139,9 @@ describe("useFormData", () => {
     });
 
     it("deletes a field when its value is cleared to an empty string", async () => {
-      const { result } = renderHook(() => useFormData(["oldFirstName"]));
+      const { result } = renderHook(() =>
+        useFormData(makeConfig(["oldFirstName"])),
+      );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       vi.clearAllMocks();
@@ -127,7 +157,9 @@ describe("useFormData", () => {
     });
 
     it("deletes a field when its value is set to null", async () => {
-      const { result } = renderHook(() => useFormData(["oldFirstName"]));
+      const { result } = renderHook(() =>
+        useFormData(makeConfig(["oldFirstName"])),
+      );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       vi.clearAllMocks();
@@ -143,7 +175,9 @@ describe("useFormData", () => {
     });
 
     it("deletes a field when its value is set to an empty array", async () => {
-      const { result } = renderHook(() => useFormData(["pronouns"]));
+      const { result } = renderHook(() =>
+        useFormData(makeConfig(["pronouns"])),
+      );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       vi.clearAllMocks();
@@ -163,7 +197,9 @@ describe("useFormData", () => {
         new Error("Delete failed"),
       );
 
-      const { result } = renderHook(() => useFormData(["oldFirstName"]));
+      const { result } = renderHook(() =>
+        useFormData(makeConfig(["oldFirstName"])),
+      );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       vi.clearAllMocks();
@@ -186,7 +222,9 @@ describe("useFormData", () => {
         new Error("Write failed"),
       );
 
-      const { result } = renderHook(() => useFormData(["oldFirstName"]));
+      const { result } = renderHook(() =>
+        useFormData(makeConfig(["oldFirstName"])),
+      );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       vi.clearAllMocks();
@@ -205,7 +243,9 @@ describe("useFormData", () => {
     });
 
     it("does not save when value is undefined", async () => {
-      const { result } = renderHook(() => useFormData(["oldFirstName"]));
+      const { result } = renderHook(() =>
+        useFormData(makeConfig(["oldFirstName"])),
+      );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       vi.clearAllMocks();

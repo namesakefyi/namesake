@@ -1,0 +1,7 @@
+{
+  "plugins": {
+    "sanity": {
+      "enabled": true
+    }
+  }
+}

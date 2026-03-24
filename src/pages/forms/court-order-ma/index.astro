@@ -1,9 +1,12 @@
 ---
 import type { SanityDocument } from "@sanity/client";
+import { FormContainer } from "@/components/react/forms/FormContainer/FormContainer";
+import type { FormSlug } from "@/constants/forms";
 import { getFormPdfMetadata } from "@/forms/getFormPdfMetadata";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { loadQuery } from "@/sanity/lib/loadQuery";
-import { MaCourtOrderForm } from "./_Form";
+
+const formSlug: FormSlug = "court-order-ma";
 
 const { data: form } = await loadQuery<SanityDocument>({
   query: `*[_type == "form" && slug.current == $slug][0]{
@@ -16,16 +19,17 @@ const { data: form } = await loadQuery<SanityDocument>({
     "costs": *[_type == "guide" && state._ref == ^.state._ref && category._ref == ^.category._ref][0].costs
   }`,
   params: {
-    slug: "court-order-ma",
+    slug: formSlug,
   },
 });
 
-const pdfs = await getFormPdfMetadata("court-order-ma");
+const pdfs = await getFormPdfMetadata(formSlug);
 ---
 
 <BaseLayout title={form.title} description={form.description} color="white">
-  <MaCourtOrderForm
+  <FormContainer
     client:load
+    slug={formSlug}
     title={form.title}
     description={form.description}
     banner={form.banner}

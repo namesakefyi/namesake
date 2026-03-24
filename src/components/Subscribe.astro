@@ -3,25 +3,21 @@ import { RiArrowRightLine } from "@remixicon/react";
 ---
 
 <form
-  action="https://namesake.mailcoach.app/subscribe/d21c197c-7919-45d5-b25a-29ee17cd538e"
+  action="https://buttondown.com/api/emails/embed-subscribe/namesake"
   method="post"
+  class="embeddable-buttondown-form"
 >
-  <strong>Keep in touch:</strong>
+  <label for="bd-email">Keep in touch</label>
   <div class="input-group">
     <input
       type="email"
       name="email"
+      id="bd-email"
       placeholder="Your email"
       autocomplete="email"
       required
     />
     <button type="submit">Subscribe <RiArrowRightLine /></button>
-  </div>
-  <div hidden>
-    <label for="special">
-      If you are a human, do not fill in this field.
-    </label>
-    <input type="text" name="special" tabindex="-1" autocomplete="off" />
   </div>
 </form>
 
@@ -42,6 +38,10 @@ import { RiArrowRightLine } from "@remixicon/react";
     display: flex;
     gap: var(--space-xs);
     margin-block-start: var(--space-s);
+  }
+
+  label {
+    font-weight: var(--weight-bold);
   }
 
   input,

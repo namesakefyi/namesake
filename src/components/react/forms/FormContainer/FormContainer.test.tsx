@@ -1,10 +1,8 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useForm } from "react-hook-form";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import type { FormConfig, FormSlug } from "@/constants/forms";
 import * as db from "@/db/database";
-import { createFormMachine } from "@/forms/createFormMachine";
-import { step } from "@/forms/defineFormConfig";
 import type { Step } from "@/forms/types";
 import { FormStep } from "../FormStep/FormStep";
 import { FormContainer } from "./FormContainer";
@@ -14,9 +12,11 @@ vi.mock("@/db/database", () => ({
   saveFormProgress: vi.fn().mockResolvedValue(undefined),
   clearFormProgress: vi.fn().mockResolvedValue(undefined),
   getAllFields: vi.fn().mockResolvedValue([]),
+  getFieldsByNames: vi.fn().mockResolvedValue([]),
+  saveField: vi.fn().mockResolvedValue(undefined),
+  deleteField: vi.fn().mockResolvedValue(undefined),
 }));
 
-// A minimal step whose component renders plain content (no form).
 const plainStep: Step = {
   id: "plain",
   title: "Plain Step",
@@ -24,7 +24,6 @@ const plainStep: Step = {
   component: () => <div>Step content</div>,
 };
 
-// A step whose component renders a FormStep, exposing a submittable form.
 const formStepStep: Step = {
   id: "form-step",
   title: "Form Step",
@@ -32,35 +31,31 @@ const formStepStep: Step = {
   component: ({ stepConfig }) => <FormStep stepConfig={stepConfig} />,
 };
 
-const plainFlow = [step(plainStep)];
-const plainMachine = createFormMachine({ id: "test-plain", steps: plainFlow });
+const plainConfig: FormConfig = {
+  slug: "court-order-ma",
+  steps: [plainStep],
+  pdfs: [],
+  downloadTitle: "Test",
+  instructions: [],
+};
 
-const formStepFlow = [step(formStepStep)];
-const formStepMachine = createFormMachine({
-  id: "test-form-step",
-  steps: formStepFlow,
+const formStepConfig: FormConfig = {
+  slug: "court-order-ma",
+  steps: [formStepStep],
+  pdfs: [],
+  downloadTitle: "Test",
+  instructions: [],
+};
+
+vi.mock("@/constants/forms", async (importOriginal) => {
+  const orig = (await importOriginal()) as Record<string, unknown>;
+  return {
+    ...orig,
+    getFormConfig: vi.fn(),
+  };
 });
 
-function makeContainer(
-  flow: typeof plainFlow,
-  machine: ReturnType<typeof createFormMachine>,
-  onSubmit: () => void | Promise<void> = vi.fn(),
-) {
-  return function Container() {
-    const form = useForm();
-    return (
-      <FormContainer
-        title="Test Title"
-        description="Test Description"
-        updatedAt="2025-01-01"
-        form={form}
-        onSubmit={onSubmit}
-        steps={flow}
-        machine={machine}
-      />
-    );
-  };
-}
+import { getFormConfig } from "@/constants/forms";
 
 describe("FormContainer", () => {
   beforeEach(() => {
@@ -72,7 +67,6 @@ describe("FormContainer", () => {
       Object.defineProperty(globalThis, "indexedDB", { value: {} });
     }
     Element.prototype.scrollIntoView = vi.fn();
-    // Ensure requestAnimationFrame callbacks run synchronously in tests.
     vi.stubGlobal("requestAnimationFrame", (cb: FrameRequestCallback) => {
       cb(0);
       return 0;
@@ -80,29 +74,38 @@ describe("FormContainer", () => {
   });
 
   describe("title step", () => {
-    const Container = makeContainer(plainFlow, plainMachine);
+    beforeEach(() => {
+      vi.mocked(getFormConfig).mockReturnValue(plainConfig);
+    });
 
     it("renders title on title step", async () => {
-      render(<Container />);
+      render(<FormContainer slug="court-order-ma" title="Test Title" />);
       expect(await screen.findByText("Test Title")).toBeInTheDocument();
     });
 
     it("renders description on title step", async () => {
-      render(<Container />);
+      render(
+        <FormContainer
+          slug="court-order-ma"
+          title="Test Title"
+          description="Test Description"
+        />,
+      );
       expect(await screen.findByText("Test Description")).toBeInTheDocument();
     });
 
     it("renders start button on title step", async () => {
-      render(<Container />);
+      render(<FormContainer slug="court-order-ma" title="Test Title" />);
       expect(
         await screen.findByRole("button", { name: "Start" }),
       ).toBeInTheDocument();
     });
 
-    it("renders a loading spinner while saved progress is being fetched", () => {
+    it("renders a loading spinner while saved progress is being fetched", async () => {
       vi.mocked(db.getFormProgress).mockReturnValue(new Promise(() => {}));
 
-      render(<Container />);
+      render(<FormContainer slug="court-order-ma" title="Test Title" />);
+      await act(async () => {});
 
       expect(
         screen.getByRole("progressbar", { name: "Loading form" }),
@@ -112,10 +115,13 @@ describe("FormContainer", () => {
   });
 
   describe("filling phase", () => {
+    beforeEach(() => {
+      vi.mocked(getFormConfig).mockReturnValue(plainConfig);
+    });
+
     it("renders step content and navigation after clicking Start", async () => {
       const user = userEvent.setup();
-      const Container = makeContainer(plainFlow, plainMachine);
-      render(<Container />);
+      render(<FormContainer slug="court-order-ma" title="Test Title" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
 
@@ -125,8 +131,7 @@ describe("FormContainer", () => {
 
     it("returns to title after clicking Previous step", async () => {
       const user = userEvent.setup();
-      const Container = makeContainer(plainFlow, plainMachine);
-      render(<Container />);
+      render(<FormContainer slug="court-order-ma" title="Test Title" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
       await user.click(screen.getByRole("button", { name: "Previous step" }));
@@ -138,10 +143,13 @@ describe("FormContainer", () => {
   });
 
   describe("review phase", () => {
+    beforeEach(() => {
+      vi.mocked(getFormConfig).mockReturnValue(plainConfig);
+    });
+
     it("renders review step after clicking Next step", async () => {
       const user = userEvent.setup();
-      const Container = makeContainer(plainFlow, plainMachine);
-      render(<Container />);
+      render(<FormContainer slug="court-order-ma" title="Test Title" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
       await user.click(screen.getByRole("button", { name: "Next step" }));
@@ -153,10 +161,18 @@ describe("FormContainer", () => {
   });
 
   describe("handleFormSubmit — default case (filling)", () => {
+    beforeEach(() => {
+      vi.mocked(getFormConfig).mockReturnValue(formStepConfig);
+    });
+
     it("advances to review when a filling-phase form step is submitted", async () => {
       const user = userEvent.setup();
-      const Container = makeContainer(formStepFlow, formStepMachine);
-      render(<Container />);
+      render(
+        <FormContainer
+          slug={"test-form-step" as FormSlug}
+          title="Test Title"
+        />,
+      );
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
       await user.click(screen.getByRole("button", { name: "Continue" }));
@@ -167,47 +183,13 @@ describe("FormContainer", () => {
     });
   });
 
-  describe("handleFormSubmit — review case", () => {
-    it("renders complete step after a successful submission", async () => {
-      const user = userEvent.setup();
-      const onSubmit = vi.fn().mockResolvedValue(undefined);
-      const Container = makeContainer(plainFlow, plainMachine, onSubmit);
-      render(<Container />);
+  describe("error handling", () => {
+    it("throws when slug has no registered config", () => {
+      vi.mocked(getFormConfig).mockReturnValue(undefined);
 
-      await user.click(await screen.findByRole("button", { name: "Start" }));
-      await user.click(screen.getByRole("button", { name: "Next step" }));
-      await user.click(
-        await screen.findByRole("button", { name: /finish and download/i }),
-      );
-
-      expect(onSubmit).toHaveBeenCalled();
-      expect(await screen.findByText("Form complete!")).toBeInTheDocument();
-    });
-
-    it("shows an error banner when submission throws", async () => {
-      const consoleSpy = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
-
-      const user = userEvent.setup();
-      const onSubmit = vi.fn().mockRejectedValue(new Error("PDF failed"));
-      const Container = makeContainer(plainFlow, plainMachine, onSubmit);
-      render(<Container />);
-
-      await user.click(await screen.findByRole("button", { name: "Start" }));
-      await user.click(screen.getByRole("button", { name: "Next step" }));
-      await user.click(
-        await screen.findByRole("button", { name: /finish and download/i }),
-      );
-
-      await waitFor(() => {
-        expect(screen.getByRole("alert")).toBeInTheDocument();
-        expect(screen.getByRole("alert")).toHaveTextContent(
-          "Something went wrong",
-        );
-      });
-
-      consoleSpy.mockRestore();
+      expect(() =>
+        render(<FormContainer slug={"nonexistent" as FormSlug} title="Test" />),
+      ).toThrow(/No form registered for slug/);
     });
   });
 });

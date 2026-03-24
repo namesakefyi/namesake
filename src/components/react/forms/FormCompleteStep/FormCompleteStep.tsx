@@ -6,16 +6,17 @@ import { Heading } from "../../common/Content/Content";
 import { DeleteFormDataModal } from "../DeleteFormDataModal";
 import { FormFeedback } from "../FormFeedback/FormFeedback";
 import "./FormCompleteStep.css";
+import type { FormSlug } from "@/constants/forms";
 
 export interface FormCompleteStepProps {
+  slug: FormSlug;
   title: string;
-  formSlug: string;
   onRedownload: (e: React.SubmitEvent<HTMLFormElement>) => void | Promise<void>;
 }
 
 export function FormCompleteStep({
+  slug,
   title,
-  formSlug,
   onRedownload,
 }: FormCompleteStepProps) {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -41,7 +42,7 @@ export function FormCompleteStep({
   };
 
   const handleRestart = async () => {
-    await clearFormProgress(formSlug);
+    await clearFormProgress(slug);
     window.location.reload();
   };
 
@@ -57,7 +58,7 @@ export function FormCompleteStep({
         </p>
       </header>
       <div className="form-complete-step-content">
-        <FormFeedback formSlug={formSlug} />
+        <FormFeedback slug={slug} />
         <DeleteFormDataModal />
         <div className="form-complete-actions">
           <form onSubmit={handleSubmit}>

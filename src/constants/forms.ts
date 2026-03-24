@@ -1,14 +1,21 @@
-import type { FormMachine } from "@/forms/createFormMachine";
 import type { Step } from "@/forms/types";
 import { courtOrderMaConfig } from "@/pages/forms/court-order-ma/config";
+import { courtOrderMinorMaConfig } from "@/pages/forms/court-order-ma-minor/config";
 import { socialSecurityConfig } from "@/pages/forms/social-security/config";
-import type { FieldName, FormData } from "./fields";
+import type { FormData } from "./fields";
 import type { PDFId } from "./pdf";
 
 /**
- * Type representing all valid form slugs.
- * Update this union whenever a new form is added to FORM_CONFIGS.
+ * Const representing all valid form slugs.
+ * Update this array whenever a new form is added.
  */
+export const FORM_SLUGS = [
+  "court-order-ma-minor",
+  "court-order-ma",
+  "social-security",
+] as const;
+
+export type FormSlug = (typeof FORM_SLUGS)[number];
 
 /**
  * Configuration for a PDF within a form.
@@ -17,38 +24,56 @@ export interface FormPdfConfig {
   /** The PDF identifier */
   pdfId: PDFId;
   /** Optional predicate to determine if this PDF should be included based on form data */
-  include?: (data: Partial<FormData>) => boolean;
+  when?: (data: Partial<FormData>) => boolean;
 }
 
 /**
- * Function that generates instructions based on form data.
+ * A single instruction entry. Plain string = always included.
+ * Object form: `{ text, when }` = included only when `when` returns true.
  */
-export type FormInstructionsFn = (data: Partial<FormData>) => string[];
+export type Instruction =
+  | string
+  | { text: string; when: (data: Partial<FormData>) => boolean };
+
+/**
+ * Resolves an instructions array to plain strings, filtering out conditional
+ * entries whose `when` predicate returns false for the given form data.
+ */
+export function resolveInstructions(
+  instructions: readonly Instruction[],
+  data: Partial<FormData>,
+): string[] {
+  return instructions.flatMap((item) => {
+    if (typeof item === "string") return [item];
+    return item.when(data) ? [item.text] : [];
+  });
+}
 
 /**
  * Complete configuration for a form.
  */
 export interface FormConfig {
   /** Form identifier matching the URL slug */
-  slug: string;
+  slug: FormSlug;
   /** Ordered steps, including optional guards for conditional inclusion. */
   steps: readonly Step[];
-  /** The XState machine for this form, created from steps. */
-  machine: FormMachine;
-  /** Flattened array of all field names, derived from steps. */
-  fields: readonly FieldName[];
   /** PDFs included in this form */
   pdfs: readonly FormPdfConfig[];
   /** Title for the downloaded PDF package */
   downloadTitle: string;
-  /** Static instructions or function that generates instructions from form data */
-  instructions: string[] | FormInstructionsFn;
+  /**
+   * Instructions shown on the cover page of the downloaded packet.
+   * Plain string = always included.
+   * Object form: `{ text, when }` = included only when `when` returns true.
+   */
+  instructions: readonly Instruction[];
 }
 
 /**
  * Registry of all form configurations.
  */
-export const FORM_CONFIGS: Record<string, FormConfig> = {
+export const FORM_CONFIGS: Record<FormSlug, FormConfig> = {
+  "court-order-ma-minor": courtOrderMinorMaConfig,
   "court-order-ma": courtOrderMaConfig,
   "social-security": socialSecurityConfig,
 };
@@ -56,14 +81,9 @@ export const FORM_CONFIGS: Record<string, FormConfig> = {
 /**
  * Get a form configuration by slug.
  */
-export function getFormConfig(slug: string): FormConfig | undefined {
+export function getFormConfig(slug: FormSlug): FormConfig | undefined {
   return FORM_CONFIGS[slug];
 }
-
-/**
- * Array of all form slugs.
- */
-export const FORM_SLUGS = Object.keys(FORM_CONFIGS);
 
 /**
  * Sentiment rating options for form feedback.

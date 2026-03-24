@@ -1,7 +1,7 @@
 import { useFormContext } from "react-hook-form";
 import { useFormStep } from "@/components/react/forms/FormContainer";
-import { resolveVisibleFields } from "@/components/react/forms/FormContainer/resolveVisibleFields";
 import type { FormData } from "@/constants/fields";
+import { resolveFormVisibility } from "@/forms/formVisibility";
 import type { Step } from "@/forms/types";
 import { formatFieldValue, getFieldLabel } from "@/utils/formatReviewFields";
 import "./FormReviewTable.css";
@@ -27,36 +27,30 @@ export function FormReviewTable({ steps }: FormReviewTableProps) {
   const { onEditStep } = useFormStep();
   const formData = form.getValues() as FormData;
 
-  const visibleFields = resolveVisibleFields(steps, formData);
+  const { sections } = resolveFormVisibility(steps, formData);
 
-  const sections: ReviewSection[] = [];
-
-  for (const step of steps) {
-    const stepFields = step.fields.filter(
-      (fieldName) => fieldName in visibleFields,
-    );
-
-    if (stepFields.length === 0) {
-      continue;
-    }
-
-    const fields = stepFields.map((fieldName) => ({
-      fieldName,
-      label: smartquotes(getFieldLabel(fieldName)),
-      value: formatFieldValue(fieldName, formData[fieldName]),
+  const reviewSections: ReviewSection[] = sections
+    .filter(({ fields }) => fields.length > 0)
+    .map(({ stepId, fields }) => ({
+      stepId,
+      fields: fields.map((fieldName) => ({
+        fieldName,
+        label: smartquotes(getFieldLabel(fieldName)),
+        value: formatFieldValue(fieldName, formData[fieldName]),
+      })),
     }));
-
-    sections.push({ stepId: step.id, fields });
-  }
 
   return (
     <div className="form-review-sections">
-      {sections.map((section) => (
+      {reviewSections.map((section) => (
         <section key={section.stepId} className="form-review-section">
           <dl className="form-review-list">
             {section.fields.map((field) => (
               <div key={field.fieldName} className="form-review-field">
-                <dt className="form-review-label">{field.label}: </dt>
+                <dt className="form-review-label">
+                  {field.label}
+                  {field.label.endsWith("?") ? " " : ": "}
+                </dt>
                 <dd className="form-review-value">
                   {field.value !== undefined ? (
                     field.value

@@ -1,23 +1,27 @@
 ---
 import type { SanityDocument } from "@sanity/client";
+import { FormContainer } from "@/components/react/forms/FormContainer/FormContainer";
+import type { FormSlug } from "@/constants/forms";
 import { getFormPdfMetadata } from "@/forms/getFormPdfMetadata";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { loadQuery } from "@/sanity/lib/loadQuery";
-import { SocialSecurityForm } from "./_Form";
+
+const formSlug: FormSlug = "social-security";
 
 const { data: form } = await loadQuery<SanityDocument>({
   query: `*[_type == "form" && slug.current == $slug][0]`,
   params: {
-    slug: "social-security",
+    slug: formSlug,
   },
 });
 
-const pdfs = await getFormPdfMetadata("social-security");
+const pdfs = await getFormPdfMetadata(formSlug);
 ---
 
 <BaseLayout title={form.title} description={form.description} color="white">
-  <SocialSecurityForm
+  <FormContainer
     client:load
+    slug={formSlug}
     title={form.title}
     description={form.description}
     updatedAt={form._updatedAt}

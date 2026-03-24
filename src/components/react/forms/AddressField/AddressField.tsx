@@ -6,7 +6,7 @@ import type { FieldName } from "@/constants/fields";
 import { JURISDICTIONS } from "@/constants/jurisdictions";
 import "./AddressField.css";
 
-type AddressType = "residence" | "mailing";
+type AddressType = "residence" | "mailing" | "parent1" | "parent2";
 
 export interface AddressFieldProps {
   children?: React.ReactNode;
@@ -28,7 +28,7 @@ export function AddressField({
       city: FieldName;
       state: FieldName;
       zip: FieldName;
-      county: FieldName;
+      county?: FieldName;
     }
   > = {
     residence: {
@@ -44,6 +44,18 @@ export function AddressField({
       state: "mailingState",
       zip: "mailingZipCode",
       county: "mailingCounty",
+    },
+    parent1: {
+      street: "parent1StreetAddress",
+      city: "parent1City",
+      state: "parent1State",
+      zip: "parent1ZipCode",
+    },
+    parent2: {
+      street: "parent2StreetAddress",
+      city: "parent2City",
+      state: "parent2State",
+      zip: "parent2ZipCode",
     },
   };
 
@@ -111,7 +123,7 @@ export function AddressField({
           </ComboBox>
         )}
       />
-      {includeCounty && (
+      {includeCounty && names[type].county && (
         <Controller
           control={control}
           name={names[type].county}

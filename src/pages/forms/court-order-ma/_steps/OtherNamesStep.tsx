@@ -13,14 +13,13 @@ export const otherNamesStep: Step = {
   title: "Have you ever used any other name or alias?",
   description:
     "This includes any names that you have used over a long period of time but did not change legally.",
-  fields: ["hasUsedOtherNameOrAlias", "otherNamesOrAliases"],
-  isFieldVisible: (fieldName, data) => {
-    // otherNamesOrAliases only visible if hasUsedOtherNameOrAlias is true
-    if (fieldName === "otherNamesOrAliases") {
-      return data.hasUsedOtherNameOrAlias === true;
-    }
-    return true;
-  },
+  fields: [
+    "hasUsedOtherNameOrAlias",
+    {
+      id: "otherNamesOrAliases",
+      when: (data) => data.hasUsedOtherNameOrAlias === true,
+    },
+  ],
   component: ({ stepConfig }) => {
     const otherNamesVisible = useFieldVisible(
       stepConfig,

@@ -1,5 +1,23 @@
 import type { FieldName, FormData } from "@/constants/fields";
 
+/** A single conditional field, visible when `when` returns true. */
+type ConditionalField = {
+  id: FieldName;
+  when: (data: Partial<FormData>) => boolean;
+};
+
+/** Multiple fields sharing one visibility predicate. */
+type ConditionalFieldGroup = {
+  ids: readonly FieldName[];
+  when: (data: Partial<FormData>) => boolean;
+};
+
+/**
+ * A field entry within a step. Plain string = always visible.
+ * Object form: `{ id, when }` or `{ ids, when }` for conditional visibility.
+ */
+export type Field = FieldName | ConditionalField | ConditionalFieldGroup;
+
 /**
  * Configuration for a single step in a form flow.
  *
@@ -16,39 +34,26 @@ export interface Step {
   id: string;
 
   /** Displayed in the navigation bar and review table. */
-  title: string;
+  title: string | ((data: Partial<FormData>) => string);
 
   /** Optional subtitle shown beneath the title on the step. */
-  description?: string;
+  description?: string | ((data: Partial<FormData>) => string);
 
   /**
-   * All fields this step writes to. Used to populate the review table
-   * and resolve values for PDF generation.
+   * All fields this step writes to. Plain string = always visible.
+   * Object form: `{ id, when }` = single conditional field.
+   * Object form: `{ ids, when }` = multiple fields sharing one predicate.
    */
-  fields: readonly FieldName[];
+  fields: readonly Field[];
 
   /**
    * When provided, the step is only included in the flow if this returns
    * true. Evaluated with live form data on every navigation.
    *
    * @example
-   * guard: (data) => data.isFilingForSomeoneElse === true,
+   * when: (data) => data.isFilingForSomeoneElse === true,
    */
-  guard?: (data: Partial<FormData>) => boolean;
-
-  /**
-   * When provided, controls whether individual fields within this step
-   * are shown in the UI, the review table, and the generated PDF.
-   * Fields not listed in `fields` are always excluded regardless.
-   * To access isFieldVisible in the step component, use the useFieldVisible hook.
-   *
-   * @example
-   * isFieldVisible: (field, data) => {
-   *   if (field === "middleName") return data.hasMiddleName === true;
-   *   return true;
-   * },
-   */
-  isFieldVisible?: (fieldName: FieldName, data: FormData) => boolean;
+  when?: (data: Partial<FormData>) => boolean;
 
   /** The React component rendered when this step is active. */
   component: React.ComponentType<{ stepConfig: Step }>;
