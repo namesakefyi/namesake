@@ -4,9 +4,10 @@ import { useFormContext } from "react-hook-form";
 import { useFormStep } from "@/components/react/forms/FormContainer";
 import type { FieldName, FormData } from "@/constants/fields";
 import { getFieldWhen } from "@/forms/formVisibility";
+import { resolveDescription, resolveTitle } from "@/forms/resolveStepContent";
 import type { Step } from "@/forms/types";
-import { slugify } from "../../../../utils/slugify";
-import { smartquotes } from "../../../../utils/smartquotes";
+import { slugify } from "@/utils/slugify";
+import { smartquotes } from "@/utils/smartquotes";
 import { Button } from "../../common/Button";
 import "./FormStep.css";
 import clsx from "clsx";
@@ -48,7 +49,10 @@ export interface FormStepProps {
 }
 
 export function FormStep({ stepConfig, children, className }: FormStepProps) {
-  const { title, description } = stepConfig;
+  const form = useFormContext();
+  const data = form.watch() as FormData;
+  const title = resolveTitle(stepConfig, data);
+  const description = resolveDescription(stepConfig, data);
   const titleId = slugify(title);
   const descriptionId = useId();
   const { onSubmit, phase } = useFormStep();

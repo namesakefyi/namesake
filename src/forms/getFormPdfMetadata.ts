@@ -35,7 +35,7 @@ export async function getFormPdfMetadata(
         pdfId: pdf.pdfId,
         title: definition.title,
         code: definition.code,
-        conditional: !!pdf.include,
+        conditional: !!pdf.when,
       };
     }),
   );

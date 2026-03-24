@@ -1,6 +1,6 @@
 import type { SubmitEvent } from "react";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
-import type { FormConfig } from "@/constants/forms";
+import { type FormConfig, resolveInstructions } from "@/constants/forms";
 import { resolveFormVisibility } from "@/forms/formVisibility";
 
 /**
@@ -28,10 +28,7 @@ export function createFormSubmitHandler(
 
     const pdfs = await loadPdfs(pdfsToInclude);
 
-    const instructions =
-      typeof config.instructions === "function"
-        ? config.instructions(formData)
-        : config.instructions;
+    const instructions = resolveInstructions(config.instructions, formData);
 
     await downloadMergedPdf({
       title: config.downloadTitle,

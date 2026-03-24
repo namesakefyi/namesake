@@ -123,6 +123,23 @@ describe("FormReviewTable", () => {
     expect(onEditStep).toHaveBeenCalledWith("legal-name");
   });
 
+  it("omits the colon separator when a label ends with a question mark", () => {
+    const yesNoStep: Step = {
+      id: "yes-no-step",
+      title: "Yes/No",
+      component: () => null,
+      fields: ["hasCourtAppointedGuardian"],
+    };
+
+    renderWithValues(<FormReviewTable steps={[yesNoStep]} />, {
+      hasCourtAppointedGuardian: true,
+    });
+
+    const term = screen.getByRole("term");
+    expect(term).toHaveTextContent(/\?(?!.*:)/);
+    expect(term).not.toHaveTextContent("?:");
+  });
+
   it("skips steps where all fields are hidden by when callbacks", () => {
     const hiddenStep: Step = {
       ...nameStep,

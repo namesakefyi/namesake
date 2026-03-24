@@ -30,7 +30,8 @@
     "pdf:remove-fields": "node scripts/remove-pdf-fields.mjs",
     "pdf:rename-fields": "node scripts/rename-pdf-fields.mjs",
     "pdf:schema": "node scripts/extract-pdf-schema.mjs",
-    "pdf:define": "node scripts/define-pdf.mjs"
+    "pdf:define": "node scripts/define-pdf.mjs",
+    "pdf:nudge-fields": "node scripts/nudge-pdf-fields.mjs"
   },
   "lint-staged": {
     "*": "pnpm check:fix"

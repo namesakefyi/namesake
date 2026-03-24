@@ -7,13 +7,13 @@ export function makeStep(
     | { id: string; when: (data: any) => boolean }
     | { ids: readonly string[]; when: (data: any) => boolean }
   )[] = [],
-  guard?: (data: any) => boolean,
+  when?: (data: any) => boolean,
 ): Step {
   return {
     id,
     title: `Step ${id}`,
     fields: fields as Field[],
     component: () => null,
-    ...(guard && { guard }),
+    ...(when && { when }),
   };
 }

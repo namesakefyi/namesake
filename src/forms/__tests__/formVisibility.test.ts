@@ -121,7 +121,7 @@ describe("resolveFormVisibility", () => {
     const steps = [makeStep("a")];
     const pdfs = [
       { pdfId: "always" as any },
-      { pdfId: "conditional" as any, include: () => false },
+      { pdfId: "conditional" as any, when: () => false },
     ];
 
     const result = resolveFormVisibility(steps, {}, pdfs);
