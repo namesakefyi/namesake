@@ -17,7 +17,7 @@ const shuffledSponsors = sponsors.sort(() => 0.5 - Math.random());
             href={sponsor.url}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Visit ${sponsor.name ?? "partner"}`}
+            aria-label={`Visit ${sponsor.name}`}
           >
             {sponsor.logo?.asset && (
               <SanityImage

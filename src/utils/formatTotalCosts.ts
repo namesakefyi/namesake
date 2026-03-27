@@ -3,10 +3,8 @@ import type { Guide } from "@/sanity/sanity.types";
 
 type GuideCostsField = Get<Guide, "costs">;
 
-/** Single line item from Sanity `costs` (matches schema + GROQ projections). */
 export type Cost = NonNullable<GuideCostsField>[number];
 
-/** Guide `costs` field or joined form query (`null` when the guide has no costs). */
 export type Costs = GuideCostsField | null;
 
 export const formatTotalCosts = (costs?: Costs) => {
