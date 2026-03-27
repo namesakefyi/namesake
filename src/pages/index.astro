@@ -4,7 +4,7 @@ export const prerender = true;
 import { Image } from "astro:assets";
 import { RiArrowRightLine } from "@remixicon/react";
 import type { SanityDocument } from "@sanity/client";
-import Partners from "@/components/Partners.astro";
+import Sponsors from "@/components/Sponsors.astro";
 import SupportMap from "@/components/SupportMap.astro";
 import PortableText from "@/components/text/PortableText.astro";
 import { siteInfo } from "@/constants/site-info";
@@ -68,7 +68,7 @@ if (!page) return Astro.redirect("/404");
       </div>
     </section>
     <SupportMap />
-    <Partners />
+    <Sponsors />
   </div>
 </BaseLayout>
 

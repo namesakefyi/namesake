@@ -3,28 +3,28 @@ import type { SanityDocument } from "@sanity/client";
 import { loadQuery } from "@/sanity/lib/loadQuery";
 import SanityImage from "./SanityImage.astro";
 
-const { data: partners } = await loadQuery<SanityDocument[]>({
-  query: `*[_type == "partner"]`,
+const { data: sponsors } = await loadQuery<SanityDocument[]>({
+  query: `*[_type == "sponsor"]`,
 });
 
-const shuffledPartners = partners.sort(() => 0.5 - Math.random());
+const shuffledSponsors = sponsors.sort(() => 0.5 - Math.random());
 ---
 
-<section class="partners">
-  <h2>Partners</h2>
+<section class="sponsors">
+  <h2>With support from</h2>
   <ul>
     {
-      shuffledPartners.map((partner) => (
+      shuffledSponsors.map((sponsor) => (
         <li>
           <a
-            href={partner.url}
+            href={sponsor.url}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Visit ${partner.name}`}
+            aria-label={`Visit ${sponsor.name}`}
           >
             <SanityImage
-              asset={partner.logo.asset}
-              alt={partner.name}
+              asset={sponsor.logo.asset}
+              alt={sponsor.name}
               options={{ width: 200 }}
             />
           </a>
@@ -35,7 +35,7 @@ const shuffledPartners = partners.sort(() => 0.5 - Math.random());
 </section>
 
 <style lang="scss">
-  .partners {
+  .sponsors {
     display: flex;
     align-items: center;
     flex-direction: column;

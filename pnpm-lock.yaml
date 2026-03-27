@@ -165,9 +165,6 @@ importers:
       '@react-aria/test-utils':
         specifier: 1.0.0-beta.2
         version: 1.0.0-beta.2(@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.1))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@sanity/cli':
-        specifier: ^6.2.1
-        version: 6.2.1(@emotion/is-prop-valid@1.4.0)(@noble/hashes@2.0.1)(@types/node@25.4.0)(@types/react@19.2.14)(jiti@2.6.1)(sass@1.94.2)(styled-components@6.3.12(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(terser@5.44.1)(ts-toolbelt@9.6.0)(typescript@5.9.3)(xstate@5.28.0)
       '@storybook/addon-links':
         specifier: ^10.2.19
         version: 10.2.19(react@19.2.4)(storybook@10.2.19(@testing-library/dom@10.4.1)(prettier@3.8.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))
