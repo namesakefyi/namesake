@@ -1,0 +1,55 @@
+---
+import type { SanityAssetDocument } from "@sanity/client";
+import type { Service } from "@/constants/services";
+import DirectoryListItem from "./DirectoryListItem.astro";
+
+export interface DirectoryContact {
+  name: string;
+  slug: string;
+  description: string;
+  state: string;
+  services: Service[];
+  email?: string;
+  phone?: string;
+  url: string;
+  logo?: { asset: SanityAssetDocument };
+  officialPartner?: boolean;
+}
+
+interface Props {
+  contacts: DirectoryContact[];
+}
+
+const { contacts } = Astro.props;
+---
+
+{
+  contacts.length ? (
+    <ul class="directory-list">
+      {contacts.map((contact) => (
+        <DirectoryListItem {...contact} />
+      ))}
+    </ul>
+  ) : (
+    <p class="empty">No directory entries yet.</p>
+  )
+}
+
+<style>
+  .directory-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    padding-block-end: var(--space-3xl);
+    columns: 2;
+    column-gap: var(--space-3xl);
+
+    @media (width < 800px) {
+      columns: 1;
+    }
+  }
+
+  .empty {
+    padding-block-end: var(--space-2xl);
+  }
+</style>

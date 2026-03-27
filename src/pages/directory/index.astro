@@ -1,0 +1,34 @@
+---
+import type { DirectoryContact } from "@/components/DirectoryList.astro";
+import DirectoryList from "@/components/DirectoryList.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { loadQuery } from "@/sanity/lib/loadQuery";
+
+const { data: contacts } = await loadQuery<DirectoryContact[]>({
+  query: `*[_type == "contact" && defined(slug)]{
+    name,
+    "slug": slug.current,
+    description,
+    "state": state->name,
+    services,
+    logo,
+    email,
+    phone,
+    url,
+    officialPartner,
+  } | order(officialPartner desc, name asc)`,
+});
+---
+
+<BaseLayout
+  title="Directory"
+  description="Need more help? Reach out to these organizations and individuals."
+  color="pink"
+>
+  <PageHeader
+    title="Directory"
+    description="Need more help? Reach out to these organizations and individuals."
+  />
+  <DirectoryList contacts={contacts} />
+</BaseLayout>
