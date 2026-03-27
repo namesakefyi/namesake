@@ -4,7 +4,7 @@
   max-width: 250px;
   color: var(--text-color);
 
-  >.namesake-label {
+  > .namesake-label {
     width: fit-content;
     max-width: 100%;
   }
@@ -98,21 +98,29 @@
   opacity: 0.2;
 }
 
-.react-aria-Select .namesake-native-select-trigger:has(select:disabled) span[aria-hidden] {
+.react-aria-Select
+  .namesake-native-select-trigger:has(select:disabled)
+  span[aria-hidden] {
   color: var(--text-color-disabled);
   background: var(--border-color-disabled);
 }
 
-.react-aria-Select .namesake-native-select-trigger>span[aria-hidden] {
+.react-aria-Select .namesake-native-select-trigger > span[aria-hidden] {
   flex-shrink: 0;
 }
 
 @media (hover: hover) {
-  .react-aria-Select .namesake-native-select-trigger.namesake-button:not( :has(select:disabled)):hover {
+  .react-aria-Select
+    .namesake-native-select-trigger.namesake-button:not(
+      :has(select:disabled)
+    ):hover {
     transform: scale(1.05);
   }
 
-  .react-aria-Select .namesake-native-select-trigger.namesake-button:not( :has(select:disabled)):active {
+  .react-aria-Select
+    .namesake-native-select-trigger.namesake-button:not(
+      :has(select:disabled)
+    ):active {
     transform: scale(0.98);
   }
 }
@@ -175,7 +183,9 @@
     }
   }
 
-  .react-aria-Select .namesake-native-select-trigger:has(select:disabled) span[aria-hidden] {
+  .react-aria-Select
+    .namesake-native-select-trigger:has(select:disabled)
+    span[aria-hidden] {
     background: 0 0;
   }
 }

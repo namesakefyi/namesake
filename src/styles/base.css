@@ -125,7 +125,6 @@ a {
 }
 
 @media (hover: hover) {
-
   a:hover,
   a:focus {
     text-decoration-color: var(--text-color);

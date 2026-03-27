@@ -10,7 +10,8 @@
   border: none;
 
   border-radius: var(--radius-s);
-  box-shadow: 8px 8px 0 0 color-mix(in srgb, var(--border-color) 20%, transparent);
+  box-shadow: 8px 8px 0 0
+    color-mix(in srgb, var(--border-color) 20%, transparent);
   transition:
     transform 200ms,
     opacity 200ms;
