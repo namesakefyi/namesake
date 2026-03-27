@@ -11,15 +11,8 @@ export default defineCliConfig({
   studioHost: "namesake",
   server: {
     hostname: "localhost",
-    // Avoid clashing with Astro dev server (default 4321)
-    port: 3333,
-  },
-  schemaExtraction: {
-    enabled: true,
-    enforceRequiredFields: true,
   },
   typegen: {
-    enabled: true,
     path: "./src/sanity/**/*.{ts,tsx}",
     schema: "schema.json",
     generates: "./src/sanity/sanity.types.ts",
