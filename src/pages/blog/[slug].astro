@@ -1,50 +1,16 @@
 ---
-import type { SanityDocument } from "@sanity/client";
+import { sanityClient } from "sanity:client";
 import SanityImage from "@/components/SanityImage.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import PortableText from "@/components/text/PortableText.astro";
 import ProseLayout from "@/layouts/ProseLayout.astro";
 import { extractHeadings } from "@/sanity/lib/extractHeadings";
-import { loadQuery } from "@/sanity/lib/loadQuery";
+import { POST_BY_SLUG_QUERY } from "@/sanity/queries";
 
 const { slug } = Astro.params;
-
 if (!slug) return Astro.redirect("/404");
 
-const { data: post } = await loadQuery<SanityDocument>({
-  query: `*[_type == "post" && slug.current == $slug][0]{
-    _id,
-    title,
-    slug,
-    publishDate,
-    description,
-    showDescription,
-    image,
-    annotation,
-    content[]{
-      ...,
-      markDefs[]{
-        ...,
-        _type == "internalLink" => {
-          ...,
-          "reference": @.reference->{_type, slug, title}
-        }
-      }
-    },
-    "authors": authors[]->{
-      _id,
-      name,
-      role,
-      bio,
-      avatar,
-      socialLinks
-    }
-  }`,
-  params: {
-    slug,
-  },
-});
-
+const post = await sanityClient.fetch(POST_BY_SLUG_QUERY, { slug });
 if (!post) return Astro.redirect("/404");
 
 const headings = extractHeadings(post.content);
@@ -57,20 +23,20 @@ const headings = extractHeadings(post.content);
   showDescription={post.showDescription}
   ogImage={post.image?.asset}
   ogAlt={post.image?.alt}
-  author={post.authors?.map((author: any) => author.name).join(", ")}
+  author={post.authors?.map((author) => author.name).join(", ")}
   color="blue"
   annotation={post.annotation ?? "highlight"}
 >
   {
     post.authors && post.authors.length > 0 && (
       <div class="authors" slot="after-header">
-        {post.authors.map((author: any) => (
+        {post.authors.map((author) => (
           <span class="author">
-            {author.avatar && (
+            {author.avatar?.asset && (
               <SanityImage
                 className="avatar"
-                asset={author.avatar?.asset}
-                alt={`${author.name} photo`}
+                asset={author.avatar.asset}
+                alt={`${author.name ?? "Author"} photo`}
                 options={{ width: 32, height: 32 }}
               />
             )}
@@ -88,25 +54,27 @@ const headings = extractHeadings(post.content);
   {
     post.authors && post.authors.length > 0 && (
       <div class="bios" slot="after-content">
-        {post.authors.map((author: any) => (
+        {post.authors.map((author) => (
           <div class="bio">
             <div class="bio-avatar">
-              <SanityImage
-                className="avatar"
-                asset={author.avatar?.asset}
-                alt={`${author.name} photo`}
-                options={{ width: 80, height: 80 }}
-              />
+              {author.avatar?.asset && (
+                <SanityImage
+                  className="avatar"
+                  asset={author.avatar.asset}
+                  alt={`${author.name ?? "Author"} photo`}
+                  options={{ width: 80, height: 80 }}
+                />
+              )}
             </div>
             <div class="content">
               <strong>{author.name}</strong>
               <p>{author.bio}</p>
               {author.socialLinks && author.socialLinks.length > 0 && (
                 <ul class="social">
-                  {author.socialLinks.map((socialLink: any) => (
+                  {author.socialLinks.map((socialLink) => (
                     <li>
-                      <a href={socialLink.url} target="_blank">
-                        {socialLink.name}
+                      <a href={socialLink.url ?? "#"} target="_blank">
+                        {socialLink.name ?? ""}
                       </a>
                     </li>
                   ))}

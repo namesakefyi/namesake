@@ -10,8 +10,8 @@ dayjs.extend(utc);
 interface Props {
   title: string;
   date?: string;
-  description?: string;
-  annotation?: RoughAnnotationType;
+  description?: string | null;
+  annotation?: RoughAnnotationType | null;
   breadcrumbs?: BreadcrumbItem[];
 }
 

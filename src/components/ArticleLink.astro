@@ -1,5 +1,5 @@
 ---
-import type { SanityAssetDocument } from "@sanity/client";
+import type { SanityImageSource } from "@sanity/image-url";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import SanityImage from "./SanityImage.astro";
@@ -11,12 +11,12 @@ interface Props {
   date: string;
   url: string;
   subhead?: string;
-  authors?: string[];
+  authors?: string[] | null;
   description?: string;
   image?: {
-    asset: SanityAssetDocument;
+    asset?: SanityImageSource;
     alt?: string;
-  };
+  } | null;
 }
 
 const { title, date, url, subhead, authors, description, image } = Astro.props;
@@ -35,7 +35,7 @@ const dateObj = new Date(date);
   {authors && <strong class="authors">By {authors.join(", ")}</strong>}
   {description && <p class="description">{description}</p>}
   {
-    image && (
+    image?.asset && (
       <a class="image" href={url} tabindex="-1">
         <SanityImage
           asset={image.asset}
