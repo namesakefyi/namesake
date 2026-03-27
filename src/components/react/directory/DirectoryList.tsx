@@ -59,7 +59,7 @@ async function fetchDirectoryContacts(
   if (stateSlug) params.set("state", stateSlug);
   if (service) params.set("service", service);
   const q = params.toString();
-  const res = await fetch(`/api/directory-contacts${q ? `?${q}` : ""}`);
+  const res = await fetch(`/api/directory${q ? `?${q}` : ""}`);
   if (!res.ok) {
     throw new Error("Failed to load directory");
   }

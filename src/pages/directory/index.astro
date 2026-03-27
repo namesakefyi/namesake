@@ -1,33 +1,23 @@
 ---
+import { sanityClient } from "sanity:client";
 import PageHeader from "@/components/PageHeader.astro";
 import { DirectoryList } from "@/components/react/directory/DirectoryList";
-import type { DirectoryContact } from "@/directory/directoryContact";
-import { DIRECTORY_CONTACTS_LIST_GROQ } from "@/directory/directoryContactsQuery";
 import { parseDirectorySearchParams } from "@/directory/parseDirectorySearchParams";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { loadQuery } from "@/sanity/lib/loadQuery";
-
-export const prerender = false;
+import {
+  DIRECTORY_CONTACTS_LIST_QUERY,
+  DIRECTORY_FILTER_STATES_QUERY,
+} from "@/sanity/queries";
 
 const { selectedStateSlug, selectedService } = parseDirectorySearchParams(
   Astro.url.searchParams,
 );
 
-const { data: filterStates } = await loadQuery<
-  { name: string; slug: string }[]
->({
-  query: `*[_type == "state" && defined(slug)] | order(name asc) {
-    name,
-    "slug": slug.current
-  }`,
-});
+const filterStates = await sanityClient.fetch(DIRECTORY_FILTER_STATES_QUERY);
 
-const { data: contacts } = await loadQuery<DirectoryContact[]>({
-  query: DIRECTORY_CONTACTS_LIST_GROQ,
-  params: {
-    stateSlug: selectedStateSlug,
-    service: selectedService,
-  },
+const contacts = await sanityClient.fetch(DIRECTORY_CONTACTS_LIST_QUERY, {
+  stateSlug: selectedStateSlug,
+  service: selectedService,
 });
 
 const title = "Directory";

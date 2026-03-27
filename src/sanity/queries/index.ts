@@ -160,3 +160,28 @@ export const STATES_SUPPORT_QUERY = defineQuery(`
 
 // Sponsors
 export const SPONSORS_QUERY = defineQuery(`*[_type == "sponsor"]`);
+
+// Directory
+const directoryContactProjection = `{
+  name,
+  "slug": slug.current,
+  description,
+  "states": states[]->name | order(@ asc),
+  services,
+  logo,
+  email,
+  phone,
+  url,
+  officialPartner,
+}`;
+
+export const DIRECTORY_FILTER_STATES_QUERY = defineQuery(`
+  *[_type == "state" && defined(slug)] | order(name asc) {
+    name,
+    "slug": slug.current
+  }
+`);
+
+export const DIRECTORY_CONTACTS_LIST_QUERY = defineQuery(
+  `*[_type == "contact" && defined(slug) && ($stateSlug == "" || $stateSlug in states[]->slug.current) && ($service == "" || $service in services)] ${directoryContactProjection} | order(officialPartner desc, name asc)`,
+);
