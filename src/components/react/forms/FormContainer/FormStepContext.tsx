@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import type { FormPhase } from "@/forms/types";
-import type { Cost } from "@/utils/formatTotalCosts";
+import type { Costs } from "@/utils/formatTotalCosts";
 
 export interface FormStepContextValue {
   onNext: () => void;
@@ -8,7 +8,7 @@ export interface FormStepContextValue {
   /** The title of the form */
   formTitle: string;
   /** The description of the form */
-  formDescription?: string;
+  formDescription?: string | null;
   /** The current step index (1-based for actual form steps, 0 for title/review) */
   currentStepIndex: number;
   /** The total number of form steps (excludes skipped steps) */
@@ -22,7 +22,7 @@ export interface FormStepContextValue {
   /** Error message from the most recent failed submission attempt, if any */
   submitError: string | null;
   /** The costs associated with this form */
-  costs?: Cost[];
+  costs?: Costs;
 }
 
 export const FormStepContext = createContext<FormStepContextValue | null>(null);

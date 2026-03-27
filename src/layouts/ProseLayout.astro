@@ -1,5 +1,5 @@
 ---
-import type { SanityAssetDocument } from "@sanity/client";
+import type { SanityImageSource } from "@sanity/image-url";
 import type { RoughAnnotationType } from "rough-notation/lib/model";
 import type { BreadcrumbItem } from "@/components/Breadcrumbs.astro";
 import PageHeader from "@/components/PageHeader.astro";
@@ -11,13 +11,13 @@ import BaseLayout from "./BaseLayout.astro";
 interface Props {
   title: string;
   date?: string;
-  description?: string;
+  description?: string | null;
   showDescription?: boolean;
   author?: string;
-  ogImage?: SanityAssetDocument;
+  ogImage?: SanityImageSource;
   ogAlt?: string;
-  annotation?: RoughAnnotationType;
-  color?: NamesakeColor;
+  annotation?: RoughAnnotationType | null;
+  color?: NamesakeColor | null;
   breadcrumbs?: BreadcrumbItem[];
 }
 

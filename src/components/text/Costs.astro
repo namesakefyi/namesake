@@ -1,21 +1,16 @@
 ---
-import type { SanityDocument } from "@sanity/client";
-import { loadQuery } from "@/sanity/lib/loadQuery";
+import { sanityClient } from "sanity:client";
+import { GUIDE_COSTS_BY_ID_QUERY } from "@/sanity/queries";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { formatTotalCosts } from "@/utils/formatTotalCosts";
 
 const { _ref } = Astro.props.node;
 
-const { data: guide } = await loadQuery<SanityDocument>({
-  query: `*[_type == "guide" && _id == $_ref][0]{
-    costs
-  }`,
-  params: {
-    _ref,
-  },
+const data = await sanityClient.fetch(GUIDE_COSTS_BY_ID_QUERY, {
+  _ref,
 });
 
-const { costs } = guide;
+const costs = data?.costs ?? [];
 
 const totalCosts = formatTotalCosts(costs);
 ---
@@ -29,13 +24,13 @@ const totalCosts = formatTotalCosts(costs);
   </thead>
   <tbody>
     {
-      (costs as any[])?.map((cost) => (
+      costs.map((cost) => (
         <tr>
           <td>
             {cost.title}
             {cost.required === "notRequired" && "(optional)"}
           </td>
-          <td>{formatCurrency(cost.amount)}</td>
+          <td>{formatCurrency(cost.amount ?? 0)}</td>
         </tr>
       ))
     }

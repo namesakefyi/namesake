@@ -1,25 +1,17 @@
 ---
+import { sanityClient } from "sanity:client";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import PageHeader from "@/components/PageHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { loadQuery } from "@/sanity/lib/loadQuery";
-import { type Guide, GuidesTable } from "./_components/GuidesTable";
+import { GUIDES_INDEX_QUERY } from "@/sanity/queries";
+import { GuidesTable } from "./_components/GuidesTable";
 
 dayjs.extend(utc);
 
 const { params } = Astro.props;
 
-const { data: guides } = await loadQuery<Guide[]>({
-  query: `*[_type == "guide" && defined(slug)]{
-    title,
-    slug,
-    "state": state->name,
-    "category": category->name,
-    _updatedAt,
-  } | order(publishDate desc)`,
-  params,
-});
+const guides = await sanityClient.fetch(GUIDES_INDEX_QUERY, params ?? {});
 ---
 
 <BaseLayout

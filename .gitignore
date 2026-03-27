@@ -43,3 +43,6 @@ storybook-static
 
 # rollup stats
 stats.html
+
+# sanity generated schema
+schema.json

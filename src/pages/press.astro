@@ -1,23 +1,16 @@
 ---
-import type { SanityDocument } from "@sanity/client";
+import { sanityClient } from "sanity:client";
 import ArticleLink from "@/components/ArticleLink.astro";
 import PageHeader from "@/components/PageHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { loadQuery } from "@/sanity/lib/loadQuery";
+import { PRESS_ARTICLES_QUERY } from "@/sanity/queries";
 
 const { params } = Astro.props;
 
-const { data: pressArticles } = await loadQuery<SanityDocument[]>({
-  query: `*[_type == "press"]{
-    _id,
-    title,
-    outlet,
-    url,
-    date,
-    image
-  } | order(date desc)`,
-  params,
-});
+const pressArticles = await sanityClient.fetch(
+  PRESS_ARTICLES_QUERY,
+  params ?? {},
+);
 ---
 
 <BaseLayout

@@ -59,6 +59,9 @@ importers:
       '@sanity/client':
         specifier: ^7.20.0
         version: 7.20.0(debug@4.4.3)
+      '@sanity/codegen':
+        specifier: ^6.0.1
+        version: 6.0.1(@oclif/core@4.10.2)(@sanity/cli-core@1.2.1(@noble/hashes@2.0.1)(@sanity/telemetry@0.8.1(react@19.2.4))(@types/node@25.4.0)(jiti@2.6.1)(sass@1.94.2)(terser@5.44.1)(yaml@2.8.3))(@sanity/telemetry@0.8.1(react@19.2.4))
       '@sanity/icons':
         specifier: ^3.7.4
         version: 3.7.4(react@19.2.4)
@@ -98,6 +101,9 @@ importers:
       fathom-client:
         specifier: ^3.7.2
         version: 3.7.2
+      groq:
+        specifier: ^5.18.0
+        version: 5.18.0
       idb:
         specifier: ^8.0.3
         version: 8.0.3
@@ -216,6 +222,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.14)
+      '@types/sanitize-html':
+        specifier: ^2.16.1
+        version: 2.16.1
       '@types/topojson-client':
         specifier: ^3.1.5
         version: 3.1.5
@@ -4389,6 +4398,9 @@ packages:
 
   '@types/resolve@1.20.6':
     resolution: {integrity: sha512-A4STmOXPhMUtHH+S6ymgE2GiBSMqf4oTvcQZMcHzokuTLVYzXTB8ttjcgxOVaAp2lGwEdzZ0J+cRbbeevQj1UQ==}
+
+  '@types/sanitize-html@2.16.1':
+    resolution: {integrity: sha512-n9wjs8bCOTyN/ynwD8s/nTcTreIHB1vf31vhLMGqUPNHaweKC4/fAl4Dj+hUlCTKYgm4P3k83fmiFfzkZ6sgMA==}
 
   '@types/sax@1.2.7':
     resolution: {integrity: sha512-rO73L89PJxeYM3s3pPPjiPgVVcymqU490g0YO5n5By0k2Erzj6tay/4lr1CHAAU4JyOWd1rpQ8bCf6cZfHU96A==}
@@ -13956,6 +13968,10 @@ snapshots:
       csstype: 3.2.3
 
   '@types/resolve@1.20.6': {}
+
+  '@types/sanitize-html@2.16.1':
+    dependencies:
+      htmlparser2: 10.1.0
 
   '@types/sax@1.2.7':
     dependencies:

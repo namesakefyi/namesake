@@ -1,12 +1,9 @@
 ---
-import type { SanityDocument } from "@sanity/client";
-import { loadQuery } from "@/sanity/lib/loadQuery";
+import { sanityClient } from "sanity:client";
+import { SPONSORS_QUERY } from "@/sanity/queries";
 import SanityImage from "./SanityImage.astro";
 
-const { data: sponsors } = await loadQuery<SanityDocument[]>({
-  query: `*[_type == "sponsor"]`,
-});
-
+const sponsors = await sanityClient.fetch(SPONSORS_QUERY);
 const shuffledSponsors = sponsors.sort(() => 0.5 - Math.random());
 ---
 
@@ -20,13 +17,15 @@ const shuffledSponsors = sponsors.sort(() => 0.5 - Math.random());
             href={sponsor.url}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Visit ${sponsor.name}`}
+            aria-label={`Visit ${sponsor.name ?? "partner"}`}
           >
-            <SanityImage
-              asset={sponsor.logo.asset}
-              alt={sponsor.name}
-              options={{ width: 200 }}
-            />
+            {sponsor.logo?.asset && (
+              <SanityImage
+                asset={sponsor.logo.asset}
+                alt={sponsor.name}
+                options={{ width: 200 }}
+              />
+            )}
           </a>
         </li>
       ))

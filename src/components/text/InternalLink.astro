@@ -1,5 +1,6 @@
 ---
 import { sanityClient } from "sanity:client";
+import { DOCUMENT_REFERENCE_BY_ID_QUERY } from "@/sanity/queries";
 
 const { node } = Astro.props;
 const { markDef } = node;
@@ -15,13 +16,12 @@ let destination =
 // If not resolved, fetch it
 if (!destination) {
   const ref = markDef.reference?._ref || markDef._ref;
-  console.log("Fetching ref:", ref);
 
-  destination =
-    ref &&
-    (await sanityClient.fetch("*[_id == $ref]{_type, slug, title}[0]", {
-      ref: ref,
-    }));
+  if (ref) {
+    destination = await sanityClient.fetch(DOCUMENT_REFERENCE_BY_ID_QUERY, {
+      ref,
+    });
+  }
 }
 
 const urlPrefixes: Record<string, string> = {

@@ -1,9 +1,12 @@
 import { formatCurrency } from "@/utils/formatCurrency";
-import { type Cost, formatTotalCosts } from "@/utils/formatTotalCosts";
+import {
+  type Costs as CostsType,
+  formatTotalCosts,
+} from "@/utils/formatTotalCosts";
 import "./Costs.css";
 
 interface CostsProps {
-  costs: Cost[];
+  costs: CostsType;
 }
 
 export function Costs({ costs }: CostsProps) {
@@ -28,7 +31,7 @@ export function Costs({ costs }: CostsProps) {
               {cost.title}
               {cost.required === "notRequired" && " (optional)"}
             </td>
-            <td>{formatCurrency(cost.amount)}</td>
+            <td>{formatCurrency(cost.amount ?? 0)}</td>
           </tr>
         ))}
       </tbody>

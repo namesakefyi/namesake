@@ -31,7 +31,8 @@
     "pdf:rename-fields": "node scripts/rename-pdf-fields.mjs",
     "pdf:schema": "node scripts/extract-pdf-schema.mjs",
     "pdf:define": "node scripts/define-pdf.mjs",
-    "pdf:nudge-fields": "node scripts/nudge-pdf-fields.mjs"
+    "pdf:nudge-fields": "node scripts/nudge-pdf-fields.mjs",
+    "typegen": "sanity schema extract --enforce-required-fields && sanity typegen generate"
   },
   "lint-staged": {
     "*": "pnpm check:fix"
@@ -54,6 +55,7 @@
     "@remixicon/react": "^4.7.0",
     "@sanity/astro": "^3.3.1",
     "@sanity/client": "^7.20.0",
+    "@sanity/codegen": "^6.0.1",
     "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^2.0.3",
     "@sanity/types": "^5.18.0",
@@ -67,6 +69,7 @@
     "d3-selection": "^3.0.0",
     "dayjs": "^1.11.19",
     "fathom-client": "^3.7.2",
+    "groq": "^5.18.0",
     "idb": "^8.0.3",
     "language-name-map": "^0.3.0",
     "postcss": "^8.5.8",
@@ -108,6 +111,7 @@
     "@types/node": "^25.4.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@types/sanitize-html": "^2.16.1",
     "@types/topojson-client": "^3.1.5",
     "@types/topojson-specification": "^1.0.5",
     "@vitest/coverage-v8": "4.0.18",

@@ -3,13 +3,22 @@ import { describe, expect, it } from "vitest";
 import type { Cost } from "@/utils/formatTotalCosts";
 import { Costs } from "./Costs";
 
-const filingFee: Cost = { title: "Court filing fee", amount: 150 };
+const filingFee: Cost = {
+  _type: "cost",
+  _key: "filing",
+  title: "Court filing fee",
+  amount: 150,
+};
 const optionalFee: Cost = {
+  _type: "cost",
+  _key: "pub",
   title: "Publication fee",
   amount: 75,
   required: "notRequired",
 };
 const requiredFee: Cost = {
+  _type: "cost",
+  _key: "kit",
   title: "Name change kit",
   amount: 25,
   required: "required",

@@ -1,27 +1,18 @@
 ---
-import type { SanityDocument } from "@sanity/client";
+import { sanityClient } from "sanity:client";
 import { FormContainer } from "@/components/react/forms/FormContainer/FormContainer";
 import type { FormSlug } from "@/constants/forms";
 import { getFormPdfMetadata } from "@/forms/getFormPdfMetadata";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { loadQuery } from "@/sanity/lib/loadQuery";
+import { FORM_BY_SLUG_WITH_GUIDE_COSTS_QUERY } from "@/sanity/queries";
 
 const formSlug: FormSlug = "court-order-ma";
 
-const { data: form } = await loadQuery<SanityDocument>({
-  query: `*[_type == "form" && slug.current == $slug][0]{
-    title,
-    description,
-    banner,
-    _updatedAt,
-    state,
-    category,
-    "costs": *[_type == "guide" && state._ref == ^.state._ref && category._ref == ^.category._ref][0].costs
-  }`,
-  params: {
-    slug: formSlug,
-  },
+const form = await sanityClient.fetch(FORM_BY_SLUG_WITH_GUIDE_COSTS_QUERY, {
+  slug: formSlug,
 });
+
+if (!form) return Astro.redirect("/404");
 
 const pdfs = await getFormPdfMetadata(formSlug);
 ---

@@ -14,7 +14,7 @@ import { createFormSubmitHandler } from "@/forms/createFormSubmitHandler";
 import type { FormPdfMetadata } from "@/forms/getFormPdfMetadata";
 import { useFormData } from "@/forms/useFormData";
 import { useFormState } from "@/forms/useFormState";
-import type { Cost } from "@/utils/formatTotalCosts";
+import type { Costs } from "@/utils/formatTotalCosts";
 import { FormStepContext } from "./FormStepContext";
 import "./FormContainer.css";
 
@@ -26,10 +26,10 @@ export interface FormContainerProps {
   title: string;
 
   /** An optional description to provide more context. */
-  description?: string;
+  description?: string | null;
 
   /** Optional banner content (Portable Text) to display on the title step. */
-  banner?: PortableTextProps["value"];
+  banner?: PortableTextProps["value"] | null;
 
   /** The date the form was last updated. */
   updatedAt?: string;
@@ -38,7 +38,7 @@ export interface FormContainerProps {
   pdfs?: FormPdfMetadata[];
 
   /** The costs associated with this form. */
-  costs?: Cost[];
+  costs?: Costs | null;
 }
 
 export function FormContainer({

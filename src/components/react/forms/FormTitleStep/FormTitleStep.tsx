@@ -56,7 +56,7 @@ export interface FormTitleStepProps {
   /**
    * The description of the form.
    */
-  description?: string;
+  description?: string | null;
 
   /**
    * Child content.
