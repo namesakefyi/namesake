@@ -1,9 +1,9 @@
 import { RiServiceLine } from "@remixicon/react";
 import { defineField, defineType } from "sanity";
 
-export const partnerType = defineType({
-  name: "partner",
-  title: "Partner",
+export const sponsorType = defineType({
+  name: "sponsor",
+  title: "Sponsor",
   type: "document",
   icon: RiServiceLine,
   fields: [

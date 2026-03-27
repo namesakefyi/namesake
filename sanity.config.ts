@@ -6,9 +6,9 @@ import {
   formType,
   guideType,
   pageType,
-  partnerType,
   postType,
   pressType,
+  sponsorType,
   stateType,
 } from "./src/sanity/schema";
 
@@ -27,7 +27,7 @@ export default defineConfig({
       pageType,
       postType,
       pressType,
-      partnerType,
+      sponsorType,
       stateType,
     ],
   },
