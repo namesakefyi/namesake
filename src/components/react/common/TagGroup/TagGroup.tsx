@@ -1,4 +1,5 @@
 import { RiCheckLine, RiCloseLine } from "@remixicon/react";
+import { forwardRef } from "react";
 import {
   Tag as AriaTag,
   TagGroup as AriaTagGroup,
@@ -41,15 +42,13 @@ export function TagGroup<T extends object>({
   );
 }
 
-export function Tag({
-  children,
-  ...props
-}: Omit<TagProps, "children"> & {
-  children?: React.ReactNode;
-}) {
+export const Tag = forwardRef<
+  HTMLDivElement,
+  Omit<TagProps, "children"> & { children?: React.ReactNode }
+>(function Tag({ children, ...props }, ref) {
   const textValue = typeof children === "string" ? children : undefined;
   return (
-    <AriaTag textValue={textValue} {...props}>
+    <AriaTag ref={ref} textValue={textValue} {...props}>
       {({ allowsRemoving, isSelected }) => (
         <>
           {isSelected && <RiCheckLine />}
@@ -63,4 +62,4 @@ export function Tag({
       )}
     </AriaTag>
   );
-}
+});

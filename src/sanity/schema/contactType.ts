@@ -25,18 +25,17 @@ export const contactType = defineType({
       validation: (Rule) => Rule.required().max(240),
     }),
     defineField({
-      name: "state",
-      title: "State",
-      description: "The state this organization serves.",
-      type: "reference",
-      to: [{ type: "state" }],
-      validation: (Rule) => Rule.required(),
+      name: "states",
+      title: "States",
+      description: "The states this organization serves.",
+      type: "array",
+      of: [defineArrayMember({ type: "reference", to: [{ type: "state" }] })],
+      validation: (Rule) => Rule.required().min(1),
     }),
     defineField({
       name: "slug",
       title: "Slug",
       type: "slug",
-      description: "URL path for this contact's page.",
       validation: (Rule) => Rule.required(),
       options: {
         source: "name",
@@ -62,8 +61,8 @@ export const contactType = defineType({
     defineField({
       name: "logo",
       title: "Logo",
+      description: "Should be dark on a transparent or white background.",
       type: "image",
-      options: { hotspot: true },
     }),
     defineField({
       name: "officialPartner",
@@ -94,8 +93,15 @@ export const contactType = defineType({
   preview: {
     select: {
       title: "name",
-      subtitle: "state.name",
+      state0: "states.0.name",
       media: "logo",
+    },
+    prepare({ title, state0, media }) {
+      return {
+        title,
+        subtitle: state0,
+        media,
+      };
     },
   },
 });

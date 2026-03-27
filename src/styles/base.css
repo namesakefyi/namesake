@@ -125,6 +125,7 @@ a {
 }
 
 @media (hover: hover) {
+
   a:hover,
   a:focus {
     text-decoration-color: var(--text-color);
@@ -149,7 +150,11 @@ img {
   clip-path: inset(50%);
 }
 
-:focus-visible {
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
   outline: 3px solid var(--text-color);
   outline-offset: 2px;
 }

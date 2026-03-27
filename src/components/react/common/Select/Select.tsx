@@ -32,7 +32,7 @@ export function Select<T extends object>({
 }: SelectProps<T>) {
   return (
     <AriaSelect {...props}>
-      <Label>{label}</Label>
+      {label ? <Label>{label}</Label> : null}
       <Button>
         <SelectValue />
         <span aria-hidden="true">

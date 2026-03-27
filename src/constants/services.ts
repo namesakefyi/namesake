@@ -1,17 +1,17 @@
 export const SERVICES: { title: string; value: Service }[] = [
-  { title: "Notary", value: "notary" },
+  { title: "Financial aid", value: "financialAid" },
+  { title: "Form filling help", value: "formFilling" },
+  { title: "Legal support", value: "legal" },
   { title: "Name change clinics", value: "nameChangeClinic" },
-  { title: "Form filling assistance", value: "formFillingAssistance" },
-  { title: "Financial assistance", value: "financialAssistance" },
-  { title: "Legal representation", value: "legalRepresentation" },
+  { title: "Notary", value: "notary" },
 ];
 
 export type Service =
-  | "notary"
+  | "financialAid"
+  | "formFilling"
+  | "legal"
   | "nameChangeClinic"
-  | "formFillingAssistance"
-  | "financialAssistance"
-  | "legalRepresentation";
+  | "notary";
 
 export const SERVICE_LABELS: Record<Service, string> = Object.fromEntries(
   SERVICES.map(({ value, title }) => [value, title]),

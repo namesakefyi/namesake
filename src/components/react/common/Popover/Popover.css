@@ -5,13 +5,12 @@
   max-width: 250px;
   font-size: var(--step--1);
   color: var(--text-color);
-  outline: 3px solid var(--border-color);
+  outline: 2px solid var(--border-color);
   background: var(--overlay-background);
   border: none;
 
   border-radius: var(--radius-s);
-  box-shadow: 8px 8px 0 0
-    color-mix(in srgb, var(--border-color) 20%, transparent);
+  box-shadow: 8px 8px 0 0 color-mix(in srgb, var(--border-color) 20%, transparent);
   transition:
     transform 200ms,
     opacity 200ms;
