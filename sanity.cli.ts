@@ -11,6 +11,11 @@ export default defineCliConfig({
   studioHost: "namesake",
   server: {
     hostname: "localhost",
-    port: 4321,
+  },
+  typegen: {
+    path: "./src/sanity/**/*.{ts,tsx}",
+    schema: "schema.json",
+    generates: "./src/sanity/sanity.types.ts",
+    overloadClientMethods: true,
   },
 });

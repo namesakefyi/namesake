@@ -1,28 +1,20 @@
 ---
-import type { SanityDocument } from "@sanity/client";
+import { sanityClient } from "sanity:client";
 import usaStates from "@severo_bo/us-atlas-2023/states-albers-10m.json";
 import { geoPath } from "d3-geo";
 import type { Feature } from "geojson";
 import { feature } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
-import { loadQuery } from "@/sanity/lib/loadQuery";
+import { STATES_SUPPORT_QUERY } from "@/sanity/queries";
 import { formatStateList } from "@/utils/formatStateList";
 
-const { data: states } = await loadQuery<SanityDocument[]>({
-  query: `*[_type == "state"]{
-    name,
-    "slug": slug.current,
-    namesakeSupport
-  }`,
-});
+const states = await sanityClient.fetch(STATES_SUPPORT_QUERY);
 
-const stateSupport = states.reduce(
-  (acc: Record<string, string>, state: SanityDocument) => {
-    acc[state.name] = state.namesakeSupport || "none";
-    return acc;
-  },
-  {},
-);
+const stateSupport = states.reduce((acc: Record<string, string>, state) => {
+  const name = state.name ?? "";
+  acc[name] = state.namesakeSupport || "none";
+  return acc;
+}, {});
 
 const topology = usaStates as unknown as Topology;
 const featureCollection = feature(
@@ -41,10 +33,12 @@ const stateFeatures = featureCollection.features.map((geoFeature: Feature) => ({
 
 const fullSupportStates = states
   .filter((state) => state.namesakeSupport === "full")
-  .map((state) => state.name);
+  .map((state) => state.name)
+  .filter((name): name is string => name != null);
 const prioritizedStates = states
   .filter((state) => state.namesakeSupport === "prioritized")
-  .map((state) => state.name);
+  .map((state) => state.name)
+  .filter((name): name is string => name != null);
 
 const supportMessage = `We fully support ${formatStateList(fullSupportStates)}, and we are prioritizing support for ${formatStateList(prioritizedStates)} next.`;
 
