@@ -1,15 +1,12 @@
 import { formatCurrency } from "@/utils/formatCurrency";
-import {
-  type Costs as CostsType,
-  formatTotalCosts,
-} from "@/utils/formatTotalCosts";
-import "./Costs.css";
+import { type Costs, formatTotalCosts } from "@/utils/formatTotalCosts";
+import "./CostsTable.css";
 
-interface CostsProps {
-  costs: CostsType;
+interface CostsTableProps {
+  costs: Costs;
 }
 
-export function Costs({ costs }: CostsProps) {
+export function CostsTable({ costs }: CostsTableProps) {
   if (!costs || costs.length === 0) {
     return null;
   }
@@ -26,7 +23,7 @@ export function Costs({ costs }: CostsProps) {
       </thead>
       <tbody>
         {costs.map((cost) => (
-          <tr key={cost.title}>
+          <tr key={cost._key}>
             <td>
               {cost.title}
               {cost.required === "notRequired" && " (optional)"}

@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 import { Banner } from "@/components/react/common/Banner";
-import { Costs } from "@/components/react/forms/Costs";
+import { CostsTable } from "@/components/react/forms/CostsTable";
 import { useFormStep } from "@/components/react/forms/FormContainer";
 import { FormStep } from "@/components/react/forms/FormStep";
 import { YesNoField } from "@/components/react/forms/YesNoField";
@@ -42,7 +42,7 @@ export const feeWaiverStep: Step = {
             </a>
           </Banner>
         ) : (
-          <Costs costs={costs ?? []} />
+          <CostsTable costs={costs ?? []} />
         )}
       </FormStep>
     );
