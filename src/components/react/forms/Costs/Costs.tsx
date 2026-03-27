@@ -31,7 +31,7 @@ export function Costs({ costs }: CostsProps) {
               {cost.title}
               {cost.required === "notRequired" && " (optional)"}
             </td>
-            <td>{formatCurrency(cost.amount ?? 0)}</td>
+            <td>{formatCurrency(cost.amount)}</td>
           </tr>
         ))}
       </tbody>
