@@ -59,12 +59,16 @@ export function DirectoryListItem({
       <ul className={styles.contactInfo}>
         <li>
           <RiMapPinLine />
-          {states?.join(", ")}
+          <div className={styles.contactLabel}>
+            <span>{states?.join(", ")}</span>
+          </div>
         </li>
         {contactLinks.map(({ Icon, href, label }) => (
           <li key={href}>
             <Icon />
-            <a href={href}>{label}</a>
+            <div className={styles.contactLabel}>
+              <a href={href}>{label}</a>
+            </div>
           </li>
         ))}
       </ul>
