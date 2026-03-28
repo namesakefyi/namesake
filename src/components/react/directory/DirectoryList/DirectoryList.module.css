@@ -16,6 +16,11 @@
   .controls {
     display: flex;
     gap: var(--space-xs);
+    align-items: center;
+  }
+
+  .count {
+    padding-inline: var(--space-xs);
   }
 }
 

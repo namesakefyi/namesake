@@ -129,15 +129,20 @@ export function DirectoryList({
             ))}
           </NativeSelect>
         </div>
-        {hasActiveFilters ? (
-          <Button
-            type="button"
-            variant="secondary"
-            onPress={() => applyFilters({ stateSlug: "", service: "" })}
-          >
-            Clear filters
-          </Button>
-        ) : null}
+        <div className={styles.controls}>
+          <span
+            className={styles.count}
+          >{`${contacts.length} ${contacts.length === 1 ? "entry" : "entries"}`}</span>
+          {hasActiveFilters ? (
+            <Button
+              type="button"
+              variant="secondary"
+              onPress={() => applyFilters({ stateSlug: "", service: "" })}
+            >
+              Clear filters
+            </Button>
+          ) : null}
+        </div>
       </section>
       <section
         ref={mainRef}
