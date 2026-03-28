@@ -58,14 +58,12 @@
   }
 
   &[data-invalid] {
-
     .react-aria-Input,
     .react-aria-Button {
       border-color: var(--invalid-color);
     }
 
     &:focus-within {
-
       .react-aria-Input,
       .react-aria-Button {
         border-color: var(--focus-ring-color);
