@@ -82,7 +82,7 @@ describe("DirectoryList", () => {
       <DirectoryList initialContacts={[mockContact]} initialUrlSearch="" />,
     );
     expect(
-      screen.getByRole("heading", { level: 3, name: "Listed Org" }),
+      screen.getByRole("heading", { level: 2, name: "Listed Org" }),
     ).toBeInTheDocument();
   });
 
@@ -116,7 +116,7 @@ describe("DirectoryList", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("heading", { level: 3, name: "Listed Org" }),
+        screen.getByRole("heading", { level: 2, name: "Listed Org" }),
       ).toBeInTheDocument();
     });
     expect(global.fetch).toHaveBeenCalled();
