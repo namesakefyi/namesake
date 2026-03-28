@@ -128,12 +128,7 @@ export function DirectoryList({
               </NativeOption>
             ))}
           </NativeSelect>
-        </div>
-        <div className={styles.controls}>
-          <span
-            className={styles.count}
-          >{`${contacts.length} ${contacts.length === 1 ? "entry" : "entries"}`}</span>
-          {hasActiveFilters ? (
+          {hasActiveFilters && (
             <Button
               type="button"
               variant="secondary"
@@ -141,7 +136,12 @@ export function DirectoryList({
             >
               Reset
             </Button>
-          ) : null}
+          )}
+        </div>
+        <div className={styles.metadata}>
+          <span
+            className={styles.count}
+          >{`${contacts.length} ${contacts.length === 1 ? "entry" : "entries"}`}</span>
         </div>
       </section>
       <section
