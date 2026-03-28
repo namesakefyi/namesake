@@ -1,0 +1,32 @@
+---
+import { sanityClient } from "sanity:client";
+import PageHeader from "@/components/PageHeader.astro";
+import {
+  DirectoryList,
+  parseDirectorySearchParams,
+} from "@/components/react/directory/DirectoryList/DirectoryList";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { DIRECTORY_CONTACTS_LIST_QUERY } from "@/sanity/queries";
+
+const { stateSlug, service } = parseDirectorySearchParams(
+  Astro.url.searchParams,
+);
+
+const contacts = await sanityClient.fetch(DIRECTORY_CONTACTS_LIST_QUERY, {
+  stateSlug,
+  service,
+});
+
+const title = "Directory";
+const description =
+  "Need more name change support? These organizations can help.";
+---
+
+<BaseLayout title={title} description={description} color="pink">
+  <PageHeader title={title} description={description} />
+  <DirectoryList
+    client:load
+    initialContacts={contacts}
+    initialUrlSearch={Astro.url.search}
+  />
+</BaseLayout>

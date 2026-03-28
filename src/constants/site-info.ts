@@ -39,6 +39,7 @@ export type SiteInfo = {
     alt: string;
   };
   urls: {
+    directory: string;
     guides: string;
     forms: string;
     blog: string;
@@ -60,6 +61,7 @@ export const siteInfo: SiteInfo = {
     url: "https://superbloom.design/",
   },
   urls: {
+    directory: "/directory",
     guides: "/guides",
     forms: "/forms",
     blog: "/blog",

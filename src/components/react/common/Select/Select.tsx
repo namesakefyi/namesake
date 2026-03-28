@@ -1,4 +1,3 @@
-import { RiArrowDownSLine } from "@remixicon/react";
 import {
   Select as AriaSelect,
   type SelectProps as AriaSelectProps,
@@ -35,9 +34,6 @@ export function Select<T extends object>({
       <Label>{label}</Label>
       <Button>
         <SelectValue />
-        <span aria-hidden="true">
-          <RiArrowDownSLine size={16} />
-        </span>
       </Button>
       {description && <Text slot="description">{description}</Text>}
       <FieldError>{errorMessage}</FieldError>

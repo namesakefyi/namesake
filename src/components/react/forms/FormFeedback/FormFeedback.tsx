@@ -102,7 +102,7 @@ export function FormFeedback({ slug }: FormFeedbackProps) {
                 Share
               </Button>
             )}
-            <a href="https://namesake.fyi/donate" className="namesake-button">
+            <a href="https://namesake.fyi/donate" className="react-aria-Button">
               <RiHandHeartLine aria-hidden />
               Donate
             </a>

@@ -1,7 +1,6 @@
 .react-aria-Select {
   position: relative;
   width: fit-content;
-  max-width: 250px;
   color: var(--text-color);
 
   span[aria-hidden] {
@@ -40,8 +39,13 @@
     display: flex;
     align-items: center;
     width: 100%;
+    padding-inline-end: calc(var(--space-l) + 1.25rem);
     font-size: var(--step-0);
     font-weight: var(--weight-normal);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M11.9999 13.1714L16.9497 8.22168L18.3639 9.63589L11.9999 15.9999L5.63599 9.63589L7.0502 8.22168L11.9999 13.1714Z'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--space-s) center;
+    background-size: 1.25rem;
 
     &[data-focus-visible] {
       outline: 3px solid var(--focus-ring-color);
@@ -51,6 +55,7 @@
     &[data-disabled] {
       color: var(--text-color-disabled);
       border-color: var(--border-color-disabled);
+
       span[aria-hidden] {
         color: var(--text-color-disabled);
         background: var(--border-color-disabled);
@@ -122,4 +127,9 @@
       }
     }
   }
+}
+
+.react-aria-NativeSelect {
+  appearance: none;
+  field-sizing: content;
 }

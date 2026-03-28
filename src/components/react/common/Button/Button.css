@@ -1,4 +1,4 @@
-.namesake-button {
+.react-aria-Button {
   display: inline-flex;
   gap: var(--space-s);
   align-items: center;
@@ -9,6 +9,7 @@
   font-weight: var(--weight-bold);
   color: var(--text-color);
   text-align: center;
+  text-wrap: nowrap;
   text-decoration: none;
   appearance: none;
   outline: none;
@@ -22,6 +23,7 @@
       &:hover {
         transform: scale(1.05);
       }
+
       &:active {
         transform: scale(0.98);
       }
@@ -55,8 +57,8 @@
     cursor: pointer;
   }
 
-  .namesake-button-start-icon:has(~ *),
-  .namesake-button-end-icon:has(~ *) {
+  .react-aria-Button-start-icon:has(~ *),
+  .react-aria-Button-end-icon:has(~ *) {
     flex-shrink: 0;
     margin-inline: -0.2em;
   }

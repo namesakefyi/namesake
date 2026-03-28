@@ -623,6 +623,34 @@ export type State = {
   namesakeSupport: "full" | "prioritized" | "none";
 };
 
+export type Contact = {
+  _id: string;
+  _type: "contact";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  description: string;
+  states: Array<
+    {
+      _key: string;
+    } & StateReference
+  >;
+  slug: Slug;
+  url: string;
+  services: Array<string>;
+  logo?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  officialPartner?: boolean;
+  email?: string;
+  phone?: string;
+};
+
 export type Category = {
   _id: string;
   _type: "category";
@@ -772,6 +800,7 @@ export type AllSanitySchemaTypes =
   | AuthorReference
   | Post
   | State
+  | Contact
   | Category
   | Author
   | SanityImagePaletteSwatch
@@ -1593,6 +1622,11 @@ export type DOCUMENT_REFERENCE_BY_ID_QUERY_RESULT =
       title: null;
     }
   | {
+      _type: "contact";
+      slug: Slug;
+      title: null;
+    }
+  | {
       _type: "form";
       slug: Slug;
       title: string;
@@ -1700,6 +1734,36 @@ export type SPONSORS_QUERY_RESULT = Array<{
   url: string;
 }>;
 
+// Source: src/sanity/queries/index.ts
+// Variable: DIRECTORY_FILTER_STATES_QUERY
+// Query: *[_type == "state" && defined(slug)] | order(name asc) {    name,    "slug": slug.current  }
+export type DIRECTORY_FILTER_STATES_QUERY_RESULT = Array<{
+  name: string;
+  slug: string;
+}>;
+
+// Source: src/sanity/queries/index.ts
+// Variable: DIRECTORY_CONTACTS_LIST_QUERY
+// Query: *[    _type == "contact" &&    defined(slug) &&    ($stateSlug == "" || $stateSlug in states[]->slug.current) &&    ($service == "" || $service in services)  ] {    name,    "slug": slug.current,    description,    "states": states[]->name | order(@ asc),    services,    logo,    email,    phone,    url,    officialPartner,  } | order(officialPartner desc, name asc)
+export type DIRECTORY_CONTACTS_LIST_QUERY_RESULT = Array<{
+  name: string;
+  slug: string;
+  description: string;
+  states: Array<string>;
+  services: Array<string>;
+  logo: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  email: string | null;
+  phone: string | null;
+  url: string;
+  officialPartner: boolean | null;
+}>;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
@@ -1719,5 +1783,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "press"]{\n    _id,\n    title,\n    outlet,\n    url,\n    date,\n    image\n  } | order(date desc)\n': PRESS_ARTICLES_QUERY_RESULT;
     '\n  *[_type == "state"]{\n    name,\n    "slug": slug.current,\n    namesakeSupport\n  }\n': STATES_SUPPORT_QUERY_RESULT;
     '*[_type == "sponsor"]': SPONSORS_QUERY_RESULT;
+    '\n  *[_type == "state" && defined(slug)] | order(name asc) {\n    name,\n    "slug": slug.current\n  }\n': DIRECTORY_FILTER_STATES_QUERY_RESULT;
+    '\n  *[\n    _type == "contact" &&\n    defined(slug) &&\n    ($stateSlug == "" || $stateSlug in states[]->slug.current) &&\n    ($service == "" || $service in services)\n  ] {\n    name,\n    "slug": slug.current,\n    description,\n    "states": states[]->name | order(@ asc),\n    services,\n    logo,\n    email,\n    phone,\n    url,\n    officialPartner,\n  } | order(officialPartner desc, name asc)\n': DIRECTORY_CONTACTS_LIST_QUERY_RESULT;
   }
 }
