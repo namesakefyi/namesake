@@ -42,16 +42,9 @@ describe("DirectoryListItem", () => {
     expect(screen.queryByText("Namesake Partner")).not.toBeInTheDocument();
   });
 
-  it("renders states as directory filter links and contact links", () => {
+  it("renders states as text and contact links", () => {
     render(<DirectoryListItem {...baseContact} />);
-    expect(screen.getByRole("link", { name: "California" })).toHaveAttribute(
-      "href",
-      "/directory?state=ca",
-    );
-    expect(screen.getByRole("link", { name: "Oregon" })).toHaveAttribute(
-      "href",
-      "/directory?state=or",
-    );
+    expect(screen.getByText("California, Oregon")).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "hello@example.org" }),
     ).toHaveAttribute("href", "mailto:hello@example.org");
@@ -67,23 +60,9 @@ describe("DirectoryListItem", () => {
 
   it("omits contact links when email, phone, and url are empty", () => {
     render(
-      <DirectoryListItem
-        {...baseContact}
-        email={null}
-        phone={null}
-        url=""
-        states={[]}
-      />,
+      <DirectoryListItem {...baseContact} email={null} phone={null} url="" />,
     );
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
-  });
-
-  it("renders an unrecognized state name as plain text", () => {
-    render(<DirectoryListItem {...baseContact} states={["Fictional State"]} />);
-    expect(screen.getByText("Fictional State")).toBeInTheDocument();
-    expect(
-      screen.queryByRole("link", { name: "Fictional State" }),
-    ).not.toBeInTheDocument();
   });
 
   it("does not render a logo when logo is null", () => {
