@@ -139,7 +139,7 @@ export function DirectoryList({
               variant="secondary"
               onPress={() => applyFilters({ stateSlug: "", service: "" })}
             >
-              Clear filters
+              Reset
             </Button>
           ) : null}
         </div>

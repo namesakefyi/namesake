@@ -77,13 +77,27 @@ describe("DirectoryList", () => {
     vi.restoreAllMocks();
   });
 
-  it("renders initial contacts from props", () => {
+  it("renders initial contacts from props and shows the entry count", () => {
     render(
       <DirectoryList initialContacts={[mockContact]} initialUrlSearch="" />,
     );
     expect(
       screen.getByRole("heading", { level: 2, name: "Listed Org" }),
     ).toBeInTheDocument();
+    expect(screen.getByText("1 entry")).toBeInTheDocument();
+  });
+
+  it("shows plural entries in the count when there are multiple contacts", () => {
+    render(
+      <DirectoryList
+        initialContacts={[
+          mockContact,
+          { ...mockContact, slug: "other", name: "Other Org" },
+        ]}
+        initialUrlSearch=""
+      />,
+    );
+    expect(screen.getByText("2 entries")).toBeInTheDocument();
   });
 
   it("shows the filtered-empty message when filters are active and the list is empty", () => {
@@ -91,18 +105,18 @@ describe("DirectoryList", () => {
     expect(
       screen.getByText("No organizations match these filters."),
     ).toBeInTheDocument();
+    expect(screen.getByText("0 entries")).toBeInTheDocument();
   });
 
-  it("shows Clear filters when a service filter is applied from the URL", () => {
+  it("shows Reset when a service filter is applied from the URL", () => {
     render(
       <DirectoryList
         initialContacts={[mockContact]}
         initialUrlSearch="?service=legal"
       />,
     );
-    expect(
-      screen.getByRole("button", { name: "Clear filters" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Reset" })).toBeInTheDocument();
+    expect(screen.getByText("1 entry")).toBeInTheDocument();
   });
 
   it("refetches when the service select changes", async () => {
@@ -118,6 +132,7 @@ describe("DirectoryList", () => {
       expect(
         screen.getByRole("heading", { level: 2, name: "Listed Org" }),
       ).toBeInTheDocument();
+      expect(screen.getByText("1 entry")).toBeInTheDocument();
     });
     expect(global.fetch).toHaveBeenCalled();
     expect(String(vi.mocked(global.fetch).mock.calls[0]?.[0])).toContain(
@@ -144,7 +159,7 @@ describe("DirectoryList", () => {
     });
   });
 
-  it("clears filters when Clear filters is pressed", async () => {
+  it("resets filters when Reset is pressed", async () => {
     const user = userEvent.setup();
     render(
       <DirectoryList
@@ -153,7 +168,7 @@ describe("DirectoryList", () => {
       />,
     );
 
-    await user.click(screen.getByRole("button", { name: "Clear filters" }));
+    await user.click(screen.getByRole("button", { name: "Reset" }));
 
     await waitFor(() => {
       const stateSelect = screen.getByRole("combobox", {
