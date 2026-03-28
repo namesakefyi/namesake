@@ -2,12 +2,12 @@
 import { sanityClient } from "sanity:client";
 import PageHeader from "@/components/PageHeader.astro";
 import { DirectoryList } from "@/components/react/directory/DirectoryList";
-import { parseDirectorySearchParams } from "@/directory/parseDirectorySearchParams";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import {
   DIRECTORY_CONTACTS_LIST_QUERY,
   DIRECTORY_FILTER_STATES_QUERY,
 } from "@/sanity/queries";
+import { parseDirectorySearchParams } from "@/utils/parseDirectorySearchParams";
 
 const { selectedStateSlug, selectedService } = parseDirectorySearchParams(
   Astro.url.searchParams,

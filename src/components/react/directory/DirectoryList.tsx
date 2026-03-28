@@ -3,10 +3,12 @@ import { Button } from "@/components/react/common/Button";
 import { NativeSelect } from "@/components/react/common/NativeSelect";
 import { ALL } from "@/constants/all";
 import { SERVICES } from "@/constants/services";
-import type { DirectoryContact } from "@/directory/directoryContact";
-import { parseDirectorySearchParams } from "@/directory/parseDirectorySearchParams";
+import type { DIRECTORY_CONTACTS_LIST_QUERY_RESULT } from "@/sanity/sanity.types";
+import { parseDirectorySearchParams } from "@/utils/parseDirectorySearchParams";
 import styles from "./DirectoryList.module.css";
 import { DirectoryListItem } from "./DirectoryListItem";
+
+export type DirectoryContact = DIRECTORY_CONTACTS_LIST_QUERY_RESULT[number];
 
 export interface DirectoryListProps {
   initialContacts: DirectoryContact[];

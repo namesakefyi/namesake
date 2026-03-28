@@ -6,9 +6,9 @@ import {
   RiVerifiedBadgeFill,
 } from "@remixicon/react";
 import { SERVICE_LABELS, type Service } from "@/constants/services";
-import type { DirectoryContact } from "@/directory/directoryContact";
 import { urlForImage } from "@/sanity/lib/urlForImage";
 import { formatCleanUrl } from "@/utils/formatCleanUrl";
+import type { DirectoryContact } from "./DirectoryList";
 import styles from "./DirectoryList.module.css";
 
 export function DirectoryListItem({
@@ -52,8 +52,8 @@ export function DirectoryListItem({
         <p className={styles.description}>{description}</p>
       </header>
       <ul className={styles.services} aria-label="Services">
-        {services.map((service: Service) => (
-          <li key={service}>{SERVICE_LABELS[service] ?? service}</li>
+        {services.map((service) => (
+          <li key={service}>{SERVICE_LABELS[service as Service] ?? service}</li>
         ))}
       </ul>
       <ul className={styles.contactInfo}>
