@@ -16,8 +16,8 @@
     }
   }
 
-  .namesake-button[slot="previous"],
-  .namesake-button[slot="next"] {
+  .react-aria-Button[slot="previous"],
+  .react-aria-Button[slot="next"] {
     width: var(--space-2xl);
     height: var(--space-2xl);
     padding: 0;

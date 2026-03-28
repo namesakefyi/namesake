@@ -13,7 +13,7 @@
     border-radius: 0;
   }
 
-  .namesake-button {
+  .react-aria-Button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -35,6 +35,7 @@
       &:hover {
         transform: none;
       }
+
       &:active {
         transform: none;
       }
@@ -48,22 +49,25 @@
 
     &[data-focus-within] {
       outline: 1px solid var(--focus-ring-color);
+
       .react-aria-Input,
-      .namesake-button {
+      .react-aria-Button {
         border-color: var(--focus-ring-color);
       }
     }
   }
 
   &[data-invalid] {
+
     .react-aria-Input,
-    .namesake-button {
+    .react-aria-Button {
       border-color: var(--invalid-color);
     }
 
     &:focus-within {
+
       .react-aria-Input,
-      .namesake-button {
+      .react-aria-Button {
         border-color: var(--focus-ring-color);
       }
     }
@@ -80,7 +84,7 @@
     font-size: var(--step--2);
   }
 
-  .namesake-button {
+  .react-aria-Button {
     &[data-disabled] {
       color: var(--text-color-disabled);
       border-color: var(--border-color-disabled);
