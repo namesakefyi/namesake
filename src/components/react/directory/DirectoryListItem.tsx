@@ -7,8 +7,8 @@ import {
 } from "@remixicon/react";
 import { SERVICE_LABELS, type Service } from "@/constants/services";
 import { urlForImage } from "@/sanity/lib/urlForImage";
+import type { DIRECTORY_CONTACTS_LIST_QUERY_RESULT } from "@/sanity/sanity.types";
 import { formatCleanUrl } from "@/utils/formatCleanUrl";
-import type { DirectoryContact } from "./DirectoryList";
 import styles from "./DirectoryList.module.css";
 
 export function DirectoryListItem({
@@ -21,7 +21,7 @@ export function DirectoryListItem({
   url,
   logo,
   officialPartner,
-}: DirectoryContact) {
+}: DIRECTORY_CONTACTS_LIST_QUERY_RESULT[number]) {
   const contactLinks = [
     { Icon: RiGlobalLine, href: url, label: formatCleanUrl(url) },
     { Icon: RiMailSendLine, href: `mailto:${email}`, label: email },
