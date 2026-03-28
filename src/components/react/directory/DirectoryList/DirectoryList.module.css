@@ -3,14 +3,15 @@
   top: 0;
   z-index: 2;
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs) var(--space-s);
+  gap: var(--space-xs);
   align-items: center;
   justify-content: space-between;
   padding-block: var(--space-s);
+  padding-inline: var(--space-l);
   margin-block-end: var(--space-xl);
+  margin-inline: calc(var(--space-l) * -1);
+  overflow-x: auto;
   background-color: var(--background-color);
-  border-bottom: 1px solid var(--border-color);
 
   .controls {
     display: flex;
