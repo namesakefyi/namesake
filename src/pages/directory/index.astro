@@ -6,16 +6,11 @@ import {
   parseDirectorySearchParams,
 } from "@/components/react/directory/DirectoryList";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import {
-  DIRECTORY_CONTACTS_LIST_QUERY,
-  DIRECTORY_FILTER_STATES_QUERY,
-} from "@/sanity/queries";
+import { DIRECTORY_CONTACTS_LIST_QUERY } from "@/sanity/queries";
 
 const { stateSlug, service } = parseDirectorySearchParams(
   Astro.url.searchParams,
 );
-
-const filterStates = await sanityClient.fetch(DIRECTORY_FILTER_STATES_QUERY);
 
 const contacts = await sanityClient.fetch(DIRECTORY_CONTACTS_LIST_QUERY, {
   stateSlug,
@@ -32,7 +27,6 @@ const description =
   <DirectoryList
     client:load
     initialContacts={contacts}
-    filterStates={filterStates}
     initialUrlSearch={Astro.url.search}
   />
 </BaseLayout>

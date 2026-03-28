@@ -1,7 +1,11 @@
 import { useRef, useState } from "react";
 import { Button } from "@/components/react/common/Button";
-import { NativeSelect } from "@/components/react/common/NativeSelect";
+import {
+  NativeOption,
+  NativeSelect,
+} from "@/components/react/common/NativeSelect";
 import { ALL } from "@/constants/all";
+import { JURISDICTIONS } from "@/constants/jurisdictions";
 import { SERVICES } from "@/constants/services";
 import type { DIRECTORY_CONTACTS_LIST_QUERY_RESULT } from "@/sanity/sanity.types";
 import styles from "./DirectoryList.module.css";
@@ -49,13 +53,11 @@ async function fetchDirectoryContactList(
 
 interface DirectoryListProps {
   initialContacts: DIRECTORY_CONTACTS_LIST_QUERY_RESULT;
-  filterStates: { name: string; slug: string }[];
   initialUrlSearch: string;
 }
 
 export function DirectoryList({
   initialContacts,
-  filterStates,
   initialUrlSearch,
 }: DirectoryListProps) {
   const [filters, setFilters] = useState<DirectoryFilters>(() =>
@@ -84,40 +86,48 @@ export function DirectoryList({
   const emptyMessage =
     hasActiveFilters && !contacts.length
       ? "No organizations match these filters."
-      : "No directory entries yet.";
+      : "No entries yet.";
 
   return (
     <>
       <section
         className={styles.directoryFilters}
-        aria-labelledby="directory-filters-heading"
+        aria-label="Directory filters"
       >
-        <h2 id="directory-filters-heading" className="visually-hidden">
-          Directory filters
-        </h2>
         <div className={styles.controls}>
           <NativeSelect
             aria-label="State"
-            options={[
-              { value: ALL, label: "All states" },
-              ...filterStates.map((s) => ({ value: s.slug, label: s.name })),
-            ]}
             value={stateSlug || ALL}
             onChange={({ target: { value } }) =>
               applyFilters({ stateSlug: value === ALL ? "" : value, service })
             }
-          />
+          >
+            <NativeOption value={ALL}>All states</NativeOption>
+            <hr />
+            {Object.entries(JURISDICTIONS).map(([abbreviation, name]) => (
+              <NativeOption
+                key={abbreviation}
+                value={abbreviation.toLowerCase()}
+              >
+                {name}
+              </NativeOption>
+            ))}
+          </NativeSelect>
           <NativeSelect
             aria-label="Service"
-            options={[
-              { value: ALL, label: "All services" },
-              ...SERVICES.map((s) => ({ value: s.value, label: s.title })),
-            ]}
             value={service || ALL}
             onChange={({ target: { value } }) =>
               applyFilters({ stateSlug, service: value === ALL ? "" : value })
             }
-          />
+          >
+            <NativeOption value={ALL}>All services</NativeOption>
+            <hr />
+            {SERVICES.map((svc) => (
+              <NativeOption key={svc.value} value={svc.value}>
+                {svc.title}
+              </NativeOption>
+            ))}
+          </NativeSelect>
         </div>
         {hasActiveFilters ? (
           <Button

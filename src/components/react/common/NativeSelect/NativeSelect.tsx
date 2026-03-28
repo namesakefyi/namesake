@@ -1,42 +1,43 @@
 import clsx from "clsx";
-import type { ComponentPropsWithoutRef } from "react";
-import { forwardRef, useId } from "react";
+import {
+  type ComponentPropsWithoutRef,
+  forwardRef,
+  type SelectHTMLAttributes,
+  useId,
+} from "react";
 import "../Button/Button.css";
 import "../Select/Select.css";
 import { Label } from "../Form";
 
-export type NativeSelectOption = {
-  value: string;
-  label: string;
-  disabled?: boolean;
-};
+export type NativeOptionProps = ComponentPropsWithoutRef<"option">;
 
-export type NativeSelectProps = Omit<
-  ComponentPropsWithoutRef<"select">,
-  "children"
-> & {
+export const NativeOption = forwardRef<HTMLOptionElement, NativeOptionProps>(
+  function NativeOption(props, ref) {
+    return <option ref={ref} {...props} />;
+  },
+);
+
+export interface NativeSelectProps
+  extends SelectHTMLAttributes<HTMLSelectElement> {
+  /** Rendered above the select as `<label htmlFor>`. */
   label?: string;
-  options: readonly NativeSelectOption[];
-};
+}
 
 export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
-  function NativeSelect({ label, options, className, ...props }, ref) {
-    const id = useId();
+  function NativeSelect({ label, className, id, children, ...props }, ref) {
+    const genId = useId();
+    const selectId = id ?? genId;
 
     return (
       <div className={clsx("react-aria-Select", className)}>
-        {label ? <Label htmlFor={id}>{label}</Label> : null}
+        {label ? <Label htmlFor={selectId}>{label}</Label> : null}
         <select
           ref={ref}
-          id={id}
           className={clsx("react-aria-Button", "react-aria-NativeSelect")}
+          id={selectId}
           {...props}
         >
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value} disabled={opt.disabled}>
-              {opt.label}
-            </option>
-          ))}
+          {children}
         </select>
       </div>
     );
