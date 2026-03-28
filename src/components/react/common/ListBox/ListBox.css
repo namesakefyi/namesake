@@ -49,6 +49,11 @@
   outline: none;
   border-radius: var(--radius-2xs);
 
+  &[data-focus-visible] {
+    outline: 3px solid var(--focus-ring-color);
+    outline-offset: -2px;
+  }
+
   &[data-selected] {
     color: var(--highlight-foreground);
     background: var(--highlight-background);
