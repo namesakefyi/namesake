@@ -48,7 +48,7 @@ export function DirectoryListItem({
             Namesake Partner
           </div>
         ) : null}
-        <h3>{name}</h3>
+        <h2>{name}</h2>
         <p className={styles.description}>{description}</p>
       </header>
       <ul className={styles.services} aria-label="Services">

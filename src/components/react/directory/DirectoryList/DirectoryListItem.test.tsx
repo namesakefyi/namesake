@@ -20,7 +20,7 @@ describe("DirectoryListItem", () => {
   it("renders name and description", () => {
     render(<DirectoryListItem {...baseContact} />);
     expect(
-      screen.getByRole("heading", { level: 3, name: "Example Org" }),
+      screen.getByRole("heading", { level: 2, name: "Example Org" }),
     ).toBeInTheDocument();
     expect(screen.getByText("Helps with name changes.")).toBeInTheDocument();
   });
