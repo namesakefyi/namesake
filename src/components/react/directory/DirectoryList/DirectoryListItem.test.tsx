@@ -79,9 +79,7 @@ describe("DirectoryListItem", () => {
   });
 
   it("renders an unrecognized state name as plain text", () => {
-    render(
-      <DirectoryListItem {...baseContact} states={["Fictional State"]} />,
-    );
+    render(<DirectoryListItem {...baseContact} states={["Fictional State"]} />);
     expect(screen.getByText("Fictional State")).toBeInTheDocument();
     expect(
       screen.queryByRole("link", { name: "Fictional State" }),

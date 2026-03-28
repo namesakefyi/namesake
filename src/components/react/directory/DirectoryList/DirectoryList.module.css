@@ -163,7 +163,7 @@
       gap: var(--space-2xs);
       max-width: 100%;
 
-      >svg {
+      > svg {
         flex-shrink: 0;
         grid-area: icon;
         margin-top: 0.3em;
@@ -173,8 +173,8 @@
         grid-area: label;
         min-width: 0;
 
-        >span,
-        >a {
+        > span,
+        > a {
           display: block;
           width: fit-content;
           padding-block: 0.15em;
