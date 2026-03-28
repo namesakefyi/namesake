@@ -95,35 +95,34 @@ export function DirectoryList({
         <h2 id="directory-filters-heading" className="visually-hidden">
           Directory filters
         </h2>
-        <NativeSelect
-          className={styles.directoryFiltersNativeSelect}
-          aria-label="State"
-          options={[
-            { value: ALL, label: "All states" },
-            ...filterStates.map((s) => ({ value: s.slug, label: s.name })),
-          ]}
-          value={stateSlug || ALL}
-          onChange={({ target: { value } }) =>
-            applyFilters({ stateSlug: value === ALL ? "" : value, service })
-          }
-        />
-        <NativeSelect
-          className={styles.directoryFiltersNativeSelect}
-          aria-label="Service"
-          options={[
-            { value: ALL, label: "All services" },
-            ...SERVICES.map((s) => ({ value: s.value, label: s.title })),
-          ]}
-          value={service || ALL}
-          onChange={({ target: { value } }) =>
-            applyFilters({ stateSlug, service: value === ALL ? "" : value })
-          }
-        />
+        <div className={styles.controls}>
+          <NativeSelect
+            aria-label="State"
+            options={[
+              { value: ALL, label: "All states" },
+              ...filterStates.map((s) => ({ value: s.slug, label: s.name })),
+            ]}
+            value={stateSlug || ALL}
+            onChange={({ target: { value } }) =>
+              applyFilters({ stateSlug: value === ALL ? "" : value, service })
+            }
+          />
+          <NativeSelect
+            aria-label="Service"
+            options={[
+              { value: ALL, label: "All services" },
+              ...SERVICES.map((s) => ({ value: s.value, label: s.title })),
+            ]}
+            value={service || ALL}
+            onChange={({ target: { value } }) =>
+              applyFilters({ stateSlug, service: value === ALL ? "" : value })
+            }
+          />
+        </div>
         {hasActiveFilters ? (
           <Button
             type="button"
             variant="secondary"
-            className={styles.directoryFiltersClearAll}
             onPress={() => applyFilters({ stateSlug: "", service: "" })}
           >
             Clear filters
@@ -132,12 +131,12 @@ export function DirectoryList({
       </section>
       <section
         ref={mainRef}
-        className={styles.directoryMain}
+        className={styles.directoryContent}
         aria-label="Directory results"
         aria-busy={status === "loading"}
       >
         {status === "error" ? (
-          <p className={styles.directoryListError} role="alert">
+          <p role="alert">
             Something went wrong loading the directory. Please refresh the page.
           </p>
         ) : contacts.length ? (
@@ -147,7 +146,7 @@ export function DirectoryList({
             ))}
           </ul>
         ) : (
-          <p className={styles.empty}>{emptyMessage}</p>
+          <p>{emptyMessage}</p>
         )}
       </section>
     </>

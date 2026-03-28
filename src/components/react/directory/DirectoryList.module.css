@@ -6,48 +6,35 @@
   flex-wrap: wrap;
   gap: var(--space-xs) var(--space-s);
   align-items: center;
+  justify-content: space-between;
   padding-block: var(--space-s);
   margin-block-end: var(--space-xl);
   background-color: var(--background-color);
   border-bottom: 1px solid var(--border-color);
+
+  .controls {
+    display: flex;
+    gap: var(--space-xs);
+  }
 }
 
-.directoryMain {
-  min-width: 0;
+.directoryContent {
   padding-block-end: var(--space-2xl);
   scroll-margin-top: calc(var(--space-2xl) * 2.5);
-  opacity: 1;
 
-  .empty {
-    padding-block-end: var(--space-2xl);
+  &[aria-busy="true"] {
+    position: relative;
+    pointer-events: none;
+
+    &::after {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      content: "";
+      background-color: var(--background-color);
+      opacity: 0.8;
+    }
   }
-}
-
-.directoryMain[aria-busy="true"] {
-  position: relative;
-  pointer-events: none;
-
-  &::after {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    content: "";
-    background-color: var(--background-color);
-    opacity: 0.8;
-  }
-}
-
-.directoryFiltersNativeSelect {
-  max-width: 100%;
-}
-
-.directoryFiltersClearAll {
-  margin-inline-start: auto;
-}
-
-.directoryListError {
-  padding-block-end: var(--space-2xl);
-  font-weight: var(--weight-bold);
 }
 
 .directoryListItems {
@@ -57,10 +44,8 @@
   padding-block-end: var(--space-3xl);
   columns: 2;
   column-gap: var(--space-3xl);
-}
 
-@media (width < 800px) {
-  .directoryListItems {
+  @media (width < 800px) {
     columns: 1;
   }
 }
