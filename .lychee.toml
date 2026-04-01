@@ -31,6 +31,12 @@ scheme = ["https"]
 # When links are available using HTTPS, treat HTTP links as errors.
 require_https = true
 
+# Base URL or website root directory to check relative URLs.
+base_url = "https://namesake.fyi"
+
+# Root path to use when checking absolute local links, must be an absolute path
+root_dir = "/dist"
+
 #############################  Exclusions  ##########################
 
 # Exclude these filesystem paths from getting checked.
