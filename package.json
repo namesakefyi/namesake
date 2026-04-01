@@ -92,7 +92,7 @@
     "@biomejs/biome": "^2.4.7",
     "@clack/prompts": "^1.1.0",
     "@csstools/postcss-logical-viewport-units": "^4.0.0",
-    "@playwright/test": "^1.58.2",
+    "@playwright/test": "^1.59.0",
     "@react-aria/test-utils": "1.0.0-beta.2",
     "@storybook/addon-links": "^10.3.3",
     "@storybook/addon-themes": "^10.3.3",
@@ -129,7 +129,7 @@
     "react-compiler-runtime": "^1.0.0",
     "sharp": "^0.34.5",
     "storybook": "^10.3.3",
-    "vitest": "4.0.18",
+    "vitest": "4.1.2",
     "wrangler": "^4.77.0"
   },
   "packageManager": "pnpm@10.23.0",
