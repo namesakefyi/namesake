@@ -43,7 +43,7 @@ jobs:
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: storybook-static
 
@@ -58,6 +58,6 @@ jobs:
     steps:
       - id: deploy
         name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
         with:
           token: ${{ github.token }}
