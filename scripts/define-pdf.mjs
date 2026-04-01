@@ -429,7 +429,7 @@ async function main() {
     exitWith("File must be a .pdf");
 
   log.message(
-    "Before beginning: create, rename, and/or reposition form fields in the PDF. Follow instructions in the README:\n\nhttps://github.com/namesakefyi/namesake.fyi/blob/main/src/pdfs/README.md",
+    "Before beginning: create, rename, and/or reposition form fields in the PDF. Follow instructions in the README:\n\nhttps://github.com/namesakefyi/namesake/blob/main/src/pdfs/README.md",
   );
 
   const jurisdictions = loadJurisdictions();
