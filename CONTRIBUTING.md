@@ -51,7 +51,7 @@ See the [README](https://github.com/namesakefyi/namesake/blob/main/src/pdfs/READ
 ## Creating pull requests
 
 1. **Keep changes small.** If you're tackling multiple issues, split them up into multiple pull requests. Smaller chunks of code are easier to review and test!
-2. **Explain what you did, why, and how.** "The better we present our code for review, the more likely the reviewer will be engaged with a critical eye." — [Writing a Great Pull Request Description](https://www.pullrequest.com/blog/writing-a-great-pull-request-description/)
+2. **Explain what you did, why, and how.** "The better we present our code for review, the more likely the reviewer will be engaged with a critical eye." — [Writing a Great Pull Request Description](https://www.hackerone.com/blog/writing-great-pull-request-description)
 
 ## Releasing
 
