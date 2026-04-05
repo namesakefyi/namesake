@@ -125,7 +125,6 @@ a {
 }
 
 @media (hover: hover) {
-
   a:hover,
   a:focus {
     text-decoration-color: var(--text-color);
@@ -222,10 +221,10 @@ textarea:focus-visible {
   position: relative;
 
   &::before {
-    content: "";
     position: absolute;
     inset: -5px;
     pointer-events: none;
+    content: "";
     background-color: var(--text-color);
   }
 }
