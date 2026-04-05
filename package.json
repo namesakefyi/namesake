@@ -35,7 +35,9 @@
     "typegen": "sanity schema extract --enforce-required-fields && sanity typegen generate"
   },
   "lint-staged": {
-    "*": "pnpm check:fix"
+    "*": [
+      "biome check --write"
+    ]
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
@@ -122,6 +124,7 @@
     "cssnano": "^7.1.2",
     "fake-indexeddb": "^6.2.5",
     "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "lodash": "^4.17.23",
     "postcss-clamp": "^4.1.0",
     "postcss-media-minmax": "^5.0.0",
