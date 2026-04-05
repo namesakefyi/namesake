@@ -125,6 +125,7 @@ a {
 }
 
 @media (hover: hover) {
+
   a:hover,
   a:focus {
     text-decoration-color: var(--text-color);
@@ -215,4 +216,16 @@ textarea:focus-visible {
   mix-blend-mode: luminosity;
   filter: grayscale(100%);
   transform: translate3d(0, 0, 0);
+}
+
+[data-annotation] {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    pointer-events: none;
+    background-color: var(--text-color);
+  }
 }
