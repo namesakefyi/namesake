@@ -35,7 +35,10 @@
     "typegen": "sanity schema extract --enforce-required-fields && sanity typegen generate"
   },
   "lint-staged": {
-    "*": "pnpm check:fix"
+    "*": [
+      "astro check",
+      "biome check --write"
+    ]
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
