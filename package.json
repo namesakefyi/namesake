@@ -110,7 +110,7 @@
     "@types/d3-geo": "^3.1.0",
     "@types/d3-selection": "^3.0.11",
     "@types/geojson": "^7946.0.16",
-    "@types/node": "^25.4.0",
+    "@types/node": "^25.5.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/sanitize-html": "^2.16.1",
