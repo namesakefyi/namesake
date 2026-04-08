@@ -19,6 +19,8 @@ export function LanguageSelectField({
 }: LanguageSelectFieldProps) {
   const { control } = useFormContext();
 
+  const collator = new Intl.Collator("en");
+
   return (
     <div className="namesake-language-select-field">
       <Controller
@@ -39,7 +41,7 @@ export function LanguageSelectField({
           >
             {Object.entries(languageNameMap)
               .sort(([_, { name: aName }], [_2, { name: bName }]) =>
-                aName.localeCompare(bName),
+                collator.compare(aName, bName),
               )
               .map(([language, { name, native }]) => (
                 <ComboBoxItem

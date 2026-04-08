@@ -1,5 +1,3 @@
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { useMemo, useState } from "react";
 import type { Selection, SortDescriptor } from "react-aria-components";
 import {
@@ -13,8 +11,6 @@ import {
 import { Tag, TagGroup } from "@/components/react/common/TagGroup";
 import type { GUIDES_INDEX_QUERY_RESULT } from "@/sanity/sanity.types";
 import "./GuidesTable.css";
-
-dayjs.extend(utc);
 
 export type Guide = GUIDES_INDEX_QUERY_RESULT[number];
 
@@ -37,6 +33,11 @@ export function GuidesTable({ guides }: GuidesTableProps) {
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "title",
     direction: "ascending",
+  });
+
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: "UTC",
+    dateStyle: "medium",
   });
 
   const handleGroupByChange = (keys: Selection) => {
@@ -98,7 +99,7 @@ export function GuidesTable({ guides }: GuidesTableProps) {
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "—";
-    return dayjs.utc(dateString).format("MMM D, YYYY");
+    return formatter.format(new Date(dateString));
   };
 
   if (!guides.length) {

@@ -1,7 +1,5 @@
 ---
 import { sanityClient } from "sanity:client";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import FormLink from "@/components/FormLink.astro";
 import PageHeader from "@/components/PageHeader.astro";
 import { type FormSlug, getFormConfig } from "@/constants/forms";
@@ -33,8 +31,6 @@ const formsWithPdfs = await Promise.all(
     };
   }),
 );
-
-dayjs.extend(utc);
 ---
 
 <BaseLayout
