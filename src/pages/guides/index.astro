@@ -1,13 +1,9 @@
 ---
 import { sanityClient } from "sanity:client";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import PageHeader from "@/components/PageHeader.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { GUIDES_INDEX_QUERY } from "@/sanity/queries";
 import { GuidesTable } from "./_components/GuidesTable";
-
-dayjs.extend(utc);
 
 const { params } = Astro.props;
 

@@ -13,13 +13,14 @@ import { formatTimeEstimate } from "@/utils/formatTimeEstimate";
 import { smartquotes } from "@/utils/smartquotes";
 import { Button } from "../../common/Button";
 import "./FormTitleStep.css";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { formatBrowser } from "@/utils/formatBrowser";
 import { formatDevice } from "@/utils/formatDevice";
 import { Heading } from "../../common/Content/Content";
 
-dayjs.extend(utc);
+const formatter = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "long",
+  timeZone: "UTC",
+});
 
 function FormInfo({ children }: { children: React.ReactNode }) {
   return <ul className="form-info">{children}</ul>;
@@ -174,7 +175,7 @@ export function FormTitleStep({
         <div className="form-title-step-date-updated">
           Form last revised on{" "}
           <time dateTime={updatedAt}>
-            {dayjs.utc(updatedAt).format("MMMM D, YYYY")}
+            {formatter.format(new Date(updatedAt))}
           </time>
           .
         </div>
