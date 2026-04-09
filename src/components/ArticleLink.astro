@@ -1,10 +1,6 @@
 ---
 import type { SanityImageSource } from "@sanity/image-url";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import SanityImage from "./SanityImage.astro";
-
-dayjs.extend(utc);
 
 interface Props {
   title: string;
@@ -22,11 +18,17 @@ interface Props {
 const { title, date, url, subhead, authors, description, image } = Astro.props;
 
 const dateObj = new Date(date);
+const formattedDate = new Intl.DateTimeFormat("en-US", {
+  timeZone: "UTC",
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+}).format(dateObj);
 ---
 
 <article class="article">
   <time class="date" datetime={dateObj.toISOString()}>
-    {dayjs.utc(dateObj).format("MMMM DD, YYYY")}
+    {formattedDate}
   </time>
   {subhead && <strong class="subhead">{subhead}</strong>}
   <h2 class="title">

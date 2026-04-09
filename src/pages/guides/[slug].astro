@@ -1,17 +1,11 @@
 ---
 import { sanityClient } from "sanity:client";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
-import utc from "dayjs/plugin/utc";
 import type { BreadcrumbItem } from "@/components/Breadcrumbs.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import PortableText from "@/components/text/PortableText.astro";
 import ProseLayout from "@/layouts/ProseLayout.astro";
 import { extractHeadings } from "@/sanity/lib/extractHeadings";
 import { GUIDE_BY_SLUG_QUERY } from "@/sanity/queries";
-
-dayjs.extend(utc);
-dayjs.extend(localizedFormat);
 
 const { slug } = Astro.params;
 if (!slug) return Astro.redirect("/404");
@@ -25,6 +19,13 @@ const breadcrumbs: BreadcrumbItem[] = [
   { label: "Namesake", href: "/" },
   { label: "Guides", href: "/guides" },
 ];
+
+const formatter = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "full",
+  timeStyle: "short",
+});
+
+const formattedDate = formatter.format(new Date(guide._updatedAt));
 ---
 
 <ProseLayout
@@ -38,9 +39,7 @@ const breadcrumbs: BreadcrumbItem[] = [
   <PortableText value={guide.content} />
   <div class="date-updated">
     Page last edited on {" "}
-    <time datetime={guide._updatedAt}
-      >{dayjs.utc(guide._updatedAt).local().format("LL [at] LT")}</time
-    >.
+    <time datetime={guide._updatedAt}>{formattedDate}</time>.
   </div>
 </ProseLayout>
 
