@@ -1,7 +1,7 @@
-import { Banner } from "@/components/react/common/Banner";
-import { CheckboxGroupField } from "@/components/react/forms/CheckboxGroupField";
-import { FormStep } from "@/components/react/forms/FormStep";
-import type { Step } from "@/forms/types";
+import { Banner } from "../../../../components/common/Banner";
+import { CheckboxGroupField } from "../../../../components/forms/CheckboxGroupField";
+import { FormStep } from "../../../../components/forms/FormStep";
+import type { Step } from "../../../../forms/types";
 
 export const raceStep: Step = {
   id: "race",

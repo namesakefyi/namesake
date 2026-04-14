@@ -1,7 +1,7 @@
-import { FormStep } from "@/components/react/forms/FormStep";
-import { YesNoField } from "@/components/react/forms/YesNoField";
-import { nameOrFallback } from "@/forms/resolveStepContent";
-import type { Step } from "@/forms/types";
+import { FormStep } from "../../../../components/forms/FormStep";
+import { YesNoField } from "../../../../components/forms/YesNoField";
+import { nameOrFallback } from "../../../../forms/resolveStepContent";
+import type { Step } from "../../../../forms/types";
 
 export const youthServicesStep: Step = {
   id: "youth-services",

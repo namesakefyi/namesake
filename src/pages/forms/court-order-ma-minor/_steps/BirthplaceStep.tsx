@@ -1,10 +1,13 @@
-import { ComboBoxField } from "@/components/react/forms/ComboBoxField";
-import { FormStep, useFieldVisible } from "@/components/react/forms/FormStep";
-import { ShortTextField } from "@/components/react/forms/ShortTextField";
-import { COUNTRIES } from "@/constants/countries";
-import { JURISDICTIONS } from "@/constants/jurisdictions";
-import { nameOrFallback } from "@/forms/resolveStepContent";
-import type { Step } from "@/forms/types";
+import { ComboBoxField } from "../../../../components/forms/ComboBoxField";
+import {
+  FormStep,
+  useFieldVisible,
+} from "../../../../components/forms/FormStep";
+import { ShortTextField } from "../../../../components/forms/ShortTextField";
+import { COUNTRIES } from "../../../../constants/countries";
+import { JURISDICTIONS } from "../../../../constants/jurisdictions";
+import { nameOrFallback } from "../../../../forms/resolveStepContent";
+import type { Step } from "../../../../forms/types";
 
 export const birthplaceStep: Step = {
   id: "birthplace",

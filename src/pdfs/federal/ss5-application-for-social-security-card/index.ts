@@ -1,6 +1,6 @@
-import { definePdf } from "@/pdfs/utils/definePdf";
-import { formatBirthplaceCountryOrState } from "@/utils/formatBirthplaceCountryOrState";
-import { formatDateMMDDYYYY } from "@/utils/formatDateMMDDYYYY";
+import { formatBirthplaceCountryOrState } from "../../../utils/formatBirthplaceCountryOrState";
+import { formatDateMMDDYYYY } from "../../../utils/formatDateMMDDYYYY";
+import { definePdf } from "../../utils/definePdf";
 import type { PdfFieldName } from "./schema";
 import pdf from "./ss5-application-for-social-security-card.pdf";
 

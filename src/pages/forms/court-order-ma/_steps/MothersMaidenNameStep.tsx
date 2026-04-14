@@ -1,7 +1,7 @@
-import { Banner } from "@/components/react/common/Banner";
-import { FormStep } from "@/components/react/forms/FormStep";
-import { ShortTextField } from "@/components/react/forms/ShortTextField";
-import type { Step } from "@/forms/types";
+import { Banner } from "../../../../components/common/Banner";
+import { FormStep } from "../../../../components/forms/FormStep";
+import { ShortTextField } from "../../../../components/forms/ShortTextField";
+import type { Step } from "../../../../forms/types";
 
 export const mothersMaidenNameStep: Step = {
   id: "mothers-maiden-name",

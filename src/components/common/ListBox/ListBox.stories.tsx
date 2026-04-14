@@ -1,0 +1,27 @@
+import type { Meta, StoryFn } from "@storybook/react";
+import { ListBox, ListBoxItem } from ".";
+
+const meta: Meta<typeof ListBox> = {
+  component: ListBox,
+  parameters: {
+    layout: "centered",
+  },
+  tags: ["autodocs"],
+};
+
+export default meta;
+type Story = StoryFn<typeof ListBox>;
+
+export const Example: Story = (args) => (
+  <ListBox aria-label="Ice cream flavor" {...args}>
+    <ListBoxItem>Chocolate</ListBoxItem>
+    <ListBoxItem>Mint</ListBoxItem>
+    <ListBoxItem>Strawberry</ListBoxItem>
+    <ListBoxItem>Vanilla</ListBoxItem>
+  </ListBox>
+);
+
+Example.args = {
+  onAction: undefined,
+  selectionMode: "single",
+};

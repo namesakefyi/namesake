@@ -1,6 +1,6 @@
 ---
 import { sanityClient } from "sanity:client";
-import { SPONSORS_QUERY } from "@/sanity/queries";
+import { SPONSORS_QUERY } from "../sanity/queries";
 import SanityImage from "./SanityImage.astro";
 
 const sponsors = await sanityClient.fetch(SPONSORS_QUERY);

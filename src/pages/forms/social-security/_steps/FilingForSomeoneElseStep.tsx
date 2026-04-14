@@ -2,11 +2,11 @@ import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "@/components/react/forms/FormStep";
-import { RadioGroupField } from "@/components/react/forms/RadioGroupField";
-import { ShortTextField } from "@/components/react/forms/ShortTextField";
-import { YesNoField } from "@/components/react/forms/YesNoField";
-import type { Step } from "@/forms/types";
+} from "../../../../components/forms/FormStep";
+import { RadioGroupField } from "../../../../components/forms/RadioGroupField";
+import { ShortTextField } from "../../../../components/forms/ShortTextField";
+import { YesNoField } from "../../../../components/forms/YesNoField";
+import type { Step } from "../../../../forms/types";
 
 export const filingForSomeoneElseStep: Step = {
   id: "filing-for-someone-else",

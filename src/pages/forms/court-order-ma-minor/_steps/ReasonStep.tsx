@@ -1,8 +1,8 @@
-import { Banner } from "@/components/react/common/Banner";
-import { FormStep } from "@/components/react/forms/FormStep";
-import { LongTextField } from "@/components/react/forms/LongTextField";
-import { nameOrFallback } from "@/forms/resolveStepContent";
-import type { Step } from "@/forms/types";
+import { Banner } from "../../../../components/common/Banner";
+import { FormStep } from "../../../../components/forms/FormStep";
+import { LongTextField } from "../../../../components/forms/LongTextField";
+import { nameOrFallback } from "../../../../forms/resolveStepContent";
+import type { Step } from "../../../../forms/types";
 
 export const reasonStep: Step = {
   id: "reason",

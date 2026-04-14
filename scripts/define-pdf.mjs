@@ -213,7 +213,7 @@ function generateDefinition({ id, title, code, jurisdiction, pdfFields }) {
 
   const fieldLines = pdfFields.map((f) => `  ${escapeKey(f.name)}: undefined,`);
 
-  return `import { definePdf } from "@/pdfs/utils/definePdf";
+  return `import { definePdf } from "../../utils/definePdf";
 import pdf from "./${id}.pdf";
 import type { PdfFieldName } from "./schema";
 
@@ -325,8 +325,8 @@ function generateStarterTest({ id, title, pdfFields }) {
       : "    // TODO: Add form data for resolver";
 
   return `import { describe, it } from "vitest";
-import type { FormData } from "@/constants/fields";
-import { expectPdfFieldsMatch } from "@/pdfs/utils/expectPdfFieldsMatch";
+import type { FormData } from "../../../constants/fields";
+import { expectPdfFieldsMatch } from "../../utils/expectPdfFieldsMatch";
 import ${importName} from ".";
 
 describe("${escapedTitle}", () => {

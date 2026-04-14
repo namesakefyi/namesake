@@ -5,8 +5,8 @@ import { geoPath } from "d3-geo";
 import type { Feature } from "geojson";
 import { feature } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
-import { STATES_SUPPORT_QUERY } from "@/sanity/queries";
-import { formatStateList } from "@/utils/formatStateList";
+import { STATES_SUPPORT_QUERY } from "../sanity/queries";
+import { formatStateList } from "../utils/formatStateList";
 
 const states = await sanityClient.fetch(STATES_SUPPORT_QUERY);
 

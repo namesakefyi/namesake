@@ -1,5 +1,5 @@
-import type { FormConfig } from "@/constants/forms";
-import { deriveCurrentAge } from "@/utils/deriveCurrentAge";
+import type { FormConfig } from "../../../constants/forms";
+import { deriveCurrentAge } from "../../../utils/deriveCurrentAge";
 import { addressStep } from "./_steps/AddressStep";
 import { birthCertificateParentsStep } from "./_steps/BirthCerticiateParentsStep";
 import { birthplaceStep } from "./_steps/BirthplaceStep";

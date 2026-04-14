@@ -1,6 +1,6 @@
-import { CheckboxField } from "@/components/react/forms/CheckboxField";
-import { FormStep } from "@/components/react/forms/FormStep";
-import type { Step } from "@/forms/types";
+import { CheckboxField } from "../../../../components/forms/CheckboxField";
+import { FormStep } from "../../../../components/forms/FormStep";
+import type { Step } from "../../../../forms/types";
 
 export const presentedByStep: Step = {
   id: "presented-by",

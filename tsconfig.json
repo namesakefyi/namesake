@@ -3,9 +3,6 @@
   "compilerOptions": {
     "allowJs": true,
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "types": ["./worker-configuration.d.ts", "node"],

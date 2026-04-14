@@ -1,5 +1,5 @@
 import type { Get } from "@sanity/codegen";
-import type { Guide } from "@/sanity/sanity.types";
+import type { Guide } from "../sanity/sanity.types";
 
 type GuideCostsField = Get<Guide, "costs">;
 

@@ -1,4 +1,4 @@
-import type { FieldName, FormData } from "@/constants/fields";
+import type { FieldName, FormData } from "../constants/fields";
 
 /** A single conditional field, visible when `when` returns true. */
 type ConditionalField = {

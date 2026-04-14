@@ -1,6 +1,6 @@
 ---
 import type { RoughAnnotationType } from "rough-notation/lib/model";
-import { smartquotes } from "@/utils/smartquotes";
+import { smartquotes } from "../utils/smartquotes";
 import Breadcrumbs, { type BreadcrumbItem } from "./Breadcrumbs.astro";
 
 interface Props {
@@ -48,7 +48,7 @@ if (date) {
 <script>
   import { annotate } from "rough-notation";
   import type { RoughAnnotationType } from "rough-notation/lib/model";
-  import { annotationConfig } from "@/constants/annotations";
+  import { annotationConfig } from "../constants/annotations";
 
   const header: HTMLElement | null = document.querySelector(".page-head h1");
   const isForcedColors = window.matchMedia("(forced-colors: active)").matches;

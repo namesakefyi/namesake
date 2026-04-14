@@ -1,6 +1,6 @@
 import { describe, it } from "vitest";
-import type { FormData } from "@/constants/fields";
-import { expectPdfFieldsMatch } from "@/pdfs/utils/expectPdfFieldsMatch";
+import type { FormData } from "../../../constants/fields";
+import { expectPdfFieldsMatch } from "../../utils/expectPdfFieldsMatch";
 import petitionToChangeNameOfAdult from ".";
 
 describe("CJP27 Petition to Change Name of Adult", () => {

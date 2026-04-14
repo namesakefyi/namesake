@@ -1,6 +1,6 @@
-import { FormStep } from "@/components/react/forms/FormStep";
-import { NameField } from "@/components/react/forms/NameField";
-import type { Step } from "@/forms/types";
+import { FormStep } from "../../../../components/forms/FormStep";
+import { NameField } from "../../../../components/forms/NameField";
+import type { Step } from "../../../../forms/types";
 
 export const currentNameStep: Step = {
   id: "current-name",

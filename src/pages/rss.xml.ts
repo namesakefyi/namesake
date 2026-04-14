@@ -2,7 +2,7 @@ import { sanityClient } from "sanity:client";
 import rss, { type RSSFeedItem } from "@astrojs/rss";
 import type { APIContext } from "astro";
 import sanitizeHtml from "sanitize-html";
-import { RSS_POSTS_QUERY } from "@/sanity/queries";
+import { RSS_POSTS_QUERY } from "../sanity/queries";
 
 export async function GET(context: APIContext) {
   const posts = await sanityClient.fetch(RSS_POSTS_QUERY);

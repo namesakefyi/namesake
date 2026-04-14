@@ -1,10 +1,10 @@
 ---
 import { sanityClient } from "sanity:client";
-import { FormContainer } from "@/components/react/forms/FormContainer/FormContainer";
-import type { FormSlug } from "@/constants/forms";
-import { getFormPdfMetadata } from "@/forms/getFormPdfMetadata";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import { FORM_BY_SLUG_WITH_GUIDE_COSTS_QUERY } from "@/sanity/queries";
+import { FormContainer } from "../../../components/forms/FormContainer/FormContainer";
+import type { FormSlug } from "../../../constants/forms";
+import { getFormPdfMetadata } from "../../../forms/getFormPdfMetadata";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { FORM_BY_SLUG_WITH_GUIDE_COSTS_QUERY } from "../../../sanity/queries";
 
 const formSlug: FormSlug = "court-order-ma";
 

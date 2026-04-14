@@ -1,7 +1,7 @@
-import { AddressField } from "@/components/react/forms/AddressField";
-import { FormStep } from "@/components/react/forms/FormStep";
-import { nameOrFallback } from "@/forms/resolveStepContent";
-import type { Step } from "@/forms/types";
+import { AddressField } from "../../../../components/forms/AddressField";
+import { FormStep } from "../../../../components/forms/FormStep";
+import { nameOrFallback } from "../../../../forms/resolveStepContent";
+import type { Step } from "../../../../forms/types";
 
 export const addressStep: Step = {
   id: "address",

@@ -1,12 +1,12 @@
 ---
 import { sanityClient } from "sanity:client";
-import FormLink from "@/components/FormLink.astro";
-import PageHeader from "@/components/PageHeader.astro";
-import { type FormSlug, getFormConfig } from "@/constants/forms";
-import { getFormPdfMetadata } from "@/forms/getFormPdfMetadata";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import { FORMS_INDEX_QUERY } from "@/sanity/queries";
-import { formatTimeEstimate } from "@/utils/formatTimeEstimate";
+import FormLink from "../../components/FormLink.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import { type FormSlug, getFormConfig } from "../../constants/forms";
+import { getFormPdfMetadata } from "../../forms/getFormPdfMetadata";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { FORMS_INDEX_QUERY } from "../../sanity/queries";
+import { formatTimeEstimate } from "../../utils/formatTimeEstimate";
 
 const { params } = Astro.props;
 

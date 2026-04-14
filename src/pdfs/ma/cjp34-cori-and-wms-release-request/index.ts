@@ -1,6 +1,6 @@
-import { definePdf } from "@/pdfs/utils/definePdf";
-import { formatDateMMDDYYYY } from "@/utils/formatDateMMDDYYYY";
-import { joinNames } from "@/utils/joinNames";
+import { formatDateMMDDYYYY } from "../../../utils/formatDateMMDDYYYY";
+import { joinNames } from "../../../utils/joinNames";
+import { definePdf } from "../../utils/definePdf";
 import pdf from "./cjp34-cori-and-wms-release-request.pdf";
 import type { PdfFieldName } from "./schema";
 
