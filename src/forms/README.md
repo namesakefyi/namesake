@@ -28,8 +28,8 @@ Each step is a `Step` object with an id, title, the fields it collects, and a Re
 ```ts
 // src/pages/forms/my-form/_steps/NameStep.tsx
 import type { Step } from "@/forms/types";
-import { FormStep } from "@/components/react/forms/FormStep";
-import { ShortTextField } from "@/components/react/forms/ShortTextField";
+import { FormStep } from "@/components/forms/FormStep";
+import { ShortTextField } from "@/components/forms/ShortTextField";
 
 export const nameStep: Step = {
   id: "name",
