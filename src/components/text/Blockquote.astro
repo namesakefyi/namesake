@@ -10,7 +10,7 @@ const { content, cite } = Astro.props.node;
   {cite && <cite>{smartquotes(cite)}</cite>}
 </blockquote>
 
-<style lang="scss">
+<style>
   cite::before {
     content: "—";
   }

@@ -1,10 +1,7 @@
 import { Controller, useFormContext } from "react-hook-form";
-import {
-  Checkbox,
-  type CheckboxProps,
-} from "@/components/react/common/Checkbox";
 import type { FieldName } from "@/constants/fields";
 import { smartquotes } from "@/utils/smartquotes";
+import { Checkbox, type CheckboxProps } from "../../common/Checkbox";
 import "./CheckboxField.css";
 
 export interface CheckboxFieldProps extends CheckboxProps {

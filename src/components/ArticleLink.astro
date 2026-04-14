@@ -49,7 +49,7 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
   }
 </article>
 
-<style lang="scss">
+<style>
   .article {
     display: flex;
     align-items: flex-start;
@@ -93,7 +93,9 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
     margin-block-end: var(--space-s);
     filter: grayscale(100%);
     mix-blend-mode: luminosity;
-    transform: translate3d(0, 0, 0); // Safari bugfix
+    transform: translate3d(0, 0, 0);
+
+    // Safari bugfix
 
     img {
       border-radius: 3px;
