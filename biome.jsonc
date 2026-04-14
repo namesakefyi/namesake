@@ -3,6 +3,7 @@
   "files": {
     "includes": [
       "**",
+      "!.lychee.toml",
       "!**/node_modules",
       "!**/playwright-report",
       "!**/test-results",
