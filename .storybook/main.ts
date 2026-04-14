@@ -22,7 +22,7 @@ const config: StorybookConfig = {
   core: {
     builder: "@storybook/builder-vite",
   },
-  stories: ["../src/components/react/**/*.stories.@(ts|tsx)"],
+  stories: ["../src/components/**/*.stories.@(ts|tsx)"],
   addons: [
     "@storybook/addon-themes",
     "@storybook/addon-links",
