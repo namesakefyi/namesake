@@ -90,7 +90,7 @@
     "xstate": "^5.28.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.7",
+    "@biomejs/biome": "^2.4.11",
     "@clack/prompts": "^1.1.0",
     "@csstools/postcss-logical-viewport-units": "^4.0.0",
     "@playwright/test": "^1.59.1",

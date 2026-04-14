@@ -4,9 +4,7 @@
   flex-direction: column;
   gap: 2px;
   width: 250px;
-  min-height: 100px;
   max-height: inherit;
-  max-height: 300px;
   padding: 4px;
   overflow: auto;
   outline: none;
@@ -39,6 +37,17 @@
       outline-offset: -2px;
     }
 
+    [slot="drag"] {
+      all: unset;
+      width: 15px;
+      text-align: center;
+
+      &[data-focus-visible] {
+        outline: 3px solid var(--focus-ring-color);
+        border-radius: 4px;
+      }
+    }
+
     &[data-selected] {
       --focus-ring-color: var(--highlight-foreground);
       color: var(--highlight-foreground);
@@ -50,7 +59,32 @@
       }
 
       .react-aria-Button {
+        padding: var(--space-2xs) var(--space-2xs);
+        font-size: var(--step-0);
+        line-height: 1.2em;
         color: var(--highlight-foreground);
+        background: transparent;
+        border: none;
+        transition: background 200ms;
+
+        &[data-hovered] {
+          background: var(--highlight-background);
+        }
+
+        &[data-pressed] {
+          background: var(--highlight-background);
+          box-shadow: none;
+        }
+
+        &:not([slot]) {
+          margin-left: auto;
+        }
+
+        &[slot="drag"] {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
       }
     }
 
@@ -58,32 +92,12 @@
       color: var(--text-color-disabled);
     }
 
-    .react-aria-Button:not([slot]) {
-      margin-left: auto;
+    &[data-allows-dragging] {
+      padding-left: 4px;
     }
 
-    .react-aria-Button {
-      padding: var(--space-2xs) var(--space-2xs);
-      font-size: var(--step-0);
-      line-height: 1.2em;
-      background: transparent;
-      border: none;
-      transition: background 200ms;
-
-      &[data-hovered] {
-        background: var(--highlight-background);
-      }
-
-      &[data-pressed] {
-        background: var(--highlight-background);
-        box-shadow: none;
-      }
-    }
-
-    .react-aria-Button[slot="drag"] {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    &[data-dragging] {
+      opacity: 0.6;
     }
   }
 
@@ -118,27 +132,6 @@
     align-items: center;
     justify-content: center;
     font-style: italic;
-  }
-}
-
-.react-aria-GridListItem {
-  &[data-allows-dragging] {
-    padding-left: 4px;
-  }
-
-  &[data-dragging] {
-    opacity: 0.6;
-  }
-
-  [slot="drag"] {
-    all: unset;
-    width: 15px;
-    text-align: center;
-
-    &[data-focus-visible] {
-      outline: 3px solid var(--focus-ring-color);
-      border-radius: 4px;
-    }
   }
 }
 
