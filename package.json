@@ -56,7 +56,7 @@
     "@portabletext/types": "^4.0.2",
     "@remixicon/react": "^4.7.0",
     "@sanity/astro": "^3.3.1",
-    "@sanity/client": "^7.20.0",
+    "@sanity/client": "^7.21.0",
     "@sanity/codegen": "^6.0.2",
     "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^2.1.1",
