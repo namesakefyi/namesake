@@ -1,7 +1,7 @@
-import { Banner } from "@/components/react/common/Banner";
-import { FormStep } from "@/components/react/forms/FormStep";
-import { RadioGroupField } from "@/components/react/forms/RadioGroupField";
-import type { Step } from "@/forms/types";
+import { Banner } from "../../../../components/common/Banner";
+import { FormStep } from "../../../../components/forms/FormStep";
+import { RadioGroupField } from "../../../../components/forms/RadioGroupField";
+import type { Step } from "../../../../forms/types";
 
 export const sexStep: Step = {
   id: "sex",

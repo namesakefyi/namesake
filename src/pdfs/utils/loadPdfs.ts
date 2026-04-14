@@ -1,5 +1,5 @@
-import type { PDFId } from "@/constants/pdf";
-import { getPdfDefinition } from "@/pdfs";
+import type { PDFId } from "../../constants/pdf";
+import { getPdfDefinition } from "..";
 
 /**
  * Load multiple PDFs.

@@ -1,6 +1,6 @@
-import { FormStep } from "@/components/react/forms/FormStep";
-import { MemorableDateField } from "@/components/react/forms/MemorableDateField";
-import type { Step } from "@/forms/types";
+import { FormStep } from "../../../../components/forms/FormStep";
+import { MemorableDateField } from "../../../../components/forms/MemorableDateField";
+import type { Step } from "../../../../forms/types";
 
 export const dateOfBirthStep: Step = {
   id: "date-of-birth",

@@ -1,4 +1,4 @@
-import { smartquotes } from "@/utils/smartquotes";
+import { smartquotes } from "../../utils/smartquotes";
 import { loadPdfLib } from "./loadPdfLib";
 
 /**

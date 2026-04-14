@@ -1,6 +1,6 @@
-import type { FieldName, FormData } from "@/constants/fields";
-import type { FormPdfConfig } from "@/constants/forms";
-import type { PDFId } from "@/constants/pdf";
+import type { FieldName, FormData } from "../constants/fields";
+import type { FormPdfConfig } from "../constants/forms";
+import type { PDFId } from "../constants/pdf";
 import type { Field, Step } from "./types";
 
 type ExpandedField = {

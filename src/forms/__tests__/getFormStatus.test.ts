@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getFormStatus } from "../getFormStatus";
 
-vi.mock("@/db/database", () => ({
+vi.mock("../../db/database", () => ({
   getFormProgress: vi.fn(),
 }));
 
-import { getFormProgress } from "@/db/database";
+import { getFormProgress } from "../../db/database";
 
 describe("getFormStatus", () => {
   beforeEach(() => {

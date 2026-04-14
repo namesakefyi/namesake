@@ -1,11 +1,11 @@
 ---
 import { sanityClient } from "sanity:client";
-import SanityImage from "@/components/SanityImage.astro";
-import TableOfContents from "@/components/TableOfContents.astro";
-import PortableText from "@/components/text/PortableText.astro";
-import ProseLayout from "@/layouts/ProseLayout.astro";
-import { extractHeadings } from "@/sanity/lib/extractHeadings";
-import { POST_BY_SLUG_QUERY } from "@/sanity/queries";
+import SanityImage from "../../components/SanityImage.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import PortableText from "../../components/text/PortableText.astro";
+import ProseLayout from "../../layouts/ProseLayout.astro";
+import { extractHeadings } from "../../sanity/lib/extractHeadings";
+import { POST_BY_SLUG_QUERY } from "../../sanity/queries";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.redirect("/404");

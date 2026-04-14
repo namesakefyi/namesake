@@ -1,7 +1,7 @@
-import { EmailField } from "@/components/react/forms/EmailField";
-import { FormStep } from "@/components/react/forms/FormStep";
-import { PhoneField } from "@/components/react/forms/PhoneField";
-import type { Step } from "@/forms/types";
+import { EmailField } from "../../../../components/forms/EmailField";
+import { FormStep } from "../../../../components/forms/FormStep";
+import { PhoneField } from "../../../../components/forms/PhoneField";
+import type { Step } from "../../../../forms/types";
 
 export const contactInfoStep: Step = {
   id: "contact-info",

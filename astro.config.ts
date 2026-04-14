@@ -1,17 +1,9 @@
-import path from "node:path";
 import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import sanity from "@sanity/astro";
 import { defineConfig, passthroughImageService } from "astro/config";
-
-// https://github.com/withastro/astro/issues/12824
-const alias = import.meta.env.PROD
-  ? {
-      "react-dom/server": "react-dom/server.edge",
-    }
-  : undefined;
 
 export default defineConfig({
   output: "server",
@@ -41,14 +33,6 @@ export default defineConfig({
     // Eliminate trailing slashes from Cloudflare Pages
     // https://creativehike.com/posts/removing-trailng-slashes-astro
     format: "file",
-  },
-  vite: {
-    resolve: {
-      alias: {
-        "@": path.resolve("src"),
-        ...alias,
-      },
-    },
   },
   devToolbar: {
     enabled: false,

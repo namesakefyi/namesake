@@ -1,7 +1,7 @@
 import { sanityClient } from "sanity:client";
 import type { APIRoute } from "astro";
-import { parseDirectorySearchParams } from "@/components/react/directory/DirectoryList/DirectoryList";
-import { DIRECTORY_CONTACTS_LIST_QUERY } from "@/sanity/queries";
+import { parseDirectorySearchParams } from "../../components/directory/DirectoryList/DirectoryList";
+import { DIRECTORY_CONTACTS_LIST_QUERY } from "../../sanity/queries";
 
 export const GET: APIRoute = async ({ url }) => {
   const { stateSlug, service } = parseDirectorySearchParams(url.searchParams);

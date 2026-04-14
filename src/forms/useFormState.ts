@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createActor } from "xstate";
-import { getFormProgress, saveFormProgress } from "@/db/database";
+import { getFormProgress, saveFormProgress } from "../db/database";
 import {
   createFormMachine,
   type FormMachine,
   getPhase,
-} from "@/forms/createFormMachine";
+} from "./createFormMachine";
 import {
   findNextStepIndex,
   findPrevStepIndex,
   getVisibleStepIds,
-} from "@/forms/formVisibility";
-import type { FormMachineContext, FormPhase, Step } from "@/forms/types";
+} from "./formVisibility";
+import type { FormMachineContext, FormPhase, Step } from "./types";
 
 type FormActor = ReturnType<typeof createActor<FormMachine>>;
 type FormSnapshot = ReturnType<FormActor["getSnapshot"]>;

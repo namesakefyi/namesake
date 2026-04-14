@@ -1,20 +1,20 @@
 import type { SubmitEvent } from "react";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { FormConfig } from "@/constants/forms";
-import type { PDFId } from "@/constants/pdf";
-import { resolveFormVisibility } from "@/forms/formVisibility";
-import { downloadMergedPdf } from "@/pdfs/utils/downloadMergedPdf";
-import { loadPdfs } from "@/pdfs/utils/loadPdfs";
+import type { FormConfig } from "../../constants/forms";
+import type { PDFId } from "../../constants/pdf";
+import { downloadMergedPdf } from "../../pdfs/utils/downloadMergedPdf";
+import { loadPdfs } from "../../pdfs/utils/loadPdfs";
 import { createFormSubmitHandler } from "../createFormSubmitHandler";
+import { resolveFormVisibility } from "../formVisibility";
 
-vi.mock("@/forms/formVisibility", () => ({
+vi.mock("../formVisibility", () => ({
   resolveFormVisibility: vi.fn(),
 }));
-vi.mock("@/pdfs/utils/downloadMergedPdf", () => ({
+vi.mock("../../pdfs/utils/downloadMergedPdf", () => ({
   downloadMergedPdf: vi.fn(),
 }));
-vi.mock("@/pdfs/utils/loadPdfs", () => ({ loadPdfs: vi.fn() }));
+vi.mock("../../pdfs/utils/loadPdfs", () => ({ loadPdfs: vi.fn() }));
 
 const mockFormData = { oldFirstName: "Jane" } as unknown as FormData;
 const mockPdfs = [{ id: "cjp27-petition-to-change-name-of-adult" }];

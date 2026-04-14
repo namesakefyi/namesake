@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { findNextStepIndex, findPrevStepIndex } from "@/forms/formVisibility";
+import { findNextStepIndex, findPrevStepIndex } from "../formVisibility";
 import { makeStep } from "./testHelpers";
 
 describe("findNextStepIndex", () => {

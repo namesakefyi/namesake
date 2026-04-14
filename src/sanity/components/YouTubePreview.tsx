@@ -1,5 +1,5 @@
 import { Text } from "@sanity/ui";
-import { YouTube } from "../../components/react/common/YouTube";
+import { YouTube } from "../../components/common/YouTube";
 import "react-lite-youtube-embed/dist/LiteYouTubeEmbed.css";
 import type { PreviewProps } from "sanity";
 

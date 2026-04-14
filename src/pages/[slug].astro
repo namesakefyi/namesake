@@ -1,10 +1,10 @@
 ---
 import { sanityClient } from "sanity:client";
-import TableOfContents from "@/components/TableOfContents.astro";
-import PortableText from "@/components/text/PortableText.astro";
-import ProseLayout from "@/layouts/ProseLayout.astro";
-import { extractHeadings } from "@/sanity/lib/extractHeadings";
-import { PAGE_BY_SLUG_QUERY } from "@/sanity/queries";
+import TableOfContents from "../components/TableOfContents.astro";
+import PortableText from "../components/text/PortableText.astro";
+import ProseLayout from "../layouts/ProseLayout.astro";
+import { extractHeadings } from "../sanity/lib/extractHeadings";
+import { PAGE_BY_SLUG_QUERY } from "../sanity/queries";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.redirect("/404");

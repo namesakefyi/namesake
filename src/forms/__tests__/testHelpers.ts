@@ -1,4 +1,4 @@
-import type { Field, Step } from "@/forms/types";
+import type { Field, Step } from "../types";
 
 export function makeStep(
   id: string,

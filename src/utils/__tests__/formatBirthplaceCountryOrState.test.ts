@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { COUNTRIES } from "@/constants/countries";
-import { JURISDICTIONS } from "@/constants/jurisdictions";
+import { COUNTRIES } from "../../constants/countries";
+import { JURISDICTIONS } from "../../constants/jurisdictions";
 import { formatBirthplaceCountryOrState } from "../formatBirthplaceCountryOrState";
 
 describe("formatBirthplaceCountryOrState", () => {

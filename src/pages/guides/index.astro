@@ -1,8 +1,8 @@
 ---
 import { sanityClient } from "sanity:client";
-import PageHeader from "@/components/PageHeader.astro";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import { GUIDES_INDEX_QUERY } from "@/sanity/queries";
+import PageHeader from "../../components/PageHeader.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { GUIDES_INDEX_QUERY } from "../../sanity/queries";
 import { GuidesTable } from "./_components/GuidesTable";
 
 const { params } = Astro.props;

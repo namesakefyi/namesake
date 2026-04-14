@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { POST } from "@/pages/api/feedback";
-import { isRateLimited } from "@/utils/rateLimitByIp";
+import { isRateLimited } from "../../../utils/rateLimitByIp";
+import { POST } from "../feedback";
 
-vi.mock("@/utils/rateLimitByIp", () => ({
+vi.mock("../../../utils/rateLimitByIp", () => ({
   isRateLimited: vi.fn().mockResolvedValue(false),
 }));
 

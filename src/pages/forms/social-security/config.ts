@@ -1,4 +1,4 @@
-import type { FormConfig } from "@/constants/forms";
+import type { FormConfig } from "../../../constants/forms";
 import { addressStep } from "./_steps/AddressStep";
 import { birthplaceStep } from "./_steps/BirthplaceStep";
 import { citizenshipStep } from "./_steps/CitizenshipStep";

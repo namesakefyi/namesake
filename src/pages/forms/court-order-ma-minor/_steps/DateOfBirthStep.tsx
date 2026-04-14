@@ -1,10 +1,10 @@
 import { useFormContext } from "react-hook-form";
-import { Banner } from "@/components/react/common/Banner";
-import { FormStep } from "@/components/react/forms/FormStep";
-import { MemorableDateField } from "@/components/react/forms/MemorableDateField";
-import { nameOrFallback } from "@/forms/resolveStepContent";
-import type { Step } from "@/forms/types";
-import { deriveCurrentAge } from "@/utils/deriveCurrentAge";
+import { Banner } from "../../../../components/common/Banner";
+import { FormStep } from "../../../../components/forms/FormStep";
+import { MemorableDateField } from "../../../../components/forms/MemorableDateField";
+import { nameOrFallback } from "../../../../forms/resolveStepContent";
+import type { Step } from "../../../../forms/types";
+import { deriveCurrentAge } from "../../../../utils/deriveCurrentAge";
 
 export const dateOfBirthStep: Step = {
   id: "date-of-birth",

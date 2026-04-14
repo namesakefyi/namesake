@@ -7,9 +7,9 @@ import {
   Table,
   TableBody,
   TableHeader,
-} from "@/components/react/common/Table";
-import { Tag, TagGroup } from "@/components/react/common/TagGroup";
-import type { GUIDES_INDEX_QUERY_RESULT } from "@/sanity/sanity.types";
+} from "../../../components/common/Table";
+import { Tag, TagGroup } from "../../../components/common/TagGroup";
+import type { GUIDES_INDEX_QUERY_RESULT } from "../../../sanity/sanity.types";
 import "./GuidesTable.css";
 
 export type Guide = GUIDES_INDEX_QUERY_RESULT[number];

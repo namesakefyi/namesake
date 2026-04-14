@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createActor } from "xstate";
-import { createFormMachine, getPhase } from "@/forms/createFormMachine";
+import { createFormMachine, getPhase } from "../createFormMachine";
 import { makeStep } from "./testHelpers";
 
 describe("createFormMachine", () => {

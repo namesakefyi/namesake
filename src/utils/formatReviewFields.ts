@@ -1,5 +1,5 @@
 import { parseDate } from "@internationalized/date";
-import { FIELD_DEFS, type FieldName } from "@/constants/fields";
+import { FIELD_DEFS, type FieldName } from "../constants/fields";
 
 /**
  * Formats a field value for display in the review table based on its type
