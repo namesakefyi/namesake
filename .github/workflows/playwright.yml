@@ -28,7 +28,7 @@ permissions:
 
 jobs:
   test:
-    name: End-to-end
+    name: End-to-End
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
