@@ -163,8 +163,8 @@ importers:
         specifier: ^1.59.1
         version: 1.59.1
       '@react-aria/test-utils':
-        specifier: 1.0.0-beta.2
-        version: 1.0.0-beta.2(@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.1))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        specifier: 1.0.0-beta.3
+        version: 1.0.0-beta.3(@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.1))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@storybook/addon-links':
         specifier: ^10.3.5
         version: 10.3.5(react@19.2.5)(storybook@10.3.5(@testing-library/dom@10.4.1)(prettier@3.8.3)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))
@@ -2853,8 +2853,8 @@ packages:
     resolution: {integrity: sha512-djfIGU9n6DRrunlvj2nIDAp17URo/nA4jSXGvf+Gupx8NLLy9fmJBZ3GL8yhqn9lSVc+cKCharjOa3aOBnWbRw==}
     engines: {node: '>=20.19 <22 || >=22.12'}
 
-  '@react-aria/test-utils@1.0.0-beta.2':
-    resolution: {integrity: sha512-v7ycNuzge2LXR+fwZjZTW/xWpVqJ9g6YSJAk8oauLRUvx5hylauFQc+7CI5i/dPz5B2JXlFFu6LC3B/EfkrGmQ==}
+  '@react-aria/test-utils@1.0.0-beta.3':
+    resolution: {integrity: sha512-eeMNlAcH1Uu0CeCg5Z5XyI5wI5UzSGs9GOVnwUXyTdjQqlBdej2/X2oM/1Bff9M6Xhr0tl3nq4N5+6hVr1lDMw==}
     peerDependencies:
       '@testing-library/react': ^16.0.0
       '@testing-library/user-event': ^14.0.0
@@ -10841,7 +10841,7 @@ snapshots:
 
   '@portabletext/types@4.0.2': {}
 
-  '@react-aria/test-utils@1.0.0-beta.2(@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.1))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@react-aria/test-utils@1.0.0-beta.3(@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.1))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
       '@swc/helpers': 0.5.21
       '@testing-library/react': 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
