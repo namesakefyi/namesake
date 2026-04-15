@@ -36,7 +36,7 @@ describe("Button", () => {
         <Button icon={RiArrowLeftLine}>Back</Button>,
       );
       expect(
-        container.querySelector(".react-aria-Button-start-icon"),
+        container.querySelector(".react-aria-Button-icon"),
       ).toBeInTheDocument();
     });
 
@@ -45,7 +45,7 @@ describe("Button", () => {
         <Button endIcon={RiArrowRightLine}>Next</Button>,
       );
       expect(
-        container.querySelector(".react-aria-Button-end-icon"),
+        container.querySelector(".react-aria-Button-icon"),
       ).toBeInTheDocument();
     });
   });
