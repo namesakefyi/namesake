@@ -48,7 +48,7 @@
     "@astrojs/markdoc": "^0.15.11",
     "@astrojs/markdown-remark": "6.3.10",
     "@astrojs/mdx": "^4.3.14",
-    "@astrojs/react": "^4.4.2",
+    "@astrojs/react": "^5.0.3",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
     "@axe-core/playwright": "^4.11.1",
