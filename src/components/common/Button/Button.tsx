@@ -35,7 +35,7 @@ export function Button({
       {composeRenderProps(props.children, (children, { isPending }) => (
         <>
           {!isPending && Icon && (
-            <Icon className="react-aria-Button-start-icon" size={iconSize} />
+            <Icon className="react-aria-Button-icon" size={iconSize} />
           )}
           {isPending && (
             <ProgressCircle
@@ -44,9 +44,9 @@ export function Button({
               isIndeterminate
             />
           )}
-          {children}
+          {children && <span>{children}</span>}
           {EndIcon && (
-            <EndIcon className="react-aria-Button-end-icon" size={iconSize} />
+            <EndIcon className="react-aria-Button-icon" size={iconSize} />
           )}
         </>
       ))}

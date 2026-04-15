@@ -2,6 +2,9 @@
   "name": "namesake",
   "type": "module",
   "version": "0.0.1",
+  "browserslist": [
+    "defaults"
+  ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky",
@@ -66,6 +69,7 @@
     "@xstate/react": "^6.1.0",
     "astro": "5.18.1",
     "astro-portabletext": "^0.13.0",
+    "browserslist": "^4.28.2",
     "d3": "^7.9.0",
     "d3-geo": "^3.1.1",
     "d3-selection": "^3.0.0",
@@ -73,7 +77,6 @@
     "groq": "^5.20.0",
     "idb": "^8.0.3",
     "language-name-map": "^0.3.0",
-    "postcss": "^8.5.9",
     "react": "^19.2.5",
     "react-aria-components": "^1.16.0",
     "react-dom": "^19.2.5",
@@ -92,7 +95,6 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.11",
     "@clack/prompts": "^1.2.0",
-    "@csstools/postcss-logical-viewport-units": "^4.0.0",
     "@playwright/test": "^1.59.1",
     "@react-aria/test-utils": "1.0.0-beta.2",
     "@storybook/addon-links": "^10.3.5",
@@ -123,15 +125,14 @@
     "cssnano": "^7.1.5",
     "fake-indexeddb": "^6.2.5",
     "husky": "^9.1.7",
+    "lightningcss": "^1.32.0",
     "lint-staged": "^16.4.0",
     "lodash": "^4.18.1",
-    "postcss-clamp": "^4.1.0",
-    "postcss-media-minmax": "^5.0.0",
-    "postcss-utopia": "^1.1.0",
     "react-compiler-runtime": "^1.0.0",
+    "sass-embedded": "^1.99.0",
     "sharp": "^0.34.5",
     "storybook": "^10.3.5",
-    "vitest": "4.1.4",
+    "vitest": "4.1.2",
     "wrangler": "^4.82.2"
   },
   "packageManager": "pnpm@10.23.0",
