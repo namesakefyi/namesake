@@ -23,10 +23,3 @@
   gap: var(--space-xs);
   align-items: center;
 }
-
-.form-navigation-button {
-  flex-shrink: 0;
-  width: var(--space-2xl);
-  height: var(--space-2xl);
-  padding: 0;
-}

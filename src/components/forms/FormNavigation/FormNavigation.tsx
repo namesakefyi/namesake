@@ -25,7 +25,6 @@ export const FormNavigation = memo(function FormNavigation() {
           variant="secondary"
           icon={RiArrowLeftLine}
           aria-label="Previous step"
-          className="form-navigation-button"
           isDisabled={disableBack}
         />
         <Button
@@ -33,7 +32,6 @@ export const FormNavigation = memo(function FormNavigation() {
           variant="secondary"
           icon={RiArrowRightLine}
           aria-label="Next step"
-          className="form-navigation-button"
           isDisabled={disableNext}
         />
       </div>

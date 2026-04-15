@@ -3,7 +3,8 @@
   gap: var(--space-s);
   align-items: center;
   justify-content: center;
-  padding: var(--space-s) var(--space-m);
+  height: calc(var(--space-2xl) + var(--space-2xs));
+  padding-inline: var(--space-m);
   margin: 0;
   font-size: var(--step-0);
   font-weight: var(--weight-bold);
@@ -63,5 +64,10 @@
     &:has(~ *) {
       margin-inline: -0.2em;
     }
+  }
+
+  &:has(.react-aria-Button-icon:only-child) {
+    aspect-ratio: 1 / 1;
+    padding: 0;
   }
 }

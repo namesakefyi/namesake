@@ -44,7 +44,7 @@ export function Button({
               isIndeterminate
             />
           )}
-          {children}
+          {children && <span>{children}</span>}
           {EndIcon && (
             <EndIcon className="react-aria-Button-icon" size={iconSize} />
           )}
