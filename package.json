@@ -2,6 +2,9 @@
   "name": "namesake",
   "type": "module",
   "version": "0.0.1",
+  "browserslist": [
+    "defaults"
+  ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky",

@@ -58,9 +58,15 @@ PrimaryPending.args = {
   isPending: true,
 };
 
-export const Icon: Story = (args) => <Button {...args}>Go back</Button>;
+export const IconOnly: Story = (args) => <Button {...args} />;
 
-Icon.args = {
+IconOnly.args = {
+  icon: RiArrowLeftLine,
+};
+
+export const StartIcon: Story = (args) => <Button {...args}>Go back</Button>;
+
+StartIcon.args = {
   icon: RiArrowLeftLine,
 };
 

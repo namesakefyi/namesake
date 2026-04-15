@@ -57,9 +57,11 @@
     cursor: pointer;
   }
 
-  .react-aria-Button-start-icon:has(~ *),
-  .react-aria-Button-end-icon:has(~ *) {
+  .react-aria-Button-start-icon {
     flex-shrink: 0;
-    margin-inline: -0.2em;
+
+    &:has(~ *) {
+      margin-inline: -0.2em;
+    }
   }
 }
