@@ -7,7 +7,7 @@ export default getViteConfig({
   test: {
     globals: true,
     include: ["src/**/*.test.{ts,tsx}"],
-    exclude: [...configDefaults.exclude],
+    exclude: [...configDefaults.exclude, "src/**/*.spec.ts"],
     setupFiles: ["./src/vitest.setup.ts"],
     environment: "jsdom",
     coverage: {
