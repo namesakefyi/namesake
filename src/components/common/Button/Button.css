@@ -57,7 +57,7 @@
     cursor: pointer;
   }
 
-  .react-aria-Button-start-icon {
+  .react-aria-Button-icon {
     flex-shrink: 0;
 
     &:has(~ *) {
