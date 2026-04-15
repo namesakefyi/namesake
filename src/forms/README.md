@@ -7,7 +7,7 @@ This directory contains the state machine, React hooks, and utilities that drive
 Export a plain `FormConfig` object. Provide a slug, an ordered list of steps, the PDFs to generate, and a download title. The XState machine is created automatically by `useFormState` at runtime.
 
 ```ts
-// src/pages/forms/my-form/config.ts
+// src/pages/forms/my-form/_config.ts
 import type { FormConfig } from "@/constants/forms";
 import { nameStep } from "./_steps/NameStep";
 import { addressStep } from "./_steps/AddressStep";

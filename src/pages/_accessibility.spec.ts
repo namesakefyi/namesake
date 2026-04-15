@@ -1,26 +1,27 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const paths = [
-  "/",
-  "/404",
-  "/about",
-  "/blog",
-  "/brand-assets",
-  "/directory",
-  "/forms",
-  "/guides",
-  "/press",
-  "/privacy",
-  "/terms",
-];
+const pages: Record<string, string> = {
+  "/": "Your name is yours to change",
+  "/404": "Page Not Found",
+  "/blog": "Blog",
+  "/brand-assets": "Brand Assets",
+  "/directory": "Directory",
+  "/forms": "Forms",
+  "/guides": "Guides",
+  "/press": "Press",
+  "/privacy": "Privacy",
+  "/terms": "Terms",
+};
 
 test.describe("accessibility", () => {
-  for (const path of paths) {
+  for (const [path, title] of Object.entries(pages)) {
     test(`${path} has no accessibility violations`, async ({
       page,
     }, testInfo) => {
       await page.goto(path);
+
+      await expect(page).toHaveTitle(new RegExp(title));
 
       const accessibilityScanResults = await new AxeBuilder({
         page,
