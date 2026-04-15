@@ -111,7 +111,7 @@ export function FormTitleStep({
         <a href="/forms" className="form-title-step-back-link">
           <RiArrowLeftLine /> All forms
         </a>
-        <Heading className="form-title-step-heading">
+        <Heading level={1} className="form-title-step-heading">
           {smartquotes(title)}
         </Heading>
         {description && (

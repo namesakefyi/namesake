@@ -1,6 +1,6 @@
 # Namesake
 
-![trans rights](https://pride-badges.pony.workers.dev/static/v1?label=Trans%20Rights&stripeWidth=6&stripeColors=5BCEFA,F5A9B8,FFFFFF,F5A9B8,5BCEFA) [![Chat](https://img.shields.io/discord/1250552190402035835?color=5865F2&logo=discord&logoColor=white)](https://namesake.fyi/chat) [![Accessibility](https://github.com/namesakefyi/namesake/actions/workflows/accessibility.yml/badge.svg)](https://github.com/namesakefyi/namesake/actions/workflows/accessibility.yml) [![Valid Links](https://github.com/namesakefyi/namesake/actions/workflows/links.yml/badge.svg)](https://github.com/namesakefyi/namesake/actions/workflows/links.yml) [![Storybook](https://github.com/namesakefyi/namesake/actions/workflows/storybook.yml/badge.svg)](https://storybook.namesake.fyi)
+![trans rights](https://pride-badges.pony.workers.dev/static/v1?label=Trans%20Rights&stripeWidth=6&stripeColors=5BCEFA,F5A9B8,FFFFFF,F5A9B8,5BCEFA) [![Chat](https://img.shields.io/discord/1250552190402035835?color=5865F2&logo=discord&logoColor=white)](https://namesake.fyi/chat) [![Playwright](https://github.com/namesakefyi/namesake/actions/workflows/playwright.yml/badge.svg)](https://github.com/namesakefyi/namesake/actions/workflows/accessibility.yml) [![Valid Links](https://github.com/namesakefyi/namesake/actions/workflows/links.yml/badge.svg)](https://github.com/namesakefyi/namesake/actions/workflows/links.yml) [![Storybook](https://github.com/namesakefyi/namesake/actions/workflows/storybook.yml/badge.svg)](https://storybook.namesake.fyi)
 
 This repository contains the source code for the [namesake.fyi](https://namesake.fyi) website and blog, built with [Astro](https://astro.build) with content managed via [Sanity](https://www.sanity.io/) and hosted via [Cloudflare](https://cloudflare.com).
 
@@ -11,7 +11,6 @@ This repository contains the source code for the [namesake.fyi](https://namesake
 
 | Location         | Description                                                             |
 | :--------------- | :---------------------------------------------------------------------- |
-| `e2e`            | End-to-end tests written using Playwright.                              |
 | `public`         | Images, fonts, favicons, and app icons.                                 |
 | `src/components` | All of the .astro components that are used and reused across the site.  |
 | `src/constants`  | Shared data for site info and colors.                                   |

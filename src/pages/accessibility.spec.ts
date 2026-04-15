@@ -15,9 +15,9 @@ const paths = [
   "/terms",
 ];
 
-test.describe("all pages", () => {
+test.describe("accessibility", () => {
   for (const path of paths) {
-    test(`${path} page should not have any automatically detectable accessibility issues`, async ({
+    test(`${path} has no accessibility violations`, async ({
       page,
     }, testInfo) => {
       await page.goto(path);
