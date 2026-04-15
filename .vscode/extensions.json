@@ -3,7 +3,8 @@
     "astro-build.astro-vscode",
     "deque-systems.vscode-axe-linter",
     "biomejs.biome",
-    "sanity-io.vscode-sanity"
+    "sanity-io.vscode-sanity",
+    "ms-playwright.playwright"
   ],
   "unwantedRecommendations": [
     "esbenp.prettier-vscode",

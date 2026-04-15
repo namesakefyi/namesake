@@ -1,13 +1,14 @@
-name: Accessibility
+name: Playwright
 on:
   push:
     branches: [main]
     paths:
       [
         "src/**/*.ts",
+        "src/**/*.spec.ts",
         "src/**/*.astro",
-        "astro.config.mjs",
-        "playwright.config.mjs",
+        "astro.config.ts",
+        "playwright.config.ts",
         "package.json",
       ]
   pull_request:
@@ -15,9 +16,10 @@ on:
     paths:
       [
         "src/**/*.ts",
+        "src/**/*.spec.ts",
         "src/**/*.astro",
-        "astro.config.mjs",
-        "playwright.config.mjs",
+        "astro.config.ts",
+        "playwright.config.ts",
         "package.json",
       ]
 
@@ -26,7 +28,7 @@ permissions:
 
 jobs:
   test:
-    name: Playwright
+    name: End-to-End
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
@@ -46,7 +48,7 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      - name: Install Playwright Browsers
+      - name: Install Playwright browsers
         run: pnpm exec playwright install chromium
 
       - name: Run Playwright tests
