@@ -23,12 +23,13 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v6
+        run: corepack enable
         with:
           node-version: "24.x"
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm i
+        run: pnpm install --frozen-lockfile
 
       - name: Deploy Sanity Studio
         run: pnpm sanity deploy

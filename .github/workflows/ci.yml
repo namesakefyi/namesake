@@ -35,12 +35,13 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v6
+        run: corepack enable
         with:
           node-version: "24.x"
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Typecheck
         run: pnpm tsc -b
