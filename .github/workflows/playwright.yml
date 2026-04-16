@@ -28,9 +28,13 @@ permissions:
 
 jobs:
   test:
-    name: End-to-End
+    name: End-to-End (${{ matrix.browser }})
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
 
     steps:
       - name: Checkout code
@@ -49,15 +53,15 @@ jobs:
         run: pnpm i
 
       - name: Install Playwright browsers
-        run: pnpm exec playwright install chromium
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
 
       - name: Run Playwright tests
-        run: pnpm test:e2e
+        run: pnpm exec playwright test --reporter=html --project=${{ matrix.browser }}
 
       - name: Upload Playwright results
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.browser }}
           path: playwright-report/
           retention-days: 30
