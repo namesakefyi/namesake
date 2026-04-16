@@ -41,11 +41,25 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
       Fathom.load("GQAJEJLZ");
     </script>
     <link
-      href="/fonts/AlteHaasGroteskRegular.woff2"
+      href="/fonts/AtkinsonHyperlegibleSoft-Regular.woff2"
       as="font"
       type="font/woff2"
     />
-    <link href="/fonts/AlteHaasGroteskBold.woff2" as="font" type="font/woff2" />
+    <link
+      href="/fonts/AtkinsonHyperlegibleSoft-Bold.woff2"
+      as="font"
+      type="font/woff2"
+    />
+    <link
+      href="/fonts/AtkinsonHyperlegibleSoft-Italic.woff2"
+      as="font"
+      type="font/woff2"
+    />
+    <link
+      href="/fonts/AtkinsonHyperlegibleSoft-BoldItalic.woff2"
+      as="font"
+      type="font/woff2"
+    />
     <meta name="generator" content={Astro.generator} />
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content={colors[color ?? "purple"]?.hex} />

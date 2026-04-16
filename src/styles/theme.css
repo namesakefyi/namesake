@@ -1,16 +1,32 @@
 @font-face {
-  font-family: 'Alte Haas Grotesk';
-  src: url('/fonts/AlteHaasGroteskRegular.woff2') format('woff2');
+  font-family: 'Atkinson Hyperlegible Soft';
+  src: url('/fonts/AtkinsonHyperlegibleSoft-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Alte Haas Grotesk';
-  src: url('/fonts/AlteHaasGroteskBold.woff2') format('woff2');
+  font-family: 'Atkinson Hyperlegible Soft';
+  src: url('/fonts/AtkinsonHyperlegibleSoft-Italic.woff2') format('woff2');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible Soft';
+  src: url('/fonts/AtkinsonHyperlegibleSoft-Bold.woff2') format('woff2');
   font-weight: bold;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible Soft';
+  src: url('/fonts/AtkinsonHyperlegibleSoft-BoldItalic.woff2') format('woff2');
+  font-weight: bold;
+  font-style: italic;
   font-display: swap;
 }
 
@@ -38,7 +54,7 @@
   --space-3xl: clamp(3rem, 2.3864rem + 2.7273vw, 4.5rem);
 
   /* Fonts */
-  --font-sans: 'Alte Haas Grotesk',
+  --font-sans: 'Atkinson Hyperlegible Soft',
     Helvetica,
     Arial,
     sans-serif;
@@ -49,7 +65,7 @@
 
   /* Line heights */
   --line-height-single: 1;
-  --line-height-display: 1.1;
+  --line-height-display: 1.05;
   --line-height-body: 1.35;
 
   /* Letter spacing */
