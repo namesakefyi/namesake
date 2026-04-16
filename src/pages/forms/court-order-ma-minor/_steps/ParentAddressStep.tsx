@@ -1,14 +1,14 @@
 import { useFormContext } from "react-hook-form";
-import { Banner } from "@/components/react/common/Banner";
-import { AddressField } from "@/components/react/forms/AddressField";
-import { CheckboxField } from "@/components/react/forms/CheckboxField";
+import { Banner } from "../../../../components/common/Banner";
+import { AddressField } from "../../../../components/forms/AddressField";
+import { CheckboxField } from "../../../../components/forms/CheckboxField";
 import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "@/components/react/forms/FormStep";
-import { nameOrFallback } from "@/forms/resolveStepContent";
-import type { Step } from "@/forms/types";
+} from "../../../../components/forms/FormStep";
+import { nameOrFallback } from "../../../../forms/resolveStepContent";
+import type { Step } from "../../../../forms/types";
 
 export const parentAddressStep: Step = {
   id: "parent-address",

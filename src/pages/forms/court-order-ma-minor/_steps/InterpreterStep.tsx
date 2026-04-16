@@ -1,11 +1,11 @@
-import { CheckboxField } from "@/components/react/forms/CheckboxField";
+import { CheckboxField } from "../../../../components/forms/CheckboxField";
 import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "@/components/react/forms/FormStep";
-import { LanguageSelectField } from "@/components/react/forms/LanguageSelectField";
-import type { Step } from "@/forms/types";
+} from "../../../../components/forms/FormStep";
+import { LanguageSelectField } from "../../../../components/forms/LanguageSelectField";
+import type { Step } from "../../../../forms/types";
 
 export const interpreterStep: Step = {
   id: "interpreter",

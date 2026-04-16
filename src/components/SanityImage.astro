@@ -1,10 +1,12 @@
 ---
-import type { SanityAssetDocument } from "@sanity/client";
-import type { ImageUrlBuilderOptionsWithAliases } from "@sanity/image-url";
-import { urlForImage } from "@/sanity/lib/urlForImage";
+import type {
+  ImageUrlBuilderOptionsWithAliases,
+  SanityImageSource,
+} from "@sanity/image-url";
+import { urlForImage } from "../sanity/lib/urlForImage";
 
 interface Props {
-  asset: SanityAssetDocument;
+  asset: SanityImageSource;
   alt?: string;
   className?: string;
   options?: Partial<ImageUrlBuilderOptionsWithAliases>;
@@ -22,7 +24,7 @@ const url = urlForImage(asset).withOptions(options).auto("format").dpr(2).url();
 <img
   class={className}
   src={url}
-  alt={alt || ""}
+  alt={alt ?? ""}
   width={options.width}
   height={options.height}
 />

@@ -1,5 +1,3 @@
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { useMemo, useState } from "react";
 import type { Selection, SortDescriptor } from "react-aria-components";
 import {
@@ -9,22 +7,15 @@ import {
   Table,
   TableBody,
   TableHeader,
-} from "@/components/react/common/Table";
-import { Tag, TagGroup } from "@/components/react/common/TagGroup";
+} from "../../../components/common/Table";
+import { Tag, TagGroup } from "../../../components/common/TagGroup";
+import type { GUIDES_INDEX_QUERY_RESULT } from "../../../sanity/sanity.types";
 import "./GuidesTable.css";
 
-dayjs.extend(utc);
-
-export interface Guide {
-  title: string;
-  slug: { current: string };
-  state?: string;
-  category?: string;
-  _updatedAt?: string;
-}
+export type Guide = GUIDES_INDEX_QUERY_RESULT[number];
 
 interface GuidesTableProps {
-  guides: Guide[];
+  guides: GUIDES_INDEX_QUERY_RESULT;
 }
 
 type GroupBy = "all" | "state" | "category";
@@ -42,6 +33,11 @@ export function GuidesTable({ guides }: GuidesTableProps) {
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "title",
     direction: "ascending",
+  });
+
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: "UTC",
+    dateStyle: "medium",
   });
 
   const handleGroupByChange = (keys: Selection) => {
@@ -65,7 +61,7 @@ export function GuidesTable({ guides }: GuidesTableProps) {
       return [...guidesToSort].sort((a, b) => {
         let cmp: number;
         if (sortDescriptor.column === "title") {
-          cmp = a.title.localeCompare(b.title);
+          cmp = (a.title ?? "").localeCompare(b.title ?? "");
         } else {
           const dateA = a._updatedAt ? new Date(a._updatedAt).getTime() : 0;
           const dateB = b._updatedAt ? new Date(b._updatedAt).getTime() : 0;
@@ -103,7 +99,7 @@ export function GuidesTable({ guides }: GuidesTableProps) {
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "—";
-    return dayjs.utc(dateString).format("MMM D, YYYY");
+    return formatter.format(new Date(dateString));
   };
 
   if (!guides.length) {
@@ -150,8 +146,8 @@ export function GuidesTable({ guides }: GuidesTableProps) {
                 {groupGuides.map((guide) => (
                   <Row key={guide.slug.current}>
                     <Cell>
-                      <a href={`/guides/${guide.slug.current}`}>
-                        {guide.title}
+                      <a href={`/guides/${guide.slug?.current}`}>
+                        {guide.title ?? ""}
                       </a>
                     </Cell>
                     <Cell>{formatDate(guide._updatedAt)}</Cell>

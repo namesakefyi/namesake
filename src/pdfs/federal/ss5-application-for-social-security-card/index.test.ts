@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { expectPdfFieldsMatch } from "@/pdfs/utils/expectPdfFieldsMatch";
-import { getPdfForm } from "@/pdfs/utils/getPdfForm";
+import { expectPdfFieldsMatch } from "../../utils/expectPdfFieldsMatch";
+import { getPdfForm } from "../../utils/getPdfForm";
 import ss5Application from ".";
 
 describe("SS-5 Application for Social Security Card", () => {

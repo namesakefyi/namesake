@@ -1,5 +1,3 @@
-import dayjs from "dayjs";
-
 /**
  * Derives current age from a date-of-birth string (YYYY-MM-DD).
  * Treats the input as a calendar date with no timezone.
@@ -9,10 +7,20 @@ export const deriveCurrentAge = (dateOfBirth?: string): number | undefined => {
     return undefined;
   }
 
-  const birth = dayjs(dateOfBirth);
-  if (!birth.isValid()) {
+  const birth = new Date(dateOfBirth);
+  if (Number.isNaN(birth.getTime())) {
     return undefined;
   }
 
-  return dayjs().diff(birth, "year");
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+
+  const hasBirthdayOccurredThisYear =
+    today.getMonth() > birth.getMonth() ||
+    (today.getMonth() === birth.getMonth() &&
+      today.getDate() >= birth.getDate());
+
+  if (!hasBirthdayOccurredThisYear) age -= 1;
+
+  return age;
 };

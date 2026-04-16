@@ -1,4 +1,4 @@
-import type { FormData } from "@/constants/fields";
+import type { FormData } from "../constants/fields";
 import type { Step } from "./types";
 
 /**

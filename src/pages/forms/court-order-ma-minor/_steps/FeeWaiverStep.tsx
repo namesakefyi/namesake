@@ -1,10 +1,10 @@
 import { useFormContext } from "react-hook-form";
-import { Banner } from "@/components/react/common/Banner";
-import { Costs } from "@/components/react/forms/Costs";
-import { useFormStep } from "@/components/react/forms/FormContainer";
-import { FormStep } from "@/components/react/forms/FormStep";
-import { YesNoField } from "@/components/react/forms/YesNoField";
-import type { Step } from "@/forms/types";
+import { Banner } from "../../../../components/common/Banner";
+import { CostsTable } from "../../../../components/forms/CostsTable";
+import { useFormStep } from "../../../../components/forms/FormContainer";
+import { FormStep } from "../../../../components/forms/FormStep";
+import { YesNoField } from "../../../../components/forms/YesNoField";
+import type { Step } from "../../../../forms/types";
 
 export const feeWaiverStep: Step = {
   id: "fee-waiver",
@@ -42,7 +42,7 @@ export const feeWaiverStep: Step = {
             </a>
           </Banner>
         ) : (
-          <Costs costs={costs ?? []} />
+          <CostsTable costs={costs ?? []} />
         )}
       </FormStep>
     );

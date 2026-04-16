@@ -6,8 +6,8 @@ import {
   type UseFormProps,
   useForm,
 } from "react-hook-form";
-import type { FormConfig } from "@/constants/forms";
-import { deleteField, getFieldsByNames, saveField } from "@/db/database";
+import type { FormConfig } from "../constants/forms";
+import { deleteField, getFieldsByNames, saveField } from "../db/database";
 import { getFormFields } from "./formVisibility";
 
 export function useFormData<TFieldValues extends FieldValues = FieldValues>(

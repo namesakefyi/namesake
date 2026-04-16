@@ -1,17 +1,17 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { ComboBox, ComboBoxItem } from "@/components/react/common/ComboBox";
-import { EmailField } from "@/components/react/forms/EmailField";
+import { ComboBox, ComboBoxItem } from "../../../../components/common/ComboBox";
+import { EmailField } from "../../../../components/forms/EmailField";
 import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "@/components/react/forms/FormStep";
-import { PhoneField } from "@/components/react/forms/PhoneField";
-import { ShortTextField } from "@/components/react/forms/ShortTextField";
-import { YesNoField } from "@/components/react/forms/YesNoField";
-import { JURISDICTIONS } from "@/constants/jurisdictions";
-import { nameOrFallback } from "@/forms/resolveStepContent";
-import type { Step } from "@/forms/types";
+} from "../../../../components/forms/FormStep";
+import { PhoneField } from "../../../../components/forms/PhoneField";
+import { ShortTextField } from "../../../../components/forms/ShortTextField";
+import { YesNoField } from "../../../../components/forms/YesNoField";
+import { JURISDICTIONS } from "../../../../constants/jurisdictions";
+import { nameOrFallback } from "../../../../forms/resolveStepContent";
+import type { Step } from "../../../../forms/types";
 
 export const guardianStep: Step = {
   id: "guardian",

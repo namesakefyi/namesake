@@ -2,11 +2,11 @@ import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "@/components/react/forms/FormStep";
-import { PronounSelectField } from "@/components/react/forms/PronounSelectField";
-import { YesNoField } from "@/components/react/forms/YesNoField";
-import { nameOrFallback } from "@/forms/resolveStepContent";
-import type { Step } from "@/forms/types";
+} from "../../../../components/forms/FormStep";
+import { PronounSelectField } from "../../../../components/forms/PronounSelectField";
+import { YesNoField } from "../../../../components/forms/YesNoField";
+import { nameOrFallback } from "../../../../forms/resolveStepContent";
+import type { Step } from "../../../../forms/types";
 
 export const pronounsStep: Step = {
   id: "pronouns",

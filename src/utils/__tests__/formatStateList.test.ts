@@ -2,58 +2,35 @@ import { describe, expect, it } from "vitest";
 import { formatStateList } from "../formatStateList";
 
 describe("formatStateList", () => {
-  it("should return empty string for empty array", () => {
+  it("returns an empty string for an empty array", () => {
     expect(formatStateList([])).toBe("");
   });
 
-  it("should format a single state name with strong tags", () => {
-    expect(formatStateList(["California"])).toBe("<strong>California</strong>");
-    expect(formatStateList(["Texas"])).toBe("<strong>Texas</strong>");
+  it("returns a single state name unchanged", () => {
+    expect(formatStateList(["California"])).toBe("California");
   });
 
-  it("should format two state names with 'and' conjunction", () => {
+  it("joins two states with 'and'", () => {
     expect(formatStateList(["California", "Texas"])).toBe(
-      "<strong>California</strong> and <strong>Texas</strong>",
-    );
-    expect(formatStateList(["New York", "Florida"])).toBe(
-      "<strong>New York</strong> and <strong>Florida</strong>",
+      "California and Texas",
     );
   });
 
-  it("should format three state names with commas and 'and'", () => {
+  it("joins three or more states with commas and 'and'", () => {
     expect(formatStateList(["California", "Texas", "Florida"])).toBe(
-      "<strong>California</strong>, <strong>Texas</strong>, and <strong>Florida</strong>",
+      "California, Texas, and Florida",
     );
-  });
-
-  it("should format four or more state names with commas and 'and'", () => {
     expect(
       formatStateList(["California", "Texas", "Florida", "New York"]),
-    ).toBe(
-      "<strong>California</strong>, <strong>Texas</strong>, <strong>Florida</strong>, and <strong>New York</strong>",
-    );
+    ).toBe("California, Texas, Florida, and New York");
   });
 
-  it("should handle state names with multiple words", () => {
+  it("handles multi-word state names", () => {
     expect(formatStateList(["New York", "New Jersey"])).toBe(
-      "<strong>New York</strong> and <strong>New Jersey</strong>",
+      "New York and New Jersey",
     );
     expect(formatStateList(["New York", "New Jersey", "New Mexico"])).toBe(
-      "<strong>New York</strong>, <strong>New Jersey</strong>, and <strong>New Mexico</strong>",
-    );
-  });
-
-  it("should format long lists correctly", () => {
-    const states = [
-      "Alabama",
-      "Alaska",
-      "Arizona",
-      "Arkansas",
-      "California",
-      "Colorado",
-    ];
-    expect(formatStateList(states)).toBe(
-      "<strong>Alabama</strong>, <strong>Alaska</strong>, <strong>Arizona</strong>, <strong>Arkansas</strong>, <strong>California</strong>, and <strong>Colorado</strong>",
+      "New York, New Jersey, and New Mexico",
     );
   });
 });

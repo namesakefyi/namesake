@@ -1,8 +1,8 @@
 import { useFormContext } from "react-hook-form";
-import { Banner } from "@/components/react/common/Banner";
-import { FormStep } from "@/components/react/forms/FormStep";
-import { YesNoField } from "@/components/react/forms/YesNoField";
-import type { Step } from "@/forms/types";
+import { Banner } from "../../../../components/common/Banner";
+import { FormStep } from "../../../../components/forms/FormStep";
+import { YesNoField } from "../../../../components/forms/YesNoField";
+import type { Step } from "../../../../forms/types";
 
 export const returnDocumentsStep: Step = {
   id: "return-documents",

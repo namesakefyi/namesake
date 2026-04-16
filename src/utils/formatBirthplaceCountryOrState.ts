@@ -1,5 +1,5 @@
-import { COUNTRIES } from "@/constants/countries";
-import { JURISDICTIONS } from "@/constants/jurisdictions";
+import { COUNTRIES } from "../constants/countries";
+import { JURISDICTIONS } from "../constants/jurisdictions";
 
 export const formatBirthplaceCountryOrState = (
   birthplaceCountry?: string,

@@ -68,11 +68,3 @@ updates:
           - "@types/d3*"
           - "@types/topojson*"
         update-types: ["patch", "minor"]
-
-      postcss:
-        patterns:
-          - "postcss*"
-          - "autoprefixer"
-          - "cssnano"
-          - "@csstools/postcss-*"
-        update-types: ["patch", "minor"]

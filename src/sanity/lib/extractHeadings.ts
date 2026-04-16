@@ -4,12 +4,12 @@ import { generateSlug } from "./generateSlug";
 import { getChildrenText } from "./getChildrenText";
 
 /**
- * Extract headings from Sanity content
+ * Extract headings from Sanity content.
  */
-export function extractHeadings(content: Block[]): MarkdownHeading[] {
-  if (!content) return [];
+export function extractHeadings(content: unknown): MarkdownHeading[] {
+  if (content == null || !Array.isArray(content)) return [];
 
-  return content
+  return (content as Block[])
     .filter((block) => block.style && /^h[1-6]$/.test(block.style))
     .map((block) => {
       const text = getChildrenText(block);

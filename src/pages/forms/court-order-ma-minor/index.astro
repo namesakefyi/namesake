@@ -1,42 +1,28 @@
 ---
-import type { SanityDocument } from "@sanity/client";
-import { FormContainer } from "@/components/react/forms/FormContainer/FormContainer";
-import type { FormSlug } from "@/constants/forms";
-import { getFormPdfMetadata } from "@/forms/getFormPdfMetadata";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import { loadQuery } from "@/sanity/lib/loadQuery";
+import { sanityClient } from "sanity:client";
+import { FormContainer } from "../../../components/forms/FormContainer/FormContainer";
+import type { FormSlug } from "../../../constants/forms";
+import { getFormPdfMetadata } from "../../../forms/getFormPdfMetadata";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { FORM_BY_SLUG_WITH_GUIDE_COSTS_QUERY } from "../../../sanity/queries";
 
 const formSlug: FormSlug = "court-order-ma-minor";
 
-const { data: form } = await loadQuery<SanityDocument | null>({
-  query: `*[_type == "form" && slug.current == $slug][0]{
-    title,
-    description,
-    banner,
-    _updatedAt,
-    state,
-    category,
-    "costs": *[_type == "guide" && state._ref == ^.state._ref && category._ref == ^.category._ref][0].costs
-  }`,
-  params: {
-    slug: formSlug,
-  },
+const form = await sanityClient.fetch(FORM_BY_SLUG_WITH_GUIDE_COSTS_QUERY, {
+  slug: formSlug,
 });
 
-const pdfs = await getFormPdfMetadata(formSlug);
+if (!form) return Astro.redirect("/404");
 
-const title = form?.title ?? "Court Order: Massachusetts (Under 18)";
-const description =
-  form?.description ??
-  "If you live in Massachusetts, are under 18, and want to legally update your name, this is the place to start.";
+const pdfs = await getFormPdfMetadata(formSlug);
 ---
 
-<BaseLayout title={title} description={description} color="white">
+<BaseLayout title={form.title} description={form.description} color="white">
   <FormContainer
     client:load
     slug={formSlug}
-    title={title}
-    description={description}
+    title={form.title}
+    description={form.description}
     banner={form?.banner}
     updatedAt={form?._updatedAt}
     pdfs={pdfs}

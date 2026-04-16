@@ -1,32 +1,34 @@
 ---
-import type { SanityAssetDocument } from "@sanity/client";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
+import type { SanityImageSource } from "@sanity/image-url";
 import SanityImage from "./SanityImage.astro";
-
-dayjs.extend(utc);
 
 interface Props {
   title: string;
   date: string;
   url: string;
   subhead?: string;
-  authors?: string[];
+  authors?: string[] | null;
   description?: string;
   image?: {
-    asset: SanityAssetDocument;
+    asset?: SanityImageSource;
     alt?: string;
-  };
+  } | null;
 }
 
 const { title, date, url, subhead, authors, description, image } = Astro.props;
 
 const dateObj = new Date(date);
+const formattedDate = new Intl.DateTimeFormat("en-US", {
+  timeZone: "UTC",
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+}).format(dateObj);
 ---
 
 <article class="article">
   <time class="date" datetime={dateObj.toISOString()}>
-    {dayjs.utc(dateObj).format("MMMM DD, YYYY")}
+    {formattedDate}
   </time>
   {subhead && <strong class="subhead">{subhead}</strong>}
   <h2 class="title">
@@ -35,7 +37,7 @@ const dateObj = new Date(date);
   {authors && <strong class="authors">By {authors.join(", ")}</strong>}
   {description && <p class="description">{description}</p>}
   {
-    image && (
+    image?.asset && (
       <a class="image" href={url} tabindex="-1">
         <SanityImage
           asset={image.asset}

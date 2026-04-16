@@ -1,23 +1,13 @@
 ---
-import type { SanityDocument } from "@sanity/client";
-import ArticleLink from "@/components/ArticleLink.astro";
-import PageHeader from "@/components/PageHeader.astro";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import { loadQuery } from "@/sanity/lib/loadQuery";
+import { sanityClient } from "sanity:client";
+import ArticleLink from "../../components/ArticleLink.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { POSTS_INDEX_QUERY } from "../../sanity/queries";
 
 const { params } = Astro.props;
 
-const { data: posts } = await loadQuery<SanityDocument[]>({
-  query: `*[_type == "post" && defined(slug) && publishDate <= now()]{
-    title,
-    slug,
-    publishDate,
-    description,
-    image,
-    "authors": authors[]->name
-  } | order(publishDate desc)`,
-  params,
-});
+const posts = await sanityClient.fetch(POSTS_INDEX_QUERY, params ?? {});
 ---
 
 <BaseLayout

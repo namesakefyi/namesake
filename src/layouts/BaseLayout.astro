@@ -1,20 +1,20 @@
 ---
-import Footer from "@/components/Footer.astro";
-import Header from "@/components/Header.astro";
-import type { NamesakeColor } from "@/constants/colors";
-import { colors } from "@/constants/colors";
-import { siteInfo } from "@/constants/site-info";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import type { NamesakeColor } from "../constants/colors";
+import { colors } from "../constants/colors";
+import { siteInfo } from "../constants/site-info";
 import "../styles/base.css";
 import "../styles/reset.css";
 import "../styles/theme.css";
 
 export interface Props {
   title: string;
-  description?: string;
+  description?: string | null;
   author?: string;
   ogImage?: string;
   ogAlt?: string;
-  color?: NamesakeColor;
+  color?: NamesakeColor | null;
 }
 
 const {
@@ -48,7 +48,7 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
     <link href="/fonts/AlteHaasGroteskBold.woff2" as="font" type="font/woff2" />
     <meta name="generator" content={Astro.generator} />
     <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content={colors[color]?.hex} />
+    <meta name="theme-color" content={colors[color ?? "purple"]?.hex} />
     <link rel="icon" href="/favicon.ico?v3" sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v3" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

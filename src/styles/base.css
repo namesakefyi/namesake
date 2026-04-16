@@ -32,31 +32,31 @@ body::after {
 }
 
 body::before {
-  background-image: url("/assets/speckles-black.svg");
+  background-image: url("/site/speckles-black.svg");
 }
 
 body[data-color="purple"]::after {
-  background-image: url("/assets/speckles-purple.svg");
+  background-image: url("/site/speckles-purple.svg");
 }
 
 body[data-color="pink"]::after {
-  background-image: url("/assets/speckles-pink.svg");
+  background-image: url("/site/speckles-pink.svg");
 }
 
 body[data-color="blue"]::after {
-  background-image: url("/assets/speckles-blue.svg");
+  background-image: url("/site/speckles-blue.svg");
 }
 
 body[data-color="yellow"]::after {
-  background-image: url("/assets/speckles-yellow.svg");
+  background-image: url("/site/speckles-yellow.svg");
 }
 
 body[data-color="green"]::after {
-  background-image: url("/assets/speckles-green.svg");
+  background-image: url("/site/speckles-green.svg");
 }
 
 body[data-color="brown"]::after {
-  background-image: url("/assets/speckles-brown.svg");
+  background-image: url("/site/speckles-brown.svg");
 }
 
 ::selection {
@@ -149,7 +149,11 @@ img {
   clip-path: inset(50%);
 }
 
-:focus-visible {
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
   outline: 3px solid var(--text-color);
   outline-offset: 2px;
 }

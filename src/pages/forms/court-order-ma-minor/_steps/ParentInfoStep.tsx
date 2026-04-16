@@ -1,9 +1,12 @@
-import { EmailField } from "@/components/react/forms/EmailField";
-import { FormStep, FormSubsection } from "@/components/react/forms/FormStep";
-import { PhoneField } from "@/components/react/forms/PhoneField";
-import { ShortTextField } from "@/components/react/forms/ShortTextField";
-import { nameOrFallback } from "@/forms/resolveStepContent";
-import type { Step } from "@/forms/types";
+import { EmailField } from "../../../../components/forms/EmailField";
+import {
+  FormStep,
+  FormSubsection,
+} from "../../../../components/forms/FormStep";
+import { PhoneField } from "../../../../components/forms/PhoneField";
+import { ShortTextField } from "../../../../components/forms/ShortTextField";
+import { nameOrFallback } from "../../../../forms/resolveStepContent";
+import type { Step } from "../../../../forms/types";
 
 export const parentInfoStep: Step = {
   id: "parent-info",

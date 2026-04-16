@@ -1,0 +1,73 @@
+.react-aria-Button {
+  display: inline-flex;
+  gap: var(--space-s);
+  align-items: center;
+  justify-content: center;
+  height: calc(var(--space-2xl) + var(--space-2xs));
+  padding-inline: var(--space-m);
+  margin: 0;
+  font-size: var(--step-0);
+  font-weight: var(--weight-bold);
+  color: var(--text-color);
+  text-align: center;
+  text-wrap: nowrap;
+  text-decoration: none;
+  appearance: none;
+  outline: none;
+  background: var(--background-color);
+  border: 1px solid var(--text-color);
+  border-radius: var(--radius-s);
+  transition: transform 80ms ease-out;
+
+  @media (hover: hover) {
+    &:not([data-disabled]) {
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+  }
+
+  &[data-variant="primary"] {
+    color: var(--background-color);
+    background-color: var(--text-color);
+    border-color: var(--text-color);
+  }
+
+  &[data-size="large"] {
+    height: var(--space-3xl);
+    padding-inline: var(--space-l);
+    font-size: var(--step-1);
+  }
+
+  &[data-focus-visible] {
+    outline: 3px solid var(--focus-ring-color);
+    outline-offset: 2px;
+  }
+
+  &[data-disabled] {
+    cursor: not-allowed;
+    mix-blend-mode: luminosity;
+    opacity: 0.2;
+  }
+
+  &:not([data-disabled]) {
+    cursor: pointer;
+  }
+
+  .react-aria-Button-icon {
+    flex-shrink: 0;
+
+    &:has(~ *) {
+      margin-inline: -0.2em;
+    }
+  }
+
+  &:has(.react-aria-Button-icon:only-child) {
+    aspect-ratio: 1 / 1;
+    padding: 0;
+  }
+}

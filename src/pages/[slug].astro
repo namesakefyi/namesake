@@ -1,40 +1,15 @@
 ---
-import type { SanityDocument } from "@sanity/client";
-import TableOfContents from "@/components/TableOfContents.astro";
-import PortableText from "@/components/text/PortableText.astro";
-import ProseLayout from "@/layouts/ProseLayout.astro";
-import { extractHeadings } from "@/sanity/lib/extractHeadings";
-import { loadQuery } from "@/sanity/lib/loadQuery";
+import { sanityClient } from "sanity:client";
+import TableOfContents from "../components/TableOfContents.astro";
+import PortableText from "../components/text/PortableText.astro";
+import ProseLayout from "../layouts/ProseLayout.astro";
+import { extractHeadings } from "../sanity/lib/extractHeadings";
+import { PAGE_BY_SLUG_QUERY } from "../sanity/queries";
 
 const { slug } = Astro.params;
-
 if (!slug) return Astro.redirect("/404");
 
-const { data: page } = await loadQuery<SanityDocument>({
-  query: `*[_type == "page" && slug.current == $slug][0]{
-    _id,
-    title,
-    slug,
-    description,
-    content[]{
-      ...,
-      markDefs[]{
-        ...,
-        _type == "internalLink" => {
-          ...,
-          "reference": @.reference->{_type, slug, title}
-        }
-      }
-    },
-    ogImage,
-    annotation,
-    color
-  }`,
-  params: {
-    slug,
-  },
-});
-
+const page = await sanityClient.fetch(PAGE_BY_SLUG_QUERY, { slug });
 if (!page) return Astro.redirect("/404");
 
 const headings = extractHeadings(page.content);

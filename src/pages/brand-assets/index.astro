@@ -2,8 +2,8 @@
 export const prerender = true;
 
 import { RiDownloadLine } from "@remixicon/react";
-import PageHeader from "@/components/PageHeader.astro";
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 import BrandAssetCard from "./_components/BrandAssetCard.astro";
 import Swatches from "./_components/Swatches.astro";
 ---
@@ -49,7 +49,7 @@ import Swatches from "./_components/Swatches.astro";
     </div>
     <a
       class="button secondary"
-      href="/assets/brand-assets/namesake-logos.zip"
+      href="/site/brand-assets/namesake-logos.zip"
       download><RiDownloadLine />Download All</a
     >
   </section>
@@ -64,7 +64,7 @@ import Swatches from "./_components/Swatches.astro";
     </p>
     <a
       class="button secondary"
-      href="/assets/brand-assets/alte-haas-grotesk.zip"
+      href="/site/brand-assets/alte-haas-grotesk.zip"
       download><RiDownloadLine />Download Alte Haas Grotesk</a
     >
   </section>
@@ -91,6 +91,10 @@ import Swatches from "./_components/Swatches.astro";
 
   section + section {
     padding-top: var(--space-3xl);
+  }
+
+  section:last-child {
+    padding-block-end: var(--space-3xl);
   }
 
   .logo-grid {

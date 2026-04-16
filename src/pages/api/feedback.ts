@@ -5,8 +5,8 @@ import {
   FORM_FEEDBACK_SENTIMENT,
   FORM_SLUGS,
   type FormFeedbackSentiment,
-} from "@/constants/forms";
-import { isRateLimited } from "@/utils/rateLimitByIp";
+} from "../../constants/forms";
+import { isRateLimited } from "../../utils/rateLimitByIp";
 
 const ALLOWED_ORIGINS = ["https://namesake.fyi"];
 

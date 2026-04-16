@@ -4,6 +4,8 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import sanity from "@sanity/astro";
 import { defineConfig } from "astro/config";
+import browserslist from "browserslist";
+import { browserslistToTargets } from "lightningcss";
 
 // Temporary fix for: https://github.com/withastro/astro/issues/15878
 const isTest = process.env.VITEST === "true";
@@ -43,5 +45,16 @@ export default defineConfig({
   },
   server: {
     host: true,
+  },
+  vite: {
+    css: {
+      transformer: "lightningcss",
+      lightningcss: {
+        targets: browserslistToTargets(browserslist("defaults")),
+      },
+    },
+    build: {
+      cssMinify: "lightningcss",
+    },
   },
 });

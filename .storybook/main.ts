@@ -1,4 +1,3 @@
-import path from "node:path";
 import type { StorybookConfig } from "@storybook/react-vite";
 
 const excludedProps = new Set([
@@ -23,7 +22,7 @@ const config: StorybookConfig = {
   core: {
     builder: "@storybook/builder-vite",
   },
-  stories: ["../src/components/react/**/*.stories.@(ts|tsx)"],
+  stories: ["../src/components/**/*.stories.@(ts|tsx)"],
   addons: [
     "@storybook/addon-themes",
     "@storybook/addon-links",
@@ -41,13 +40,6 @@ const config: StorybookConfig = {
       propFilter: (prop) =>
         !prop.name.startsWith("aria-") && !excludedProps.has(prop.name),
     },
-  },
-  viteFinal: (config) => {
-    if (!config.resolve) return config;
-    config.resolve.alias = {
-      "@": path.resolve(import.meta.dirname, "../src"),
-    };
-    return config;
   },
 };
 

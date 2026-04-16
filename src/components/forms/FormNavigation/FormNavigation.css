@@ -1,0 +1,25 @@
+.form-navigation {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  gap: var(--space-m);
+  align-items: center;
+  padding-block: var(--space-m);
+  background: var(--background-color);
+}
+
+.form-progress {
+  flex: 1;
+  min-width: 0;
+
+  .react-aria-ProgressBar {
+    width: 100%;
+  }
+}
+
+.form-navigation-buttons {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+}

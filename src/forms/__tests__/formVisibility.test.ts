@@ -4,7 +4,7 @@ import {
   getFieldWhen,
   getFormFields,
   resolveFormVisibility,
-} from "@/forms/formVisibility";
+} from "../formVisibility";
 import { makeStep } from "./testHelpers";
 
 describe("getFieldNames", () => {

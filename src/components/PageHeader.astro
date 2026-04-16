@@ -1,17 +1,13 @@
 ---
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import type { RoughAnnotationType } from "rough-notation/lib/model";
-import { smartquotes } from "@/utils/smartquotes";
+import { smartquotes } from "../utils/smartquotes";
 import Breadcrumbs, { type BreadcrumbItem } from "./Breadcrumbs.astro";
-
-dayjs.extend(utc);
 
 interface Props {
   title: string;
   date?: string;
-  description?: string;
-  annotation?: RoughAnnotationType;
+  description?: string | null;
+  annotation?: RoughAnnotationType | null;
   breadcrumbs?: BreadcrumbItem[];
 }
 
@@ -22,6 +18,16 @@ const {
   annotation = "circle",
   breadcrumbs,
 } = Astro.props;
+
+const formatter = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "long",
+  timeZone: "UTC",
+});
+
+let formattedDate = "";
+if (date) {
+  formattedDate = formatter.format(new Date(date));
+}
 ---
 
 <div class="page-head">
@@ -29,7 +35,7 @@ const {
   {
     date && (
       <time class="date" datetime={date}>
-        {dayjs.utc(date).format("MMMM DD, YYYY")}
+        {formattedDate}
       </time>
     )
   }
@@ -42,7 +48,7 @@ const {
 <script>
   import { annotate } from "rough-notation";
   import type { RoughAnnotationType } from "rough-notation/lib/model";
-  import { annotationConfig } from "@/constants/annotations";
+  import { annotationConfig } from "../constants/annotations";
 
   const header: HTMLElement | null = document.querySelector(".page-head h1");
   const isForcedColors = window.matchMedia("(forced-colors: active)").matches;

@@ -5,10 +5,6 @@ import {
   RiFileCheckLine,
   RiTimerLine,
 } from "@remixicon/react";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-
-dayjs.extend(utc);
 
 interface Props {
   title: string;
@@ -19,6 +15,13 @@ interface Props {
 }
 
 const { title, slug, documentCount, timeEstimate, updatedAt } = Astro.props;
+
+const formatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: "UTC",
+  dateStyle: "medium",
+});
+
+const formattedDate = formatter.format(new Date(updatedAt));
 ---
 
 <article class="form">
@@ -55,12 +58,12 @@ const { title, slug, documentCount, timeEstimate, updatedAt } = Astro.props;
       <RiFileCheckLine />{" "}
       {`${documentCount} document${documentCount > 1 ? "s" : ""}`}
     </li>
-    <li>Updated {dayjs.utc(updatedAt).format("MMM D, YYYY")}</li>
+    <li>Updated {formattedDate}</li>
   </ul>
 </article>
 
 <script>
-  import { getFormStatus } from "@/forms/getFormStatus";
+  import { getFormStatus } from "../forms/getFormStatus";
 
   document
     .querySelectorAll<HTMLElement>("[data-form-slug].form-status")

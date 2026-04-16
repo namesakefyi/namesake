@@ -2,6 +2,9 @@
   "plugins": {
     "sanity": {
       "enabled": true
+    },
+    "cloudflare": {
+      "enabled": true
     }
   }
 }

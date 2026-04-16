@@ -3,12 +3,13 @@ import { structureTool } from "sanity/structure";
 import {
   authorType,
   categoryType,
+  contactType,
   formType,
   guideType,
   pageType,
-  partnerType,
   postType,
   pressType,
+  sponsorType,
   stateType,
 } from "./src/sanity/schema";
 
@@ -22,12 +23,13 @@ export default defineConfig({
     types: [
       authorType,
       categoryType,
+      contactType,
       formType,
       guideType,
       pageType,
       postType,
       pressType,
-      partnerType,
+      sponsorType,
       stateType,
     ],
   },

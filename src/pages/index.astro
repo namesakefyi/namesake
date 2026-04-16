@@ -2,46 +2,28 @@
 export const prerender = true;
 
 import { Image } from "astro:assets";
+import { sanityClient } from "sanity:client";
 import { RiArrowRightLine } from "@remixicon/react";
-import type { SanityDocument } from "@sanity/client";
-import Partners from "@/components/Partners.astro";
-import SupportMap from "@/components/SupportMap.astro";
-import PortableText from "@/components/text/PortableText.astro";
-import { siteInfo } from "@/constants/site-info";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import heroIllustration from "@/pages/home/_hero-form.png";
-import { loadQuery } from "@/sanity/lib/loadQuery";
+import Sponsors from "../components/Sponsors.astro";
+import SupportMap from "../components/SupportMap.astro";
+import PortableText from "../components/text/PortableText.astro";
+import { siteInfo } from "../constants/site-info";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { urlForImage } from "../sanity/lib/urlForImage";
+import { HOME_PAGE_QUERY } from "../sanity/queries";
+import heroIllustration from "./home/_hero-form.png";
 
-// Fetch the home page from Sanity (slug: "index" or empty slug for home)
-const { data: page } = await loadQuery<SanityDocument>({
-  query: `*[_type == "page" && (slug.current == "index" || slug.current == "" || !defined(slug))][0]{
-    _id,
-    title,
-    slug,
-    description,
-    content[]{
-      ...,
-      markDefs[]{
-        ...,
-        _type == "internalLink" => {
-          ...,
-          "reference": @.reference->{_type, slug, title}
-        }
-      }
-    },
-    ogImage,
-    annotation,
-    color
-  }`,
-});
+const page = await sanityClient.fetch(HOME_PAGE_QUERY);
 
 if (!page) return Astro.redirect("/404");
 ---
 
 <BaseLayout
-  title={page.title || siteInfo.name}
-  description={page.description || siteInfo.description}
-  ogImage={page.ogImage?.asset}
+  title={page.title}
+  description={page.description}
+  ogImage={page.ogImage?.asset
+    ? urlForImage(page.ogImage.asset).url()
+    : undefined}
   ogAlt={page.ogImage?.alt}
 >
   <div class="home">
@@ -68,7 +50,7 @@ if (!page) return Astro.redirect("/404");
       </div>
     </section>
     <SupportMap />
-    <Partners />
+    <Sponsors />
   </div>
 </BaseLayout>
 

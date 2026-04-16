@@ -1,6 +1,6 @@
-import { type FormSlug, getFormConfig } from "@/constants/forms";
-import type { PDFId } from "@/constants/pdf";
-import { getPdfDefinition } from "@/pdfs";
+import { type FormSlug, getFormConfig } from "../constants/forms";
+import type { PDFId } from "../constants/pdf";
+import { getPdfDefinition } from "../pdfs";
 
 /**
  * Metadata for a PDF form that includes display information.

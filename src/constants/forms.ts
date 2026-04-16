@@ -1,7 +1,7 @@
-import type { Step } from "@/forms/types";
-import { courtOrderMaConfig } from "@/pages/forms/court-order-ma/config";
-import { courtOrderMinorMaConfig } from "@/pages/forms/court-order-ma-minor/config";
-import { socialSecurityConfig } from "@/pages/forms/social-security/config";
+import type { Step } from "../forms/types";
+import { courtOrderMaConfig } from "../pages/forms/court-order-ma/_config";
+import { courtOrderMinorMaConfig } from "../pages/forms/court-order-ma-minor/_config";
+import { socialSecurityConfig } from "../pages/forms/social-security/_config";
 import type { FormData } from "./fields";
 import type { PDFId } from "./pdf";
 

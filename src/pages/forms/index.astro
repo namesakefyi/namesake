@@ -1,30 +1,21 @@
 ---
-import type { SanityDocument } from "@sanity/client";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import FormLink from "@/components/FormLink.astro";
-import PageHeader from "@/components/PageHeader.astro";
-import { getFormConfig } from "@/constants/forms";
-import { getFormPdfMetadata } from "@/forms/getFormPdfMetadata";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import { loadQuery } from "@/sanity/lib/loadQuery";
-import { formatTimeEstimate } from "@/utils/formatTimeEstimate";
+import { sanityClient } from "sanity:client";
+import FormLink from "../../components/FormLink.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import { type FormSlug, getFormConfig } from "../../constants/forms";
+import { getFormPdfMetadata } from "../../forms/getFormPdfMetadata";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { FORMS_INDEX_QUERY } from "../../sanity/queries";
+import { formatTimeEstimate } from "../../utils/formatTimeEstimate";
 
 const { params } = Astro.props;
 
-const { data: forms } = await loadQuery<SanityDocument[]>({
-  query: `*[_type == "form" && defined(slug)]{
-    title,
-    slug,
-    _updatedAt,
-  } | order(publishDate desc)`,
-  params,
-});
+const forms = await sanityClient.fetch(FORMS_INDEX_QUERY, params ?? {});
 
 // Get PDF metadata and step count for each form
 const formsWithPdfs = await Promise.all(
   forms.map(async (form) => {
-    const formSlug = form.slug.current;
+    const formSlug = form.slug.current as FormSlug;
     const config = getFormConfig(formSlug);
     const pdfs = config ? await getFormPdfMetadata(formSlug) : [];
     const stepCount = config?.steps.length ?? 0;
@@ -40,8 +31,6 @@ const formsWithPdfs = await Promise.all(
     };
   }),
 );
-
-dayjs.extend(utc);
 ---
 
 <BaseLayout
