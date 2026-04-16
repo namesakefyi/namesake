@@ -119,16 +119,9 @@ test("Social Security", async ({ page }, testInfo) => {
       page.getByRole("heading", { name: "What is your date of birth?" }),
     ).toBeVisible();
 
-    await page.getByRole("group", { name: "Date of birth" }).click();
     await page
       .getByRole("spinbutton", { name: "month, Date of birth" })
-      .fill("01");
-    await page
-      .getByRole("spinbutton", { name: "day, Date of birth" })
-      .fill("01");
-    await page
-      .getByRole("spinbutton", { name: "year, Date of birth" })
-      .fill("1970");
+      .pressSequentially("01011970");
 
     await page.getByRole("button", { name: "Continue" }).click();
   });
