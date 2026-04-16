@@ -38,7 +38,7 @@
     "typegen": "sanity schema extract --enforce-required-fields && sanity typegen generate"
   },
   "lint-staged": {
-    "*": [
+    "*.{astro,cjs,css,js,json,jsonc,jsx,mjs,ts,tsx}": [
       "biome check --write"
     ]
   },

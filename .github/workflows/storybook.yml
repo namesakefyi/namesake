@@ -27,7 +27,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup PNPM
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@v5
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -36,7 +36,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build Storybook
         run: pnpm storybook:build
