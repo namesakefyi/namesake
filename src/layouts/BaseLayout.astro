@@ -41,7 +41,14 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
       import * as Fathom from "fathom-client";
       Fathom.load("GQAJEJLZ");
     </script>
-    <Font cssVariable="--font-sans" preload />
+    <Font
+      cssVariable="--font-sans"
+      preload={[
+        { subset: "latin", style: "normal" },
+        { weight: "400" },
+        { weight: "700" },
+      ]}
+    />
     <meta name="generator" content={Astro.generator} />
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content={colors[color ?? "purple"]?.hex} />
