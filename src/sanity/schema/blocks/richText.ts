@@ -18,7 +18,10 @@ export const richTextBlock = {
     { title: "Numbered", value: "number" },
   ],
   marks: {
-    decorators: [{ title: "Bold", value: "strong" }],
+    decorators: [
+      { title: "Bold", value: "strong" },
+      { title: "Emphasis", value: "em" },
+    ],
     annotations: [externalLink, internalLink],
   },
 };
