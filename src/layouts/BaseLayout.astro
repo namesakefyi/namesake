@@ -1,4 +1,5 @@
 ---
+import { Font } from "astro:assets";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import type { NamesakeColor } from "../constants/colors";
@@ -40,26 +41,7 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
       import * as Fathom from "fathom-client";
       Fathom.load("GQAJEJLZ");
     </script>
-    <link
-      href="/fonts/AtkinsonHyperlegibleSoft-Regular.woff2"
-      as="font"
-      type="font/woff2"
-    />
-    <link
-      href="/fonts/AtkinsonHyperlegibleSoft-Bold.woff2"
-      as="font"
-      type="font/woff2"
-    />
-    <link
-      href="/fonts/AtkinsonHyperlegibleSoft-Italic.woff2"
-      as="font"
-      type="font/woff2"
-    />
-    <link
-      href="/fonts/AtkinsonHyperlegibleSoft-BoldItalic.woff2"
-      as="font"
-      type="font/woff2"
-    />
+    <Font cssVariable="--font-sans" />
     <meta name="generator" content={Astro.generator} />
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content={colors[color ?? "purple"]?.hex} />
