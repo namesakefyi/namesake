@@ -56,16 +56,18 @@ import Swatches from "./_components/Swatches.astro";
   <section>
     <h2>Typography</h2>
     <p>
-      The text you’re reading now is set in <strong>Alte Haas Grotesk</strong>,
-      a rounded version of Neue Haas Grotesk—better known today as Helvetica.
-      Alte Haas Grotesk was created by <a href="https://www.yannlecoroller.com/"
-        >Yann Le Coroller</a
-      > and is freely distributed. It emulates the look of printed text.
+      The text you’re reading now is set in <a
+        href="https://github.com/namesakefyi/atkinson-hyperlegible-soft"
+        >Atkinson Hyperlegible Soft</a
+      >, a rounded modification of <a
+        href="https://www.brailleinstitute.org/freefont/"
+        >Atkinson Hyperlegible</a
+      > from the Braille Institute. It emulates the look of printed text.
     </p>
     <a
       class="button secondary"
-      href="/site/brand-assets/alte-haas-grotesk.zip"
-      download><RiDownloadLine />Download Alte Haas Grotesk</a
+      href="https://github.com/namesakefyi/atkinson-hyperlegible-soft/releases/latest"
+      download><RiDownloadLine />Download Fonts</a
     >
   </section>
   <section>
@@ -87,6 +89,11 @@ import Swatches from "./_components/Swatches.astro";
 <style lang="scss">
   h2 {
     margin-bottom: var(--space-s);
+  }
+
+  p {
+    max-width: 60ch;
+    text-wrap: pretty;
   }
 
   section + section {
