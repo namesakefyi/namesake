@@ -21,7 +21,10 @@ export const detailsBlock: ObjectDefinition = {
           type: "block",
           styles: [{ title: "Normal", value: "normal" }],
           marks: {
-            decorators: [{ title: "Bold", value: "strong" }],
+            decorators: [
+              { title: "Bold", value: "strong" },
+              { title: "Emphasis", value: "em" },
+            ],
             annotations: [
               defineArrayMember(externalLink),
               defineArrayMember(internalLink),
