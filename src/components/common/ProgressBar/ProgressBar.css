@@ -4,7 +4,7 @@
     "label value"
     "bar bar";
   grid-template-columns: 1fr auto;
-  gap: var(--space-s);
+  gap: var(--space-xs);
   align-items: flex-end;
   width: 250px;
   line-height: 1;
@@ -27,6 +27,7 @@
   .fill {
     height: 100%;
     background: var(--highlight-background);
+
     @media (prefers-reduced-motion: no-preference) {
       transition: transform 0.2s ease-out;
     }
@@ -42,6 +43,7 @@
   }
 
   .label {
+    margin: 0;
     font-size: var(--step-0);
     font-weight: var(--weight-bold);
   }
