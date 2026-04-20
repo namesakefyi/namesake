@@ -129,6 +129,7 @@
     "lightningcss": "^1.32.0",
     "lodash": "^4.18.1",
     "nano-staged": "^1.0.2",
+    "optimo": "^0.0.27",
     "react-compiler-runtime": "^1.0.0",
     "sass-embedded": "^1.99.0",
     "sharp": "^0.34.5",
