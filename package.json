@@ -7,7 +7,6 @@
   ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "prepare": "husky",
     "dev": "astro dev --open",
     "start": "astro dev",
     "build": "pnpm pdf:schema && wrangler types && astro check && astro build",
@@ -37,7 +36,10 @@
     "pdf:nudge-fields": "node scripts/nudge-pdf-fields.mjs",
     "typegen": "sanity schema extract --enforce-required-fields && sanity typegen generate"
   },
-  "lint-staged": {
+  "simple-git-hooks": {
+    "pre-commit": "./node_modules/.bin/nano-staged"
+  },
+  "nano-staged": {
     "*.{astro,cjs,css,js,json,jsonc,jsx,mjs,ts,tsx}": [
       "biome check --write"
     ]
@@ -124,13 +126,13 @@
     "clsx": "^2.1.1",
     "cssnano": "^7.1.5",
     "fake-indexeddb": "^6.2.5",
-    "husky": "^9.1.7",
     "lightningcss": "^1.32.0",
-    "lint-staged": "^16.4.0",
     "lodash": "^4.18.1",
+    "nano-staged": "^1.0.2",
     "react-compiler-runtime": "^1.0.0",
     "sass-embedded": "^1.99.0",
     "sharp": "^0.34.5",
+    "simple-git-hooks": "^2.13.1",
     "storybook": "^10.3.5",
     "vitest": "4.1.2",
     "wrangler": "^4.82.2"
