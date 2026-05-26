@@ -40,7 +40,8 @@ export default definePdf<PdfFieldName>({
     // Pre-printed form fields not driven by user data
     Court: undefined,
     "Case Name and Number if known": undefined,
-    "lower cost paid for by the state Check all that apply and in any": undefined,
+    "lower cost paid for by the state Check all that apply and in any":
+      undefined,
     "guess as to the cost if known": undefined,
     "Filing fee and any surcharge": undefined,
     "Filing fee and any surcharge for appeal": undefined,
