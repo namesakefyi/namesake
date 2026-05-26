@@ -61,4 +61,4 @@ export interface PDFDefinition<TPdfFieldName extends string = string> {
 export type PDFResolver<
   TPdfFieldName extends string,
   TFormData = Partial<FormData>,
-> = (data: TFormData) => Partial<Record<TPdfFieldName, PDFFieldValue>>;
+> = (data: TFormData) => Record<TPdfFieldName, PDFFieldValue>;

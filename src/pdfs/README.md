@@ -81,6 +81,16 @@ For each PDF field, look up a matching FIELD_DEF by name. Use it directly, or de
 
 If no FIELD_DEF exists for a PDF field, add one to `src/constants/fields.ts`.
 
+Every field in the schema must be present in the resolver — TypeScript will error if any are missing. For fields that don't correspond to user data (pre-printed form content, fields intentionally left blank), leave them as `undefined`:
+
+```ts
+resolver: (data) => ({
+  petitionerFirstName: data.oldFirstName,
+  // Pre-printed court header — not driven by user data
+  docketNumber: undefined,
+})
+```
+
 No conditional checks are needed in the PDF definition itself; that logic is handled elsewhere. Just map PDF field names to data names.
 
 ### Step 4: Write tests
