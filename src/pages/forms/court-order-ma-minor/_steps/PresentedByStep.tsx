@@ -7,20 +7,16 @@ export const presentedByStep: Step = {
   title: "Who is presenting this petition?",
   description: "Select all that apply.",
   fields: [
-    "isPresentedByLegalMotherParent1",
-    "isPresentedByLegalFatherParent2",
+    "isPresentedByLegalParent1",
+    "isPresentedByLegalParent2",
+    "isPresentedByLegalParent3",
     "isPresentedByCourtAppointedGuardian",
   ],
   component: ({ stepConfig }) => (
     <FormStep stepConfig={stepConfig}>
-      <CheckboxField
-        name="isPresentedByLegalMotherParent1"
-        label="Legal mother (or parent 1)"
-      />
-      <CheckboxField
-        name="isPresentedByLegalFatherParent2"
-        label="Legal father (or parent 2)"
-      />
+      <CheckboxField name="isPresentedByLegalParent1" label="Legal parent 1" />
+      <CheckboxField name="isPresentedByLegalParent2" label="Legal parent 2" />
+      <CheckboxField name="isPresentedByLegalParent3" label="Legal parent 3" />
       <CheckboxField
         name="isPresentedByCourtAppointedGuardian"
         label="Court-appointed guardian(s)"

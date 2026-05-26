@@ -52,6 +52,12 @@ export const FIELD_DEFS = [
     type: "boolean",
   },
   {
+    name: "isInterpreterNeededForParent3",
+    label: "Interpreter needed for parent 3?",
+    type: "boolean",
+  },
+
+  {
     name: "areBothParentsListedOnBirthCertificate",
     label: "Both parents listed on the minor's birth certificate?",
     type: "boolean",
@@ -67,18 +73,28 @@ export const FIELD_DEFS = [
     type: "boolean",
   },
   {
+    name: "isParent3Assenting",
+    label: "Parent 3 assenting?",
+    type: "boolean",
+  },
+  {
     name: "isPresentedByCourtAppointedGuardian",
     label: "Presented by court-appointed guardian?",
     type: "boolean",
   },
   {
-    name: "isPresentedByLegalFatherParent2",
-    label: "Presented by legal father (parent 2)?",
+    name: "isPresentedByLegalParent1",
+    label: "Presented by legal parent 1?",
     type: "boolean",
   },
   {
-    name: "isPresentedByLegalMotherParent1",
-    label: "Presented by legal mother (parent 1)?",
+    name: "isPresentedByLegalParent2",
+    label: "Presented by legal parent 2?",
+    type: "boolean",
+  },
+  {
+    name: "isPresentedByLegalParent3",
+    label: "Presented by legal parent 3?",
     type: "boolean",
   },
   {
@@ -205,6 +221,46 @@ export const FIELD_DEFS = [
   {
     name: "parent2ZipCode",
     label: "Parent 2 zip code",
+    type: "string",
+  },
+  {
+    name: "parent3FullName",
+    label: "Parent 3 full name",
+    type: "string",
+  },
+  {
+    name: "parent3Phone",
+    label: "Parent 3 phone",
+    type: "string",
+  },
+  {
+    name: "parent3Email",
+    label: "Parent 3 email",
+    type: "string",
+  },
+  {
+    name: "parent3State",
+    label: "Parent 3 state",
+    type: "string",
+  },
+  {
+    name: "parent3StreetAddress",
+    label: "Parent 3 street address",
+    type: "string",
+  },
+  {
+    name: "parent3City",
+    label: "Parent 3 city",
+    type: "string",
+  },
+  {
+    name: "parent3ZipCode",
+    label: "Parent 3 zip code",
+    type: "string",
+  },
+  {
+    name: "parent3DissentReason",
+    label: "Parent 3 dissent reason",
     type: "string",
   },
   {

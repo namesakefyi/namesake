@@ -15,6 +15,7 @@ export const interpreterStep: Step = {
     "isInterpreterNeededForChild",
     "isInterpreterNeededForParent1",
     "isInterpreterNeededForParent2",
+    "isInterpreterNeededForParent3",
     "isInterpreterNeededForGuardian",
     {
       id: "language",
@@ -22,6 +23,7 @@ export const interpreterStep: Step = {
         data.isInterpreterNeededForChild === true ||
         data.isInterpreterNeededForParent1 === true ||
         data.isInterpreterNeededForParent2 === true ||
+        data.isInterpreterNeededForParent3 === true ||
         data.isInterpreterNeededForGuardian === true,
     },
   ],
@@ -40,6 +42,10 @@ export const interpreterStep: Step = {
         <CheckboxField
           name="isInterpreterNeededForParent2"
           label="Parent 2 needs an interpreter"
+        />
+        <CheckboxField
+          name="isInterpreterNeededForParent3"
+          label="Parent 3 needs an interpreter"
         />
         <CheckboxField
           name="isInterpreterNeededForGuardian"

@@ -32,6 +32,10 @@ export const parentAddressStep: Step = {
         "parent2City",
         "parent2State",
         "parent2ZipCode",
+        "parent3StreetAddress",
+        "parent3City",
+        "parent3State",
+        "parent3ZipCode",
       ],
       when: (data) =>
         data.parentsHaveUnknownAddresses === false &&
@@ -74,16 +78,22 @@ export const parentAddressStep: Step = {
             />
             {!secondAddressVisible && <AddressField type="parent1" />}
             <FormSubsection
-              title="First parent's address"
+              title="Parent 1 address"
               isVisible={secondAddressVisible}
             >
               <AddressField type="parent1" />
             </FormSubsection>
             <FormSubsection
-              title="Second parent's address"
+              title="Parent 2 address"
               isVisible={secondAddressVisible}
             >
               <AddressField type="parent2" />
+            </FormSubsection>
+            <FormSubsection
+              title="Parent 3 address"
+              isVisible={secondAddressVisible}
+            >
+              <AddressField type="parent3" />
             </FormSubsection>
           </>
         )}

@@ -6,7 +6,7 @@ import { ComboBox, ComboBoxItem } from "../../common/ComboBox";
 import { TextField } from "../../common/TextField";
 import "./AddressField.css";
 
-type AddressType = "residence" | "mailing" | "parent1" | "parent2";
+type AddressType = "residence" | "mailing" | "parent1" | "parent2" | "parent3";
 
 export interface AddressFieldProps {
   children?: React.ReactNode;
@@ -56,6 +56,12 @@ export function AddressField({
       city: "parent2City",
       state: "parent2State",
       zip: "parent2ZipCode",
+    },
+    parent3: {
+      street: "parent3StreetAddress",
+      city: "parent3City",
+      state: "parent3State",
+      zip: "parent3ZipCode",
     },
   };
 

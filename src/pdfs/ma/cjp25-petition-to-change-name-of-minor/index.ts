@@ -25,8 +25,9 @@ export default definePdf<PdfFieldName>({
     oldLastName: data.oldLastName,
 
     // 2. Petition presented by
-    isPresentedByLegalMotherParent1: data.isPresentedByLegalMotherParent1,
-    isPresentedByLegalFatherParent2: data.isPresentedByLegalFatherParent2,
+    isPresentedByLegalParent1: data.isPresentedByLegalParent1,
+    isPresentedByLegalParent2: data.isPresentedByLegalParent2,
+    isPresentedByLegalParent3: data.isPresentedByLegalParent3,
     isPresentedByCourtAppointedGuardian:
       data.isPresentedByCourtAppointedGuardian,
 

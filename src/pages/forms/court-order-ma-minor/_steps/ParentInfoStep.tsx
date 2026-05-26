@@ -10,9 +10,9 @@ import type { Step } from "../../../../forms/types";
 
 export const parentInfoStep: Step = {
   id: "parent-info",
-  title: "What are both parents' information?",
-  description: (data) =>
-    `List ${nameOrFallback(data, "the minor")}'s legal parents and contact information.`,
+  title: (data) =>
+    `What are ${nameOrFallback(data, "the minor")}'s legal parents' information?`,
+  description: "List names and contact information.",
   fields: [
     "parent1FullName",
     "parent1Phone",
@@ -20,18 +20,26 @@ export const parentInfoStep: Step = {
     "parent2FullName",
     "parent2Phone",
     "parent2Email",
+    "parent3FullName",
+    "parent3Phone",
+    "parent3Email",
   ],
   component: ({ stepConfig }) => (
     <FormStep stepConfig={stepConfig}>
-      <FormSubsection title="Legal mother (or parent 1)">
+      <FormSubsection title="Parent 1">
         <ShortTextField name="parent1FullName" label="Full name" />
         <PhoneField name="parent1Phone" />
         <EmailField name="parent1Email" />
       </FormSubsection>
-      <FormSubsection title="Legal father (or parent 2)">
+      <FormSubsection title="Parent 2">
         <ShortTextField name="parent2FullName" label="Full name" />
         <PhoneField name="parent2Phone" />
         <EmailField name="parent2Email" />
+      </FormSubsection>
+      <FormSubsection title="Parent 3">
+        <ShortTextField name="parent3FullName" label="Full name" />
+        <PhoneField name="parent3Phone" />
+        <EmailField name="parent3Email" />
       </FormSubsection>
     </FormStep>
   ),

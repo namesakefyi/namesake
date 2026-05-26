@@ -21,6 +21,11 @@ export const consentStep: Step = {
       id: "parent2DissentReason",
       when: (data) => data.isParent2Assenting === false,
     },
+    "isParent3Assenting",
+    {
+      id: "parent3DissentReason",
+      when: (data) => data.isParent3Assenting === false,
+    },
     {
       id: "hasCourtAppointedGuardian",
       when: (data) => data.hasCourtAppointedGuardian === true,
@@ -39,6 +44,10 @@ export const consentStep: Step = {
     const parent2DissentVisible = useFieldVisible(
       stepConfig,
       "parent2DissentReason",
+    );
+    const parent3DissentVisible = useFieldVisible(
+      stepConfig,
+      "parent3DissentReason",
     );
     const guardianVisible = useFieldVisible(
       stepConfig,
@@ -64,6 +73,13 @@ export const consentStep: Step = {
         />
         <FormSubsection isVisible={parent2DissentVisible}>
           <LongTextField name="parent2DissentReason" label="Reason" />
+        </FormSubsection>
+        <YesNoField
+          name="isParent3Assenting"
+          label="Does parent 3 consent to the name change?"
+        />
+        <FormSubsection isVisible={parent3DissentVisible}>
+          <LongTextField name="parent3DissentReason" label="Reason" />
         </FormSubsection>
         {guardianVisible && (
           <>
