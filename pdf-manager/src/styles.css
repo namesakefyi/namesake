@@ -1,0 +1,1038 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --bg: #111;
+  --bg-2: #1a1a1a;
+  --bg-3: #222;
+  --bg-4: #2a2a2a;
+  --border: #333;
+  --text: #e8e8e8;
+  --text-muted: #888;
+  --text-dim: #555;
+  --accent: #4a9eff;
+  --accent-dim: rgba(74, 158, 255, 0.15);
+  --green: #4caf6e;
+  --yellow: #e8a838;
+  --red: #e85454;
+  --font: system-ui, -apple-system, sans-serif;
+  --mono: ui-monospace, "Cascadia Code", monospace;
+  --radius: 4px;
+  --header-height: 44px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* ─── Layout ──────────────────────────────────────────────────────────────── */
+
+.app {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  width: 220px;
+  overflow: hidden;
+  background: var(--bg-2);
+  border-right: 1px solid var(--border);
+}
+
+.sidebar-header {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+  padding: 0 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.editor-panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.pdf-manager {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ─── PDF list ────────────────────────────────────────────────────────────── */
+
+.pdf-list {
+  flex: 1;
+  padding: 8px 0;
+  overflow-y: auto;
+  outline: none;
+}
+
+.pdf-list-section {
+  list-style: none;
+}
+
+.pdf-list-header {
+  padding: 8px 12px 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.pdf-list-item {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  padding: 6px 12px;
+  cursor: pointer;
+  outline: none;
+  border-radius: 0;
+}
+
+.pdf-list-item[data-hovered] {
+  background: var(--bg-3);
+}
+.pdf-list-item[data-focused] {
+  background: var(--bg-3);
+}
+.pdf-list-item[data-selected] {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+.pdf-item-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pdf-item-code {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+.pdf-list-item[data-selected] .pdf-item-code {
+  color: var(--accent);
+  opacity: 0.7;
+}
+
+/* ─── Editor toolbar ─────────────────────────────────────────────────────── */
+
+.editor-toolbar {
+  display: flex;
+  flex-shrink: 0;
+  gap: 10px;
+  align-items: center;
+  height: var(--header-height);
+  padding: 0 14px;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.editor-meta {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+  align-items: baseline;
+  min-width: 0;
+}
+.editor-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.meta-code {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.meta-jurisdiction {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.editor-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 6px;
+  align-items: center;
+}
+.upload-error-inline {
+  font-size: 12px;
+  color: var(--red);
+}
+
+/* ─── Editor body ─────────────────────────────────────────────────────────── */
+
+.editor-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ─── Field mapper (full-screen overlay) ─────────────────────────────────── */
+
+.field-mapper {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.field-mapper-header {
+  display: flex;
+  flex-shrink: 0;
+  gap: 10px;
+  align-items: center;
+  height: var(--header-height);
+  padding: 0 14px;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.field-mapper-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+.field-mapper-spacer {
+  flex: 1;
+}
+
+.field-mapper-summary {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.field-mapper-badge {
+  font-size: 11px;
+}
+.field-mapper-badge-warn {
+  color: var(--yellow);
+}
+.field-mapper-badge-ok {
+  color: var(--green);
+}
+
+.field-mapper-error {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--red);
+  background: rgba(232, 84, 84, 0.1);
+  border-bottom: 1px solid rgba(232, 84, 84, 0.3);
+}
+
+.field-mapper-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.field-mapper-panel {
+  flex-shrink: 0;
+  width: 280px;
+  padding-bottom: 16px;
+  overflow-y: auto;
+  border-left: 1px solid var(--border);
+}
+
+.field-mapper-section-header {
+  padding: 8px 12px 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.field-mapper-row {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.field-mapper-row.unresolved {
+  padding-left: 8px;
+  border-left: 2px solid var(--yellow);
+}
+.field-mapper-row:hover {
+  background: var(--bg-3);
+}
+.field-mapper-row.highlighted {
+  background: var(--bg-3);
+}
+
+.field-mapper-dot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.dot-retained {
+  background: var(--green);
+  opacity: 0.5;
+}
+.dot-mapped {
+  background: var(--green);
+}
+.dot-unresolved {
+  background: var(--yellow);
+}
+.dot-removed {
+  background: var(--red);
+}
+
+.field-mapper-unchanged-toggle {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  width: 100%;
+  padding: 5px 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+.field-mapper-unchanged-toggle:hover {
+  color: var(--text);
+  background: var(--bg-3);
+}
+.field-mapper-toggle-arrow {
+  font-size: 9px;
+  opacity: 0.7;
+}
+
+.field-mapper-row-retained {
+  cursor: default;
+  opacity: 0.6;
+}
+.field-mapper-row-retained:hover {
+  background: transparent;
+}
+
+.field-mapper-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--mono);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.field-item[data-variant="new"] {
+  padding-left: 8px;
+  border-left: 2px solid var(--yellow);
+}
+.field-item[data-variant="created"] {
+  padding-left: 8px;
+  border-left: 2px solid var(--green);
+}
+.field-item[data-variant="deleted"] {
+  padding-left: 8px;
+  border-left: 2px solid var(--red);
+}
+
+.fm-badge-btn {
+  padding: 0;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.fm-badge-btn:hover {
+  opacity: 0.8;
+}
+
+.fm-unresolved-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 200;
+  min-width: 260px;
+  max-height: 320px;
+  padding: 4px 0;
+  overflow-y: auto;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.fm-popover-item {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  padding: 4px 10px;
+}
+.fm-popover-item:hover {
+  background: var(--bg-4);
+}
+
+.fm-popover-empty {
+  padding: 8px 12px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.fm-assign-overlay {
+  position: fixed;
+  z-index: 500;
+}
+
+.fm-assign-input {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text);
+  outline: none;
+  background: var(--bg-4);
+  border: 1px solid var(--accent);
+  border-radius: 0;
+}
+
+.fm-suggestions {
+  max-height: 160px;
+  overflow-y: auto;
+  background: var(--bg-3);
+  border: 1px solid var(--accent);
+  border-top: none;
+}
+
+.fm-suggestion-item {
+  display: block;
+  width: 100%;
+  padding: 4px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.fm-suggestion-item:hover,
+.fm-suggestion-item.active {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.field-mapper-name-removed {
+  text-decoration: line-through;
+  opacity: 0.45;
+}
+
+.field-mapper-action-btn {
+  flex-shrink: 0;
+  padding: 2px 4px;
+  font-size: 10px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: var(--radius);
+}
+.field-mapper-remove-btn {
+  color: var(--red);
+}
+.field-mapper-remove-btn:hover {
+  background: rgba(232, 84, 84, 0.12);
+}
+.field-mapper-undo-btn {
+  color: var(--text-muted);
+}
+.field-mapper-undo-btn:hover {
+  background: var(--bg-3);
+}
+
+/* ─── PDF canvas ──────────────────────────────────────────────────────────── */
+
+.pdf-canvas-scroll {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  min-width: 0; /* allow flex item to shrink below canvas pixel width */
+  padding: 16px;
+  overflow: auto;
+  background: var(--bg);
+}
+
+.pdf-canvas-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.page-wrap {
+  position: relative;
+  flex-shrink: 0;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+}
+
+.page-wrap canvas {
+  display: block;
+}
+
+.field-passive-highlight {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 2px;
+}
+
+.field-click-zone {
+  position: absolute;
+  z-index: 2;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.field-click-zone:hover {
+  background: rgba(74, 158, 255, 0.15);
+  opacity: 1;
+}
+
+.field-hover-highlight {
+  position: absolute;
+  z-index: 3;
+  box-sizing: border-box;
+  pointer-events: none;
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+}
+
+.field-highlight {
+  position: absolute;
+  z-index: 4;
+  box-sizing: border-box;
+  pointer-events: none;
+  border: 2px solid var(--accent);
+  border-radius: 2px;
+}
+
+/* ─── Field panel ─────────────────────────────────────────────────────────── */
+
+.field-panel {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  width: 280px;
+  overflow: hidden;
+  border-left: 1px solid var(--border);
+}
+
+.field-panel-header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.field-count {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.field-list {
+  flex: 1;
+  padding: 4px 0;
+  overflow-y: auto;
+  outline: none;
+  list-style: none;
+}
+
+.field-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  overflow: hidden;
+  cursor: pointer;
+  outline: none;
+}
+
+.field-item-inner {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.field-type-icon {
+  flex-shrink: 0;
+  width: 12px;
+  color: var(--text-dim);
+}
+
+.field-item[data-hovered] {
+  background: var(--bg-3);
+}
+.field-item[data-focused] {
+  background: var(--bg-3);
+}
+.field-item[data-selected] {
+  background: var(--accent-dim);
+}
+.field-item.menu-open {
+  background: var(--bg-4);
+}
+
+.type-badge {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.field-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--mono);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.field-item[data-variant="new"] .field-name {
+  color: var(--yellow);
+}
+.field-item[data-variant="created"] .field-name {
+  color: var(--green);
+}
+.field-item[data-variant="deleted"] .field-name {
+  color: var(--red);
+}
+
+/* ─── Context menu ────────────────────────────────────────────────────────── */
+
+.context-menu {
+  position: fixed;
+  z-index: 200;
+  min-width: 140px;
+  padding: 4px 0;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.context-menu-item {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+  background: none;
+  border: none;
+}
+
+.context-menu-item:hover,
+.context-menu-item:focus {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.context-menu-danger {
+  color: var(--red);
+}
+.context-menu-danger:hover,
+.context-menu-danger:focus {
+  color: var(--red);
+  background: rgba(232, 84, 84, 0.12);
+}
+
+/* ─── Rename overlay ──────────────────────────────────────────────────────── */
+
+.rename-overlay-input {
+  position: fixed;
+  z-index: 300;
+  box-sizing: border-box;
+  padding: 5px 10px;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text);
+  outline: none;
+  background: var(--bg-4);
+  border: 1px solid var(--accent);
+  border-radius: 0;
+}
+
+/* ─── Diff banner ─────────────────────────────────────────────────────────── */
+
+.diff-banner {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 8px 14px;
+  background: var(--bg-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.diff-banner-content {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.diff-added {
+  font-size: 12px;
+  color: var(--green);
+  text-decoration: none;
+}
+.diff-removed {
+  font-size: 12px;
+  color: var(--red);
+  text-decoration: none;
+}
+.diff-hint {
+  font-size: 11px;
+  font-style: italic;
+  color: var(--text-muted);
+}
+.diff-dismiss {
+  padding: 2px;
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.diff-dismiss:hover {
+  color: var(--text);
+}
+
+/* ─── Empty state ─────────────────────────────────────────────────────────── */
+
+.empty-state {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.hint {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.btn:hover {
+  background: var(--bg-4);
+  border-color: #444;
+}
+.btn[data-focused] {
+  border-color: var(--accent);
+}
+.btn-primary {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.btn-primary:hover {
+  opacity: 0.9;
+}
+.btn-sm {
+  padding: 3px 8px;
+  font-size: 11px;
+}
+.btn-disabled,
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* ─── Modals ──────────────────────────────────────────────────────────────── */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal {
+  width: 480px;
+  max-width: 95vw;
+  padding: 24px;
+  outline: none;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.modal-title {
+  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.modal-description {
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+/* ─── Form fields ─────────────────────────────────────────────────────────── */
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.form-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 6px 8px;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--text);
+  outline: none;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: var(--accent);
+}
+
+.form-error {
+  font-size: 12px;
+  color: var(--red);
+}
+
+/* ─── Field review (update PDF step 2) ───────────────────────────────────── */
+
+.field-review {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 320px;
+  margin-top: 16px;
+  overflow-y: auto;
+}
+
+.field-review-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-review-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.field-review-label-removed {
+  color: var(--red);
+}
+.field-review-label-new {
+  color: var(--yellow);
+}
+
+.field-review-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.field-review-tag {
+  padding: 2px 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--bg-3);
+  border-radius: var(--radius);
+}
+
+.field-review-tag-removed {
+  color: var(--red);
+  background: rgba(232, 84, 84, 0.1);
+}
+
+.field-map-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.field-map-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.field-map-raw {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.field-map-arrow {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.field-map-input {
+  min-width: 0;
+}
+
+/* ─── Drop zone ───────────────────────────────────────────────────────────── */
+
+.drop-zone {
+  display: block;
+  width: 100%;
+  padding: 24px;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  background: none;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.drop-zone:hover,
+.drop-zone:focus {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+
+.drop-zone.has-file {
+  color: var(--green);
+  border-color: var(--green);
+  border-style: solid;
+}
+
+.drop-zone-filename {
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+/* ─── Utility ─────────────────────────────────────────────────────────────── */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  clip: rect(0, 0, 0, 0);
+}

@@ -29,12 +29,8 @@
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
     "idb:add-migration": "node scripts/create-idb-migration.mjs",
-    "pdf:clean": "node scripts/clean-pdf.mjs",
-    "pdf:remove-fields": "node scripts/remove-pdf-fields.mjs",
-    "pdf:rename": "node scripts/rename-pdf-fields.mjs",
     "pdf:schema": "node scripts/extract-pdf-schema.mjs",
-    "pdf:define": "node scripts/define-pdf.mjs",
-    "pdf:nudge-fields": "node scripts/nudge-pdf-fields.mjs",
+    "pdf:manage": "node pdf-manager/index.mjs",
     "typegen": "sanity schema extract --enforce-required-fields && sanity typegen generate"
   },
   "simple-git-hooks": {
@@ -97,6 +93,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.15",
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.3.5",
     "@clack/prompts": "^1.4.0",
     "@playwright/test": "^1.60.0",
     "@react-aria/test-utils": "1.0.0-beta.3",
