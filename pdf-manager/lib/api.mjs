@@ -18,7 +18,7 @@ import {
 import { loadFormFields, loadJurisdictions } from "./fields.mjs";
 import {
   applyRenames,
-  deleteField,
+  deleteFields,
   extractFields,
   extractFieldsFromBytes,
   stripFormFieldStyles,
@@ -158,7 +158,7 @@ async function handleSaveFields(req, res, id) {
   const oldSchemaFields = new Set(loadSchemaFields(found.pdfPath));
 
   if (renames.length > 0) await applyRenames(found.pdfPath, renames);
-  for (const fieldName of deletes) await deleteField(found.pdfPath, fieldName);
+  await deleteFields(found.pdfPath, deletes);
 
   await processPdf(found.pdfPath);
   formatFiles([join(found.pdfDir, "schema.ts")]);
@@ -274,7 +274,7 @@ async function handleReplacePdf(req, res, id) {
   writeFileSync(found.pdfPath, await pdfDoc.save());
 
   if (renames.length > 0) await applyRenames(found.pdfPath, renames);
-  for (const fieldName of deletes) await deleteField(found.pdfPath, fieldName);
+  await deleteFields(found.pdfPath, deletes);
 
   await processPdf(found.pdfPath);
   formatFiles([join(found.pdfDir, "schema.ts")]);

@@ -6,20 +6,16 @@ function useLatestRef(value) {
   return ref;
 }
 
-const PDFJS_CDN =
-  "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs";
-const WORKER_CDN =
-  "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs";
+import * as pdfjsLib from "pdfjs-dist";
+import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
+
 const MAX_SCALE = 1.5;
 
 let pdfjsPromise = null;
 function getPdfjs() {
-  if (!pdfjsPromise) {
-    pdfjsPromise = import(/* @vite-ignore */ PDFJS_CDN).then((lib) => {
-      lib.GlobalWorkerOptions.workerSrc = WORKER_CDN;
-      return lib;
-    });
-  }
+  if (!pdfjsPromise) pdfjsPromise = Promise.resolve(pdfjsLib);
   return pdfjsPromise;
 }
 

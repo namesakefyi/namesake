@@ -158,7 +158,6 @@ export default definePdf<PdfFieldName>({
     // 12. All court-appointed guardians consent?
     isAllGuardiansAssentingTrue: data.isAllGuardiansAssenting,
     isAllGuardiansAssentingFalse: !data.isAllGuardiansAssenting,
-    hasNoCountAppointedGuardian: !data.hasCourtAppointedGuardian,
     guardianDissentReason: data.guardianDissentReason,
 
     // 13. New name

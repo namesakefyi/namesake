@@ -103,20 +103,18 @@ export async function applyRenames(pdfPath, renames) {
   writeFileSync(pdfPath, await doc.save());
 }
 
-/** Removes a single field from the PDF and saves it in place. */
-export async function deleteField(pdfPath, fieldName) {
+/** Removes one or more fields from the PDF and saves it in place. */
+export async function deleteFields(pdfPath, fieldNames) {
+  if (!fieldNames.length) return;
   const bytes = readFileSync(pdfPath);
   const doc = await PDFDocument.load(bytes);
   const form = doc.getForm();
-  try {
-    const field = form.getField(fieldName);
-    const widgets = field.acroField.getWidgets();
-    for (let i = widgets.length - 1; i >= 0; i--) {
-      field.acroField.removeWidget(i);
+  for (const fieldName of fieldNames) {
+    try {
+      form.removeField(form.getField(fieldName));
+    } catch {
+      // field not found — skip
     }
-    form.removeField(field);
-  } catch {
-    // field not found — skip
   }
   writeFileSync(pdfPath, await doc.save());
 }

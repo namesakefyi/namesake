@@ -144,9 +144,6 @@ describe("Petition to Change Name of Minor", () => {
     expect(form.getCheckBox("hasCourtAppointedGuardianTrue").isChecked()).toBe(
       false,
     );
-    expect(form.getCheckBox("hasNoCountAppointedGuardian").isChecked()).toBe(
-      true,
-    );
   });
 
   it("derives isOnlyOneParentListedOnBirthCertificate when both listed", async () => {

@@ -5,6 +5,7 @@
 export async function loadPdfLib() {
   const {
     PDFDocument,
+    PDFDropdown,
     popGraphicsState,
     pushGraphicsState,
     StandardFonts,
@@ -13,6 +14,7 @@ export async function loadPdfLib() {
 
   return {
     PDFDocument,
+    PDFDropdown,
     popGraphicsState,
     pushGraphicsState,
     StandardFonts,
