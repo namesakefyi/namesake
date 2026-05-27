@@ -173,7 +173,6 @@ export function PdfCanvas({
   }, [hoveredField]);
 
   // Highlight selected fields — draw outline for each; scroll to highlightedField
-  // biome-ignore lint/correctness/useExhaustiveDependencies: selectedFields is a Set compared by reference; re-runs on every selection change
   useEffect(() => {
     for (const el of activeHlsRef.current) el.remove();
     activeHlsRef.current = [];

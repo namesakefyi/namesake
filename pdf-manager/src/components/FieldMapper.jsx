@@ -1,4 +1,11 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { ListBox } from "react-aria-components";
 import { createPortal } from "react-dom";
 import { FieldItem } from "./FieldList.jsx";
@@ -274,7 +281,7 @@ export function FieldMapper({
     return colors;
   }, [preview.newFields, assignments, retainedSet, deletedFields]);
 
-  function pushUndo() {
+  const pushUndo = useCallback(() => {
     setHistory((prev) => [
       ...prev,
       {
@@ -283,9 +290,9 @@ export function FieldMapper({
         removedOld: new Set(removedOld),
       },
     ]);
-  }
+  }, [assignments, deletedFields, removedOld]);
 
-  function undo() {
+  const undo = useCallback(() => {
     setHistory((prev) => {
       if (prev.length === 0) return prev;
       const snapshot = prev[prev.length - 1];
@@ -294,7 +301,7 @@ export function FieldMapper({
       setRemovedOld(snapshot.removedOld);
       return prev.slice(0, -1);
     });
-  }
+  }, []);
 
   function setAssignment(rawName, value) {
     pushUndo();

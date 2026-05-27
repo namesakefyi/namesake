@@ -25,19 +25,19 @@ export default definePdf<PdfFieldName>({
     oldLastName: data.oldLastName,
 
     // 2. Petition presented by
-    isPresentedByLegalMotherParent1: data.isPresentedByLegalMotherParent1,
-    isPresentedByLegalFatherParent2: data.isPresentedByLegalFatherParent2,
+    isPresentedByLegalParent1: data.isPresentedByLegalMotherParent1,
+    isPresentedByLegalParent2: data.isPresentedByLegalFatherParent2,
+    isPresentedByLegalParent3: undefined,
     isPresentedByCourtAppointedGuardian:
       data.isPresentedByCourtAppointedGuardian,
 
     // 3. Minor's info
-    birthplaceCity: data.birthplaceCity,
-    birthplaceState: data.birthplaceState,
     dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
     currentAge: deriveCurrentAge(data.dateOfBirth)?.toString(),
 
     // 4. Minor's address
     mailingStreetAddress: data.residenceStreetAddress,
+    mailingStreetAddress2: undefined,
     mailingCity: data.residenceCity,
     mailingState: data.residenceState,
     mailingZipCode: data.residenceZipCode,
@@ -55,19 +55,25 @@ export default definePdf<PdfFieldName>({
     shouldReturnOriginalDocuments: true,
 
     // 6. Legal parents
-    parent1FullName: data.parent1FullName,
+    parent1FirstName: undefined,
+    parent1MiddleName: undefined,
+    parent1LastName: undefined,
     parent1StreetAddress: data.parent1StreetAddress,
+    parent1StreetAddress2: undefined,
     parent1City: data.parent1City,
     parent1State: data.parent1State,
     parent1ZipCode: data.parent1ZipCode,
     parent1Phone: data.parent1Phone,
     parent1Email: data.parent1Email,
 
-    parent2FullName: data.parent2FullName,
+    parent2FirstName: undefined,
+    parent2MiddleName: undefined,
+    parent2LastName: undefined,
     parent2StreetAddress:
       data.parentsHaveDifferentAddresses === true
         ? data.parent2StreetAddress
         : data.parent1StreetAddress,
+    parent2StreetAddress2: undefined,
     parent2City:
       data.parentsHaveDifferentAddresses === true
         ? data.parent2City
@@ -83,6 +89,21 @@ export default definePdf<PdfFieldName>({
     parent2Phone: data.parent2Phone,
     parent2Email: data.parent2Email,
 
+    parent3FirstName: undefined,
+    parent3MiddleName: undefined,
+    parent3LastName: undefined,
+    parent3StreetAddress: undefined,
+    parent3StreetAddress2: undefined,
+    parent3City: undefined,
+    parent3State: undefined,
+    parent3ZipCode: undefined,
+    parent3Phone: undefined,
+    parent3Email: undefined,
+
+    // Primary contact info
+    phoneNumber: undefined,
+    email: undefined,
+
     // Parental info
     isOnlyOneParentListedOnBirthCertificate:
       !data.areBothParentsListedOnBirthCertificate,
@@ -94,16 +115,22 @@ export default definePdf<PdfFieldName>({
     hasCountAppointedGuardianFalse: !data.hasCourtAppointedGuardian,
     hasCourtAppointedGuardianTrue: data.hasCourtAppointedGuardian,
 
-    guardianFullName: data.guardianFullName,
+    guardianFirstName: undefined,
+    guardianMiddleName: undefined,
+    guardianLastName: undefined,
     guardianStreetAddress: data.guardianStreetAddress,
+    guardianStreetAddress2: undefined,
     guardianCity: data.guardianCity,
     guardianState: data.guardianState,
     guardianZipCode: data.guardianZipCode,
     guardianPhone: data.guardianPhone,
     guardianEmail: data.guardianEmail,
 
-    coGuardianFullName: data.coGuardianFullName,
+    coGuardianFirstName: undefined,
+    coGuardianMiddleName: undefined,
+    coGuardianLastName: undefined,
     coGuardianStreetAddress: data.coGuardianStreetAddress,
+    coGuardianStreetAddress2: undefined,
     coGuardianCity: data.coGuardianCity,
     coGuardianState: data.coGuardianState,
     coGuardianZipCode: data.coGuardianZipCode,
@@ -123,26 +150,32 @@ export default definePdf<PdfFieldName>({
     isParent2AssentingFalse: !data.isParent2Assenting,
     parent2DissentReason: data.parent2DissentReason,
 
-    // 11. All court-appointed guardians consent?
+    // 11. Legal parent 3 consents?
+    isParent3AssentingTrue: undefined,
+    isParent3AssentingFalse: undefined,
+    parent3DissentReason: undefined,
+
+    // 12. All court-appointed guardians consent?
     isAllGuardiansAssentingTrue: data.isAllGuardiansAssenting,
     isAllGuardiansAssentingFalse: !data.isAllGuardiansAssenting,
     hasNoCountAppointedGuardian: !data.hasCourtAppointedGuardian,
     guardianDissentReason: data.guardianDissentReason,
 
-    // 12. New name
+    // 13. New name
     newFirstName: data.newFirstName,
     newMiddleName: data.newMiddleName,
     newLastName: data.newLastName,
 
-    // 13. Reason for changing name
+    // 14. Reason for changing name
     reasonForChangingName: data.reasonForChangingName,
 
-    // 14. Text-only
+    // 15. Text-only
 
-    // 15. Interpreters needed?
+    // 16. Interpreters needed?
     isInterpreterNeededForChild: data.isInterpreterNeededForChild,
     isInterpreterNeededForParent1: data.isInterpreterNeededForParent1,
     isInterpreterNeededForParent2: data.isInterpreterNeededForParent2,
+    isInterpreterNeededForParent3: undefined,
     isInterpreterNeededForGuardian: data.isInterpreterNeededForGuardian,
     languages: formatLanguage(data.language),
 
