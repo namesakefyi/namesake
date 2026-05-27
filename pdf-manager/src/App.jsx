@@ -49,7 +49,7 @@ export function App() {
         ) : (
           <div className="empty-state">
             <p>Select a PDF to edit</p>
-            <p className="hint">↑↓ to navigate · Enter to open · a to add</p>
+            <p className="hint">↑↓ to navigate · Enter to open</p>
           </div>
         )}
       </main>
