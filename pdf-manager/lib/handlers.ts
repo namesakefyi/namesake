@@ -51,9 +51,14 @@ export async function handleSaveFields(c: Context) {
   const found = findPdfById(c.req.param("id"));
   if (!found) return c.json({ error: "Not found" }, 404);
 
-  const { renames = [], deletes = [] } = await c.req.json<{
+  const {
+    renames = [],
+    deletes = [],
+    unexcludes = [],
+  } = await c.req.json<{
     renames?: Array<{ from: string; to: string }>;
     deletes?: string[];
+    unexcludes?: string[];
   }>();
 
   const oldSchemaFields = new Set(loadSchemaFields(found.pdfPath));
@@ -63,7 +68,11 @@ export async function handleSaveFields(c: Context) {
   // Pass rename targets as `keep` so processPdf doesn't auto-exclude them —
   // they're new names that aren't in the old schema yet.
   const keepNames = renames.map((r) => r.to);
-  await processPdf(found.pdfPath, { exclude: deletes, keep: keepNames });
+  await processPdf(found.pdfPath, {
+    exclude: deletes,
+    keep: keepNames,
+    unexclude: unexcludes,
+  });
   formatFiles([join(found.pdfDir, "schema.ts")]);
 
   const newSchemaFields = loadSchemaFields(found.pdfPath);

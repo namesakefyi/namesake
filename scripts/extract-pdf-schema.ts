@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env tsx
 
 /**
  * Extracts AcroForm field names from PDFs and writes schema.ts files.

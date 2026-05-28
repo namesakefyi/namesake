@@ -26,8 +26,10 @@ export function useScrollSelectedIntoView(
     if (!highlightedField || !listRef.current) return;
     const item = listRef.current.querySelector('[aria-selected="true"]');
     if (!item) return;
-    const { top: lt, bottom: lb } = listRef.current.getBoundingClientRect();
+    const scrollContainer = listRef.current.parentElement;
+    if (!scrollContainer) return;
+    const { top: ct, bottom: cb } = scrollContainer.getBoundingClientRect();
     const { top: it, bottom: ib } = item.getBoundingClientRect();
-    if (it < lt || ib > lb) item.scrollIntoView({ block: "nearest" });
+    if (it < ct || ib > cb) item.scrollIntoView({ block: "nearest" });
   }, [highlightedField, listRef]);
 }

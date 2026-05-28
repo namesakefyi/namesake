@@ -99,7 +99,11 @@ export interface ProcessPdfResult {
  */
 export async function processPdf(
   pdfPath: string,
-  { exclude = [], keep = [] }: { exclude?: string[]; keep?: string[] } = {},
+  {
+    exclude = [],
+    keep = [],
+    unexclude = [],
+  }: { exclude?: string[]; keep?: string[]; unexclude?: string[] } = {},
 ): Promise<ProcessPdfResult> {
   const dir = dirname(pdfPath);
   const filename = basename(pdfPath);
@@ -107,6 +111,7 @@ export async function processPdf(
   const schemaPath = join(dir, "schema.ts");
 
   const excluded = loadExclusions(dir);
+  for (const n of unexclude) excluded.delete(n);
   for (const n of exclude) excluded.add(n);
 
   const allFields = await extractFieldsWithClass(pdfPath);
@@ -118,7 +123,7 @@ export async function processPdf(
   // retained new fields that the caller has already vetted.
   if (existsSync(schemaPath)) {
     const activeNames = new Set(loadSchemaFields(pdfPath));
-    const keepSet = new Set(keep);
+    const keepSet = new Set([...keep, ...unexclude]);
     for (const f of allFields) {
       if (
         !excluded.has(f.name) &&

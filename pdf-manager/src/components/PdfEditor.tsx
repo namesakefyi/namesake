@@ -19,6 +19,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
     {},
   );
   const [stagedDeletes, setStagedDeletes] = useState(new Set<string>());
+  const [stagedUnexcludes, setStagedUnexcludes] = useState(new Set<string>());
   const [highlightedField, setHighlightedField] = useState<string | null>(null);
   const [hoveredField, setHoveredField] = useState<string | null>(null);
   const [diff, setDiff] = useState<Diff | null>(null);
@@ -88,19 +89,24 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
     };
   }, [uploadFile, pdfId]);
 
-  async function commit(renames: Rename[], deletes: string[]) {
+  async function commit(
+    renames: Rename[],
+    deletes: string[],
+    unexcludes: string[],
+  ) {
     if (saving) return;
     setSaving(true);
     try {
       const res = await fetch(`/api/pdf/${pdfId}/fields`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ renames, deletes }),
+        body: JSON.stringify({ renames, deletes, unexcludes }),
       });
       const result = await res.json<Diff>();
       if (!res.ok) throw new Error(result.error ?? "Save failed");
       setStagedRenames({});
       setStagedDeletes(new Set());
+      setStagedUnexcludes(new Set());
       setDiff(result);
       await loadFields();
       onFieldsChanged?.();
@@ -114,10 +120,11 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
     [fields],
   );
 
-  const allExcluded = useMemo(
-    () => new Set([...persistedExcludes, ...stagedDeletes]),
-    [persistedExcludes, stagedDeletes],
-  );
+  const allExcluded = useMemo(() => {
+    const s = new Set([...persistedExcludes, ...stagedDeletes]);
+    for (const n of stagedUnexcludes) s.delete(n);
+    return s;
+  }, [persistedExcludes, stagedDeletes, stagedUnexcludes]);
 
   async function handleSave() {
     const renames = Object.entries(stagedRenames).map(([from, to]) => ({
@@ -125,8 +132,10 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
       to,
     }));
     const deletes = [...stagedDeletes];
-    if (renames.length === 0 && deletes.length === 0) return;
-    await commit(renames, deletes);
+    const unexcludes = [...stagedUnexcludes];
+    if (renames.length === 0 && deletes.length === 0 && unexcludes.length === 0)
+      return;
+    await commit(renames, deletes, unexcludes);
   }
 
   function handleRename(originalName: string, newName: string) {
@@ -140,7 +149,17 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
     });
   }
 
-  function handleDelete(fieldName: string) {
+  function handleExclude(fieldName: string) {
+    if (persistedExcludes.has(fieldName)) {
+      // Toggle re-inclusion of a persisted exclusion
+      setStagedUnexcludes((prev) => {
+        const next = new Set(prev);
+        if (next.has(fieldName)) next.delete(fieldName);
+        else next.add(fieldName);
+        return next;
+      });
+      return;
+    }
     if (stagedDeletes.has(fieldName)) {
       setStagedDeletes((prev) => {
         const next = new Set(prev);
@@ -149,7 +168,6 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
       });
       return;
     }
-    if (persistedExcludes.has(fieldName)) return;
     setStagedDeletes((prev) => new Set([...prev, fieldName]));
     setStagedRenames((prev) => {
       const next = { ...prev };
@@ -159,7 +177,9 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
   }
 
   const hasChanges =
-    Object.keys(stagedRenames).length > 0 || stagedDeletes.size > 0;
+    Object.keys(stagedRenames).length > 0 ||
+    stagedDeletes.size > 0 ||
+    stagedUnexcludes.size > 0;
 
   if (preview && pdfBase64) {
     return (
@@ -249,7 +269,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
           onHoverField={setHoveredField}
           highlightedField={highlightedField}
           onRename={handleRename}
-          onExclude={handleDelete}
+          onExclude={handleExclude}
         />
       </div>
     </div>
