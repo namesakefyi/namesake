@@ -177,10 +177,7 @@ describe("POST /api/feedback", () => {
         makeRequest(validBody, { Origin: "http://localhost:4321" }),
       );
 
-      expect(fetch).not.toHaveBeenCalledWith(
-        "https://api.resend.com/emails",
-        expect.anything(),
-      );
+      expect(fetch).not.toHaveBeenCalled();
     });
 
     it("does not send an email when RESEND_API_KEY is absent", async () => {

@@ -8,7 +8,8 @@ import {
 } from "../../constants/forms";
 import { isRateLimited } from "../../utils/rateLimitByIp";
 
-const ALLOWED_ORIGINS = ["https://namesake.fyi", "http://localhost:4321"];
+const PRODUCTION_ORIGIN = "https://namesake.fyi";
+const ALLOWED_ORIGINS = [PRODUCTION_ORIGIN, "http://localhost:4321"];
 
 const FeedbackSchema = z.object({
   form_slug: z.enum(FORM_SLUGS),
@@ -87,10 +88,16 @@ export const POST: APIRoute = async ({ request }) => {
     .run();
 
   const resendApiKey = env?.RESEND_API_KEY as string | undefined;
-  const isProductionRequest = origin === "https://namesake.fyi";
-  if (resendApiKey && isProductionRequest) {
+  if (resendApiKey && origin === PRODUCTION_ORIGIN) {
     const sentimentLabel = FORM_FEEDBACK_SENTIMENT[sentiment];
     const location = [city, region, country].filter(Boolean).join(", ");
+
+    const escapeHtml = (text: string) =>
+      text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
 
     try {
       const emailRes = await fetch("https://api.resend.com/emails", {
@@ -103,7 +110,7 @@ export const POST: APIRoute = async ({ request }) => {
           from: "noreply@namesake.fyi",
           to: "hey@namesake.fyi",
           subject: `${sentimentLabel} feedback on ${form_slug}`,
-          html: `<p>A user ${location ? `in <strong>${location}</strong>` : ""} submitted <strong>${sentimentLabel}</strong> feedback on <a href="https://namesake.fyi/forms/${form_slug}">${form_slug}</a>.</p><p>${commentValue ?? "<em>No comment</em>"}</p>`,
+          html: `<p>A user ${location ? `in <strong>${location}</strong>` : ""} submitted <strong>${sentimentLabel}</strong> feedback on <a href="https://namesake.fyi/forms/${form_slug}">${form_slug}</a>.</p><p>${commentValue ? escapeHtml(commentValue) : "<em>No comment</em>"}</p>`,
         }),
       });
       if (!emailRes.ok) {
