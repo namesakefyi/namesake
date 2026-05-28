@@ -2,10 +2,13 @@
 import { PDFCheckBox, PDFTextField } from "@cantoo/pdf-lib";
 
 export const pdfSchema = {
+  courtName: PDFTextField,
+  caseNameAndNumber: PDFTextField,
   applicantName: PDFTextField,
   residenceStreetAddress: PDFTextField,
   residenceCity: PDFTextField,
   residenceStateAndZip: PDFTextField,
+  isSectionAChecked: PDFCheckBox,
   "Transitional Aid to Families with Dependent Children TAFDC": PDFCheckBox,
   "Medicaid MassHealth": PDFCheckBox,
   "Emergency Aid to Elderly Disabled or Children EAEDC": PDFCheckBox,
@@ -59,10 +62,3 @@ export const pdfSchema = {
 } as const;
 
 export type PdfFieldName = keyof typeof pdfSchema;
-
-/** Fields present in the PDF but excluded from the schema */
-export const pdfExcludedFields = [
-  "A I receive public assistance under check form of public assistance received",
-  "Case Name and Number if known",
-  "Court",
-] as const;
