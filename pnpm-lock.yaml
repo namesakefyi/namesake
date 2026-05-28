@@ -155,9 +155,6 @@ importers:
       ua-parser-js:
         specifier: ^2.0.10
         version: 2.0.10
-      vite:
-        specifier: ^7.3.3
-        version: 7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.3)(yaml@2.9.0)
       xstate:
         specifier: ^5.31.1
         version: 5.31.1
@@ -291,6 +288,9 @@ importers:
       tsx:
         specifier: ^4.22.3
         version: 4.22.3
+      vite:
+        specifier: ^7.3.3
+        version: 7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.3)(yaml@2.9.0)
       vitest:
         specifier: 4.1.6
         version: 4.1.6(@types/node@25.9.1)(@vitest/coverage-v8@4.1.6)(jsdom@29.1.1(@noble/hashes@2.2.0))(vite@7.3.3(@types/node@25.9.1)(jiti@2.7.0)(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.3)(yaml@2.9.0))

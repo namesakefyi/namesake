@@ -91,7 +91,6 @@
     "topojson-client": "^3.1.0",
     "typescript": "^5.9.3",
     "ua-parser-js": "^2.0.10",
-    "vite": "^7.3.3",
     "xstate": "^5.31.1"
   },
   "devDependencies": {
@@ -138,6 +137,7 @@
     "simple-git-hooks": "^2.13.1",
     "storybook": "^10.4.1",
     "tsx": "^4.22.3",
+    "vite": "^7.3.3",
     "vitest": "4.1.6",
     "wrangler": "^4.95.0"
   },
