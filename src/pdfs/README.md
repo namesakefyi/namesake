@@ -16,56 +16,43 @@ src/pdfs/
       schema.ts          # auto-generated form schema
 ```
 
-## Adding new PDFs
+---
 
-### Step 1: Review and rename fields
+## Adding a new PDF
 
-Use the [BentoPDF Form Creator](https://bentopdf.com/form-creator.html). Upload the original PDF form that was downloaded.
+### Step 1: Upload via the PDF Manager
 
-Examine the names of all fields in the form. These names are what we use to map user submissions from Namesake forms to the final output in the completed PDF. Often, the raw PDF from a .gov site has field names that are vague ("type"), full sentences ("[A] I receive assistance from ..."), meaningless internal markers ("form1[0].BodyPage1[0].S1[0].Ln[0]"), or a mix of all three.
-
-Sometimes, interactive fields will be missing altogether. In this case, you'll need to insert new text fields and checkbox fields, then position and name them.
-
-When naming:
-
-1. Use `camelCase` for all fields, like `residenceStreetAddress` or `newFirstName`.
-2. Prefix checkbox fields with `is`, `should`, or `has`. For example, `isReceivingMedicaid` or `shouldReturnOriginalDocuments`.
-   - If there are two separate checkboxes representing the same boolean value (such as a "Yes" and "No" checkbox for the same question), you can add the suffix `True` and `False`. For example, `hasPreviousNameChangeTrue` and `hasPreviousNameChangeFalse`.
-3. Try to match the list of [existing field definitions](../constants/fields.ts). Nothing needs to *exactly* match, but keeping the names close will make the next step easier.
-4. Don't hesitate to make a name long, if it needs to be; some of these form fields are very specific.
-
-When all user-enterable fields have been labeled and positioned, download the modified PDF and save it anywhere.
-
-### Step 2: Generate PDF definitions
-
-Run the define script with the path to your modified PDF:
+Start the PDF Manager:
 
 ```zsh
-pnpm pdf:define ./path/to/form.pdf
+pnpm pdf:manage
 ```
 
-The path can be anywhere (e.g. Downloads, Desktop). The script will copy the PDF into the correct folder and generate `index.ts`, `schema.ts`, and a starter test file.
+This opens the editor at `http://localhost:3456`. Click **Add PDF**, upload the file, and fill in:
 
-The script will prompt for:
 - **Form title** — e.g. "Petition to Change Name of Adult"
 - **Form code** (optional) — e.g. "CJP-27"
 - **Jurisdiction** — Federal or a state (MA, NY, etc.)
 
+The manager copies the PDF into the correct folder, strips any default field borders and backgrounds, and generates `index.ts`, `schema.ts`, and a starter `index.test.ts`.
+
+### Step 2: Rename fields
+
+Raw PDFs from .gov sites often have vague, sentence-length, or internal field names ("form1[0].BodyPage1[0].S1[0].Ln[0]"). Select a field in the list and press `Enter` (or double-click) to rename it. The PDF preview highlights the current field so you can see it in context.
+
+Field naming conventions:
+
+1. Use `camelCase` — e.g. `residenceStreetAddress`, `newFirstName`.
+2. Prefix checkbox fields with `is`, `should`, or `has` — e.g. `isReceivingMedicaid`, `shouldReturnOriginalDocuments`.
+   - If a question has a separate "Yes" and "No" checkbox, add the suffix `True` / `False` — e.g. `hasPreviousNameChangeTrue` and `hasPreviousNameChangeFalse`.
+3. Try to match [existing field definitions](../constants/fields.ts). Exact matches aren't required, but staying close makes wiring easier.
+4. Don't shorten a name if it needs to be specific — long is fine.
+
+To exclude a field from the schema (for fields that are pre-printed or never filled), select it and press `Delete` or `Backspace`. The field remains in the PDF but is omitted from `schema.ts`. Hold `Shift` to select multiple fields and exclude them all at once. Click **Save** to write all renames and exclusions to disk and regenerate `schema.ts`.
+
 ### Step 3: Map PDF fields to form data
 
-We've generated an `index.ts` file with all of our field definitions in a flat list. Right now, all those fields are `undefined`.
-
-```ts
-resolver: (data) => ({
-  petitionerFirstName: undefined,
-  petitionerMiddleName: undefined,
-  petitionerLastName: undefined,
-  dateOfBirth: undefined,
-  // etc.
-})
-```
-
-The resolver maps each PDF field name (left) to a value from user-submitted form data (right). Form data comes from [FIELD_DEFS](../constants/fields.ts).
+Open `src/pdfs/{jurisdiction}/{id}/index.ts`. Every field starts as `undefined` — map each one to a value from user-submitted form data (`src/constants/fields.ts`):
 
 ```ts
 resolver: (data) => ({
@@ -77,11 +64,9 @@ resolver: (data) => ({
 })
 ```
 
-For each PDF field, look up a matching FIELD_DEF by name. Use it directly, or derive a value. Format helpers can be imported from `@/utils` to help concatenate a full name, join an array of pronouns, or format a date.
+For each PDF field, find a matching FIELD_DEF by name. Use it directly or derive a value. Format helpers can be imported from `@/utils` to concatenate a full name, join pronouns, or format a date.
 
-If no FIELD_DEF exists for a PDF field, add one to `src/constants/fields.ts`.
-
-Every field in the schema must be present in the resolver — TypeScript will error if any are missing. For fields that don't correspond to user data (pre-printed form content, fields intentionally left blank), leave them as `undefined`:
+For fields that don't correspond to user data (pre-printed court headers, fields intentionally left blank), leave them as `undefined`:
 
 ```ts
 resolver: (data) => ({
@@ -91,52 +76,33 @@ resolver: (data) => ({
 })
 ```
 
-No conditional checks are needed in the PDF definition itself; that logic is handled elsewhere. Just map PDF field names to data names.
+TypeScript will error if any schema field is missing from the resolver. If no FIELD_DEF exists for a PDF field, add one to `src/constants/fields.ts`.
+
+Do not worry about complex conditional logic for data when wiring up the PDF resolver (e.g. only fill out field 4a. if field 4 is true) — that logic is handled elsewhere. Simply map PDF field names to data names.
 
 ### Step 4: Write tests
 
-Every PDF and definition should include a test to validate that the form renders, checkboxes get checked, text fields get filled, and derived values are correct.
-
-Use `expectPdfFieldsMatch` to verify the base set of data. Other tests can then focus on testing derived values or other unique behavior.
+Every PDF definition should include a test that validates field rendering. Use `expectPdfFieldsMatch` to verify the base set of data, then add focused tests for any derived or conditional values:
 
 ```ts
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, it } from "vitest";
 import type { FormData } from "@/constants/fields";
 import { expectPdfFieldsMatch } from "@/pdfs/utils/expectPdfFieldsMatch";
-import { getPdfForm } from "@/pdfs/utils/getPdfForm";
-import cjp25PetitionToChangeNameOfMinor from ".";
+import myPdf from ".";
 
-describe("Petition to Change Name of Minor", () => {
-  afterEach(() => vi.useRealTimers());
-
+describe("My Form", () => {
   const testData: Partial<FormData> = {
-    // Full test data for all fields...
+    newFirstName: "Eva",
+    // ... all relevant fields
   };
 
-  // Verify that all fields render
   it("maps all fields correctly to the PDF", async () => {
-    await expectPdfFieldsMatch(cjp25PetitionToChangeNameOfMinor, testData);
-  });
-
-  // Test derived logic
-  it("derives isChildUnder12 from date of birth", async () => {
-    vi.setSystemTime(new Date(2025, 5, 15));
-    const dataWithOlderChild = {
-      ...testData,
-      dateOfBirth: "2012-01-01", // 13 years old — isChildUnder12 becomes false
-    };
-
-    const form = await getPdfForm({
-      pdf: cjp25PetitionToChangeNameOfMinor,
-      userData: dataWithOlderChild,
-    });
-
-    expect(form.getCheckBox("isChildUnder12").isChecked()).toBe(false);
+    await expectPdfFieldsMatch(myPdf, testData);
   });
 });
 ```
 
-Run your tests:
+Run tests:
 
 ```zsh
 pnpm test path/to/pdf/index.test.ts
@@ -144,26 +110,38 @@ pnpm test path/to/pdf/index.test.ts
 
 Then open a pull request. You've added a new PDF definition to Namesake!
 
-## Regenerating schema.ts
+---
 
-If you modify a PDF file (e.g. in BentoPDF or another tool) to rename form fields, regenerate the schema:
+## Replacing an existing PDF
 
-```zsh
-pnpm pdf:schema path/to/form.pdf
-```
+When a revised version of a PDF is published (e.g. a new revision on a .gov site), open the PDF Manager and select the existing PDF. Click **New Revision** and upload the new file.
 
-To regenerate schemas for all PDFs in `src/pdfs`, run without an argument:
+The manager compares the new field names against the existing schema and presents a diff:
+
+- **Unchanged fields** — retained automatically, no action needed.
+- **Renamed fields** — the manager suggests matches using fuzzy name similarity; confirm or adjust each one.
+- **New fields** — type a name or pick a suggestion to map them to existing schema fields.
+- **Removed fields** — any old field name not claimed by a new field must be explicitly removed.
+
+Once all old field names are accounted for, click **Replace**. The manager writes the new PDF to disk, applies all renames and exclusions, and regenerates `schema.ts`. Update `index.ts` and `index.test.ts` to reflect any new or removed fields.
+
+### Keyboard shortcuts
+
+| Keys | Action |
+|------|--------|
+| `↑` / `↓` | Navigate the field list |
+| `Enter` | Rename selected field |
+| `Delete` / `Backspace` | Exclude selected field(s) from schema |
+| `Shift+click` | Multi-select fields |
+| `Cmd+Z` / `Ctrl+Z` | Undo last change |
+| `Esc` | Cancel / close without saving |
+
+---
+
+## Regenerating the schema manually
+
+If you edit a PDF outside the manager, regenerate all schemas with:
 
 ```zsh
 pnpm pdf:schema
 ```
-
-## Removing form borders and backgrounds
-
-PDF editors may insert default black borders and white backgrounds to text fields and checkboxes that you insert. To remove these styles and display transparent fields, run:
-
-```zsh
-pnpm pdf:clean path/to/form.pdf
-```
-
-Form fields are stripped of styles automatically during `pnpm pdf:define`.

@@ -9,19 +9,20 @@ import {
 
 export const pdfSchema = {
   Reset_Form: PDFButton,
-  SpousalSupportPayments: PDFRadioGroup,
-  PreviousNameChangePetition: PDFRadioGroup,
   SealingRequest: PDFRadioGroup,
   "SealingRequest-specify": PDFTextField,
-  SupportingDocument: PDFRadioGroup,
-  Print_Form: PDFButton,
   courtType: PDFDropdown,
   courtCounty: PDFDropdown,
+  oldName: PDFTextField,
   indexNumber: PDFTextField,
+  SupportingDocument: PDFRadioGroup,
   shouldChangeName: PDFCheckBox,
   shouldChangeSexDesignation: PDFCheckBox,
   newName: PDFTextField,
   birthplace: PDFTextField,
+  SpousalSupportPayments: PDFRadioGroup,
+  PreviousNameChangePetition: PDFRadioGroup,
+  Print_Form: PDFButton,
   hasConviction: PDFRadioGroup,
   courtOfConviction: PDFTextField,
   crime: PDFTextField,
@@ -46,8 +47,8 @@ export const pdfSchema = {
   newSex: PDFDropdown,
   previousSexDesignationChangePetition: PDFRadioGroup,
   previousSexDesignationChangePetitionReason: PDFTextField,
-  sexChangeDesignationReason: PDFTextField,
   providesSexChangeDesignationReason: PDFRadioGroup,
+  sexChangeDesignationReason: PDFTextField,
   age: PDFTextField,
   dateOfBirth: PDFTextField,
   residenceAddress: PDFTextField,
@@ -56,7 +57,6 @@ export const pdfSchema = {
   signatureDay: PDFDropdown,
   signatureMonth: PDFDropdown,
   signatureYearEnding: PDFDropdown,
-  oldName: PDFTextField,
 } as const;
 
 export type PdfFieldName = keyof typeof pdfSchema;

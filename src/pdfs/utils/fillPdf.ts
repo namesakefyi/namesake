@@ -15,7 +15,7 @@ export async function fillPdf({
   userData: Partial<FormData>;
 }): Promise<Uint8Array> {
   try {
-    const { PDFDocument } = await loadPdfLib();
+    const { PDFDocument, PDFDropdown } = await loadPdfLib();
 
     // Fetch the PDF with form fields
     const formPdfBytes = await fetchPdf(pdf.pdfPath);
@@ -38,8 +38,12 @@ export async function fillPdf({
         const checkbox = form.getCheckBox(fieldName);
         value ? checkbox.check() : checkbox.uncheck();
       } else if (typeof value === "string") {
-        const field = form.getTextField(fieldName);
-        field.setText(value);
+        const field = form.getField(fieldName);
+        if (field instanceof PDFDropdown) {
+          field.select(value);
+        } else {
+          form.getTextField(fieldName).setText(value);
+        }
       }
     }
 

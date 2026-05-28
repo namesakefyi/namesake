@@ -2,14 +2,14 @@
 import { PDFCheckBox, PDFTextField } from "@cantoo/pdf-lib";
 
 export const pdfSchema = {
+  caseName: PDFTextField,
   county: PDFTextField,
   isChangeOfNameProceeding: PDFCheckBox,
   oldName: PDFTextField,
   dateOfBirth: PDFTextField,
+  ssnLastFour: PDFTextField,
   mothersMaidenName: PDFTextField,
   otherNamesOrAliases: PDFTextField,
-  ssnLastFour: PDFTextField,
-  caseName: PDFTextField,
 } as const;
 
 export type PdfFieldName = keyof typeof pdfSchema;

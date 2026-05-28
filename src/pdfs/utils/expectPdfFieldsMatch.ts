@@ -1,3 +1,4 @@
+import { PDFDropdown } from "@cantoo/pdf-lib";
 import { expect } from "vitest";
 import type { FormData } from "../../constants/fields";
 import type { PDFDefinition } from "../../constants/pdf";
@@ -19,7 +20,12 @@ export async function expectPdfFieldsMatch(
     if (typeof value === "boolean") {
       expect(form.getCheckBox(fieldName).isChecked()).toBe(value);
     } else {
-      expect(form.getTextField(fieldName).getText()).toBe(value);
+      const field = form.getField(fieldName);
+      const actual =
+        field instanceof PDFDropdown
+          ? field.getSelected()[0]
+          : form.getTextField(fieldName).getText();
+      expect(actual).toBe(value);
     }
   }
 }
