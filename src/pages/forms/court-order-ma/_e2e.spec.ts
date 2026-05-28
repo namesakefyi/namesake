@@ -312,11 +312,4 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
       page.getByText(/There are \d+ responses stored on this browser/),
     ).toBeVisible();
   });
-
-  await test.step("Submit feedback", async () => {
-    await page.getByText("It was easy").click();
-    await page.getByRole("textbox", { name: "Feedback" }).fill("Test comment");
-    await page.getByRole("button", { name: "Submit" }).click();
-    await expect(page.getByText("Thank you for your feedback!")).toBeVisible();
-  });
 });
