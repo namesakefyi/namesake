@@ -54,8 +54,8 @@ beforeEach(() => {
       }
     }
 
-    // For HTTP(S) URLs, use the original fetch
-    return originalFetch(input);
+    // Reject unhandled HTTP requests so tests don't silently hit real servers
+    throw new Error(`Unmocked HTTP request in test: ${url}`);
   });
 });
 
