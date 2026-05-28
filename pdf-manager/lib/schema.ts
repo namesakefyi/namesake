@@ -3,15 +3,20 @@ import { basename, dirname, extname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PDFDocument } from "@cantoo/pdf-lib";
 import { escapeKey } from "../../scripts/utils.mjs";
-import { fieldReadingOrder } from "./pdf.mjs";
+import { fieldReadingOrder } from "./pdf.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
 const PDFS_DIR = join(ROOT, "src/pdfs");
 
+interface PdfFieldWithClass {
+  name: string;
+  fieldClass: string;
+}
+
 /** Recursively finds all .pdf files under dir. */
-export function findPdfFiles(dir) {
-  const files = [];
+export function findPdfFiles(dir: string): string[] {
+  const files: string[] = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const fullPath = join(dir, entry.name);
     if (entry.isDirectory()) files.push(...findPdfFiles(fullPath));
@@ -21,7 +26,9 @@ export function findPdfFiles(dir) {
   return files;
 }
 
-async function extractFieldsWithClass(pdfPath) {
+async function extractFieldsWithClass(
+  pdfPath: string,
+): Promise<PdfFieldWithClass[]> {
   const bytes = readFileSync(pdfPath);
   const doc = await PDFDocument.load(bytes);
   const form = doc.getForm();
@@ -33,12 +40,11 @@ async function extractFieldsWithClass(pdfPath) {
 }
 
 /** Reads the active field names (pdfSchema keys) from an existing schema.ts. */
-function loadActiveFieldNames(schemaPath) {
+function loadActiveFieldNames(schemaPath: string): Set<string> {
   if (!existsSync(schemaPath)) return new Set();
   try {
     const content = readFileSync(schemaPath, "utf8");
-    // Match both bare identifiers and quoted keys (e.g. "Some Long Name")
-    const names = new Set();
+    const names = new Set<string>();
     for (const m of content.matchAll(
       /^\s+(?:([a-zA-Z_]\w*)|("(?:[^"\\]|\\.)*")):\s*PDF/gm,
     )) {
@@ -51,7 +57,7 @@ function loadActiveFieldNames(schemaPath) {
 }
 
 /** Reads the current exclusion set from schema.ts for a PDF directory. */
-export function loadExclusions(pdfDir) {
+export function loadExclusions(pdfDir: string): Set<string> {
   const schemaPath = join(pdfDir, "schema.ts");
   if (!existsSync(schemaPath)) return new Set();
   try {
@@ -68,7 +74,11 @@ export function loadExclusions(pdfDir) {
 }
 
 /** Returns schema.ts file content as a string. */
-export function generateTypesContent(stem, fields, excluded = new Set()) {
+function generateTypesContent(
+  stem: string,
+  fields: PdfFieldWithClass[],
+  excluded: Set<string> = new Set(),
+): string {
   const usedClasses = [...new Set(fields.map((f) => f.fieldClass))];
   const imports =
     usedClasses.length > 0
@@ -94,13 +104,23 @@ export type PdfFieldName = keyof typeof pdfSchema;
 ${excludedSection}`;
 }
 
+export interface ProcessPdfResult {
+  path: string;
+  displayPath: string;
+  count: number;
+  checkboxCount: number;
+}
+
 /**
  * Writes schema.ts next to the PDF, omitting any excluded fields.
  * Pass `exclude` to add new field names to the exclusion set (merged with any
  * previously excluded fields already recorded in schema.ts).
  * Returns { path, displayPath, count, checkboxCount }.
  */
-export async function processPdf(pdfPath, { exclude = [] } = {}) {
+export async function processPdf(
+  pdfPath: string,
+  { exclude = [] }: { exclude?: string[] } = {},
+): Promise<ProcessPdfResult> {
   const dir = dirname(pdfPath);
   const filename = basename(pdfPath);
   const stem = filename.slice(0, -extname(filename).length);

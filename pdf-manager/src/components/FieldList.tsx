@@ -1,3 +1,4 @@
+import type { RefObject } from "react";
 import {
   useCallback,
   useEffect,
@@ -5,8 +6,24 @@ import {
   useRef,
   useState,
 } from "react";
-import { ListBox, ListBoxItem } from "react-aria-components";
+import {
+  ListBox,
+  ListBoxItem,
+  Menu,
+  MenuItem,
+  Popover,
+} from "react-aria-components";
 import { createPortal } from "react-dom";
+import { useFieldRowRect, useScrollSelectedIntoView } from "../hooks.ts";
+import type { Field } from "../types.ts";
+
+interface RenameOverlayProps {
+  fieldName: string;
+  currentName: string;
+  listRef: RefObject<HTMLElement | null>;
+  onConfirm: (name: string) => void;
+  onCancel: () => void;
+}
 
 function RenameOverlay({
   fieldName,
@@ -14,18 +31,10 @@ function RenameOverlay({
   listRef,
   onConfirm,
   onCancel,
-}) {
+}: RenameOverlayProps) {
   const [value, setValue] = useState(currentName);
-  const [rect, setRect] = useState(null);
-  const inputRef = useRef(null);
-
-  useLayoutEffect(() => {
-    const inner = Array.from(
-      listRef.current?.querySelectorAll("[data-field-id]") ?? [],
-    ).find((el) => el.dataset.fieldId === fieldName);
-    const li = inner?.closest("[role='option']");
-    if (li) setRect(li.getBoundingClientRect());
-  }, [fieldName, listRef]);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const rect = useFieldRowRect(fieldName, listRef);
 
   useLayoutEffect(() => {
     if (!rect || !inputRef.current) return;
@@ -58,66 +67,46 @@ function RenameOverlay({
   );
 }
 
-function ContextMenu({ x, y, onRename, onExclude, onClose }) {
-  const menuRef = useRef(null);
+interface ContextMenuProps {
+  x: number;
+  y: number;
+  onRename: () => void;
+  onExclude: () => void;
+  onClose: () => void;
+}
 
-  useEffect(() => {
-    menuRef.current?.querySelector("button")?.focus();
-    function onKeyDown(e) {
-      if (e.key === "Escape") {
-        e.stopPropagation();
-        onClose();
-      }
-    }
-    function onMouseDown(e) {
-      if (!menuRef.current?.contains(e.target)) onClose();
-    }
-    window.addEventListener("keydown", onKeyDown, true);
-    window.addEventListener("mousedown", onMouseDown);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown, true);
-      window.removeEventListener("mousedown", onMouseDown);
-    };
-  }, [onClose]);
-
+function ContextMenu({ x, y, onRename, onExclude, onClose }: ContextMenuProps) {
+  const triggerRef = useRef<HTMLDivElement>(null);
   return (
-    <div
-      ref={menuRef}
-      className="context-menu"
-      style={{ left: x, top: y }}
-      role="menu"
-      onKeyDown={(e) => {
-        if (e.key === "ArrowDown") {
-          e.preventDefault();
-          e.currentTarget.querySelectorAll("button")[1]?.focus();
-        }
-        if (e.key === "ArrowUp") {
-          e.preventDefault();
-          e.currentTarget.querySelectorAll("button")[0]?.focus();
-        }
-      }}
-    >
-      <button
-        type="button"
-        className="context-menu-item"
-        role="menuitem"
-        onClick={onRename}
+    <>
+      <div ref={triggerRef} style={{ position: "fixed", left: x, top: y }} />
+      <Popover
+        triggerRef={triggerRef}
+        isOpen
+        onOpenChange={(open) => !open && onClose()}
+        placement="bottom start"
+        className="context-menu"
       >
-        Rename
-      </button>
-      <button
-        type="button"
-        className="context-menu-item"
-        role="menuitem"
-        onClick={onExclude}
-      >
-        Exclude
-      </button>
-    </div>
+        <Menu
+          autoFocus="first"
+          onAction={(key) => {
+            if (key === "rename") onRename();
+            else if (key === "exclude") onExclude();
+          }}
+        >
+          <MenuItem id="rename" className="context-menu-item">
+            Rename
+          </MenuItem>
+          <MenuItem id="exclude" className="context-menu-item">
+            Exclude
+          </MenuItem>
+        </Menu>
+      </Popover>
+    </>
   );
 }
 
-function FieldTypeIcon({ type }) {
+function FieldTypeIcon({ type }: { type: Field["type"] }) {
   if (type === "checkbox") {
     return (
       <svg
@@ -193,6 +182,17 @@ function FieldTypeIcon({ type }) {
   );
 }
 
+type FieldVariant = "new" | "excluded" | "normal" | "created";
+
+export interface FieldItemProps {
+  field: Field;
+  displayName: string;
+  onStartRename?: (name: string) => void;
+  onContextMenu?: (name: string, x: number, y: number) => void;
+  onHoverField?: (name: string | null) => void;
+  variant?: FieldVariant;
+}
+
 export function FieldItem({
   field,
   displayName,
@@ -200,7 +200,7 @@ export function FieldItem({
   onContextMenu,
   onHoverField,
   variant,
-}) {
+}: FieldItemProps) {
   const resolvedVariant =
     variant ?? (displayName !== field.name ? "new" : undefined);
 
@@ -238,6 +238,23 @@ export function FieldItem({
   );
 }
 
+interface ContextMenuState {
+  fieldName: string;
+  x: number;
+  y: number;
+}
+
+export interface FieldListProps {
+  fields: Field[];
+  stagedRenames: Record<string, string>;
+  excludedFields?: Set<string>;
+  highlightedField: string | null;
+  onHighlight: (name: string) => void;
+  onHoverField?: (name: string | null) => void;
+  onRename: (original: string, newName: string) => void;
+  onExclude: (name: string) => void;
+}
+
 export function FieldList({
   fields,
   stagedRenames,
@@ -247,28 +264,27 @@ export function FieldList({
   onHoverField,
   onRename,
   onExclude,
-}) {
-  const [renamingField, setRenamingField] = useState(null);
-  const [contextMenu, setContextMenu] = useState(null);
-  const listRef = useRef(null);
+}: FieldListProps) {
+  const [renamingField, setRenamingField] = useState<string | null>(null);
+  const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   const focusList = () => setTimeout(() => listRef.current?.focus(), 0);
 
-  const startRename = useCallback((fieldName) => {
+  const startRename = useCallback((fieldName: string) => {
     setRenamingField(fieldName);
     setContextMenu(null);
   }, []);
 
-  function confirmRename(newName) {
-    if (renamingField && newName && newName !== renamingField)
-      onRename(renamingField, newName);
+  function confirmRename(newName: string) {
+    if (renamingField && newName) onRename(renamingField, newName);
     setRenamingField(null);
     focusList();
   }
 
   // Capture phase so Delete/Backspace/Enter reach us before RAC's type-ahead and activation handlers.
   useEffect(() => {
-    function onKeyDown(e) {
+    function onKeyDown(e: KeyboardEvent) {
       if (!listRef.current?.contains(document.activeElement)) return;
       if (renamingField || contextMenu) return;
       if ((e.key === "Delete" || e.key === "Backspace") && highlightedField) {
@@ -296,14 +312,7 @@ export function FieldList({
     excludedFields,
   ]);
 
-  useEffect(() => {
-    if (!highlightedField || !listRef.current) return;
-    const item = listRef.current.querySelector('[aria-selected="true"]');
-    if (!item) return;
-    const { top: lt, bottom: lb } = listRef.current.getBoundingClientRect();
-    const { top: it, bottom: ib } = item.getBoundingClientRect();
-    if (it < lt || ib > lb) item.scrollIntoView({ block: "nearest" });
-  }, [highlightedField]);
+  useScrollSelectedIntoView(highlightedField, listRef);
 
   const activeList = fields.filter((f) => !excludedFields.has(f.name));
   const excludedList = fields.filter((f) => excludedFields.has(f.name));
@@ -331,7 +340,7 @@ export function FieldList({
           onMouseLeave={() => onHoverField?.(null)}
           onSelectionChange={(keys) => {
             const name = [...keys][0];
-            if (name) onHighlight(name);
+            if (name) onHighlight(String(name));
             if (renamingField && name !== renamingField) setRenamingField(null);
           }}
         >
@@ -364,7 +373,7 @@ export function FieldList({
               onMouseLeave={() => onHoverField?.(null)}
               onSelectionChange={(keys) => {
                 const name = [...keys][0];
-                if (name) onHighlight(name);
+                if (name) onHighlight(String(name));
               }}
             >
               {excludedList.map((field) => (

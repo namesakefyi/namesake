@@ -1,76 +1,79 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { DiffBanner } from "./DiffBanner.jsx";
-import { FieldList } from "./FieldList.jsx";
-import { FieldMapper } from "./FieldMapper.jsx";
-import { PdfCanvas } from "./PdfCanvas.jsx";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Button, FileTrigger } from "react-aria-components";
+import type { Diff, Field, FieldPreview, PdfMeta, Rename } from "../types.ts";
+import { fileToBase64 } from "../utils.ts";
+import { DiffBanner } from "./DiffBanner.tsx";
+import { FieldList } from "./FieldList.tsx";
+import { FieldMapper } from "./FieldMapper.tsx";
+import { PdfCanvas } from "./PdfCanvas.tsx";
 
-async function fileToBase64(file) {
-  const arrayBuffer = await file.arrayBuffer();
-  const uint8 = new Uint8Array(arrayBuffer);
-  let binary = "";
-  for (let i = 0; i < uint8.length; i += 8192) {
-    binary += String.fromCharCode(...uint8.subarray(i, i + 8192));
-  }
-  return btoa(binary);
+interface PdfEditorProps {
+  pdfId: string;
+  onFieldsChanged?: () => void;
 }
 
-export function PdfEditor({ pdfId, onFieldsChanged }) {
-  const [meta, setMeta] = useState(null);
-  const [fields, setFields] = useState([]);
-  const [stagedRenames, setStagedRenames] = useState({});
-  const [stagedDeletes, setStagedDeletes] = useState(new Set());
-  const [highlightedField, setHighlightedField] = useState(null);
-  const [hoveredField, setHoveredField] = useState(null);
-  const [diff, setDiff] = useState(null);
+export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
+  const [meta, setMeta] = useState<PdfMeta | null>(null);
+  const [fields, setFields] = useState<Field[]>([]);
+  const [stagedRenames, setStagedRenames] = useState<Record<string, string>>(
+    {},
+  );
+  const [stagedDeletes, setStagedDeletes] = useState(new Set<string>());
+  const [highlightedField, setHighlightedField] = useState<string | null>(null);
+  const [hoveredField, setHoveredField] = useState<string | null>(null);
+  const [diff, setDiff] = useState<Diff | null>(null);
   const [saving, setSaving] = useState(false);
 
   // Upload New Version state
-  const fileInputRef = useRef(null);
-  const [uploadFile, setUploadFile] = useState(null);
-  const [pdfBase64, setPdfBase64] = useState(null);
-  const [preview, setPreview] = useState(null);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [pdfBase64, setPdfBase64] = useState<string | null>(null);
+  const [preview, setPreview] = useState<FieldPreview | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const loadFields = useCallback(async () => {
-    const [fieldsRes, pdfsRes] = await Promise.all([
-      fetch(`/api/pdf/${pdfId}/fields`),
-      fetch("/api/pdfs"),
-    ]);
-    const [newFields, allPdfs] = await Promise.all([
-      fieldsRes.json(),
-      pdfsRes.json(),
-    ]);
-    setFields(newFields);
-    setMeta(allPdfs.find((p) => p.id === pdfId) ?? null);
+    const res = await fetch(`/api/pdf/${pdfId}/fields`);
+    setFields(await res.json());
   }, [pdfId]);
 
   useEffect(() => {
     loadFields();
   }, [loadFields]);
 
+  useEffect(() => {
+    async function fetchMeta() {
+      const res = await fetch("/api/pdfs");
+      const allPdfs: PdfMeta[] = await res.json();
+      setMeta(allPdfs.find((p) => p.id === pdfId) ?? null);
+    }
+    fetchMeta();
+  }, [pdfId]);
+
   // Auto-trigger preview when a file is selected
   useEffect(() => {
     if (!uploadFile) return;
+    const file = uploadFile;
     let cancelled = false;
     async function runPreview() {
       setUploading(true);
       setUploadError(null);
       try {
-        const base64 = await fileToBase64(uploadFile);
+        const base64 = await fileToBase64(file);
         if (cancelled) return;
         const res = await fetch(`/api/pdf/${pdfId}/preview`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ pdfBase64: base64 }),
         });
-        const data = await res.json();
+        const data = await res.json<FieldPreview>();
         if (cancelled) return;
         if (!res.ok) throw new Error(data.error ?? "Failed to load preview");
+        const preview = data;
         setPdfBase64(base64);
-        setPreview(data);
+        setPreview(preview);
       } catch (err) {
-        if (!cancelled) setUploadError(err.message);
+        if (!cancelled)
+          setUploadError(err instanceof Error ? err.message : String(err));
       } finally {
         if (!cancelled) setUploading(false);
       }
@@ -81,7 +84,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }) {
     };
   }, [uploadFile, pdfId]);
 
-  async function commit(renames, deletes) {
+  async function commit(renames: Rename[], deletes: string[]) {
     if (saving) return;
     setSaving(true);
     try {
@@ -90,7 +93,8 @@ export function PdfEditor({ pdfId, onFieldsChanged }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ renames, deletes }),
       });
-      const result = await res.json();
+      const result = await res.json<Diff>();
+      if (!res.ok) throw new Error(result.error ?? "Save failed");
       setStagedRenames({});
       setStagedDeletes(new Set());
       setDiff(result);
@@ -121,7 +125,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }) {
     await commit(renames, deletes);
   }
 
-  function handleRename(originalName, newName) {
+  function handleRename(originalName: string, newName: string) {
     setStagedRenames((prev) => {
       if (newName === originalName) {
         const next = { ...prev };
@@ -132,7 +136,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }) {
     });
   }
 
-  function handleDelete(fieldName) {
+  function handleDelete(fieldName: string) {
     if (stagedDeletes.has(fieldName)) {
       setStagedDeletes((prev) => {
         const next = new Set(prev);
@@ -150,24 +154,10 @@ export function PdfEditor({ pdfId, onFieldsChanged }) {
     });
   }
 
-  function handleUploadClick() {
-    setUploadFile(null);
-    setPdfBase64(null);
-    setPreview(null);
-    setUploadError(null);
-    fileInputRef.current?.click();
-  }
-
-  function handleFileChange(e) {
-    const file = e.target.files?.[0];
-    if (file) setUploadFile(file);
-    e.target.value = "";
-  }
-
   const hasChanges =
     Object.keys(stagedRenames).length > 0 || stagedDeletes.size > 0;
 
-  if (preview) {
+  if (preview && pdfBase64) {
     return (
       <FieldMapper
         pdfId={pdfId}
@@ -205,24 +195,30 @@ export function PdfEditor({ pdfId, onFieldsChanged }) {
           {uploadError && (
             <span className="upload-error-inline">{uploadError}</span>
           )}
-          <button
-            type="button"
-            className="btn btn-sm"
-            onClick={handleUploadClick}
-            disabled={uploading}
+          <FileTrigger
+            acceptedFileTypes={[".pdf"]}
+            onSelect={(fl) => {
+              if (!fl?.[0]) return;
+              setUploadFile(null);
+              setPdfBase64(null);
+              setPreview(null);
+              setUploadError(null);
+              setUploadFile(fl[0]);
+            }}
           >
-            {uploading ? "Loading…" : "Upload New Version"}
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".pdf"
-            className="sr-only"
-            onChange={handleFileChange}
-          />
+            <Button
+              className="btn btn-sm"
+              isPending={uploading}
+              isDisabled={uploading}
+            >
+              {({ isPending }) =>
+                isPending ? "Loading…" : "Upload New Version"
+              }
+            </Button>
+          </FileTrigger>
           <button
             type="button"
-            className={`btn btn-primary btn-sm ${!hasChanges ? "btn-disabled" : ""}`}
+            className="btn btn-primary btn-sm"
             onClick={handleSave}
             disabled={!hasChanges || saving}
             title="Save changes (s)"

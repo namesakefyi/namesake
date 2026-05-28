@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { AddPdfModal } from "./components/AddPdfModal.jsx";
-import { PdfEditor } from "./components/PdfEditor.jsx";
-import { PdfList } from "./components/PdfList.jsx";
+import { AddPdfModal } from "./components/AddPdfModal.tsx";
+import { PdfEditor } from "./components/PdfEditor.tsx";
+import { PdfList } from "./components/PdfList.tsx";
+import type { PdfMeta } from "./types.ts";
 
 export function App() {
-  const [pdfs, setPdfs] = useState([]);
-  const [selectedId, setSelectedId] = useState(null);
+  const [pdfs, setPdfs] = useState<PdfMeta[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [addPdfOpen, setAddPdfOpen] = useState(false);
 
   const loadPdfs = useCallback(async () => {
@@ -17,7 +18,7 @@ export function App() {
     loadPdfs();
   }, [loadPdfs]);
 
-  function handlePdfAdded(id) {
+  function handlePdfAdded(id: string) {
     loadPdfs();
     setSelectedId(id);
     setAddPdfOpen(false);
@@ -44,7 +45,7 @@ export function App() {
           <PdfEditor
             key={selectedId}
             pdfId={selectedId}
-            onFieldsChanged={() => loadPdfs()}
+            onFieldsChanged={loadPdfs}
           />
         ) : (
           <div className="empty-state">

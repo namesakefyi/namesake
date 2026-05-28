@@ -4,9 +4,16 @@ import {
   ListBoxItem,
   ListBoxSection,
 } from "react-aria-components";
+import type { PdfMeta } from "../types.ts";
 
-function groupByJurisdiction(pdfs) {
-  const groups = {};
+interface PdfListProps {
+  pdfs: PdfMeta[];
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+}
+
+function groupByJurisdiction(pdfs: PdfMeta[]): Record<string, PdfMeta[]> {
+  const groups: Record<string, PdfMeta[]> = {};
   for (const pdf of pdfs) {
     const key = pdf.jurisdiction || "Other";
     if (!groups[key]) groups[key] = [];
@@ -15,7 +22,7 @@ function groupByJurisdiction(pdfs) {
   return groups;
 }
 
-export function PdfList({ pdfs, selectedId, onSelect }) {
+export function PdfList({ pdfs, selectedId, onSelect }: PdfListProps) {
   const grouped = groupByJurisdiction(pdfs);
 
   return (
@@ -27,7 +34,7 @@ export function PdfList({ pdfs, selectedId, onSelect }) {
       selectedKeys={selectedId ? new Set([selectedId]) : new Set()}
       onSelectionChange={(keys) => {
         const id = [...keys][0];
-        if (id) onSelect(id);
+        if (id) onSelect(String(id));
       }}
     >
       {Object.entries(grouped).map(([jurisdiction, items]) => (

@@ -1,30 +1,31 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-const XFA_LEAF_MAP = {
+const XFA_LEAF_MAP: Record<string, string> = {
   fn: "FirstName",
   ln: "LastName",
   mn: "MiddleName",
-  zip: "ZipCode",
   A1: "StreetAddress",
-  Apt: "Apt",
+  Apt: "StreetAddress2",
   cityTown: "City",
   State: "State",
+  zip: "ZipCode",
 };
 
-function leafFromXfa(name) {
-  const last = name
-    .split(".")
-    .pop()
-    .replace(/\[\d+\]$/, "");
+function leafFromXfa(name: string): string {
+  const last =
+    name
+      .split(".")
+      .pop()
+      ?.replace(/\[\d+\]$/, "") ?? "";
   return XFA_LEAF_MAP[last] ?? last;
 }
 
-function normalize(s) {
+function normalize(s: string): string {
   return s.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
-function longestCommonSubstringScore(a, b) {
+function longestCommonSubstringScore(a: string, b: string): number {
   if (!a || !b) return 0;
   let max = 0;
   for (let i = 0; i < a.length; i++) {
@@ -43,7 +44,7 @@ function longestCommonSubstringScore(a, b) {
 }
 
 /** Returns the best matching schema field name for a raw PDF field name, or "". */
-export function suggestName(fieldName, schemaFields) {
+export function suggestName(fieldName: string, schemaFields: string[]): string {
   if (!schemaFields.length) return "";
   const leaf = leafFromXfa(fieldName);
   const normLeaf = normalize(leaf);
@@ -63,9 +64,11 @@ export function suggestName(fieldName, schemaFields) {
 }
 
 /** Returns field names from the sibling schema.ts of a PDF path. */
-export function loadSchemaFields(pdfPath) {
+export function loadSchemaFields(pdfPath: string): string[] {
   const schemaPath = join(dirname(pdfPath), "schema.ts");
   if (!existsSync(schemaPath)) return [];
   const content = readFileSync(schemaPath, "utf8");
-  return [...content.matchAll(/^\s+([a-zA-Z_]\w*):\s*PDF/gm)].map((m) => m[1]);
+  return [
+    ...content.matchAll(/^\s+(?:([a-zA-Z_]\w*)|("(?:[^"\\]|\\.)*")):\s*PDF/gm),
+  ].map((m) => (m[1] !== undefined ? m[1] : JSON.parse(m[2])));
 }

@@ -30,7 +30,7 @@
     "storybook:build": "storybook build",
     "idb:add-migration": "node scripts/create-idb-migration.mjs",
     "pdf:schema": "node scripts/extract-pdf-schema.mjs",
-    "pdf:manage": "node pdf-manager/index.mjs",
+    "pdf:manage": "vite --config pdf-manager/vite.config.ts --open",
     "typegen": "sanity schema extract --enforce-required-fields && sanity typegen generate"
   },
   "simple-git-hooks": {

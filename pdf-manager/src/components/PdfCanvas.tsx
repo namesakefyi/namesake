@@ -1,10 +1,18 @@
-import * as pdfjsLib from "pdfjs-dist/build/pdf.min.mjs";
+import * as pdfjsLib from "pdfjs-dist";
 import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import { useCallback, useEffect, useRef } from "react";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
 
-function useLatestRef(value) {
+interface FieldEntry {
+  wrap: HTMLDivElement;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+function useLatestRef<T>(value: T) {
   const ref = useRef(value);
   ref.current = value;
   return ref;
@@ -12,10 +20,13 @@ function useLatestRef(value) {
 
 const MAX_SCALE = 1.5;
 
-let pdfjsPromise = null;
-function getPdfjs() {
-  if (!pdfjsPromise) pdfjsPromise = Promise.resolve(pdfjsLib);
-  return pdfjsPromise;
+interface PdfCanvasProps {
+  pdfUrl: string | null;
+  highlightedField: string | null;
+  hoveredField: string | null;
+  onFieldClick: (name: string) => void;
+  fieldColors?: Record<string, string>;
+  selectedFields?: Set<string>;
 }
 
 export function PdfCanvas({
@@ -25,12 +36,12 @@ export function PdfCanvas({
   onFieldClick,
   fieldColors = {},
   selectedFields,
-}) {
-  const containerRef = useRef(null);
-  const fieldMapRef = useRef(new Map());
-  const activeHlsRef = useRef([]);
-  const hoverHlRef = useRef(null);
-  const passiveHlsRef = useRef([]);
+}: PdfCanvasProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const fieldMapRef = useRef(new Map<string, FieldEntry[]>());
+  const activeHlsRef = useRef<HTMLDivElement[]>([]);
+  const hoverHlRef = useRef<HTMLDivElement | null>(null);
+  const passiveHlsRef = useRef<HTMLDivElement[]>([]);
   const onFieldClickRef = useLatestRef(onFieldClick);
   const fieldColorsRef = useLatestRef(fieldColors);
 
@@ -68,7 +79,9 @@ export function PdfCanvas({
   useEffect(() => {
     if (!pdfUrl) return;
     const container = containerRef.current;
-    const scrollEl = container.parentElement; // .pdf-canvas-scroll
+    if (!container) return;
+    const scrollEl = container.parentElement;
+    if (!scrollEl) return;
     container.innerHTML = "";
     fieldMapRef.current = new Map();
     passiveHlsRef.current = []; // DOM wiped — refs are stale
@@ -77,13 +90,13 @@ export function PdfCanvas({
 
     let cancelled = false;
 
+    const resolvedUrl = pdfUrl;
     async function render() {
-      const pdfjsLib = await getPdfjs();
-      const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+      const pdf = await pdfjsLib.getDocument(resolvedUrl).promise;
       if (cancelled) return;
 
       // Scale pages to fit available width (container minus 2×16px padding)
-      const availableWidth = (scrollEl.clientWidth || 600) - 32;
+      const availableWidth = (scrollEl?.clientWidth || 600) - 32;
       const firstPage = await pdf.getPage(1);
       const naturalVp = firstPage.getViewport({ scale: 1 });
       const scale = Math.min(MAX_SCALE, availableWidth / naturalVp.width);
@@ -101,18 +114,17 @@ export function PdfCanvas({
         const canvas = document.createElement("canvas");
         canvas.width = vp.width;
         canvas.height = vp.height;
-        await page.render({
-          canvasContext: canvas.getContext("2d"),
-          viewport: vp,
-        }).promise;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) continue;
+        await page.render({ canvasContext: ctx, viewport: vp }).promise;
         wrap.appendChild(canvas);
-        container.appendChild(wrap);
+        container?.appendChild(wrap);
 
         const anns = await page.getAnnotations();
         for (const ann of anns) {
           if (ann.subtype !== "Widget" || !ann.fieldName) continue;
           const [x1, y1, x2, y2] = vp.convertToViewportRectangle(ann.rect);
-          const entry = {
+          const entry: FieldEntry = {
             wrap,
             x: Math.min(x1, x2),
             y: Math.min(y1, y2),
@@ -122,7 +134,7 @@ export function PdfCanvas({
           if (!fieldMapRef.current.has(ann.fieldName)) {
             fieldMapRef.current.set(ann.fieldName, []);
           }
-          fieldMapRef.current.get(ann.fieldName).push(entry);
+          fieldMapRef.current.get(ann.fieldName)?.push(entry);
 
           const clickZone = document.createElement("div");
           clickZone.className = "field-click-zone";
@@ -173,14 +185,14 @@ export function PdfCanvas({
     activeHlsRef.current = [];
 
     const toHighlight =
-      selectedFields?.size > 0
+      selectedFields && selectedFields.size > 0
         ? selectedFields
         : highlightedField
           ? new Set([highlightedField])
           : null;
     if (!toHighlight) return;
 
-    let scrollEl = null;
+    let scrollEl: HTMLDivElement | null = null;
     for (const name of toHighlight) {
       const entries = fieldMapRef.current.get(name);
       if (!entries?.length) continue;

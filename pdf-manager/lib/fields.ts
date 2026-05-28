@@ -8,38 +8,58 @@ const FIELDS_PATH = join(ROOT, "src/constants/fields.ts");
 const JURISDICTIONS_PATH = join(ROOT, "src/constants/jurisdictions.ts");
 
 /** Common PDF field name → form field name mappings. */
-const PDF_TO_FORM_FIELD_MAP = {
+const PDF_TO_FORM_FIELD_MAP: Record<string, string> = {
   petitionerFirstName: "oldFirstName",
   petitionerMiddleName: "oldMiddleName",
   petitionerLastName: "oldLastName",
   county: "residenceCounty",
 };
 
+export interface FormField {
+  name: string;
+  type: string;
+}
+
+export interface Jurisdiction {
+  name: string;
+  abbreviation: string;
+}
+
+let _formFields: FormField[] | null = null;
+let _jurisdictions: Jurisdiction[] | null = null;
+
 /** Returns { name, type }[] parsed from FIELD_DEFS in fields.ts. */
-export function loadFormFields() {
+export function loadFormFields(): FormField[] {
+  if (_formFields) return _formFields;
   const content = readFileSync(FIELDS_PATH, "utf8");
   const regex =
     /\{\s*name:\s*"([^"]+)"[^}]*type:\s*"(string|boolean|string\[\])"/g;
-  const result = [];
+  const result: FormField[] = [];
   for (const m of content.matchAll(regex)) {
     result.push({ name: m[1], type: m[2] });
   }
-  return result;
+  _formFields = result;
+  return _formFields;
 }
 
 /** Returns { name, abbreviation }[] from jurisdictions.ts. */
-export function loadJurisdictions() {
+export function loadJurisdictions(): Jurisdiction[] {
+  if (_jurisdictions) return _jurisdictions;
   const content = readFileSync(JURISDICTIONS_PATH, "utf8");
   const regex = /\{\s*name:\s*"([^"]+)",\s*abbreviation:\s*"([^"]+)"/g;
-  const result = [];
+  const result: Jurisdiction[] = [];
   for (const m of content.matchAll(regex)) {
     result.push({ name: m[1], abbreviation: m[2] });
   }
-  return result;
+  _jurisdictions = result;
+  return _jurisdictions;
 }
 
 /** Maps a PDF field name to a form field name, or null if no match. */
-export function pdfFieldToFormField(pdfFieldName, formFieldsByName) {
+function pdfFieldToFormField(
+  pdfFieldName: string,
+  formFieldsByName: Map<string, FormField>,
+): string | null {
   if (formFieldsByName.has(pdfFieldName)) return pdfFieldName;
   if (PDF_TO_FORM_FIELD_MAP[pdfFieldName])
     return PDF_TO_FORM_FIELD_MAP[pdfFieldName];
@@ -49,7 +69,7 @@ export function pdfFieldToFormField(pdfFieldName, formFieldsByName) {
 }
 
 /** Returns a placeholder value string for a form field. */
-function getPlaceholderForField(formField) {
+function getPlaceholderForField(formField: FormField): string | true {
   const { name, type } = formField;
   if (type === "boolean") return true;
   if (type === "string[]") return '["placeholder"]';
@@ -63,11 +83,14 @@ function getPlaceholderForField(formField) {
 }
 
 /** Builds testData entry lines from PDF fields mapped to form fields. */
-export function buildTestDataEntries(pdfFields, formFields) {
+export function buildTestDataEntries(
+  pdfFields: Array<{ name: string }>,
+  formFields: FormField[],
+): string[] {
   const formFieldsByName = new Map(formFields.map((f) => [f.name, f]));
-  const seen = new Set();
-  const lines = [];
-  const unmapped = [];
+  const seen = new Set<string>();
+  const lines: string[] = [];
+  const unmapped: string[] = [];
 
   for (const pdfField of pdfFields) {
     const formFieldName = pdfFieldToFormField(pdfField.name, formFieldsByName);
@@ -78,6 +101,7 @@ export function buildTestDataEntries(pdfFields, formFields) {
     if (seen.has(formFieldName)) continue;
     seen.add(formFieldName);
     const formField = formFields.find((f) => f.name === formFieldName);
+    if (!formField) continue;
     const value = getPlaceholderForField(formField);
     lines.push(`    ${formFieldName}: ${value},`);
   }

@@ -1,29 +1,22 @@
-import {
-  existsSync,
-  mkdirSync,
-  readdirSync,
-  readFileSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import type { IncomingMessage, ServerResponse } from "node:http";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PDFDocument } from "@cantoo/pdf-lib";
 import {
-  addIdToPdfConstants,
+  computeOutputPaths,
   formatFiles,
-  generateDefinition,
-  generatePdfId,
-  generateStarterTest,
-} from "./define.mjs";
-import { loadFormFields, loadJurisdictions } from "./fields.mjs";
+  writeDefinitionFiles,
+} from "./define.ts";
+import { loadJurisdictions } from "./fields.ts";
 import {
   applyRenames,
   extractFields,
   extractFieldsFromBytes,
   stripFormFieldStyles,
-} from "./pdf.mjs";
-import { loadExclusions, processPdf } from "./schema.mjs";
-import { loadSchemaFields, suggestName } from "./suggest.mjs";
+} from "./pdf.ts";
+import { loadExclusions, processPdf } from "./schema.ts";
+import { loadSchemaFields, suggestName } from "./suggest.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
@@ -32,10 +25,12 @@ const PDFS_DIR = join(ROOT, "src/pdfs");
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 /** Reads a JSON request body. */
-async function readBody(req) {
+async function readBody(
+  req: IncomingMessage,
+): Promise<Record<string, unknown>> {
   return new Promise((resolve, reject) => {
     let body = "";
-    req.on("data", (chunk) => {
+    req.on("data", (chunk: Buffer) => {
       body += chunk;
     });
     req.on("end", () => {
@@ -50,13 +45,19 @@ async function readBody(req) {
 }
 
 /** Sends a JSON response. */
-function json(res, data, status = 200) {
+function json(res: ServerResponse, data: unknown, status = 200): void {
   res.writeHead(status, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
 }
 
+interface PdfMeta {
+  title: string;
+  code: string;
+  jurisdiction: string;
+}
+
 /** Parses index.ts for PDF metadata via regex. */
-function parsePdfMetadata(pdfDir) {
+function parsePdfMetadata(pdfDir: string): PdfMeta | null {
   const indexPath = join(pdfDir, "index.ts");
   if (!existsSync(indexPath)) return null;
   const content = readFileSync(indexPath, "utf8");
@@ -68,7 +69,7 @@ function parsePdfMetadata(pdfDir) {
 }
 
 /** Counts fields in schema.ts by counting PDF class references. */
-function countSchemaFields(pdfDir) {
+function countSchemaFields(pdfDir: string): number {
   const schemaPath = join(pdfDir, "schema.ts");
   if (!existsSync(schemaPath)) return 0;
   const content = readFileSync(schemaPath, "utf8");
@@ -77,9 +78,19 @@ function countSchemaFields(pdfDir) {
   ).length;
 }
 
+interface PdfEntry {
+  id: string;
+  jurisdiction: string;
+  title: string;
+  code: string;
+  fieldCount: number;
+  pdfPath: string;
+  pdfDir: string;
+}
+
 /** Returns all PDFs as [{ id, title, code, jurisdiction, fieldCount, pdfPath, pdfDir }]. */
-function listAllPdfs() {
-  const result = [];
+function listAllPdfs(): PdfEntry[] {
+  const result: PdfEntry[] = [];
   for (const entry of readdirSync(PDFS_DIR, { withFileTypes: true })) {
     if (!entry.isDirectory() || entry.name === "utils") continue;
     const jurisdictionDir = join(PDFS_DIR, entry.name);
@@ -107,7 +118,7 @@ function listAllPdfs() {
 }
 
 /** Finds a PDF's directory and file path by id. */
-function findPdfById(id) {
+function findPdfById(id: string): { pdfDir: string; pdfPath: string } | null {
   for (const entry of readdirSync(PDFS_DIR, { withFileTypes: true })) {
     if (!entry.isDirectory() || entry.name === "utils") continue;
     const pdfDir = join(PDFS_DIR, entry.name, id);
@@ -120,7 +131,10 @@ function findPdfById(id) {
 
 // ─── Route handlers ───────────────────────────────────────────────────────────
 
-async function handleListPdfs(_req, res) {
+async function handleListPdfs(
+  _req: IncomingMessage,
+  res: ServerResponse,
+): Promise<void> {
   const pdfs = listAllPdfs().map(
     ({ id, title, code, jurisdiction, fieldCount }) => ({
       id,
@@ -133,7 +147,11 @@ async function handleListPdfs(_req, res) {
   json(res, pdfs);
 }
 
-async function handleGetPdfBytes(_req, res, id) {
+async function handleGetPdfBytes(
+  _req: IncomingMessage,
+  res: ServerResponse,
+  id: string,
+): Promise<void> {
   const found = findPdfById(id);
   if (!found) return json(res, { error: "Not found" }, 404);
   const bytes = readFileSync(found.pdfPath);
@@ -141,19 +159,32 @@ async function handleGetPdfBytes(_req, res, id) {
   res.end(bytes);
 }
 
-async function handleGetFields(_req, res, id) {
+async function handleGetFields(
+  _req: IncomingMessage,
+  res: ServerResponse,
+  id: string,
+): Promise<void> {
   const found = findPdfById(id);
   if (!found) return json(res, { error: "Not found" }, 404);
   const fields = await extractFields(found.pdfPath);
   const excluded = loadExclusions(found.pdfDir);
-  json(res, fields.map((f) => ({ ...f, excluded: excluded.has(f.name) })));
+  json(
+    res,
+    fields.map((f) => ({ ...f, excluded: excluded.has(f.name) })),
+  );
 }
 
-async function handleSaveFields(req, res, id) {
+async function handleSaveFields(
+  req: IncomingMessage,
+  res: ServerResponse,
+  id: string,
+): Promise<void> {
   const found = findPdfById(id);
   if (!found) return json(res, { error: "Not found" }, 404);
 
-  const { renames = [], deletes = [] } = await readBody(req);
+  const body = await readBody(req);
+  const renames = (body.renames as Array<{ from: string; to: string }>) ?? [];
+  const deletes = (body.deletes as string[]) ?? [];
 
   const oldSchemaFields = new Set(loadSchemaFields(found.pdfPath));
 
@@ -171,8 +202,17 @@ async function handleSaveFields(req, res, id) {
   json(res, { added, removed });
 }
 
-async function handleAddPdf(req, res) {
-  const { title, code, jurisdiction, pdfBase64 } = await readBody(req);
+async function handleAddPdf(
+  req: IncomingMessage,
+  res: ServerResponse,
+): Promise<void> {
+  const body = await readBody(req);
+  const { title, code, jurisdiction, pdfBase64 } = body as {
+    title?: string;
+    code?: string;
+    jurisdiction?: string;
+    pdfBase64?: string;
+  };
   if (!title || !jurisdiction || !pdfBase64) {
     return json(
       res,
@@ -181,54 +221,52 @@ async function handleAddPdf(req, res) {
     );
   }
 
-  const id = generatePdfId(code, title);
-  const jurisdictionDir =
-    jurisdiction.toLowerCase() === "federal"
-      ? join(PDFS_DIR, "federal")
-      : join(PDFS_DIR, jurisdiction.toLowerCase());
-  const pdfDir = join(jurisdictionDir, id);
-  const pdfDestPath = join(pdfDir, `${id}.pdf`);
-  const indexPath = join(pdfDir, "index.ts");
-  const testPath = join(pdfDir, "index.test.ts");
+  const { id, pdfDir, pdfDestPath, indexPath, testPath } = computeOutputPaths({
+    title,
+    code: code ?? "",
+    jurisdiction,
+  });
 
   if (existsSync(indexPath)) {
     return json(res, { error: `PDF "${id}" already exists` }, 409);
   }
 
-  const pdfBytes = Buffer.from(pdfBase64, "base64");
-  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const rawBytes = Buffer.from(pdfBase64, "base64");
+  const pdfDoc = await PDFDocument.load(rawBytes);
   stripFormFieldStyles(pdfDoc);
   const cleanedBytes = await pdfDoc.save();
 
-  mkdirSync(pdfDir, { recursive: true });
-  writeFileSync(pdfDestPath, cleanedBytes);
+  const pdfFields = await extractFieldsFromBytes(cleanedBytes);
 
-  const pdfFields = await extractFields(pdfDestPath);
-  await processPdf(pdfDestPath);
-
-  const definition = generateDefinition({
+  writeDefinitionFiles({
     id,
     title,
     code: code ?? "",
     jurisdiction,
+    pdfDir,
+    pdfDestPath,
+    indexPath,
+    testPath,
     pdfFields,
+    pdfBytes: cleanedBytes,
   });
-  writeFileSync(indexPath, `${definition}\n`);
 
-  const test = generateStarterTest({ id, title, pdfFields });
-  writeFileSync(testPath, `${test}\n`);
-
-  addIdToPdfConstants(id);
-  formatFiles([indexPath, testPath, join(pdfDir, "schema.ts")]);
+  await processPdf(pdfDestPath);
+  formatFiles([join(pdfDir, "schema.ts")]);
 
   json(res, { id, fieldCount: pdfFields.length });
 }
 
-async function handlePreviewReplace(req, res, id) {
+async function handlePreviewReplace(
+  req: IncomingMessage,
+  res: ServerResponse,
+  id: string,
+): Promise<void> {
   const found = findPdfById(id);
   if (!found) return json(res, { error: "Not found" }, 404);
 
-  const { pdfBase64 } = await readBody(req);
+  const body = await readBody(req);
+  const { pdfBase64 } = body as { pdfBase64?: string };
   if (!pdfBase64) return json(res, { error: "pdfBase64 is required" }, 400);
 
   const oldNames = new Set(loadSchemaFields(found.pdfPath));
@@ -244,8 +282,8 @@ async function handlePreviewReplace(req, res, id) {
     .map((f) => f.name);
   const removed = [...oldNames].filter((n) => !newNames.has(n));
 
-  const usedSuggestions = new Set();
-  const autoMappings = {};
+  const usedSuggestions = new Set<string>();
+  const autoMappings: Record<string, string> = {};
   for (const field of newFields.filter((f) => !oldNames.has(f.name))) {
     const available = removed.filter((n) => !usedSuggestions.has(n));
     const suggestion = suggestName(field.name, available);
@@ -258,11 +296,24 @@ async function handlePreviewReplace(req, res, id) {
   json(res, { newFields, retained, added, removed, autoMappings });
 }
 
-async function handleReplacePdf(req, res, id) {
+async function handleReplacePdf(
+  req: IncomingMessage,
+  res: ServerResponse,
+  id: string,
+): Promise<void> {
   const found = findPdfById(id);
   if (!found) return json(res, { error: "Not found" }, 404);
 
-  const { pdfBase64, renames = [], deletes = [] } = await readBody(req);
+  const body = await readBody(req);
+  const {
+    pdfBase64,
+    renames = [],
+    deletes = [],
+  } = body as {
+    pdfBase64?: string;
+    renames?: Array<{ from: string; to: string }>;
+    deletes?: string[];
+  };
   if (!pdfBase64) return json(res, { error: "pdfBase64 is required" }, 400);
 
   const oldSchemaFields = new Set(loadSchemaFields(found.pdfPath));
@@ -287,49 +338,64 @@ async function handleReplacePdf(req, res, id) {
   json(res, { added, removed, unchanged, fieldCount: newSchemaFields.length });
 }
 
-async function handleGetFormFields(_req, res) {
-  const fields = loadFormFields().map((f) => f.name);
-  json(res, fields);
-}
-
-async function handleGetJurisdictions(_req, res) {
+async function handleGetJurisdictions(
+  _req: IncomingMessage,
+  res: ServerResponse,
+): Promise<void> {
   const jurisdictions = loadJurisdictions();
   json(res, [{ name: "Federal", abbreviation: "federal" }, ...jurisdictions]);
 }
 
 // ─── Router ───────────────────────────────────────────────────────────────────
 
-async function route(req, res) {
+async function route(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const { method } = req;
-  const url = new URL(req.url, "http://localhost");
+  const url = new URL(req.url ?? "/", "http://localhost");
   const path = url.pathname;
 
   if (method === "GET" && path === "/api/pdfs") return handleListPdfs(req, res);
-  if (method === "GET" && path === "/api/form-fields")
-    return handleGetFormFields(req, res);
   if (method === "GET" && path === "/api/jurisdictions")
     return handleGetJurisdictions(req, res);
 
+  function extractId(match: RegExpMatchArray): string | null {
+    const id = match[1];
+    if (id.includes("/") || id.includes("..")) {
+      json(res, { error: "Invalid id" }, 400);
+      return null;
+    }
+    return id;
+  }
+
   const bytesMatch = path.match(/^\/api\/pdf\/([^/]+)\/bytes$/);
-  if (method === "GET" && bytesMatch)
-    return handleGetPdfBytes(req, res, bytesMatch[1]);
+  if (method === "GET" && bytesMatch) {
+    const id = extractId(bytesMatch);
+    if (!id) return;
+    return handleGetPdfBytes(req, res, id);
+  }
 
   const fieldsMatch = path.match(/^\/api\/pdf\/([^/]+)\/fields$/);
   if (fieldsMatch) {
-    if (method === "GET") return handleGetFields(req, res, fieldsMatch[1]);
-    if (method === "POST") return handleSaveFields(req, res, fieldsMatch[1]);
+    const id = extractId(fieldsMatch);
+    if (!id) return;
+    if (method === "GET") return handleGetFields(req, res, id);
+    if (method === "POST") return handleSaveFields(req, res, id);
   }
 
-  const addPdfMatch = path === "/api/pdfs" && method === "POST";
-  if (addPdfMatch) return handleAddPdf(req, res);
+  if (method === "POST" && path === "/api/pdfs") return handleAddPdf(req, res);
 
   const replaceMatch = path.match(/^\/api\/pdf\/([^/]+)\/file$/);
-  if (method === "PUT" && replaceMatch)
-    return handleReplacePdf(req, res, replaceMatch[1]);
+  if (method === "PUT" && replaceMatch) {
+    const id = extractId(replaceMatch);
+    if (!id) return;
+    return handleReplacePdf(req, res, id);
+  }
 
   const previewMatch = path.match(/^\/api\/pdf\/([^/]+)\/preview$/);
-  if (method === "POST" && previewMatch)
-    return handlePreviewReplace(req, res, previewMatch[1]);
+  if (method === "POST" && previewMatch) {
+    const id = extractId(previewMatch);
+    if (!id) return;
+    return handlePreviewReplace(req, res, id);
+  }
 
   json(res, { error: "Not found" }, 404);
 }
@@ -339,16 +405,32 @@ async function route(req, res) {
 export function createApiPlugin() {
   return {
     name: "pdf-manager-api",
-    configureServer(server) {
-      server.middlewares.use(async (req, res, next) => {
-        if (!req.url?.startsWith("/api/")) return next();
-        try {
-          await route(req, res);
-        } catch (err) {
-          console.error("[pdf-manager api]", err);
-          json(res, { error: err.message }, 500);
-        }
-      });
+    configureServer(server: {
+      middlewares: {
+        use: (
+          fn: (
+            req: IncomingMessage,
+            res: ServerResponse,
+            next: () => void,
+          ) => void,
+        ) => void;
+      };
+    }) {
+      server.middlewares.use(
+        async (req: IncomingMessage, res: ServerResponse, next: () => void) => {
+          if (!req.url?.startsWith("/api/")) return next();
+          try {
+            await route(req, res);
+          } catch (err) {
+            console.error("[pdf-manager api]", err);
+            json(
+              res,
+              { error: err instanceof Error ? err.message : String(err) },
+              500,
+            );
+          }
+        },
+      );
     },
   };
 }

@@ -1,3 +1,4 @@
+import type { RefObject } from "react";
 import {
   useCallback,
   useEffect,
@@ -6,10 +7,29 @@ import {
   useRef,
   useState,
 } from "react";
-import { ListBox } from "react-aria-components";
+import {
+  Button,
+  Dialog,
+  DialogTrigger,
+  Disclosure,
+  DisclosurePanel,
+  ListBox,
+  Popover,
+} from "react-aria-components";
 import { createPortal } from "react-dom";
-import { FieldItem } from "./FieldList.jsx";
-import { PdfCanvas } from "./PdfCanvas.jsx";
+import { useFieldRowRect, useScrollSelectedIntoView } from "../hooks.ts";
+import type { Diff, FieldPreview } from "../types.ts";
+import { FieldItem } from "./FieldList.tsx";
+import { PdfCanvas } from "./PdfCanvas.tsx";
+
+interface AssignOverlayProps {
+  rawName: string;
+  currentValue: string;
+  listRef: RefObject<HTMLElement | null>;
+  available: string[];
+  onConfirm: (value: string) => void;
+  onCancel: () => void;
+}
 
 function AssignOverlay({
   rawName,
@@ -18,21 +38,13 @@ function AssignOverlay({
   available,
   onConfirm,
   onCancel,
-}) {
+}: AssignOverlayProps) {
   const [value, setValue] = useState(currentValue);
   const [filterText, setFilterText] = useState("");
-  const [rect, setRect] = useState(null);
   const [activeIdx, setActiveIdx] = useState(-1);
   const closedRef = useRef(false);
-  const inputRef = useRef(null);
-
-  useLayoutEffect(() => {
-    const inner = Array.from(
-      listRef.current?.querySelectorAll("[data-field-id]") ?? [],
-    ).find((el) => el.dataset.fieldId === rawName);
-    const li = inner?.closest("[role='option']");
-    if (li) setRect(li.getBoundingClientRect());
-  }, [rawName, listRef]);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const rect = useFieldRowRect(rawName, listRef);
 
   useLayoutEffect(() => {
     if (!rect || !inputRef.current) return;
@@ -46,14 +58,14 @@ function AssignOverlay({
     n.toLowerCase().includes(filterText.toLowerCase()),
   );
 
-  function close(confirm) {
+  function close(confirm: boolean) {
     if (closedRef.current) return;
     closedRef.current = true;
     if (confirm && value.trim()) onConfirm(value.trim());
     else onCancel();
   }
 
-  function selectSuggestion(name) {
+  function selectSuggestion(name: string) {
     if (closedRef.current) return;
     closedRef.current = true;
     onConfirm(name);
@@ -114,76 +126,19 @@ function AssignOverlay({
   );
 }
 
-function UnresolvedPopover({
-  wrapperRef,
-  unclaimedNames,
-  removedOld,
-  onRemove,
-  onUndo,
-  onClose,
-}) {
-  const popoverRef = useRef(null);
+interface UndoSnapshot {
+  assignments: Record<string, string>;
+  deletedFields: Set<string>;
+  removedOld: Set<string>;
+}
 
-  useEffect(() => {
-    function onMouseDown(e) {
-      if (
-        !popoverRef.current?.contains(e.target) &&
-        !wrapperRef.current?.contains(e.target)
-      )
-        onClose();
-    }
-    function onKeyDown(e) {
-      if (e.key === "Escape") {
-        e.stopPropagation();
-        onClose();
-      }
-    }
-    window.addEventListener("mousedown", onMouseDown);
-    window.addEventListener("keydown", onKeyDown, true);
-    return () => {
-      window.removeEventListener("mousedown", onMouseDown);
-      window.removeEventListener("keydown", onKeyDown, true);
-    };
-  }, [wrapperRef, onClose]);
-
-  return (
-    <div ref={popoverRef} className="fm-unresolved-popover">
-      {unclaimedNames.length === 0 && removedOld.size === 0 ? (
-        <div className="fm-popover-empty">All fields accounted for</div>
-      ) : (
-        <>
-          {unclaimedNames.map((name) => (
-            <div key={name} className="fm-popover-item">
-              <span className="field-mapper-dot dot-unresolved" />
-              <span className="field-mapper-name">{name}</span>
-              <button
-                type="button"
-                className="field-mapper-action-btn field-mapper-remove-btn"
-                onClick={() => onRemove(name)}
-              >
-                Remove
-              </button>
-            </div>
-          ))}
-          {[...removedOld].map((name) => (
-            <div key={name} className="fm-popover-item">
-              <span className="field-mapper-dot dot-removed" />
-              <span className="field-mapper-name field-mapper-name-removed">
-                {name}
-              </span>
-              <button
-                type="button"
-                className="field-mapper-action-btn field-mapper-undo-btn"
-                onClick={() => onUndo(name)}
-              >
-                Undo
-              </button>
-            </div>
-          ))}
-        </>
-      )}
-    </div>
-  );
+interface FieldMapperProps {
+  pdfId: string;
+  fileName?: string;
+  pdfBase64: string;
+  preview: FieldPreview;
+  onClose: () => void;
+  onSuccess: (result: Diff) => void;
 }
 
 export function FieldMapper({
@@ -193,31 +148,29 @@ export function FieldMapper({
   preview,
   onClose,
   onSuccess,
-}) {
-  const [assignments, setAssignments] = useState(() => {
-    const a = {};
+}: FieldMapperProps) {
+  const [assignments, setAssignments] = useState<Record<string, string>>(() => {
+    const a: Record<string, string> = {};
     for (const f of preview.newFields) {
       a[f.name] = preview.autoMappings?.[f.name] ?? f.name;
     }
     return a;
   });
 
-  const [deletedFields, setDeletedFields] = useState(new Set());
-  const [removedOld, setRemovedOld] = useState(new Set());
-  const [_history, setHistory] = useState([]);
-  const [showUnchanged, setShowUnchanged] = useState(false);
+  const [deletedFields, setDeletedFields] = useState(new Set<string>());
+  const [removedOld, setRemovedOld] = useState(new Set<string>());
+  const [, setHistory] = useState<UndoSnapshot[]>([]);
   const [showPopover, setShowPopover] = useState(false);
-  const [selectedKeys, setSelectedKeys] = useState(new Set());
-  const [highlightedField, setHighlightedField] = useState(null);
-  const [hoveredField, setHoveredField] = useState(null);
-  const [editingField, setEditingField] = useState(null);
+  const [selectedKeys, setSelectedKeys] = useState(new Set<string>());
+  const [highlightedField, setHighlightedField] = useState<string | null>(null);
+  const [hoveredField, setHoveredField] = useState<string | null>(null);
+  const [editingField, setEditingField] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const listRef = useRef(null);
-  const badgeWrapperRef = useRef(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
-  const [newPdfUrl, setNewPdfUrl] = useState(null);
+  const [newPdfUrl, setNewPdfUrl] = useState<string | null>(null);
   useEffect(() => {
     const binary = atob(pdfBase64);
     const bytes = new Uint8Array(binary.length);
@@ -272,9 +225,10 @@ export function FieldMapper({
   }, [unresolvedCount, removedOld.size]);
 
   const fieldColors = useMemo(() => {
-    const colors = {};
+    const colors: Record<string, string> = {};
     for (const f of preview.newFields) {
-      if (deletedFields.has(f.name)) colors[f.name] = "rgba(136, 136, 136, 0.18)";
+      if (deletedFields.has(f.name))
+        colors[f.name] = "rgba(136, 136, 136, 0.18)";
       else if (!retainedSet.has(f.name) && assignments[f.name] === f.name)
         colors[f.name] = "rgba(232, 168, 56, 0.18)";
     }
@@ -303,7 +257,7 @@ export function FieldMapper({
     });
   }, []);
 
-  function setAssignment(rawName, value) {
+  function setAssignment(rawName: string, value: string) {
     pushUndo();
     setAssignments((prev) => {
       const next = { ...prev };
@@ -318,7 +272,7 @@ export function FieldMapper({
   }
 
   useEffect(() => {
-    function onKeyDown(e) {
+    function onKeyDown(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === "z" && !e.shiftKey) {
         const active = document.activeElement;
         if (active?.tagName === "INPUT" || active?.tagName === "TEXTAREA")
@@ -374,20 +328,13 @@ export function FieldMapper({
     pushUndo,
   ]);
 
-  useEffect(() => {
-    if (!highlightedField || !listRef.current) return;
-    const item = listRef.current.querySelector('[aria-selected="true"]');
-    if (!item) return;
-    const { top: lt, bottom: lb } = listRef.current.getBoundingClientRect();
-    const { top: it, bottom: ib } = item.getBoundingClientRect();
-    if (it < lt || ib > lb) item.scrollIntoView({ block: "nearest" });
-  }, [highlightedField]);
+  useScrollSelectedIntoView(highlightedField, listRef);
 
   async function handleConfirm() {
     setSubmitting(true);
     setError(null);
     try {
-      const renames = [];
+      const renames: { from: string; to: string }[] = [];
       for (const [rawName, assignedName] of Object.entries(assignments)) {
         if (!deletedFields.has(rawName) && assignedName !== rawName)
           renames.push({ from: rawName, to: assignedName });
@@ -401,11 +348,11 @@ export function FieldMapper({
           deletes: [...deletedFields],
         }),
       });
-      const data = await res.json();
+      const data = await res.json<Diff>();
       if (!res.ok) throw new Error(data.error ?? "Failed to replace PDF");
       onSuccess(data);
     } catch (err) {
-      setError(err.message);
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setSubmitting(false);
     }
@@ -425,41 +372,70 @@ export function FieldMapper({
         <span className="field-mapper-title">New revision</span>
         {fileName && <span className="meta-code">{fileName}</span>}
         <div className="field-mapper-spacer" />
-        <span ref={badgeWrapperRef} style={{ position: "relative" }}>
-          {unresolvedCount > 0 ? (
-            <button
-              type="button"
-              className="field-mapper-badge field-mapper-badge-warn fm-badge-btn"
-              onClick={() => setShowPopover((v) => !v)}
-            >
+        {unresolvedCount > 0 ? (
+          <DialogTrigger isOpen={showPopover} onOpenChange={setShowPopover}>
+            <Button className="field-mapper-badge field-mapper-badge-warn fm-badge-btn">
               {unresolvedCount} unmapped
-            </button>
-          ) : (
-            <span className="field-mapper-badge field-mapper-badge-ok">
-              Ready
-            </span>
-          )}
-          {showPopover && (
-            <UnresolvedPopover
-              wrapperRef={badgeWrapperRef}
-              unclaimedNames={unclaimedOldNames}
-              removedOld={removedOld}
-              onRemove={(name) => {
-                pushUndo();
-                setRemovedOld((prev) => new Set([...prev, name]));
-              }}
-              onUndo={(name) => {
-                pushUndo();
-                setRemovedOld((prev) => {
-                  const next = new Set(prev);
-                  next.delete(name);
-                  return next;
-                });
-              }}
-              onClose={() => setShowPopover(false)}
-            />
-          )}
-        </span>
+            </Button>
+            <Popover placement="bottom end" className="fm-unresolved-popover">
+              <Dialog
+                className="fm-unresolved-dialog"
+                aria-label="Unmapped fields"
+              >
+                {unclaimedOldNames.length === 0 && removedOld.size === 0 ? (
+                  <div className="fm-popover-empty">
+                    All fields accounted for
+                  </div>
+                ) : (
+                  <>
+                    {unclaimedOldNames.map((name) => (
+                      <div key={name} className="fm-popover-item">
+                        <span className="field-mapper-dot dot-unresolved" />
+                        <span className="field-mapper-name">{name}</span>
+                        <button
+                          type="button"
+                          className="field-mapper-action-btn field-mapper-remove-btn"
+                          onClick={() => {
+                            pushUndo();
+                            setRemovedOld((prev) => new Set([...prev, name]));
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    {[...removedOld].map((name) => (
+                      <div key={name} className="fm-popover-item">
+                        <span className="field-mapper-dot dot-removed" />
+                        <span className="field-mapper-name field-mapper-name-removed">
+                          {name}
+                        </span>
+                        <button
+                          type="button"
+                          className="field-mapper-action-btn field-mapper-undo-btn"
+                          onClick={() => {
+                            pushUndo();
+                            setRemovedOld((prev) => {
+                              const next = new Set(prev);
+                              next.delete(name);
+                              return next;
+                            });
+                          }}
+                        >
+                          Undo
+                        </button>
+                      </div>
+                    ))}
+                  </>
+                )}
+              </Dialog>
+            </Popover>
+          </DialogTrigger>
+        ) : (
+          <span className="field-mapper-badge field-mapper-badge-ok">
+            Ready
+          </span>
+        )}
         <button type="button" className="btn btn-sm" onClick={onClose}>
           Cancel
         </button>
@@ -503,10 +479,14 @@ export function FieldMapper({
                 selectedKeys={selectedKeys}
                 onMouseLeave={() => setHoveredField(null)}
                 onSelectionChange={(keys) => {
-                  setSelectedKeys(keys);
-                  const last = [...keys].at(-1) ?? null;
+                  const keySet =
+                    keys === "all"
+                      ? new Set(activeFields.map((f) => f.name))
+                      : new Set([...keys].map(String));
+                  setSelectedKeys(keySet);
+                  const last = [...keySet].at(-1) ?? null;
                   setHighlightedField(last);
-                  if (editingField && !keys.has(editingField))
+                  if (editingField && !keySet.has(editingField))
                     setEditingField(null);
                 }}
               >
@@ -536,31 +516,34 @@ export function FieldMapper({
           )}
 
           {preview.retained.length > 0 && (
-            <>
-              <button
-                type="button"
-                className="field-mapper-unchanged-toggle"
-                onClick={() => setShowUnchanged((v) => !v)}
-                style={{ marginTop: activeFields.length > 0 ? 4 : 0 }}
-              >
-                <span className="field-mapper-toggle-arrow">
-                  {showUnchanged ? "▾" : "▸"}
-                </span>
-                <span>{preview.retained.length} unchanged</span>
-              </button>
-              {showUnchanged &&
-                preview.retained.map((name) => (
-                  <div
-                    key={name}
-                    className="field-mapper-row field-mapper-row-retained"
+            <Disclosure style={{ marginTop: activeFields.length > 0 ? 4 : 0 }}>
+              {({ isExpanded }) => (
+                <>
+                  <Button
+                    slot="trigger"
+                    className="field-mapper-unchanged-toggle"
                   >
-                    <span className="field-mapper-dot dot-retained" />
-                    <span className="field-mapper-name" title={name}>
-                      {name}
+                    <span className="field-mapper-toggle-arrow" aria-hidden>
+                      {isExpanded ? "▾" : "▸"}
                     </span>
-                  </div>
-                ))}
-            </>
+                    <span>{preview.retained.length} unchanged</span>
+                  </Button>
+                  <DisclosurePanel>
+                    {preview.retained.map((name) => (
+                      <div
+                        key={name}
+                        className="field-mapper-row field-mapper-row-retained"
+                      >
+                        <span className="field-mapper-dot dot-retained" />
+                        <span className="field-mapper-name" title={name}>
+                          {name}
+                        </span>
+                      </div>
+                    ))}
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
           )}
         </div>
       </div>
@@ -577,7 +560,7 @@ export function FieldMapper({
             const currentIdx = activeFields.findIndex(
               (f) => f.name === editingField,
             );
-            let next = null;
+            let next: string | null = null;
             for (let i = currentIdx + 1; i < activeFields.length; i++) {
               const f = activeFields[i];
               if (

@@ -1,4 +1,11 @@
-export function DiffBanner({ diff, onDismiss }) {
+import type { Diff } from "../types.ts";
+
+interface DiffBannerProps {
+  diff: Diff;
+  onDismiss: () => void;
+}
+
+export function DiffBanner({ diff, onDismiss }: DiffBannerProps) {
   const { added = [], removed = [] } = diff;
   if (added.length === 0 && removed.length === 0) return null;
 
