@@ -8,7 +8,7 @@ import {
 } from "../../constants/forms";
 import { isRateLimited } from "../../utils/rateLimitByIp";
 
-const ALLOWED_ORIGINS = ["https://namesake.fyi"];
+const ALLOWED_ORIGINS = ["https://namesake.fyi", "http://localhost:4321"];
 
 const FeedbackSchema = z.object({
   form_slug: z.enum(FORM_SLUGS),
@@ -87,7 +87,8 @@ export const POST: APIRoute = async ({ request }) => {
     .run();
 
   const resendApiKey = env?.RESEND_API_KEY as string | undefined;
-  if (resendApiKey) {
+  const isProductionRequest = origin === "https://namesake.fyi";
+  if (resendApiKey && isProductionRequest) {
     const sentimentLabel = FORM_FEEDBACK_SENTIMENT[sentiment];
     const location = [city, region, country].filter(Boolean).join(", ");
 

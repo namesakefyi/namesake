@@ -99,11 +99,11 @@ describe("POST /api/feedback", () => {
       expect((await callPost(request)).status).toBe(403);
     });
 
-    it("returns 403 for a localhost origin", async () => {
+    it("accepts requests from localhost", async () => {
       const response = await callPost(
         makeRequest(validBody, { Origin: "http://localhost:4321" }),
       );
-      expect(response.status).toBe(403);
+      expect(response.status).toBe(200);
     });
 
     it("returns 403 for a preview deploy origin", async () => {
@@ -137,6 +137,67 @@ describe("POST /api/feedback", () => {
       expect(await response.json()).toMatchObject({
         error: "Too many submissions",
       });
+    });
+  });
+
+  describe("email notifications", () => {
+    beforeEach(() => {
+      env.RESEND_API_KEY = "test-key";
+      vi.spyOn(global, "fetch").mockResolvedValue(
+        new Response(null, { status: 200 }),
+      );
+    });
+
+    it("sends an email for production origin requests", async () => {
+      await callPost(makeRequest(validBody));
+
+      expect(fetch).toHaveBeenCalledWith(
+        "https://api.resend.com/emails",
+        expect.objectContaining({
+          method: "POST",
+          headers: expect.objectContaining({
+            Authorization: "Bearer test-key",
+          }),
+          body: expect.stringContaining("court-order-ma"),
+        }),
+      );
+    });
+
+    it("includes the correct recipient and subject in the email", async () => {
+      await callPost(makeRequest(validBody));
+
+      const [, options] = vi.mocked(fetch).mock.calls[0];
+      const body = JSON.parse(options?.body as string);
+      expect(body.to).toBe("hey@namesake.fyi");
+      expect(body.subject).toMatch(/court-order-ma/);
+    });
+
+    it("does not send an email for localhost origin requests", async () => {
+      await callPost(
+        makeRequest(validBody, { Origin: "http://localhost:4321" }),
+      );
+
+      expect(fetch).not.toHaveBeenCalledWith(
+        "https://api.resend.com/emails",
+        expect.anything(),
+      );
+    });
+
+    it("does not send an email when RESEND_API_KEY is absent", async () => {
+      env.RESEND_API_KEY = undefined;
+      await callPost(makeRequest(validBody));
+
+      expect(fetch).not.toHaveBeenCalled();
+    });
+
+    it("still returns 200 when the Resend API returns an error", async () => {
+      vi.mocked(fetch).mockResolvedValueOnce(
+        new Response("Internal Server Error", { status: 500 }),
+      );
+
+      const response = await callPost(makeRequest(validBody));
+      expect(response.status).toBe(200);
+      expect(await response.json()).toEqual({ success: true });
     });
   });
 
