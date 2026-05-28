@@ -274,7 +274,7 @@ export function FieldMapper({
   const fieldColors = useMemo(() => {
     const colors = {};
     for (const f of preview.newFields) {
-      if (deletedFields.has(f.name)) colors[f.name] = "rgba(232, 84, 84, 0.18)";
+      if (deletedFields.has(f.name)) colors[f.name] = "rgba(136, 136, 136, 0.18)";
       else if (!retainedSet.has(f.name) && assignments[f.name] === f.name)
         colors[f.name] = "rgba(232, 168, 56, 0.18)";
     }
@@ -519,7 +519,7 @@ export function FieldMapper({
                       displayName={assigned}
                       variant={
                         deletedFields.has(f.name)
-                          ? "deleted"
+                          ? "excluded"
                           : assigned === f.name
                             ? "new"
                             : allOldNames.includes(assigned)

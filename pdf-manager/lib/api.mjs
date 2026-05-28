@@ -18,12 +18,11 @@ import {
 import { loadFormFields, loadJurisdictions } from "./fields.mjs";
 import {
   applyRenames,
-  deleteFields,
   extractFields,
   extractFieldsFromBytes,
   stripFormFieldStyles,
 } from "./pdf.mjs";
-import { processPdf } from "./schema.mjs";
+import { loadExclusions, processPdf } from "./schema.mjs";
 import { loadSchemaFields, suggestName } from "./suggest.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -146,7 +145,8 @@ async function handleGetFields(_req, res, id) {
   const found = findPdfById(id);
   if (!found) return json(res, { error: "Not found" }, 404);
   const fields = await extractFields(found.pdfPath);
-  json(res, fields);
+  const excluded = loadExclusions(found.pdfDir);
+  json(res, fields.map((f) => ({ ...f, excluded: excluded.has(f.name) })));
 }
 
 async function handleSaveFields(req, res, id) {
@@ -158,9 +158,8 @@ async function handleSaveFields(req, res, id) {
   const oldSchemaFields = new Set(loadSchemaFields(found.pdfPath));
 
   if (renames.length > 0) await applyRenames(found.pdfPath, renames);
-  await deleteFields(found.pdfPath, deletes);
 
-  await processPdf(found.pdfPath);
+  await processPdf(found.pdfPath, { exclude: deletes });
   formatFiles([join(found.pdfDir, "schema.ts")]);
 
   const newSchemaFields = loadSchemaFields(found.pdfPath);
@@ -274,9 +273,8 @@ async function handleReplacePdf(req, res, id) {
   writeFileSync(found.pdfPath, await pdfDoc.save());
 
   if (renames.length > 0) await applyRenames(found.pdfPath, renames);
-  await deleteFields(found.pdfPath, deletes);
 
-  await processPdf(found.pdfPath);
+  await processPdf(found.pdfPath, { exclude: deletes });
   formatFiles([join(found.pdfDir, "schema.ts")]);
 
   const newSchemaFields = loadSchemaFields(found.pdfPath);

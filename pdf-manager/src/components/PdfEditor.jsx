@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DiffBanner } from "./DiffBanner.jsx";
 import { FieldList } from "./FieldList.jsx";
 import { FieldMapper } from "./FieldMapper.jsx";
@@ -101,6 +101,16 @@ export function PdfEditor({ pdfId, onFieldsChanged }) {
     }
   }
 
+  const persistedExcludes = useMemo(
+    () => new Set(fields.filter((f) => f.excluded).map((f) => f.name)),
+    [fields],
+  );
+
+  const allExcluded = useMemo(
+    () => new Set([...persistedExcludes, ...stagedDeletes]),
+    [persistedExcludes, stagedDeletes],
+  );
+
   async function handleSave() {
     const renames = Object.entries(stagedRenames).map(([from, to]) => ({
       from,
@@ -123,6 +133,15 @@ export function PdfEditor({ pdfId, onFieldsChanged }) {
   }
 
   function handleDelete(fieldName) {
+    if (stagedDeletes.has(fieldName)) {
+      setStagedDeletes((prev) => {
+        const next = new Set(prev);
+        next.delete(fieldName);
+        return next;
+      });
+      return;
+    }
+    if (persistedExcludes.has(fieldName)) return;
     setStagedDeletes((prev) => new Set([...prev, fieldName]));
     setStagedRenames((prev) => {
       const next = { ...prev };
@@ -145,7 +164,6 @@ export function PdfEditor({ pdfId, onFieldsChanged }) {
     e.target.value = "";
   }
 
-  const visibleFields = fields.filter((f) => !stagedDeletes.has(f.name));
   const hasChanges =
     Object.keys(stagedRenames).length > 0 || stagedDeletes.size > 0;
 
@@ -224,13 +242,14 @@ export function PdfEditor({ pdfId, onFieldsChanged }) {
           onFieldClick={setHighlightedField}
         />
         <FieldList
-          fields={visibleFields}
+          fields={fields}
           stagedRenames={stagedRenames}
+          excludedFields={allExcluded}
           onHighlight={setHighlightedField}
           onHoverField={setHoveredField}
           highlightedField={highlightedField}
           onRename={handleRename}
-          onDelete={handleDelete}
+          onExclude={handleDelete}
         />
       </div>
     </div>

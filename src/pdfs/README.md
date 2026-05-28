@@ -48,7 +48,7 @@ Field naming conventions:
 3. Try to match [existing field definitions](../constants/fields.ts). Exact matches aren't required, but staying close makes wiring easier.
 4. Don't shorten a name if it needs to be specific — long is fine.
 
-To delete a field entirely, select it and press `Delete` or `Backspace`. Hold `Shift` to select multiple fields and delete them all at once. Click **Save** to write all renames and deletions to disk and regenerate `schema.ts`.
+To exclude a field from the schema (for fields that are pre-printed or never filled), select it and press `Delete` or `Backspace`. The field remains in the PDF but is omitted from `schema.ts`. Hold `Shift` to select multiple fields and exclude them all at once. Click **Save** to write all renames and exclusions to disk and regenerate `schema.ts`.
 
 ### Step 3: Map PDF fields to form data
 
@@ -123,7 +123,7 @@ The manager compares the new field names against the existing schema and present
 - **New fields** — type a name or pick a suggestion to map them to existing schema fields.
 - **Removed fields** — any old field name not claimed by a new field must be explicitly removed.
 
-Once all old field names are accounted for, click **Replace**. The manager writes the new PDF to disk, applies all renames and deletions, and regenerates `schema.ts`. Update `index.ts` and `index.test.ts` to reflect any new or removed fields.
+Once all old field names are accounted for, click **Replace**. The manager writes the new PDF to disk, applies all renames and exclusions, and regenerates `schema.ts`. Update `index.ts` and `index.test.ts` to reflect any new or removed fields.
 
 ### Keyboard shortcuts
 
@@ -131,7 +131,7 @@ Once all old field names are accounted for, click **Replace**. The manager write
 |------|--------|
 | `↑` / `↓` | Navigate the field list |
 | `Enter` | Rename selected field |
-| `Delete` / `Backspace` | Mark selected field(s) for deletion |
+| `Delete` / `Backspace` | Exclude selected field(s) from schema |
 | `Shift+click` | Multi-select fields |
 | `Cmd+Z` / `Ctrl+Z` | Undo last change |
 | `Esc` | Cancel / close without saving |

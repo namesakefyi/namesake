@@ -5,13 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  Dialog,
-  ListBox,
-  ListBoxItem,
-  Modal,
-  ModalOverlay,
-} from "react-aria-components";
+import { ListBox, ListBoxItem } from "react-aria-components";
 import { createPortal } from "react-dom";
 
 function RenameOverlay({
@@ -64,43 +58,7 @@ function RenameOverlay({
   );
 }
 
-function DeleteConfirmDialog({ fieldName, onConfirm, onCancel }) {
-  return (
-    <ModalOverlay
-      className="modal-overlay"
-      isOpen
-      onOpenChange={(open) => {
-        if (!open) onCancel();
-      }}
-    >
-      <Modal className="modal modal-sm">
-        <Dialog aria-labelledby="delete-dialog-title">
-          <h2 id="delete-dialog-title" className="modal-title">
-            Delete field?
-          </h2>
-          <p className="modal-description">
-            <code className="field-name-code">{fieldName}</code> will be removed
-            from the PDF. You can discard this change by closing without saving.
-          </p>
-          <div className="modal-actions">
-            <Button className="btn" onPress={onCancel} autoFocus>
-              Cancel
-            </Button>
-            <button
-              type="button"
-              className="btn btn-danger"
-              onClick={onConfirm}
-            >
-              Delete
-            </button>
-          </div>
-        </Dialog>
-      </Modal>
-    </ModalOverlay>
-  );
-}
-
-function ContextMenu({ x, y, onRename, onDelete, onClose }) {
+function ContextMenu({ x, y, onRename, onExclude, onClose }) {
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -149,11 +107,11 @@ function ContextMenu({ x, y, onRename, onDelete, onClose }) {
       </button>
       <button
         type="button"
-        className="context-menu-item context-menu-danger"
+        className="context-menu-item"
         role="menuitem"
-        onClick={onDelete}
+        onClick={onExclude}
       >
-        Delete
+        Exclude
       </button>
     </div>
   );
@@ -283,14 +241,14 @@ export function FieldItem({
 export function FieldList({
   fields,
   stagedRenames,
+  excludedFields = new Set(),
   highlightedField,
   onHighlight,
   onHoverField,
   onRename,
-  onDelete,
+  onExclude,
 }) {
   const [renamingField, setRenamingField] = useState(null);
-  const [deletingField, setDeletingField] = useState(null);
   const [contextMenu, setContextMenu] = useState(null);
   const listRef = useRef(null);
 
@@ -298,12 +256,6 @@ export function FieldList({
 
   const startRename = useCallback((fieldName) => {
     setRenamingField(fieldName);
-    setDeletingField(null);
-    setContextMenu(null);
-  }, []);
-
-  const startDelete = useCallback((fieldName) => {
-    setDeletingField(fieldName);
     setContextMenu(null);
   }, []);
 
@@ -311,12 +263,6 @@ export function FieldList({
     if (renamingField && newName && newName !== renamingField)
       onRename(renamingField, newName);
     setRenamingField(null);
-    focusList();
-  }
-
-  function confirmDelete() {
-    if (deletingField) onDelete(deletingField);
-    setDeletingField(null);
     focusList();
   }
 
@@ -328,8 +274,12 @@ export function FieldList({
       if ((e.key === "Delete" || e.key === "Backspace") && highlightedField) {
         e.preventDefault();
         e.stopPropagation();
-        startDelete(highlightedField);
-      } else if (e.key === "Enter" && highlightedField) {
+        onExclude(highlightedField);
+      } else if (
+        e.key === "Enter" &&
+        highlightedField &&
+        !excludedFields.has(highlightedField)
+      ) {
         e.preventDefault();
         e.stopPropagation();
         startRename(highlightedField);
@@ -337,7 +287,14 @@ export function FieldList({
     }
     window.addEventListener("keydown", onKeyDown, true);
     return () => window.removeEventListener("keydown", onKeyDown, true);
-  }, [highlightedField, renamingField, contextMenu, startDelete, startRename]);
+  }, [
+    highlightedField,
+    renamingField,
+    contextMenu,
+    onExclude,
+    startRename,
+    excludedFields,
+  ]);
 
   useEffect(() => {
     if (!highlightedField || !listRef.current) return;
@@ -348,41 +305,81 @@ export function FieldList({
     if (it < lt || ib > lb) item.scrollIntoView({ block: "nearest" });
   }, [highlightedField]);
 
+  const activeList = fields.filter((f) => !excludedFields.has(f.name));
+  const excludedList = fields.filter((f) => excludedFields.has(f.name));
+
   return (
     <div className="field-panel">
       <div className="field-panel-header">
-        <span className="field-count">{fields.length} fields</span>
+        <span className="field-count">{activeList.length} fields</span>
+        {excludedList.length > 0 && (
+          <span className="field-count-excluded">
+            {excludedList.length} excluded
+          </span>
+        )}
       </div>
-      <ListBox
-        ref={listRef}
-        aria-label="PDF fields"
-        className="field-list"
-        selectionMode="single"
-        selectionBehavior="replace"
-        selectedKeys={
-          highlightedField ? new Set([highlightedField]) : new Set()
-        }
-        onMouseLeave={() => onHoverField?.(null)}
-        onSelectionChange={(keys) => {
-          const name = [...keys][0];
-          if (name) onHighlight(name);
-          if (renamingField && name !== renamingField) setRenamingField(null);
-        }}
-      >
-        {fields.map((field) => (
-          <FieldItem
-            key={field.name}
-            field={field}
-            displayName={stagedRenames[field.name] ?? field.name}
-            onStartRename={startRename}
-            onContextMenu={(name, x, y) => {
-              onHighlight(name);
-              setContextMenu({ fieldName: name, x, y });
-            }}
-            onHoverField={onHoverField}
-          />
-        ))}
-      </ListBox>
+      <div className="field-scroll-area">
+        <ListBox
+          ref={listRef}
+          aria-label="PDF fields"
+          className="field-list"
+          selectionMode="single"
+          selectionBehavior="replace"
+          selectedKeys={
+            highlightedField ? new Set([highlightedField]) : new Set()
+          }
+          onMouseLeave={() => onHoverField?.(null)}
+          onSelectionChange={(keys) => {
+            const name = [...keys][0];
+            if (name) onHighlight(name);
+            if (renamingField && name !== renamingField) setRenamingField(null);
+          }}
+        >
+          {activeList.map((field) => (
+            <FieldItem
+              key={field.name}
+              field={field}
+              displayName={stagedRenames[field.name] ?? field.name}
+              onStartRename={startRename}
+              onContextMenu={(name, x, y) => {
+                onHighlight(name);
+                setContextMenu({ fieldName: name, x, y });
+              }}
+              onHoverField={onHoverField}
+            />
+          ))}
+        </ListBox>
+
+        {excludedList.length > 0 && (
+          <div className="field-excluded-group">
+            <div className="field-section-label">Excluded</div>
+            <ListBox
+              aria-label="Excluded fields"
+              className="field-list field-list-excluded"
+              selectionMode="single"
+              selectionBehavior="replace"
+              selectedKeys={
+                highlightedField ? new Set([highlightedField]) : new Set()
+              }
+              onMouseLeave={() => onHoverField?.(null)}
+              onSelectionChange={(keys) => {
+                const name = [...keys][0];
+                if (name) onHighlight(name);
+              }}
+            >
+              {excludedList.map((field) => (
+                <FieldItem
+                  key={field.name}
+                  field={field}
+                  displayName={stagedRenames[field.name] ?? field.name}
+                  variant="excluded"
+                  onHoverField={onHoverField}
+                />
+              ))}
+            </ListBox>
+          </div>
+        )}
+      </div>
 
       {renamingField && (
         <RenameOverlay
@@ -402,20 +399,13 @@ export function FieldList({
           x={contextMenu.x}
           y={contextMenu.y}
           onRename={() => startRename(contextMenu.fieldName)}
-          onDelete={() => startDelete(contextMenu.fieldName)}
-          onClose={() => {
+          onExclude={() => {
+            onExclude(contextMenu.fieldName);
             setContextMenu(null);
             focusList();
           }}
-        />
-      )}
-
-      {deletingField && (
-        <DeleteConfirmDialog
-          fieldName={deletingField}
-          onConfirm={confirmDelete}
-          onCancel={() => {
-            setDeletingField(null);
+          onClose={() => {
+            setContextMenu(null);
             focusList();
           }}
         />

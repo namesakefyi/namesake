@@ -1,15 +1,14 @@
+import * as pdfjsLib from "pdfjs-dist/build/pdf.min.mjs";
+import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import { useCallback, useEffect, useRef } from "react";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
 
 function useLatestRef(value) {
   const ref = useRef(value);
   ref.current = value;
   return ref;
 }
-
-import * as pdfjsLib from "pdfjs-dist";
-import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
 
 const MAX_SCALE = 1.5;
 

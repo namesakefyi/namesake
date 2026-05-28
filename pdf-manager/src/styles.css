@@ -371,10 +371,6 @@ body {
   padding-left: 8px;
   border-left: 2px solid var(--green);
 }
-.field-item[data-variant="deleted"] {
-  padding-left: 8px;
-  border-left: 2px solid var(--red);
-}
 
 .fm-badge-btn {
   padding: 0;
@@ -587,11 +583,37 @@ body {
   font-size: 11px;
   color: var(--text-muted);
 }
+.field-count-excluded {
+  font-size: 11px;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.field-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.field-excluded-group {
+  border-top: 1px solid var(--border);
+}
+
+.field-section-label {
+  padding: 5px 12px 3px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.field-list-excluded {
+  padding: 2px 0 4px;
+}
 
 .field-list {
-  flex: 1;
   padding: 4px 0;
-  overflow-y: auto;
   outline: none;
   list-style: none;
 }
@@ -656,8 +678,9 @@ body {
 .field-item[data-variant="created"] .field-name {
   color: var(--green);
 }
-.field-item[data-variant="deleted"] .field-name {
-  color: var(--red);
+.field-item[data-variant="excluded"] .field-name {
+  color: var(--text-muted);
+  text-decoration: line-through;
 }
 
 /* ─── Context menu ────────────────────────────────────────────────────────── */

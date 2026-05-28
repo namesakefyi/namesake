@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, extname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PDFDocument } from "@cantoo/pdf-lib";
@@ -32,8 +32,43 @@ async function extractFieldsWithClass(pdfPath) {
   }));
 }
 
+/** Reads the active field names (pdfSchema keys) from an existing schema.ts. */
+function loadActiveFieldNames(schemaPath) {
+  if (!existsSync(schemaPath)) return new Set();
+  try {
+    const content = readFileSync(schemaPath, "utf8");
+    // Match both bare identifiers and quoted keys (e.g. "Some Long Name")
+    const names = new Set();
+    for (const m of content.matchAll(
+      /^\s+(?:([a-zA-Z_]\w*)|("(?:[^"\\]|\\.)*")):\s*PDF/gm,
+    )) {
+      names.add(m[1] ?? JSON.parse(m[2]));
+    }
+    return names;
+  } catch {
+    return new Set();
+  }
+}
+
+/** Reads the current exclusion set from schema.ts for a PDF directory. */
+export function loadExclusions(pdfDir) {
+  const schemaPath = join(pdfDir, "schema.ts");
+  if (!existsSync(schemaPath)) return new Set();
+  try {
+    const content = readFileSync(schemaPath, "utf8");
+    const match = content.match(
+      /export const pdfExcludedFields\s*=\s*(\[[\s\S]*?\])\s*as const/,
+    );
+    if (!match) return new Set();
+    // Strip trailing commas (Biome formatter adds them, breaking JSON.parse)
+    return new Set(JSON.parse(match[1].replace(/,(\s*\])/g, "$1")));
+  } catch {
+    return new Set();
+  }
+}
+
 /** Returns schema.ts file content as a string. */
-export function generateTypesContent(stem, fields) {
+export function generateTypesContent(stem, fields, excluded = new Set()) {
   const usedClasses = [...new Set(fields.map((f) => f.fieldClass))];
   const imports =
     usedClasses.length > 0
@@ -43,24 +78,53 @@ export function generateTypesContent(stem, fields) {
     .map((f) => `  ${escapeKey(f.name)}: ${f.fieldClass}`)
     .join(",\n");
   const schemaBody = schemaEntries ? `\n${schemaEntries},\n` : "\n";
+
+  const sortedExcludes = [...excluded].sort();
+  const excludedSection =
+    sortedExcludes.length > 0
+      ? `\n/** Fields present in the PDF but excluded from the schema */\nexport const pdfExcludedFields = ${JSON.stringify(sortedExcludes)} as const;\n`
+      : "";
+
   return `/** Auto-generated from ${stem}.pdf — do not edit */
 ${imports}
 
 export const pdfSchema = {${schemaBody}} as const;
 
 export type PdfFieldName = keyof typeof pdfSchema;
-`;
+${excludedSection}`;
 }
 
-/** Writes schema.ts next to the PDF. Returns { path, displayPath, count, checkboxCount }. */
-export async function processPdf(pdfPath) {
+/**
+ * Writes schema.ts next to the PDF, omitting any excluded fields.
+ * Pass `exclude` to add new field names to the exclusion set (merged with any
+ * previously excluded fields already recorded in schema.ts).
+ * Returns { path, displayPath, count, checkboxCount }.
+ */
+export async function processPdf(pdfPath, { exclude = [] } = {}) {
   const dir = dirname(pdfPath);
   const filename = basename(pdfPath);
   const stem = filename.slice(0, -extname(filename).length);
   const schemaPath = join(dir, "schema.ts");
 
-  const fields = await extractFieldsWithClass(pdfPath);
-  writeFileSync(schemaPath, generateTypesContent(stem, fields));
+  const excluded = loadExclusions(dir);
+  for (const n of exclude) excluded.add(n);
+
+  const allFields = await extractFieldsWithClass(pdfPath);
+
+  // When updating an existing schema, auto-exclude any PDF field that is
+  // unknown — not currently active and not already excluded. This prevents
+  // unmapped PDF fields from silently appearing in the generated schema.
+  if (existsSync(schemaPath)) {
+    const activeNames = loadActiveFieldNames(schemaPath);
+    for (const f of allFields) {
+      if (!excluded.has(f.name) && !activeNames.has(f.name)) {
+        excluded.add(f.name);
+      }
+    }
+  }
+
+  const fields = allFields.filter((f) => !excluded.has(f.name));
+  writeFileSync(schemaPath, generateTypesContent(stem, fields, excluded));
 
   const displayPath = relative(PDFS_DIR, join(dir, stem));
   const checkboxCount = fields.filter(
