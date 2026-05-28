@@ -77,6 +77,11 @@ export default defineConfig({
     host: true,
   },
   vite: {
+    ssr: {
+      optimizeDeps: {
+        exclude: ["astro-portabletext"],
+      },
+    },
     css: {
       transformer: "lightningcss",
       lightningcss: {
