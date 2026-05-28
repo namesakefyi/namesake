@@ -1,14 +1,10 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, extname, join, relative } from "node:path";
-import { fileURLToPath } from "node:url";
 import { PDFDocument } from "@cantoo/pdf-lib";
 import { escapeKey } from "../../scripts/utils.mjs";
+import { PDFS_DIR } from "./catalog.ts";
 import { fieldReadingOrder } from "./pdf.ts";
 import { loadSchemaFields } from "./suggest.ts";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, "../..");
-const PDFS_DIR = join(ROOT, "src/pdfs");
 
 interface PdfFieldWithClass {
   name: string;

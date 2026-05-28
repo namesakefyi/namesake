@@ -1,4 +1,4 @@
-import { type FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Dialog,
@@ -16,11 +16,12 @@ import type { AddPdfResult, Jurisdiction } from "../types.ts";
 import { fileToBase64 } from "../utils.ts";
 
 interface AddPdfModalProps {
+  isOpen: boolean;
   onClose: () => void;
   onSuccess: (id: string) => void;
 }
 
-export function AddPdfModal({ onClose, onSuccess }: AddPdfModalProps) {
+export function AddPdfModal({ isOpen, onClose, onSuccess }: AddPdfModalProps) {
   const [jurisdictions, setJurisdictions] = useState<Jurisdiction[]>([]);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -33,7 +34,10 @@ export function AddPdfModal({ onClose, onSuccess }: AddPdfModalProps) {
       .catch(() => setError("Failed to load jurisdictions"));
   }, []);
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: {
+    preventDefault(): void;
+    currentTarget: HTMLFormElement;
+  }) {
     e.preventDefault();
     if (!pdfFile) return;
     const data = new FormData(e.currentTarget);
@@ -63,7 +67,7 @@ export function AddPdfModal({ onClose, onSuccess }: AddPdfModalProps) {
   return (
     <ModalOverlay
       className="modal-overlay"
-      isOpen
+      isOpen={isOpen}
       onOpenChange={(open) => !open && onClose()}
     >
       <Modal className="modal">

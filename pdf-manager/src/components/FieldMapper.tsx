@@ -157,7 +157,7 @@ export function FieldMapper({
 
   const [deletedFields, setDeletedFields] = useState(new Set<string>());
   const [removedOld, setRemovedOld] = useState(new Set<string>());
-  const [, setHistory] = useState<UndoSnapshot[]>([]);
+  const [undoHistory, setHistory] = useState<UndoSnapshot[]>([]);
   const [showPopover, setShowPopover] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState(new Set<string>());
   const [highlightedField, setHighlightedField] = useState<string | null>(null);
@@ -245,15 +245,13 @@ export function FieldMapper({
   }, [assignments, deletedFields, removedOld]);
 
   const undo = useCallback(() => {
-    setHistory((prev) => {
-      if (prev.length === 0) return prev;
-      const snapshot = prev[prev.length - 1];
-      setAssignments(snapshot.assignments);
-      setDeletedFields(snapshot.deletedFields);
-      setRemovedOld(snapshot.removedOld);
-      return prev.slice(0, -1);
-    });
-  }, []);
+    const snapshot = undoHistory[undoHistory.length - 1];
+    if (!snapshot) return;
+    setAssignments(snapshot.assignments);
+    setDeletedFields(snapshot.deletedFields);
+    setRemovedOld(snapshot.removedOld);
+    setHistory((prev) => prev.slice(0, -1));
+  }, [undoHistory]);
 
   function setAssignment(rawName: string, value: string) {
     pushUndo();

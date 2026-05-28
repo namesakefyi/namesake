@@ -55,12 +55,11 @@ export function App() {
         )}
       </main>
 
-      {addPdfOpen && (
-        <AddPdfModal
-          onClose={() => setAddPdfOpen(false)}
-          onSuccess={handlePdfAdded}
-        />
-      )}
+      <AddPdfModal
+        isOpen={addPdfOpen}
+        onClose={() => setAddPdfOpen(false)}
+        onSuccess={handlePdfAdded}
+      />
     </div>
   );
 }

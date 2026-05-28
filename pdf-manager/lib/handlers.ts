@@ -179,13 +179,15 @@ export async function handleReplacePdf(c: Context) {
 
   const oldSchemaFields = new Set(loadSchemaFields(found.pdfPath));
   const oldBytes = readFileSync(found.pdfPath);
-
-  const newBytes = Buffer.from(pdfBase64, "base64");
-  const pdfDoc = await PDFDocument.load(newBytes);
-  stripFormFieldStyles(pdfDoc);
-  writeFileSync(found.pdfPath, await pdfDoc.save());
+  const schemaPath = join(found.pdfDir, "schema.ts");
+  const oldSchemaContent = readFileSync(schemaPath, "utf8");
 
   try {
+    const newBytes = Buffer.from(pdfBase64, "base64");
+    const pdfDoc = await PDFDocument.load(newBytes);
+    stripFormFieldStyles(pdfDoc);
+    writeFileSync(found.pdfPath, await pdfDoc.save());
+
     if (renames.length > 0) await applyRenames(found.pdfPath, renames);
 
     // Keep all non-deleted fields: retained old fields plus any new fields the
@@ -198,9 +200,10 @@ export async function handleReplacePdf(c: Context) {
       .filter((n) => !deleteSet.has(n));
 
     await processPdf(found.pdfPath, { exclude: deletes, keep: keepNames });
-    formatFiles([join(found.pdfDir, "schema.ts")]);
+    formatFiles([schemaPath]);
   } catch (err) {
     writeFileSync(found.pdfPath, oldBytes);
+    writeFileSync(schemaPath, oldSchemaContent);
     throw err;
   }
 
