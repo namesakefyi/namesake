@@ -190,7 +190,10 @@ async function handleSaveFields(
 
   if (renames.length > 0) await applyRenames(found.pdfPath, renames);
 
-  await processPdf(found.pdfPath, { exclude: deletes });
+  // Pass rename targets as `keep` so processPdf doesn't auto-exclude them —
+  // they're new names that aren't in the old schema yet.
+  const keepNames = renames.map((r) => r.to);
+  await processPdf(found.pdfPath, { exclude: deletes, keep: keepNames });
   formatFiles([join(found.pdfDir, "schema.ts")]);
 
   const newSchemaFields = loadSchemaFields(found.pdfPath);
@@ -269,13 +272,17 @@ async function handlePreviewReplace(
   const { pdfBase64 } = body as { pdfBase64?: string };
   if (!pdfBase64) return json(res, { error: "pdfBase64 is required" }, 400);
 
-  const oldNames = new Set(loadSchemaFields(found.pdfPath));
+  // Include excluded fields so they can be offered as rename targets.
+  const activeOldNames = new Set(loadSchemaFields(found.pdfPath));
+  const excludedOldNames = loadExclusions(found.pdfDir);
+  const oldNames = new Set([...activeOldNames, ...excludedOldNames]);
+
   const newBytes = Buffer.from(pdfBase64, "base64");
   const newFields = await extractFieldsFromBytes(newBytes);
   const newNames = new Set(newFields.map((f) => f.name));
 
   const retained = newFields
-    .filter((f) => oldNames.has(f.name))
+    .filter((f) => activeOldNames.has(f.name))
     .map((f) => f.name);
   const added = newFields
     .filter((f) => !oldNames.has(f.name))
@@ -317,16 +324,29 @@ async function handleReplacePdf(
   if (!pdfBase64) return json(res, { error: "pdfBase64 is required" }, 400);
 
   const oldSchemaFields = new Set(loadSchemaFields(found.pdfPath));
+  const oldBytes = readFileSync(found.pdfPath);
 
   const newBytes = Buffer.from(pdfBase64, "base64");
   const pdfDoc = await PDFDocument.load(newBytes);
   stripFormFieldStyles(pdfDoc);
   writeFileSync(found.pdfPath, await pdfDoc.save());
 
-  if (renames.length > 0) await applyRenames(found.pdfPath, renames);
+  try {
+    if (renames.length > 0) await applyRenames(found.pdfPath, renames);
 
-  await processPdf(found.pdfPath, { exclude: deletes });
-  formatFiles([join(found.pdfDir, "schema.ts")]);
+    // Keep all non-deleted fields: retained old fields plus any new fields the
+    // user chose not to delete. This prevents processPdf's auto-exclude from
+    // silently dropping rename targets and brand-new fields.
+    const deleteSet = new Set(deletes);
+    const allNewFields = await extractFields(found.pdfPath);
+    const keepNames = allNewFields.map((f) => f.name).filter((n) => !deleteSet.has(n));
+
+    await processPdf(found.pdfPath, { exclude: deletes, keep: keepNames });
+    formatFiles([join(found.pdfDir, "schema.ts")]);
+  } catch (err) {
+    writeFileSync(found.pdfPath, oldBytes);
+    throw err;
+  }
 
   const newSchemaFields = loadSchemaFields(found.pdfPath);
   const added = newSchemaFields.filter((f) => !oldSchemaFields.has(f));

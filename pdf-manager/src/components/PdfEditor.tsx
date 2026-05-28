@@ -41,12 +41,16 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
   }, [loadFields]);
 
   useEffect(() => {
+    let cancelled = false;
     async function fetchMeta() {
       const res = await fetch("/api/pdfs");
-      const allPdfs: PdfMeta[] = await res.json();
-      setMeta(allPdfs.find((p) => p.id === pdfId) ?? null);
+      const allPdfs = await res.json<PdfMeta[]>();
+      if (!cancelled) setMeta(allPdfs.find((p) => p.id === pdfId) ?? null);
     }
     fetchMeta();
+    return () => {
+      cancelled = true;
+    };
   }, [pdfId]);
 
   // Auto-trigger preview when a file is selected

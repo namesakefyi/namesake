@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { PDFDocument } from "@cantoo/pdf-lib";
 import { escapeKey } from "../../scripts/utils.mjs";
 import { fieldReadingOrder } from "./pdf.ts";
+import { loadSchemaFields } from "./suggest.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
@@ -39,22 +40,6 @@ async function extractFieldsWithClass(
   }));
 }
 
-/** Reads the active field names (pdfSchema keys) from an existing schema.ts. */
-function loadActiveFieldNames(schemaPath: string): Set<string> {
-  if (!existsSync(schemaPath)) return new Set();
-  try {
-    const content = readFileSync(schemaPath, "utf8");
-    const names = new Set<string>();
-    for (const m of content.matchAll(
-      /^\s+(?:([a-zA-Z_]\w*)|("(?:[^"\\]|\\.)*")):\s*PDF/gm,
-    )) {
-      names.add(m[1] ?? JSON.parse(m[2]));
-    }
-    return names;
-  } catch {
-    return new Set();
-  }
-}
 
 /** Reads the current exclusion set from schema.ts for a PDF directory. */
 export function loadExclusions(pdfDir: string): Set<string> {
@@ -115,11 +100,13 @@ export interface ProcessPdfResult {
  * Writes schema.ts next to the PDF, omitting any excluded fields.
  * Pass `exclude` to add new field names to the exclusion set (merged with any
  * previously excluded fields already recorded in schema.ts).
+ * Pass `keep` to protect specific field names from auto-exclusion (e.g. rename
+ * targets or intentionally-retained new fields that aren't in the old schema).
  * Returns { path, displayPath, count, checkboxCount }.
  */
 export async function processPdf(
   pdfPath: string,
-  { exclude = [] }: { exclude?: string[] } = {},
+  { exclude = [], keep = [] }: { exclude?: string[]; keep?: string[] } = {},
 ): Promise<ProcessPdfResult> {
   const dir = dirname(pdfPath);
   const filename = basename(pdfPath);
@@ -134,10 +121,13 @@ export async function processPdf(
   // When updating an existing schema, auto-exclude any PDF field that is
   // unknown — not currently active and not already excluded. This prevents
   // unmapped PDF fields from silently appearing in the generated schema.
+  // Fields in `keep` are exempted: they are rename targets or intentionally
+  // retained new fields that the caller has already vetted.
   if (existsSync(schemaPath)) {
-    const activeNames = loadActiveFieldNames(schemaPath);
+    const activeNames = new Set(loadSchemaFields(pdfPath));
+    const keepSet = new Set(keep);
     for (const f of allFields) {
-      if (!excluded.has(f.name) && !activeNames.has(f.name)) {
+      if (!excluded.has(f.name) && !activeNames.has(f.name) && !keepSet.has(f.name)) {
         excluded.add(f.name);
       }
     }

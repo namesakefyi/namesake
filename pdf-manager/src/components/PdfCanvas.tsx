@@ -1,6 +1,6 @@
 import * as pdfjsLib from "pdfjs-dist";
 import pdfjsWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
 
@@ -39,6 +39,7 @@ export function PdfCanvas({
 }: PdfCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const fieldMapRef = useRef(new Map<string, FieldEntry[]>());
+  const [renderVersion, setRenderVersion] = useState(0);
   const activeHlsRef = useRef<HTMLDivElement[]>([]);
   const hoverHlRef = useRef<HTMLDivElement | null>(null);
   const passiveHlsRef = useRef<HTMLDivElement[]>([]);
@@ -149,8 +150,13 @@ export function PdfCanvas({
         }
       }
 
-      // Apply any already-known passive highlights now that positions are populated
-      if (!cancelled) applyPassiveHighlights();
+      // Apply any already-known passive highlights now that positions are populated,
+      // and bump renderVersion so the active-highlight effect re-runs with the
+      // now-populated fieldMapRef (fixes missed highlights on fast selection).
+      if (!cancelled) {
+        applyPassiveHighlights();
+        setRenderVersion((v) => v + 1);
+      }
     }
 
     render().catch(console.error);
@@ -228,7 +234,8 @@ export function PdfCanvas({
         });
       }
     }
-  }, [highlightedField, selectedFields]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: renderVersion re-triggers after PDF render completes
+  }, [highlightedField, selectedFields, renderVersion]);
 
   return (
     <div className="pdf-canvas-scroll">

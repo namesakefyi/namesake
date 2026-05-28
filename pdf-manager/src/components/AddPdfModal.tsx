@@ -37,7 +37,8 @@ export function AddPdfModal({ onClose, onSuccess }: AddPdfModalProps) {
   useEffect(() => {
     fetch("/api/jurisdictions")
       .then((r) => r.json<Jurisdiction[]>())
-      .then(setJurisdictions);
+      .then(setJurisdictions)
+      .catch(() => setError("Failed to load jurisdictions"));
   }, []);
 
   async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
