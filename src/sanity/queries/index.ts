@@ -9,6 +9,10 @@ export const portableTextWithInternalLinks = `content[]{
       ...,
       "reference": @.reference->{_type, slug, title}
     }
+  },
+  _type == "formEmbed" => {
+    ...,
+    "form": form->{title, slug}
   }
 }`;
 
