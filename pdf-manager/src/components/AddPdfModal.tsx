@@ -1,20 +1,15 @@
-import type { SubmitEvent } from "react";
-import { useEffect, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import {
   Button,
   Dialog,
   DropZone,
   FileTrigger,
+  Form,
   Input,
   isFileDropItem,
   Label,
-  ListBox,
-  ListBoxItem,
   Modal,
   ModalOverlay,
-  Popover,
-  Select,
-  SelectValue,
   TextField,
 } from "react-aria-components";
 import type { AddPdfResult, Jurisdiction } from "../types.ts";
@@ -27,9 +22,6 @@ interface AddPdfModalProps {
 
 export function AddPdfModal({ onClose, onSuccess }: AddPdfModalProps) {
   const [jurisdictions, setJurisdictions] = useState<Jurisdiction[]>([]);
-  const [title, setTitle] = useState("");
-  const [code, setCode] = useState("");
-  const [jurisdiction, setJurisdiction] = useState<string | null>(null);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,9 +33,13 @@ export function AddPdfModal({ onClose, onSuccess }: AddPdfModalProps) {
       .catch(() => setError("Failed to load jurisdictions"));
   }, []);
 
-  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!title || !jurisdiction || !pdfFile) return;
+    if (!pdfFile) return;
+    const data = new FormData(e.currentTarget);
+    const title = data.get("title") as string;
+    const code = data.get("code") as string;
+    const jurisdiction = data.get("jurisdiction") as string;
 
     setSubmitting(true);
     setError(null);
@@ -54,9 +50,9 @@ export function AddPdfModal({ onClose, onSuccess }: AddPdfModalProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, code, jurisdiction, pdfBase64 }),
       });
-      const data = await res.json<AddPdfResult>();
-      if (!res.ok) throw new Error(data.error ?? "Failed to add PDF");
-      onSuccess(data.id);
+      const result = await res.json<AddPdfResult>();
+      if (!res.ok) throw new Error(result.error ?? "Failed to add PDF");
+      onSuccess(result.id);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -74,7 +70,7 @@ export function AddPdfModal({ onClose, onSuccess }: AddPdfModalProps) {
         <Dialog aria-label="Add PDF">
           <h2 className="modal-title">Add PDF</h2>
 
-          <form onSubmit={handleSubmit} className="modal-form">
+          <Form onSubmit={handleSubmit} className="modal-form">
             <DropZone
               className={`drop-zone${pdfFile ? " has-file" : ""}`}
               onDrop={async (e) => {
@@ -100,55 +96,37 @@ export function AddPdfModal({ onClose, onSuccess }: AddPdfModalProps) {
               </FileTrigger>
             </DropZone>
 
-            <TextField className="form-field" isRequired>
+            <TextField className="form-field" isRequired name="title">
               <Label className="form-label">Form title</Label>
-              <Input
-                className="form-input"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
+              <Input className="form-input" />
             </TextField>
 
-            <TextField className="form-field">
+            <TextField className="form-field" name="code">
               <Label className="form-label">Form code (optional)</Label>
-              <Input
-                className="form-input"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-              />
+              <Input className="form-input" />
             </TextField>
 
-            <Select
-              className="form-field"
-              isRequired
-              value={jurisdiction}
-              onChange={(key) => setJurisdiction(key ? String(key) : null)}
-            >
-              <Label className="form-label">Jurisdiction</Label>
-              <Button className="form-input form-select-btn">
-                <SelectValue>
-                  {({ isPlaceholder, selectedText }) =>
-                    isPlaceholder ? "Select…" : selectedText
-                  }
-                </SelectValue>
-                <span className="form-select-arrow" aria-hidden="true">
-                  ▾
-                </span>
-              </Button>
-              <Popover className="form-select-popover">
-                <ListBox className="form-select-listbox">
-                  {jurisdictions.map((j) => (
-                    <ListBoxItem
-                      key={j.abbreviation}
-                      id={j.abbreviation}
-                      className="form-select-item"
-                    >
-                      {j.name}
-                    </ListBoxItem>
-                  ))}
-                </ListBox>
-              </Popover>
-            </Select>
+            <div className="form-field">
+              <label className="form-label" htmlFor="jurisdiction">
+                Jurisdiction
+              </label>
+              <select
+                id="jurisdiction"
+                name="jurisdiction"
+                className="form-input"
+                required
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Select…
+                </option>
+                {jurisdictions.map((j) => (
+                  <option key={j.abbreviation} value={j.abbreviation}>
+                    {j.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {error && <p className="form-error">{error}</p>}
 
@@ -160,12 +138,12 @@ export function AddPdfModal({ onClose, onSuccess }: AddPdfModalProps) {
                 type="submit"
                 className="btn btn-primary"
                 isPending={submitting}
-                isDisabled={!title || !jurisdiction || !pdfFile}
+                isDisabled={!pdfFile}
               >
                 {({ isPending }) => (isPending ? "Creating…" : "Create")}
               </Button>
             </div>
-          </form>
+          </Form>
         </Dialog>
       </Modal>
     </ModalOverlay>

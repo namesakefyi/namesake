@@ -1,4 +1,3 @@
-import type { RefObject } from "react";
 import {
   useCallback,
   useEffect,
@@ -6,52 +5,35 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  ListBox,
-  ListBoxItem,
-  Menu,
-  MenuItem,
-  Popover,
-} from "react-aria-components";
-import { createPortal } from "react-dom";
-import { useFieldRowRect, useScrollSelectedIntoView } from "../hooks.ts";
+import { ListBox, ListBoxItem } from "react-aria-components";
+import { useScrollSelectedIntoView } from "../hooks.ts";
 import type { Field } from "../types.ts";
 
-interface RenameOverlayProps {
-  fieldName: string;
-  currentName: string;
-  listRef: RefObject<HTMLElement | null>;
-  onConfirm: (name: string) => void;
-  onCancel: () => void;
-}
-
-function RenameOverlay({
-  fieldName,
+function RenameInput({
   currentName,
-  listRef,
   onConfirm,
   onCancel,
-}: RenameOverlayProps) {
+}: {
+  currentName: string;
+  onConfirm: (name: string) => void;
+  onCancel: () => void;
+}) {
   const [value, setValue] = useState(currentName);
   const inputRef = useRef<HTMLInputElement>(null);
-  const rect = useFieldRowRect(fieldName, listRef);
 
   useLayoutEffect(() => {
-    if (!rect || !inputRef.current) return;
-    inputRef.current.focus();
-    inputRef.current.select();
-  }, [rect]);
+    inputRef.current?.focus();
+    inputRef.current?.select();
+  }, []);
 
-  if (!rect) return null;
-
-  return createPortal(
+  return (
     <input
       ref={inputRef}
       className="rename-overlay-input"
-      style={{ left: rect.left, top: rect.top, width: rect.width }}
       value={value}
       onChange={(e) => setValue(e.target.value)}
       onKeyDown={(e) => {
+        e.stopPropagation();
         if (e.key === "Enter") {
           e.preventDefault();
           onConfirm(value.trim());
@@ -62,47 +44,7 @@ function RenameOverlay({
         }
       }}
       onBlur={onCancel}
-    />,
-    document.body,
-  );
-}
-
-interface ContextMenuProps {
-  x: number;
-  y: number;
-  onRename: () => void;
-  onExclude: () => void;
-  onClose: () => void;
-}
-
-function ContextMenu({ x, y, onRename, onExclude, onClose }: ContextMenuProps) {
-  const triggerRef = useRef<HTMLDivElement>(null);
-  return (
-    <>
-      <div ref={triggerRef} style={{ position: "fixed", left: x, top: y }} />
-      <Popover
-        triggerRef={triggerRef}
-        isOpen
-        onOpenChange={(open) => !open && onClose()}
-        placement="bottom start"
-        className="context-menu"
-      >
-        <Menu
-          autoFocus="first"
-          onAction={(key) => {
-            if (key === "rename") onRename();
-            else if (key === "exclude") onExclude();
-          }}
-        >
-          <MenuItem id="rename" className="context-menu-item">
-            Rename
-          </MenuItem>
-          <MenuItem id="exclude" className="context-menu-item">
-            Exclude
-          </MenuItem>
-        </Menu>
-      </Popover>
-    </>
+    />
   );
 }
 
@@ -187,8 +129,10 @@ type FieldVariant = "new" | "excluded" | "normal" | "created";
 export interface FieldItemProps {
   field: Field;
   displayName: string;
+  isRenaming?: boolean;
   onStartRename?: (name: string) => void;
-  onContextMenu?: (name: string, x: number, y: number) => void;
+  onConfirmRename?: (name: string) => void;
+  onCancelRename?: () => void;
   onHoverField?: (name: string | null) => void;
   variant?: FieldVariant;
 }
@@ -196,8 +140,10 @@ export interface FieldItemProps {
 export function FieldItem({
   field,
   displayName,
+  isRenaming,
   onStartRename,
-  onContextMenu,
+  onConfirmRename,
+  onCancelRename,
   onHoverField,
   variant,
 }: FieldItemProps) {
@@ -210,38 +156,26 @@ export function FieldItem({
       textValue={displayName}
       className="field-item"
       data-variant={resolvedVariant}
+      data-field-id={field.name}
+      onMouseEnter={() => onHoverField?.(field.name)}
+      onDoubleClick={(e) => {
+        e.preventDefault();
+        onStartRename?.(field.name);
+      }}
     >
-      {/* biome-ignore lint/a11y/noStaticElementInteractions: double-click and right-click interactions */}
-      <div
-        className="field-item-inner"
-        data-field-id={field.name}
-        onMouseEnter={() => onHoverField?.(field.name)}
-        onDoubleClick={(e) => {
-          e.preventDefault();
-          onStartRename?.(field.name);
-        }}
-        onContextMenu={
-          onContextMenu
-            ? (e) => {
-                e.preventDefault();
-                onContextMenu(field.name, e.clientX, e.clientY);
-              }
-            : undefined
-        }
-      >
-        <FieldTypeIcon type={field.type} />
-        <span className="field-name" title={field.name}>
-          {displayName}
-        </span>
-      </div>
+      <FieldTypeIcon type={field.type} />
+      <span className="field-name" title={field.name}>
+        {displayName}
+      </span>
+      {isRenaming && onConfirmRename && onCancelRename && (
+        <RenameInput
+          currentName={displayName}
+          onConfirm={onConfirmRename}
+          onCancel={onCancelRename}
+        />
+      )}
     </ListBoxItem>
   );
-}
-
-interface ContextMenuState {
-  fieldName: string;
-  x: number;
-  y: number;
 }
 
 export interface FieldListProps {
@@ -266,14 +200,12 @@ export function FieldList({
   onExclude,
 }: FieldListProps) {
   const [renamingField, setRenamingField] = useState<string | null>(null);
-  const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
   const focusList = () => setTimeout(() => listRef.current?.focus(), 0);
 
   const startRename = useCallback((fieldName: string) => {
     setRenamingField(fieldName);
-    setContextMenu(null);
   }, []);
 
   function confirmRename(newName: string) {
@@ -286,7 +218,7 @@ export function FieldList({
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (!listRef.current?.contains(document.activeElement)) return;
-      if (renamingField || contextMenu) return;
+      if (renamingField) return;
       if ((e.key === "Delete" || e.key === "Backspace") && highlightedField) {
         e.preventDefault();
         e.stopPropagation();
@@ -303,14 +235,7 @@ export function FieldList({
     }
     window.addEventListener("keydown", onKeyDown, true);
     return () => window.removeEventListener("keydown", onKeyDown, true);
-  }, [
-    highlightedField,
-    renamingField,
-    contextMenu,
-    onExclude,
-    startRename,
-    excludedFields,
-  ]);
+  }, [highlightedField, renamingField, onExclude, startRename, excludedFields]);
 
   useScrollSelectedIntoView(highlightedField, listRef);
 
@@ -349,10 +274,12 @@ export function FieldList({
               key={field.name}
               field={field}
               displayName={stagedRenames[field.name] ?? field.name}
+              isRenaming={renamingField === field.name}
               onStartRename={startRename}
-              onContextMenu={(name, x, y) => {
-                onHighlight(name);
-                setContextMenu({ fieldName: name, x, y });
+              onConfirmRename={confirmRename}
+              onCancelRename={() => {
+                setRenamingField(null);
+                focusList();
               }}
               onHoverField={onHoverField}
             />
@@ -389,36 +316,6 @@ export function FieldList({
           </div>
         )}
       </div>
-
-      {renamingField && (
-        <RenameOverlay
-          fieldName={renamingField}
-          currentName={stagedRenames[renamingField] ?? renamingField}
-          listRef={listRef}
-          onConfirm={confirmRename}
-          onCancel={() => {
-            setRenamingField(null);
-            focusList();
-          }}
-        />
-      )}
-
-      {contextMenu && (
-        <ContextMenu
-          x={contextMenu.x}
-          y={contextMenu.y}
-          onRename={() => startRename(contextMenu.fieldName)}
-          onExclude={() => {
-            onExclude(contextMenu.fieldName);
-            setContextMenu(null);
-            focusList();
-          }}
-          onClose={() => {
-            setContextMenu(null);
-            focusList();
-          }}
-        />
-      )}
     </div>
   );
 }

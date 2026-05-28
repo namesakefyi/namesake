@@ -16,7 +16,6 @@ import {
   ListBox,
   Popover,
 } from "react-aria-components";
-import { createPortal } from "react-dom";
 import { useFieldRowRect, useScrollSelectedIntoView } from "../hooks.ts";
 import type { Diff, FieldPreview } from "../types.ts";
 import { FieldItem } from "./FieldList.tsx";
@@ -71,7 +70,7 @@ function AssignOverlay({
     onConfirm(name);
   }
 
-  return createPortal(
+  return (
     <div
       className="fm-assign-overlay"
       style={{ left: rect.left, top: rect.top, width: rect.width }}
@@ -121,8 +120,7 @@ function AssignOverlay({
           ))}
         </div>
       )}
-    </div>,
-    document.body,
+    </div>
   );
 }
 

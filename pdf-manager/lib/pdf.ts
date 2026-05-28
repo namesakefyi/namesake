@@ -13,12 +13,6 @@ interface TaggedField {
   x: number;
 }
 
-/**
- * Returns pdf-lib field objects sorted in document reading order:
- * page (ascending) → top edge (descending PDF y) → left edge (ascending x).
- * Fields on the same visual row (within SAME_ROW_THRESHOLD pts) are ordered
- * left-to-right.
- */
 export function fieldReadingOrder(
   fields: PDFField[],
   pages: PDFPage[],
@@ -68,7 +62,6 @@ export interface PdfFieldInfo {
   type: "text" | "checkbox";
 }
 
-/** Returns { name, type }[] for every form field, sorted in reading order. */
 export async function extractFields(pdfPath: string): Promise<PdfFieldInfo[]> {
   return extractFieldsFromBytes(readFileSync(pdfPath));
 }
@@ -86,7 +79,6 @@ export async function extractFieldsFromBytes(
   }));
 }
 
-/** Removes borders and backgrounds from all form field widgets (mutates in place). */
 export function stripFormFieldStyles(pdfDoc: PDFDocument): void {
   const form = pdfDoc.getForm();
   for (const field of form.getFields()) {
@@ -108,7 +100,6 @@ export interface Rename {
   to: string;
 }
 
-/** Applies [{ from, to }] renames to the PDF and saves it in place. */
 export async function applyRenames(
   pdfPath: string,
   renames: Rename[],

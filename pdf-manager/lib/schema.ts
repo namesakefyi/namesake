@@ -40,8 +40,6 @@ async function extractFieldsWithClass(
   }));
 }
 
-
-/** Reads the current exclusion set from schema.ts for a PDF directory. */
 export function loadExclusions(pdfDir: string): Set<string> {
   const schemaPath = join(pdfDir, "schema.ts");
   if (!existsSync(schemaPath)) return new Set();
@@ -58,7 +56,6 @@ export function loadExclusions(pdfDir: string): Set<string> {
   }
 }
 
-/** Returns schema.ts file content as a string. */
 function generateTypesContent(
   stem: string,
   fields: PdfFieldWithClass[],
@@ -127,7 +124,11 @@ export async function processPdf(
     const activeNames = new Set(loadSchemaFields(pdfPath));
     const keepSet = new Set(keep);
     for (const f of allFields) {
-      if (!excluded.has(f.name) && !activeNames.has(f.name) && !keepSet.has(f.name)) {
+      if (
+        !excluded.has(f.name) &&
+        !activeNames.has(f.name) &&
+        !keepSet.has(f.name)
+      ) {
         excluded.add(f.name);
       }
     }

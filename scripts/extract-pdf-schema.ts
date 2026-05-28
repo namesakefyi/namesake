@@ -23,7 +23,7 @@ async function main() {
 
   if (!quiet) intro("PDF Schema Extraction");
 
-  let pdfPaths;
+  let pdfPaths: string[];
   if (arg) {
     const baseDir = process.env.INIT_CWD || process.cwd();
     const resolved = resolve(baseDir, arg);
@@ -56,7 +56,7 @@ async function main() {
         );
       }
     } catch (err) {
-      if (!quiet) task?.error(err.message);
+      if (!quiet) task?.error(err instanceof Error ? err.message : String(err));
       throw err;
     }
   }
@@ -69,7 +69,7 @@ async function main() {
   );
   if (result.status !== 0) process.exit(result.status ?? 1);
 
-  if (!quiet) task.success(`Extracted schema for ${pdfPaths.length} PDFs`);
+  if (!quiet) task?.success(`Extracted schema for ${pdfPaths.length} PDFs`);
 }
 
 main().catch((err) => {

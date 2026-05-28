@@ -42,7 +42,6 @@ export function loadFormFields(): FormField[] {
   return _formFields;
 }
 
-/** Returns { name, abbreviation }[] from jurisdictions.ts. */
 export function loadJurisdictions(): Jurisdiction[] {
   if (_jurisdictions) return _jurisdictions;
   const content = readFileSync(JURISDICTIONS_PATH, "utf8");
@@ -55,7 +54,6 @@ export function loadJurisdictions(): Jurisdiction[] {
   return _jurisdictions;
 }
 
-/** Maps a PDF field name to a form field name, or null if no match. */
 function pdfFieldToFormField(
   pdfFieldName: string,
   formFieldsByName: Map<string, FormField>,
@@ -68,7 +66,6 @@ function pdfFieldToFormField(
   return null;
 }
 
-/** Returns a placeholder value string for a form field. */
 function getPlaceholderForField(formField: FormField): string | true {
   const { name, type } = formField;
   if (type === "boolean") return true;
@@ -82,7 +79,6 @@ function getPlaceholderForField(formField: FormField): string | true {
   return '"placeholder"';
 }
 
-/** Builds testData entry lines from PDF fields mapped to form fields. */
 export function buildTestDataEntries(
   pdfFields: Array<{ name: string }>,
   formFields: FormField[],
@@ -100,7 +96,7 @@ export function buildTestDataEntries(
     }
     if (seen.has(formFieldName)) continue;
     seen.add(formFieldName);
-    const formField = formFields.find((f) => f.name === formFieldName);
+    const formField = formFieldsByName.get(formFieldName);
     if (!formField) continue;
     const value = getPlaceholderForField(formField);
     lines.push(`    ${formFieldName}: ${value},`);

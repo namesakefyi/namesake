@@ -34,7 +34,7 @@ body,
 
 body {
   font-family: var(--font);
-  font-size: 13px;
+  font-size: 11px;
   color: var(--text);
   background: var(--bg);
 }
@@ -182,13 +182,11 @@ body {
 .meta-code {
   flex-shrink: 0;
   font-family: var(--mono);
-  font-size: 11px;
   color: var(--text-muted);
 }
 
 .meta-jurisdiction {
   flex-shrink: 0;
-  font-size: 11px;
   color: var(--text-dim);
 }
 
@@ -241,10 +239,6 @@ body {
 
 .field-mapper-spacer {
   flex: 1;
-}
-
-.field-mapper-badge {
-  font-size: 11px;
 }
 
 .field-mapper-badge-warn {
@@ -302,7 +296,6 @@ body {
   width: 100%;
   padding: 5px 10px;
   font-family: var(--font);
-  font-size: 11px;
   color: var(--text-muted);
   text-align: left;
   cursor: pointer;
@@ -338,7 +331,6 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: var(--mono);
-  font-size: 11px;
   white-space: nowrap;
 }
 
@@ -414,12 +406,11 @@ body {
 
 .fm-popover-empty {
   padding: 8px 12px;
-  font-size: 11px;
   color: var(--text-muted);
 }
 
 .fm-assign-overlay {
-  position: fixed;
+  position: absolute;
   z-index: 500;
 }
 
@@ -430,7 +421,6 @@ body {
   padding: 5px 10px;
   margin: 0;
   font-family: var(--mono);
-  font-size: 11px;
   color: var(--text);
   outline: none;
   background: var(--bg-4);
@@ -453,7 +443,6 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: var(--mono);
-  font-size: 11px;
   color: var(--text);
   text-align: left;
   white-space: nowrap;
@@ -508,7 +497,11 @@ body {
 .field-click-zone {
   position: absolute;
   z-index: 2;
+  padding: 0;
   cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: 0;
   opacity: 0;
   transition: opacity 0.1s;
 
@@ -556,14 +549,12 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-.field-count {
-  font-size: 11px;
+.field-count,
+.field-count-excluded {
   color: var(--text-muted);
 }
 
 .field-count-excluded {
-  font-size: 11px;
-  color: var(--text-muted);
   opacity: 0.6;
 }
 
@@ -596,16 +587,6 @@ body {
   list-style: none;
 }
 
-.field-item-inner {
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  gap: 6px;
-  align-items: center;
-  min-width: 0;
-  overflow: hidden;
-}
-
 .field-type-icon {
   flex-shrink: 0;
   width: 12px;
@@ -616,14 +597,17 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: var(--mono);
-  font-size: 11px;
   white-space: nowrap;
 }
 
 .field-item {
   position: relative;
   display: flex;
+  flex: 1;
+  flex-direction: row;
+  gap: 6px;
   align-items: center;
+  min-width: 0;
   padding: 5px 10px;
   overflow: hidden;
   cursor: pointer;
@@ -637,6 +621,7 @@ body {
   &[data-selected] {
     background: var(--accent-dim);
   }
+
   &.menu-open {
     background: var(--bg-4);
   }
@@ -665,48 +650,14 @@ body {
   }
 }
 
-/* ─── Context menu ────────────────────────────────────────────────────────── */
-
-.context-menu {
-  min-width: 140px;
-  padding: 4px 0;
-  outline: none;
-  background: var(--bg-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-}
-
-.context-menu-item {
-  display: block;
-  width: 100%;
-  padding: 6px 12px;
-  font-family: var(--font);
-  font-size: 12px;
-  color: var(--text);
-  text-align: left;
-  cursor: pointer;
-  outline: none;
-  background: none;
-  border: none;
-
-  &:hover,
-  &:focus {
-    color: var(--accent);
-    background: var(--accent-dim);
-  }
-}
-
 /* ─── Rename overlay ──────────────────────────────────────────────────────── */
 
 .rename-overlay-input {
-  position: fixed;
-  z-index: 300;
+  position: absolute;
+  inset: 0;
   box-sizing: border-box;
   padding: 5px 10px;
-  margin: 0;
   font-family: var(--mono);
-  font-size: 11px;
   color: var(--text);
   outline: none;
   background: var(--bg-4);
@@ -734,20 +685,20 @@ body {
   align-items: center;
 }
 
-.diff-added {
+.diff-added,
+.diff-removed {
   font-size: 12px;
-  color: var(--green);
   text-decoration: none;
 }
 
+.diff-added {
+  color: var(--green);
+}
 .diff-removed {
-  font-size: 12px;
   color: var(--red);
-  text-decoration: none;
 }
 
 .diff-hint {
-  font-size: 11px;
   font-style: italic;
   color: var(--text-muted);
 }
@@ -778,7 +729,6 @@ body {
 }
 
 .hint {
-  font-size: 11px;
   color: var(--text-dim);
 }
 
@@ -827,7 +777,6 @@ body {
 
 .btn-sm {
   padding: 3px 8px;
-  font-size: 11px;
 }
 
 /* ─── Modals ──────────────────────────────────────────────────────────────── */
@@ -951,55 +900,4 @@ body {
 
 .drop-zone-filename {
   font-family: var(--mono);
-  font-size: 11px;
-}
-
-/* ─── Select ──────────────────────────────────────────────────────────────── */
-
-.form-select-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-family: var(--font);
-  font-size: 12px;
-  text-align: left;
-  cursor: pointer;
-}
-
-.form-select-arrow {
-  flex-shrink: 0;
-  font-size: 10px;
-  color: var(--text-muted);
-}
-
-.form-select-popover {
-  width: var(--trigger-width);
-  overflow: hidden;
-  outline: none;
-  background: var(--bg-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-}
-
-.form-select-listbox {
-  max-height: 220px;
-  padding: 4px 0;
-  overflow-y: auto;
-  outline: none;
-  list-style: none;
-}
-
-.form-select-item {
-  padding: 6px 8px;
-  font-size: 12px;
-  color: var(--text);
-  cursor: pointer;
-  outline: none;
-
-  &[data-hovered],
-  &[data-focused] {
-    color: var(--accent);
-    background: var(--accent-dim);
-  }
 }
