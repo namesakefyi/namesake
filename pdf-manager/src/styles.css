@@ -14,7 +14,6 @@
   --border: #333;
   --text: #e8e8e8;
   --text-muted: #888;
-  --text-dim: #555;
   --accent: #4a9eff;
   --accent-dim: rgba(74, 158, 255, 0.15);
   --green: #4caf6e;
@@ -106,7 +105,7 @@ body {
   padding: 8px 12px 4px;
   font-size: 10px;
   font-weight: 700;
-  color: var(--text-dim);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -122,7 +121,7 @@ body {
   flex-shrink: 0;
   font-family: var(--mono);
   font-size: 10px;
-  color: var(--text-dim);
+  color: var(--text-muted);
 }
 
 .pdf-list-item {
@@ -187,7 +186,7 @@ body {
 
 .meta-jurisdiction {
   flex-shrink: 0;
-  color: var(--text-dim);
+  color: var(--text-muted);
 }
 
 .editor-actions {
@@ -559,6 +558,7 @@ body {
 }
 
 .field-scroll-area {
+  position: relative;
   flex: 1;
   overflow-y: auto;
 }
@@ -590,7 +590,7 @@ body {
 .field-type-icon {
   flex-shrink: 0;
   width: 12px;
-  color: var(--text-dim);
+  color: var(--text-muted);
 }
 
 .field-name {
@@ -706,7 +706,7 @@ body {
 .diff-dismiss {
   padding: 2px;
   font-size: 12px;
-  color: var(--text-dim);
+  color: var(--text-muted);
   cursor: pointer;
   background: none;
   border: none;
@@ -729,7 +729,7 @@ body {
 }
 
 .hint {
-  color: var(--text-dim);
+  color: var(--text-muted);
 }
 
 /* ─── Buttons ─────────────────────────────────────────────────────────────── */

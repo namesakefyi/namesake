@@ -29,6 +29,7 @@ function RenameInput({
   return (
     <input
       ref={inputRef}
+      id="rename-field-input"
       className="rename-overlay-input"
       value={value}
       onChange={(e) => setValue(e.target.value)}
@@ -129,10 +130,7 @@ type FieldVariant = "new" | "excluded" | "normal" | "created";
 export interface FieldItemProps {
   field: Field;
   displayName: string;
-  isRenaming?: boolean;
   onStartRename?: (name: string) => void;
-  onConfirmRename?: (name: string) => void;
-  onCancelRename?: () => void;
   onHoverField?: (name: string | null) => void;
   variant?: FieldVariant;
 }
@@ -140,10 +138,7 @@ export interface FieldItemProps {
 export function FieldItem({
   field,
   displayName,
-  isRenaming,
   onStartRename,
-  onConfirmRename,
-  onCancelRename,
   onHoverField,
   variant,
 }: FieldItemProps) {
@@ -167,13 +162,6 @@ export function FieldItem({
       <span className="field-name" title={field.name}>
         {displayName}
       </span>
-      {isRenaming && onConfirmRename && onCancelRename && (
-        <RenameInput
-          currentName={displayName}
-          onConfirm={onConfirmRename}
-          onCancel={onCancelRename}
-        />
-      )}
     </ListBoxItem>
   );
 }
@@ -200,7 +188,12 @@ export function FieldList({
   onExclude,
 }: FieldListProps) {
   const [renamingField, setRenamingField] = useState<string | null>(null);
+  const [renameRect, setRenameRect] = useState<{
+    top: number;
+    height: number;
+  } | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const focusList = () => setTimeout(() => listRef.current?.focus(), 0);
 
@@ -213,6 +206,39 @@ export function FieldList({
     setRenamingField(null);
     focusList();
   }
+
+  // Measure the renaming item's position within the scroll area so the input
+  // can be rendered as a sibling of ListBox (outside its DOM subtree) while
+  // still appearing directly over the item.
+  useLayoutEffect(() => {
+    if (!renamingField) {
+      setRenameRect(null);
+      return;
+    }
+    const scrollArea = scrollAreaRef.current;
+    if (!scrollArea) return;
+    const el = Array.from(scrollArea.querySelectorAll("[data-field-id]")).find(
+      (el) => el.getAttribute("data-field-id") === renamingField,
+    );
+    if (!el) return;
+    const containerRect = scrollArea.getBoundingClientRect();
+    const itemRect = el.getBoundingClientRect();
+    setRenameRect({
+      top: itemRect.top - containerRect.top + scrollArea.scrollTop,
+      height: itemRect.height,
+    });
+  }, [renamingField]);
+
+  // The overlay position is computed at rename-start and becomes stale if the
+  // list scrolls. Cancel the rename on scroll so they never diverge.
+  useEffect(() => {
+    if (!renamingField) return;
+    const el = scrollAreaRef.current;
+    if (!el) return;
+    const cancel = () => setRenamingField(null);
+    el.addEventListener("scroll", cancel, { passive: true });
+    return () => el.removeEventListener("scroll", cancel);
+  }, [renamingField]);
 
   // Capture phase so Delete/Backspace/Enter reach us before RAC's type-ahead and activation handlers.
   useEffect(() => {
@@ -252,7 +278,7 @@ export function FieldList({
           </span>
         )}
       </div>
-      <div className="field-scroll-area">
+      <div ref={scrollAreaRef} className="field-scroll-area">
         <ListBox
           ref={listRef}
           aria-label="PDF fields"
@@ -264,9 +290,9 @@ export function FieldList({
           }
           onMouseLeave={() => onHoverField?.(null)}
           onSelectionChange={(keys) => {
+            if (renamingField) return;
             const name = [...keys][0];
             if (name) onHighlight(String(name));
-            if (renamingField && name !== renamingField) setRenamingField(null);
           }}
         >
           {activeList.map((field) => (
@@ -274,13 +300,7 @@ export function FieldList({
               key={field.name}
               field={field}
               displayName={stagedRenames[field.name] ?? field.name}
-              isRenaming={renamingField === field.name}
               onStartRename={startRename}
-              onConfirmRename={confirmRename}
-              onCancelRename={() => {
-                setRenamingField(null);
-                focusList();
-              }}
               onHoverField={onHoverField}
             />
           ))}
@@ -313,6 +333,27 @@ export function FieldList({
                 />
               ))}
             </ListBox>
+          </div>
+        )}
+
+        {renamingField && renameRect && (
+          <div
+            style={{
+              position: "absolute",
+              top: renameRect.top,
+              left: 0,
+              right: 0,
+              height: renameRect.height,
+            }}
+          >
+            <RenameInput
+              currentName={stagedRenames[renamingField] ?? renamingField}
+              onConfirm={confirmRename}
+              onCancel={() => {
+                setRenamingField(null);
+                focusList();
+              }}
+            />
           </div>
         )}
       </div>

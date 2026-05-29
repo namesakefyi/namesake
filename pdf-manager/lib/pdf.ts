@@ -1,10 +1,10 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import type { PDFField, PDFPage } from "@cantoo/pdf-lib";
-import { PDFDocument, PDFName } from "@cantoo/pdf-lib";
+import { PDFDocument } from "@cantoo/pdf-lib";
 
 // Fields within this many PDF points vertically are treated as the same row
-// and sorted left-to-right within that row. ~5pt ≈ 2mm.
-const SAME_ROW_THRESHOLD = 5;
+// and sorted left-to-right within that row. ~10pt ≈ 4mm.
+const SAME_ROW_THRESHOLD = 10;
 
 interface TaggedField {
   field: PDFField;

@@ -45,6 +45,9 @@ function PdfPage({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const task = page.render({ canvasContext: ctx, viewport: vp });
+    task.promise.catch((err) => {
+      if (err?.name !== "RenderingCancelledException") console.error(err);
+    });
     return () => {
       task.cancel();
     };
