@@ -3,9 +3,8 @@
   flex-direction: column;
   gap: var(--space-m);
   align-items: flex-start;
-  padding: var(--space-l);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-m);
+  padding-block-end: var(--space-l);
+  border-block-end: 1px solid var(--border-color);
 }
 
 .delete-form-data-modal {

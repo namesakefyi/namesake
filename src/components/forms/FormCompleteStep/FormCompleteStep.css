@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: var(--space-2xl);
   align-items: flex-start;
-  padding-block: var(--space-xl) var(--space-2xl);
+  padding-block: var(--space-xl) 0;
 }
 
 .form-complete-step-header {

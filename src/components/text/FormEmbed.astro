@@ -1,78 +1,48 @@
 ---
-const { form } = Astro.props.node;
+import { sanityClient } from "sanity:client";
+import { FormContainer } from "../../components/forms/FormContainer/FormContainer";
+import { type FormSlug } from "../../constants/forms";
+import { getFormPdfMetadata } from "../../forms/getFormPdfMetadata";
+import { FORM_BY_SLUG_WITH_GUIDE_COSTS_QUERY } from "../../sanity/queries";
 
-if (!form?.slug?.current) return;
+const { form: formNode } = Astro.props.node;
 
-const slug = form.slug.current;
-const title = form.title ?? "Open form";
-const formUrl = `/forms/${slug}`;
+if (!formNode?.slug?.current) return;
+
+const slug = formNode.slug.current as FormSlug;
+
+const form = await sanityClient.fetch(FORM_BY_SLUG_WITH_GUIDE_COSTS_QUERY, {
+  slug,
+});
+
+if (!form) return;
+
+const pdfs = await getFormPdfMetadata(slug);
 ---
 
-<div class="form-embed">
-  <div class="form-embed-frame">
-    <iframe
-      src={formUrl}
-      title={title}
-      loading="lazy"
-    ></iframe>
-  </div>
-  <div class="form-embed-footer">
-    <a href={formUrl} class="form-embed-expand">
-      Open full form
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-        <polyline points="15 3 21 3 21 9"></polyline>
-        <line x1="10" y1="14" x2="21" y2="3"></line>
-      </svg>
-    </a>
-  </div>
+<div class="not-content form-embed">
+  <FormContainer
+    client:load
+    slug={slug}
+    title={form.title}
+    description={form.description}
+    banner={form.banner}
+    updatedAt={form._updatedAt}
+    pdfs={pdfs}
+    costs={form.costs}
+    inline
+  />
 </div>
 
 <style>
   .form-embed {
-    border: 0.5px solid var(--border-color);
-    margin-block: var(--space-l);
-    overflow: hidden;
-  }
-
-  .form-embed-frame {
-    position: relative;
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-  }
-
-  iframe {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: var(--surface-color, #fff);
-  }
-
-  .form-embed-footer {
-    border-top: 0.5px solid var(--border-color);
-    padding: var(--space-xs) var(--space-m);
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .form-embed-expand {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2xs);
-    font-size: var(--step--1);
-    color: var(--text-color);
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-
-    svg {
-      width: 1em;
-      height: 1em;
-      flex-shrink: 0;
-    }
+    margin-block: var(--space-xl);
+    border: 1px solid var(--border-color);
+    padding-block-end: var(--space-xl);
+    box-shadow:
+      5px 5px 0 -3px var(--background-color),
+      5px 5px 0 -2px var(--border-color),
+      10px 10px 0 -5px var(--background-color),
+      10px 10px 0 -4px var(--border-color);
   }
 </style>

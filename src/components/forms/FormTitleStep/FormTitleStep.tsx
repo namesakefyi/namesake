@@ -1,6 +1,5 @@
 import {
   type RemixiconComponentType,
-  RiArrowLeftLine,
   RiArrowRightLine,
   RiFileCheckLine,
   RiShieldKeyholeLine,
@@ -10,12 +9,12 @@ import { useEffect, useState } from "react";
 import { type IBrowser, type IDevice, UAParser } from "ua-parser-js";
 import type { FormPdfMetadata } from "../../../forms/getFormPdfMetadata";
 import { formatTimeEstimate } from "../../../utils/formatTimeEstimate";
-import { smartquotes } from "../../../utils/smartquotes";
-import { Button } from "../../common/Button";
-import "./FormTitleStep.css";
 import { formatBrowser } from "../../../utils/formatBrowser";
 import { formatDevice } from "../../../utils/formatDevice";
+import { smartquotes } from "../../../utils/smartquotes";
+import { Button } from "../../common/Button";
 import { Heading } from "../../common/Content/Content";
+import "./FormTitleStep.css";
 
 const formatter = new Intl.DateTimeFormat("en-US", {
   dateStyle: "long",
@@ -49,40 +48,14 @@ function FormInfoItem({ icon: Icon, children }: FormInfoItemProps) {
 }
 
 export interface FormTitleStepProps {
-  /**
-   * The title of the form.
-   */
   title: string;
-
-  /**
-   * The description of the form.
-   */
   description?: string | null;
-
-  /**
-   * Child content.
-   */
   children?: React.ReactNode;
-
-  /**
-   * Handler for when the user clicks the start button.
-   */
   onStart: () => void;
-
-  /**
-   * The PDF metadata for forms that will be generated.
-   */
   pdfs: FormPdfMetadata[];
-
-  /**
-   * The total number of steps in the form.
-   */
   totalSteps: number;
-
-  /**
-   * The date the form was last updated.
-   */
   updatedAt: string;
+  headingLevel?: 1 | 2 | 3;
 }
 
 export function FormTitleStep({
@@ -93,6 +66,7 @@ export function FormTitleStep({
   pdfs,
   totalSteps,
   updatedAt,
+  headingLevel = 1,
 }: FormTitleStepProps) {
   const [device, setDevice] = useState<IDevice | null>(null);
   const [browser, setBrowser] = useState<IBrowser | null>(null);
@@ -108,10 +82,7 @@ export function FormTitleStep({
   return (
     <section className="form-title-step">
       <header className="form-title-step-header">
-        <a href="/forms" className="form-title-step-back-link">
-          <RiArrowLeftLine /> All forms
-        </a>
-        <Heading level={1} className="form-title-step-heading">
+        <Heading level={headingLevel} className="form-title-step-heading">
           {smartquotes(title)}
         </Heading>
         {description && (
@@ -145,7 +116,7 @@ export function FormTitleStep({
               Takes about <strong>{timeEstimate}</strong>.
             </FormInfoItemTitle>
             <FormInfoItemDescription>
-              We’ll provide guidance for common questions.
+              We'll provide guidance for common questions.
             </FormInfoItemDescription>
           </FormInfoItem>
         )}

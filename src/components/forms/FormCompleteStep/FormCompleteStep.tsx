@@ -12,22 +12,27 @@ export interface FormCompleteStepProps {
   slug: FormSlug;
   title: string;
   onRedownload: (e: React.SubmitEvent<HTMLFormElement>) => void | Promise<void>;
+  inline?: boolean;
+  headingLevel?: 1 | 2 | 3;
 }
 
 export function FormCompleteStep({
   slug,
   title,
   onRedownload,
+  inline = false,
+  headingLevel = 1,
 }: FormCompleteStepProps) {
   const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
+    if (inline) return;
     const previous = document.body.dataset.color;
     document.body.dataset.color = "green";
     return () => {
       document.body.dataset.color = previous ?? "";
     };
-  }, []);
+  }, [inline]);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,11 +54,11 @@ export function FormCompleteStep({
   return (
     <section className="form-complete-step">
       <header className="form-complete-step-header">
-        <Heading level={1} className="form-complete-step-heading">
+        <Heading level={headingLevel} className="form-complete-step-heading">
           Form complete!
         </Heading>
         <p className="form-complete-step-description">
-          Check your downloads for your <strong>{title}</strong> packet. Review,
+          The <strong>{title}</strong> packet is in your downloads. Review,
           print, and follow steps for filing.
         </p>
       </header>

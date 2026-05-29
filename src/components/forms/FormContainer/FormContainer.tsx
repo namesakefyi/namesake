@@ -39,6 +39,9 @@ export interface FormContainerProps {
 
   /** The costs associated with this form. */
   costs?: Costs | null;
+
+  /** Render inline within a page rather than as a full-page experience. */
+  inline?: boolean;
 }
 
 export function FormContainer({
@@ -49,6 +52,7 @@ export function FormContainer({
   updatedAt,
   pdfs,
   costs,
+  inline = false,
 }: FormContainerProps) {
   const config = getFormConfig(slug);
 
@@ -77,8 +81,16 @@ export function FormContainer({
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const scrollToFormTop = useCallback(() => {
-    containerRef.current?.scrollIntoView({ block: "start" });
-  }, []);
+    const el = containerRef.current;
+    if (!el) return;
+    if (inline) {
+      if (el.getBoundingClientRect().top < 0) {
+        el.scrollIntoView({ block: "start" });
+      }
+      return;
+    }
+    el.scrollIntoView({ block: "start" });
+  }, [inline]);
 
   const focusStepContent = useCallback(() => {
     requestAnimationFrame(() => {
@@ -162,6 +174,7 @@ export function FormContainer({
             updatedAt={updatedAt ?? ""}
             totalSteps={totalSteps}
             onStart={onStart}
+            headingLevel={inline ? 2 : 1}
           >
             {banner && (
               <Banner icon={RiMegaphoneLine}>
@@ -185,6 +198,8 @@ export function FormContainer({
             title={title}
             slug={config.slug}
             onRedownload={onSubmit}
+            inline={inline}
+            headingLevel={inline ? 2 : 1}
           />
         );
       default:
@@ -203,6 +218,7 @@ export function FormContainer({
     totalSteps,
     onStart,
     onSubmit,
+    inline,
   ]);
 
   const showNavigation = !["title", "complete"].includes(phase);
@@ -225,6 +241,7 @@ export function FormContainer({
     return (
       <section
         className="form-container form-container-loading"
+        data-inline={inline || undefined}
         ref={containerRef}
       >
         <ProgressCircle isIndeterminate aria-label="Loading form" size={40} />
@@ -235,7 +252,11 @@ export function FormContainer({
   return (
     <FormProvider {...form}>
       <FormStepContext.Provider value={stepContextValue}>
-        <section className="form-container" ref={containerRef}>
+        <section
+          className="form-container"
+          data-inline={inline || undefined}
+          ref={containerRef}
+        >
           {showNavigation && <FormNavigation />}
           <div className="form-container-content">{currentStepComponent}</div>
         </section>

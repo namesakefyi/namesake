@@ -4,9 +4,8 @@
   gap: var(--space-l);
   align-items: stretch;
   width: 100%;
-  padding: var(--space-l);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-m);
+  padding-block-end: var(--space-l);
+  border-block-end: 1px solid var(--border-color);
 }
 
 .form-feedback-success {
