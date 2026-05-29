@@ -181,35 +181,35 @@ const headerDescription =
       scroll-margin-top: 1ex;
     }
 
-    h2:not(:first-child) {
+    h2:not(:where(.not-content *)):not(:first-child) {
       margin-block-start: var(--space-3xl);
     }
 
-    h3 {
+    h3:not(:where(.not-content *)) {
       margin-block-start: var(--space-xl);
     }
 
-    h2,
-    h3 {
+    h2:not(:where(.not-content *)),
+    h3:not(:where(.not-content *)) {
       margin-block-end: var(--space-m);
       text-wrap: balance;
     }
 
-    p,
-    ul,
-    ol,
-    img {
+    p:not(:where(.not-content *)),
+    ul:not(:where(.not-content *)),
+    ol:not(:where(.not-content *)),
+    img:not(:where(.not-content *)) {
       margin-block: var(--space-m);
     }
 
-    img,
-    ul,
-    ol {
+    img:not(:where(.not-content *)),
+    ul:not(:where(.not-content *)),
+    ol:not(:where(.not-content *)) {
       margin-block: var(--space-xl);
     }
 
-    ul,
-    ol {
+    ul:not(:where(.not-content *)),
+    ol:not(:where(.not-content *)) {
       padding-inline-start: var(--space-xl);
 
       li {
@@ -217,10 +217,10 @@ const headerDescription =
       }
     }
 
-    ul ul,
-    ol ul,
-    ul ol,
-    ol ol {
+    ul ul:not(:where(.not-content *)),
+    ol ul:not(:where(.not-content *)),
+    ul ol:not(:where(.not-content *)),
+    ol ol:not(:where(.not-content *)) {
       margin-block: 0;
     }
 

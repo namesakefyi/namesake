@@ -156,6 +156,7 @@ export type Form = {
     _key: string;
   }>;
   slug: Slug;
+  unlisted?: boolean;
   state?: StateReference;
   category: CategoryReference;
 };
@@ -177,6 +178,7 @@ export type Guide = {
   state?: StateReference;
   category: CategoryReference;
   slug: Slug;
+  unlisted?: boolean;
   costs?: Array<{
     title?: string;
     amount?: number;
@@ -261,6 +263,11 @@ export type Guide = {
           _key: string;
         }>;
         _type: "details";
+        _key: string;
+      }
+    | {
+        form?: FormReference;
+        _type: "formEmbed";
         _key: string;
       }
     | {
@@ -637,6 +644,7 @@ export type Contact = {
     } & StateReference
   >;
   slug: Slug;
+  unlisted?: boolean;
   url: string;
   services: Array<string>;
   logo?: {
@@ -814,7 +822,7 @@ export type AllSanitySchemaTypes =
 
 // Source: src/sanity/queries/index.ts
 // Variable: HOME_PAGE_QUERY
-// Query: *[_type == "page" && (slug.current == "index" || slug.current == "" || !defined(slug))][0]{    _id,    title,    slug,    description,    content[]{  ...,  markDefs[]{    ...,    _type == "internalLink" => {      ...,      "reference": @.reference->{_type, slug, title}    }  }},    ogImage,    annotation,    color  }
+// Query: *[_type == "page" && (slug.current == "index" || slug.current == "" || !defined(slug))][0]{    _id,    title,    slug,    description,    content[]{  ...,  markDefs[]{    ...,    _type == "internalLink" => {      ...,      "reference": @.reference->{_type, slug, title}    }  },  _type == "formEmbed" => {    ...,    "form": form->{title, slug}  }},    ogImage,    annotation,    color  }
 export type HOME_PAGE_QUERY_RESULT = {
   _id: string;
   title: string;
@@ -946,7 +954,7 @@ export type HOME_PAGE_QUERY_RESULT = {
 
 // Source: src/sanity/queries/index.ts
 // Variable: PAGE_BY_SLUG_QUERY
-// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    title,    slug,    description,    content[]{  ...,  markDefs[]{    ...,    _type == "internalLink" => {      ...,      "reference": @.reference->{_type, slug, title}    }  }},    ogImage,    annotation,    color  }
+// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    title,    slug,    description,    content[]{  ...,  markDefs[]{    ...,    _type == "internalLink" => {      ...,      "reference": @.reference->{_type, slug, title}    }  },  _type == "formEmbed" => {    ...,    "form": form->{title, slug}  }},    ogImage,    annotation,    color  }
 export type PAGE_BY_SLUG_QUERY_RESULT = {
   _id: string;
   title: string;
@@ -1097,7 +1105,7 @@ export type POSTS_INDEX_QUERY_RESULT = Array<{
 
 // Source: src/sanity/queries/index.ts
 // Variable: POST_BY_SLUG_QUERY
-// Query: *[_type == "post" && slug.current == $slug][0]{    _id,    title,    slug,    publishDate,    description,    showDescription,    image,    annotation,    content[]{  ...,  markDefs[]{    ...,    _type == "internalLink" => {      ...,      "reference": @.reference->{_type, slug, title}    }  }},    "authors": authors[]->{      _id,      name,      role,      bio,      avatar,      socialLinks    }  }
+// Query: *[_type == "post" && slug.current == $slug][0]{    _id,    title,    slug,    publishDate,    description,    showDescription,    image,    annotation,    content[]{  ...,  markDefs[]{    ...,    _type == "internalLink" => {      ...,      "reference": @.reference->{_type, slug, title}    }  },  _type == "formEmbed" => {    ...,    "form": form->{title, slug}  }},    "authors": authors[]->{      _id,      name,      role,      bio,      avatar,      socialLinks    }  }
 export type POST_BY_SLUG_QUERY_RESULT = {
   _id: string;
   title: string;
@@ -1292,7 +1300,7 @@ export type RSS_POSTS_QUERY_RESULT = Array<{
 
 // Source: src/sanity/queries/index.ts
 // Variable: GUIDES_INDEX_QUERY
-// Query: *[_type == "guide" && defined(slug)]{    title,    slug,    "state": state->name,    "category": category->name,    _updatedAt,  } | order(publishDate desc)
+// Query: *[_type == "guide" && defined(slug) && !unlisted]{    title,    slug,    "state": state->name,    "category": category->name,    _updatedAt,  } | order(publishDate desc)
 export type GUIDES_INDEX_QUERY_RESULT = Array<{
   title: string;
   slug: Slug;
@@ -1303,7 +1311,7 @@ export type GUIDES_INDEX_QUERY_RESULT = Array<{
 
 // Source: src/sanity/queries/index.ts
 // Variable: GUIDE_BY_SLUG_QUERY
-// Query: *[_type == "guide" && slug.current == $slug][0]{    ...,    content[]{  ...,  markDefs[]{    ...,    _type == "internalLink" => {      ...,      "reference": @.reference->{_type, slug, title}    }  }}  }
+// Query: *[_type == "guide" && slug.current == $slug][0]{    ...,    content[]{  ...,  markDefs[]{    ...,    _type == "internalLink" => {      ...,      "reference": @.reference->{_type, slug, title}    }  },  _type == "formEmbed" => {    ...,    "form": form->{title, slug}  }}  }
 export type GUIDE_BY_SLUG_QUERY_RESULT = {
   _id: string;
   _type: "guide";
@@ -1315,6 +1323,7 @@ export type GUIDE_BY_SLUG_QUERY_RESULT = {
   state?: StateReference;
   category: CategoryReference;
   slug: Slug;
+  unlisted?: boolean;
   costs?: Array<{
     title?: string;
     amount?: number;
@@ -1455,6 +1464,15 @@ export type GUIDE_BY_SLUG_QUERY_RESULT = {
         markDefs: null;
       }
     | {
+        form: {
+          title: string;
+          slug: Slug;
+        } | null;
+        _type: "formEmbed";
+        _key: string;
+        markDefs: null;
+      }
+    | {
         asset?: SanityImageAssetReference;
         media?: unknown;
         hotspot?: SanityImageHotspot;
@@ -1506,7 +1524,7 @@ export type GUIDE_BY_SLUG_QUERY_RESULT = {
 
 // Source: src/sanity/queries/index.ts
 // Variable: FORMS_INDEX_QUERY
-// Query: *[_type == "form" && defined(slug)]{    title,    slug,    _updatedAt,  } | order(publishDate desc)
+// Query: *[_type == "form" && defined(slug) && !unlisted]{    title,    slug,    _updatedAt,  } | order(publishDate desc)
 export type FORMS_INDEX_QUERY_RESULT = Array<{
   title: string;
   slug: Slug;
@@ -1555,6 +1573,7 @@ export type FORM_BY_SLUG_QUERY_RESULT = {
     _key: string;
   }>;
   slug: Slug;
+  unlisted?: boolean;
   state?: StateReference;
   category: CategoryReference;
 } | null;
@@ -1735,16 +1754,8 @@ export type SPONSORS_QUERY_RESULT = Array<{
 }>;
 
 // Source: src/sanity/queries/index.ts
-// Variable: DIRECTORY_FILTER_STATES_QUERY
-// Query: *[_type == "state" && defined(slug)] | order(name asc) {    name,    "slug": slug.current  }
-export type DIRECTORY_FILTER_STATES_QUERY_RESULT = Array<{
-  name: string;
-  slug: string;
-}>;
-
-// Source: src/sanity/queries/index.ts
 // Variable: DIRECTORY_CONTACTS_LIST_QUERY
-// Query: *[    _type == "contact" &&    defined(slug) &&    ($stateSlug == "" || $stateSlug in states[]->slug.current) &&    ($service == "" || $service in services)  ] {    name,    "slug": slug.current,    description,    "states": states[]->name | order(@ asc),    services,    logo,    email,    phone,    url,    officialPartner,  } | order(officialPartner desc, name asc)
+// Query: *[    _type == "contact" &&    defined(slug) &&    !unlisted &&    ($stateSlug == "" || $stateSlug in states[]->slug.current) &&    ($service == "" || $service in services)  ] {    name,    "slug": slug.current,    description,    "states": states[]->name | order(@ asc),    services,    logo,    email,    phone,    url,    officialPartner,  } | order(officialPartner desc, name asc)
 export type DIRECTORY_CONTACTS_LIST_QUERY_RESULT = Array<{
   name: string;
   slug: string;
@@ -1768,14 +1779,14 @@ export type DIRECTORY_CONTACTS_LIST_QUERY_RESULT = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[_type == "page" && (slug.current == "index" || slug.current == "" || !defined(slug))][0]{\n    _id,\n    title,\n    slug,\n    description,\n    content[]{\n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => {\n      ...,\n      "reference": @.reference->{_type, slug, title}\n    }\n  }\n},\n    ogImage,\n    annotation,\n    color\n  }\n': HOME_PAGE_QUERY_RESULT;
-    '\n  *[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    slug,\n    description,\n    content[]{\n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => {\n      ...,\n      "reference": @.reference->{_type, slug, title}\n    }\n  }\n},\n    ogImage,\n    annotation,\n    color\n  }\n': PAGE_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "page" && (slug.current == "index" || slug.current == "" || !defined(slug))][0]{\n    _id,\n    title,\n    slug,\n    description,\n    content[]{\n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => {\n      ...,\n      "reference": @.reference->{_type, slug, title}\n    }\n  },\n  _type == "formEmbed" => {\n    ...,\n    "form": form->{title, slug}\n  }\n},\n    ogImage,\n    annotation,\n    color\n  }\n': HOME_PAGE_QUERY_RESULT;
+    '\n  *[_type == "page" && slug.current == $slug][0]{\n    _id,\n    title,\n    slug,\n    description,\n    content[]{\n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => {\n      ...,\n      "reference": @.reference->{_type, slug, title}\n    }\n  },\n  _type == "formEmbed" => {\n    ...,\n    "form": form->{title, slug}\n  }\n},\n    ogImage,\n    annotation,\n    color\n  }\n': PAGE_BY_SLUG_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug) && publishDate <= now()]{\n    title,\n    slug,\n    publishDate,\n    description,\n    image,\n    "authors": authors[]->name\n  } | order(publishDate desc)\n': POSTS_INDEX_QUERY_RESULT;
-    '\n  *[_type == "post" && slug.current == $slug][0]{\n    _id,\n    title,\n    slug,\n    publishDate,\n    description,\n    showDescription,\n    image,\n    annotation,\n    content[]{\n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => {\n      ...,\n      "reference": @.reference->{_type, slug, title}\n    }\n  }\n},\n    "authors": authors[]->{\n      _id,\n      name,\n      role,\n      bio,\n      avatar,\n      socialLinks\n    }\n  }\n': POST_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "post" && slug.current == $slug][0]{\n    _id,\n    title,\n    slug,\n    publishDate,\n    description,\n    showDescription,\n    image,\n    annotation,\n    content[]{\n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => {\n      ...,\n      "reference": @.reference->{_type, slug, title}\n    }\n  },\n  _type == "formEmbed" => {\n    ...,\n    "form": form->{title, slug}\n  }\n},\n    "authors": authors[]->{\n      _id,\n      name,\n      role,\n      bio,\n      avatar,\n      socialLinks\n    }\n  }\n': POST_BY_SLUG_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug) && publishDate <= now()]{\n    title,\n    slug,\n    publishDate,\n    description,\n    "contentText": pt::text(content)\n  } | order(publishDate desc)\n': RSS_POSTS_QUERY_RESULT;
-    '\n  *[_type == "guide" && defined(slug)]{\n    title,\n    slug,\n    "state": state->name,\n    "category": category->name,\n    _updatedAt,\n  } | order(publishDate desc)\n': GUIDES_INDEX_QUERY_RESULT;
-    '\n  *[_type == "guide" && slug.current == $slug][0]{\n    ...,\n    content[]{\n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => {\n      ...,\n      "reference": @.reference->{_type, slug, title}\n    }\n  }\n}\n  }\n': GUIDE_BY_SLUG_QUERY_RESULT;
-    '\n  *[_type == "form" && defined(slug)]{\n    title,\n    slug,\n    _updatedAt,\n  } | order(publishDate desc)\n': FORMS_INDEX_QUERY_RESULT;
+    '\n  *[_type == "guide" && defined(slug) && !unlisted]{\n    title,\n    slug,\n    "state": state->name,\n    "category": category->name,\n    _updatedAt,\n  } | order(publishDate desc)\n': GUIDES_INDEX_QUERY_RESULT;
+    '\n  *[_type == "guide" && slug.current == $slug][0]{\n    ...,\n    content[]{\n  ...,\n  markDefs[]{\n    ...,\n    _type == "internalLink" => {\n      ...,\n      "reference": @.reference->{_type, slug, title}\n    }\n  },\n  _type == "formEmbed" => {\n    ...,\n    "form": form->{title, slug}\n  }\n}\n  }\n': GUIDE_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "form" && defined(slug) && !unlisted]{\n    title,\n    slug,\n    _updatedAt,\n  } | order(publishDate desc)\n': FORMS_INDEX_QUERY_RESULT;
     '\n  *[_type == "form" && slug.current == $slug][0]\n': FORM_BY_SLUG_QUERY_RESULT;
     '\n  *[_type == "form" && slug.current == $slug][0]{\n    title,\n    description,\n    banner,\n    _updatedAt,\n    state,\n    category,\n    "costs": *[_type == "guide" && state._ref == ^.state._ref && category._ref == ^.category._ref][0].costs\n  }\n': FORM_BY_SLUG_WITH_GUIDE_COSTS_QUERY_RESULT;
     "\n  *[_id == $ref]{_type, slug, title}[0]\n": DOCUMENT_REFERENCE_BY_ID_QUERY_RESULT;
@@ -1783,7 +1794,6 @@ declare module "@sanity/client" {
     '\n  *[_type == "press"]{\n    _id,\n    title,\n    outlet,\n    url,\n    date,\n    image\n  } | order(date desc)\n': PRESS_ARTICLES_QUERY_RESULT;
     '\n  *[_type == "state"]{\n    name,\n    "slug": slug.current,\n    namesakeSupport\n  }\n': STATES_SUPPORT_QUERY_RESULT;
     '*[_type == "sponsor"]': SPONSORS_QUERY_RESULT;
-    '\n  *[_type == "state" && defined(slug)] | order(name asc) {\n    name,\n    "slug": slug.current\n  }\n': DIRECTORY_FILTER_STATES_QUERY_RESULT;
-    '\n  *[\n    _type == "contact" &&\n    defined(slug) &&\n    ($stateSlug == "" || $stateSlug in states[]->slug.current) &&\n    ($service == "" || $service in services)\n  ] {\n    name,\n    "slug": slug.current,\n    description,\n    "states": states[]->name | order(@ asc),\n    services,\n    logo,\n    email,\n    phone,\n    url,\n    officialPartner,\n  } | order(officialPartner desc, name asc)\n': DIRECTORY_CONTACTS_LIST_QUERY_RESULT;
+    '\n  *[\n    _type == "contact" &&\n    defined(slug) &&\n    !unlisted &&\n    ($stateSlug == "" || $stateSlug in states[]->slug.current) &&\n    ($service == "" || $service in services)\n  ] {\n    name,\n    "slug": slug.current,\n    description,\n    "states": states[]->name | order(@ asc),\n    services,\n    logo,\n    email,\n    phone,\n    url,\n    officialPartner,\n  } | order(officialPartner desc, name asc)\n': DIRECTORY_CONTACTS_LIST_QUERY_RESULT;
   }
 }
