@@ -442,6 +442,189 @@ export const FIELD_DEFS = [
     label: "Relationship to the person you are filing for (other)",
     type: "string",
   },
+  // Affidavit of Indigency
+  {
+    name: "indigencyBasis",
+    label: "Reason for indigency",
+    type: "string",
+    options: {
+      "public-assistance": "Public assistance",
+      income: "Income at or below poverty level",
+      "unable-to-pay": "Unable to pay without depriving myself or dependents",
+      none: "None of the above",
+    },
+  },
+  { name: "isReceivingTAFDC", label: "Receiving TAFDC?", type: "boolean" },
+  { name: "isReceivingEAEDC", label: "Receiving EAEDC?", type: "boolean" },
+  {
+    name: "isReceivingMedicaid",
+    label: "Receiving Medicaid?",
+    type: "boolean",
+  },
+  { name: "isReceivingSSI", label: "Receiving SSI?", type: "boolean" },
+  {
+    name: "isReceivingVeteransBenefits",
+    label: "Receiving veterans benefits?",
+    type: "boolean",
+  },
+  {
+    name: "incomeAmount",
+    label: "Income amount",
+    type: "string",
+    format: "currency",
+  },
+  {
+    name: "incomePeriod",
+    label: "Income period",
+    type: "string",
+    options: {
+      "per-week": "Weekly",
+      biweekly: "Biweekly",
+      "per-month": "Monthly",
+      "per-year": "Yearly",
+    },
+  },
+  { name: "householdSize", label: "Household size", type: "string" },
+  { name: "numberOfDependents", label: "Number of dependents", type: "string" },
+  {
+    name: "otherHouseholdIncome",
+    label: "Other household income",
+    type: "string",
+    format: "currency",
+  },
+  {
+    name: "shouldWaiveFilingFeeAndSurcharge",
+    label: "Waive filing fee and surcharge?",
+    type: "boolean",
+  },
+  {
+    name: "filingFeeAndSurcharge",
+    label: "Filing fee and surcharge amount",
+    type: "string",
+    format: "currency",
+  },
+  {
+    name: "shouldWaiveFilingFeeAndSurchargeForAppeal",
+    label: "Waive filing fee and surcharge for appeal?",
+    type: "boolean",
+  },
+  {
+    name: "filingFeeAndSurchargeForAppeal",
+    label: "Filing fee and surcharge for appeal amount",
+    type: "string",
+    format: "currency",
+  },
+  {
+    name: "shouldWaiveFeesForCourtSummons",
+    label: "Waive fees for court summons?",
+    type: "boolean",
+  },
+  {
+    name: "feesForCourtSummons",
+    label: "Fees for court summons amount",
+    type: "string",
+    format: "currency",
+  },
+  {
+    name: "shouldWaiveOtherFeesSection2",
+    label: "Waive other fees (Section 2)?",
+    type: "boolean",
+  },
+  {
+    name: "otherFeesSection2",
+    label: "Other fees amount (Section 2)",
+    type: "string",
+    format: "currency",
+  },
+  {
+    name: "otherFeesSection2Details",
+    label: "Other fees details (Section 2)",
+    type: "string",
+  },
+  {
+    name: "applySubstitutionSection2",
+    label: "Apply substitution (Section 2)?",
+    type: "boolean",
+  },
+  {
+    name: "substitutionDetailsSection2",
+    label: "Substitution details (Section 2)",
+    type: "string",
+  },
+  {
+    name: "shouldWaiveExpertServices",
+    label: "Waive expert services?",
+    type: "boolean",
+  },
+  {
+    name: "costOfExpertServices",
+    label: "Expert services cost",
+    type: "string",
+    format: "currency",
+  },
+  {
+    name: "expertServicesDetails",
+    label: "Expert services details",
+    type: "string",
+  },
+  {
+    name: "shouldWaiveCostOfTranscription",
+    label: "Waive cost of transcription?",
+    type: "boolean",
+  },
+  {
+    name: "costOfTranscription",
+    label: "Transcription cost",
+    type: "string",
+    format: "currency",
+  },
+  {
+    name: "shouldWaiveRecordingOfTrialForAppeal",
+    label: "Waive recording of trial for appeal?",
+    type: "boolean",
+  },
+  {
+    name: "shouldWaiveAppealBond",
+    label: "Waive appeal bond?",
+    type: "boolean",
+  },
+  {
+    name: "shouldWaiveCostOfWrittenTranscriptPreparation",
+    label: "Waive cost of written transcript preparation?",
+    type: "boolean",
+  },
+  {
+    name: "costOfWrittenTranscriptPreparation",
+    label: "Written transcript preparation cost",
+    type: "string",
+    format: "currency",
+  },
+  {
+    name: "shouldWaiveOtherFeesSection3",
+    label: "Waive other fees (Section 3)?",
+    type: "boolean",
+  },
+  {
+    name: "otherFeesSection3",
+    label: "Other fees amount (Section 3)",
+    type: "string",
+    format: "currency",
+  },
+  {
+    name: "otherFeesSection3Details",
+    label: "Other fees details (Section 3)",
+    type: "string",
+  },
+  {
+    name: "applySubstitutionSection3",
+    label: "Apply substitution (Section 3)?",
+    type: "boolean",
+  },
+  {
+    name: "substitutionDetailsSection3",
+    label: "Substitution details (Section 3)",
+    type: "string",
+  },
 ] as const;
 
 export type FieldName = (typeof FIELD_DEFS)[number]["name"];

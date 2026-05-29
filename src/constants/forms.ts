@@ -1,4 +1,5 @@
 import type { Step } from "../forms/types";
+import { affidavitOfIndigencyMaConfig } from "../pages/forms/affidavit-of-indigency-ma/_config";
 import { courtOrderMaConfig } from "../pages/forms/court-order-ma/_config";
 import { courtOrderMinorMaConfig } from "../pages/forms/court-order-ma-minor/_config";
 import { socialSecurityConfig } from "../pages/forms/social-security/_config";
@@ -10,6 +11,7 @@ import type { PDFId } from "./pdf";
  * Update this array whenever a new form is added.
  */
 export const FORM_SLUGS = [
+  "affidavit-of-indigency-ma",
   "court-order-ma-minor",
   "court-order-ma",
   "social-security",
@@ -73,6 +75,7 @@ export interface FormConfig {
  * Registry of all form configurations.
  */
 export const FORM_CONFIGS: Record<FormSlug, FormConfig> = {
+  "affidavit-of-indigency-ma": affidavitOfIndigencyMaConfig,
   "court-order-ma-minor": courtOrderMinorMaConfig,
   "court-order-ma": courtOrderMaConfig,
   "social-security": socialSecurityConfig,

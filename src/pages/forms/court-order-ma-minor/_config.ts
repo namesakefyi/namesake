@@ -7,7 +7,6 @@ import { coGuardianStep } from "./_steps/CoGuardianStep";
 import { consentStep } from "./_steps/ConsentStep";
 import { currentNameStep } from "./_steps/CurrentNameStep";
 import { dateOfBirthStep } from "./_steps/DateOfBirthStep";
-import { feeWaiverStep } from "./_steps/FeeWaiverStep";
 import { guardianStep } from "./_steps/GuardianStep";
 import { interpreterStep } from "./_steps/InterpreterStep";
 import { newNameStep } from "./_steps/NewNameStep";
@@ -43,17 +42,12 @@ export const courtOrderMinorMaConfig: FormConfig = {
     youthServicesStep,
     interpreterStep,
     pronounsStep,
-    feeWaiverStep,
   ],
   pdfs: [
     { pdfId: "cjp25-petition-to-change-name-of-minor" },
     {
       pdfId: "cjp34-cori-and-wms-release-request",
       when: (data) => (deriveCurrentAge(data.dateOfBirth) ?? 0) >= 12,
-    },
-    {
-      pdfId: "affidavit-of-indigency",
-      when: (data) => data.shouldApplyForFeeWaiver === true,
     },
     // TODO: Add CJP 31 and TC0002 PDFs
   ],
@@ -62,14 +56,7 @@ export const courtOrderMinorMaConfig: FormConfig = {
     "Review all documents carefully.",
     "Do not sign the Petition to Change Name of Minor (CJP 25) until in the presence of a notary.",
     "File with the Probate and Family Court in your county.",
-    {
-      text: "Complete the Affidavit of Indigency on your own.",
-      when: (data) => data.shouldApplyForFeeWaiver === true,
-    },
-    {
-      text: "To pay for filing, bring a credit or debit card, a check made payable to the Commonwealth of Massachusetts, or exact cash.",
-      when: (data) => data.shouldApplyForFeeWaiver !== true,
-    },
+    "To pay for filing, bring a credit or debit card, a check made payable to the Commonwealth of Massachusetts, or exact cash.",
     {
       text: "Since the address or whereabouts of legal parent(s) is unknown, you must file a Motion for Service by Alternate Means and Affidavit of Diligent Search (CJP 31) with a Military Affidavit (TC0002).",
       when: (data) => data.parentsHaveUnknownAddresses === true,

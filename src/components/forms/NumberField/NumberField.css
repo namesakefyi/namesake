@@ -1,0 +1,6 @@
+.namesake-number-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  width: 100%;
+}

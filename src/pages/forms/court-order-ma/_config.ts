@@ -4,7 +4,6 @@ import { birthplaceStep } from "./_steps/BirthplaceStep";
 import { contactInfoStep } from "./_steps/ContactInfoStep";
 import { currentNameStep } from "./_steps/CurrentNameStep";
 import { dateOfBirthStep } from "./_steps/DateOfBirthStep";
-import { feeWaiverStep } from "./_steps/FeeWaiverStep";
 import { interpreterStep } from "./_steps/InterpreterStep";
 import { mothersMaidenNameStep } from "./_steps/MothersMaidenNameStep";
 import { newNameStep } from "./_steps/NewNameStep";
@@ -27,30 +26,18 @@ export const courtOrderMaConfig: FormConfig = {
     otherNamesStep,
     interpreterStep,
     pronounsStep,
-    feeWaiverStep,
     mothersMaidenNameStep,
   ],
   pdfs: [
     { pdfId: "cjp27-petition-to-change-name-of-adult" },
     { pdfId: "cjp34-cori-and-wms-release-request" },
-    {
-      pdfId: "affidavit-of-indigency",
-      when: (data) => data.shouldApplyForFeeWaiver === true,
-    },
   ],
   downloadTitle: "Massachusetts Court Order",
   instructions: [
     "Do not sign the Petition to Change Name (CJP 27) until in the presence of a notary.",
     "Review all documents carefully.",
     "File with the Probate and Family Court in your county.",
-    {
-      text: "Complete the Affidavit of Indigency on your own.",
-      when: (data) => data.shouldApplyForFeeWaiver === true,
-    },
-    {
-      text: "To pay for filing, bring a credit or debit card, a check made payable to the Commonwealth of Massachusetts, or exact cash.",
-      when: (data) => data.shouldApplyForFeeWaiver !== true,
-    },
+    "To pay for filing, bring a credit or debit card, a check made payable to the Commonwealth of Massachusetts, or exact cash.",
     "Remember to bring a certified copy of your birth certificate and certified copies of any previous name changes.",
   ],
 };
