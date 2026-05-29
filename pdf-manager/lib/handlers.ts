@@ -9,12 +9,7 @@ import {
   writeDefinitionFiles,
 } from "./define.ts";
 import { loadJurisdictions } from "./fields.ts";
-import {
-  applyRenames,
-  extractFields,
-  extractFieldsFromBytes,
-  stripFormFieldStyles,
-} from "./pdf.ts";
+import { applyRenames, extractFields, extractFieldsFromBytes } from "./pdf.ts";
 import { loadExclusions, processPdf } from "./schema.ts";
 import { loadSchemaFields, suggestName } from "./suggest.ts";
 
@@ -109,7 +104,6 @@ export async function handleAddPdf(c: Context) {
 
   const rawBytes = Buffer.from(pdfBase64, "base64");
   const pdfDoc = await PDFDocument.load(rawBytes);
-  stripFormFieldStyles(pdfDoc);
   const cleanedBytes = await pdfDoc.save();
 
   const pdfFields = await extractFieldsFromBytes(cleanedBytes);
@@ -194,7 +188,6 @@ export async function handleReplacePdf(c: Context) {
   try {
     const newBytes = Buffer.from(pdfBase64, "base64");
     const pdfDoc = await PDFDocument.load(newBytes);
-    stripFormFieldStyles(pdfDoc);
     writeFileSync(found.pdfPath, await pdfDoc.save());
 
     if (renames.length > 0) await applyRenames(found.pdfPath, renames);

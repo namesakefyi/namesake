@@ -79,22 +79,6 @@ export async function extractFieldsFromBytes(
   }));
 }
 
-export function stripFormFieldStyles(pdfDoc: PDFDocument): void {
-  const form = pdfDoc.getForm();
-  for (const field of form.getFields()) {
-    for (const widget of field.acroField.getWidgets()) {
-      widget.dict.delete(PDFName.of("AP"));
-      const borderStyle = (widget as any).getOrCreateBorderStyle?.();
-      if (borderStyle) borderStyle.setWidth(0);
-      const ac = (widget as any).getOrCreateAppearanceCharacteristics?.();
-      if (ac) {
-        ac.dict.delete(PDFName.of("BG"));
-        ac.dict.delete(PDFName.of("BC"));
-      }
-    }
-  }
-}
-
 export interface Rename {
   from: string;
   to: string;

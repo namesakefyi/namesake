@@ -8,7 +8,7 @@ export const pdfSchema = {
   residenceStreetAddress: PDFTextField,
   residenceCity: PDFTextField,
   residenceStateAndZip: PDFTextField,
-  isSectionAChecked: PDFCheckBox,
+  isReceivingPublicAssistance: PDFCheckBox,
   "Transitional Aid to Families with Dependent Children TAFDC": PDFCheckBox,
   "Medicaid MassHealth": PDFCheckBox,
   "Emergency Aid to Elderly Disabled or Children EAEDC": PDFCheckBox,
