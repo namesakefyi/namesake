@@ -152,7 +152,8 @@ export function FieldItem({
       className="field-item"
       data-variant={resolvedVariant}
       data-field-id={field.name}
-      onMouseEnter={() => onHoverField?.(field.name)}
+      onHoverStart={() => onHoverField?.(field.name)}
+      onHoverEnd={() => onHoverField?.(null)}
       onDoubleClick={(e) => {
         e.preventDefault();
         onStartRename?.(field.name);
@@ -229,17 +230,6 @@ export function FieldList({
     });
   }, [renamingField]);
 
-  // The overlay position is computed at rename-start and becomes stale if the
-  // list scrolls. Cancel the rename on scroll so they never diverge.
-  useEffect(() => {
-    if (!renamingField) return;
-    const el = scrollAreaRef.current;
-    if (!el) return;
-    const cancel = () => setRenamingField(null);
-    el.addEventListener("scroll", cancel, { passive: true });
-    return () => el.removeEventListener("scroll", cancel);
-  }, [renamingField]);
-
   // Capture phase so Delete/Backspace/Enter reach us before RAC's type-ahead and activation handlers.
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -288,7 +278,6 @@ export function FieldList({
           selectedKeys={
             highlightedField ? new Set([highlightedField]) : new Set()
           }
-          onMouseLeave={() => onHoverField?.(null)}
           onSelectionChange={(keys) => {
             if (renamingField) return;
             const name = [...keys][0];

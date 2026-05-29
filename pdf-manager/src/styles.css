@@ -515,8 +515,7 @@ body {
   z-index: 3;
   box-sizing: border-box;
   pointer-events: none;
-  border: 1px solid var(--accent);
-  border-radius: 2px;
+  outline: 2px solid var(--accent);
 }
 
 .field-highlight {
@@ -524,8 +523,7 @@ body {
   z-index: 4;
   box-sizing: border-box;
   pointer-events: none;
-  border: 2px solid var(--accent);
-  border-radius: 2px;
+  outline: 3px solid var(--accent);
 }
 
 /* ─── Field panel ─────────────────────────────────────────────────────────── */
