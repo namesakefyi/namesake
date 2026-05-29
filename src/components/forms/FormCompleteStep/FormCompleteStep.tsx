@@ -58,7 +58,7 @@ export function FormCompleteStep({
           Form complete!
         </Heading>
         <p className="form-complete-step-description">
-          The <strong>{title}</strong> packet is in your downloads. Review,
+          Check your downloads for your <strong>{title}</strong> packet. Review,
           print, and follow steps for filing.
         </p>
       </header>
