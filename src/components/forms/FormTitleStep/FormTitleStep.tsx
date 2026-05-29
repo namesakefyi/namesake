@@ -16,11 +16,6 @@ import { Button } from "../../common/Button";
 import { Heading } from "../../common/Content/Content";
 import "./FormTitleStep.css";
 
-const formatter = new Intl.DateTimeFormat("en-US", {
-  dateStyle: "long",
-  timeZone: "UTC",
-});
-
 function FormInfo({ children }: { children: React.ReactNode }) {
   return <ul className="form-info">{children}</ul>;
 }
@@ -54,7 +49,6 @@ export interface FormTitleStepProps {
   onStart: () => void;
   pdfs: FormPdfMetadata[];
   totalSteps: number;
-  updatedAt: string;
   headingLevel?: 1 | 2 | 3;
 }
 
@@ -65,7 +59,6 @@ export function FormTitleStep({
   onStart,
   pdfs,
   totalSteps,
-  updatedAt,
   headingLevel = 1,
 }: FormTitleStepProps) {
   const [device, setDevice] = useState<IDevice | null>(null);
@@ -142,15 +135,6 @@ export function FormTitleStep({
           Start
         </Button>
       </footer>
-      {updatedAt && (
-        <div className="form-title-step-date-updated">
-          Form last revised on{" "}
-          <time dateTime={updatedAt}>
-            {formatter.format(new Date(updatedAt))}
-          </time>
-          .
-        </div>
-      )}
     </section>
   );
 }

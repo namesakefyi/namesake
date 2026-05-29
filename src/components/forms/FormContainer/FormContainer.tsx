@@ -31,9 +31,6 @@ export interface FormContainerProps {
   /** Optional banner content (Portable Text) to display on the title step. */
   banner?: PortableTextProps["value"] | null;
 
-  /** The date the form was last updated. */
-  updatedAt?: string;
-
   /** The PDF metadata for forms that will be generated. */
   pdfs?: FormPdfMetadata[];
 
@@ -49,7 +46,6 @@ export function FormContainer({
   title,
   description,
   banner,
-  updatedAt,
   pdfs,
   costs,
   inline = false,
@@ -171,7 +167,6 @@ export function FormContainer({
             title={title}
             description={description}
             pdfs={pdfs ?? []}
-            updatedAt={updatedAt ?? ""}
             totalSteps={totalSteps}
             onStart={onStart}
             headingLevel={inline ? 2 : 1}
@@ -210,7 +205,6 @@ export function FormContainer({
     steps,
     activeStep,
     pdfs,
-    updatedAt,
     title,
     description,
     banner,

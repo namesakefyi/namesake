@@ -86,11 +86,3 @@
     width: 100%;
   }
 }
-
-.form-title-step-date-updated {
-  width: 100%;
-  padding-block-start: var(--space-s);
-  font-size: var(--step--1);
-  text-wrap: pretty;
-  border-top: 1px solid var(--border-color);
-}
