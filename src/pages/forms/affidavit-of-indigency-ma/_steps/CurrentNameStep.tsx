@@ -6,7 +6,7 @@ export const currentNameStep: Step = {
   id: "current-name",
   title: "What is your current legal name?",
   description:
-    "This is the name you're leaving behind. Type it exactly as it appears on your ID.",
+    "This name will attach the fee waiver to your name change application.",
   fields: ["oldFirstName", "oldMiddleName", "oldLastName"],
   component: ({ stepConfig }) => (
     <FormStep stepConfig={stepConfig}>

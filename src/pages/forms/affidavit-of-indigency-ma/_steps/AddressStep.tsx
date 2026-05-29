@@ -13,8 +13,6 @@ const whenNotUnhoused = (data: Record<string, unknown>) =>
 export const addressStep: Step = {
   id: "address",
   title: "What is your residential address?",
-  description:
-    "You must file your name change in the county where you live. We'll help you find where to file.",
   fields: [
     "isCurrentlyUnhoused",
     {
@@ -50,7 +48,7 @@ export const addressStep: Step = {
             application and connect you with housing resources.
           </Banner>
         )}
-        {residenceVisible && <AddressField type="residence" includeCounty />}
+        {residenceVisible && <AddressField type="residence" />}
       </FormStep>
     );
   },
