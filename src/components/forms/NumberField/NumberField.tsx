@@ -7,10 +7,8 @@ import {
 } from "../../common/NumberField";
 import "./NumberField.css";
 
-export interface NumberFieldFormProps extends Omit<
-  NumberFieldProps,
-  "value" | "onChange" | "defaultValue"
-> {
+export interface NumberFieldFormProps
+  extends Omit<NumberFieldProps, "value" | "onChange" | "defaultValue"> {
   label: string;
   name: FieldName;
   defaultValue?: number;

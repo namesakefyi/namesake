@@ -478,10 +478,10 @@ export const FIELD_DEFS = [
     label: "Income period",
     type: "string",
     options: {
-      "per-week": "Weekly",
+      weekly: "Weekly",
       biweekly: "Biweekly",
-      "per-month": "Monthly",
-      "per-year": "Yearly",
+      monthly: "Monthly",
+      yearly: "Yearly",
     },
   },
   { name: "householdSize", label: "Household size", type: "string" },

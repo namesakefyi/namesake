@@ -22,8 +22,13 @@ export async function fetchPovertyGuideline(
   try {
     const res = await fetch(`${HHS_API_BASE}/${year}/${state}/${clampedSize}`);
     if (!res.ok) return null;
-    const json = await res.json() as {
-      data: { year: string; state: string; household_size: string; income: string };
+    const json = (await res.json()) as {
+      data: {
+        year: string;
+        state: string;
+        household_size: string;
+        income: string;
+      };
     };
     return {
       year: Number(json.data.year),

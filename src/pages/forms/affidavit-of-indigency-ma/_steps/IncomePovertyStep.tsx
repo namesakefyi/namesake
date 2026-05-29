@@ -7,13 +7,23 @@ import { RadioGroupField } from "../../../../components/forms/RadioGroupField";
 import type { Step } from "../../../../forms/types";
 import type { PovertyGuideline } from "../../../../utils/fetchPovertyGuideline";
 import { fetchPovertyGuideline } from "../../../../utils/fetchPovertyGuideline";
+import "./IncomePovertyStep.css";
 
-const MULTIPLIERS: Record<string, number> = {
-  "per-week": 52,
+export const INCOME_MULTIPLIERS: Record<string, number> = {
+  weekly: 52,
   biweekly: 26,
-  "per-month": 12,
-  "per-year": 1,
+  monthly: 12,
+  yearly: 1,
 };
+
+export function derivePovertyComparison(
+  annualIncome: number,
+  threshold: number,
+): "equal" | "below" | "above" {
+  if (annualIncome === threshold) return "equal";
+  if (annualIncome < threshold) return "below";
+  return "above";
+}
 
 const formatCurrency = (n: number) =>
   new Intl.NumberFormat("en-US", {
@@ -65,7 +75,7 @@ function PovertyResult({
 
   if (!guideline) {
     return (
-      <p style={{ color: "var(--text-color-placeholder)" }} aria-busy="true">
+      <p className="poverty-result-loading" aria-busy="true">
         Loading poverty guideline…
       </p>
     );
@@ -77,15 +87,11 @@ function PovertyResult({
 
   const annualIncome =
     income != null && incomePeriod
-      ? income * (MULTIPLIERS[incomePeriod] ?? 1)
+      ? income * (INCOME_MULTIPLIERS[incomePeriod] ?? 1)
       : null;
   const comparison =
     annualIncome != null
-      ? annualIncome === threshold
-        ? "equal"
-        : annualIncome < threshold
-          ? "below"
-          : "above"
+      ? derivePovertyComparison(annualIncome, threshold)
       : null;
   const qualifies = comparison === "equal" || comparison === "below";
 
@@ -94,17 +100,21 @@ function PovertyResult({
       <div aria-busy={loading}>
         <p>
           The {guideline.year} federal poverty guideline for a household of{" "}
-          <strong style={loading ? { opacity: 0.5 } : undefined}>
+          <strong
+            className={loading ? "poverty-result-dynamic-loading" : undefined}
+          >
             {householdLabel}
           </strong>{" "}
           is{" "}
-          <strong style={loading ? { opacity: 0.5 } : undefined}>
+          <strong
+            className={loading ? "poverty-result-dynamic-loading" : undefined}
+          >
             {formatCurrency(threshold)}/year
           </strong>
           .
         </p>
         {annualIncome != null && (
-          <p style={qualifies ? undefined : { color: "var(--invalid-color)" }}>
+          <p className={qualifies ? undefined : "poverty-result-above"}>
             Your annualized income of{" "}
             <strong>{formatCurrency(annualIncome)}</strong> is{" "}
             <strong>
@@ -186,10 +196,10 @@ export const incomePovertyStep: Step = {
           name="incomePeriod"
           label="How often do you receive this income?"
           options={[
-            { label: "Weekly", value: "per-week" },
+            { label: "Weekly", value: "weekly" },
             { label: "Biweekly (every two weeks)", value: "biweekly" },
-            { label: "Monthly", value: "per-month" },
-            { label: "Yearly", value: "per-year" },
+            { label: "Monthly", value: "monthly" },
+            { label: "Yearly", value: "yearly" },
           ]}
         />
         <NumberField

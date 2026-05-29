@@ -1,0 +1,11 @@
+.poverty-result-loading {
+  color: var(--text-color-placeholder);
+}
+
+.poverty-result-dynamic-loading {
+  opacity: 0.5;
+}
+
+.poverty-result-above {
+  color: var(--invalid-color);
+}

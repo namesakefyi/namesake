@@ -31,10 +31,10 @@ export default definePdf<PdfFieldName>({
     // Section B: Income at or below poverty level
     dollarAmount: data.incomeAmount,
     isUnderPovertyLevel: data.indigencyBasis === "income",
-    perWeek: data.incomePeriod === "per-week",
+    perWeek: data.incomePeriod === "weekly",
     biweekly: data.incomePeriod === "biweekly",
-    perMonth: data.incomePeriod === "per-month",
-    perYear: data.incomePeriod === "per-year",
+    perMonth: data.incomePeriod === "monthly",
+    perYear: data.incomePeriod === "yearly",
     householdSize: data.householdSize,
     numberOfDependents: data.numberOfDependents,
     otherHouseholdIncome: data.otherHouseholdIncome,

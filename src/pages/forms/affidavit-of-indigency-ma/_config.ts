@@ -1,7 +1,7 @@
 import type { FormConfig } from "../../../constants/forms";
 import { extraFeesStep } from "./_steps/ExtraFeesStep";
-import { indigencyBasisStep } from "./_steps/IndigencyBasisStep";
 import { incomePovertyStep } from "./_steps/IncomePovertyStep";
+import { indigencyBasisStep } from "./_steps/IndigencyBasisStep";
 import { normalFeesStep } from "./_steps/NormalFeesStep";
 import { publicAssistanceStep } from "./_steps/PublicAssistanceStep";
 
