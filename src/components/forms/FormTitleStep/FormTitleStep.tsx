@@ -116,7 +116,7 @@ export function FormTitleStep({
               Takes about <strong>{timeEstimate}</strong>.
             </FormInfoItemTitle>
             <FormInfoItemDescription>
-              We'll provide guidance for common questions.
+              We’ll provide guidance for common questions.
             </FormInfoItemDescription>
           </FormInfoItem>
         )}
