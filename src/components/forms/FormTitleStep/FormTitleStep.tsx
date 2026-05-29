@@ -8,9 +8,9 @@ import {
 import { useEffect, useState } from "react";
 import { type IBrowser, type IDevice, UAParser } from "ua-parser-js";
 import type { FormPdfMetadata } from "../../../forms/getFormPdfMetadata";
-import { formatTimeEstimate } from "../../../utils/formatTimeEstimate";
 import { formatBrowser } from "../../../utils/formatBrowser";
 import { formatDevice } from "../../../utils/formatDevice";
+import { formatTimeEstimate } from "../../../utils/formatTimeEstimate";
 import { smartquotes } from "../../../utils/smartquotes";
 import { Button } from "../../common/Button";
 import { Heading } from "../../common/Content/Content";
