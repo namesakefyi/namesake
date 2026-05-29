@@ -56,7 +56,6 @@ export const courtOrderMinorMaConfig: FormConfig = {
     "Review all documents carefully.",
     "Do not sign the Petition to Change Name of Minor (CJP 25) until in the presence of a notary.",
     "File with the Probate and Family Court in your county.",
-    "To pay for filing, bring a credit or debit card, a check made payable to the Commonwealth of Massachusetts, or exact cash.",
     {
       text: "Since the address or whereabouts of legal parent(s) is unknown, you must file a Motion for Service by Alternate Means and Affidavit of Diligent Search (CJP 31) with a Military Affidavit (TC0002).",
       when: (data) => data.parentsHaveUnknownAddresses === true,

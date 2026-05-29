@@ -37,7 +37,6 @@ export const courtOrderMaConfig: FormConfig = {
     "Do not sign the Petition to Change Name (CJP 27) until in the presence of a notary.",
     "Review all documents carefully.",
     "File with the Probate and Family Court in your county.",
-    "To pay for filing, bring a credit or debit card, a check made payable to the Commonwealth of Massachusetts, or exact cash.",
     "Remember to bring a certified copy of your birth certificate and certified copies of any previous name changes.",
   ],
 };
