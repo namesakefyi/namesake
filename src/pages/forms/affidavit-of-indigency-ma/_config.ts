@@ -1,8 +1,7 @@
 import type { FormConfig } from "../../../constants/forms";
 import { extraFeesStep } from "./_steps/ExtraFeesStep";
-import { householdStep } from "./_steps/HouseholdStep";
-import { incomeStep } from "./_steps/IncomeStep";
 import { indigencyBasisStep } from "./_steps/IndigencyBasisStep";
+import { incomePovertyStep } from "./_steps/IncomePovertyStep";
 import { normalFeesStep } from "./_steps/NormalFeesStep";
 import { publicAssistanceStep } from "./_steps/PublicAssistanceStep";
 
@@ -11,8 +10,7 @@ export const affidavitOfIndigencyMaConfig: FormConfig = {
   steps: [
     indigencyBasisStep,
     publicAssistanceStep,
-    incomeStep,
-    householdStep,
+    incomePovertyStep,
     normalFeesStep,
     extraFeesStep,
   ],

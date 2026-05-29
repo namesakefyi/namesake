@@ -2,13 +2,15 @@ import { Controller, useFormContext } from "react-hook-form";
 import type { FieldName } from "../../../constants/fields";
 import { smartquotes } from "../../../utils/smartquotes";
 import {
-  NumberField as CommonNumberField,
+  NumberField as AriaNumberField,
   type NumberFieldProps,
 } from "../../common/NumberField";
 import "./NumberField.css";
 
-export interface NumberFieldFormProps
-  extends Omit<NumberFieldProps, "value" | "onChange" | "defaultValue"> {
+export interface NumberFieldFormProps extends Omit<
+  NumberFieldProps,
+  "value" | "onChange" | "defaultValue"
+> {
   label: string;
   name: FieldName;
   defaultValue?: number;
@@ -31,7 +33,7 @@ export function NumberField({
         name={name}
         defaultValue={defaultValue !== undefined ? String(defaultValue) : ""}
         render={({ field, fieldState: { invalid, error } }) => (
-          <CommonNumberField
+          <AriaNumberField
             {...props}
             value={
               field.value === "" || field.value == null

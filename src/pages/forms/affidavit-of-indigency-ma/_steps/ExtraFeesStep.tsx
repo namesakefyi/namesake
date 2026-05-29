@@ -76,7 +76,6 @@ export const extraFeesStep: Step = {
             label="Describe the expert services needed"
           />
         </FormSubsection>
-
         <CheckboxField
           name="shouldWaiveCostOfTranscription"
           label="Taking and/or transcribing a deposition"
@@ -84,14 +83,11 @@ export const extraFeesStep: Step = {
         <FormSubsection isVisible={waiveTranscription === true}>
           <NumberField name="costOfTranscription" {...amountProps} />
         </FormSubsection>
-
         <CheckboxField
           name="shouldWaiveRecordingOfTrialForAppeal"
           label="Cassette copies of tape recording of trial or other proceeding (for appeal, not represented by public defender)"
         />
-
         <CheckboxField name="shouldWaiveAppealBond" label="Appeal bond" />
-
         <CheckboxField
           name="shouldWaiveCostOfWrittenTranscriptPreparation"
           label="Preparing a written transcript of trial or other proceeding"
@@ -102,7 +98,6 @@ export const extraFeesStep: Step = {
             {...amountProps}
           />
         </FormSubsection>
-
         <CheckboxField
           name="shouldWaiveOtherFeesSection3"
           label="Other extra fees or costs"
@@ -114,7 +109,6 @@ export const extraFeesStep: Step = {
             label="What are these fees for?"
           />
         </FormSubsection>
-
         <CheckboxField
           name="applySubstitutionSection3"
           label="Substitution of an extra cost at no charge or lower cost paid by the state"
