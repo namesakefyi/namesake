@@ -1,5 +1,7 @@
 import { useFormContext } from "react-hook-form";
 import { CheckboxField } from "../../../../components/forms/CheckboxField";
+import { useFormStep } from "../../../../components/forms/FormContainer";
+import { CostsTable } from "../../../../components/forms/CostsTable";
 import {
   FormStep,
   FormSubsection,
@@ -50,6 +52,7 @@ export const normalFeesStep: Step = {
     },
   ],
   component: ({ stepConfig }) => {
+    const { costs } = useFormStep();
     const form = useFormContext();
     const waiveFilingFee = form.watch("shouldWaiveFilingFeeAndSurcharge");
     const waiveAppealFee = form.watch(
@@ -61,6 +64,7 @@ export const normalFeesStep: Step = {
 
     return (
       <FormStep stepConfig={stepConfig}>
+        <CostsTable costs={costs ?? []} />
         <CheckboxField
           name="shouldWaiveFilingFeeAndSurcharge"
           label="Filing fee and any surcharge"
@@ -71,7 +75,7 @@ export const normalFeesStep: Step = {
 
         <CheckboxField
           name="shouldWaiveFilingFeeAndSurchargeForAppeal"
-          label="Filing fee and any surcharge for appeal"
+          label="Filing fee and any surcharge for appeal (uncommon)"
         />
         <FormSubsection isVisible={waiveAppealFee === true}>
           <NumberField name="filingFeeAndSurchargeForAppeal" {...amountProps} />
@@ -99,7 +103,7 @@ export const normalFeesStep: Step = {
 
         <CheckboxField
           name="applySubstitutionSection2"
-          label="Substitution of a document, service, or object at no cost or lower cost paid by the state"
+          label="Ask the court to substitute a required service with a free or lower-cost alternative (uncommon)"
         />
         <FormSubsection isVisible={applySubstitution === true}>
           <ShortTextField

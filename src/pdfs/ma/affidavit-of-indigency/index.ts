@@ -44,34 +44,62 @@ export default definePdf<PdfFieldName>({
 
     // Section 2: Fee waivers
     shouldWaiveFilingFeeAndSurcharge: data.shouldWaiveFilingFeeAndSurcharge,
-    filingFeeAndSurcharge: data.filingFeeAndSurcharge,
+    filingFeeAndSurcharge: data.shouldWaiveFilingFeeAndSurcharge
+      ? data.filingFeeAndSurcharge
+      : undefined,
     shouldWaiveFilingFeeAndSurchargeForAppeal:
       data.shouldWaiveFilingFeeAndSurchargeForAppeal,
-    filingFeeAndSurchargeForAppeal: data.filingFeeAndSurchargeForAppeal,
+    filingFeeAndSurchargeForAppeal:
+      data.shouldWaiveFilingFeeAndSurchargeForAppeal
+        ? data.filingFeeAndSurchargeForAppeal
+        : undefined,
     shouldWaiveFeesForCourtSummons: data.shouldWaiveFeesForCourtSummons,
-    feesForCourtSummons: data.feesForCourtSummons,
+    feesForCourtSummons: data.shouldWaiveFeesForCourtSummons
+      ? data.feesForCourtSummons
+      : undefined,
     shouldWaiveOtherFeesSection2: data.shouldWaiveOtherFeesSection2,
-    otherFeesSection2: data.otherFeesSection2,
-    otherFeesSection2Details: data.otherFeesSection2Details,
+    otherFeesSection2: data.shouldWaiveOtherFeesSection2
+      ? data.otherFeesSection2
+      : undefined,
+    otherFeesSection2Details: data.shouldWaiveOtherFeesSection2
+      ? data.otherFeesSection2Details
+      : undefined,
     applySubstitutionSection2: data.applySubstitutionSection2,
-    substitutionDetailsSection2: data.substitutionDetailsSection2,
+    substitutionDetailsSection2: data.applySubstitutionSection2
+      ? data.substitutionDetailsSection2
+      : undefined,
 
     // Section 3: Expense waivers
     shouldWaiveExpertServices: data.shouldWaiveExpertServices,
-    costOfExpertServices: data.costOfExpertServices,
-    expertServicesDetails: data.expertServicesDetails,
+    costOfExpertServices: data.shouldWaiveExpertServices
+      ? data.costOfExpertServices
+      : undefined,
+    expertServicesDetails: data.shouldWaiveExpertServices
+      ? data.expertServicesDetails
+      : undefined,
     shouldWaiveCostOfTranscription: data.shouldWaiveCostOfTranscription,
-    costOfTranscription: data.costOfTranscription,
+    costOfTranscription: data.shouldWaiveCostOfTranscription
+      ? data.costOfTranscription
+      : undefined,
     shouldWaiveRecordingOfTrialForAppeal:
       data.shouldWaiveRecordingOfTrialForAppeal,
     shouldWaiveAppealBond: data.shouldWaiveAppealBond,
     shouldWaiveCostOfWrittenTranscriptPreparation:
       data.shouldWaiveCostOfWrittenTranscriptPreparation,
-    costOfWrittenTranscriptPreparation: data.costOfWrittenTranscriptPreparation,
+    costOfWrittenTranscriptPreparation:
+      data.shouldWaiveCostOfWrittenTranscriptPreparation
+        ? data.costOfWrittenTranscriptPreparation
+        : undefined,
     shouldWaiveOtherFeesSection3: data.shouldWaiveOtherFeesSection3,
-    otherFeesSection3: data.otherFeesSection3,
-    otherFeesSection3Details: data.otherFeesSection3Details,
+    otherFeesSection3: data.shouldWaiveOtherFeesSection3
+      ? data.otherFeesSection3
+      : undefined,
+    otherFeesSection3Details: data.shouldWaiveOtherFeesSection3
+      ? data.otherFeesSection3Details
+      : undefined,
     applySubstitutionSection3: data.applySubstitutionSection3,
-    substitutionDetailsSection3: data.substitutionDetailsSection3,
+    substitutionDetailsSection3: data.applySubstitutionSection3
+      ? data.substitutionDetailsSection3
+      : undefined,
   }),
 });

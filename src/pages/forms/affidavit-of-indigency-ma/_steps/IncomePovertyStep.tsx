@@ -165,7 +165,7 @@ export const incomePovertyStep: Step = {
   id: "income-poverty",
   title: "What is your income after taxes?",
   description:
-    "We'll use this along with your household size to check whether your income is at or below the federal poverty level.",
+    "We'll check whether your income qualifies you for a fee waiver based on the federal poverty level.",
   when: (data) => data.indigencyBasis === "income",
   fields: [
     "incomeAmount",
@@ -184,7 +184,7 @@ export const incomePovertyStep: Step = {
       <FormStep stepConfig={stepConfig}>
         <NumberField
           name="incomeAmount"
-          label="Income amount, after taxes"
+          label="Income amount"
           minValue={0}
           formatOptions={{
             style: "currency",

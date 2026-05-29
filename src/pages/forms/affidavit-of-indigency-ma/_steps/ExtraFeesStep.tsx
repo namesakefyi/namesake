@@ -20,7 +20,7 @@ const amountProps = {
 
 export const extraFeesStep: Step = {
   id: "extra-fees",
-  title: "Are there any extra costs you need the court to cover?",
+  title: "Do you need any other costs waived?",
   description:
     "These are rare for name changes. If none apply, you can skip this step.",
   fields: [
@@ -85,7 +85,7 @@ export const extraFeesStep: Step = {
         </FormSubsection>
         <CheckboxField
           name="shouldWaiveRecordingOfTrialForAppeal"
-          label="Cassette copies of tape recording of trial or other proceeding (for appeal, not represented by public defender)"
+          label="Recording of trial for appeal (if you don't have a public defender)"
         />
         <CheckboxField name="shouldWaiveAppealBond" label="Appeal bond" />
         <CheckboxField
@@ -111,7 +111,7 @@ export const extraFeesStep: Step = {
         </FormSubsection>
         <CheckboxField
           name="applySubstitutionSection3"
-          label="Substitution of an extra cost at no charge or lower cost paid by the state"
+          label="Ask the court to substitute one of these costs with a free or lower-cost alternative"
         />
         <FormSubsection isVisible={applySubstitution === true}>
           <ShortTextField
