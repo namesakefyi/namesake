@@ -1,4 +1,4 @@
-import { RiAddLine, RiSubtractLine } from "@remixicon/react";
+import { RiArrowDownSLine, RiArrowUpSLine } from "@remixicon/react";
 import {
   NumberField as AriaNumberField,
   type NumberFieldProps as AriaNumberFieldProps,
@@ -27,9 +27,19 @@ export function NumberField({
     <AriaNumberField {...props}>
       <Label>{label}</Label>
       <Group>
-        <Button slot="decrement" icon={RiSubtractLine} aria-label="Decrement" />
         <Input />
-        <Button slot="increment" icon={RiAddLine} aria-label="Increment" />
+        <div className="number-field-stepper">
+          <Button
+            slot="increment"
+            icon={RiArrowUpSLine}
+            aria-label="Increment"
+          />
+          <Button
+            slot="decrement"
+            icon={RiArrowDownSLine}
+            aria-label="Decrement"
+          />
+        </div>
       </Group>
       {description && <Text slot="description">{description}</Text>}
       <FieldError>{errorMessage}</FieldError>

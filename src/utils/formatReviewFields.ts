@@ -37,7 +37,17 @@ export function formatFieldValue(
       }
       return undefined;
     default:
-      // Handle special formatting for certain field name patterns
+      // Enum fields: map stored keys to human-readable labels
+      if ("options" in fieldDef) {
+        return (
+          (fieldDef.options as Record<string, string>)[value] ?? String(value)
+        );
+      }
+
+      // Currency fields: format as whole-dollar USD
+      if ("format" in fieldDef && fieldDef.format === "currency") {
+        return formatCurrency(value);
+      }
 
       // Phone number formatting
       if (fieldName === "phoneNumber") {
@@ -51,6 +61,16 @@ export function formatFieldValue(
 
       return String(value);
   }
+}
+
+function formatCurrency(value: string): string | undefined {
+  const num = Number(value);
+  if (Number.isNaN(num)) return String(value);
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(num);
 }
 
 function formatPhoneNumber(phone: string): string | undefined {

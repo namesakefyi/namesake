@@ -99,6 +99,13 @@ describe("formatFieldValue", () => {
     });
   });
 
+  describe("currency formatting", () => {
+    it("formats currency value", () => {
+      const result = formatFieldValue("incomeAmount", 1234);
+      expect(result).toBe("$1,234");
+    });
+  });
+
   describe("unknown field name", () => {
     it("coerces the value to a string", () => {
       // @ts-expect-error - testing with invalid field name

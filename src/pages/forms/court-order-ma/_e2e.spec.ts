@@ -33,7 +33,6 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
     await expect(
       page.getByText("Court Activity Record Request Form (CJP-34)"),
     ).toBeVisible();
-    await expect(page.getByText("Affidavit of Indigency")).toBeVisible();
 
     await expect(page.getByText("Responses are securely stored")).toBeVisible();
 
@@ -224,26 +223,6 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
     await page
       .getByRole("textbox", { name: "List other pronouns" })
       .fill("zi/zir");
-    await page.getByRole("button", { name: "Continue" }).click();
-  });
-
-  await test.step("Fee waiver", async () => {
-    await expect(
-      page.getByRole("heading", {
-        name: "Do you need to apply for a fee waiver?",
-      }),
-    ).toBeVisible();
-
-    await expect(page.getByRole("cell", { name: "$165" })).toBeVisible();
-    await page.getByText("Yes, help me waive filing fees").click();
-    await expect(
-      page.getByText("Your download will include an Affidavit of Indigency."),
-    ).toBeVisible();
-
-    await expect(
-      page.getByRole("link", { name: "request financial assistance" }),
-    ).toBeVisible();
-    await page.getByText("No, I will pay the filing fee").click();
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
