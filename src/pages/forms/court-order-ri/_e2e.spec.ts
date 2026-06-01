@@ -222,18 +222,10 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     ).toBeVisible();
     await expect(page.getByText("Residence street address: 100")).toBeVisible();
     await expect(page.getByText("Residence city: Providence")).toBeVisible();
-    await expect(
-      page.getByText("Mother’s first name: Mary"),
-    ).toBeVisible();
-    await expect(
-      page.getByText("Mother’s last name: Maiden"),
-    ).toBeVisible();
-    await expect(
-      page.getByText("Father’s first name: John"),
-    ).toBeVisible();
-    await expect(
-      page.getByText("Father’s last name: Smith"),
-    ).toBeVisible();
+    await expect(page.getByText("Mother’s first name: Mary")).toBeVisible();
+    await expect(page.getByText("Mother’s last name: Maiden")).toBeVisible();
+    await expect(page.getByText("Father’s first name: John")).toBeVisible();
+    await expect(page.getByText("Father’s last name: Smith")).toBeVisible();
     await expect(page.getByText("Occupation: Software Engineer")).toBeVisible();
   });
 
