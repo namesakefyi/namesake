@@ -1,6 +1,7 @@
 import { formatBirthplaceCountryOrState } from "../../../utils/formatBirthplaceCountryOrState";
 import { formatDateMMDDYYYY } from "../../../utils/formatDateMMDDYYYY";
 import { joinNames } from "../../../utils/joinNames";
+import { joinParts } from "../../../utils/joinParts";
 import { definePdf } from "../../utils/definePdf";
 import pdf from "./pc8.1-change-of-name.pdf";
 import type { PdfFieldName } from "./schema";
@@ -24,13 +25,11 @@ export default definePdf<PdfFieldName>({
       residenceZipCode: data.residenceZipCode,
       phoneNumber: data.phoneNumber,
       mailingStreetAddress: data.mailingStreetAddress,
-      mailingCityStateAndZip: [
+      mailingCityStateAndZip: joinParts(
         data.mailingCity,
         data.mailingState,
         data.mailingZipCode,
-      ]
-        .filter(Boolean)
-        .join(", "),
+      ),
       email: data.email,
       nameOnOriginalBirthRecord: joinNames(
         data.oldFirstName,
@@ -38,15 +37,13 @@ export default definePdf<PdfFieldName>({
         data.oldLastName,
       ),
       dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
-      placeOfBirth: [
+      placeOfBirth: joinParts(
         data.birthplaceCity,
         formatBirthplaceCountryOrState(
           data.birthplaceCountry,
           data.birthplaceState,
         ),
-      ]
-        .filter(Boolean)
-        .join(", "),
+      ),
       mothersMaidenName: joinNames(
         data.mothersFirstName,
         data.mothersMiddleName,
