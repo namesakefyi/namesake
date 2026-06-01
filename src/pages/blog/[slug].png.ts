@@ -3,7 +3,7 @@ import type { APIRoute } from "astro";
 import { POST_BY_SLUG_QUERY } from "../../sanity/queries";
 import { createOgImageResponse } from "../../utils/createOgImageResponse";
 
-export const GET: APIRoute = async ({ params, request, locals }) => {
+export const GET: APIRoute = async ({ params, request }) => {
   const { slug } = params;
   if (!slug) return new Response("Not found", { status: 404 });
 
@@ -15,6 +15,5 @@ export const GET: APIRoute = async ({ params, request, locals }) => {
     title: post.title,
     color: "blue",
     origin: new URL(request.url).origin,
-    ctx: locals.cfContext,
   });
 };

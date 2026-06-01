@@ -1,4 +1,4 @@
-import { cache, GoogleFont, ImageResponse } from "cf-workers-og";
+import { GoogleFont, ImageResponse } from "cf-workers-og";
 import { createElement } from "react";
 import { OgImage } from "../components/OgImage";
 import type { NamesakeColor } from "../constants/colors";
@@ -8,7 +8,6 @@ type OgImageOptions = {
   title: string;
   color?: Exclude<NamesakeColor, "black">;
   origin: string;
-  ctx: { waitUntil(promise: Promise<unknown>): void };
 };
 
 export async function createOgImageResponse({
@@ -16,10 +15,7 @@ export async function createOgImageResponse({
   title,
   color,
   origin,
-  ctx,
 }: OgImageOptions) {
-  cache.setExecutionContext(ctx);
-
   return ImageResponse.create(
     createElement(OgImage, { subhead, title, color, origin }),
     {
