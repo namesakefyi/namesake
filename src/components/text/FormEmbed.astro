@@ -1,15 +1,17 @@
 ---
 import { sanityClient } from "sanity:client";
 import { FormContainer } from "../../components/forms/FormContainer/FormContainer";
-import type { FormSlug } from "../../constants/forms";
+import { FORM_SLUGS, type FormSlug } from "../../constants/forms";
 import { getFormPdfMetadata } from "../../forms/getFormPdfMetadata";
 import { FORM_BY_SLUG_WITH_GUIDE_COSTS_QUERY } from "../../sanity/queries";
 
 const { form: formNode } = Astro.props.node;
 
-if (!formNode?.slug?.current) return;
+const rawSlug = formNode?.slug?.current;
 
-const slug = formNode.slug.current as FormSlug;
+if (!rawSlug || !FORM_SLUGS.includes(rawSlug)) return;
+
+const slug = rawSlug as FormSlug;
 
 const form = await sanityClient.fetch(FORM_BY_SLUG_WITH_GUIDE_COSTS_QUERY, {
   slug,
