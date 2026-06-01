@@ -149,6 +149,14 @@ img {
   clip-path: inset(50%);
 }
 
+button,
+input,
+select,
+textarea {
+  min-width: 0;
+  max-width: 100%;
+}
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
