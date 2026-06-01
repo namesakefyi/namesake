@@ -19,7 +19,7 @@ export default defineConfig({
       include: [
         "src/components/**/*.{ts,tsx}",
         "src/db/**/*.{ts,tsx}",
-        "src/forms/**/*.ts",
+        "src/forms/*.ts",
         "src/pdfs/**/*.{ts,tsx}",
         "src/utils/**/*.{ts,tsx}",
       ],
