@@ -1,9 +1,9 @@
-import type { Step } from "../forms/types";
 import { affidavitOfIndigencyMaConfig } from "../forms/affidavit-of-indigency-ma/config";
 import { courtOrderMaConfig } from "../forms/court-order-ma/config";
 import { courtOrderMinorMaConfig } from "../forms/court-order-ma-minor/config";
 import { courtOrderRiConfig } from "../forms/court-order-ri/config";
 import { socialSecurityConfig } from "../forms/social-security/config";
+import type { Step } from "../forms/types";
 import type { FormData } from "./fields";
 import type { PDFId } from "./pdf";
 
@@ -20,6 +20,10 @@ export const FORM_SLUGS = [
 ] as const;
 
 export type FormSlug = (typeof FORM_SLUGS)[number];
+
+export function isFormSlug(slug: string): slug is FormSlug {
+  return (FORM_SLUGS as readonly string[]).includes(slug);
+}
 
 /**
  * Configuration for a PDF within a form.

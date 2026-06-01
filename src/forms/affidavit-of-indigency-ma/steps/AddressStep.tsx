@@ -1,10 +1,7 @@
 import { Banner } from "../../../components/common/Banner";
 import { AddressField } from "../../../components/forms/AddressField";
 import { CheckboxField } from "../../../components/forms/CheckboxField";
-import {
-  FormStep,
-  useFieldVisible,
-} from "../../../components/forms/FormStep";
+import { FormStep, useFieldVisible } from "../../../components/forms/FormStep";
 import type { Step } from "../../../forms/types";
 
 const whenNotUnhoused = (data: Record<string, unknown>) =>

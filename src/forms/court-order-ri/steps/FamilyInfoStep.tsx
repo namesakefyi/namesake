@@ -1,7 +1,4 @@
-import {
-  FormStep,
-  FormSubsection,
-} from "../../../components/forms/FormStep";
+import { FormStep, FormSubsection } from "../../../components/forms/FormStep";
 import { NameField } from "../../../components/forms/NameField";
 import type { Step } from "../../../forms/types";
 
