@@ -1,3 +1,4 @@
+import { formatAddress } from "../../../utils/formatAddress";
 import { formatDateMMDDYYYY } from "../../../utils/formatDateMMDDYYYY";
 import { joinNames } from "../../../utils/joinNames";
 import { definePdf } from "../../utils/definePdf";
@@ -19,14 +20,12 @@ export default definePdf<PdfFieldName>({
         .filter(Boolean)
         .join(", ") || undefined,
     dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
-    residenceAddress: [
+    residenceAddress: formatAddress(
       data.residenceStreetAddress,
       data.residenceCity,
       data.residenceState,
       data.residenceZipCode,
-    ]
-      .filter(Boolean)
-      .join(", "),
+    ),
     nameChange: "Legal name change",
   }),
 });
