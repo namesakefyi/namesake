@@ -23,6 +23,14 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     expect(accessibilityScanResults.violations).toHaveLength(0);
 
     await expect(
+      page.getByText(
+        "This form helps you fill out name change documents, including:",
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Background Check Authorization of Release"),
+    ).toBeVisible();
+    await expect(
       page.getByText("Change of Name (PC-8.1)"),
     ).toBeVisible();
 
