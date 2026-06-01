@@ -1,3 +1,6 @@
+import { formatBirthplaceCountryOrState } from "../../../utils/formatBirthplaceCountryOrState";
+import { formatDateMMDDYYYY } from "../../../utils/formatDateMMDDYYYY";
+import { joinNames } from "../../../utils/joinNames";
 import { definePdf } from "../../utils/definePdf";
 import pdf from "./pc8.1-change-of-name.pdf";
 import type { PdfFieldName } from "./schema";
@@ -8,62 +11,73 @@ export default definePdf<PdfFieldName>({
   code: "PC-8.1",
   jurisdiction: "RI",
   pdfPath: pdf,
-  resolver: (data) => ({
-    // TODO: Map fields to form data
-    "Combo Box 1": undefined,
-    "2": undefined,
-    "Combo Box 4": undefined,
-    "3": undefined,
-    "5": undefined,
-    "6": undefined,
-    "7": undefined,
-    "8": undefined,
-    "9": undefined,
-    "10": undefined,
-    "11": undefined,
-    "12": undefined,
-    "13": undefined,
-    "15": undefined,
-    "17": undefined,
-    "18": undefined,
-    "19": undefined,
-    "20": undefined,
-    "21": undefined,
-    "22": undefined,
-    "23": undefined,
-    "24": undefined,
-    "25": undefined,
-    "26": undefined,
-    "27": undefined,
-    "28": undefined,
-    "29": undefined,
-    "30": undefined,
-    "31": undefined,
-    "32": undefined,
-    "33": undefined,
-    "34": undefined,
-    sign1: undefined,
-    "35": undefined,
-    "36": undefined,
-    "37": undefined,
-    "38": undefined,
-    "39": undefined,
-    "40": undefined,
-    "sign 2": undefined,
-    "41": undefined,
-    "42": undefined,
-    "43": undefined,
-    "44": undefined,
-    "45": undefined,
-    "46": undefined,
-    "47": undefined,
-    "48": undefined,
-    "49": undefined,
-    "50": undefined,
-    "51": undefined,
-    "52": undefined,
-    "53": undefined,
-    "54": undefined,
-    "Signature Field 4": undefined,
-  }),
+  resolver: (data) => {
+    const reason = data.reasonForChangingName ?? "";
+    const splitAt = Math.min(reason.lastIndexOf(" ", 200), 200);
+    const reasonLine1 = splitAt > 0 ? reason.slice(0, splitAt) : reason.slice(0, 200);
+    const reasonLine2 = splitAt > 0 ? reason.slice(splitAt + 1) : reason.slice(200);
+
+    return {
+      currentLegalName: joinNames(
+        data.oldFirstName,
+        data.oldMiddleName,
+        data.oldLastName,
+      ),
+      residenceStreetAddress: data.residenceStreetAddress,
+      residenceCity: data.residenceCity,
+      residenceState: data.residenceState,
+      residenceZipCode: data.residenceZipCode,
+      phoneNumber: data.phoneNumber,
+      mailingStreetAddress: data.mailingStreetAddress,
+      mailingCityStateAndZip: [
+        data.mailingCity,
+        data.mailingState,
+        data.mailingZipCode,
+      ]
+        .filter(Boolean)
+        .join(", "),
+      email: data.email,
+      nameOnOriginalBirthRecord: joinNames(
+        data.oldFirstName,
+        data.oldMiddleName,
+        data.oldLastName,
+      ),
+      dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
+      placeOfBirth: [
+        data.birthplaceCity,
+        formatBirthplaceCountryOrState(data.birthplaceCountry, data.birthplaceState),
+      ]
+        .filter(Boolean)
+        .join(", "),
+      mothersMaidenName: joinNames(
+        data.mothersFirstName,
+        data.mothersMiddleName,
+        data.mothersLastName,
+      ),
+      fathersName: joinNames(
+        data.fathersFirstName,
+        data.fathersMiddleName,
+        data.fathersLastName,
+      ),
+      occupation: data.occupation,
+      maritalStatus: data.maritalStatus,
+      previousAddress1: data.previousAddress1,
+      previousAddress2: data.previousAddress2,
+      previousAddress3: data.previousAddress3,
+      reasonForNameChange: reasonLine1 || undefined,
+      reasonForNameChange2: reasonLine2 || undefined,
+      newFirstName: data.newFirstName,
+      newMiddleName: data.newMiddleName,
+      newLastName: data.newLastName,
+      newBirthCertFirstName: data.shouldChangeBirthCertificate
+        ? data.newFirstName
+        : undefined,
+      newBirthCertMiddleName: data.shouldChangeBirthCertificate
+        ? data.newMiddleName
+        : undefined,
+      newBirthCertLastName: data.shouldChangeBirthCertificate
+        ? data.newLastName
+        : undefined,
+    };
+  },
 });

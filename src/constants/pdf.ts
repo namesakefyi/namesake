@@ -10,6 +10,7 @@ export const PDF_IDS = [
   "cjp34-cori-and-wms-release-request",
   "ss5-application-for-social-security-card",
   "pc8.1-change-of-name",
+  "background-check-authorization-of-release",
 ] as const;
 
 export type PDFId = (typeof PDF_IDS)[number];

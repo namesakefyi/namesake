@@ -1,18 +1,41 @@
 import { describe, it } from "vitest";
 import type { FormData } from "../../../constants/fields";
 import { expectPdfFieldsMatch } from "../../utils/expectPdfFieldsMatch";
-import pc8.1ChangeOfName from ".";
+import pc81ChangeOfName from ".";
 
 describe("Change of Name", () => {
   const testData: Partial<FormData> = {
-
-    // TODO: map PDF fields to form data: Combo Box 1, 2, Combo Box 4, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, sign1, 35, 36, 37, 38, 39, 40, sign 2, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, Signature Field 4
+    oldFirstName: "My",
+    oldMiddleName: "Old",
+    oldLastName: "Name",
+    newFirstName: "Marsha",
+    newMiddleName: "P",
+    newLastName: "Johnson",
+    residenceStreetAddress: "100 Main St",
+    residenceCity: "Providence",
+    residenceState: "RI",
+    residenceZipCode: "02903",
+    phoneNumber: "+1 (234) 567-8901",
+    email: "test@email.com",
+    dateOfBirth: "1970-01-01",
+    birthplaceCity: "Providence",
+    birthplaceCountry: "US",
+    birthplaceState: "RI",
+    mothersFirstName: "Mary",
+    mothersMiddleName: "Ann",
+    mothersLastName: "Maiden",
+    fathersFirstName: "John",
+    fathersMiddleName: "Paul",
+    fathersLastName: "Smith",
+    occupation: "Software Engineer",
+    maritalStatus: "Single",
+    previousAddress1: "100 Main St, Providence, RI 02903",
+    previousAddress2: "45 Oak Ave, Cranston, RI 02910",
+    reasonForChangingName: "I want a name which aligns with my gender identity.",
+    shouldChangeBirthCertificate: true,
   };
 
   it("maps all fields correctly to the PDF", async () => {
-    await expectPdfFieldsMatch(pc8.1ChangeOfName, testData);
+    await expectPdfFieldsMatch(pc81ChangeOfName, testData);
   });
-
-  // Test any derived fields below
 });
-
