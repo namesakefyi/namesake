@@ -12,11 +12,6 @@ export default definePdf<PdfFieldName>({
   jurisdiction: "RI",
   pdfPath: pdf,
   resolver: (data) => {
-    const reason = data.reasonForChangingName ?? "";
-    const splitAt = Math.min(reason.lastIndexOf(" ", 200), 200);
-    const reasonLine1 = splitAt > 0 ? reason.slice(0, splitAt) : reason.slice(0, 200);
-    const reasonLine2 = splitAt > 0 ? reason.slice(splitAt + 1) : reason.slice(200);
-
     return {
       currentLegalName: joinNames(
         data.oldFirstName,
@@ -45,7 +40,10 @@ export default definePdf<PdfFieldName>({
       dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
       placeOfBirth: [
         data.birthplaceCity,
-        formatBirthplaceCountryOrState(data.birthplaceCountry, data.birthplaceState),
+        formatBirthplaceCountryOrState(
+          data.birthplaceCountry,
+          data.birthplaceState,
+        ),
       ]
         .filter(Boolean)
         .join(", "),
@@ -64,8 +62,8 @@ export default definePdf<PdfFieldName>({
       previousAddress1: data.previousAddress1,
       previousAddress2: data.previousAddress2,
       previousAddress3: data.previousAddress3,
-      reasonForNameChange: reasonLine1 || undefined,
-      reasonForNameChange2: reasonLine2 || undefined,
+      reasonForNameChange: data.reasonForChangingName,
+      reasonForNameChange2: undefined,
       newFirstName: data.newFirstName,
       newMiddleName: data.newMiddleName,
       newLastName: data.newLastName,
