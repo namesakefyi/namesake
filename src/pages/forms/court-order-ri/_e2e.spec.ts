@@ -95,7 +95,9 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
       .getByRole("textbox", { name: "Street address" })
       .fill("100 Main St");
     await page.getByRole("textbox", { name: "City" }).fill("Providence");
-    await page.getByRole("combobox", { name: "State" }).fill("ri");
+    await page
+      .getByRole("combobox", { name: "State" })
+      .pressSequentially("rho");
     await page.getByRole("option", { name: "Rhode Island" }).click();
     await page.getByRole("textbox", { name: "ZIP" }).fill("02903");
     await page.getByRole("button", { name: "Continue" }).click();
@@ -131,11 +133,16 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
       page.getByRole("heading", { name: "Where were you born?" }),
     ).toBeVisible();
     await page.getByRole("textbox", { name: "City" }).fill("Providence");
-    await page.getByRole("combobox", { name: "Country" }).fill("unite");
+    await page
+      .getByRole("combobox", { name: "Country" })
+      .pressSequentially("unite");
     await page
       .getByRole("option", { name: "United States of America" })
       .click();
-    await page.getByRole("combobox", { name: "State" }).fill("rho");
+    await expect(page.getByRole("combobox", { name: "State" })).toBeVisible();
+    await page
+      .getByRole("combobox", { name: "State" })
+      .pressSequentially("rho");
     await page.getByRole("option", { name: "Rhode Island" }).click();
     await page.getByRole("button", { name: "Continue" }).click();
   });
@@ -198,7 +205,7 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
       .fill("Software Engineer");
     await page
       .getByRole("combobox", { name: "Marital status (optional)" })
-      .fill("Single");
+      .pressSequentially("Single");
     await page.getByRole("option", { name: "Single" }).click();
     await page.getByRole("button", { name: "Continue" }).click();
   });
