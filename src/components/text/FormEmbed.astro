@@ -7,12 +7,11 @@ import { FORM_BY_SLUG_WITH_GUIDE_COSTS_QUERY } from "../../sanity/queries";
 
 const { form: formNode } = Astro.props.node;
 
-if (!formNode?.slug?.current) return;
+const rawSlug = formNode?.slug?.current;
 
-const slugValue = formNode.slug.current;
-if (!(FORM_SLUGS as readonly string[]).includes(slugValue)) return;
+if (!rawSlug || !FORM_SLUGS.includes(rawSlug)) return;
 
-const slug = slugValue as FormSlug;
+const slug = rawSlug as FormSlug;
 
 const form = await sanityClient.fetch(FORM_BY_SLUG_WITH_GUIDE_COSTS_QUERY, {
   slug,
