@@ -64,7 +64,7 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
   await test.step("Reason for name change", async () => {
     await expect(
       page.getByRole("heading", {
-        name: "What is the reason you're changing your name?",
+        name: "What is the reason you’re changing your name?",
       }),
     ).toBeVisible();
     await expect(page.getByText("What do I write?")).toBeVisible();
@@ -104,14 +104,15 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
   await test.step("Previous addresses", async () => {
     await expect(
       page.getByRole("heading", {
-        name: "What are all the addresses where you've lived?",
+        name: "What are your three most recent addresses?",
       }),
     ).toBeVisible();
     await page
-      .getByRole("textbox", { name: "Previous addresses" })
-      .fill(
-        "100 Main St, Providence, RI 02903\n45 Oak Ave, Cranston, RI 02910",
-      );
+      .getByRole("textbox", { name: "Address 1" })
+      .fill("100 Main St, Providence, RI 02903");
+    await page
+      .getByRole("textbox", { name: "Address 2" })
+      .fill("45 Oak Ave, Cranston, RI 02910");
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
@@ -141,12 +142,8 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
 
   await test.step("Birth certificate", async () => {
     await expect(
-      page.getByRole("heading", { name: "Were you born in Rhode Island?" }),
-    ).toBeVisible();
-    await page.getByText("Yes, I was born in Rhode Island").click();
-    await expect(
       page.getByRole("heading", {
-        name: "Do you also want to update your birth certificate?",
+        name: "Do you want to update your Rhode Island birth certificate?",
       }),
     ).toBeVisible();
     await page
@@ -161,33 +158,48 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
         name: "Have you ever changed your name before?",
       }),
     ).toBeVisible();
-    await page.getByText("No, I've never changed my name").click();
+    await page.getByText("No, I’ve never changed my name").click();
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
   await test.step("Family information", async () => {
     await expect(
-      page.getByRole("heading", { name: "What are your parents' names?" }),
+      page.getByRole("heading", { name: "What are your parents’ names?" }),
     ).toBeVisible();
-    await page
-      .getByRole("textbox", { name: "Mother's maiden name" })
+    const motherSection = page
+      .locator("fieldset")
+      .filter({ hasText: /Mother/ });
+    await motherSection
+      .getByRole("textbox", { name: "First name" })
+      .fill("Mary");
+    await motherSection
+      .getByRole("textbox", { name: "Last or family name" })
       .fill("Maiden");
-    await page
-      .getByRole("textbox", { name: "Father's name" })
-      .fill("Father Name");
+    const fatherSection = page
+      .locator("fieldset")
+      .filter({ hasText: /Father/ });
+    await fatherSection
+      .getByRole("textbox", { name: "First name" })
+      .fill("John");
+    await fatherSection
+      .getByRole("textbox", { name: "Last or family name" })
+      .fill("Smith");
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
   await test.step("Personal information", async () => {
     await expect(
-      page.getByRole("heading", { name: "Tell us a bit about yourself." }),
+      page.getByRole("heading", {
+        name: "What is your occupation and marital status?",
+      }),
     ).toBeVisible();
     await page
       .getByRole("textbox", { name: "Occupation" })
       .fill("Software Engineer");
     await page
-      .getByRole("textbox", { name: "Marital status (optional)" })
+      .getByRole("combobox", { name: "Marital status (optional)" })
       .fill("Single");
+    await page.getByRole("option", { name: "Single" }).click();
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
@@ -210,8 +222,18 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     ).toBeVisible();
     await expect(page.getByText("Residence street address: 100")).toBeVisible();
     await expect(page.getByText("Residence city: Providence")).toBeVisible();
-    await expect(page.getByText("Mother's maiden name: Maiden")).toBeVisible();
-    await expect(page.getByText("Father's name: Father Name")).toBeVisible();
+    await expect(
+      page.getByText("Mother’s first name: Mary"),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Mother’s last name: Maiden"),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Father’s first name: John"),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Father’s last name: Smith"),
+    ).toBeVisible();
     await expect(page.getByText("Occupation: Software Engineer")).toBeVisible();
   });
 
