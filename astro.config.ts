@@ -77,8 +77,9 @@ export default defineConfig({
     host: true,
   },
   vite: {
+    assetsInclude: ["**/*.wasm"],
     ssr: {
-      external: ["@takumi-rs/core"],
+      external: ["node:buffer", "node:path", "node:fs"],
       optimizeDeps: {
         exclude: ["astro-portabletext"],
       },
