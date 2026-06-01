@@ -1,5 +1,5 @@
+import { cache, GoogleFont, ImageResponse } from "cf-workers-og";
 import { createElement } from "react";
-import { GoogleFont, ImageResponse, cache } from "cf-workers-og";
 import { OgImage } from "../components/OgImage";
 import type { NamesakeColor } from "../constants/colors";
 

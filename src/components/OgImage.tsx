@@ -7,7 +7,12 @@ type OgImageProps = {
   origin: string;
 };
 
-export function OgImage({ subhead, title, color = "white", origin }: OgImageProps) {
+export function OgImage({
+  subhead,
+  title,
+  color = "white",
+  origin,
+}: OgImageProps) {
   return (
     <div
       style={{
@@ -23,7 +28,14 @@ export function OgImage({ subhead, title, color = "white", origin }: OgImageProp
       }}
     >
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-        <p style={{ display: "flex", fontSize: "32px", color: "#111111", margin: 0 }}>
+        <p
+          style={{
+            display: "flex",
+            fontSize: "32px",
+            color: "#111111",
+            margin: 0,
+          }}
+        >
           {subhead}
         </p>
         <p
