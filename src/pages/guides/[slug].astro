@@ -34,6 +34,8 @@ const formattedDate = formatter.format(new Date(guide._updatedAt));
   annotation="box"
   breadcrumbs={breadcrumbs}
   color="white"
+  ogImage={`/guides/${slug}.png`}
+  ogAlt={guide.title}
 >
   <TableOfContents headings={headings} slot="toc" />
   <PortableText value={guide.content} />

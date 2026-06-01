@@ -78,6 +78,7 @@ export default defineConfig({
   },
   vite: {
     ssr: {
+      external: ["@takumi-rs/core"],
       optimizeDeps: {
         exclude: ["astro-portabletext"],
       },

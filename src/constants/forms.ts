@@ -1,9 +1,9 @@
 import type { Step } from "../forms/types";
-import { affidavitOfIndigencyMaConfig } from "../pages/forms/affidavit-of-indigency-ma/_config";
-import { courtOrderMaConfig } from "../pages/forms/court-order-ma/_config";
-import { courtOrderMinorMaConfig } from "../pages/forms/court-order-ma-minor/_config";
-import { courtOrderRiConfig } from "../pages/forms/court-order-ri/_config";
-import { socialSecurityConfig } from "../pages/forms/social-security/_config";
+import { affidavitOfIndigencyMaConfig } from "../forms/affidavit-of-indigency-ma/config";
+import { courtOrderMaConfig } from "../forms/court-order-ma/config";
+import { courtOrderMinorMaConfig } from "../forms/court-order-ma-minor/config";
+import { courtOrderRiConfig } from "../forms/court-order-ri/config";
+import { socialSecurityConfig } from "../forms/social-security/config";
 import type { FormData } from "./fields";
 import type { PDFId } from "./pdf";
 

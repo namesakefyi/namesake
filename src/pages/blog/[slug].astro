@@ -5,6 +5,7 @@ import TableOfContents from "../../components/TableOfContents.astro";
 import PortableText from "../../components/text/PortableText.astro";
 import ProseLayout from "../../layouts/ProseLayout.astro";
 import { extractHeadings } from "../../sanity/lib/extractHeadings";
+import { urlForImage } from "../../sanity/lib/urlForImage";
 import { POST_BY_SLUG_QUERY } from "../../sanity/queries";
 
 const { slug } = Astro.params;
@@ -14,6 +15,12 @@ const post = await sanityClient.fetch(POST_BY_SLUG_QUERY, { slug });
 if (!post) return Astro.redirect("/404");
 
 const headings = extractHeadings(post.content);
+
+// 1. Custom Sanity image → 2. Auto-generated OG image → 3. Default (BaseLayout fallback)
+const ogImage = post.image?.asset
+  ? urlForImage(post.image.asset).url()
+  : `/blog/${slug}.png`;
+const ogAlt = post.image?.alt ?? post.title;
 ---
 
 <ProseLayout
@@ -21,8 +28,8 @@ const headings = extractHeadings(post.content);
   date={post.publishDate}
   description={post.description}
   showDescription={post.showDescription}
-  ogImage={post.image?.asset}
-  ogAlt={post.image?.alt}
+  ogImage={ogImage}
+  ogAlt={ogAlt}
   author={post.authors?.map((author) => author.name).join(", ")}
   color="blue"
   annotation={post.annotation ?? "highlight"}

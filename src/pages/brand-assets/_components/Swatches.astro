@@ -1,10 +1,10 @@
 ---
-import { colors } from "../../../constants/colors";
+import { COLORS } from "../../../constants/colors";
 ---
 
 <ul class="swatches">
   {
-    Object.values(colors)
+    Object.values(COLORS)
       .filter((color) => !color.forText)
       .map((color) => (
         <li
