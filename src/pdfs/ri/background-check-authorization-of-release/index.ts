@@ -20,12 +20,12 @@ export default definePdf<PdfFieldName>({
         .filter(Boolean)
         .join(", ") || undefined,
     dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
-    residenceAddress: formatAddress(
-      data.residenceStreetAddress,
-      data.residenceCity,
-      data.residenceState,
-      data.residenceZipCode,
-    ),
+    residenceAddress: formatAddress({
+      street: data.residenceStreetAddress,
+      city: data.residenceCity,
+      state: data.residenceState,
+      zip: data.residenceZipCode,
+    }),
     nameChange: "Legal name change",
   }),
 });
