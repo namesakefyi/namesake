@@ -1,7 +1,7 @@
 import type { TitledListValue } from "@sanity/types";
 import type { RoughAnnotationType } from "rough-notation/lib/model";
 import type { NamesakeColor } from "../../../constants/colors";
-import { colors } from "../../../constants/colors";
+import { COLORS } from "../../../constants/colors";
 import { externalLink, internalLink } from "../annotations";
 
 export const richTextBlock = {
@@ -37,7 +37,7 @@ export const annotationOptions: TitledListValue<RoughAnnotationType>[] = [
 ];
 
 export const colorOptions: TitledListValue<NamesakeColor>[] = Object.entries(
-  colors,
+  COLORS,
 ).map(([key, color]) => ({
   title: color.name,
   value: key as NamesakeColor,

@@ -3,7 +3,7 @@ import { Font } from "astro:assets";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import type { NamesakeColor } from "../constants/colors";
-import { colors } from "../constants/colors";
+import { COLORS } from "../constants/colors";
 import { siteInfo } from "../constants/site-info";
 import "../styles/base.css";
 import "../styles/reset.css";
@@ -51,7 +51,7 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
     />
     <meta name="generator" content={Astro.generator} />
     <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content={colors[color ?? "purple"]?.hex} />
+    <meta name="theme-color" content={COLORS[color ?? "purple"]?.hex} />
     <link rel="icon" href="/favicon.ico?v3" sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v3" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

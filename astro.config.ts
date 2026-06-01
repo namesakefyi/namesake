@@ -77,7 +77,9 @@ export default defineConfig({
     host: true,
   },
   vite: {
+    assetsInclude: ["**/*.wasm"],
     ssr: {
+      external: ["node:buffer", "node:path", "node:fs"],
       optimizeDeps: {
         exclude: ["astro-portabletext"],
       },
@@ -98,13 +100,11 @@ export default defineConfig({
         output: {
           manualChunks(id) {
             if (
-              id.includes("/src/constants/") &&
-              !id.includes("/src/constants/forms")
+              (id.includes("/src/constants/") &&
+                !id.includes("/src/constants/forms")) ||
+              id.includes("/src/utils/")
             ) {
-              return "shared-constants";
-            }
-            if (id.includes("/src/utils/")) {
-              return "shared-utils";
+              return "shared";
             }
           },
         },

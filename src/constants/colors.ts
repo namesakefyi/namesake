@@ -15,7 +15,7 @@ export type NamesakeColor =
   | "black"
   | "white";
 
-export const colors: Record<NamesakeColor, Color> = {
+export const COLORS: Record<NamesakeColor, Color> = {
   purple: {
     id: "purple",
     name: "Namesake Purple",

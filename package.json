@@ -70,6 +70,7 @@
     "astro": "6.3.7",
     "astro-portabletext": "^0.13.0",
     "browserslist": "^4.28.2",
+    "cf-workers-og": "^3.0.1",
     "d3": "^7.9.0",
     "d3-geo": "^3.1.1",
     "d3-selection": "^3.0.0",
