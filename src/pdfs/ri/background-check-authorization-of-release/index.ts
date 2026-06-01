@@ -11,7 +11,11 @@ export default definePdf<PdfFieldName>({
   jurisdiction: "RI",
   pdfPath: pdf,
   resolver: (data) => ({
-    fullName: joinNames(data.oldFirstName, data.oldMiddleName, data.oldLastName),
+    fullName: joinNames(
+      data.oldFirstName,
+      data.oldMiddleName,
+      data.oldLastName,
+    ),
     otherNames:
       [
         data.previousNameFrom,

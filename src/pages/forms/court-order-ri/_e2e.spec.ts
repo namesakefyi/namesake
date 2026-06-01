@@ -30,9 +30,7 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     await expect(
       page.getByText("Background Check Authorization of Release"),
     ).toBeVisible();
-    await expect(
-      page.getByText("Change of Name (PC-8.1)"),
-    ).toBeVisible();
+    await expect(page.getByText("Change of Name (PC-8.1)")).toBeVisible();
 
     await expect(page.getByText("Responses are securely stored")).toBeVisible();
 
@@ -45,7 +43,9 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     ).toBeVisible();
     await page.getByRole("textbox", { name: "First name" }).fill("Marsha");
     await page.getByRole("textbox", { name: "Middle name" }).fill("P");
-    await page.getByRole("textbox", { name: "Last or family name" }).fill("Johnson");
+    await page
+      .getByRole("textbox", { name: "Last or family name" })
+      .fill("Johnson");
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
@@ -55,7 +55,9 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     ).toBeVisible();
     await page.getByRole("textbox", { name: "First name" }).fill("My");
     await page.getByRole("textbox", { name: "Middle name" }).fill("Old");
-    await page.getByRole("textbox", { name: "Last or family name" }).fill("Name");
+    await page
+      .getByRole("textbox", { name: "Last or family name" })
+      .fill("Name");
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
@@ -76,8 +78,12 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     await expect(
       page.getByRole("heading", { name: "What is your contact information?" }),
     ).toBeVisible();
-    await page.getByRole("textbox", { name: "Phone number" }).fill("12345678901");
-    await page.getByRole("textbox", { name: "Email address" }).fill("test@email.com");
+    await page
+      .getByRole("textbox", { name: "Phone number" })
+      .fill("12345678901");
+    await page
+      .getByRole("textbox", { name: "Email address" })
+      .fill("test@email.com");
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
@@ -85,7 +91,9 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     await expect(
       page.getByRole("heading", { name: "What is your residential address?" }),
     ).toBeVisible();
-    await page.getByRole("textbox", { name: "Street address" }).fill("100 Main St");
+    await page
+      .getByRole("textbox", { name: "Street address" })
+      .fill("100 Main St");
     await page.getByRole("textbox", { name: "City" }).fill("Providence");
     await page.getByRole("combobox", { name: "State" }).fill("ri");
     await page.getByRole("option", { name: "Rhode Island" }).click();
@@ -101,7 +109,9 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     ).toBeVisible();
     await page
       .getByRole("textbox", { name: "Previous addresses" })
-      .fill("100 Main St, Providence, RI 02903\n45 Oak Ave, Cranston, RI 02910");
+      .fill(
+        "100 Main St, Providence, RI 02903\n45 Oak Ave, Cranston, RI 02910",
+      );
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
@@ -121,7 +131,9 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     ).toBeVisible();
     await page.getByRole("textbox", { name: "City" }).fill("Providence");
     await page.getByRole("combobox", { name: "Country" }).fill("unite");
-    await page.getByRole("option", { name: "United States of America" }).click();
+    await page
+      .getByRole("option", { name: "United States of America" })
+      .click();
     await page.getByRole("combobox", { name: "State" }).fill("rho");
     await page.getByRole("option", { name: "Rhode Island" }).click();
     await page.getByRole("button", { name: "Continue" }).click();
@@ -157,8 +169,12 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     await expect(
       page.getByRole("heading", { name: "What are your parents' names?" }),
     ).toBeVisible();
-    await page.getByRole("textbox", { name: "Mother's maiden name" }).fill("Maiden");
-    await page.getByRole("textbox", { name: "Father's name" }).fill("Father Name");
+    await page
+      .getByRole("textbox", { name: "Mother's maiden name" })
+      .fill("Maiden");
+    await page
+      .getByRole("textbox", { name: "Father's name" })
+      .fill("Father Name");
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
@@ -166,8 +182,12 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     await expect(
       page.getByRole("heading", { name: "Tell us a bit about yourself." }),
     ).toBeVisible();
-    await page.getByRole("textbox", { name: "Occupation" }).fill("Software Engineer");
-    await page.getByRole("textbox", { name: "Marital status (optional)" }).fill("Single");
+    await page
+      .getByRole("textbox", { name: "Occupation" })
+      .fill("Software Engineer");
+    await page
+      .getByRole("textbox", { name: "Marital status (optional)" })
+      .fill("Single");
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
@@ -188,9 +208,7 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     await expect(
       page.getByText("Date of birth: January 1, 1970"),
     ).toBeVisible();
-    await expect(
-      page.getByText("Residence street address: 100"),
-    ).toBeVisible();
+    await expect(page.getByText("Residence street address: 100")).toBeVisible();
     await expect(page.getByText("Residence city: Providence")).toBeVisible();
     await expect(page.getByText("Mother's maiden name: Maiden")).toBeVisible();
     await expect(page.getByText("Father's name: Father Name")).toBeVisible();
