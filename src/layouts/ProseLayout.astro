@@ -35,12 +35,12 @@ const {
 } = Astro.props;
 
 // Convert Sanity asset to URL for BaseLayout
-const ogImageUrl =
-  ogImage == null
-    ? undefined
-    : typeof ogImage === "string"
-      ? ogImage
-      : urlForImage(ogImage).url();
+let ogImageUrl: string | undefined;
+if (typeof ogImage === "string") {
+  ogImageUrl = ogImage;
+} else if (ogImage != null) {
+  ogImageUrl = urlForImage(ogImage).url();
+}
 
 const headerDescription =
   showDescription === false
