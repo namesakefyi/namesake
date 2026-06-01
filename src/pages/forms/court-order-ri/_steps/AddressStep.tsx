@@ -8,13 +8,6 @@ import {
 } from "../../../../components/forms/FormStep";
 import type { Step } from "../../../../forms/types";
 
-const whenNotUnhoused = (data: Record<string, unknown>) =>
-  data.isCurrentlyUnhoused !== true;
-
-const whenMailing = (data: Record<string, unknown>) =>
-  data.isCurrentlyUnhoused !== true &&
-  data.isMailingAddressDifferentFromResidence === true;
-
 export const addressStep: Step = {
   id: "address",
   title: "What is your residential address?",
@@ -30,7 +23,7 @@ export const addressStep: Step = {
         "residenceZipCode",
         "isMailingAddressDifferentFromResidence",
       ],
-      when: whenNotUnhoused,
+      when: (data) => data.isCurrentlyUnhoused !== true,
     },
     {
       ids: [
@@ -39,7 +32,9 @@ export const addressStep: Step = {
         "mailingState",
         "mailingZipCode",
       ],
-      when: whenMailing,
+      when: (data) =>
+        data.isCurrentlyUnhoused !== true &&
+        data.isMailingAddressDifferentFromResidence === true,
     },
   ],
   component: ({ stepConfig }) => {
