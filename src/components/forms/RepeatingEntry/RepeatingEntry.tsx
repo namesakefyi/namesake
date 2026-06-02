@@ -1,13 +1,17 @@
 import { RiAddLine, RiDeleteBinLine } from "@remixicon/react";
 import { useRef } from "react";
 import { useFormContext } from "react-hook-form";
-import type { FieldName } from "../../../constants/fields";
+import type { FieldName, FormData } from "../../../constants/fields";
 import { Button } from "../../common/Button";
 import "./RepeatingEntry.css";
 
+type ArrayFieldName = {
+  [K in FieldName]: FormData[K] extends string[] ? K : never;
+}[FieldName];
+
 export interface RepeatingEntryProps {
   /** The array field name to store all entries. */
-  name: FieldName;
+  name: ArrayFieldName;
   /** Minimum number of visible instances. Default: 1 */
   min?: number;
   /** Maximum number of visible instances. */
@@ -26,8 +30,8 @@ export function RepeatingEntry({
   max,
   children,
 }: RepeatingEntryProps) {
-  const { watch, setValue } = useFormContext();
-  const raw = (watch(name) as string[] | undefined) ?? [];
+  const { watch, setValue } = useFormContext<FormData>();
+  const raw = watch(name) ?? [];
   const values =
     raw.length >= min ? raw : [...raw, ...Array(min - raw.length).fill("")];
 
@@ -39,15 +43,16 @@ export function RepeatingEntry({
   const handleChange = (index: number, val: string) => {
     const next = [...values];
     next[index] = val;
-    setValue(name, next as any);
+    setValue(name, next);
   };
 
   const handleAdd = () => {
-    setValue(name, [...values, ""] as any);
+    setValue(name, [...values, ""]);
   };
 
   const handleRemove = () => {
-    setValue(name, values.slice(0, -1) as any);
+    keys.current = keys.current.slice(0, -1);
+    setValue(name, values.slice(0, -1));
   };
 
   const canAdd = max === undefined || values.length < max;

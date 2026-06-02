@@ -11,7 +11,7 @@ export const previousAddressesStep: Step = {
   fields: [
     {
       id: "previousAddresses",
-      when: (data) => (data.previousAddresses?.filter(Boolean).length ?? 0) > 0,
+      when: (data) => data.previousAddresses?.some(Boolean) ?? false,
     },
   ],
   component: ({ stepConfig }) => (
