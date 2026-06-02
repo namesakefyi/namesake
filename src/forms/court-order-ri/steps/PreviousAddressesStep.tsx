@@ -1,17 +1,31 @@
+import { TextField } from "../../../components/common/TextField";
 import { FormStep } from "../../../components/forms/FormStep";
-import { ShortTextField } from "../../../components/forms/ShortTextField";
+import { RepeatingEntry } from "../../../components/forms/RepeatingEntry";
 import type { Step } from "../../../forms/types";
 
 export const previousAddressesStep: Step = {
   id: "previous-addresses",
-  title: "What are your three most recent addresses?",
-  description: "List where you have resided prior to your current address.",
-  fields: ["previousAddress1", "previousAddress2", "previousAddress3"],
+  title: "What are your most recent addresses?",
+  description:
+    "List up to three addresses where you have resided prior to your current address.",
+  fields: [
+    {
+      id: "previousAddresses",
+      when: (data) => (data.previousAddresses?.filter(Boolean).length ?? 0) > 0,
+    },
+  ],
   component: ({ stepConfig }) => (
     <FormStep stepConfig={stepConfig}>
-      <ShortTextField name="previousAddress1" label="Address 1" size={40} />
-      <ShortTextField name="previousAddress2" label="Address 2" size={40} />
-      <ShortTextField name="previousAddress3" label="Address 3" size={40} />
+      <RepeatingEntry name="previousAddresses" min={0} max={3}>
+        {(value, onChange, index) => (
+          <TextField
+            value={value}
+            onChange={onChange}
+            label={`Address ${index + 1}`}
+            size={40}
+          />
+        )}
+      </RepeatingEntry>
     </FormStep>
   ),
 };

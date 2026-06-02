@@ -269,9 +269,11 @@ export const FIELD_DEFS = [
   { name: "mothersMaidenName", label: "Mother's maiden name", type: "string" },
   { name: "occupation", label: "Occupation", type: "string" },
   { name: "maritalStatus", label: "Marital status", type: "string" },
-  { name: "previousAddress1", label: "Previous address 1", type: "string" },
-  { name: "previousAddress2", label: "Previous address 2", type: "string" },
-  { name: "previousAddress3", label: "Previous address 3", type: "string" },
+  {
+    name: "previousAddresses",
+    label: "Previous addresses",
+    type: "string[]",
+  },
   {
     name: "shouldChangeBirthCertificate",
     label: "Update birth certificate?",

@@ -1,5 +1,4 @@
 .namesake-text-field {
-  width: 100%;
   color: var(--text-color);
 
   .react-aria-Input,
@@ -11,7 +10,7 @@
     color: var(--field-text-color);
     background: var(--field-background);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-xs);
+    border-radius: var(--radius-s);
     box-shadow: inset 0 3px 0 0
       color-mix(in srgb, var(--namesake-black) 10%, transparent);
 
