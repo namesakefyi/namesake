@@ -33,7 +33,8 @@ export function formatFieldValue(
 
     case "string[]":
       if (Array.isArray(value)) {
-        return value.length > 0 ? value.join(", ") : undefined;
+        const nonEmpty = value.filter(Boolean);
+        return nonEmpty.length > 0 ? nonEmpty.join(", ") : undefined;
       }
       return undefined;
     default:

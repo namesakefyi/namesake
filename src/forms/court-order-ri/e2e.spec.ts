@@ -106,12 +106,13 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
   await test.step("Previous addresses", async () => {
     await expect(
       page.getByRole("heading", {
-        name: "What are your three most recent addresses?",
+        name: "What are your most recent addresses?",
       }),
     ).toBeVisible();
     await page
       .getByRole("textbox", { name: "Address 1" })
       .fill("100 Main St, Providence, RI 02903");
+    await page.getByRole("button", { name: "Add" }).click();
     await page
       .getByRole("textbox", { name: "Address 2" })
       .fill("45 Oak Ave, Cranston, RI 02910");
@@ -229,6 +230,11 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     ).toBeVisible();
     await expect(page.getByText("Residence street address: 100")).toBeVisible();
     await expect(page.getByText("Residence city: Providence")).toBeVisible();
+    await expect(
+      page.getByText(
+        "Previous addresses: 100 Main St, Providence, RI 02903, 45 Oak Ave, Cranston, RI 02910",
+      ),
+    ).toBeVisible();
     await expect(page.getByText("Mother’s first name: Mary")).toBeVisible();
     await expect(page.getByText("Mother’s last name: Maiden")).toBeVisible();
     await expect(page.getByText("Father’s first name: John")).toBeVisible();

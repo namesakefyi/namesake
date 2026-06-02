@@ -29,8 +29,10 @@ describe("Change of Name", () => {
     fathersLastName: "Smith",
     occupation: "Software Engineer",
     maritalStatus: "Single",
-    previousAddress1: "100 Main St, Providence, RI 02903",
-    previousAddress2: "45 Oak Ave, Cranston, RI 02910",
+    previousAddresses: [
+      "100 Main St, Providence, RI 02903",
+      "45 Oak Ave, Cranston, RI 02910",
+    ],
     reasonForChangingName:
       "I want a name which aligns with my gender identity.",
     shouldChangeBirthCertificate: true,
