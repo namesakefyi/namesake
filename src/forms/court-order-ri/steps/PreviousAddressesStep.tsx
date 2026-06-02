@@ -16,7 +16,7 @@ export const previousAddressesStep: Step = {
   ],
   component: ({ stepConfig }) => (
     <FormStep stepConfig={stepConfig}>
-      <RepeatingEntry name="previousAddresses" min={0} max={3}>
+      <RepeatingEntry name="previousAddresses" min={0} max={3} defaultCount={1}>
         {(value, onChange, index) => (
           <TextField
             value={value}
