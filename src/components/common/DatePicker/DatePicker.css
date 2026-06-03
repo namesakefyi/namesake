@@ -1,14 +1,19 @@
 .react-aria-DatePicker {
+  min-width: 0;
+  max-width: 100%;
   color: var(--text-color);
 
   .react-aria-Group {
     display: flex;
     align-items: center;
     width: fit-content;
+    max-width: 100%;
   }
 
   .react-aria-DateInput {
+    box-sizing: border-box;
     width: 16ch;
+    max-width: 100%;
     padding: var(--space-s) var(--space-2xl) var(--space-s) var(--space-s);
   }
 

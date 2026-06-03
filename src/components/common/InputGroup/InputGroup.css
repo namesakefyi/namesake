@@ -1,8 +1,12 @@
 .input-group {
+  min-width: 0;
+  max-width: 100%;
+
   .react-aria-Group {
     display: flex;
     align-items: center;
     width: fit-content;
+    max-width: 100%;
     overflow: hidden;
     background: var(--field-background);
     border: 1px solid var(--border-color);
@@ -25,6 +29,8 @@
   }
 
   .react-aria-Input {
+    min-width: 0;
+    max-width: 100%;
     padding: var(--space-2xs);
     margin: 0;
     font-size: 1rem;

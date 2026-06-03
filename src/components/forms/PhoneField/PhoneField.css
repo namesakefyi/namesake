@@ -3,8 +3,11 @@
   flex-direction: column;
   gap: var(--space-m);
   width: 100%;
+  min-width: 0;
 }
 
 .phone-number-input {
+  box-sizing: border-box;
   width: 20ch;
+  max-width: 100%;
 }
