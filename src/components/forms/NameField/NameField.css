@@ -3,11 +3,13 @@
   flex-direction: column;
   gap: var(--space-m);
   width: 100%;
+  min-width: 0;
 }
 
 .namesake-name-field-inputs {
   display: flex;
   flex-direction: column;
   gap: var(--space-m);
+  min-width: 0;
   max-width: 30ch;
 }

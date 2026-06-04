@@ -1,4 +1,5 @@
 .react-aria-DatePicker {
+  min-width: 0;
   color: var(--text-color);
 
   .react-aria-Group {

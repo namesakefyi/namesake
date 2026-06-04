@@ -4,6 +4,7 @@
   gap: var(--space-xl);
   align-items: flex-start;
   justify-content: center;
+  min-width: 0;
   border: none;
 
   /* Remove focus outline when programmatically focused */
@@ -35,6 +36,7 @@
   flex-direction: column;
   gap: var(--space-l);
   width: 100%;
+  min-width: 0;
 }
 
 .form-subsection {
