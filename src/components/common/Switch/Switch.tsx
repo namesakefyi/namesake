@@ -1,19 +1,34 @@
 import {
-  Switch as AriaSwitch,
-  type SwitchProps as AriaSwitchProps,
+  SwitchButton,
+  SwitchField,
+  type SwitchFieldProps,
+  type ValidationResult,
 } from "react-aria-components";
+import { Text } from "../Content";
+import { FieldError } from "../Form";
 
 import "./Switch.css";
 
-export interface SwitchProps extends Omit<AriaSwitchProps, "children"> {
+export interface SwitchProps extends Omit<SwitchFieldProps, "children"> {
   children: React.ReactNode;
+  description?: string;
+  errorMessage?: string | ((validation: ValidationResult) => string);
 }
 
-export function Switch({ children, ...props }: SwitchProps) {
+export function Switch({
+  children,
+  description,
+  errorMessage,
+  ...props
+}: SwitchProps) {
   return (
-    <AriaSwitch {...props}>
-      <div className="indicator" />
-      {children}
-    </AriaSwitch>
+    <SwitchField {...props}>
+      <SwitchButton>
+        <div className="indicator" />
+        {children}
+      </SwitchButton>
+      {description && <Text slot="description">{description}</Text>}
+      {errorMessage && <FieldError>{errorMessage}</FieldError>}
+    </SwitchField>
   );
 }

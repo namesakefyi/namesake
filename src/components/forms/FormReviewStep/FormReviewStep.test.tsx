@@ -44,7 +44,7 @@ describe("FormReviewStep", () => {
     expect(screen.getByText("Review your information")).toBeInTheDocument();
   });
 
-  it("renders with default description", () => {
+  it("renders description", () => {
     render(<FormReviewStep steps={[]} />, { wrapper: TestWrapper });
 
     expect(
@@ -52,43 +52,6 @@ describe("FormReviewStep", () => {
         /Please review your answers before submitting. Once submitted, completed forms will download automatically./i,
       ),
     ).toBeInTheDocument();
-  });
-
-  it("renders with custom title", () => {
-    render(<FormReviewStep title="Confirm Your Details" steps={[]} />, {
-      wrapper: TestWrapper,
-    });
-
-    expect(screen.getByText("Confirm Your Details")).toBeInTheDocument();
-  });
-
-  it("renders with custom description", () => {
-    render(
-      <FormReviewStep
-        steps={[]}
-        title="Review"
-        description="Please double-check everything."
-      />,
-      { wrapper: TestWrapper },
-    );
-
-    expect(
-      screen.getByText("Please double-check everything."),
-    ).toBeInTheDocument();
-  });
-
-  it("does not render description when not provided", () => {
-    render(
-      <FormReviewStep title="Review" description={undefined} steps={[]} />,
-      {
-        wrapper: TestWrapper,
-      },
-    );
-
-    expect(screen.getByText("Review")).toBeInTheDocument();
-
-    const description = document.querySelector(".form-review-step-description");
-    expect(description).not.toBeInTheDocument();
   });
 
   it("renders submit button", () => {

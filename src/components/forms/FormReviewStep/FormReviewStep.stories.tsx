@@ -1,6 +1,22 @@
 import type { Meta } from "@storybook/react-vite";
-import { FormProvider, useForm } from "react-hook-form";
+import type { Step } from "../../../forms/types";
+import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormReviewStep, type FormReviewStepProps } from "./FormReviewStep";
+
+const mockSteps: Step[] = [
+  {
+    id: "personal-info",
+    title: "Personal Information",
+    fields: ["oldFirstName", "oldLastName"],
+    component: () => null,
+  },
+  {
+    id: "contact",
+    title: "Contact Details",
+    fields: ["email"],
+    component: () => null,
+  },
+];
 
 const meta: Meta<typeof FormReviewStep> = {
   component: FormReviewStep,
@@ -8,16 +24,26 @@ const meta: Meta<typeof FormReviewStep> = {
     layout: "padded",
   },
   decorators: [
-    (Story) => {
-      const form = useForm();
-      return (
-        <FormProvider {...form}>
-          <form onSubmit={(e) => e.preventDefault()}>
-            <Story />
-          </form>
-        </FormProvider>
-      );
-    },
+    (Story) => (
+      <FormStepContext.Provider
+        value={{
+          onNext: () => console.log("Next clicked"),
+          onBack: () => console.log("Back clicked"),
+          formTitle: "Massachusetts Court Order",
+          currentStepIndex: 0,
+          totalSteps: 3,
+          phase: "review",
+          onSubmit: (e) => {
+            e.preventDefault();
+            console.log("Submit clicked");
+          },
+          onEditStep: () => {},
+          submitError: null,
+        }}
+      >
+        <Story />
+      </FormStepContext.Provider>
+    ),
   ],
 };
 
@@ -27,23 +53,34 @@ export const Default = (args: FormReviewStepProps) => (
   <FormReviewStep {...args} />
 );
 
-Default.args = {};
+Default.args = {
+  steps: mockSteps,
+};
 
-export const WithCustomTitle = (args: FormReviewStepProps) => (
+export const WithSubmitError = (args: FormReviewStepProps) => (
   <FormReviewStep {...args} />
 );
 
-WithCustomTitle.args = {
-  title: "Confirm details",
-  description:
-    "Please double-check all information before submitting. You won't be able to edit these details after submission.",
+WithSubmitError.args = {
+  steps: mockSteps,
 };
 
-export const WithoutDescription = (args: FormReviewStepProps) => (
-  <FormReviewStep {...args} />
-);
-
-WithoutDescription.args = {
-  title: "Review your information",
-  description: undefined,
-};
+WithSubmitError.decorators = [
+  (Story: React.ComponentType) => (
+    <FormStepContext.Provider
+      value={{
+        onNext: () => {},
+        onBack: () => {},
+        formTitle: "Massachusetts Court Order",
+        currentStepIndex: 0,
+        totalSteps: 3,
+        phase: "review",
+        onSubmit: (e) => e.preventDefault(),
+        onEditStep: () => {},
+        submitError: "Something went wrong. Please try again.",
+      }}
+    >
+      <Story />
+    </FormStepContext.Provider>
+  ),
+];
