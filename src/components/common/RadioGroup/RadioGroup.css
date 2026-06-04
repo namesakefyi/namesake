@@ -10,7 +10,22 @@
   }
 }
 
+.namesake-radio-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+
+  [slot="description"] {
+    font-size: var(--step--2);
+  }
+
+  &[data-disabled] [slot="description"] {
+    opacity: 0.3;
+  }
+}
+
 .namesake-radio {
+  /* This is needed so the HiddenInput is positioned correctly */
   position: relative;
   display: flex;
   gap: var(--space-s);

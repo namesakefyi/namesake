@@ -1,8 +1,9 @@
 import {
-  Radio as AriaRadio,
   RadioGroup as AriaRadioGroup,
   type RadioGroupProps as AriaRadioGroupProps,
-  type RadioProps as AriaRadioProps,
+  RadioButton,
+  RadioField,
+  type RadioFieldProps,
   type ValidationResult,
 } from "react-aria-components";
 import { Text } from "../Content";
@@ -38,8 +39,20 @@ export function RadioGroup({
   );
 }
 
-export interface RadioProps extends AriaRadioProps {}
+export interface RadioProps extends RadioFieldProps {
+  description?: string;
+}
 
-export function Radio({ className, ...props }: RadioProps) {
-  return <AriaRadio {...props} className={clsx("namesake-radio", className)} />;
+export function Radio({
+  className,
+  description,
+  children,
+  ...props
+}: RadioProps) {
+  return (
+    <RadioField className={clsx("namesake-radio-field", className)} {...props}>
+      <RadioButton className="namesake-radio">{children}</RadioButton>
+      {description && <Text slot="description">{description}</Text>}
+    </RadioField>
+  );
 }
