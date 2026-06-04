@@ -23,14 +23,10 @@ describe("CheckboxField", () => {
       />,
     );
 
-    const checkboxLabel = screen.getByText(
-      "I would like my documents returned",
-    );
-    await userEvent.click(checkboxLabel);
-
     const checkbox = screen.getByRole("checkbox", {
       name: "I would like my documents returned",
     }) as HTMLInputElement;
+    await userEvent.click(checkbox);
     expect(checkbox.checked).toBe(true);
   });
 

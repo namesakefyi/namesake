@@ -49,12 +49,10 @@ describe("CheckboxGroupField", () => {
       />,
     );
 
-    const secondOption = screen.getByText("Option 2");
-    await userEvent.click(secondOption);
-
     const selectedCheckbox = screen.getByRole("checkbox", {
       name: "Option 2",
     }) as HTMLInputElement;
+    await userEvent.click(selectedCheckbox);
     expect(selectedCheckbox.checked).toBe(true);
   });
 
@@ -98,7 +96,9 @@ describe("CheckboxGroupField", () => {
     );
 
     // Select prefer not to answer
-    const preferNotToAnswer = screen.getByText("Prefer not to answer");
+    const preferNotToAnswer = screen.getByRole("checkbox", {
+      name: "Prefer not to answer",
+    });
     await userEvent.click(preferNotToAnswer);
 
     // Check that all other options are disabled
@@ -117,7 +117,9 @@ describe("CheckboxGroupField", () => {
     expect(preferNotToAnswerCheckbox.checked).toBe(true);
 
     // Uncheck prefer not to answer
-    await userEvent.click(preferNotToAnswer);
+    await userEvent.click(
+      screen.getByRole("checkbox", { name: "Prefer not to answer" }),
+    );
 
     // Verify all options are enabled
     for (const option of mockOptions) {
