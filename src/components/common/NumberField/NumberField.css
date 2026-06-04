@@ -1,4 +1,6 @@
 .react-aria-NumberField {
+  min-width: 0;
+
   .react-aria-Input {
     width: 13ch;
     padding: var(--space-s) var(--space-m);
