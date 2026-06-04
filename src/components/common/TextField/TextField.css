@@ -1,4 +1,5 @@
 .namesake-text-field {
+  min-width: 0;
   color: var(--text-color);
 
   .react-aria-Input,
