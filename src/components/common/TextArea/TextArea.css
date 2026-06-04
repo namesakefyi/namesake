@@ -2,14 +2,10 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-width: 0;
-  max-width: 100%;
   color: var(--text-color);
 
   .react-aria-TextArea {
-    box-sizing: border-box;
     width: 100%;
-    max-width: 100%;
     min-height: var(--space-3xl);
     padding: calc(var(--space-s) + 2px) var(--space-m);
     margin: 0;

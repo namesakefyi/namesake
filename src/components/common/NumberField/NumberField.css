@@ -1,11 +1,6 @@
 .react-aria-NumberField {
-  min-width: 0;
-  max-width: 100%;
-
   .react-aria-Input {
-    box-sizing: border-box;
     width: 13ch;
-    max-width: 100%;
     padding: var(--space-s) var(--space-m);
     outline: none;
     background: var(--field-background);
@@ -73,7 +68,6 @@
     display: flex;
     align-items: stretch;
     width: fit-content;
-    max-width: 100%;
     border-radius: var(--radius-xs);
 
     &[data-focus-within] {
