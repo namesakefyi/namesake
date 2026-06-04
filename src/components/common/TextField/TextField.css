@@ -5,6 +5,7 @@
   .react-aria-Input,
   .react-aria-TextArea {
     display: block;
+    max-width: 100%;
     padding: var(--space-s) var(--space-m);
     margin: 0;
     font-size: var(--step-0);

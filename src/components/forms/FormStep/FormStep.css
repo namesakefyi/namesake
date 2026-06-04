@@ -35,8 +35,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-l);
-  min-width: 0;
   width: 100%;
+  min-width: 0;
 }
 
 .form-subsection {
