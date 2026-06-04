@@ -45,7 +45,7 @@
     stroke-dasharray: 22px;
     stroke-dashoffset: 66;
     transform: translateY(-0.5px) translateX(1px);
-    transition: all 200ms ease-out;
+    transition: stroke-dashoffset 200ms ease-out;
   }
 
   &[data-focus-visible] .checkbox {
