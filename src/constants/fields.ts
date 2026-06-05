@@ -87,6 +87,11 @@ export const FIELD_DEFS = [
     type: "boolean",
   },
   {
+    name: "hasNoRecordOfOtherStateConvictionsProbationParole",
+    label: "No record of convictions, probation, or parole in any other state?",
+    type: "boolean",
+  },
+  {
     name: "residenceStreetAddress",
     label: "Residence street address",
     type: "string",

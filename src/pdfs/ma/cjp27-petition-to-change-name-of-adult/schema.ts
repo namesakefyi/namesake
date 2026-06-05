@@ -2,7 +2,7 @@
 import { PDFCheckBox, PDFDropdown, PDFTextField } from "@cantoo/pdf-lib";
 
 export const pdfSchema = {
-  county: PDFDropdown, // TODO: Can we just say it is a TextField?
+  county: PDFDropdown,
   petitionerFirstName: PDFTextField,
   petitionerMiddleName: PDFTextField,
   petitionerLastName: PDFTextField,
@@ -24,7 +24,6 @@ export const pdfSchema = {
   mailingZipCode: PDFTextField,
   phoneNumber: PDFTextField,
   email: PDFTextField,
-  isAddressCorrectionsSupervisedFacility: PDFCheckBox,
   hasPreviousNameChangeFalse: PDFCheckBox,
   hasPreviousNameChangeTrue: PDFCheckBox,
   previousNameFrom: PDFTextField,
@@ -71,4 +70,5 @@ export const pdfExcludedFields = [
   "form1[0].BodyPage1[0].S11[0].TextField6[1]",
   "form1[0].BodyPage1[0].S11[0].TextField7[0]",
   "form1[0].BodyPage1[0].S1[0].DocketNo[0]",
+  "isAddressCorrectionsSupervisedFacility",
 ] as const;

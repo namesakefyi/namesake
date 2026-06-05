@@ -34,8 +34,6 @@ export default definePdf<PdfFieldName>({
     mailingZipCode: data.mailingZipCode,
     email: data.email,
     phoneNumber: data.phoneNumber,
-    isAddressCorrectionsSupervisedFacility:
-      data.isAddressCorrectionsSupervisedFacility,
     hasPreviousNameChangeTrue: data.hasPreviousNameChange,
     hasPreviousNameChangeFalse: !data.hasPreviousNameChange,
     previousNameFrom: data.previousNameFrom,
