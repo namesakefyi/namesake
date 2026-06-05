@@ -23,15 +23,19 @@ export default definePdf<PdfFieldName>({
     birthplaceState: data.birthplaceState,
     dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
     residenceStreetAddress: data.residenceStreetAddress,
+    residenceSteetAddressDetail: "", // TODO:
     residenceCity: data.residenceCity,
     residenceState: data.residenceState,
     residenceZipCode: data.residenceZipCode,
     mailingStreetAddress: data.mailingStreetAddress,
+    mailingStreetAddressDetail: "", // TODO:
     mailingCity: data.mailingCity,
     mailingState: data.mailingState,
     mailingZipCode: data.mailingZipCode,
     email: data.email,
     phoneNumber: data.phoneNumber,
+    isAddressCorrectionsSupervisedFacility:
+      data.isAddressCorrectionsSupervisedFacility,
     hasPreviousNameChangeTrue: data.hasPreviousNameChange,
     hasPreviousNameChangeFalse: !data.hasPreviousNameChange,
     previousNameFrom: data.previousNameFrom,
@@ -45,6 +49,8 @@ export default definePdf<PdfFieldName>({
     newMiddleName: data.newMiddleName,
     newLastName: data.newLastName,
     reasonForChangingName: data.reasonForChangingName,
+    hasNoRecordOfOtherStateConvictionsProbationParole:
+      data.hasNoRecordOfOtherStateConvictionsProbationParole,
     isInterpreterNeeded: data.isInterpreterNeeded,
     language: formatLanguage(data.language),
     isOkayToSharePronouns: data.isOkayToSharePronouns,
