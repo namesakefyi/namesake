@@ -44,6 +44,7 @@ export function AddPdfModal({ isOpen, onClose, onSuccess }: AddPdfModalProps) {
     const title = data.get("title") as string;
     const code = data.get("code") as string;
     const jurisdiction = data.get("jurisdiction") as string;
+    const canonicalUrl = data.get("canonicalUrl") as string;
 
     setSubmitting(true);
     setError(null);
@@ -52,7 +53,13 @@ export function AddPdfModal({ isOpen, onClose, onSuccess }: AddPdfModalProps) {
       const res = await fetch("/api/pdfs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, code, jurisdiction, pdfBase64 }),
+        body: JSON.stringify({
+          title,
+          code,
+          jurisdiction,
+          canonicalUrl,
+          pdfBase64,
+        }),
       });
       const result = await res.json<AddPdfResult>();
       if (!res.ok) throw new Error(result.error ?? "Failed to add PDF");
@@ -108,6 +115,11 @@ export function AddPdfModal({ isOpen, onClose, onSuccess }: AddPdfModalProps) {
             <TextField className="form-field" name="code">
               <Label className="form-label">Form code (optional)</Label>
               <Input className="form-input" />
+            </TextField>
+
+            <TextField className="form-field" isRequired name="canonicalUrl">
+              <Label className="form-label">Canonical URL</Label>
+              <Input className="form-input" type="url" />
             </TextField>
 
             <div className="form-field">

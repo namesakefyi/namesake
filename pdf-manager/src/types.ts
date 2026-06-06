@@ -9,6 +9,7 @@ export interface PdfMeta {
   title: string;
   code: string;
   jurisdiction: string;
+  canonicalUrl: string;
   fieldCount: number;
 }
 

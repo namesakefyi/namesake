@@ -11,6 +11,8 @@ export default definePdf<PdfFieldName>({
   title: "Petition to Change Name of Minor",
   code: "CJP-25",
   jurisdiction: "MA",
+  canonicalUrl:
+    "https://www.mass.gov/doc/petition-to-change-name-of-minor-cjp-25/download",
   pdfPath: pdf,
   resolver: (data) => ({
     // Header

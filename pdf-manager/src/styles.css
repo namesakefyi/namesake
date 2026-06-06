@@ -189,6 +189,18 @@ body {
   color: var(--text-muted);
 }
 
+.meta-canonical-link {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.meta-canonical-link:hover {
+  color: var(--text);
+}
+
 .editor-actions {
   display: flex;
   flex-shrink: 0;
