@@ -190,15 +190,14 @@ body {
 }
 
 .meta-canonical-link {
-  display: flex;
   flex-shrink: 0;
-  align-items: center;
   color: var(--text-muted);
   text-decoration: none;
-}
 
-.meta-canonical-link:hover {
-  color: var(--text);
+  &:hover {
+    color: var(--text);
+    text-decoration: underline;
+  }
 }
 
 .editor-actions {
