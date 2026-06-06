@@ -43,6 +43,11 @@ export interface PDFDefinition<TPdfFieldName extends string = string> {
   jurisdiction?: Jurisdiction;
 
   /**
+   * The canonical URL of the original form. This should be a link to a .gov website or other official source.
+   */
+  canonicalUrl: string;
+
+  /**
    * The path to the PDF file, imported as a module.
    */
   pdfPath: string;

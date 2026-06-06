@@ -15,13 +15,16 @@ import { loadSchemaFields, suggestName } from "./suggest.ts";
 
 export async function handleListPdfs(c: Context) {
   return c.json(
-    listAllPdfs().map(({ id, title, code, jurisdiction, fieldCount }) => ({
-      id,
-      title,
-      code,
-      jurisdiction,
-      fieldCount,
-    })),
+    listAllPdfs().map(
+      ({ id, title, code, jurisdiction, canonicalUrl, fieldCount }) => ({
+        id,
+        title,
+        code,
+        jurisdiction,
+        canonicalUrl,
+        fieldCount,
+      }),
+    ),
   );
 }
 
@@ -78,16 +81,20 @@ export async function handleSaveFields(c: Context) {
 }
 
 export async function handleAddPdf(c: Context) {
-  const { title, code, jurisdiction, pdfBase64 } = await c.req.json<{
-    title?: string;
-    code?: string;
-    jurisdiction?: string;
-    pdfBase64?: string;
-  }>();
+  const { title, code, jurisdiction, canonicalUrl, pdfBase64 } =
+    await c.req.json<{
+      title?: string;
+      code?: string;
+      jurisdiction?: string;
+      canonicalUrl?: string;
+      pdfBase64?: string;
+    }>();
 
-  if (!title || !jurisdiction || !pdfBase64) {
+  if (!title || !jurisdiction || !canonicalUrl || !pdfBase64) {
     return c.json(
-      { error: "title, jurisdiction, and pdfBase64 are required" },
+      {
+        error: "title, jurisdiction, canonicalUrl, and pdfBase64 are required",
+      },
       400,
     );
   }
@@ -113,6 +120,7 @@ export async function handleAddPdf(c: Context) {
     title,
     code: code ?? "",
     jurisdiction,
+    canonicalUrl,
     pdfDir,
     pdfDestPath,
     indexPath,

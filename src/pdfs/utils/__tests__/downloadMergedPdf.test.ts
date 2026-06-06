@@ -108,6 +108,7 @@ describe("downloadMergedPdf", () => {
       id: "test-form-2" as any,
       title: "Test Form 2",
       jurisdiction: "MA",
+      canonicalUrl: "https://example.com",
       pdfPath: "public/forms/test-form-2.pdf",
       resolver: (data) => ({ field1: data.newFirstName }),
     });

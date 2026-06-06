@@ -8,6 +8,7 @@ export default definePdf<PdfFieldName>({
   id: "ss5-application-for-social-security-card",
   title: "Application for Social Security Card",
   code: "SS-5",
+  canonicalUrl: "https://www.ssa.gov/forms/ss-5.pdf",
   pdfPath: pdf,
   resolver: (data) => ({
     newFirstName: data.newFirstName,
