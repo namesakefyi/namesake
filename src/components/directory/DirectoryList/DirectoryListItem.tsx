@@ -6,10 +6,21 @@ import {
   RiVerifiedBadgeFill,
 } from "@remixicon/react";
 import { SERVICE_LABELS, type Service } from "../../../constants/services";
-import { urlForImage } from "../../../sanity/lib/urlForImage";
-import type { DIRECTORY_CONTACTS_LIST_QUERY_RESULT } from "../../../sanity/sanity.types";
 import { formatCleanUrl } from "../../../utils/formatCleanUrl";
 import styles from "./DirectoryList.module.css";
+
+export interface DirectoryContact {
+  name: string;
+  slug: string;
+  description: string;
+  states: string[];
+  services: string[];
+  logoUrl: string | null;
+  email: string | null;
+  phone: string | null;
+  url: string;
+  officialPartner: boolean;
+}
 
 export function DirectoryListItem({
   name,
@@ -19,27 +30,19 @@ export function DirectoryListItem({
   email,
   phone,
   url,
-  logo,
+  logoUrl,
   officialPartner,
-}: DIRECTORY_CONTACTS_LIST_QUERY_RESULT[number]) {
+}: DirectoryContact) {
   const contactLinks = [
     { Icon: RiGlobalLine, href: url, label: formatCleanUrl(url) },
     { Icon: RiMailSendLine, href: `mailto:${email}`, label: email },
     { Icon: RiPhoneLine, href: `tel:${phone}`, label: phone },
   ].filter((link) => link.label);
 
-  const logoSrc =
-    logo?.asset &&
-    urlForImage(logo.asset)
-      .withOptions({ height: 64 })
-      .auto("format")
-      .dpr(2)
-      .url();
-
   return (
     <li className={styles.directoryListItem}>
-      {logoSrc ? (
-        <img className={styles.logo} src={logoSrc} alt={`${name} logo`} />
+      {logoUrl ? (
+        <img className={styles.logo} src={logoUrl} alt={`${name} logo`} />
       ) : null}
       <header>
         {officialPartner ? (

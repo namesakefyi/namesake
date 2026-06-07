@@ -2,11 +2,10 @@ import { useRef, useState } from "react";
 import { ALL } from "../../../constants/all";
 import { JURISDICTIONS } from "../../../constants/jurisdictions";
 import { SERVICES } from "../../../constants/services";
-import type { DIRECTORY_CONTACTS_LIST_QUERY_RESULT } from "../../../sanity/sanity.types";
 import { Button } from "../../common/Button";
 import { NativeOption, NativeSelect } from "../../common/NativeSelect";
 import styles from "./DirectoryList.module.css";
-import { DirectoryListItem } from "./DirectoryListItem";
+import { type DirectoryContact, DirectoryListItem } from "./DirectoryListItem";
 
 type DirectoryFilters = { stateSlug: string; service: string };
 
@@ -39,17 +38,15 @@ export function parseDirectorySearchParams(
 
 async function fetchDirectoryContactList(
   filters: DirectoryFilters,
-): Promise<DIRECTORY_CONTACTS_LIST_QUERY_RESULT> {
+): Promise<DirectoryContact[]> {
   const res = await fetch(directoryUrl("/api/directory", filters));
   if (!res.ok) throw new Error("Failed to load directory");
-  const { contacts } = (await res.json()) as {
-    contacts: DIRECTORY_CONTACTS_LIST_QUERY_RESULT;
-  };
+  const { contacts } = (await res.json()) as { contacts: DirectoryContact[] };
   return contacts;
 }
 
 interface DirectoryListProps {
-  initialContacts: DIRECTORY_CONTACTS_LIST_QUERY_RESULT;
+  initialContacts: DirectoryContact[];
   initialUrlSearch: string;
 }
 

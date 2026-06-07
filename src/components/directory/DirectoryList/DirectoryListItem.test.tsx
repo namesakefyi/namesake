@@ -1,15 +1,14 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import type { DIRECTORY_CONTACTS_LIST_QUERY_RESULT } from "../../../sanity/sanity.types";
-import { DirectoryListItem } from "./DirectoryListItem";
+import { type DirectoryContact, DirectoryListItem } from "./DirectoryListItem";
 
-const baseContact: DIRECTORY_CONTACTS_LIST_QUERY_RESULT[number] = {
+const baseContact: DirectoryContact = {
   name: "Example Org",
   slug: "example-org",
   description: "Helps with name changes.",
   states: ["California", "Oregon"],
   services: ["legal", "notary"],
-  logo: null,
+  logoUrl: null,
   email: "hello@example.org",
   phone: "555-0100",
   url: "https://www.example.org/",
@@ -65,8 +64,18 @@ describe("DirectoryListItem", () => {
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
-  it("does not render a logo when logo is null", () => {
+  it("does not render a logo when logoUrl is null", () => {
     const { container } = render(<DirectoryListItem {...baseContact} />);
     expect(container.querySelector("img")).not.toBeInTheDocument();
+  });
+
+  it("renders a logo when logoUrl is provided", () => {
+    const { container } = render(
+      <DirectoryListItem
+        {...baseContact}
+        logoUrl="https://example.org/logo.png"
+      />,
+    );
+    expect(container.querySelector("img")).toBeInTheDocument();
   });
 });

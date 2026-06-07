@@ -11,16 +11,16 @@ import {
   vi,
 } from "vitest";
 import { ALL } from "../../../constants/all";
-import type { DIRECTORY_CONTACTS_LIST_QUERY_RESULT } from "../../../sanity/sanity.types";
 import { DirectoryList, parseDirectorySearchParams } from "./DirectoryList";
+import type { DirectoryContact } from "./DirectoryListItem";
 
-const mockContact: DIRECTORY_CONTACTS_LIST_QUERY_RESULT[number] = {
+const mockContact: DirectoryContact = {
   name: "Listed Org",
   slug: "listed-org",
   description: "Description here.",
   states: ["Maine"],
   services: ["legal"],
-  logo: null,
+  logoUrl: null,
   email: null,
   phone: null,
   url: "",

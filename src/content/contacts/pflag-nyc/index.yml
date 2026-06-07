@@ -1,0 +1,12 @@
+name: PFLAG NYC
+description: PFLAG NYC is a partnership of parents, allies, and LGBTQ+ folks working to make a better future for LGBTQ+ youth and adults.
+states:
+  - ny
+url: https://www.pflagnyc.org/
+services:
+  - formFilling
+  - nameChangeClinic
+  - notary
+email: info@pflagnyc.org
+phone: 646-240-4288
+logo: ./logo.png
