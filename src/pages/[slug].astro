@@ -1,28 +1,23 @@
 ---
-import { sanityClient } from "sanity:client";
+import { getEntry, render } from "astro:content";
 import TableOfContents from "../components/TableOfContents.astro";
-import PortableText from "../components/text/PortableText.astro";
 import ProseLayout from "../layouts/ProseLayout.astro";
-import { extractHeadings } from "../sanity/lib/extractHeadings";
-import { PAGE_BY_SLUG_QUERY } from "../sanity/queries";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.redirect("/404");
 
-const page = await sanityClient.fetch(PAGE_BY_SLUG_QUERY, { slug });
+const page = await getEntry("pages", slug);
 if (!page) return Astro.redirect("/404");
 
-const headings = extractHeadings(page.content);
+const { Content, headings } = await render(page);
 ---
 
 <ProseLayout
-  title={page.title}
-  description={page.description}
-  ogImage={page.ogImage?.asset}
-  ogAlt={page.ogImage?.alt}
-  annotation={page.annotation}
-  color={page.color}
+  title={page.data.title}
+  description={page.data.description}
+  annotation={page.data.annotation}
+  color={page.data.color}
 >
   <TableOfContents headings={headings} slot="toc" />
-  <PortableText value={page.content} />
+  <Content />
 </ProseLayout>
