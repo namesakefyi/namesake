@@ -1,4 +1,6 @@
 ---
+export const prerender = true;
+
 import { getCollection } from "astro:content";
 import ArticleLink from "../components/ArticleLink.astro";
 import PageHeader from "../components/PageHeader.astro";
@@ -26,7 +28,6 @@ const pressArticles = pressEntries.sort(
             url={data.url}
             subhead={data.outlet}
             image={data.image}
-            imageAlt={data.imageAlt}
           />
         ))
       ) : (

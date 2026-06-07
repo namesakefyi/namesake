@@ -3,6 +3,7 @@ dist/
 
 # generated types
 .astro/
+tsconfig.tsbuildinfo
 
 # sanity
 .sanity/

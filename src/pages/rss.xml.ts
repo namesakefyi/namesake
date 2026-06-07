@@ -1,18 +1,19 @@
-import { sanityClient } from "sanity:client";
+export const prerender = true;
+
+import { type CollectionEntry, getCollection } from "astro:content";
 import rss, { type RSSFeedItem } from "@astrojs/rss";
 import type { APIContext } from "astro";
-import sanitizeHtml from "sanitize-html";
-import { RSS_POSTS_QUERY } from "../sanity/queries";
 
 export async function GET(context: APIContext) {
-  const posts = await sanityClient.fetch(RSS_POSTS_QUERY);
+  const posts = (await getCollection("posts")).filter(
+    (post: CollectionEntry<"posts">) => post.data.publishDate <= new Date(),
+  );
 
-  const items: RSSFeedItem[] = posts.map((post) => ({
-    title: post.title ?? undefined,
-    pubDate: post.publishDate ? new Date(post.publishDate) : undefined,
-    description: post.description ?? undefined,
-    link: post.slug?.current ? `/blog/${post.slug.current}` : undefined,
-    content: sanitizeHtml(post.contentText || post.description || ""),
+  const items: RSSFeedItem[] = posts.map((post: CollectionEntry<"posts">) => ({
+    title: post.data.title,
+    pubDate: post.data.publishDate,
+    description: post.data.description,
+    link: `/blog/${post.id}`,
   }));
 
   return await rss({

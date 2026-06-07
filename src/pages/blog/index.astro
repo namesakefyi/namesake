@@ -1,13 +1,23 @@
 ---
-import { sanityClient } from "sanity:client";
+export const prerender = true;
+
+import { getCollection } from "astro:content";
 import ArticleLink from "../../components/ArticleLink.astro";
 import PageHeader from "../../components/PageHeader.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { POSTS_INDEX_QUERY } from "../../sanity/queries";
 
-const { params } = Astro.props;
+const [allPosts, allAuthors] = await Promise.all([
+  getCollection("posts"),
+  getCollection("authors"),
+]);
 
-const posts = await sanityClient.fetch(POSTS_INDEX_QUERY, params ?? {});
+const authorNames = Object.fromEntries(
+  allAuthors.map((a) => [a.id, a.data.name]),
+);
+
+const posts = allPosts
+  .filter((post) => post.data.publishDate <= new Date())
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
 ---
 
 <BaseLayout
@@ -21,12 +31,12 @@ const posts = await sanityClient.fetch(POSTS_INDEX_QUERY, params ?? {});
       posts.length ? (
         posts.map((post) => (
           <ArticleLink
-            authors={post.authors}
-            title={post.title}
-            date={post.publishDate}
-            url={`/blog/${post.slug.current}`}
-            description={post.description}
-            sanityImage={post.image}
+            authors={post.data.authors?.map((id) => authorNames[id] ?? id)}
+            title={post.data.title}
+            date={post.data.publishDate}
+            url={`/blog/${post.id}`}
+            description={post.data.description}
+            image={post.data.image}
           />
         ))
       ) : (

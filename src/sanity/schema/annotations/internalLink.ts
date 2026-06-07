@@ -11,7 +11,7 @@ export const internalLink: BlockAnnotationDefinition = {
       name: "reference",
       type: "reference",
       title: "Reference",
-      to: [{ type: "form" }, { type: "guide" }, { type: "post" }],
+      to: [{ type: "form" }, { type: "guide" }],
       validation: (Rule) => Rule.required(),
     },
   ],

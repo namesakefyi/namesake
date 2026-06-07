@@ -1,10 +1,8 @@
 ---
-import type { SanityImageSource } from "@sanity/image-url";
 import type { RoughAnnotationType } from "rough-notation/lib/model";
 import type { BreadcrumbItem } from "../components/Breadcrumbs.astro";
 import PageHeader from "../components/PageHeader.astro";
 import type { NamesakeColor } from "../constants/colors";
-import { urlForImage } from "../sanity/lib/urlForImage";
 import { smartquotes } from "../utils/smartquotes";
 import BaseLayout from "./BaseLayout.astro";
 
@@ -14,7 +12,7 @@ interface Props {
   description?: string | null;
   showDescription?: boolean;
   author?: string;
-  ogImage?: SanityImageSource;
+  ogImage?: string;
   ogAlt?: string;
   annotation?: RoughAnnotationType | null;
   color?: NamesakeColor | null;
@@ -27,20 +25,12 @@ const {
   description,
   showDescription,
   author,
-  ogImage,
+  ogImage: ogImageUrl,
   ogAlt,
   annotation,
   color,
   breadcrumbs,
 } = Astro.props;
-
-// Convert Sanity asset to URL for BaseLayout
-let ogImageUrl: string | undefined;
-if (typeof ogImage === "string") {
-  ogImageUrl = ogImage;
-} else if (ogImage != null) {
-  ogImageUrl = urlForImage(ogImage).url();
-}
 
 const headerDescription =
   showDescription === false
