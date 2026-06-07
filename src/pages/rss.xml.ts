@@ -1,16 +1,13 @@
-import { getCollection } from "astro:content";
+import { type CollectionEntry, getCollection } from "astro:content";
 import rss, { type RSSFeedItem } from "@astrojs/rss";
 import type { APIContext } from "astro";
 
 export async function GET(context: APIContext) {
-  const allPosts = await getCollection("posts");
-  const posts = allPosts
-    .filter((post) => post.data.publishDate <= new Date())
-    .sort(
-      (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
-    );
+  const posts = (await getCollection("posts")).filter(
+    (post: CollectionEntry<"posts">) => post.data.publishDate <= new Date(),
+  );
 
-  const items: RSSFeedItem[] = posts.map((post) => ({
+  const items: RSSFeedItem[] = posts.map((post: CollectionEntry<"posts">) => ({
     title: post.data.title,
     pubDate: post.data.publishDate,
     description: post.data.description,
