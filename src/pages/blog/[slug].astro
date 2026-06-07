@@ -52,14 +52,14 @@ const ogAlt = post.data.image?.alt ?? post.data.title;
       <div class="authors" slot="after-header">
         {authors.map((author) => (
           <span class="author">
-            <div class="avatar">
-              <Image
-                src={author.data.avatar}
-                alt={`${author.data.name} photo`}
-                width={32}
-                height={32}
-              />
-            </div>
+            <Image
+              class="avatar author-avatar"
+              src={author.data.avatar}
+              alt={`${author.data.name} photo`}
+              width={32}
+              height={32}
+              densities={[1, 2]}
+            />
             <div class="author-info">
               <strong>{author.data.name}</strong>
               <span class="role">{author.data.role}</span>
@@ -76,14 +76,14 @@ const ogAlt = post.data.image?.alt ?? post.data.title;
       <div class="bios" slot="after-content">
         {authors.map((author) => (
           <div class="bio">
-            <div class="bio-avatar">
-              <Image
-                src={author.data.avatar}
-                alt={`${author.data.name} photo`}
-                width={80}
-                height={80}
-              />
-            </div>
+            <Image
+              class="avatar bio-avatar"
+              src={author.data.avatar}
+              alt={`${author.data.name} photo`}
+              width={80}
+              height={80}
+              densities={[1, 2]}
+            />
             <div class="content">
               <strong>{author.data.name}</strong>
               <p>{author.data.bio}</p>
@@ -135,32 +135,18 @@ const ogAlt = post.data.image?.alt ?? post.data.title;
     }
   }
 
-  .avatar {
+  .author-avatar {
     width: 32px;
     height: 32px;
-    border-radius: 100%;
-    overflow: hidden;
     flex-shrink: 0;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    object-fit: cover;
   }
 
   .bio-avatar {
-    flex-shrink: 0;
     width: 80px;
     height: 80px;
-    overflow: hidden;
-    border-radius: 100%;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    flex-shrink: 0;
+    object-fit: cover;
   }
 
   .bios {
