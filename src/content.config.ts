@@ -107,7 +107,7 @@ const contacts = defineCollection({
         z.enum(SERVICES.map((s) => s.value) as [string, ...string[]]),
       ),
       officialPartner: z.boolean().default(false),
-      email: z.string().email().optional(),
+      email: z.email().optional(),
       phone: z.string().optional(),
       logo: image().optional(),
     }),
