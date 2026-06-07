@@ -16,33 +16,6 @@ export const portableTextWithInternalLinks = `content[]{
   }
 }`;
 
-// Pages
-export const HOME_PAGE_QUERY = defineQuery(`
-  *[_type == "page" && (slug.current == "index" || slug.current == "" || !defined(slug))][0]{
-    _id,
-    title,
-    slug,
-    description,
-    ${portableTextWithInternalLinks},
-    ogImage,
-    annotation,
-    color
-  }
-`);
-
-export const PAGE_BY_SLUG_QUERY = defineQuery(`
-  *[_type == "page" && slug.current == $slug][0]{
-    _id,
-    title,
-    slug,
-    description,
-    ${portableTextWithInternalLinks},
-    ogImage,
-    annotation,
-    color
-  }
-`);
-
 // Posts
 export const POSTS_INDEX_QUERY = defineQuery(`
   *[_type == "post" && defined(slug) && publishDate <= now()]{
