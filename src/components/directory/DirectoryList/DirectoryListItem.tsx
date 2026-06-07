@@ -1,4 +1,3 @@
-import type { CollectionEntry } from "astro:content";
 import {
   RiGlobalLine,
   RiMailSendLine,
@@ -10,15 +9,18 @@ import { SERVICE_LABELS, type Service } from "../../../constants/services";
 import { formatCleanUrl } from "../../../utils/formatCleanUrl";
 import styles from "./DirectoryList.module.css";
 
-export type DirectoryContact = Omit<
-  CollectionEntry<"contacts">["data"],
-  "logo" | "email" | "phone"
-> & {
+export interface DirectoryContact {
+  name: string;
   slug: string;
+  description: string;
+  states: string[];
+  services: string[];
   logoUrl: string | null;
   email: string | null;
   phone: string | null;
-};
+  url: string;
+  officialPartner: boolean;
+}
 
 export function DirectoryListItem({
   name,

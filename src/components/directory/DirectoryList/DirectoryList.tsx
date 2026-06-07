@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { ALL } from "../../../constants/all";
-import { JURISDICTIONS } from "../../../constants/jurisdictions";
 import { SERVICES } from "../../../constants/services";
 import { Button } from "../../common/Button";
 import { NativeOption, NativeSelect } from "../../common/NativeSelect";
@@ -48,11 +47,13 @@ async function fetchDirectoryContactList(
 interface DirectoryListProps {
   initialContacts: DirectoryContact[];
   initialUrlSearch: string;
+  allStates: { id: string; name: string }[];
 }
 
 export function DirectoryList({
   initialContacts,
   initialUrlSearch,
+  allStates,
 }: DirectoryListProps) {
   const [filters, setFilters] = useState<DirectoryFilters>(() =>
     parseDirectorySearchParams(initialUrlSearch),
@@ -98,11 +99,8 @@ export function DirectoryList({
           >
             <NativeOption value={ALL}>All states</NativeOption>
             <hr />
-            {Object.entries(JURISDICTIONS).map(([abbreviation, name]) => (
-              <NativeOption
-                key={abbreviation}
-                value={abbreviation.toLowerCase()}
-              >
+            {allStates.map(({ id, name }) => (
+              <NativeOption key={id} value={id}>
                 {name}
               </NativeOption>
             ))}
