@@ -40,16 +40,16 @@ If you violate any of the Terms, we may terminate your account. That’s a broad
 ## Uptime, Security, and Privacy
 
 1. Your use of the Services is at your sole risk. We provide these Services on an “as is” and “as available” basis. We do not offer service-level agreements for our Services, but we do take uptime of our applications seriously. Visit [status.namesake.fyi](https://status.namesake.fyi/) to see the status of our Services.
-1. We reserve the right to temporarily disable your account if your usage significantly exceeds the average usage of other customers of the Services. Of course, we’ll reach out to the account owner before taking any action except in rare cases where the level of use may negatively impact the performance of the Service for other customers.
-1. We enforce encryption for data transmission from the public Internet. Your application data is stored on your device and is never transmitted to or stored on our servers, so it is not subject to risks associated with central databases.
-1. You agree that Namesake may process data as described in our [Privacy Policy](https://namesake.fyi/privacy) and for no other purpose.
-1. We use third party vendors and hosting partners to provide the necessary hardware, software, networking, and related technology required to run the Services. You can see a list of all [subprocessors who handle personal data for Namesake](https://namesake.fyi/subprocessors).
+2. We reserve the right to temporarily disable your account if your usage significantly exceeds the average usage of other customers of the Services. Of course, we’ll reach out to the account owner before taking any action except in rare cases where the level of use may negatively impact the performance of the Service for other customers.
+3. We enforce encryption for data transmission from the public Internet. Your application data is stored on your device and is never transmitted to or stored on our servers, so it is not subject to risks associated with central databases.
+4. You agree that Namesake may process data as described in our [Privacy Policy](https://namesake.fyi/privacy) and for no other purpose.
+5. We use third party vendors and hosting partners to provide the necessary hardware, software, networking, and related technology required to run the Services. You can see a list of all [subprocessors who handle personal data for Namesake](https://namesake.fyi/subprocessors).
 
 ## Copyright and Content Ownership
 
 1. All content posted on the Services must comply with U.S. copyright law.
-1. The Company or its licensors own all right, title, and interest in and to the Services, including all intellectual property rights therein, and you obtain no ownership rights in the Services as a result of your use. You must request permission to use the Company’s logos for promotional purposes. Please [email us](mailto:hey@namesake.fyi) requests to use logos. We reserve the right to rescind any permissions if you violate these Terms.
-1. You agree not to reproduce, duplicate, copy, sell, resell or exploit any portion of the Services, use of the Services, or access to the Services without the express written permission of the Company.
+2. The Company or its licensors own all right, title, and interest in and to the Services, including all intellectual property rights therein, and you obtain no ownership rights in the Services as a result of your use. You must request permission to use the Company’s logos for promotional purposes. Please [email us](mailto:hey@namesake.fyi) requests to use logos. We reserve the right to rescind any permissions if you violate these Terms.
+3. You agree not to reproduce, duplicate, copy, sell, resell or exploit any portion of the Services, use of the Services, or access to the Services without the express written permission of the Company.
 
 ## Features and Bugs
 
