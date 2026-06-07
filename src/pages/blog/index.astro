@@ -34,8 +34,7 @@ const posts = allPosts
             date={post.data.publishDate}
             url={`/blog/${post.id}`}
             description={post.data.description}
-            image={post.data.image}
-            imageAlt={post.data.imageAlt}
+            image={post.data.image && { src: post.data.image, alt: post.data.imageAlt ?? "" }}
           />
         ))
       ) : (

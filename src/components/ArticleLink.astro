@@ -9,12 +9,10 @@ interface Props {
   subhead?: string;
   authors?: string[] | null;
   description?: string;
-  image?: ImageMetadata | null;
-  imageAlt?: string | null;
+  image?: { src: ImageMetadata; alt: string } | null;
 }
 
-const { title, date, url, subhead, authors, description, image, imageAlt } =
-  Astro.props;
+const { title, date, url, subhead, authors, description, image } = Astro.props;
 
 const dateObj = new Date(date);
 const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -38,7 +36,7 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
   {
     image && (
       <a class="image" href={url} tabindex="-1">
-        <Image src={image} alt={imageAlt ?? ""} width={800} densities={[1, 2]} />
+        <Image src={image.src} alt={image.alt} width={800} densities={[1, 2]} />
       </a>
     )
   }
