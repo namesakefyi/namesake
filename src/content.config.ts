@@ -22,8 +22,12 @@ const press = defineCollection({
       outlet: z.string(),
       url: z.url(),
       date: z.date(),
-      image: image().optional(),
-      imageAlt: z.string().optional(),
+      image: z
+        .object({
+          src: image(),
+          alt: z.string(),
+        })
+        .optional(),
     }),
 });
 
