@@ -13,7 +13,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const GET: APIRoute = async ({ props, request }) => {
-  const { post }: { post: CollectionEntry<"posts"> } = props;
+  const post: CollectionEntry<"posts"> = props.post;
 
   return await createOgImageResponse({
     subhead: "Blog",
