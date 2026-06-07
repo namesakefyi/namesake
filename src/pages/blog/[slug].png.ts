@@ -1,18 +1,17 @@
-import { sanityClient } from "sanity:client";
+import { getEntry } from "astro:content";
 import type { APIRoute } from "astro";
-import { POST_BY_SLUG_QUERY } from "../../sanity/queries";
 import { createOgImageResponse } from "../../utils/createOgImageResponse";
 
 export const GET: APIRoute = async ({ params, request }) => {
   const { slug } = params;
   if (!slug) return new Response("Not found", { status: 404 });
 
-  const post = await sanityClient.fetch(POST_BY_SLUG_QUERY, { slug });
+  const post = await getEntry("posts", slug);
   if (!post) return new Response("Not found", { status: 404 });
 
   return await createOgImageResponse({
     subhead: "Blog",
-    title: post.title,
+    title: post.data.title,
     color: "blue",
     origin: new URL(request.url).origin,
   });

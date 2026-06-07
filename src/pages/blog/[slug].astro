@@ -1,55 +1,55 @@
 ---
-import { sanityClient } from "sanity:client";
-import SanityImage from "../../components/SanityImage.astro";
+import { Image } from "astro:assets";
+import { getEntry, render } from "astro:content";
 import TableOfContents from "../../components/TableOfContents.astro";
-import PortableText from "../../components/text/PortableText.astro";
 import ProseLayout from "../../layouts/ProseLayout.astro";
-import { extractHeadings } from "../../sanity/lib/extractHeadings";
-import { urlForImage } from "../../sanity/lib/urlForImage";
-import { POST_BY_SLUG_QUERY } from "../../sanity/queries";
 
 const { slug } = Astro.params;
 if (!slug) return Astro.redirect("/404");
 
-const post = await sanityClient.fetch(POST_BY_SLUG_QUERY, { slug });
+const post = await getEntry("posts", slug);
 if (!post) return Astro.redirect("/404");
 
-const headings = extractHeadings(post.content);
+const { Content, headings } = await render(post);
 
-// 1. Custom Sanity image → 2. Auto-generated OG image → 3. Default (BaseLayout fallback)
-const ogImage = post.image?.asset
-  ? urlForImage(post.image.asset).url()
-  : `/blog/${slug}.png`;
-const ogAlt = post.image?.alt ?? post.title;
+const authorEntries = await Promise.all(
+  (post.data.authors ?? []).map((id) => getEntry("authors", id)),
+);
+const authors = authorEntries.filter(
+  (a): a is NonNullable<typeof a> => a !== undefined,
+);
+
+const ogImage = post.data.image ? post.data.image.src : `/blog/${slug}.png`;
+const ogAlt = post.data.imageAlt ?? post.data.title;
 ---
 
 <ProseLayout
-  title={post.title}
-  date={post.publishDate}
-  description={post.description}
-  showDescription={post.showDescription}
+  title={post.data.title}
+  date={post.data.publishDate.toISOString()}
+  description={post.data.description}
+  showDescription={post.data.showDescription}
   ogImage={ogImage}
   ogAlt={ogAlt}
-  author={post.authors?.map((author) => author.name).join(", ")}
+  author={authors.map((a) => a.data.name).join(", ")}
   color="blue"
-  annotation={post.annotation ?? "highlight"}
+  annotation={post.data.annotation ?? "highlight"}
 >
   {
-    post.authors && post.authors.length > 0 && (
+    authors.length > 0 && (
       <div class="authors" slot="after-header">
-        {post.authors.map((author) => (
+        {authors.map((author) => (
           <span class="author">
-            {author.avatar?.asset && (
-              <SanityImage
-                className="avatar"
-                asset={author.avatar.asset}
-                alt={`${author.name ?? "Author"} photo`}
-                options={{ width: 32, height: 32 }}
+            <div class="avatar">
+              <Image
+                src={author.data.avatar}
+                alt={`${author.data.name} photo`}
+                width={32}
+                height={32}
               />
-            )}
+            </div>
             <div class="author-info">
-              <strong>{author.name}</strong>
-              <span class="role">{author.role}</span>
+              <strong>{author.data.name}</strong>
+              <span class="role">{author.data.role}</span>
             </div>
           </span>
         ))}
@@ -57,31 +57,29 @@ const ogAlt = post.image?.alt ?? post.title;
     )
   }
   <TableOfContents slot="toc" headings={headings} />
-  <PortableText value={post.content} />
+  <Content />
   {
-    post.authors && post.authors.length > 0 && (
+    authors.length > 0 && (
       <div class="bios" slot="after-content">
-        {post.authors.map((author) => (
+        {authors.map((author) => (
           <div class="bio">
             <div class="bio-avatar">
-              {author.avatar?.asset && (
-                <SanityImage
-                  className="avatar"
-                  asset={author.avatar.asset}
-                  alt={`${author.name ?? "Author"} photo`}
-                  options={{ width: 80, height: 80 }}
-                />
-              )}
+              <Image
+                src={author.data.avatar}
+                alt={`${author.data.name} photo`}
+                width={80}
+                height={80}
+              />
             </div>
             <div class="content">
-              <strong>{author.name}</strong>
-              <p>{author.bio}</p>
-              {author.socialLinks && author.socialLinks.length > 0 && (
+              <strong>{author.data.name}</strong>
+              <p>{author.data.bio}</p>
+              {author.data.socialLinks && author.data.socialLinks.length > 0 && (
                 <ul class="social">
-                  {author.socialLinks.map((socialLink) => (
+                  {author.data.socialLinks.map((link) => (
                     <li>
-                      <a href={socialLink.url ?? "#"} target="_blank">
-                        {socialLink.name ?? ""}
+                      <a href={link.url} target="_blank" rel="noopener noreferrer">
+                        {link.name}
                       </a>
                     </li>
                   ))}
@@ -124,12 +122,32 @@ const ogAlt = post.image?.alt ?? post.title;
     }
   }
 
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 100%;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
   .bio-avatar {
     flex-shrink: 0;
     width: 80px;
     height: 80px;
     overflow: hidden;
     border-radius: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   .bios {

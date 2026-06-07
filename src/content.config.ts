@@ -45,4 +45,38 @@ const states = defineCollection({
   }),
 });
 
-export const collections = { pages, press, sponsors, states };
+const authors = defineCollection({
+  loader: glob({ base: "./src/content/authors", pattern: "**/index.yml" }),
+  schema: ({ image }) =>
+    z.object({
+      name: z.string(),
+      role: z.string(),
+      bio: z.string(),
+      avatar: image(),
+      socialLinks: z
+        .array(
+          z.object({
+            name: z.string(),
+            url: z.string().url(),
+          }),
+        )
+        .optional(),
+    }),
+});
+
+const posts = defineCollection({
+  loader: glob({ base: "./src/content/posts", pattern: "**/index.mdx" }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      showDescription: z.boolean().default(true),
+      publishDate: z.date(),
+      annotation: z.enum(ANNOTATION_TYPES).optional(),
+      authors: z.array(z.string()).optional(),
+      image: image().optional(),
+      imageAlt: z.string().optional(),
+    }),
+});
+
+export const collections = { pages, press, sponsors, states, authors, posts };

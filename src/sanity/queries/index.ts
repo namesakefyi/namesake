@@ -16,50 +16,6 @@ export const portableTextWithInternalLinks = `content[]{
   }
 }`;
 
-// Posts
-export const POSTS_INDEX_QUERY = defineQuery(`
-  *[_type == "post" && defined(slug) && publishDate <= now()]{
-    title,
-    slug,
-    publishDate,
-    description,
-    image,
-    "authors": authors[]->name
-  } | order(publishDate desc)
-`);
-
-export const POST_BY_SLUG_QUERY = defineQuery(`
-  *[_type == "post" && slug.current == $slug][0]{
-    _id,
-    title,
-    slug,
-    publishDate,
-    description,
-    showDescription,
-    image,
-    annotation,
-    ${portableTextWithInternalLinks},
-    "authors": authors[]->{
-      _id,
-      name,
-      role,
-      bio,
-      avatar,
-      socialLinks
-    }
-  }
-`);
-
-export const RSS_POSTS_QUERY = defineQuery(`
-  *[_type == "post" && defined(slug) && publishDate <= now()]{
-    title,
-    slug,
-    publishDate,
-    description,
-    "contentText": pt::text(content)
-  } | order(publishDate desc)
-`);
-
 // Guides
 export const GUIDES_INDEX_QUERY = defineQuery(`
   *[_type == "guide" && defined(slug) && !unlisted]{
