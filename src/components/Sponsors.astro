@@ -78,10 +78,12 @@ const shuffledSponsors = sponsors.sort(() => 0.5 - Math.random());
 
       img {
         display: block;
-        max-width: 200px;
-        max-height: var(--row-height);
-        width: auto;
-        height: auto;
+        width: 200px;
+
+        @supports (object-fit: contain) {
+          height: var(--row-height);
+          object-fit: contain;
+        }
       }
 
       @media (forced-colors: active) {
