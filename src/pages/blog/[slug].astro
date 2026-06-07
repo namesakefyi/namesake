@@ -1,14 +1,27 @@
 ---
+export const prerender = true;
+
 import { Image } from "astro:assets";
-import { getEntry, render } from "astro:content";
+import {
+  type CollectionEntry,
+  getCollection,
+  getEntry,
+  render,
+} from "astro:content";
 import TableOfContents from "../../components/TableOfContents.astro";
 import ProseLayout from "../../layouts/ProseLayout.astro";
 
-const { slug } = Astro.params;
-if (!slug) return Astro.redirect("/404");
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
 
-const post = await getEntry("posts", slug);
-if (!post) return Astro.redirect("/404");
+interface Props {
+  post: CollectionEntry<"posts">;
+}
+
+const { post } = Astro.props;
+const { slug } = Astro.params;
 
 const { Content, headings } = await render(post);
 

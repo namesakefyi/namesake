@@ -1,3 +1,5 @@
+export const prerender = true;
+
 import { type CollectionEntry, getCollection } from "astro:content";
 import rss, { type RSSFeedItem } from "@astrojs/rss";
 import type { APIContext } from "astro";
