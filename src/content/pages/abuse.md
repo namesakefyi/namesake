@@ -5,7 +5,9 @@ annotation: crossed-off
 color: brown
 ---
 
-**Last updated: April 16, 2026**
+**Last updated: June 6, 2026**
+
+## Restricted purposes
 
 When you use any of Namesake’s Services, you acknowledge that you may **not**:
 
