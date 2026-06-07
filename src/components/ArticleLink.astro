@@ -1,21 +1,36 @@
 ---
+import { Image } from "astro:assets";
 import type { SanityImageSource } from "@sanity/image-url";
+import type { ImageMetadata } from "astro";
 import SanityImage from "./SanityImage.astro";
 
 interface Props {
   title: string;
-  date: string;
+  date: Date | string;
   url: string;
   subhead?: string;
   authors?: string[] | null;
   description?: string;
-  image?: {
+  image?: ImageMetadata | null;
+  imageAlt?: string | null;
+  /** @deprecated Use image + imageAlt instead */
+  sanityImage?: {
     asset?: SanityImageSource;
     alt?: string;
   } | null;
 }
 
-const { title, date, url, subhead, authors, description, image } = Astro.props;
+const {
+  title,
+  date,
+  url,
+  subhead,
+  authors,
+  description,
+  image,
+  imageAlt,
+  sanityImage,
+} = Astro.props;
 
 const dateObj = new Date(date);
 const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -37,15 +52,19 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
   {authors && <strong class="authors">By {authors.join(", ")}</strong>}
   {description && <p class="description">{description}</p>}
   {
-    image?.asset && (
+    image ? (
+      <a class="image" href={url} tabindex="-1">
+        <Image src={image} alt={imageAlt ?? ""} width={800} densities={[1, 2]} />
+      </a>
+    ) : sanityImage?.asset ? (
       <a class="image" href={url} tabindex="-1">
         <SanityImage
-          asset={image.asset}
-          alt={image.alt}
+          asset={sanityImage.asset}
+          alt={sanityImage.alt}
           options={{ width: 800, height: 450 }}
         />
       </a>
-    )
+    ) : null
   }
 </article>
 

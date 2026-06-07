@@ -1,9 +1,8 @@
 ---
-import { sanityClient } from "sanity:client";
-import { SPONSORS_QUERY } from "../sanity/queries";
-import SanityImage from "./SanityImage.astro";
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
 
-const sponsors = await sanityClient.fetch(SPONSORS_QUERY);
+const sponsors = await getCollection("sponsors");
 const shuffledSponsors = sponsors.sort(() => 0.5 - Math.random());
 ---
 
@@ -11,21 +10,20 @@ const shuffledSponsors = sponsors.sort(() => 0.5 - Math.random());
   <h2>Support from</h2>
   <ul>
     {
-      shuffledSponsors.map((sponsor) => (
+      shuffledSponsors.map(({ data }) => (
         <li>
           <a
-            href={sponsor.url}
+            href={data.url}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Visit ${sponsor.name}`}
+            aria-label={`Visit ${data.name}`}
           >
-            {sponsor.logo?.asset && (
-              <SanityImage
-                asset={sponsor.logo.asset}
-                alt={sponsor.name}
-                options={{ width: 200 }}
-              />
-            )}
+            <Image
+              src={data.logo}
+              alt={data.name}
+              width={200}
+              densities={[1, 2]}
+            />
           </a>
         </li>
       ))
@@ -78,15 +76,12 @@ const shuffledSponsors = sponsors.sort(() => 0.5 - Math.random());
         border-radius: 5px;
       }
 
-      picture,
       img {
         display: block;
-        width: 200px;
-
-        @supports (object-fit: contain) {
-          height: var(--row-height);
-          object-fit: contain;
-        }
+        max-width: 200px;
+        max-height: var(--row-height);
+        width: auto;
+        height: auto;
       }
 
       @media (forced-colors: active) {

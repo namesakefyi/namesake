@@ -114,30 +114,6 @@ export const GUIDE_COSTS_BY_ID_QUERY = defineQuery(`
   }
 `);
 
-// Press
-export const PRESS_ARTICLES_QUERY = defineQuery(`
-  *[_type == "press"]{
-    _id,
-    title,
-    outlet,
-    url,
-    date,
-    image
-  } | order(date desc)
-`);
-
-// States
-export const STATES_SUPPORT_QUERY = defineQuery(`
-  *[_type == "state"]{
-    name,
-    "slug": slug.current,
-    namesakeSupport
-  }
-`);
-
-// Sponsors
-export const SPONSORS_QUERY = defineQuery(`*[_type == "sponsor"]`);
-
 export const DIRECTORY_CONTACTS_LIST_QUERY = defineQuery(`
   *[
     _type == "contact" &&

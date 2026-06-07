@@ -26,7 +26,7 @@ const posts = await sanityClient.fetch(POSTS_INDEX_QUERY, params ?? {});
             date={post.publishDate}
             url={`/blog/${post.slug.current}`}
             description={post.description}
-            image={post.image}
+            sanityImage={post.image}
           />
         ))
       ) : (
