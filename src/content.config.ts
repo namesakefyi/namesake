@@ -78,8 +78,12 @@ const posts = defineCollection({
       publishDate: z.date(),
       annotation: z.enum(ANNOTATION_TYPES).optional(),
       authors: z.array(z.string()).optional(),
-      image: image().optional(),
-      imageAlt: z.string().optional(),
+      image: z
+        .object({
+          src: image(),
+          alt: z.string(),
+        })
+        .optional(),
     }),
 });
 

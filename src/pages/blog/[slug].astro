@@ -32,8 +32,8 @@ const authors = authorEntries.filter(
   (a): a is NonNullable<typeof a> => a !== undefined,
 );
 
-const ogImage = post.data.image ? post.data.image.src : `/blog/${slug}.png`;
-const ogAlt = post.data.imageAlt ?? post.data.title;
+const ogImage = post.data.image ? post.data.image.src.src : `/blog/${slug}.png`;
+const ogAlt = post.data.image?.alt ?? post.data.title;
 ---
 
 <ProseLayout
