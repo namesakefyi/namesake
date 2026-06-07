@@ -1,15 +1,12 @@
 ---
-import { sanityClient } from "sanity:client";
+import { getCollection } from "astro:content";
 import ArticleLink from "../components/ArticleLink.astro";
 import PageHeader from "../components/PageHeader.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { PRESS_ARTICLES_QUERY } from "../sanity/queries";
 
-const { params } = Astro.props;
-
-const pressArticles = await sanityClient.fetch(
-  PRESS_ARTICLES_QUERY,
-  params ?? {},
+const pressEntries = await getCollection("press");
+const pressArticles = pressEntries.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
 );
 ---
 
@@ -22,13 +19,14 @@ const pressArticles = await sanityClient.fetch(
   <div class="articles">
     {
       pressArticles.length ? (
-        pressArticles.map((article) => (
+        pressArticles.map(({ data }) => (
           <ArticleLink
-            title={article.title}
-            date={article.date}
-            url={article.url}
-            subhead={article.outlet}
-            image={article.image}
+            title={data.title}
+            date={data.date}
+            url={data.url}
+            subhead={data.outlet}
+            image={data.image}
+            imageAlt={data.imageAlt}
           />
         ))
       ) : (
