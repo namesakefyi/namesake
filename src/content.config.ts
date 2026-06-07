@@ -61,7 +61,7 @@ const authors = defineCollection({
         .array(
           z.object({
             name: z.string(),
-            url: z.string().url(),
+            url: z.url(),
           }),
         )
         .optional(),
