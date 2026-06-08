@@ -1,5 +1,5 @@
 ---
-import { getImage } from "astro:assets";
+import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import {
   RiGlobalLine,
@@ -17,30 +17,19 @@ import {
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { formatCleanUrl } from "../../utils/formatCleanUrl";
 
-const stateParam = Astro.url.searchParams.get("state") ?? "";
-const serviceParam = Astro.url.searchParams.get("service") ?? "";
-const stateSlug = /^[a-z]{2}$/.test(stateParam) ? stateParam : "";
-const service = SERVICES.some((s) => s.value === serviceParam)
-  ? serviceParam
-  : "";
+const stateParam = Astro.url.searchParams.get("state");
+const serviceParam = Astro.url.searchParams.get("service");
 
 const [statesCollection, filteredEntries] = await Promise.all([
   getCollection("states"),
   getCollection("directory", ({ data }) => {
-    if (stateSlug && !data.states.some((ref) => ref.id === stateSlug))
+    if (stateParam && !data.states.some((ref) => ref.id === stateParam))
       return false;
-    if (service && !data.services.includes(service as Service)) return false;
+    if (serviceParam && !data.services.includes(serviceParam as Service))
+      return false;
     return true;
   }),
 ]);
-
-const stateNameById = Object.fromEntries(
-  statesCollection.map(({ id, data }) => [id, data.name]),
-);
-
-const allStates = statesCollection
-  .map(({ id, data }) => ({ id, name: data.name }))
-  .sort((a, b) => a.name.localeCompare(b.name));
 
 filteredEntries.sort((a, b) => {
   if (a.data.officialPartner !== b.data.officialPartner)
@@ -48,25 +37,25 @@ filteredEntries.sort((a, b) => {
   return a.data.name.localeCompare(b.data.name);
 });
 
-const contacts = await Promise.all(
-  filteredEntries.map(async ({ id, data }) => {
-    const logoUrl = data.logo ? (await getImage({ src: data.logo })).src : null;
-    return {
-      slug: id,
-      name: data.name,
-      description: data.description,
-      states: data.states.map((ref) => stateNameById[ref.id] ?? ref.id).sort(),
-      services: data.services,
-      officialPartner: data.officialPartner,
-      email: data.email ?? null,
-      phone: data.phone ?? null,
-      url: data.url,
-      logoUrl,
-    };
-  }),
-);
+const contacts = filteredEntries.map(({ id, data }) => ({
+  slug: id,
+  name: data.name,
+  description: data.description,
+  states: data.states
+    .map(
+      (ref) =>
+        statesCollection.find((s) => s.id === ref.id)?.data.name ?? ref.id,
+    )
+    .sort(),
+  services: data.services,
+  officialPartner: data.officialPartner,
+  email: data.email,
+  phone: data.phone,
+  url: data.url,
+  logo: data.logo,
+}));
 
-const hasActiveFilters = Boolean(stateSlug || service);
+const hasActiveFilters = Boolean(stateParam || serviceParam);
 const title = "Directory";
 const description =
   "Need more name change support? These organizations can help.";
@@ -79,18 +68,28 @@ const description =
       <select name="state" aria-label="State">
         <option value="">All states</option>
         <hr />
-        {allStates.map(({ id, name }) => (
-          <option value={id} selected={id === stateSlug}>{name}</option>
-        ))}
+        {
+          statesCollection.map(({ id, data }) => (
+            <option value={id} selected={id === stateParam}>
+              {data.name}
+            </option>
+          ))
+        }
       </select>
       <select name="service" aria-label="Service">
         <option value="">All services</option>
         <hr />
-        {SERVICES.map(({ value, title }) => (
-          <option value={value} selected={value === service}>{title}</option>
-        ))}
+        {
+          SERVICES.map(({ value, title }) => (
+            <option value={value} selected={value === serviceParam}>
+              {title}
+            </option>
+          ))
+        }
       </select>
-      <a id="filter-reset" href={Astro.url.pathname} hidden={!hasActiveFilters}>Reset</a>
+      <a id="filter-reset" href={Astro.url.pathname} hidden={!hasActiveFilters}
+        >Reset</a
+      >
     </form>
     <div class="metadata">
       <span id="filter-count" class="count">
@@ -104,120 +103,131 @@ const description =
     class="directory-content"
     aria-label="Directory results"
   >
-    {contacts.length ? (
-      <ul class="directory-list-items">
-        {contacts.map((c) => (
-          <li class="directory-list-item">
-            {c.logoUrl && (
-              <img class="logo" src={c.logoUrl} alt={`${c.name} logo`} />
-            )}
-            <header>
-              {c.officialPartner && (
-                <div class="badge">
-                  <RiVerifiedBadgeFill size={16} />
-                  Namesake Partner
-                </div>
-              )}
-              <h2>{c.name}</h2>
-              <p class="description">{c.description}</p>
-            </header>
-            <ul class="services" aria-label="Services">
-              {c.services.map((svc) => (
-                <li>{SERVICE_LABELS[svc as Service] ?? svc}</li>
-              ))}
-            </ul>
-            <ul class="contact-info">
-              <li>
-                <RiMapPinLine size={18} />
-                <div class="contact-label">
-                  <span>{c.states.join(", ")}</span>
-                </div>
-              </li>
-              {c.url && (
+    {
+      contacts.length ? (
+        <ul class="directory-list-items">
+          {contacts.map((c) => (
+            <li class="directory-list-item">
+              {c.logo &&
+                (c.logo.format === "svg" ? (
+                  <img class="logo" src={c.logo.src} alt={`${c.name} logo`} />
+                ) : (
+                  <Image class="logo" src={c.logo} alt={`${c.name} logo`} />
+                ))}
+              <header>
+                {c.officialPartner && (
+                  <div class="badge">
+                    <RiVerifiedBadgeFill size={16} />
+                    Namesake Partner
+                  </div>
+                )}
+                <h2>{c.name}</h2>
+                <p class="description">{c.description}</p>
+              </header>
+              <ul class="services" aria-label="Services">
+                {c.services.map((svc) => (
+                  <li>{SERVICE_LABELS[svc as Service] ?? svc}</li>
+                ))}
+              </ul>
+              <ul class="contact-info">
                 <li>
-                  <RiGlobalLine size={18} />
+                  <RiMapPinLine size={18} />
                   <div class="contact-label">
-                    <a href={c.url}>{formatCleanUrl(c.url)}</a>
+                    <span>{c.states.join(", ")}</span>
                   </div>
                 </li>
-              )}
-              {c.email && (
-                <li>
-                  <RiMailSendLine size={18} />
-                  <div class="contact-label">
-                    <a href={`mailto:${c.email}`}>{c.email}</a>
-                  </div>
-                </li>
-              )}
-              {c.phone && (
-                <li>
-                  <RiPhoneLine size={18} />
-                  <div class="contact-label">
-                    <a href={`tel:${c.phone}`}>{c.phone}</a>
-                  </div>
-                </li>
-              )}
-            </ul>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p>{hasActiveFilters ? "No organizations match these filters." : "No entries yet."}</p>
-    )}
+                {c.url && (
+                  <li>
+                    <RiGlobalLine size={18} />
+                    <div class="contact-label">
+                      <a href={c.url}>{formatCleanUrl(c.url)}</a>
+                    </div>
+                  </li>
+                )}
+                {c.email && (
+                  <li>
+                    <RiMailSendLine size={18} />
+                    <div class="contact-label">
+                      <a href={`mailto:${c.email}`}>{c.email}</a>
+                    </div>
+                  </li>
+                )}
+                {c.phone && (
+                  <li>
+                    <RiPhoneLine size={18} />
+                    <div class="contact-label">
+                      <a href={`tel:${c.phone}`}>{c.phone}</a>
+                    </div>
+                  </li>
+                )}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>
+          {hasActiveFilters
+            ? "No organizations match these filters."
+            : "No entries yet."}
+        </p>
+      )
+    }
   </section>
 </BaseLayout>
 
 <script>
-  const form = document.getElementById("directory-form") as unknown as HTMLFormElement;
-  const resetLink = document.getElementById("filter-reset") as unknown as HTMLAnchorElement;
-  const stateSelect = form.elements.namedItem("state") as unknown as HTMLSelectElement;
-  const serviceSelect = form.elements.namedItem("service") as unknown as HTMLSelectElement;
-  const results = document.getElementById("directory-results") as HTMLElement;
-  const countEl = document.getElementById("filter-count") as HTMLElement;
+  const form = document.querySelector<HTMLFormElement>("#directory-form")!;
+  const resetLink = document.querySelector<HTMLAnchorElement>("#filter-reset")!;
+  const results = document.querySelector<HTMLElement>("#directory-results")!;
+  const countEl = document.querySelector<HTMLElement>("#filter-count")!;
 
-  async function applyFilters() {
-    const params = new URLSearchParams();
-    if (stateSelect.value) params.set("state", stateSelect.value);
-    if (serviceSelect.value) params.set("service", serviceSelect.value);
-    const search = params.toString();
-    const newUrl = location.pathname + (search ? "?" + search : "");
+  let fetchController: AbortController | null = null;
 
-    history.replaceState(null, "", newUrl);
-    resetLink.hidden = !stateSelect.value && !serviceSelect.value;
-
-    if (results.getBoundingClientRect().top <= 0) {
-      results.scrollIntoView({ behavior: "instant", block: "start" });
-    }
-
+  async function updateResults(url: URL) {
+    fetchController?.abort();
+    fetchController = new AbortController();
+    const { signal } = fetchController;
     results.setAttribute("aria-busy", "true");
 
     try {
-      const res = await fetch(newUrl);
-      const html = await res.text();
-      const doc = new DOMParser().parseFromString(html, "text/html");
-      const incoming = doc.getElementById("directory-results");
-      if (incoming) results.innerHTML = incoming.innerHTML;
-      const count = results.querySelectorAll(".directory-list-item").length;
-      countEl.textContent = `${count} ${count === 1 ? "entry" : "entries"}`;
+      const doc = new DOMParser().parseFromString(
+        await fetch(url, { signal }).then((r) => r.text()),
+        "text/html",
+      );
+      results.innerHTML =
+        doc.querySelector("#directory-results")?.innerHTML ?? results.innerHTML;
+      countEl.textContent =
+        doc.querySelector("#filter-count")?.textContent ?? countEl.textContent;
     } catch {
+      if (signal.aborted) return;
       results.innerHTML =
         '<p role="alert">Something went wrong loading the directory. Please refresh the page.</p>';
     } finally {
-      results.removeAttribute("aria-busy");
+      if (!signal.aborted) results.removeAttribute("aria-busy");
     }
   }
 
-  form.addEventListener("change", () => form.requestSubmit());
+  function applyFilters() {
+    const url = new URL(location.pathname, location.origin);
+    new FormData(form).forEach((value, key) => {
+      if (value) url.searchParams.set(key, value as string);
+    });
+    history.replaceState(null, "", url);
+    resetLink.hidden = !url.searchParams.size;
+    if (results.getBoundingClientRect().top <= 0) {
+      results.scrollIntoView({ behavior: "instant", block: "start" });
+    }
+    updateResults(url);
+  }
 
+  form.addEventListener("change", () => form.requestSubmit());
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     applyFilters();
   });
-
   resetLink.addEventListener("click", (e) => {
     e.preventDefault();
-    stateSelect.value = "";
-    serviceSelect.value = "";
+    form.querySelectorAll("select").forEach((el) => (el.value = ""));
     applyFilters();
   });
 </script>
