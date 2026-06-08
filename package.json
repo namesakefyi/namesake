@@ -115,7 +115,6 @@
     "fake-indexeddb": "^6.2.5",
     "jsdom": "^29.1.1",
     "lightningcss": "^1.32.0",
-    "lodash": "^4.18.1",
     "nano-staged": "^1.0.2",
     "optimo": "^0.0.27",
     "pdfjs-dist": "^4.10.38",
