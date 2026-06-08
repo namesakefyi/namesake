@@ -5,3 +5,12 @@
   width: 100%;
   min-width: 0;
 }
+
+.namesake-address-field-add-address2 {
+  all: unset;
+  align-self: flex-start;
+  font-size: var(--step--1);
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}

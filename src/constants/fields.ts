@@ -91,6 +91,12 @@ export const FIELD_DEFS = [
     label: "Residence street address",
     type: "string",
   },
+  {
+    name: "residenceStreetAddress2",
+    label: "Apartment, suite, unit, etc.",
+    type: "string",
+  },
+
   { name: "residenceCity", label: "Residence city", type: "string" },
   { name: "residenceCounty", label: "Residence county", type: "string" },
   { name: "residenceState", label: "Residence state", type: "string" },
@@ -103,6 +109,11 @@ export const FIELD_DEFS = [
   {
     name: "mailingStreetAddress",
     label: "Mailing street address",
+    type: "string",
+  },
+  {
+    name: "mailingStreetAddress2",
+    label: "Apartment, suite, unit, etc.",
     type: "string",
   },
   { name: "mailingCity", label: "Mailing city", type: "string" },
