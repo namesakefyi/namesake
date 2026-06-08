@@ -3,7 +3,9 @@ import {
   RiHandHeartLine,
   RiHeart3Line,
   RiShareForwardLine,
+  RiThumbDownFill,
   RiThumbDownLine,
+  RiThumbUpFill,
   RiThumbUpLine,
 } from "@remixicon/react";
 import { useActionState, useRef } from "react";
@@ -123,11 +125,13 @@ export function FormFeedback({ slug }: FormFeedbackProps) {
             defaultValue={isSubmitError(state) ? state.sentiment : undefined}
           >
             <Radio value="positive" className="form-feedback-sentiment-option">
-              <RiThumbUpLine size={24} aria-hidden />
+              <RiThumbUpLine size={24} aria-hidden className="icon-outline" />
+              <RiThumbUpFill size={24} aria-hidden className="icon-filled" />
               It was easy
             </Radio>
             <Radio value="negative" className="form-feedback-sentiment-option">
-              <RiThumbDownLine size={24} aria-hidden />
+              <RiThumbDownLine size={24} aria-hidden className="icon-outline" />
+              <RiThumbDownFill size={24} aria-hidden className="icon-filled" />
               Had some problems
             </Radio>
           </RadioGroup>
