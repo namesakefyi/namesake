@@ -11,7 +11,7 @@ interface Props {
   slug: string;
   documentCount: number;
   timeEstimate: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 const { title, slug, documentCount, timeEstimate, updatedAt } = Astro.props;
@@ -21,7 +21,7 @@ const formatter = new Intl.DateTimeFormat("en-US", {
   dateStyle: "medium",
 });
 
-const formattedDate = formatter.format(new Date(updatedAt));
+const formattedDate = updatedAt ? formatter.format(new Date(updatedAt)) : null;
 ---
 
 <article class="form">
@@ -58,7 +58,7 @@ const formattedDate = formatter.format(new Date(updatedAt));
       <RiFileCheckLine />{" "}
       {`${documentCount} document${documentCount > 1 ? "s" : ""}`}
     </li>
-    <li>Updated {formattedDate}</li>
+    {formattedDate && <li>Updated {formattedDate}</li>}
   </ul>
 </article>
 

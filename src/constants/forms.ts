@@ -1,8 +1,8 @@
-import { affidavitOfIndigencyMaConfig } from "../forms/affidavit-of-indigency-ma/config";
-import { courtOrderMaConfig } from "../forms/court-order-ma/config";
-import { courtOrderMinorMaConfig } from "../forms/court-order-ma-minor/config";
-import { courtOrderRiConfig } from "../forms/court-order-ri/config";
-import { socialSecurityConfig } from "../forms/social-security/config";
+import { affidavitOfIndigencyMaConfig } from "../content/forms/affidavit-of-indigency-ma/config";
+import { courtOrderMaConfig } from "../content/forms/court-order-ma/config";
+import { courtOrderMinorMaConfig } from "../content/forms/court-order-ma-minor/config";
+import { courtOrderRiConfig } from "../content/forms/court-order-ri/config";
+import { socialSecurityConfig } from "../content/forms/social-security/config";
 import type { Step } from "../forms/types";
 import type { FormData } from "./fields";
 import type { PDFId } from "./pdf";
@@ -55,6 +55,12 @@ export function resolveInstructions(
     if (typeof item === "string") return [item];
     return item.when(data) ? [item.text] : [];
   });
+}
+
+export interface FormCost {
+  title: string;
+  amount: number;
+  required: "required" | "notRequired";
 }
 
 /**

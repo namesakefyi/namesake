@@ -1,24 +1,19 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import type { Cost } from "../../../utils/formatTotalCosts";
+import type { FormCost } from "../../../constants/forms";
 import { CostsTable } from "./CostsTable";
 
-const filingFee: Cost = {
-  _type: "cost",
-  _key: "filing",
+const filingFee: FormCost = {
   title: "Court filing fee",
   amount: 150,
+  required: "required",
 };
-const optionalFee: Cost = {
-  _type: "cost",
-  _key: "pub",
+const optionalFee: FormCost = {
   title: "Publication fee",
   amount: 75,
   required: "notRequired",
 };
-const requiredFee: Cost = {
-  _type: "cost",
-  _key: "kit",
+const requiredFee: FormCost = {
   title: "Name change kit",
   amount: 25,
   required: "required",
@@ -58,7 +53,6 @@ describe("CostsTable", () => {
 
   it("renders the formatted amount for each cost", () => {
     render(<CostsTable costs={[filingFee]} />);
-    // Scope to the cost row (not the footer total row)
     const costRow = screen
       .getByRole("cell", { name: "Court filing fee" })
       .closest("tr");
@@ -94,13 +88,11 @@ describe("CostsTable", () => {
 
   it("renders the total of required costs in the footer", () => {
     render(<CostsTable costs={[filingFee, requiredFee]} />);
-    // Both are required — total is $175
     expect(screen.getByRole("cell", { name: "$175" })).toBeInTheDocument();
   });
 
   it("renders a cost range in the footer when optional costs exist", () => {
     render(<CostsTable costs={[filingFee, optionalFee]} />);
-    // Required: $150, total with optional: $225 → range
     expect(screen.getByRole("cell", { name: "$150–$225" })).toBeInTheDocument();
   });
 

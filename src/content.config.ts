@@ -52,6 +52,46 @@ const directory = defineCollection({
     }),
 });
 
+const forms = defineCollection({
+  loader: glob({ base: "./src/content/forms", pattern: "*/index.md" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    state: reference("states").optional(),
+    category: reference("categories"),
+    unlisted: z.boolean().default(false),
+    costs: z
+      .array(
+        z.object({
+          title: z.string(),
+          amount: z.number(),
+          required: z.enum(["required", "notRequired"]),
+        }),
+      )
+      .optional(),
+  }),
+});
+
+const guides = defineCollection({
+  loader: glob({ base: "./src/content/guides", pattern: "**/*.mdx" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    state: reference("states").optional(),
+    category: reference("categories"),
+    unlisted: z.boolean().default(false),
+    costs: z
+      .array(
+        z.object({
+          title: z.string(),
+          amount: z.number(),
+          required: z.enum(["required", "notRequired"]),
+        }),
+      )
+      .optional(),
+  }),
+});
+
 const pages = defineCollection({
   loader: glob({ base: "./src/content/pages", pattern: "**/*.md" }),
   schema: z.object({
@@ -120,6 +160,8 @@ export const collections = {
   authors,
   categories,
   directory,
+  forms,
+  guides,
   pages,
   posts,
   press,

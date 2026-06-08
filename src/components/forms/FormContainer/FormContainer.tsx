@@ -1,15 +1,14 @@
-import type { PortableTextProps } from "@portabletext/react";
-import { PortableText } from "@portabletext/react";
-import { RiMegaphoneLine } from "@remixicon/react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { FormProvider } from "react-hook-form";
-import { type FormSlug, getFormConfig } from "../../../constants/forms";
+import {
+  type FormCost,
+  type FormSlug,
+  getFormConfig,
+} from "../../../constants/forms";
 import { createFormSubmitHandler } from "../../../forms/createFormSubmitHandler";
 import type { FormPdfMetadata } from "../../../forms/getFormPdfMetadata";
 import { useFormData } from "../../../forms/useFormData";
 import { useFormState } from "../../../forms/useFormState";
-import type { Costs } from "../../../utils/formatTotalCosts";
-import { Banner } from "../../common/Banner";
 import { ProgressCircle } from "../../common/ProgressCircle";
 import { FormCompleteStep } from "../FormCompleteStep";
 import { FormNavigation } from "../FormNavigation";
@@ -28,14 +27,14 @@ export interface FormContainerProps {
   /** An optional description to provide more context. */
   description?: string | null;
 
-  /** Optional banner content (Portable Text) to display on the title step. */
-  banner?: PortableTextProps["value"] | null;
+  /** Costs associated with this form. */
+  costs?: readonly FormCost[] | null;
+
+  /** Optional content to render on the title step (e.g. a <Banner>). */
+  children?: React.ReactNode;
 
   /** The PDF metadata for forms that will be generated. */
   pdfs?: FormPdfMetadata[];
-
-  /** The costs associated with this form. */
-  costs?: Costs | null;
 
   /** Render inline within a page rather than as a full-page experience. */
   inline?: boolean;
@@ -45,9 +44,9 @@ export function FormContainer({
   slug,
   title,
   description,
-  banner,
-  pdfs,
   costs,
+  children,
+  pdfs,
   inline = false,
 }: FormContainerProps) {
   const config = getFormConfig(slug);
@@ -171,11 +170,7 @@ export function FormContainer({
             onStart={onStart}
             headingLevel={inline ? 2 : 1}
           >
-            {banner && (
-              <Banner icon={RiMegaphoneLine}>
-                <PortableText value={banner} />
-              </Banner>
-            )}
+            {children}
           </FormTitleStep>
         );
       case "filling":
@@ -207,7 +202,7 @@ export function FormContainer({
     pdfs,
     title,
     description,
-    banner,
+    children,
     config.slug,
     totalSteps,
     onStart,
@@ -234,7 +229,11 @@ export function FormContainer({
   if (isLoading) {
     return (
       <section
-        className="form-container form-container-loading"
+        className={
+          inline
+            ? "form-container form-container-loading not-content"
+            : "form-container form-container-loading"
+        }
         data-inline={inline || undefined}
         ref={containerRef}
       >
@@ -247,7 +246,7 @@ export function FormContainer({
     <FormProvider {...form}>
       <FormStepContext.Provider value={stepContextValue}>
         <section
-          className="form-container"
+          className={inline ? "form-container not-content" : "form-container"}
           data-inline={inline || undefined}
           ref={containerRef}
         >

@@ -1,40 +1,34 @@
 ---
-import { sanityClient } from "sanity:client";
+import { getCollection } from "astro:content";
 import FormLink from "../../components/FormLink.astro";
 import PageHeader from "../../components/PageHeader.astro";
-import { type FormSlug, getFormConfig } from "../../constants/forms";
+import { getFormConfig, isFormSlug } from "../../constants/forms";
 import { getFormPdfMetadata } from "../../forms/getFormPdfMetadata";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { FORMS_INDEX_QUERY } from "../../sanity/queries";
-import type { FORMS_INDEX_QUERY_RESULT } from "../../sanity/sanity.types";
 import { formatTimeEstimate } from "../../utils/formatTimeEstimate";
 
-const { params } = Astro.props;
-
-const forms: FORMS_INDEX_QUERY_RESULT = await sanityClient.fetch(
-  FORMS_INDEX_QUERY,
-  params ?? {},
+const allForms = await getCollection(
+  "forms",
+  ({ data, id }) => !data.unlisted && isFormSlug(id),
 );
 
-// Get PDF metadata and step count for each form
 const formsWithPdfs = await Promise.all(
-  forms.map(async (form) => {
-    const formSlug = form.slug.current as FormSlug;
-    const config = getFormConfig(formSlug);
-    const pdfs = config ? await getFormPdfMetadata(formSlug) : [];
+  allForms.map(async (form) => {
+    if (!isFormSlug(form.id)) return null;
+    const slug = form.id;
+    const config = getFormConfig(slug);
+    const pdfs = config ? await getFormPdfMetadata(slug) : [];
     const stepCount = config?.steps.length ?? 0;
     const timeEstimate = formatTimeEstimate(stepCount);
 
     return {
-      title: form.title,
-      slug: form.slug,
+      title: form.data.title,
+      slug,
       pdfs,
-      stepCount,
       timeEstimate,
-      updatedAt: form._updatedAt,
     };
   }),
-);
+).then((results) => results.filter((r) => r !== null));
 ---
 
 <BaseLayout
@@ -52,10 +46,9 @@ const formsWithPdfs = await Promise.all(
         formsWithPdfs.map((form) => (
           <FormLink
             title={form.title}
-            slug={form.slug.current}
+            slug={form.slug}
             documentCount={form.pdfs.length}
             timeEstimate={form.timeEstimate}
-            updatedAt={form.updatedAt}
           />
         ))
       ) : (

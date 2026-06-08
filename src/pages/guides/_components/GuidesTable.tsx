@@ -9,13 +9,18 @@ import {
   TableHeader,
 } from "../../../components/common/Table";
 import { Tag, TagGroup } from "../../../components/common/TagGroup";
-import type { GUIDES_INDEX_QUERY_RESULT } from "../../../sanity/sanity.types";
 import "./GuidesTable.css";
 
-export type Guide = GUIDES_INDEX_QUERY_RESULT[number];
+export interface Guide {
+  id: string;
+  title: string;
+  state?: string | null;
+  category?: string | null;
+  updatedAt?: string;
+}
 
 interface GuidesTableProps {
-  guides: GUIDES_INDEX_QUERY_RESULT;
+  guides: Guide[];
 }
 
 type GroupBy = "all" | "state" | "category";
@@ -63,8 +68,8 @@ export function GuidesTable({ guides }: GuidesTableProps) {
         if (sortDescriptor.column === "title") {
           cmp = (a.title ?? "").localeCompare(b.title ?? "");
         } else {
-          const dateA = a._updatedAt ? new Date(a._updatedAt).getTime() : 0;
-          const dateB = b._updatedAt ? new Date(b._updatedAt).getTime() : 0;
+          const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+          const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
           cmp = dateA - dateB;
         }
         return sortDescriptor.direction === "descending" ? -cmp : cmp;
@@ -75,7 +80,6 @@ export function GuidesTable({ guides }: GuidesTableProps) {
       return { All: sortGuides(guides) };
     }
 
-    // Use Map to preserve insertion order (order from Sanity)
     const groups = new Map<string, Guide[]>();
     for (const guide of guides) {
       const key = guide[groupBy] ?? "Other";
@@ -84,7 +88,6 @@ export function GuidesTable({ guides }: GuidesTableProps) {
       groups.set(key, existing);
     }
 
-    // For states, sort alphabetically; for categories, preserve Sanity order
     const keys = [...groups.keys()];
     if (groupBy === "state") {
       keys.sort();
@@ -144,13 +147,11 @@ export function GuidesTable({ guides }: GuidesTableProps) {
               </TableHeader>
               <TableBody>
                 {groupGuides.map((guide) => (
-                  <Row key={guide.slug.current}>
+                  <Row key={guide.id}>
                     <Cell>
-                      <a href={`/guides/${guide.slug?.current}`}>
-                        {guide.title ?? ""}
-                      </a>
+                      <a href={`/guides/${guide.id}`}>{guide.title}</a>
                     </Cell>
-                    <Cell>{formatDate(guide._updatedAt)}</Cell>
+                    <Cell>{formatDate(guide.updatedAt)}</Cell>
                   </Row>
                 ))}
               </TableBody>

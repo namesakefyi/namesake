@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
+import type { FormCost } from "../../../constants/forms";
 import type { FormPhase } from "../../../forms/types";
-import type { Costs } from "../../../utils/formatTotalCosts";
 
 export interface FormStepContextValue {
   onNext: () => void;
@@ -22,7 +22,7 @@ export interface FormStepContextValue {
   /** Error message from the most recent failed submission attempt, if any */
   submitError: string | null;
   /** The costs associated with this form */
-  costs?: Costs;
+  costs?: readonly FormCost[] | null;
 }
 
 export const FormStepContext = createContext<FormStepContextValue | null>(null);

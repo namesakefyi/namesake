@@ -1,0 +1,22 @@
+---
+import { getEntry, render } from "astro:content";
+import { FormContainer } from "../../../components/forms/FormContainer/FormContainer";
+import { getFormPdfMetadata } from "../../../forms/getFormPdfMetadata";
+
+const formEntry = await getEntry("forms", "social-security");
+if (!formEntry) return;
+const { Content } = await render(formEntry);
+const pdfs = await getFormPdfMetadata("social-security");
+---
+
+<FormContainer
+  client:load
+  slug="social-security"
+  title={formEntry.data.title}
+  description={formEntry.data.description}
+  costs={formEntry.data.costs}
+  pdfs={pdfs}
+  inline
+>
+  <Content />
+</FormContainer>

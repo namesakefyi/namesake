@@ -1,55 +1,39 @@
 ---
-import { sanityClient } from "sanity:client";
+export const prerender = true;
+
+import { type CollectionEntry, getCollection, render } from "astro:content";
 import type { BreadcrumbItem } from "../../components/Breadcrumbs.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
-import PortableText from "../../components/text/PortableText.astro";
 import ProseLayout from "../../layouts/ProseLayout.astro";
-import { extractHeadings } from "../../sanity/lib/extractHeadings";
-import { GUIDE_BY_SLUG_QUERY } from "../../sanity/queries";
 
-const { slug } = Astro.params;
-if (!slug) return Astro.redirect("/404");
+export async function getStaticPaths() {
+  const guides = await getCollection("guides", ({ data }) => !data.unlisted);
+  return guides.map((guide) => ({
+    params: { slug: guide.id },
+    props: { guide },
+  }));
+}
 
-const guide = await sanityClient.fetch(GUIDE_BY_SLUG_QUERY, { slug });
-if (!guide) return Astro.redirect("/404");
+interface Props {
+  guide: CollectionEntry<"guides">;
+}
 
-const headings = extractHeadings(guide.content);
-
-const breadcrumbs: BreadcrumbItem[] = [
-  { label: "Namesake", href: "/" },
-  { label: "Guides", href: "/guides" },
-];
-
-const formatter = new Intl.DateTimeFormat("en-US", {
-  dateStyle: "full",
-  timeStyle: "short",
-});
-
-const formattedDate = formatter.format(new Date(guide._updatedAt));
+const { guide } = Astro.props;
+const { Content, headings } = await render(guide);
 ---
 
 <ProseLayout
-  title={guide.title}
-  description={guide.description}
+  title={guide.data.title}
+  description={guide.data.description}
   annotation="box"
-  breadcrumbs={breadcrumbs}
+  breadcrumbs={[
+    { label: "Namesake", href: "/" },
+    { label: "Guides", href: "/guides" },
+  ] satisfies BreadcrumbItem[]}
   color="white"
-  ogImage={`/guides/${slug}.png`}
-  ogAlt={guide.title}
+  ogImage={`/guides/${guide.id}.png`}
+  ogAlt={guide.data.title}
 >
   <TableOfContents headings={headings} slot="toc" />
-  <PortableText value={guide.content} />
-  <div class="date-updated">
-    Page last edited on {" "}
-    <time datetime={guide._updatedAt}>{formattedDate}</time>.
-  </div>
+  <Content />
 </ProseLayout>
-
-<style>
-  .date-updated {
-    margin-block-start: var(--space-3xl);
-    padding-block-start: var(--space-s);
-    border-top: 1px solid var(--text-color);
-    font-size: var(--step--1);
-  }
-</style>
