@@ -47,12 +47,6 @@ importers:
       '@maskito/core':
         specifier: ^5.2.2
         version: 5.2.2
-      '@portabletext/react':
-        specifier: ^6.2.0
-        version: 6.2.0(react@19.2.6)
-      '@portabletext/types':
-        specifier: ^4.0.2
-        version: 4.0.2
       '@remixicon/react':
         specifier: ^4.9.0
         version: 4.9.0(react@19.2.6)
@@ -65,9 +59,6 @@ importers:
       astro:
         specifier: 6.3.7
         version: 6.3.7(@types/node@25.9.1)(lightningcss@1.32.0)(rollup@4.60.4)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.3)(yaml@2.9.0)
-      astro-portabletext:
-        specifier: ^0.13.0
-        version: 0.13.0(astro@6.3.7(@types/node@25.9.1)(lightningcss@1.32.0)(rollup@4.60.4)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.3)(yaml@2.9.0))
       browserslist:
         specifier: ^4.28.2
         version: 4.28.2
@@ -1814,20 +1805,6 @@ packages:
   '@poppinss/exception@1.2.3':
     resolution: {integrity: sha512-dCED+QRChTVatE9ibtoaxc+WkdzOSjYTKi/+uacHWIsfodVfpsueo3+DKpgU5Px8qXjgmXkSvhXvSCz3fnP9lw==}
 
-  '@portabletext/react@6.2.0':
-    resolution: {integrity: sha512-Z0J/AWrvg7GyDfEBQRRhi6ZpxLOsN4/QbU8KhTwfa6r2ELiRaMa4gkHE9wfs3V1ozNDrTG4IRr+8yBnHNDnAqA==}
-    engines: {node: '>=20.19 <22 || >=22.12'}
-    peerDependencies:
-      react: ^18.2 || ^19
-
-  '@portabletext/toolkit@5.0.2':
-    resolution: {integrity: sha512-Njc1LE1PMJkTx/wEPqZ6sOWGgFgX2B47fxpOQ/Ia4ByhsZoA5Sq8dNvvV5F052j/xE8TbOLiBEjS848FkKADDQ==}
-    engines: {node: '>=20.19 <22 || >=22.12'}
-
-  '@portabletext/types@4.0.2':
-    resolution: {integrity: sha512-djfIGU9n6DRrunlvj2nIDAp17URo/nA4jSXGvf+Gupx8NLLy9fmJBZ3GL8yhqn9lSVc+cKCharjOa3aOBnWbRw==}
-    engines: {node: '>=20.19 <22 || >=22.12'}
-
   '@react-aria/test-utils@1.0.0-beta.3':
     resolution: {integrity: sha512-eeMNlAcH1Uu0CeCg5Z5XyI5wI5UzSGs9GOVnwUXyTdjQqlBdej2/X2oM/1Bff9M6Xhr0tl3nq4N5+6hVr1lDMw==}
     peerDependencies:
@@ -2568,12 +2545,6 @@ packages:
   astring@1.9.0:
     resolution: {integrity: sha512-LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==}
     hasBin: true
-
-  astro-portabletext@0.13.0:
-    resolution: {integrity: sha512-Z9N32H7eRP8tuSavnJqUm4vKqHj59oYEyhqq4YiwsAcFnwDbepbb6cmIRGG5S+eejvHibrjyAKdQxhVINYXCbA==}
-    engines: {node: '>=20.19 <22 || >=22.12'}
-    peerDependencies:
-      astro: '>=4.6.0'
 
   astro@6.3.7:
     resolution: {integrity: sha512-zIeDRrI0qNgN1lcCjNqt6/IVCVej7VwSa326cO8uP9BOk1cg4QuffhLnOn2gCgWQr32/wxpSRFfXiLKHglu1Tw==}
@@ -6518,18 +6489,6 @@ snapshots:
 
   '@poppinss/exception@1.2.3': {}
 
-  '@portabletext/react@6.2.0(react@19.2.6)':
-    dependencies:
-      '@portabletext/toolkit': 5.0.2
-      '@portabletext/types': 4.0.2
-      react: 19.2.6
-
-  '@portabletext/toolkit@5.0.2':
-    dependencies:
-      '@portabletext/types': 4.0.2
-
-  '@portabletext/types@4.0.2': {}
-
   '@react-aria/test-utils@1.0.0-beta.3(@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@testing-library/user-event@14.6.1(@testing-library/dom@10.4.1))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
       '@swc/helpers': 0.5.23
@@ -7295,12 +7254,6 @@ snapshots:
       js-tokens: 10.0.0
 
   astring@1.9.0: {}
-
-  astro-portabletext@0.13.0(astro@6.3.7(@types/node@25.9.1)(lightningcss@1.32.0)(rollup@4.60.4)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.3)(yaml@2.9.0)):
-    dependencies:
-      '@portabletext/toolkit': 5.0.2
-      '@portabletext/types': 4.0.2
-      astro: 6.3.7(@types/node@25.9.1)(lightningcss@1.32.0)(rollup@4.60.4)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.3)(yaml@2.9.0)
 
   astro@6.3.7(@types/node@25.9.1)(lightningcss@1.32.0)(rollup@4.60.4)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.3)(yaml@2.9.0):
     dependencies:

@@ -11,6 +11,7 @@ import browserslist from "browserslist";
 import { browserslistToTargets } from "lightningcss";
 
 export default defineConfig({
+  site: "https://namesake.fyi",
   output: "static",
   adapter: cloudflare({
     imageService: "compile",
@@ -18,7 +19,6 @@ export default defineConfig({
   image: {
     service: passthroughImageService(),
   },
-  site: "https://namesake.fyi",
   integrations: [sitemap(), mdx(), react()],
   prefetch: true,
   trailingSlash: "never",
@@ -69,9 +69,6 @@ export default defineConfig({
     assetsInclude: ["**/*.wasm"],
     ssr: {
       external: ["node:buffer", "node:path", "node:fs"],
-      optimizeDeps: {
-        exclude: ["astro-portabletext"],
-      },
     },
     css: {
       transformer: "lightningcss",
