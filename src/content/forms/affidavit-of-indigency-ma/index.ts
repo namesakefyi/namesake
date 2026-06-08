@@ -16,7 +16,6 @@ export default defineForm({
     { title: "Filing fee", amount: 150, required: "required" },
     { title: "Surcharge fee", amount: 15, required: "required" },
   ],
-  unlisted: true,
   steps: [
     currentNameStep,
     addressStep,
