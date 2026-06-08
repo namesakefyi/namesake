@@ -5,7 +5,7 @@ state: ri
 category: court-order
 ---
 
-import CourtOrderRiForm from "../forms/court-order-ri/Form.astro"
+import { FormContainer } from "../../components/forms/FormContainer/FormContainer"
 
 ## Get prepared
 
@@ -59,7 +59,7 @@ You can also use a shelter’s address when filing your name change petition. Rh
 
 ## Fill out forms
 
-<CourtOrderRiForm />
+<FormContainer client:load slug="court-order-ri" inline />
 
 ## Review and print documents
 

@@ -1,8 +1,12 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FormProvider } from "react-hook-form";
-import type { FormConfig, FormSlug } from "../../../constants/forms";
+import type { FormSlug } from "../../../constants/forms";
 import { createFormSubmitHandler } from "../../../forms/createFormSubmitHandler";
-import type { FormPdfMetadata } from "../../../forms/getFormPdfMetadata";
+import { getFormConfig } from "../../../forms/getFormConfig";
+import {
+  type FormPdfMetadata,
+  getFormPdfMetadata,
+} from "../../../forms/getFormPdfMetadata";
 import { useFormData } from "../../../forms/useFormData";
 import { useFormState } from "../../../forms/useFormState";
 import { ProgressCircle } from "../../common/ProgressCircle";
@@ -15,10 +19,6 @@ import "./FormContainer.css";
 
 export interface FormContainerProps {
   slug: FormSlug;
-  config: FormConfig;
-
-  /** The PDF metadata for forms that will be generated. */
-  pdfs?: FormPdfMetadata[];
 
   /** Render inline within a page rather than as a full-page experience. */
   inline?: boolean;
@@ -29,12 +29,17 @@ export interface FormContainerProps {
 
 export function FormContainer({
   slug,
-  config,
-  pdfs,
   inline = false,
   children,
 }: FormContainerProps) {
+  const config = getFormConfig(slug);
+  if (!config) throw new Error(`No form config found for slug: ${slug}`);
   const { title, description, costs, steps } = config;
+
+  const [pdfs, setPdfs] = useState<FormPdfMetadata[]>([]);
+  useEffect(() => {
+    getFormPdfMetadata(slug).then(setPdfs);
+  }, [slug]);
   const form = useFormData(config);
   const onSubmit = createFormSubmitHandler(config, form);
 

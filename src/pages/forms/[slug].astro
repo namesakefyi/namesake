@@ -5,7 +5,6 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import { FormContainer } from "../../components/forms/FormContainer/FormContainer";
 import type { FormSlug } from "../../constants/forms";
 import { getFormConfig } from "../../forms/getFormConfig";
-import { getFormPdfMetadata } from "../../forms/getFormPdfMetadata";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
@@ -21,7 +20,6 @@ const { form } = Astro.props;
 const { slug } = Astro.params;
 const config = getFormConfig(form.id);
 if (!config) return Astro.redirect("/404");
-const pdfs = await getFormPdfMetadata(form.id);
 ---
 
 <BaseLayout
@@ -30,10 +28,5 @@ const pdfs = await getFormPdfMetadata(form.id);
   color="white"
   ogImage={`/forms/${slug}.png`}
 >
-  <FormContainer
-    client:load
-    slug={form.id as FormSlug}
-    config={config}
-    pdfs={pdfs}
-  />
+  <FormContainer client:load slug={form.id as FormSlug} />
 </BaseLayout>

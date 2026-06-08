@@ -17,6 +17,13 @@ vi.mock("../../../db/database", () => ({
   deleteField: vi.fn().mockResolvedValue(undefined),
 }));
 
+vi.mock("../../../forms/getFormConfig");
+vi.mock("../../../forms/getFormPdfMetadata", () => ({
+  getFormPdfMetadata: vi.fn().mockResolvedValue([]),
+}));
+
+import { getFormConfig } from "../../../forms/getFormConfig";
+
 const plainStep: Step = {
   id: "plain",
   title: "Plain Step",
@@ -52,6 +59,7 @@ const formStepConfig: FormConfig = {
 describe("FormContainer", () => {
   beforeEach(() => {
     vi.mocked(db.getFormProgress).mockResolvedValue(undefined);
+    vi.mocked(getFormConfig).mockReturnValue(plainConfig);
   });
 
   beforeAll(() => {
@@ -67,22 +75,21 @@ describe("FormContainer", () => {
 
   describe("title step", () => {
     it("renders title on title step", async () => {
-      render(<FormContainer slug="court-order-ma" config={plainConfig} />);
+      render(<FormContainer slug="court-order-ma" />);
       expect(await screen.findByText("Test")).toBeInTheDocument();
     });
 
     it("renders description on title step", async () => {
-      render(
-        <FormContainer
-          slug="court-order-ma"
-          config={{ ...plainConfig, description: "Test Description" }}
-        />,
-      );
+      vi.mocked(getFormConfig).mockReturnValue({
+        ...plainConfig,
+        description: "Test Description",
+      });
+      render(<FormContainer slug="court-order-ma" />);
       expect(await screen.findByText("Test Description")).toBeInTheDocument();
     });
 
     it("renders start button on title step", async () => {
-      render(<FormContainer slug="court-order-ma" config={plainConfig} />);
+      render(<FormContainer slug="court-order-ma" />);
       expect(
         await screen.findByRole("button", { name: "Start" }),
       ).toBeInTheDocument();
@@ -91,7 +98,7 @@ describe("FormContainer", () => {
     it("renders a loading spinner while saved progress is being fetched", async () => {
       vi.mocked(db.getFormProgress).mockReturnValue(new Promise(() => {}));
 
-      render(<FormContainer slug="court-order-ma" config={plainConfig} />);
+      render(<FormContainer slug="court-order-ma" />);
       await act(async () => {});
 
       expect(
@@ -104,7 +111,7 @@ describe("FormContainer", () => {
   describe("filling phase", () => {
     it("renders step content and navigation after clicking Start", async () => {
       const user = userEvent.setup();
-      render(<FormContainer slug="court-order-ma" config={plainConfig} />);
+      render(<FormContainer slug="court-order-ma" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
 
@@ -114,7 +121,7 @@ describe("FormContainer", () => {
 
     it("returns to title after clicking Previous step", async () => {
       const user = userEvent.setup();
-      render(<FormContainer slug="court-order-ma" config={plainConfig} />);
+      render(<FormContainer slug="court-order-ma" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
       await user.click(screen.getByRole("button", { name: "Previous step" }));
@@ -128,7 +135,7 @@ describe("FormContainer", () => {
   describe("review phase", () => {
     it("renders review step after clicking Next step", async () => {
       const user = userEvent.setup();
-      render(<FormContainer slug="court-order-ma" config={plainConfig} />);
+      render(<FormContainer slug="court-order-ma" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
       await user.click(screen.getByRole("button", { name: "Next step" }));
@@ -141,8 +148,9 @@ describe("FormContainer", () => {
 
   describe("handleFormSubmit — default case (filling)", () => {
     it("advances to review when a filling-phase form step is submitted", async () => {
+      vi.mocked(getFormConfig).mockReturnValue(formStepConfig);
       const user = userEvent.setup();
-      render(<FormContainer slug="court-order-ma" config={formStepConfig} />);
+      render(<FormContainer slug="court-order-ma" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
       await user.click(screen.getByRole("button", { name: "Continue" }));
