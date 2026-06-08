@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import FormLink from "../../components/FormLink.astro";
 import PageHeader from "../../components/PageHeader.astro";
+import type { FormSlug } from "../../constants/forms";
 import { getFormConfig } from "../../forms/getFormConfig";
 import { getFormPdfMetadata } from "../../forms/getFormPdfMetadata";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -12,7 +13,7 @@ const allForms = await getCollection("forms", ({ data }) => !data.unlisted);
 const formsWithPdfs = await Promise.all(
   allForms.map(async (form) => {
     const config = getFormConfig(form.id);
-    const pdfs = config ? await getFormPdfMetadata(form.id) : [];
+    const pdfs = config ? await getFormPdfMetadata(form.id as FormSlug) : [];
     const stepCount = config?.steps.length ?? 0;
     const timeEstimate = formatTimeEstimate(stepCount);
 

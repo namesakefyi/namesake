@@ -3,12 +3,15 @@ import type { FormData } from "./fields";
 import type { StateId } from "./jurisdictions";
 import type { PDFId } from "./pdf";
 
-export type FormSlug =
-  | "affidavit-of-indigency-ma"
-  | "court-order-ma"
-  | "court-order-ma-minor"
-  | "court-order-ri"
-  | "social-security";
+export const FORM_SLUGS = [
+  "affidavit-of-indigency-ma",
+  "court-order-ma",
+  "court-order-ma-minor",
+  "court-order-ri",
+  "social-security",
+] as const;
+
+export type FormSlug = (typeof FORM_SLUGS)[number];
 
 export type CategoryId =
   | "birth-certificate"

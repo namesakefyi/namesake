@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import type { Selection, SortDescriptor } from "react-aria-components";
+import type { Selection } from "react-aria-components";
 import {
   Cell,
   Column,
@@ -32,12 +32,11 @@ const getInitialGroupBy = (): GroupBy => {
   return "all";
 };
 
+const sortGuides = (guidesToSort: Guide[]) =>
+  [...guidesToSort].sort((a, b) => a.title.localeCompare(b.title));
+
 export function GuidesTable({ guides }: GuidesTableProps) {
   const [groupBy, setGroupBy] = useState<GroupBy>(getInitialGroupBy);
-  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: "title",
-    direction: "ascending",
-  });
 
   const handleGroupByChange = (keys: Selection) => {
     if (keys === "all") return;
@@ -56,14 +55,6 @@ export function GuidesTable({ guides }: GuidesTableProps) {
   };
 
   const groupedGuides = useMemo(() => {
-    const sortGuides = (guidesToSort: Guide[]) => {
-      return [...guidesToSort].sort((a, b) => {
-        let cmp: number;
-        cmp = (a.title ?? "").localeCompare(b.title ?? "");
-        return sortDescriptor.direction === "descending" ? -cmp : cmp;
-      });
-    };
-
     if (groupBy === "all") {
       return { All: sortGuides(guides) };
     }
@@ -77,16 +68,14 @@ export function GuidesTable({ guides }: GuidesTableProps) {
     }
 
     const keys = [...groups.keys()];
-    if (groupBy === "state") {
-      keys.sort();
-    }
+    if (groupBy === "state") keys.sort();
 
     const sortedGroups: Record<string, Guide[]> = {};
     for (const key of keys) {
       sortedGroups[key] = sortGuides(groups.get(key) ?? []);
     }
     return sortedGroups;
-  }, [guides, groupBy, sortDescriptor]);
+  }, [guides, groupBy]);
 
   if (!guides.length) {
     return <p>No guides found.</p>;
@@ -117,11 +106,9 @@ export function GuidesTable({ guides }: GuidesTableProps) {
             <Table
               aria-label={groupBy === "all" ? "Guides" : `${group} guides`}
               className="guides-table"
-              sortDescriptor={sortDescriptor}
-              onSortChange={setSortDescriptor}
             >
               <TableHeader>
-                <Column id="title" isRowHeader allowsSorting>
+                <Column id="title" isRowHeader>
                   Name
                 </Column>
               </TableHeader>

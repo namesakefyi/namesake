@@ -1,5 +1,3 @@
-export const prerender = true;
-
 import { type CollectionEntry, getCollection } from "astro:content";
 import type { APIRoute, GetStaticPaths } from "astro";
 import { createOgImageResponse } from "../../utils/createOgImageResponse";

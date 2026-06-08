@@ -11,7 +11,7 @@ import browserslist from "browserslist";
 import { browserslistToTargets } from "lightningcss";
 
 export default defineConfig({
-  output: "server",
+  output: "static",
   adapter: cloudflare({
     imageService: "compile",
   }),
