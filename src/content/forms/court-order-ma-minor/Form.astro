@@ -1,22 +1,15 @@
 ---
-import { getEntry, render } from "astro:content";
 import { FormContainer } from "../../../components/forms/FormContainer/FormContainer";
 import { getFormPdfMetadata } from "../../../forms/getFormPdfMetadata";
+import { courtOrderMinorMaConfig } from "./config";
 
-const formEntry = await getEntry("forms", "court-order-ma-minor");
-if (!formEntry) return;
-const { Content } = await render(formEntry);
 const pdfs = await getFormPdfMetadata("court-order-ma-minor");
 ---
 
 <FormContainer
   client:load
   slug="court-order-ma-minor"
-  title={formEntry.data.title}
-  description={formEntry.data.description}
-  costs={formEntry.data.costs}
+  config={courtOrderMinorMaConfig}
   pdfs={pdfs}
   inline
->
-  <Content />
-</FormContainer>
+/>

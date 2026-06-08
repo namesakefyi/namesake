@@ -1,10 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { FormProvider } from "react-hook-form";
-import {
-  type FormCost,
-  type FormSlug,
-  getFormConfig,
-} from "../../../constants/forms";
+import type { FormConfig, FormSlug } from "../../../constants/forms";
 import { createFormSubmitHandler } from "../../../forms/createFormSubmitHandler";
 import type { FormPdfMetadata } from "../../../forms/getFormPdfMetadata";
 import { useFormData } from "../../../forms/useFormData";
@@ -18,46 +14,27 @@ import { FormStepContext } from "./FormStepContext";
 import "./FormContainer.css";
 
 export interface FormContainerProps {
-  /** Form slug to look up config. Must be registered in getFormConfig. */
   slug: FormSlug;
-
-  /** The title of the form. */
-  title: string;
-
-  /** An optional description to provide more context. */
-  description?: string | null;
-
-  /** Costs associated with this form. */
-  costs?: readonly FormCost[] | null;
-
-  /** Optional content to render on the title step (e.g. a <Banner>). */
-  children?: React.ReactNode;
+  config: FormConfig;
 
   /** The PDF metadata for forms that will be generated. */
   pdfs?: FormPdfMetadata[];
 
   /** Render inline within a page rather than as a full-page experience. */
   inline?: boolean;
+
+  /** Optional content to render on the title step (e.g. a <Banner>). */
+  children?: React.ReactNode;
 }
 
 export function FormContainer({
   slug,
-  title,
-  description,
-  costs,
-  children,
+  config,
   pdfs,
   inline = false,
+  children,
 }: FormContainerProps) {
-  const config = getFormConfig(slug);
-
-  if (!config) {
-    throw new Error(
-      `FormContainer: No form registered for slug "${slug}". Add it to getFormConfig.`,
-    );
-  }
-
-  const { steps } = config;
+  const { title, description, costs, steps } = config;
   const form = useFormData(config);
   const onSubmit = createFormSubmitHandler(config, form);
 
@@ -186,7 +163,7 @@ export function FormContainer({
         return (
           <FormCompleteStep
             title={title}
-            slug={config.slug}
+            slug={slug}
             onRedownload={onSubmit}
             inline={inline}
             headingLevel={inline ? 2 : 1}
@@ -203,7 +180,7 @@ export function FormContainer({
     title,
     description,
     children,
-    config.slug,
+    slug,
     totalSteps,
     onStart,
     onSubmit,

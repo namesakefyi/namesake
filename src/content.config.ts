@@ -3,6 +3,7 @@ import { file, glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { ANNOTATION_TYPES } from "./constants/annotations";
 import { COLOR_KEYS } from "./constants/colors";
+import type { FormConfig } from "./constants/forms";
 import { SERVICES } from "./constants/services";
 
 const authors = defineCollection({
@@ -53,7 +54,26 @@ const directory = defineCollection({
 });
 
 const forms = defineCollection({
-  loader: glob({ base: "./src/content/forms", pattern: "*/index.md" }),
+  loader: () => {
+    const modules = import.meta.glob<{ [key: string]: FormConfig }>(
+      "./content/forms/*/config.ts",
+      { eager: true },
+    );
+    return Object.entries(modules).map(([path, module]) => {
+      const id =
+        path.match(/\.\/content\/forms\/([^/]+)\/config\.ts/)?.[1] ?? "";
+      const config = Object.values(module).find(Boolean) as FormConfig;
+      return {
+        id,
+        title: config.title,
+        description: config.description,
+        state: config.state,
+        category: config.category,
+        costs: config.costs,
+        unlisted: config.unlisted ?? false,
+      };
+    });
+  },
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
@@ -80,15 +100,6 @@ const guides = defineCollection({
     state: reference("states").optional(),
     category: reference("categories"),
     unlisted: z.boolean().default(false),
-    costs: z
-      .array(
-        z.object({
-          title: z.string(),
-          amount: z.number(),
-          required: z.enum(["required", "notRequired"]),
-        }),
-      )
-      .optional(),
   }),
 });
 

@@ -1,29 +1,35 @@
-import { affidavitOfIndigencyMaConfig } from "../content/forms/affidavit-of-indigency-ma/config";
-import { courtOrderMaConfig } from "../content/forms/court-order-ma/config";
-import { courtOrderMinorMaConfig } from "../content/forms/court-order-ma-minor/config";
-import { courtOrderRiConfig } from "../content/forms/court-order-ri/config";
-import { socialSecurityConfig } from "../content/forms/social-security/config";
 import type { Step } from "../forms/types";
 import type { FormData } from "./fields";
+import type { StateId } from "./jurisdictions";
 import type { PDFId } from "./pdf";
 
-/**
- * Const representing all valid form slugs.
- * Update this array whenever a new form is added.
- */
-export const FORM_SLUGS = [
-  "affidavit-of-indigency-ma",
-  "court-order-ma-minor",
-  "court-order-ma",
-  "court-order-ri",
-  "social-security",
-] as const;
+export type FormSlug =
+  | "affidavit-of-indigency-ma"
+  | "court-order-ma"
+  | "court-order-ma-minor"
+  | "court-order-ri"
+  | "social-security";
 
-export type FormSlug = (typeof FORM_SLUGS)[number];
-
-export function isFormSlug(slug: string): slug is FormSlug {
-  return (FORM_SLUGS as readonly string[]).includes(slug);
-}
+export type CategoryId =
+  | "birth-certificate"
+  | "court-order"
+  | "devices"
+  | "education"
+  | "entertainment"
+  | "finance"
+  | "gaming"
+  | "government"
+  | "health"
+  | "housing"
+  | "other"
+  | "passport"
+  | "personal"
+  | "shopping"
+  | "social"
+  | "social-security"
+  | "state-id"
+  | "subscriptions"
+  | "travel";
 
 /**
  * Configuration for a PDF within a form.
@@ -67,8 +73,19 @@ export interface FormCost {
  * Complete configuration for a form.
  */
 export interface FormConfig {
-  /** Form identifier matching the URL slug */
-  slug: FormSlug;
+  /** Display title */
+  title: string;
+  /** Optional description */
+  description?: string;
+  /** State abbreviation, e.g. "ma" */
+  state?: StateId;
+  /** Category identifier */
+  category: CategoryId;
+  /** Costs associated with this form */
+  costs?: readonly FormCost[];
+  /** If true, excluded from the public forms listing */
+  unlisted?: boolean;
+
   /** Ordered steps, including optional guards for conditional inclusion. */
   steps: readonly Step[];
   /** PDFs included in this form */
@@ -81,24 +98,6 @@ export interface FormConfig {
    * Object form: `{ text, when }` = included only when `when` returns true.
    */
   instructions: readonly Instruction[];
-}
-
-/**
- * Registry of all form configurations.
- */
-export const FORM_CONFIGS: Record<FormSlug, FormConfig> = {
-  "affidavit-of-indigency-ma": affidavitOfIndigencyMaConfig,
-  "court-order-ma-minor": courtOrderMinorMaConfig,
-  "court-order-ma": courtOrderMaConfig,
-  "court-order-ri": courtOrderRiConfig,
-  "social-security": socialSecurityConfig,
-};
-
-/**
- * Get a form configuration by slug.
- */
-export function getFormConfig(slug: FormSlug): FormConfig | undefined {
-  return FORM_CONFIGS[slug];
 }
 
 /**

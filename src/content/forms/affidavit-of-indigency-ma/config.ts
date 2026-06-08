@@ -8,7 +8,15 @@ import { normalFeesStep } from "./steps/NormalFeesStep";
 import { publicAssistanceStep } from "./steps/PublicAssistanceStep";
 
 export const affidavitOfIndigencyMaConfig: FormConfig = {
-  slug: "affidavit-of-indigency-ma",
+  title: "Affidavit of Indigency: Massachusetts",
+  description: "Fill out this form to waive court fees and other expenses.",
+  state: "ma",
+  category: "court-order",
+  costs: [
+    { title: "Filing fee", amount: 150, required: "required" },
+    { title: "Surcharge fee", amount: 15, required: "required" },
+  ],
+  unlisted: true,
   steps: [
     currentNameStep,
     addressStep,

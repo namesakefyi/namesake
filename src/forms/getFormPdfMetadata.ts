@@ -1,6 +1,6 @@
-import { type FormSlug, getFormConfig } from "../constants/forms";
 import type { PDFId } from "../constants/pdf";
 import { getPdfDefinition } from "../pdfs";
+import { getFormConfig } from "./getFormConfig";
 
 /**
  * Metadata for a PDF form that includes display information.
@@ -16,16 +16,10 @@ export interface FormPdfMetadata {
   conditional?: boolean;
 }
 
-/**
- * Get PDF metadata for a form to display on the forms index page.
- *
- * @param formSlug - The form slug identifier
- * @returns Array of PDF metadata including title, code, and whether it's conditional
- */
 export async function getFormPdfMetadata(
-  formSlug: FormSlug,
+  slug: string,
 ): Promise<FormPdfMetadata[]> {
-  const config = getFormConfig(formSlug);
+  const config = getFormConfig(slug);
   if (!config) return [];
 
   return await Promise.all(

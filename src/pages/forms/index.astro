@@ -2,33 +2,28 @@
 import { getCollection } from "astro:content";
 import FormLink from "../../components/FormLink.astro";
 import PageHeader from "../../components/PageHeader.astro";
-import { getFormConfig, isFormSlug } from "../../constants/forms";
+import { getFormConfig } from "../../forms/getFormConfig";
 import { getFormPdfMetadata } from "../../forms/getFormPdfMetadata";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { formatTimeEstimate } from "../../utils/formatTimeEstimate";
 
-const allForms = await getCollection(
-  "forms",
-  ({ data, id }) => !data.unlisted && isFormSlug(id),
-);
+const allForms = await getCollection("forms", ({ data }) => !data.unlisted);
 
 const formsWithPdfs = await Promise.all(
   allForms.map(async (form) => {
-    if (!isFormSlug(form.id)) return null;
-    const slug = form.id;
-    const config = getFormConfig(slug);
-    const pdfs = config ? await getFormPdfMetadata(slug) : [];
+    const config = getFormConfig(form.id);
+    const pdfs = config ? await getFormPdfMetadata(form.id) : [];
     const stepCount = config?.steps.length ?? 0;
     const timeEstimate = formatTimeEstimate(stepCount);
 
     return {
       title: form.data.title,
-      slug,
+      slug: form.id,
       pdfs,
       timeEstimate,
     };
   }),
-).then((results) => results.filter((r) => r !== null));
+);
 ---
 
 <BaseLayout

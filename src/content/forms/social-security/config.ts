@@ -16,7 +16,9 @@ import { raceStep } from "./steps/RaceStep";
 import { sexStep } from "./steps/SexStep";
 
 export const socialSecurityConfig: FormConfig = {
-  slug: "social-security",
+  title: "Social Security",
+  description: "Apply for a new Social Security card with your updated name.",
+  category: "social-security",
   steps: [
     newNameStep,
     oldNameStep,
