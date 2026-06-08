@@ -42,9 +42,7 @@ function PdfPage({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    const task = page.render({ canvasContext: ctx, viewport: vp });
+    const task = page.render({ canvas, viewport: vp });
     task.promise.catch((err) => {
       if (err?.name !== "RenderingCancelledException") console.error(err);
     });
