@@ -1,10 +1,12 @@
-import { getCollection } from "astro:content";
+import { type CollectionEntry, getCollection } from "astro:content";
 import type { APIRoute, GetStaticPaths } from "astro";
 import { createOgImageResponse } from "../../utils/createOgImageResponse";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const guides = await getCollection("guides");
-  return guides.map((guide) => ({ params: { slug: guide.id } }));
+  return guides.map((guide: CollectionEntry<"guides">) => ({
+    params: { slug: guide.id },
+  }));
 };
 
 export const GET: APIRoute = async ({ params, request }) => {
@@ -12,7 +14,7 @@ export const GET: APIRoute = async ({ params, request }) => {
   if (!slug) return new Response("Not found", { status: 404 });
 
   const guides = await getCollection("guides");
-  const guide = guides.find((g) => g.id === slug);
+  const guide = guides.find((g: CollectionEntry<"guides">) => g.id === slug);
   if (!guide) return new Response("Not found", { status: 404 });
 
   return await createOgImageResponse({
