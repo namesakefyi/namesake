@@ -1,4 +1,4 @@
-import type { FormConfig } from "../../../constants/forms";
+import { defineForm } from "../../../forms/defineForm";
 import { addressStep } from "./steps/AddressStep";
 import { birthplaceStep } from "./steps/BirthplaceStep";
 import { citizenshipStep } from "./steps/CitizenshipStep";
@@ -15,7 +15,7 @@ import { previousSocialSecurityCardStep } from "./steps/PreviousSocialSecurityCa
 import { raceStep } from "./steps/RaceStep";
 import { sexStep } from "./steps/SexStep";
 
-export const socialSecurityConfig: FormConfig = {
+export default defineForm({
   title: "Social Security",
   description: "Apply for a new Social Security card with your updated name.",
   category: "social-security",
@@ -50,4 +50,4 @@ export const socialSecurityConfig: FormConfig = {
         data.citizenshipStatus === "other",
     },
   ],
-};
+});

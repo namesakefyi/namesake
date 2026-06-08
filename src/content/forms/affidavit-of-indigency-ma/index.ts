@@ -1,4 +1,4 @@
-import type { FormConfig } from "../../../constants/forms";
+import { defineForm } from "../../../forms/defineForm";
 import { addressStep } from "./steps/AddressStep";
 import { currentNameStep } from "./steps/CurrentNameStep";
 import { extraFeesStep } from "./steps/ExtraFeesStep";
@@ -7,7 +7,7 @@ import { indigencyBasisStep } from "./steps/IndigencyBasisStep";
 import { normalFeesStep } from "./steps/NormalFeesStep";
 import { publicAssistanceStep } from "./steps/PublicAssistanceStep";
 
-export const affidavitOfIndigencyMaConfig: FormConfig = {
+export default defineForm({
   title: "Affidavit of Indigency: Massachusetts",
   description: "Fill out this form to waive court fees and other expenses.",
   state: "ma",
@@ -32,4 +32,4 @@ export const affidavitOfIndigencyMaConfig: FormConfig = {
     "Do not sign the Affidavit of Indigency until you are in the presence of a notary.",
     "File with the Probate and Family Court along with your other documents.",
   ],
-};
+});

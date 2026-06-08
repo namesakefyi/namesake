@@ -1,14 +1,14 @@
 import type { FormConfig } from "../constants/forms";
 
-const modules = import.meta.glob<{ [key: string]: FormConfig }>(
-  "../content/forms/*/config.ts",
+const modules = import.meta.glob<{ default: FormConfig }>(
+  "../content/forms/*/index.ts",
   { eager: true },
 );
 
 export function getFormConfig(slug: string): FormConfig | undefined {
   const key = Object.keys(modules).find((k) =>
-    k.includes(`/forms/${slug}/config.ts`),
+    k.endsWith(`/forms/${slug}/index.ts`),
   );
   if (!key) return undefined;
-  return Object.values(modules[key]).find(Boolean) as FormConfig;
+  return modules[key].default;
 }

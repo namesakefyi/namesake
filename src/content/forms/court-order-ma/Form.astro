@@ -1,7 +1,7 @@
 ---
 import { FormContainer } from "../../../components/forms/FormContainer/FormContainer";
 import { getFormPdfMetadata } from "../../../forms/getFormPdfMetadata";
-import { courtOrderMaConfig } from "./config";
+import config from ".";
 
 const pdfs = await getFormPdfMetadata("court-order-ma");
 ---
@@ -9,7 +9,7 @@ const pdfs = await getFormPdfMetadata("court-order-ma");
 <FormContainer
   client:load
   slug="court-order-ma"
-  config={courtOrderMaConfig}
+  config={config}
   pdfs={pdfs}
   inline
 />

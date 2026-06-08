@@ -1,4 +1,4 @@
-import type { FormConfig } from "../../../constants/forms";
+import { defineForm } from "../../../forms/defineForm";
 import { addressStep } from "./steps/AddressStep";
 import { birthplaceStep } from "./steps/BirthplaceStep";
 import { contactInfoStep } from "./steps/ContactInfoStep";
@@ -12,7 +12,7 @@ import { previousNameChangeStep } from "./steps/PreviousNameChangeStep";
 import { pronounsStep } from "./steps/PronounsStep";
 import { reasonStep } from "./steps/ReasonStep";
 
-export const courtOrderMaConfig: FormConfig = {
+export default defineForm({
   title: "Court Order: Massachusetts",
   description:
     "If you live in Massachusetts and want to legally update your name, this is the place to start.",
@@ -47,4 +47,4 @@ export const courtOrderMaConfig: FormConfig = {
     "File with the Probate and Family Court in your county.",
     "Remember to bring a certified copy of your birth certificate and certified copies of any previous name changes.",
   ],
-};
+});

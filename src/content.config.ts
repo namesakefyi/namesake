@@ -55,14 +55,14 @@ const directory = defineCollection({
 
 const forms = defineCollection({
   loader: () => {
-    const modules = import.meta.glob<{ [key: string]: FormConfig }>(
-      "./content/forms/*/config.ts",
+    const modules = import.meta.glob<{ default: FormConfig }>(
+      "./content/forms/*/index.ts",
       { eager: true },
     );
     return Object.entries(modules).map(([path, module]) => {
       const id =
-        path.match(/\.\/content\/forms\/([^/]+)\/config\.ts/)?.[1] ?? "";
-      const config = Object.values(module).find(Boolean) as FormConfig;
+        path.match(/\.\/content\/forms\/([^/]+)\/index\.ts/)?.[1] ?? "";
+      const config = module.default;
       return {
         id,
         title: config.title,

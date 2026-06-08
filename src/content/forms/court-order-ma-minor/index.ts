@@ -1,4 +1,4 @@
-import type { FormConfig } from "../../../constants/forms";
+import { defineForm } from "../../../forms/defineForm";
 import { deriveCurrentAge } from "../../../utils/deriveCurrentAge";
 import { addressStep } from "./steps/AddressStep";
 import { birthCertificateParentsStep } from "./steps/BirthCerticiateParentsStep";
@@ -20,7 +20,7 @@ import { pronounsStep } from "./steps/PronounsStep";
 import { reasonStep } from "./steps/ReasonStep";
 import { youthServicesStep } from "./steps/YouthServicesStep";
 
-export const courtOrderMinorMaConfig: FormConfig = {
+export default defineForm({
   title: "Court Order: Massachusetts (Under 18)",
   description:
     "If you live in Massachusetts, are under 18, and want to legally update your name, this is the place to start.",
@@ -79,4 +79,4 @@ export const courtOrderMinorMaConfig: FormConfig = {
     },
     "Remember to bring all supporting documents to the court.",
   ],
-};
+});
