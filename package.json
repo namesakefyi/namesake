@@ -119,6 +119,7 @@
     "optimo": "^0.0.27",
     "pdfjs-dist": "^4.10.38",
     "react-compiler-runtime": "^1.0.0",
+    "sass-embedded": "^1.100.0",
     "sharp": "^0.34.5",
     "simple-git-hooks": "^2.13.1",
     "storybook": "^10.4.1",
