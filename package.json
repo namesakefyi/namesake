@@ -117,7 +117,7 @@
     "lightningcss": "^1.32.0",
     "nano-staged": "^1.0.2",
     "optimo": "^0.0.27",
-    "pdfjs-dist": "^4.10.38",
+    "pdfjs-dist": "^6.0.227",
     "react-compiler-runtime": "^1.0.0",
     "sass-embedded": "^1.100.0",
     "sharp": "^0.34.5",
