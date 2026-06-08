@@ -16,7 +16,6 @@ export interface Guide {
   title: string;
   state?: string | null;
   category?: string | null;
-  updatedAt?: string;
 }
 
 interface GuidesTableProps {
@@ -40,11 +39,6 @@ export function GuidesTable({ guides }: GuidesTableProps) {
     direction: "ascending",
   });
 
-  const formatter = new Intl.DateTimeFormat("en-US", {
-    timeZone: "UTC",
-    dateStyle: "medium",
-  });
-
   const handleGroupByChange = (keys: Selection) => {
     if (keys === "all") return;
     const selected = [...keys][0] as GroupBy;
@@ -65,13 +59,7 @@ export function GuidesTable({ guides }: GuidesTableProps) {
     const sortGuides = (guidesToSort: Guide[]) => {
       return [...guidesToSort].sort((a, b) => {
         let cmp: number;
-        if (sortDescriptor.column === "title") {
-          cmp = (a.title ?? "").localeCompare(b.title ?? "");
-        } else {
-          const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
-          const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
-          cmp = dateA - dateB;
-        }
+        cmp = (a.title ?? "").localeCompare(b.title ?? "");
         return sortDescriptor.direction === "descending" ? -cmp : cmp;
       });
     };
@@ -99,11 +87,6 @@ export function GuidesTable({ guides }: GuidesTableProps) {
     }
     return sortedGroups;
   }, [guides, groupBy, sortDescriptor]);
-
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return "—";
-    return formatter.format(new Date(dateString));
-  };
 
   if (!guides.length) {
     return <p>No guides found.</p>;
@@ -141,9 +124,6 @@ export function GuidesTable({ guides }: GuidesTableProps) {
                 <Column id="title" isRowHeader allowsSorting>
                   Name
                 </Column>
-                <Column id="updated" allowsSorting style={{ width: "0px" }}>
-                  Updated
-                </Column>
               </TableHeader>
               <TableBody>
                 {groupGuides.map((guide) => (
@@ -151,7 +131,6 @@ export function GuidesTable({ guides }: GuidesTableProps) {
                     <Cell>
                       <a href={`/guides/${guide.id}`}>{guide.title}</a>
                     </Cell>
-                    <Cell>{formatDate(guide.updatedAt)}</Cell>
                   </Row>
                 ))}
               </TableBody>
