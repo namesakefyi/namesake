@@ -3,6 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "license": "GPL-3.0",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "browserslist": [
     "defaults"
   ],
@@ -43,8 +46,6 @@
   "dependencies": {
     "@astrojs/check": "^0.9.9",
     "@astrojs/cloudflare": "13.6.0",
-    "@astrojs/markdoc": "^1.0.6",
-    "@astrojs/markdown-remark": "7.2.0",
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/react": "^5.0.6",
     "@astrojs/rss": "^4.0.18",
@@ -54,13 +55,10 @@
     "@hono/node-server": "^2.0.4",
     "@internationalized/date": "^3.12.2",
     "@maskito/core": "^5.2.2",
-    "@portabletext/react": "^6.2.0",
-    "@portabletext/types": "^4.0.2",
     "@remixicon/react": "^4.9.0",
     "@severo_bo/us-atlas-2023": "^4.0.0",
     "@xstate/react": "^6.1.0",
     "astro": "6.4.2",
-    "astro-portabletext": "^0.13.0",
     "browserslist": "^4.28.2",
     "cf-workers-og": "^3.0.1",
     "d3": "^7.9.0",
@@ -74,11 +72,9 @@
     "react-aria-components": "^1.18.0",
     "react-dom": "^19.2.6",
     "react-hook-form": "^7.77.0",
-    "react-is": "^19.2.6",
     "react-lite-youtube-embed": "^3.5.1",
     "rough-notation": "^0.5.1",
     "sanitize-html": "^2.17.4",
-    "styled-components": "^6.4.2",
     "topojson-client": "^3.1.0",
     "typescript": "^5.9.3",
     "ua-parser-js": "^2.0.10",
@@ -119,7 +115,6 @@
     "fake-indexeddb": "^6.2.5",
     "jsdom": "^29.1.1",
     "lightningcss": "^1.32.0",
-    "lodash": "^4.18.1",
     "nano-staged": "^1.0.2",
     "optimo": "^0.0.27",
     "pdfjs-dist": "^4.10.38",
