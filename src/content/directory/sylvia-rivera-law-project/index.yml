@@ -1,0 +1,14 @@
+name: Sylvia Rivera Law Project
+description: The Sylvia Rivera Law Project works to guarantee that all people are free to self-determine gender identity and expression, regardless of income or race, and without facing harassment, discrimination or violence.
+states:
+  - ny
+url: https://srlp.org/
+services:
+  - financialAid
+  - formFilling
+  - legal
+  - nameChangeClinic
+  - notary
+email: dst@srlp.org
+phone: 212-337-8550
+logo: ./logo.png

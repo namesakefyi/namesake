@@ -1,0 +1,12 @@
+name: Chosen Family Law Center
+description: The Chosen Family Law Center is building the legal framework to support dignity and justice for all family types. We pursue our mission through advocacy and education, legislative development, and direct legal services for those in need.
+states:
+  - ny
+url: https://chosenfamilylawcenter.org/
+services:
+  - notary
+  - formFilling
+  - legal
+email: contact@chosenfamilylawcenter.org
+phone: 732-639-1657
+logo: ./logo.webp

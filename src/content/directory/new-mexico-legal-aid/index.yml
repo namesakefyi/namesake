@@ -1,0 +1,11 @@
+name: New Mexico Legal Aid
+description: Our services range from education, advice, and brief services, to full representation in some cases. No one is denied access based on race, age, gender, religion, political affiliation, beliefs, or disability.
+states:
+  - nm
+url: https://newmexicolegalaid.org/
+services:
+  - formFilling
+  - legal
+  - notary
+phone: 833-545-4357
+logo: ./logo.png

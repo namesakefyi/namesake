@@ -1,0 +1,12 @@
+name: Legal Aid of North Carolina
+description: Trusted legal help that lifts up families, supports workers, and honors veterans — building a stronger North Carolina for all.
+states:
+  - nc
+url: https://legalaidnc.org/
+services:
+  - financialAid
+  - formFilling
+  - legal
+  - notary
+phone: 866-219-5262
+logo: ./logo.png

@@ -69,24 +69,3 @@ export const GUIDE_COSTS_BY_ID_QUERY = defineQuery(`
     costs
   }
 `);
-
-export const DIRECTORY_CONTACTS_LIST_QUERY = defineQuery(`
-  *[
-    _type == "contact" &&
-    defined(slug) &&
-    !unlisted &&
-    ($stateSlug == "" || $stateSlug in states[]->slug.current) &&
-    ($service == "" || $service in services)
-  ] {
-    name,
-    "slug": slug.current,
-    description,
-    "states": states[]->name | order(@ asc),
-    services,
-    logo,
-    email,
-    phone,
-    url,
-    officialPartner,
-  } | order(officialPartner desc, name asc)
-`);
