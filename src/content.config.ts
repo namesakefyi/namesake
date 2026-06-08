@@ -44,7 +44,10 @@ const contacts = defineCollection({
       ),
       officialPartner: z.boolean().default(false),
       email: z.email().optional(),
-      phone: z.string().optional(),
+      phone: z
+        .string()
+        .regex(/^\d{3}-\d{3}-\d{4}$/)
+        .optional(),
       logo: image().optional(),
     }),
 });
