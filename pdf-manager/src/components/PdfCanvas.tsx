@@ -77,7 +77,7 @@ export function PdfCanvas({
     async function load() {
       const scrollEl = scrollRef.current;
       if (!scrollEl) return;
-      const pdf = await pdfjsLib.getDocument(url).promise;
+      const pdf = await pdfjsLib.getDocument({ url }).promise;
       if (cancelled) return;
 
       const availableWidth = scrollEl.clientWidth - 32;

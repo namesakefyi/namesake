@@ -1,0 +1,12 @@
+name: Transgender Resource Center of New Mexico
+description: We support transgender, nonbinary, and gender nonconforming communities through direct services, education, and advocacy.
+states:
+  - nm
+url: https://tgrcnm.org/
+services:
+  - formFilling
+  - legal
+  - notary
+email: tgrcnm@tgrcnm.org
+phone: 505-200-9086
+logo: ./logo.webp

@@ -1,8 +1,0 @@
----
-import type { TextNodeProps } from "astro-portabletext/types";
-import { smartquotes } from "../../utils/smartquotes";
-
-export type Props = TextNodeProps;
----
-
-{smartquotes(Astro.props.node.text)}

@@ -1,13 +1,8 @@
-import type { Get } from "@sanity/codegen";
-import type { Guide } from "../sanity/sanity.types";
+import type { FormCost } from "../constants/forms";
 
-type GuideCostsField = Get<Guide, "costs">;
+export type { FormCost as Cost };
 
-export type Cost = NonNullable<GuideCostsField>[number];
-
-export type Costs = GuideCostsField | null;
-
-export const formatTotalCosts = (costs?: Costs) => {
+export const formatTotalCosts = (costs?: readonly FormCost[] | null) => {
   if (!costs || costs.length === 0) return "Free";
 
   const formatCurrency = (amount: number) =>

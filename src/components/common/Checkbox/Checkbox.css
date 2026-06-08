@@ -1,3 +1,17 @@
+.namesake-checkbox-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+
+  [slot="description"] {
+    font-size: var(--step--2);
+  }
+
+  &[data-disabled] [slot="description"] {
+    opacity: 0.3;
+  }
+}
+
 .namesake-checkbox {
   --selected-color: var(--highlight-background);
   --selected-color-pressed: var(--highlight-background);
@@ -31,7 +45,7 @@
     stroke-dasharray: 22px;
     stroke-dashoffset: 66;
     transform: translateY(-0.5px) translateX(1px);
-    transition: all 200ms ease-out;
+    transition: stroke-dashoffset 200ms ease-out;
   }
 
   &[data-focus-visible] .checkbox {

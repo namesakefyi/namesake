@@ -1,18 +1,15 @@
 ---
-import type { SanityImageSource } from "@sanity/image-url";
-import SanityImage from "./SanityImage.astro";
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 
 interface Props {
   title: string;
-  date: string;
+  date: Date | string;
   url: string;
   subhead?: string;
   authors?: string[] | null;
   description?: string;
-  image?: {
-    asset?: SanityImageSource;
-    alt?: string;
-  } | null;
+  image?: { src: ImageMetadata; alt: string } | null;
 }
 
 const { title, date, url, subhead, authors, description, image } = Astro.props;
@@ -37,13 +34,9 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
   {authors && <strong class="authors">By {authors.join(", ")}</strong>}
   {description && <p class="description">{description}</p>}
   {
-    image?.asset && (
+    image && (
       <a class="image" href={url} tabindex="-1">
-        <SanityImage
-          asset={image.asset}
-          alt={image.alt}
-          options={{ width: 800, height: 450 }}
-        />
+        <Image src={image.src} alt={image.alt} width={800} densities={[1, 2]} />
       </a>
     )
   }

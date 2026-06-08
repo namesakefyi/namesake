@@ -33,12 +33,27 @@ const meta: Meta<typeof FormTitleStep> = {
 
 export default meta;
 
+const sharedArgs = {
+  title: "Massachusetts Name Change Petition",
+  description:
+    "This guided form will help you complete your name change paperwork.",
+  onStart: () => console.log("Start clicked"),
+  pdfs: [
+    {
+      pdfId: "cjp27-petition-to-change-name-of-adult" as const,
+      title: "Petition to Change Name of Adult",
+      code: "CJP-27",
+    },
+  ],
+  totalSteps: 5,
+};
+
 export const Example = (args: FormTitleStepProps) => (
   <FormTitleStep {...args} />
 );
 
 Example.args = {
-  onStart: () => console.log("Start clicked"),
+  ...sharedArgs,
 };
 
 export const WithChildren = (args: FormTitleStepProps) => (
@@ -46,7 +61,7 @@ export const WithChildren = (args: FormTitleStepProps) => (
 );
 
 WithChildren.args = {
-  onStart: () => console.log("Start clicked"),
+  ...sharedArgs,
   children: (
     <div>
       <p>

@@ -100,6 +100,7 @@ describe("downloadPdf", () => {
       id: "test-form" as any,
       title: "Custom Form Name",
       jurisdiction: "MA",
+      canonicalUrl: "https://example.com",
       pdfPath: "public/forms/test-form.pdf",
       resolver: () => ({}),
     });

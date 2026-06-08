@@ -3,6 +3,16 @@ import type {
   RoughAnnotationType,
 } from "rough-notation/lib/model";
 
+export const ANNOTATION_TYPES = [
+  "highlight",
+  "underline",
+  "strike-through",
+  "bracket",
+  "circle",
+  "box",
+  "crossed-off",
+] as const satisfies readonly RoughAnnotationType[];
+
 export const annotationConfig: Record<
   RoughAnnotationType,
   Omit<RoughAnnotationConfig, "type">

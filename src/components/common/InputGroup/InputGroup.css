@@ -1,4 +1,6 @@
 .input-group {
+  min-width: 0;
+
   .react-aria-Group {
     display: flex;
     align-items: center;

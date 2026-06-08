@@ -55,7 +55,7 @@ const usaStates = [
   { name: "West Virginia", abbreviation: "WV", territory: false },
   { name: "Wisconsin", abbreviation: "WI", territory: false },
   { name: "Wyoming", abbreviation: "WY", territory: false },
-];
+] as const;
 
 /**
  * Jurisdictions, a.k.a. US States and territories.
@@ -67,4 +67,8 @@ export const JURISDICTIONS = usaStates.reduce(
   },
   {} as Record<string, string>,
 );
-export type Jurisdiction = keyof typeof JURISDICTIONS;
+
+export type Jurisdiction = (typeof usaStates)[number]["abbreviation"];
+
+/** Lowercase state/territory abbreviation, matching content collection state IDs. */
+export type StateId = Lowercase<Jurisdiction>;

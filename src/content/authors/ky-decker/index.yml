@@ -1,0 +1,9 @@
+name: Ky Decker
+role: Co-Founder, Namesake
+bio: "Ky Decker (they/them) leads Namesake's product and design. Previously, they've worked as a product designer and design engineer at Scribe, Cityblock, and Dropbox."
+avatar: ./avatar.jpg
+socialLinks:
+  - name: Website
+    url: "https://ky.fyi"
+  - name: GitHub
+    url: "https://github.com/kydecker"

@@ -1,13 +1,28 @@
 ---
-import { sanityClient } from "sanity:client";
+import { getCollection, getEntry } from "astro:content";
 import PageHeader from "../../components/PageHeader.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { GUIDES_INDEX_QUERY } from "../../sanity/queries";
 import { GuidesTable } from "./_components/GuidesTable";
 
-const { params } = Astro.props;
+const allGuides = await getCollection("guides", ({ data }) => !data.unlisted);
 
-const guides = await sanityClient.fetch(GUIDES_INDEX_QUERY, params ?? {});
+const guides = await Promise.all(
+  allGuides.map(async (guide) => {
+    const stateEntry = guide.data.state
+      ? await getEntry(guide.data.state)
+      : null;
+    const categoryEntry = guide.data.category
+      ? await getEntry(guide.data.category)
+      : null;
+
+    return {
+      id: guide.id,
+      title: guide.data.title,
+      state: stateEntry?.data.name ?? null,
+      category: categoryEntry?.data.name ?? null,
+    };
+  }),
+);
 ---
 
 <BaseLayout

@@ -26,6 +26,7 @@ interface DefinitionParams {
   title: string;
   code: string;
   jurisdiction: string;
+  canonicalUrl: string;
   pdfFields: PdfFieldInfo[];
 }
 
@@ -35,6 +36,7 @@ function generateDefinition({
   title,
   code,
   jurisdiction,
+  canonicalUrl,
   pdfFields,
 }: DefinitionParams): string {
   const props = [
@@ -44,6 +46,7 @@ function generateDefinition({
     ...(jurisdiction && jurisdiction !== "federal"
       ? [`jurisdiction: "${jurisdiction}",`]
       : []),
+    `canonicalUrl: "${canonicalUrl}",`,
     "pdfPath: pdf,",
   ];
   const fieldLines = pdfFields.map((f) => `  ${escapeKey(f.name)}: undefined,`);
@@ -164,6 +167,7 @@ export interface WriteDefinitionFilesParams {
   title: string;
   code: string;
   jurisdiction: string;
+  canonicalUrl: string;
   pdfDir: string;
   pdfDestPath: string;
   indexPath: string;
@@ -178,6 +182,7 @@ export function writeDefinitionFiles({
   title,
   code,
   jurisdiction,
+  canonicalUrl,
   pdfDir,
   pdfDestPath,
   indexPath,
@@ -193,6 +198,7 @@ export function writeDefinitionFiles({
     title,
     code,
     jurisdiction,
+    canonicalUrl,
     pdfFields,
   });
   writeFileSync(indexPath, `${definition}\n`);

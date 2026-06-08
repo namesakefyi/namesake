@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: var(--space-m);
   width: 100%;
+  min-width: 0;
 
   &:not([data-inline]) {
     min-height: 100dvh;
@@ -12,6 +13,7 @@
 
 .form-container-content {
   width: 100%;
+  min-width: 0;
 
   .form-container:not([data-inline]) & {
     padding-block-end: var(--space-xl);
@@ -23,6 +25,15 @@
 }
 
 .form-container[data-inline] {
+  padding-block-end: var(--space-xl);
+  margin-block: var(--space-xl);
+  border: 1px solid var(--border-color);
+  box-shadow:
+    5px 5px 0 -3px var(--background-color),
+    5px 5px 0 -2px var(--border-color),
+    10px 10px 0 -5px var(--background-color),
+    10px 10px 0 -4px var(--border-color);
+
   .form-title-step {
     padding-block: 0;
   }

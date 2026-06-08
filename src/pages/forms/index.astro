@@ -1,37 +1,27 @@
 ---
-import { sanityClient } from "sanity:client";
+import { getCollection } from "astro:content";
 import FormLink from "../../components/FormLink.astro";
 import PageHeader from "../../components/PageHeader.astro";
-import { type FormSlug, getFormConfig } from "../../constants/forms";
+import type { FormSlug } from "../../constants/forms";
+import { getFormConfig } from "../../forms/getFormConfig";
 import { getFormPdfMetadata } from "../../forms/getFormPdfMetadata";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { FORMS_INDEX_QUERY } from "../../sanity/queries";
-import type { FORMS_INDEX_QUERY_RESULT } from "../../sanity/sanity.types";
 import { formatTimeEstimate } from "../../utils/formatTimeEstimate";
 
-const { params } = Astro.props;
+const allForms = await getCollection("forms", ({ data }) => !data.unlisted);
 
-const forms: FORMS_INDEX_QUERY_RESULT = await sanityClient.fetch(
-  FORMS_INDEX_QUERY,
-  params ?? {},
-);
-
-// Get PDF metadata and step count for each form
 const formsWithPdfs = await Promise.all(
-  forms.map(async (form) => {
-    const formSlug = form.slug.current as FormSlug;
-    const config = getFormConfig(formSlug);
-    const pdfs = config ? await getFormPdfMetadata(formSlug) : [];
+  allForms.map(async (form) => {
+    const config = getFormConfig(form.id);
+    const pdfs = config ? await getFormPdfMetadata(form.id as FormSlug) : [];
     const stepCount = config?.steps.length ?? 0;
     const timeEstimate = formatTimeEstimate(stepCount);
 
     return {
-      title: form.title,
-      slug: form.slug,
+      title: form.data.title,
+      slug: form.id,
       pdfs,
-      stepCount,
       timeEstimate,
-      updatedAt: form._updatedAt,
     };
   }),
 );
@@ -52,10 +42,9 @@ const formsWithPdfs = await Promise.all(
         formsWithPdfs.map((form) => (
           <FormLink
             title={form.title}
-            slug={form.slug.current}
+            slug={form.slug}
             documentCount={form.pdfs.length}
             timeEstimate={form.timeEstimate}
-            updatedAt={form.updatedAt}
           />
         ))
       ) : (
