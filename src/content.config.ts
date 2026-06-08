@@ -31,8 +31,8 @@ const categories = defineCollection({
   }),
 });
 
-const contacts = defineCollection({
-  loader: glob({ base: "./src/content/contacts", pattern: "**/index.yml" }),
+const directory = defineCollection({
+  loader: glob({ base: "./src/content/directory", pattern: "**/index.yml" }),
   schema: ({ image }) =>
     z.object({
       name: z.string(),
@@ -119,7 +119,7 @@ const states = defineCollection({
 export const collections = {
   authors,
   categories,
-  contacts,
+  directory,
   pages,
   posts,
   press,

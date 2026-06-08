@@ -26,7 +26,7 @@ const service = SERVICES.some((s) => s.value === serviceParam)
 
 const [statesCollection, filteredEntries] = await Promise.all([
   getCollection("states"),
-  getCollection("contacts", ({ data }) => {
+  getCollection("directory", ({ data }) => {
     if (stateSlug && !data.states.some((ref) => ref.id === stateSlug))
       return false;
     if (service && !data.services.includes(service as Service)) return false;
