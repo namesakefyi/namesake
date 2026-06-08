@@ -2,7 +2,6 @@ import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import sanity from "@sanity/astro";
 import {
   defineConfig,
   fontProviders,
@@ -12,7 +11,7 @@ import browserslist from "browserslist";
 import { browserslistToTargets } from "lightningcss";
 
 export default defineConfig({
-  output: "server",
+  output: "static",
   adapter: cloudflare({
     imageService: "compile",
   }),
@@ -20,17 +19,7 @@ export default defineConfig({
     service: passthroughImageService(),
   },
   site: "https://namesake.fyi",
-  integrations: [
-    sitemap(),
-    mdx(),
-    sanity({
-      projectId: "k4p1j15y",
-      dataset: "production",
-      useCdn: true,
-      apiVersion: "2025-09-19",
-    }),
-    react(),
-  ],
+  integrations: [sitemap(), mdx(), react()],
   prefetch: true,
   trailingSlash: "never",
   build: {

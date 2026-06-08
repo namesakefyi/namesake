@@ -11,8 +11,7 @@
       "!**/src/styles/theme.css",
       "!.astro",
       "!worker-configuration.d.ts",
-      "!**/coverage",
-      "!**/src/sanity/sanity.types.ts"
+      "!**/coverage"
     ]
   },
   "vcs": {

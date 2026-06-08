@@ -1,3 +1,5 @@
+export const prerender = false;
+
 import { env } from "cloudflare:workers";
 import type { APIRoute } from "astro";
 import { z } from "astro/zod";

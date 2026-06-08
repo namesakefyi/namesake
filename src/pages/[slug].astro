@@ -1,14 +1,21 @@
 ---
-import { getEntry, render } from "astro:content";
+import { type CollectionEntry, getCollection, render } from "astro:content";
 import TableOfContents from "../components/TableOfContents.astro";
 import ProseLayout from "../layouts/ProseLayout.astro";
 
-const { slug } = Astro.params;
-if (!slug) return Astro.redirect("/404");
+export async function getStaticPaths() {
+  const pages = await getCollection("pages");
+  return pages.map((page) => ({
+    params: { slug: page.id },
+    props: { page },
+  }));
+}
 
-const page = await getEntry("pages", slug);
-if (!page) return Astro.redirect("/404");
+interface Props {
+  page: CollectionEntry<"pages">;
+}
 
+const { page } = Astro.props;
 const { Content, headings } = await render(page);
 ---
 
