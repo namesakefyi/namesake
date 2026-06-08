@@ -132,7 +132,7 @@
     "tsx": "^4.22.4",
     "vite": "^7.3.3",
     "vitest": "4.1.8",
-    "wrangler": "^4.96.0"
+    "wrangler": "^4.98.0"
   },
   "packageManager": "pnpm@11.1.2",
   "homepage": "https://namesake.fyi",
