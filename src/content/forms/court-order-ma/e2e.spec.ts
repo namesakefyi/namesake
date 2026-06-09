@@ -109,10 +109,12 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
       page.getByRole("heading", { name: "Where were you born?" }),
     ).toBeVisible();
     await page.getByRole("textbox", { name: "City" }).fill("Birthcity");
+    await page.getByRole("combobox", { name: "Country" }).click();
     await page.getByRole("combobox", { name: "Country" }).fill("unite");
     await page
       .getByRole("option", { name: "United States of America" })
       .click();
+    await page.getByRole("combobox", { name: "State" }).click();
     await page.getByRole("combobox", { name: "State" }).fill("mas");
     await page.getByRole("option", { name: "Massachusetts" }).click();
     await page.getByRole("button", { name: "Continue" }).click();
