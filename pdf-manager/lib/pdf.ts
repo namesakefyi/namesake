@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import type { PDFField, PDFPage } from "@cantoo/pdf-lib";
-import { PDFDocument, PDFDropdown, PDFName, PDFString } from "@cantoo/pdf-lib";
+import { PDFDocument, PDFDropdown, PDFName } from "@cantoo/pdf-lib";
 
 // Fields within this many PDF points vertically are treated as the same row
 // and sorted left-to-right within that row. ~10pt ≈ 4mm.
