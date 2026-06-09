@@ -96,20 +96,26 @@ test("Social Security", async ({ page }, testInfo) => {
     await page
       .getByRole("textbox", { name: "City of birth" })
       .fill("Springfield");
-    await page.getByRole("combobox", { name: "Country" }).click();
-    await page.getByRole("combobox", { name: "Country" }).fill("can");
-    await page.getByRole("option", { name: "Canada" }).click();
-    await expect(page.getByRole("combobox", { name: "State" })).toHaveCount(0);
 
-    await page.getByRole("combobox", { name: "Country" }).click();
-    await page.getByRole("combobox", { name: "Country" }).fill("unite");
-    await page
-      .getByRole("option", { name: "United States of America" })
-      .click();
-    await expect(page.getByRole("combobox", { name: "State" })).toBeVisible();
-    await page.getByRole("combobox", { name: "State" }).click();
-    await page.getByRole("combobox", { name: "State" }).fill("mas");
-    await page.getByRole("option", { name: "Massachusetts" }).click();
+    const countryCombobox = page.getByRole("combobox", { name: "Country" });
+    await countryCombobox.fill("canada");
+    await countryCombobox.press("ArrowDown");
+    await countryCombobox.press("Enter");
+    await expect(countryCombobox).toHaveValue("Canada");
+
+    const stateCombobox = page.getByRole("combobox", { name: "State" });
+    await expect(stateCombobox).toHaveCount(0);
+
+    await countryCombobox.fill("united sta");
+    await countryCombobox.press("ArrowDown");
+    await countryCombobox.press("Enter");
+    await expect(countryCombobox).toHaveValue("United States of America");
+
+    await expect(stateCombobox).toBeVisible();
+    await stateCombobox.fill("mas");
+    await stateCombobox.press("ArrowDown");
+    await stateCombobox.press("Enter");
+    await expect(stateCombobox).toHaveValue("Massachusetts");
 
     await page.getByRole("button", { name: "Continue" }).click();
   });
@@ -285,9 +291,14 @@ test("Social Security", async ({ page }, testInfo) => {
       .getByRole("textbox", { name: "Street address" })
       .fill("200 Oak St");
     await page.getByRole("textbox", { name: "City" }).fill("Boston");
-    await page.getByRole("combobox", { name: "State" }).click();
-    await page.getByRole("combobox", { name: "State" }).fill("ma");
-    await page.getByRole("option", { name: "Massachusetts" }).click();
+
+    const stateCombobox = page.getByRole("combobox", { name: "State" });
+    await stateCombobox.click();
+    await stateCombobox.fill("mass");
+    await stateCombobox.press("ArrowDown");
+    await stateCombobox.press("Enter");
+    await expect(stateCombobox).toHaveValue("Massachusetts");
+
     await page.getByRole("textbox", { name: "ZIP" }).fill("02110");
     await page.getByRole("button", { name: "Continue" }).click();
   });

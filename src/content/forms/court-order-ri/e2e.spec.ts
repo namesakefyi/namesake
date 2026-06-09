@@ -95,8 +95,12 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
       .getByRole("textbox", { name: "Street address" })
       .fill("100 Main St");
     await page.getByRole("textbox", { name: "City" }).fill("Providence");
-    await page.getByRole("combobox", { name: "State" }).click();
-    await page.getByRole("option", { name: "Rhode Island" }).click();
+
+    const stateCombobox = page.getByRole("combobox", { name: "State" });
+    await stateCombobox.fill("rhode is");
+    await stateCombobox.press("ArrowDown");
+    await stateCombobox.press("Enter");
+
     await page.getByRole("textbox", { name: "ZIP" }).fill("02903");
     await page.getByRole("button", { name: "Continue" }).click();
   });
@@ -132,13 +136,16 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
       page.getByRole("heading", { name: "Where were you born?" }),
     ).toBeVisible();
     await page.getByRole("textbox", { name: "City" }).fill("Providence");
-    await page.getByRole("combobox", { name: "Country" }).click();
-    await page
-      .getByRole("option", { name: "United States of America" })
-      .click();
-    await expect(page.getByRole("combobox", { name: "State" })).toBeVisible();
-    await page.getByRole("combobox", { name: "State" }).click();
-    await page.getByRole("option", { name: "Rhode Island" }).click();
+
+    const countryCombobox = page.getByRole("combobox", { name: "Country" });
+    await countryCombobox.fill("united states");
+    await countryCombobox.press("ArrowDown");
+    await countryCombobox.press("Enter");
+
+    const stateCombobox = page.getByRole("combobox", { name: "State" });
+    await stateCombobox.fill("rhode is");
+    await stateCombobox.press("ArrowDown");
+    await stateCombobox.press("Enter");
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
@@ -198,10 +205,14 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
     await page
       .getByRole("textbox", { name: "Occupation" })
       .fill("Software Engineer");
-    await page
-      .getByRole("combobox", { name: "Marital status (optional)" })
-      .click();
-    await page.getByRole("option", { name: "Single" }).click();
+
+    const maritalStatusCombobox = page.getByRole("combobox", {
+      name: "Marital status (optional)",
+    });
+    await maritalStatusCombobox.fill("single");
+    await maritalStatusCombobox.press("ArrowDown");
+    await maritalStatusCombobox.press("Enter");
+
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
