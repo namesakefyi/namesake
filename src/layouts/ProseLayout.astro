@@ -271,10 +271,6 @@ const headerDescription =
         opacity: 1;
       }
 
-      &[open] summary {
-        font-weight: var(--weight-bold);
-      }
-
       &[open] summary::before {
         rotate: 90deg;
       }
@@ -286,6 +282,7 @@ const headerDescription =
       list-style-type: none;
       padding-inline-start: var(--details-indent);
       padding-block: var(--space-2xs);
+      font-weight: var(--weight-bold);
       cursor: pointer;
       margin: 0;
 
