@@ -1,9 +1,10 @@
+import type { FormCost } from "../../../constants/forms";
 import { formatCurrency } from "../../../utils/formatCurrency";
-import { type Costs, formatTotalCosts } from "../../../utils/formatTotalCosts";
+import { formatTotalCosts } from "../../../utils/formatTotalCosts";
 import "./CostsTable.css";
 
 interface CostsTableProps {
-  costs: Costs;
+  costs?: readonly FormCost[] | null;
 }
 
 export function CostsTable({ costs }: CostsTableProps) {
@@ -23,7 +24,7 @@ export function CostsTable({ costs }: CostsTableProps) {
       </thead>
       <tbody>
         {costs.map((cost) => (
-          <tr key={cost._key}>
+          <tr key={cost.title}>
             <td>
               {cost.title}
               {cost.required === "notRequired" && " (optional)"}

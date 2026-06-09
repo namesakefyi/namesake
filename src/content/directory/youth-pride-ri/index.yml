@@ -1,0 +1,11 @@
+name: Youth Pride RI
+description: Youth Pride, Inc.'s mission is to meet the unique, ongoing needs of LGBTQIA2S+ youth and young adults through direct service, support, advocacy, and education.
+states:
+  - ri
+url: https://www.youthprideri.org/
+services:
+  - formFilling
+  - nameChangeClinic
+email: info@youthprideri.org
+phone: 401-421-5626
+logo: ./logo.png

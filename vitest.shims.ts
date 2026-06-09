@@ -1,13 +1,12 @@
 /// <reference path="./worker-configuration.d.ts" />
 
 /**
- * Virtual modules for Astro/Sanity/Workers import specifiers that Vite cannot resolve during Vitest.
+ * Virtual modules for Astro/Workers import specifiers that Vite cannot resolve during Vitest.
  *
  * @see https://vitest.dev/config/#plugins — Vitest uses Vite's plugin pipeline (`resolveId` / `load`).
  * @see https://vite.dev/guide/api-plugin.html — virtual module ids conventionally use a `\0` prefix.
  */
 
-import type { SanityClient } from "@sanity/client";
 import type { Plugin } from "vitest/config";
 
 type Shim<Spec extends string = string> = Readonly<{
@@ -22,7 +21,7 @@ function virtualId(slug: string): `\0${string}` {
   return `\0vitest:${slug}` as `\0${string}`;
 }
 
-/** Drops compile-only `typeAlignment` (`satisfies` Wrangler / Sanity types against emitted `source`). */
+/** Drops compile-only `typeAlignment` (`satisfies` Wrangler types against emitted `source`). */
 function defineShim<const Spec extends string>(
   def: Shim<Spec> & { typeAlignment: unknown },
 ): Shim<Spec> {
@@ -32,14 +31,6 @@ function defineShim<const Spec extends string>(
 }
 
 const shims = [
-  defineShim({
-    specifier: "sanity:client",
-    virtualModuleId: virtualId("sanity-client"),
-    source: "export const sanityClient = {};".trimStart(),
-    typeAlignment: {
-      sanityClient: {} as SanityClient,
-    } satisfies { sanityClient: SanityClient },
-  }),
   defineShim({
     specifier: "cloudflare:workers",
     virtualModuleId: virtualId("cloudflare-workers"),

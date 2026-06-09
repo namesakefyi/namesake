@@ -1,0 +1,11 @@
+name: Haus of Codec
+description: Haus of Codec is providing a safe housing space for youth ages 18-24 to call home and help them find their own, more permanent housing solutions and workforce development opportunities.
+states:
+  - ri
+url: https://www.hausofcodec.org/
+services:
+  - formFilling
+  - nameChangeClinic
+email: info@hausofcodec.org
+phone: 401-484-7465
+logo: ./logo.png

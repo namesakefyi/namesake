@@ -11,8 +11,7 @@
       "!**/src/styles/theme.css",
       "!.astro",
       "!worker-configuration.d.ts",
-      "!**/coverage",
-      "!**/src/sanity/sanity.types.ts"
+      "!**/coverage"
     ]
   },
   "vcs": {
@@ -22,7 +21,9 @@
   },
   "formatter": {
     "enabled": true,
-    "indentStyle": "space"
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf"
   },
   "assist": {
     "actions": {

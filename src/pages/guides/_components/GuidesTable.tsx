@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import type { Selection, SortDescriptor } from "react-aria-components";
+import type { Selection } from "react-aria-components";
 import {
   Cell,
   Column,
@@ -9,13 +9,17 @@ import {
   TableHeader,
 } from "../../../components/common/Table";
 import { Tag, TagGroup } from "../../../components/common/TagGroup";
-import type { GUIDES_INDEX_QUERY_RESULT } from "../../../sanity/sanity.types";
 import "./GuidesTable.css";
 
-export type Guide = GUIDES_INDEX_QUERY_RESULT[number];
+export interface Guide {
+  id: string;
+  title: string;
+  state?: string | null;
+  category?: string | null;
+}
 
 interface GuidesTableProps {
-  guides: GUIDES_INDEX_QUERY_RESULT;
+  guides: Guide[];
 }
 
 type GroupBy = "all" | "state" | "category";
@@ -28,17 +32,11 @@ const getInitialGroupBy = (): GroupBy => {
   return "all";
 };
 
+const sortGuides = (guidesToSort: Guide[]) =>
+  [...guidesToSort].sort((a, b) => a.title.localeCompare(b.title));
+
 export function GuidesTable({ guides }: GuidesTableProps) {
   const [groupBy, setGroupBy] = useState<GroupBy>(getInitialGroupBy);
-  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: "title",
-    direction: "ascending",
-  });
-
-  const formatter = new Intl.DateTimeFormat("en-US", {
-    timeZone: "UTC",
-    dateStyle: "medium",
-  });
 
   const handleGroupByChange = (keys: Selection) => {
     if (keys === "all") return;
@@ -57,25 +55,10 @@ export function GuidesTable({ guides }: GuidesTableProps) {
   };
 
   const groupedGuides = useMemo(() => {
-    const sortGuides = (guidesToSort: Guide[]) => {
-      return [...guidesToSort].sort((a, b) => {
-        let cmp: number;
-        if (sortDescriptor.column === "title") {
-          cmp = (a.title ?? "").localeCompare(b.title ?? "");
-        } else {
-          const dateA = a._updatedAt ? new Date(a._updatedAt).getTime() : 0;
-          const dateB = b._updatedAt ? new Date(b._updatedAt).getTime() : 0;
-          cmp = dateA - dateB;
-        }
-        return sortDescriptor.direction === "descending" ? -cmp : cmp;
-      });
-    };
-
     if (groupBy === "all") {
       return { All: sortGuides(guides) };
     }
 
-    // Use Map to preserve insertion order (order from Sanity)
     const groups = new Map<string, Guide[]>();
     for (const guide of guides) {
       const key = guide[groupBy] ?? "Other";
@@ -84,23 +67,15 @@ export function GuidesTable({ guides }: GuidesTableProps) {
       groups.set(key, existing);
     }
 
-    // For states, sort alphabetically; for categories, preserve Sanity order
     const keys = [...groups.keys()];
-    if (groupBy === "state") {
-      keys.sort();
-    }
+    if (groupBy === "state") keys.sort();
 
     const sortedGroups: Record<string, Guide[]> = {};
     for (const key of keys) {
       sortedGroups[key] = sortGuides(groups.get(key) ?? []);
     }
     return sortedGroups;
-  }, [guides, groupBy, sortDescriptor]);
-
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return "—";
-    return formatter.format(new Date(dateString));
-  };
+  }, [guides, groupBy]);
 
   if (!guides.length) {
     return <p>No guides found.</p>;
@@ -131,26 +106,18 @@ export function GuidesTable({ guides }: GuidesTableProps) {
             <Table
               aria-label={groupBy === "all" ? "Guides" : `${group} guides`}
               className="guides-table"
-              sortDescriptor={sortDescriptor}
-              onSortChange={setSortDescriptor}
             >
               <TableHeader>
-                <Column id="title" isRowHeader allowsSorting>
+                <Column id="title" isRowHeader>
                   Name
-                </Column>
-                <Column id="updated" allowsSorting style={{ width: "0px" }}>
-                  Updated
                 </Column>
               </TableHeader>
               <TableBody>
                 {groupGuides.map((guide) => (
-                  <Row key={guide.slug.current}>
+                  <Row key={guide.id}>
                     <Cell>
-                      <a href={`/guides/${guide.slug?.current}`}>
-                        {guide.title ?? ""}
-                      </a>
+                      <a href={`/guides/${guide.id}`}>{guide.title}</a>
                     </Cell>
-                    <Cell>{formatDate(guide._updatedAt)}</Cell>
                   </Row>
                 ))}
               </TableBody>

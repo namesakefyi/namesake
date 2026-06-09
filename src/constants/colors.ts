@@ -5,15 +5,18 @@ type Color = {
   forText?: boolean;
 };
 
-export type NamesakeColor =
-  | "purple"
-  | "pink"
-  | "blue"
-  | "yellow"
-  | "green"
-  | "brown"
-  | "black"
-  | "white";
+export const COLOR_KEYS = [
+  "purple",
+  "pink",
+  "blue",
+  "yellow",
+  "green",
+  "brown",
+  "black",
+  "white",
+] as const;
+
+export type NamesakeColor = (typeof COLOR_KEYS)[number];
 
 export const COLORS: Record<NamesakeColor, Color> = {
   purple: {

@@ -1,15 +1,14 @@
-import type { PortableTextProps } from "@portabletext/react";
-import { PortableText } from "@portabletext/react";
-import { RiMegaphoneLine } from "@remixicon/react";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FormProvider } from "react-hook-form";
-import { type FormSlug, getFormConfig } from "../../../constants/forms";
+import type { FormSlug } from "../../../constants/forms";
 import { createFormSubmitHandler } from "../../../forms/createFormSubmitHandler";
-import type { FormPdfMetadata } from "../../../forms/getFormPdfMetadata";
+import { getFormConfig } from "../../../forms/getFormConfig";
+import {
+  type FormPdfMetadata,
+  getFormPdfMetadata,
+} from "../../../forms/getFormPdfMetadata";
 import { useFormData } from "../../../forms/useFormData";
 import { useFormState } from "../../../forms/useFormState";
-import type { Costs } from "../../../utils/formatTotalCosts";
-import { Banner } from "../../common/Banner";
 import { ProgressCircle } from "../../common/ProgressCircle";
 import { FormCompleteStep } from "../FormCompleteStep";
 import { FormNavigation } from "../FormNavigation";
@@ -19,46 +18,28 @@ import { FormStepContext } from "./FormStepContext";
 import "./FormContainer.css";
 
 export interface FormContainerProps {
-  /** Form slug to look up config. Must be registered in getFormConfig. */
   slug: FormSlug;
-
-  /** The title of the form. */
-  title: string;
-
-  /** An optional description to provide more context. */
-  description?: string | null;
-
-  /** Optional banner content (Portable Text) to display on the title step. */
-  banner?: PortableTextProps["value"] | null;
-
-  /** The PDF metadata for forms that will be generated. */
-  pdfs?: FormPdfMetadata[];
-
-  /** The costs associated with this form. */
-  costs?: Costs | null;
 
   /** Render inline within a page rather than as a full-page experience. */
   inline?: boolean;
+
+  /** Optional content to render on the title step (e.g. a <Banner>). */
+  children?: React.ReactNode;
 }
 
 export function FormContainer({
   slug,
-  title,
-  description,
-  banner,
-  pdfs,
-  costs,
   inline = false,
+  children,
 }: FormContainerProps) {
   const config = getFormConfig(slug);
+  if (!config) throw new Error(`No form config found for slug: ${slug}`);
+  const { title, description, costs, steps } = config;
 
-  if (!config) {
-    throw new Error(
-      `FormContainer: No form registered for slug "${slug}". Add it to getFormConfig.`,
-    );
-  }
-
-  const { steps } = config;
+  const [pdfs, setPdfs] = useState<FormPdfMetadata[]>([]);
+  useEffect(() => {
+    getFormPdfMetadata(slug).then(setPdfs);
+  }, [slug]);
   const form = useFormData(config);
   const onSubmit = createFormSubmitHandler(config, form);
 
@@ -171,11 +152,7 @@ export function FormContainer({
             onStart={onStart}
             headingLevel={inline ? 2 : 1}
           >
-            {banner && (
-              <Banner icon={RiMegaphoneLine}>
-                <PortableText value={banner} />
-              </Banner>
-            )}
+            {children}
           </FormTitleStep>
         );
       case "filling":
@@ -191,7 +168,7 @@ export function FormContainer({
         return (
           <FormCompleteStep
             title={title}
-            slug={config.slug}
+            slug={slug}
             onRedownload={onSubmit}
             inline={inline}
             headingLevel={inline ? 2 : 1}
@@ -207,8 +184,8 @@ export function FormContainer({
     pdfs,
     title,
     description,
-    banner,
-    config.slug,
+    children,
+    slug,
     totalSteps,
     onStart,
     onSubmit,
@@ -234,7 +211,11 @@ export function FormContainer({
   if (isLoading) {
     return (
       <section
-        className="form-container form-container-loading"
+        className={
+          inline
+            ? "form-container form-container-loading not-content"
+            : "form-container form-container-loading"
+        }
         data-inline={inline || undefined}
         ref={containerRef}
       >
@@ -247,7 +228,7 @@ export function FormContainer({
     <FormProvider {...form}>
       <FormStepContext.Provider value={stepContextValue}>
         <section
-          className="form-container"
+          className={inline ? "form-container not-content" : "form-container"}
           data-inline={inline || undefined}
           ref={containerRef}
         >

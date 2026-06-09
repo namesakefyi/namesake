@@ -70,10 +70,7 @@ describe("AddressField", () => {
     });
     const zipInput = screen.getByLabelText("ZIP");
 
-    expect(streetAddressInput).toHaveAttribute(
-      "autocomplete",
-      "street-address",
-    );
+    expect(streetAddressInput).toHaveAttribute("autocomplete", "address-line1");
     expect(cityInput).toHaveAttribute("autocomplete", "address-level2");
     expect(stateSelect).toHaveAttribute("autocomplete", "address-level1");
     expect(zipInput).toHaveAttribute("autocomplete", "postal-code");
@@ -112,6 +109,86 @@ describe("AddressField", () => {
     expect(cityInput).toHaveAttribute("name", "mailingCity");
     expect(stateSelect).toHaveAttribute("name", "mailingState");
     expect(zipInput).toHaveAttribute("name", "mailingZipCode");
+  });
+
+  it("does not show address2 field or toggle by default", () => {
+    renderWithFormProvider(<AddressField type="residence" />);
+
+    expect(
+      screen.queryByLabelText("Apartment, suite, unit, etc."),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", {
+        name: "Add apartment, suite, unit, etc.",
+      }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("shows toggle instead of address2 field when includeAddress2 is true", () => {
+    renderWithFormProvider(<AddressField type="residence" includeAddress2 />);
+
+    expect(
+      screen.getByRole("button", { name: "Add apartment, suite, unit, etc." }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByLabelText("Apartment, suite, unit, etc."),
+    ).not.toBeInTheDocument();
+  });
+
+  it("reveals address2 field when toggle is clicked", async () => {
+    renderWithFormProvider(<AddressField type="residence" includeAddress2 />);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Add apartment, suite, unit, etc." }),
+    );
+
+    expect(
+      screen.getByLabelText("Apartment, suite, unit, etc."),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", {
+        name: "Add apartment, suite, unit, etc.",
+      }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("shows address2 field immediately when field has a pre-existing value", () => {
+    renderWithFormProvider(<AddressField type="residence" includeAddress2 />, {
+      defaultValues: { residenceStreetAddress2: "Apt 4B" },
+    });
+
+    const address2Input = screen.getByLabelText("Apartment, suite, unit, etc.");
+    expect(address2Input).toBeInTheDocument();
+    expect(address2Input).toHaveValue("Apt 4B");
+    expect(
+      screen.queryByRole("button", {
+        name: "Add apartment, suite, unit, etc.",
+      }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("uses correct field name and autocomplete for address2", async () => {
+    renderWithFormProvider(<AddressField type="residence" includeAddress2 />);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Add apartment, suite, unit, etc." }),
+    );
+
+    const address2Input = screen.getByLabelText("Apartment, suite, unit, etc.");
+    expect(address2Input).toHaveAttribute("name", "residenceStreetAddress2");
+    expect(address2Input).toHaveAttribute("autocomplete", "address-line2");
+  });
+
+  it("uses correct field name for mailing address2", async () => {
+    renderWithFormProvider(<AddressField type="mailing" includeAddress2 />);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Add apartment, suite, unit, etc." }),
+    );
+
+    expect(
+      screen.getByLabelText("Apartment, suite, unit, etc."),
+    ).toHaveAttribute("name", "mailingStreetAddress2");
   });
 
   it("does not show county selection by default", () => {

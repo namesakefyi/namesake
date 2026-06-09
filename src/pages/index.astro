@@ -1,57 +1,45 @@
 ---
-export const prerender = true;
-
 import { Image } from "astro:assets";
-import { sanityClient } from "sanity:client";
 import { RiArrowRightLine } from "@remixicon/react";
 import Sponsors from "../components/Sponsors.astro";
 import SupportMap from "../components/SupportMap.astro";
-import PortableText from "../components/text/PortableText.astro";
 import { siteInfo } from "../constants/site-info";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { urlForImage } from "../sanity/lib/urlForImage";
-import { HOME_PAGE_QUERY } from "../sanity/queries";
-import heroIllustration from "./home/_hero-form.png";
-
-const page = await sanityClient.fetch(HOME_PAGE_QUERY);
-
-if (!page) return Astro.redirect("/404");
+import passport from "./home/passport.png";
 ---
 
 <BaseLayout
-  title={page.title}
-  description={page.description}
-  ogImage={page.ogImage?.asset
-    ? urlForImage(page.ogImage.asset).url()
-    : undefined}
-  ogAlt={page.ogImage?.alt}
+  title={siteInfo.title}
+  description={siteInfo.description}
+  ogImage={siteInfo.image.src}
+  ogAlt={siteInfo.image.alt}
 >
-  <div class="home">
-    <h1>
-      <span>Your name is</span>
-      <span class="hero-highlight">yours to change</span>
-    </h1>
-    <div class="hero">
-      <Image
-        src={heroIllustration}
-        alt="Some snails and flowers on top of a court order document"
-        class="illustration"
-        widths={[800, 1200, 1800]}
-        sizes={`(max-width: 400px) 800px, (max-width: 600px) 1200px, 1800px`}
-      />
-    </div>
-    <section class="content">
-      <PortableText value={page.content} />
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Your name is <span class="hero-highlight">yours</span> to change</h1>
+      <p class="subtitle">
+        Namesake publishes name change guides and tools for trans people in the
+        U.S. It's free, <a href={siteInfo.socialLinks.github.href}
+          >open&nbsp;source</a
+        >, and always will be.
+      </p>
       <div class="buttons">
         <a href={siteInfo.urls.guides} class="button primary"
           >Browse guides <RiArrowRightLine className="icon" /></a
         >
         <a href={siteInfo.urls.chat}>Join us on Discord</a>
       </div>
-    </section>
-    <SupportMap />
-    <Sponsors />
+    </div>
+    <Image
+      class="hero-image"
+      src={passport}
+      alt=""
+      width={440}
+      densities={[1, 2]}
+    />
   </div>
+  <SupportMap />
+  <Sponsors />
 </BaseLayout>
 
 <script>
@@ -60,102 +48,85 @@ if (!page) return Astro.redirect("/404");
   const heroHighlight: HTMLElement | null =
     document.querySelector(".hero-highlight");
 
-  const isForcedColors = window.matchMedia("(forced-colors: active)").matches;
-  if (heroHighlight && !isForcedColors) {
-    heroHighlight.style.color = "var(--background-color)";
+  if (heroHighlight) {
     const highlight = annotate(heroHighlight, {
-      type: "highlight",
-      iterations: 1,
+      type: "circle",
+      iterations: 2,
+      padding: 4,
+      strokeWidth: 3,
     });
     highlight.show();
   }
 </script>
 
 <style lang="scss">
-  .home {
+  .hero {
+    width: min(100vw, 1200px);
+    padding-inline: var(--space-l);
+    margin-inline: calc(var(--space-l) * -1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .hero-content {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: var(--space-l);
     padding-block: var(--space-2xl);
   }
 
-  @keyframes slideInUp {
-    from {
-      transform: translateY(var(--space-m));
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  .hero {
-    padding-inline: var(--space-2xs);
-    padding-block-start: var(--space-3xl);
-    margin-inline: calc(-1 * var(--space-m));
-    position: relative;
-    overflow: hidden;
-    max-width: 100vw;
-  }
-
-  .illustration {
-    width: 900px;
-    max-width: 100%;
-    user-select: none;
-    pointer-events: none;
+  .hero-image {
+    flex-shrink: 0;
     mix-blend-mode: multiply;
-    animation: slideInUp 0.6s ease-out 0.3s both;
 
-    @media (forced-colors: active) {
-      filter: invert(1);
-      mix-blend-mode: screen;
+    @media (width < 1200px) {
+      margin-inline-end: -48px;
+    }
+
+    @media (width < 1060px) {
+      width: 400px;
+      margin-inline-end: -80px;
+    }
+
+    @media (width < 920px) {
+      width: 360px;
+    }
+
+    @media (width < 860px) {
+      width: 320px;
+      margin-block-start: var(--space-3xl);
+      align-self: flex-start;
+    }
+
+    @media (width < 580px) {
+      display: none;
     }
   }
 
   h1 {
-    text-align: center;
     font-size: var(--step-5);
-
-    @media (width >= 420px) {
-      font-size: var(--step-6);
-    }
+    text-wrap: balance;
 
     @media (width >= 600px) {
-      font-size: var(--step-7);
-    }
-
-    span {
-      white-space: nowrap;
+      font-size: var(--step-6);
     }
   }
 
-  .hero-highlight {
-    color: var(--background-color);
-  }
-
-  .content {
-    padding-block-start: var(--space-xl);
-    max-width: 860px;
+  .subtitle {
     font-size: var(--step-1);
-    animation: slideInUp 0.6s ease-out 0.6s both;
-    text-wrap: pretty;
-
-    :global(p) + :global(p) {
-      margin-top: var(--space-l);
-    }
-
-    @media (width < 540px) {
-      font-size: var(--step-0);
-    }
+    max-width: 58ch;
+    text-wrap: balance;
   }
 
   .buttons {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    flex-wrap: wrap;
     gap: var(--space-l);
-    margin-block-start: var(--space-3xl);
   }
 
   .icon {

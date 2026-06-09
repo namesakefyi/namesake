@@ -1,18 +1,24 @@
-import { sanityClient } from "sanity:client";
-import type { APIRoute } from "astro";
-import { POST_BY_SLUG_QUERY } from "../../sanity/queries";
+import { type CollectionEntry, getCollection } from "astro:content";
+import type { APIRoute, GetStaticPaths } from "astro";
 import { createOgImageResponse } from "../../utils/createOgImageResponse";
 
-export const GET: APIRoute = async ({ params, request }) => {
-  const { slug } = params;
-  if (!slug) return new Response("Not found", { status: 404 });
+export const getStaticPaths: GetStaticPaths = async () => {
+  const posts = await getCollection("posts");
+  return posts.map((post: CollectionEntry<"posts">) => ({
+    params: { slug: post.id },
+  }));
+};
 
-  const post = await sanityClient.fetch(POST_BY_SLUG_QUERY, { slug });
+export const GET: APIRoute = async ({ params, request }) => {
+  const posts = await getCollection("posts");
+  const post = posts.find(
+    (p: CollectionEntry<"posts">) => p.id === params.slug,
+  );
   if (!post) return new Response("Not found", { status: 404 });
 
   return await createOgImageResponse({
     subhead: "Blog",
-    title: post.title,
+    title: post.data.title,
     color: "blue",
     origin: new URL(request.url).origin,
   });

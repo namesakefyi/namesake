@@ -214,6 +214,17 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
           {meta?.jurisdiction && (
             <span className="meta-jurisdiction">{meta.jurisdiction}</span>
           )}
+          {meta?.canonicalUrl && (
+            <a
+              href={meta.canonicalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="meta-canonical-link"
+              title={meta.canonicalUrl}
+            >
+              {new URL(meta.canonicalUrl).hostname}
+            </a>
+          )}
         </div>
         <div className="editor-actions">
           {uploadError && (

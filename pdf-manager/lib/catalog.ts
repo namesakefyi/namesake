@@ -10,6 +10,7 @@ interface PdfMeta {
   title: string;
   code: string;
   jurisdiction: string;
+  canonicalUrl: string;
 }
 
 export interface PdfEntry {
@@ -17,6 +18,7 @@ export interface PdfEntry {
   jurisdiction: string;
   title: string;
   code: string;
+  canonicalUrl: string;
   fieldCount: number;
   pdfPath: string;
   pdfDir: string;
@@ -31,6 +33,7 @@ function parsePdfMetadata(pdfDir: string): PdfMeta | null {
     title: content.match(/\btitle:\s*"([^"]+)"/)?.[1] ?? "",
     code: content.match(/\bcode:\s*"([^"]+)"/)?.[1] ?? "",
     jurisdiction: content.match(/\bjurisdiction:\s*"([^"]+)"/)?.[1] ?? "",
+    canonicalUrl: content.match(/\bcanonicalUrl:\s*"([^"]+)"/)?.[1] ?? "",
   };
 }
 
@@ -63,6 +66,7 @@ export function listAllPdfs(): PdfEntry[] {
         jurisdiction: meta.jurisdiction || entry.name.toUpperCase(),
         title: meta.title,
         code: meta.code,
+        canonicalUrl: meta.canonicalUrl,
         fieldCount: countSchemaFields(pdfDir),
         pdfPath: join(pdfDir, pdfFile),
         pdfDir,

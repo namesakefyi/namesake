@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import * as forms from "../../constants/forms";
 import * as pdfs from "../../pdfs";
+import * as forms from "../getFormConfig";
 import { getFormPdfMetadata } from "../getFormPdfMetadata";
 
-vi.mock("../../constants/forms", () => ({
+vi.mock("../getFormConfig", () => ({
   getFormConfig: vi.fn(),
 }));
 

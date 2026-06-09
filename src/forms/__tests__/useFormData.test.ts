@@ -1,6 +1,6 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { FormConfig, FormSlug } from "../../constants/forms";
+import type { FormConfig } from "../../constants/forms";
 import * as database from "../../db/database";
 import { useFormData } from "../useFormData";
 
@@ -12,7 +12,8 @@ vi.mock("../../db/database", () => ({
 
 function makeConfig(fields: string[]): FormConfig {
   return {
-    slug: "test" as FormSlug,
+    title: "Test",
+    category: "other",
     steps: [
       {
         id: "s",
