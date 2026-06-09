@@ -43,12 +43,11 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
     await expect(
       page.getByRole("heading", { name: "What is your new name?" }),
     ).toBeVisible();
-    await page.getByRole("textbox", { name: "First name" }).click();
+    await expect(
+      page.getByRole("textbox", { name: "First name" }),
+    ).toBeVisible();
     await page.getByRole("textbox", { name: "First name" }).fill("Marsha");
-
-    await page.getByRole("textbox", { name: "Middle name" }).click();
     await page.getByRole("textbox", { name: "Middle name" }).fill("P");
-    await page.getByRole("textbox", { name: "Last or family name" }).click();
     await page
       .getByRole("textbox", { name: "Last or family name" })
       .fill("Johnson");
@@ -59,11 +58,11 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
     await expect(
       page.getByRole("heading", { name: "What is your current legal name?" }),
     ).toBeVisible();
-    await page.getByRole("textbox", { name: "First name" }).click();
+    await expect(
+      page.getByRole("textbox", { name: "First name" }),
+    ).toBeVisible();
     await page.getByRole("textbox", { name: "First name" }).fill("My");
-    await page.getByRole("textbox", { name: "First name" }).press("Tab");
     await page.getByRole("textbox", { name: "Middle name" }).fill("Old");
-    await page.getByRole("textbox", { name: "Middle name" }).press("Tab");
     await page
       .getByRole("textbox", { name: "Last or family name" })
       .fill("Name");
@@ -78,7 +77,9 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
       }),
     ).toBeVisible();
 
-    await page.getByRole("textbox", { name: "Reason for name change" }).click();
+    await expect(
+      page.getByRole("textbox", { name: "Reason for name change" }),
+    ).toBeVisible();
     await expect(page.getByText("What do I write?")).toBeVisible();
     await page
       .getByRole("textbox", { name: "Reason for name change" })
@@ -90,12 +91,13 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
     await expect(
       page.getByRole("heading", { name: "What is your contact information?" }),
     ).toBeVisible();
-    await page.getByRole("textbox", { name: "Phone number" }).click();
+    await expect(
+      page.getByRole("textbox", { name: "Phone number" }),
+    ).toBeVisible();
     await page
       .getByRole("textbox", { name: "Phone number" })
       .fill("12345678901");
 
-    await page.getByRole("textbox", { name: "Email address" }).click();
     await page
       .getByRole("textbox", { name: "Email address" })
       .fill("test@email.com");
@@ -106,14 +108,11 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
     await expect(
       page.getByRole("heading", { name: "Where were you born?" }),
     ).toBeVisible();
-    await page.getByRole("textbox", { name: "City" }).click();
     await page.getByRole("textbox", { name: "City" }).fill("Birthcity");
-    await page.getByRole("combobox", { name: "Country" }).click();
     await page.getByRole("combobox", { name: "Country" }).fill("unite");
     await page
       .getByRole("option", { name: "United States of America" })
       .click();
-    await page.getByRole("combobox", { name: "State" }).click();
     await page.getByRole("combobox", { name: "State" }).fill("mas");
     await page.getByRole("option", { name: "Massachusetts" }).click();
     await page.getByRole("button", { name: "Continue" }).click();
@@ -216,10 +215,13 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
       }),
     ).toBeVisible();
     await page.getByText("Yes").click();
+    await expect(page.getByRole("grid", { name: "Pronouns" })).toBeVisible();
     await page.getByRole("row", { name: "they/them" }).click();
     await page.getByRole("row", { name: "she/her" }).click();
     await page.getByRole("row", { name: "other pronouns" }).click();
-    await page.getByRole("textbox", { name: "List other pronouns" }).click();
+    await expect(
+      page.getByRole("textbox", { name: "List other pronouns" }),
+    ).toBeVisible();
     await page
       .getByRole("textbox", { name: "List other pronouns" })
       .fill("zi/zir");
