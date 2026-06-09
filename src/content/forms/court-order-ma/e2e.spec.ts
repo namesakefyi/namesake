@@ -147,9 +147,7 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
     await page.getByRole("textbox", { name: "City" }).press("Tab");
     await page.getByRole("combobox", { name: "State" }).fill("ma");
     await page.getByRole("option", { name: "Massachusetts" }).click();
-    await page.getByRole("textbox", { name: "County" }).click();
     await page.getByRole("textbox", { name: "County" }).fill("Suffolk");
-    await page.getByRole("textbox", { name: "ZIP" }).click();
     await page.getByRole("textbox", { name: "ZIP" }).fill("02108");
 
     await page.getByText("I use a different mailing address").click();
