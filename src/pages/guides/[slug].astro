@@ -1,7 +1,7 @@
 ---
-import { type CollectionEntry, getCollection, render } from "astro:content";
+import { getCollection, render } from "astro:content";
 import type { BreadcrumbItem } from "../../components/Breadcrumbs.astro";
-import EditLink from "../../components/EditLink.astro";
+import GuideFooter from "../../components/GuideFooter.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
 import ProseLayout from "../../layouts/ProseLayout.astro";
 
@@ -13,12 +13,8 @@ export async function getStaticPaths() {
   }));
 }
 
-interface Props {
-  guide: CollectionEntry<"guides">;
-}
-
 const { guide } = Astro.props;
-const { Content, headings } = await render(guide);
+const { Content, headings, remarkPluginFrontmatter } = await render(guide);
 ---
 
 <ProseLayout
@@ -35,17 +31,8 @@ const { Content, headings } = await render(guide);
 >
   <TableOfContents headings={headings} slot="toc" />
   <Content />
-  <footer>
-    <EditLink path={guide.filePath} />
-  </footer>
+  <GuideFooter
+    filePath={guide.filePath}
+    lastModified={remarkPluginFrontmatter.lastModified}
+  />
 </ProseLayout>
-
-<style>
-  footer {
-    display: flex;
-    justify-content: space-between;
-    padding-block-start: var(--space-s);
-    border-block-start: 1px solid var(--border-color);
-    margin-block-start: var(--space-2xl);
-  }
-</style>
