@@ -1,7 +1,7 @@
 ---
-
 import { type CollectionEntry, getCollection, render } from "astro:content";
 import type { BreadcrumbItem } from "../../components/Breadcrumbs.astro";
+import EditLink from "../../components/EditLink.astro";
 import TableOfContents from "../../components/TableOfContents.astro";
 import ProseLayout from "../../layouts/ProseLayout.astro";
 
@@ -35,4 +35,17 @@ const { Content, headings } = await render(guide);
 >
   <TableOfContents headings={headings} slot="toc" />
   <Content />
+  <footer>
+    <EditLink path={guide.filePath} />
+  </footer>
 </ProseLayout>
+
+<style>
+  footer {
+    display: flex;
+    justify-content: space-between;
+    padding-block-start: var(--space-s);
+    border-block-start: 1px solid var(--border-color);
+    margin-block-start: var(--space-2xl);
+  }
+</style>
