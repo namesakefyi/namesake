@@ -39,7 +39,6 @@ export const addressStep: Step = {
         "mailingStreetAddress",
         "mailingStreetAddress2",
         "mailingCity",
-        "mailingCounty",
         "mailingState",
         "mailingZipCode",
       ],
