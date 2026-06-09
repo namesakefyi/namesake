@@ -1,4 +1,5 @@
 import { Banner } from "../../../../components/common/Banner";
+import { CheckboxField } from "../../../../components/forms/CheckboxField";
 import { FormStep } from "../../../../components/forms/FormStep";
 import { LongTextField } from "../../../../components/forms/LongTextField";
 import type { Step } from "../../../../forms/types";
@@ -6,7 +7,10 @@ import type { Step } from "../../../../forms/types";
 export const reasonStep: Step = {
   id: "reason",
   title: "What is the reason you're changing your name?",
-  fields: ["reasonForChangingName"],
+  fields: [
+    "reasonForChangingName",
+    "hasNoRecordOfOtherStateConvictionsProbationParole",
+  ],
   component: ({ stepConfig }) => (
     <FormStep stepConfig={stepConfig}>
       <LongTextField
@@ -28,6 +32,10 @@ export const reasonStep: Step = {
           <li>"I am transgender."</li>
         </ul>
       </Banner>
+      <CheckboxField
+        name="hasNoRecordOfOtherStateConvictionsProbationParole"
+        label="I certify that I have no record of convictions, probation, or parole in any other state."
+      />
     </FormStep>
   ),
 };

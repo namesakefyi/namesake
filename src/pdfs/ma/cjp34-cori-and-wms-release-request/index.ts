@@ -24,6 +24,8 @@ export default definePdf<PdfFieldName>({
     dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
     mothersMaidenName: data.mothersMaidenName,
     otherNamesOrAliases: data.otherNamesOrAliases,
+    ssnFirstThree: undefined,
+    ssnMiddleTwo: undefined,
     ssnLastFour: undefined,
   }),
 });

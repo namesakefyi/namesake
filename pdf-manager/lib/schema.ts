@@ -3,7 +3,7 @@ import { basename, dirname, extname, join, relative } from "node:path";
 import { PDFDocument } from "@cantoo/pdf-lib";
 import { escapeKey } from "../../scripts/utils.mjs";
 import { PDFS_DIR } from "./catalog.ts";
-import { fieldReadingOrder } from "./pdf.ts";
+import { convertDropdownsToTextFields, fieldReadingOrder } from "./pdf.ts";
 import { loadSchemaFields } from "./suggest.ts";
 
 interface PdfFieldWithClass {
@@ -114,6 +114,7 @@ export async function processPdf(
   for (const n of unexclude) excluded.delete(n);
   for (const n of exclude) excluded.add(n);
 
+  await convertDropdownsToTextFields(pdfPath);
   const allFields = await extractFieldsWithClass(pdfPath);
 
   // When updating an existing schema, auto-exclude any PDF field that is

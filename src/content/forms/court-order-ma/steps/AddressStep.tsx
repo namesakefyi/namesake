@@ -25,6 +25,7 @@ export const addressStep: Step = {
     {
       ids: [
         "residenceStreetAddress",
+        "residenceStreetAddress2",
         "residenceCity",
         "residenceCounty",
         "residenceState",
@@ -36,8 +37,8 @@ export const addressStep: Step = {
     {
       ids: [
         "mailingStreetAddress",
+        "mailingStreetAddress2",
         "mailingCity",
-        "mailingCounty",
         "mailingState",
         "mailingZipCode",
       ],
@@ -68,7 +69,7 @@ export const addressStep: Step = {
         )}
         {residenceVisible && (
           <>
-            <AddressField type="residence" includeCounty />
+            <AddressField type="residence" includeAddress2 includeCounty />
             <CheckboxField
               name="isMailingAddressDifferentFromResidence"
               label="I use a different mailing address"
@@ -79,7 +80,7 @@ export const addressStep: Step = {
           title="What is your mailing address?"
           isVisible={mailingVisible}
         >
-          <AddressField type="mailing" />
+          <AddressField type="mailing" includeAddress2 />
         </FormSubsection>
       </FormStep>
     );

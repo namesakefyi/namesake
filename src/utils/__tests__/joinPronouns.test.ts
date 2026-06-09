@@ -26,4 +26,11 @@ describe("joinPronouns", () => {
     expect(joinPronouns([], undefined)).toBe("");
     expect(joinPronouns(undefined, "")).toBe("");
   });
+
+  it("excludes the literal 'Other' entry and uses otherPronouns instead", () => {
+    expect(joinPronouns(["She/Her", "Other"], "Ze/Zir")).toBe(
+      "She/Her, Ze/Zir",
+    );
+    expect(joinPronouns(["Other"], "Ze/Zir")).toBe("Ze/Zir");
+  });
 });
