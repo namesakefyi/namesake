@@ -245,9 +245,7 @@ const headerDescription =
     }
 
     details:not(:where(.not-content *)) {
-      border: 1px solid var(--border-color);
-
-      --details-indent: calc(var(--space-xl) + var(--space-s) - 1px);
+      --details-indent: var(--space-l);
       --details-transition-duration: 0.2s;
 
       transition-property: margin-block-start;
@@ -280,17 +278,14 @@ const headerDescription =
       &[open] summary::before {
         rotate: 90deg;
       }
-
-      & + details {
-        border-top: none;
-      }
     }
 
     summary:not(:where(.not-content *)) {
+      display: inline-block;
       position: relative;
       list-style-type: none;
-      padding-inline: var(--details-indent) var(--space-m);
-      padding-block: var(--space-xs);
+      padding-inline-start: var(--details-indent);
+      padding-block: var(--space-2xs);
       cursor: pointer;
       margin: 0;
 
@@ -302,14 +297,14 @@ const headerDescription =
       &::before {
         content: "";
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M13.1717 12.0007L8.22192 7.05093L9.63614 5.63672L16.0001 12.0007L9.63614 18.3646L8.22192 16.9504L13.1717 12.0007Z'%3E%3C/path%3E%3C/svg%3E");
-        padding: var(--space-xs);
         transition: rotate 0.15s ease-out;
         position: absolute;
-        left: 0.9em;
-        top: 0.85em;
+        left: -0.2em;
+        top: 0.35em;
         width: var(--space-l);
         height: var(--space-l);
-        font-size: 0.6em;
+        font-size: 1em;
+        scale: 1.1;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -319,7 +314,7 @@ const headerDescription =
 
     details > *:not(summary):not(:where(.not-content *)) {
       padding-block-end: var(--space-s);
-      padding-inline: var(--details-indent) var(--space-m);
+      padding-inline-start: var(--details-indent);
 
       &:first-of-type {
         margin-block-start: 0;
