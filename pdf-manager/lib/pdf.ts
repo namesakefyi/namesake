@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import type { PDFField, PDFPage } from "@cantoo/pdf-lib";
-import { PDFDocument } from "@cantoo/pdf-lib";
+import { PDFDocument, PDFDropdown, PDFName, PDFString } from "@cantoo/pdf-lib";
 
 // Fields within this many PDF points vertically are treated as the same row
 // and sorted left-to-right within that row. ~10pt ≈ 4mm.
@@ -77,6 +77,28 @@ export async function extractFieldsFromBytes(
     name: f.getName(),
     type: f.constructor.name === "PDFCheckBox" ? "checkbox" : "text",
   }));
+}
+
+/**
+ * Converts all PDFDropdown fields to plain text fields in the PDF on disk.
+ * This lets fillPdf write any value without needing to match the PDF's fixed
+ * option list, and ensures the generated schema never references PDFDropdown.
+ */
+export async function convertDropdownsToTextFields(
+  pdfPath: string,
+): Promise<void> {
+  const bytes = readFileSync(pdfPath);
+  const doc = await PDFDocument.load(bytes);
+  const form = doc.getForm();
+  let changed = false;
+  for (const field of form.getFields()) {
+    if (field instanceof PDFDropdown) {
+      field.acroField.dict.set(PDFName.of("FT"), PDFName.of("Tx"));
+      field.acroField.dict.delete(PDFName.of("Opt"));
+      changed = true;
+    }
+  }
+  if (changed) writeFileSync(pdfPath, await doc.save());
 }
 
 export interface Rename {

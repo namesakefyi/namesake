@@ -1,8 +1,8 @@
 /** Auto-generated from cjp27-petition-to-change-name-of-adult.pdf — do not edit */
-import { PDFCheckBox, PDFDropdown, PDFTextField } from "@cantoo/pdf-lib";
+import { PDFCheckBox, PDFTextField } from "@cantoo/pdf-lib";
 
 export const pdfSchema = {
-  county: PDFDropdown,
+  county: PDFTextField,
   petitionerFirstName: PDFTextField,
   petitionerMiddleName: PDFTextField,
   petitionerLastName: PDFTextField,
@@ -13,12 +13,12 @@ export const pdfSchema = {
   birthplaceState: PDFTextField,
   dateOfBirth: PDFTextField,
   residenceStreetAddress: PDFTextField,
-  residenceSteetAddressDetail: PDFTextField,
+  residenceSteetAddress2: PDFTextField,
   residenceCity: PDFTextField,
   residenceState: PDFTextField,
   residenceZipCode: PDFTextField,
   mailingStreetAddress: PDFTextField,
-  mailingStreetAddressDetail: PDFTextField,
+  mailingStreetAddress2: PDFTextField,
   mailingCity: PDFTextField,
   mailingState: PDFTextField,
   mailingZipCode: PDFTextField,

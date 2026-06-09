@@ -1,8 +1,8 @@
 /** Auto-generated from cjp25-petition-to-change-name-of-minor.pdf — do not edit */
-import { PDFCheckBox, PDFDropdown, PDFTextField } from "@cantoo/pdf-lib";
+import { PDFCheckBox, PDFTextField } from "@cantoo/pdf-lib";
 
 export const pdfSchema = {
-  county: PDFDropdown,
+  county: PDFTextField,
   petitionerFirstName: PDFTextField,
   petitionerMiddleName: PDFTextField,
   petitionerLastName: PDFTextField,

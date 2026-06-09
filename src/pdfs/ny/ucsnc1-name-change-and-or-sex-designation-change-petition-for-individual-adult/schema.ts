@@ -2,7 +2,6 @@
 import {
   PDFButton,
   PDFCheckBox,
-  PDFDropdown,
   PDFRadioGroup,
   PDFTextField,
 } from "@cantoo/pdf-lib";
@@ -11,8 +10,8 @@ export const pdfSchema = {
   Reset_Form: PDFButton,
   SealingRequest: PDFRadioGroup,
   "SealingRequest-specify": PDFTextField,
-  courtType: PDFDropdown,
-  courtCounty: PDFDropdown,
+  courtType: PDFTextField,
+  courtCounty: PDFTextField,
   oldName: PDFTextField,
   indexNumber: PDFTextField,
   SupportingDocument: PDFRadioGroup,
@@ -44,7 +43,7 @@ export const pdfSchema = {
   hasPreviousNameChange: PDFRadioGroup,
   previousNameReason: PDFTextField,
   reasonForChangingName: PDFTextField,
-  newSex: PDFDropdown,
+  newSex: PDFTextField,
   previousSexDesignationChangePetition: PDFRadioGroup,
   previousSexDesignationChangePetitionReason: PDFTextField,
   providesSexChangeDesignationReason: PDFRadioGroup,
@@ -54,9 +53,9 @@ export const pdfSchema = {
   residenceAddress: PDFTextField,
   supportingDocumentsDescription: PDFTextField,
   signatureDate: PDFTextField,
-  signatureDay: PDFDropdown,
-  signatureMonth: PDFDropdown,
-  signatureYearEnding: PDFDropdown,
+  signatureDay: PDFTextField,
+  signatureMonth: PDFTextField,
+  signatureYearEnding: PDFTextField,
 } as const;
 
 export type PdfFieldName = keyof typeof pdfSchema;

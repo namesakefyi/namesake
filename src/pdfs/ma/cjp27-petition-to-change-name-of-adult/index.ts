@@ -25,12 +25,12 @@ export default definePdf<PdfFieldName>({
     birthplaceState: data.birthplaceState,
     dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
     residenceStreetAddress: data.residenceStreetAddress,
-    residenceSteetAddressDetail: "", // TODO:
+    residenceSteetAddress2: data.residenceStreetAddress2,
     residenceCity: data.residenceCity,
     residenceState: data.residenceState,
     residenceZipCode: data.residenceZipCode,
     mailingStreetAddress: data.mailingStreetAddress,
-    mailingStreetAddressDetail: "", // TODO:
+    mailingStreetAddress2: data.mailingStreetAddress2,
     mailingCity: data.mailingCity,
     mailingState: data.mailingState,
     mailingZipCode: data.mailingZipCode,
