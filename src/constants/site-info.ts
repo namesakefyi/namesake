@@ -49,6 +49,8 @@ export type SiteInfo = {
     contribute: string;
   };
   socialLinks: Record<SocialPlatform, SocialLink>;
+  editBaseUrl: string;
+  historyBaseUrl: string;
 };
 
 export const siteInfo: SiteInfo = {
@@ -120,4 +122,6 @@ export const siteInfo: SiteInfo = {
       Icon: RiRssFill,
     },
   },
+  editBaseUrl: "https://github.com/namesakefyi/namesake/edit/main/",
+  historyBaseUrl: "https://github.com/namesakefyi/namesake/commits/main/",
 };
