@@ -245,9 +245,9 @@ const headerDescription =
     }
 
     details:not(:where(.not-content *)) {
-      --details-indent: var(--space-l);
       --details-transition-duration: 0.2s;
 
+      padding-inline-start: var(--space-2xl);
       transition-property: margin-block-start;
       transition-duration: var(--details-transition-duration);
       transition-timing-function: ease;
@@ -274,14 +274,16 @@ const headerDescription =
       &[open] summary::before {
         rotate: 90deg;
       }
+
+      & + details {
+        padding-block-start: var(--space-s);
+      }
     }
 
     summary:not(:where(.not-content *)) {
       display: inline-block;
       position: relative;
       list-style-type: none;
-      padding-inline-start: var(--details-indent);
-      padding-block: var(--space-2xs);
       font-weight: var(--weight-bold);
       cursor: pointer;
       margin: 0;
@@ -294,31 +296,15 @@ const headerDescription =
       &::before {
         content: "";
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M13.1717 12.0007L8.22192 7.05093L9.63614 5.63672L16.0001 12.0007L9.63614 18.3646L8.22192 16.9504L13.1717 12.0007Z'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 75%;
         transition: rotate 0.15s ease-out;
         position: absolute;
-        left: -0.2em;
-        top: 0.35em;
-        width: var(--space-l);
-        height: var(--space-l);
-        font-size: 1em;
-        scale: 1.1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 0;
-      }
-    }
-
-    details > *:not(summary):not(:where(.not-content *)) {
-      padding-block-end: var(--space-s);
-      padding-inline-start: var(--details-indent);
-
-      &:first-of-type {
-        margin-block-start: 0;
-      }
-
-      &:last-child {
-        margin-block-end: 0;
+        left: calc(var(--space-2xl) * -1);
+        top: -0.05em;
+        width: 1lh;
+        height: 1lh;
       }
     }
   }
