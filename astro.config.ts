@@ -86,25 +86,8 @@ export default defineConfig({
         targets: browserslistToTargets(browserslist("defaults")),
       },
     },
-    // Re-enable this after Astro supports Vite v8
-    // https://github.com/vitejs/vite/issues/21293
-    // build: {
-    //   cssMinify: "lightningcss",
-    // },
     build: {
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (
-              (id.includes("/src/constants/") &&
-                !id.includes("/src/constants/forms")) ||
-              id.includes("/src/utils/")
-            ) {
-              return "shared";
-            }
-          },
-        },
-      },
+      cssMinify: "lightningcss",
     },
   },
 });
