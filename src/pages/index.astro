@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
-import { RiArrowRightLine } from "@remixicon/react";
+import { RiArrowRightLine, RiMegaphoneLine } from "@remixicon/react";
+import { Banner } from "../components/common/Banner";
 import Sponsors from "../components/Sponsors.astro";
 import SupportMap from "../components/SupportMap.astro";
 import { siteInfo } from "../constants/site-info";
@@ -38,6 +39,12 @@ import passport from "./home/passport.png";
       densities={[1, 2]}
     />
   </div>
+  <Banner icon={RiMegaphoneLine} className="fundraiser-banner">
+    We're raising funds to help expand our guides and forms to more states. <a
+      href="https://www.every.org/namesake/f/help-simplify-name-changes"
+      >Support Namesake this Pride Month.</a
+    >
+  </Banner>
   <SupportMap />
   <Sponsors />
 </BaseLayout>
@@ -131,5 +138,9 @@ import passport from "./home/passport.png";
 
   .icon {
     margin-inline-end: calc(var(--space-2xs) * -1);
+  }
+
+  .fundraiser-banner {
+    margin-block-start: var(--space-m);
   }
 </style>
