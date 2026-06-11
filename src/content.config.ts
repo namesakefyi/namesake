@@ -99,6 +99,7 @@ const guides = defineCollection({
     description: z.string().optional(),
     state: reference("states").optional(),
     category: reference("categories"),
+    stub: z.boolean().default(false),
     unlisted: z.boolean().default(false),
   }),
 });

@@ -1,0 +1,41 @@
+---
+import type { BreadcrumbItem } from "../../components/Breadcrumbs.astro";
+import GuideLinkGroup from "../../components/GuideLinkGroup.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import { getGuidesByState } from "../../content/queries/guides";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const { guidesByState } = await getGuidesByState();
+  return guidesByState.map(({ state, guides }) => ({
+    params: { state: state.id },
+    props: { state, guides },
+  }));
+}
+
+const { state, guides } = Astro.props;
+---
+
+<BaseLayout
+  title={state.data.name}
+  description={`Step-by-step name change guides for ${state.data.name}.`}
+  color="white"
+>
+  <PageHeader
+    title={state.data.name}
+    description={`Step-by-step name change guides for ${state.data.name}.`}
+    breadcrumbs={[
+      { label: "Namesake", href: "/" },
+      { label: "Guides", href: "/guides" },
+    ] satisfies BreadcrumbItem[]}
+  />
+  <div class="guides">
+    <GuideLinkGroup guides={guides} />
+  </div>
+</BaseLayout>
+
+<style>
+  .guides {
+    padding-block-end: var(--space-2xl);
+  }
+</style>
