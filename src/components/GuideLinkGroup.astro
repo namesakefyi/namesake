@@ -18,7 +18,7 @@ const { guides, title, titleHref } = Astro.props;
         <li>
           <a
             href={`/guides/${guide.id}`}
-            data-stub={guide.data.stub || undefined}
+            class:list={[{ stub: !!guide.data.stub }]}
           >
             {guide.data.title}
           </a>
@@ -58,7 +58,7 @@ const { guides, title, titleHref } = Astro.props;
       }
     }
 
-    &[data-stub] {
+    &.stub {
       color: var(--invalid-color);
       text-decoration-color: var(--invalid-color);
     }
