@@ -1,43 +1,16 @@
 ---
-import { getCollection, getEntry } from "astro:content";
 import type { BreadcrumbItem } from "../../components/Breadcrumbs.astro";
 import GuideLinkGroup from "../../components/GuideLinkGroup.astro";
 import PageHeader from "../../components/PageHeader.astro";
-import { categoryRank } from "../../constants/guides";
+import { getGuidesByState } from "../../content/queries/guides";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
-  const allGuides = await getCollection("guides", ({ data }) => !data.unlisted);
-
-  const stateGuides = await Promise.all(
-    allGuides.flatMap((guide) =>
-      guide.data.state
-        ? [getEntry(guide.data.state).then((state) => ({ guide, state }))]
-        : [],
-    ),
-  );
-
-  const byState = Object.groupBy(stateGuides, ({ state }) => state.id);
-
-  return Object.entries(byState).flatMap(([stateId, guides]) => {
-    if (!guides) return [];
-    return [
-      {
-        params: { state: stateId },
-        props: {
-          state: guides[0].state,
-          guides: guides
-            .map(({ guide }) => guide)
-            .sort(
-              (a, b) =>
-                categoryRank(a.data.category.id) -
-                  categoryRank(b.data.category.id) ||
-                a.data.title.localeCompare(b.data.title),
-            ),
-        },
-      },
-    ];
-  });
+  const { guidesByState } = await getGuidesByState();
+  return guidesByState.map(({ state, guides }) => ({
+    params: { state: state.id },
+    props: { state, guides },
+  }));
 }
 
 const { state, guides } = Astro.props;

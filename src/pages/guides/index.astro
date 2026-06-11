@@ -1,31 +1,10 @@
 ---
-import { getCollection, getEntry } from "astro:content";
 import GuideLinkGroup from "../../components/GuideLinkGroup.astro";
 import PageHeader from "../../components/PageHeader.astro";
-import { categoryRank } from "../../constants/guides";
+import { getGuidesByState } from "../../content/queries/guides";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-const allGuides = await getCollection("guides", ({ data }) => !data.unlisted);
-
-const generalGuides = allGuides.filter(({ data }) => !data.state);
-
-const stateGuides = (
-  await Promise.all(
-    allGuides.flatMap((guide) =>
-      guide.data.state
-        ? [getEntry(guide.data.state).then((state) => ({ guide, state }))]
-        : [],
-    ),
-  )
-).sort(
-  (a, b) =>
-    a.state.data.name.localeCompare(b.state.data.name) ||
-    categoryRank(a.guide.data.category.id) -
-      categoryRank(b.guide.data.category.id) ||
-    a.guide.data.title.localeCompare(b.guide.data.title),
-);
-
-const guidesByState = Object.groupBy(stateGuides, ({ state }) => state.id);
+const { generalGuides, guidesByState } = await getGuidesByState();
 ---
 
 <BaseLayout
@@ -44,11 +23,11 @@ const guidesByState = Object.groupBy(stateGuides, ({ state }) => state.id);
       )
     }
     {
-      Object.entries(guidesByState).map(([stateId, guides]) => (
+      guidesByState.map(({ state, guides }) => (
         <GuideLinkGroup
-          guides={guides?.map(({ guide }) => guide) ?? []}
-          title={guides?.[0].state.data.name}
-          titleHref={`/guides/${stateId}`}
+          guides={guides}
+          title={state.data.name}
+          titleHref={`/guides/${state.id}`}
         />
       ))
     }
