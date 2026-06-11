@@ -37,6 +37,13 @@ export default defineConfig({
     // https://creativehike.com/posts/removing-trailng-slashes-astro
     format: "file",
   },
+  redirects: {
+    // Use new nested routes for state guides
+    "/guides/birth-certificate-ma": "/guides/ma/birth-certificate",
+    "/guides/court-order-ma": "/guides/ma/court-order",
+    "/guides/state-id-ma": "/guides/ma/state-id",
+    "/guides/court-order-ri": "/guides/ri/court-order",
+  },
   fonts: [
     {
       provider: fontProviders.local(),

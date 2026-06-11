@@ -1,0 +1,68 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import type { BreadcrumbItem } from "../../components/Breadcrumbs.astro";
+import GuideLinkGroup from "../../components/GuideLinkGroup.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import { categoryRank } from "../../constants/guides";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const allGuides = await getCollection("guides", ({ data }) => !data.unlisted);
+
+  const stateGuides = await Promise.all(
+    allGuides.flatMap((guide) =>
+      guide.data.state
+        ? [getEntry(guide.data.state).then((state) => ({ guide, state }))]
+        : [],
+    ),
+  );
+
+  const byState = Object.groupBy(stateGuides, ({ state }) => state.id);
+
+  return Object.entries(byState).flatMap(([stateId, guides]) => {
+    if (!guides) return [];
+    return [
+      {
+        params: { state: stateId },
+        props: {
+          state: guides[0].state,
+          guides: guides
+            .map(({ guide }) => guide)
+            .sort(
+              (a, b) =>
+                categoryRank(a.data.category.id) -
+                  categoryRank(b.data.category.id) ||
+                a.data.title.localeCompare(b.data.title),
+            ),
+        },
+      },
+    ];
+  });
+}
+
+const { state, guides } = Astro.props;
+---
+
+<BaseLayout
+  title={state.data.name}
+  description={`Step-by-step name change guides for ${state.data.name}.`}
+  color="white"
+>
+  <PageHeader
+    title={state.data.name}
+    description={`Step-by-step name change guides for ${state.data.name}.`}
+    breadcrumbs={[
+      { label: "Namesake", href: "/" },
+      { label: "Guides", href: "/guides" },
+    ] satisfies BreadcrumbItem[]}
+  />
+  <div class="guides">
+    <GuideLinkGroup guides={guides} />
+  </div>
+</BaseLayout>
+
+<style>
+  .guides {
+    padding-block-end: var(--space-2xl);
+  }
+</style>

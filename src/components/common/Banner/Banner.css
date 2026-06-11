@@ -27,6 +27,10 @@
     .banner-icon {
       background-color: var(--invalid-color);
     }
+
+    a {
+      text-decoration-color: var(--invalid-color);
+    }
   }
 
   p + p {

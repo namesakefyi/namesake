@@ -1,0 +1,66 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  guides: CollectionEntry<"guides">[];
+  title?: string;
+  titleHref?: string;
+}
+
+const { guides, title, titleHref } = Astro.props;
+---
+
+<section class="guide-link-group">
+  {title && <h2>{titleHref ? <a href={titleHref}>{title}</a> : title}</h2>}
+  <ul class:list={[{ indent: !!title }]}>
+    {
+      guides.map((guide) => (
+        <li>
+          <a
+            href={`/guides/${guide.id}`}
+            data-stub={guide.data.stub || undefined}
+          >
+            {guide.data.title}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .guide-link-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+  }
+
+  ul {
+    padding: 0;
+    display: flex;
+    list-style-type: none;
+    flex-direction: column;
+    gap: var(--space-xs);
+    font-size: var(--step-1);
+
+    &.indent {
+      padding-inline-start: var(--space-l);
+    }
+  }
+
+  a {
+    display: inline-block;
+    text-decoration: none;
+
+    @media (hover: hover) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &[data-stub] {
+      color: var(--invalid-color);
+      text-decoration-color: var(--invalid-color);
+    }
+  }
+</style>

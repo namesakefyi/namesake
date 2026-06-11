@@ -129,7 +129,7 @@
     "vitest": "4.1.8",
     "wrangler": "^4.98.0"
   },
-  "packageManager": "pnpm@11.1.2",
+  "packageManager": "pnpm@11.5.3",
   "homepage": "https://namesake.fyi",
   "bugs": {
     "url": "https://github.com/namesakefyi/namesake/issues"

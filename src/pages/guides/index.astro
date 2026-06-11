@@ -1,28 +1,31 @@
 ---
 import { getCollection, getEntry } from "astro:content";
+import GuideLinkGroup from "../../components/GuideLinkGroup.astro";
 import PageHeader from "../../components/PageHeader.astro";
+import { categoryRank } from "../../constants/guides";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { GuidesTable } from "./_components/GuidesTable";
 
 const allGuides = await getCollection("guides", ({ data }) => !data.unlisted);
 
-const guides = await Promise.all(
-  allGuides.map(async (guide) => {
-    const stateEntry = guide.data.state
-      ? await getEntry(guide.data.state)
-      : null;
-    const categoryEntry = guide.data.category
-      ? await getEntry(guide.data.category)
-      : null;
+const generalGuides = allGuides.filter(({ data }) => !data.state);
 
-    return {
-      id: guide.id,
-      title: guide.data.title,
-      state: stateEntry?.data.name ?? null,
-      category: categoryEntry?.data.name ?? null,
-    };
-  }),
+const stateGuides = (
+  await Promise.all(
+    allGuides.flatMap((guide) =>
+      guide.data.state
+        ? [getEntry(guide.data.state).then((state) => ({ guide, state }))]
+        : [],
+    ),
+  )
+).sort(
+  (a, b) =>
+    a.state.data.name.localeCompare(b.state.data.name) ||
+    categoryRank(a.guide.data.category.id) -
+      categoryRank(b.guide.data.category.id) ||
+    a.guide.data.title.localeCompare(b.guide.data.title),
 );
+
+const guidesByState = Object.groupBy(stateGuides, ({ state }) => state.id);
 ---
 
 <BaseLayout
@@ -35,12 +38,28 @@ const guides = await Promise.all(
     description="Step-by-step name change guides for identity documents."
   />
   <div class="guides">
-    <GuidesTable client:load guides={guides} />
+    {
+      generalGuides.length > 0 && (
+        <GuideLinkGroup guides={generalGuides} title="General" />
+      )
+    }
+    {
+      Object.entries(guidesByState).map(([stateId, guides]) => (
+        <GuideLinkGroup
+          guides={guides?.map(({ guide }) => guide) ?? []}
+          title={guides?.[0].state.data.name}
+          titleHref={`/guides/${stateId}`}
+        />
+      ))
+    }
   </div>
 </BaseLayout>
 
 <style>
   .guides {
     padding-block-end: var(--space-2xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
   }
 </style>
