@@ -37,8 +37,12 @@ const { generalGuides, guidesByState } = await getGuidesByState();
 <style>
   .guides {
     padding-block-end: var(--space-2xl);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2xl);
+
+    @supports (display: grid-lanes) {
+      display: grid-lanes;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      flow-tolerance: 1em;
+      gap: var(--space-2xl);
+    }
   }
 </style>
