@@ -126,7 +126,7 @@
   namesakeSupport: none
 - id: ri
   name: Rhode Island
-  namesakeSupport: prioritized
+  namesakeSupport: full
 - id: sc
   name: South Carolina
   namesakeSupport: none
