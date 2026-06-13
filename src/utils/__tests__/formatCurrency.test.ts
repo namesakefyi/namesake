@@ -14,14 +14,20 @@ describe("formatCurrency", () => {
     expect(formatCurrency(1000000)).toBe("$1,000,000");
   });
 
-  it("should round decimal values to the nearest dollar", () => {
-    expect(formatCurrency(99.99)).toBe("$100");
-    expect(formatCurrency(99.49)).toBe("$99");
-    expect(formatCurrency(50.5)).toBe("$51");
-    expect(formatCurrency(50.4)).toBe("$50");
-  });
-
   it("should handle zero", () => {
     expect(formatCurrency(0)).toBe("$0");
+  });
+
+  it("should handle cents", () => {
+    expect(formatCurrency(1.25)).toBe("$1.25");
+    expect(formatCurrency(9.99)).toBe("$9.99");
+
+    // always include two digits when cents are present
+    expect(formatCurrency(1.5)).toBe("$1.50");
+    expect(formatCurrency(1.5)).not.toBe("$1.5");
+
+    // exclude cents when zero
+    expect(formatCurrency(1.0)).toBe("$1");
+    expect(formatCurrency(1.0)).not.toBe("$1.00");
   });
 });
