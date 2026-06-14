@@ -1,0 +1,28 @@
+/* These styles are only used when printing the page. */
+
+@media print {
+	html {
+		background-color: none;
+	}
+
+	body > *:not(main) {
+		display: none !important;
+	}
+
+	body::before,
+	body::after {
+		display: none;
+	}
+
+	.rough-annotation {
+		display: none; /* Would display in odd location due to loading delay. */
+	}
+
+	a[href]:after {
+		content: " (" attr(href) ")";
+	}
+
+	abbr[title]:after {
+		content: " (" attr(title) ")";
+	}
+}
