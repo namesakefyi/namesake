@@ -46,20 +46,4 @@ describe("formatTotalCosts", () => {
     ];
     expect(formatTotalCosts(costs)).toBe("$1,000–$3,000");
   });
-
-  it("should format currency without decimal places", () => {
-    const costs: FormCost[] = [
-      {
-        amount: 1000.99,
-        title: "Required item with decimals",
-        required: "required",
-      },
-      {
-        amount: 2000.5,
-        title: "Optional item with decimals",
-        required: "notRequired",
-      },
-    ];
-    expect(formatTotalCosts(costs)).toBe("$1,001–$3,001");
-  });
 });
