@@ -1,16 +1,10 @@
 import type { FormCost } from "../constants/forms";
+import { formatCurrency } from "./formatCurrency";
 
 export type { FormCost as Cost };
 
 export const formatTotalCosts = (costs?: readonly FormCost[] | null) => {
   if (!costs || costs.length === 0) return "Free";
-
-  const formatCurrency = (amount: number) =>
-    amount.toLocaleString("en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    });
 
   const requiredTotal = costs
     .filter((cost) => cost.required !== "notRequired")
