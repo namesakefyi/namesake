@@ -6,7 +6,7 @@ import {
   FormSubsection,
   useFieldVisible,
 } from "#components/forms/FormStep";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 const whenNotUnhoused = (data: Record<string, unknown>) =>
   data.isCurrentlyUnhoused !== true;

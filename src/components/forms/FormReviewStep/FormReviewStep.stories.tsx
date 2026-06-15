@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
-import type { Step } from "#forms/types";
+import type { Step } from "#lib/forms/types";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormReviewStep, type FormReviewStepProps } from "./FormReviewStep";
 

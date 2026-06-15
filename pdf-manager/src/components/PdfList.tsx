@@ -4,7 +4,7 @@ import {
   ListBoxItem,
   ListBoxSection,
 } from "react-aria-components";
-import type { PdfMeta } from "../types.ts";
+import type { PdfMeta } from "../types";
 
 interface PdfListProps {
   pdfs: PdfMeta[];

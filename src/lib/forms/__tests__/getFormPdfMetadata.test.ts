@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import * as pdfs from "../../pdfs/getPdfDefinition";
+import * as pdfs from "#lib/pdfs/getPdfDefinition";
 import * as forms from "../getFormConfig";
 import { getFormPdfMetadata } from "../getFormPdfMetadata";
 

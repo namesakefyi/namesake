@@ -1,4 +1,4 @@
-import type { Step } from "../forms/types";
+import type { Step } from "#lib/forms/types";
 import type { FormData } from "./fields";
 import type { StateId } from "./jurisdictions";
 import type { PDFId } from "./pdf";

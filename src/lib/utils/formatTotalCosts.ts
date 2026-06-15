@@ -1,4 +1,4 @@
-import type { FormCost } from "../constants/forms";
+import type { FormCost } from "#constants/forms";
 import { formatCurrency } from "./formatCurrency";
 
 export type { FormCost as Cost };

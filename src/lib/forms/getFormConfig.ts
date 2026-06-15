@@ -1,7 +1,7 @@
-import type { FormConfig } from "../constants/forms";
+import type { FormConfig } from "#constants/forms";
 
 const modules = import.meta.glob<{ default: FormConfig }>(
-  "../content/forms/*/index.ts",
+  "../../content/forms/*/index.ts",
   { eager: true },
 );
 

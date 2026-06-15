@@ -10,8 +10,8 @@ import { PhoneField } from "#components/forms/PhoneField";
 import { ShortTextField } from "#components/forms/ShortTextField";
 import { YesNoField } from "#components/forms/YesNoField";
 import { JURISDICTIONS } from "#constants/jurisdictions";
-import { defineStep } from "#forms/defineStep";
-import { nameOrFallback } from "#forms/resolveStepContent";
+import { defineStep } from "#lib/forms/defineStep";
+import { nameOrFallback } from "#lib/forms/resolveStepContent";
 
 export const guardianStep = defineStep({
   id: "guardian",

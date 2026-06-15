@@ -1,7 +1,7 @@
 import { Banner } from "#components/common/Banner";
 import { FormStep } from "#components/forms/FormStep";
 import { YesNoField } from "#components/forms/YesNoField";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const ethnicityStep = defineStep({
   id: "ethnicity",

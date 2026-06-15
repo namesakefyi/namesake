@@ -1,7 +1,7 @@
 import { TextField } from "#components/common/TextField";
 import { FormStep } from "#components/forms/FormStep";
 import { RepeatingEntry } from "#components/forms/RepeatingEntry";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const previousAddressesStep = defineStep({
   id: "previous-addresses",

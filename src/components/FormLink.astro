@@ -63,7 +63,7 @@ const formattedDate = updatedAt ? formatter.format(new Date(updatedAt)) : null;
 </article>
 
 <script>
-  import { getFormStatus } from "../forms/getFormStatus";
+  import { getFormStatus } from "#lib/forms/getFormStatus";
 
   document
     .querySelectorAll<HTMLElement>("[data-form-slug].form-status")

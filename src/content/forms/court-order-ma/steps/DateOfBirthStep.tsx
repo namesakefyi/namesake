@@ -1,6 +1,6 @@
 import { FormStep } from "#components/forms/FormStep";
 import { MemorableDateField } from "#components/forms/MemorableDateField";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const dateOfBirthStep = defineStep({
   id: "date-of-birth",

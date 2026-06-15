@@ -1,10 +1,10 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FormConfig } from "#constants/forms";
-import * as database from "../../db/database";
+import * as database from "#db/database";
 import { useFormData } from "../useFormData";
 
-vi.mock("../../db/database", () => ({
+vi.mock("#db/database", () => ({
   getFieldsByNames: vi.fn(),
   saveField: vi.fn(),
   deleteField: vi.fn(),

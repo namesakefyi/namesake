@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { FormData } from "#constants/fields";
-import { expectPdfFieldsMatch } from "#pdfs/expectPdfFieldsMatch";
-import { getPdfForm } from "#pdfs/getPdfForm";
+import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
+import { getPdfForm } from "#lib/pdfs/getPdfForm";
 import cjp25PetitionToChangeNameOfMinor from ".";
 
 describe("Petition to Change Name of Minor", () => {

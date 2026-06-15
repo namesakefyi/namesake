@@ -2,7 +2,7 @@ import { Banner } from "#components/common/Banner";
 import { CheckboxField } from "#components/forms/CheckboxField";
 import { FormStep } from "#components/forms/FormStep";
 import { LongTextField } from "#components/forms/LongTextField";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const reasonStep = defineStep({
   id: "reason",

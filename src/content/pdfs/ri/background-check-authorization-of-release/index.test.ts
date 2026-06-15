@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { FormData } from "#constants/fields";
-import { expectPdfFieldsMatch } from "#pdfs/expectPdfFieldsMatch";
+import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import backgroundCheckAuthorizationOfRelease from ".";
 
 describe("Background Check Authorization of Release", () => {

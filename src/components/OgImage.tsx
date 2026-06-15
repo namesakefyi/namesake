@@ -1,4 +1,4 @@
-import { COLORS, type NamesakeColor } from "../constants/colors";
+import { COLORS, type NamesakeColor } from "#constants/colors";
 
 type OgImageProps = {
   subhead: string;

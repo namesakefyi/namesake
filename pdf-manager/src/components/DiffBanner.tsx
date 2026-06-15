@@ -1,4 +1,4 @@
-import type { Diff } from "../types.ts";
+import type { Diff } from "../types";
 
 interface DiffBannerProps {
   diff: Diff;

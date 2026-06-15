@@ -6,7 +6,7 @@ import {
   FormSubsection,
   useFieldVisible,
 } from "#components/forms/FormStep";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const addressStep = defineStep({
   id: "address",

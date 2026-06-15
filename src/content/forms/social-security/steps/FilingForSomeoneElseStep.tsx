@@ -6,7 +6,7 @@ import {
 import { RadioGroupField } from "#components/forms/RadioGroupField";
 import { ShortTextField } from "#components/forms/ShortTextField";
 import { YesNoField } from "#components/forms/YesNoField";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const filingForSomeoneElseStep = defineStep({
   id: "filing-for-someone-else",
