@@ -1,3 +1,4 @@
+import path from "node:path";
 import {
   configDefaults,
   coverageConfigDefaults,
@@ -11,6 +12,9 @@ export default defineConfig({
     clearMocks: true,
     include: ["src/**/*.test.{ts,tsx}"],
     exclude: [...configDefaults.exclude, "src/**/*.spec.ts"],
+    alias: {
+      "~": path.resolve(__dirname, "src"),
+    },
     setupFiles: ["./src/vitest.setup.ts"],
     environment: "jsdom",
     coverage: {
