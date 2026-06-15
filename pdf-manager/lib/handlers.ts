@@ -2,16 +2,16 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { PDFDocument } from "@cantoo/pdf-lib";
 import type { Context } from "hono";
-import { findPdfById, listAllPdfs } from "./catalog.ts";
+import { findPdfById, listAllPdfs } from "./catalog";
 import {
   computeOutputPaths,
   formatFiles,
   writeDefinitionFiles,
-} from "./define.ts";
-import { loadJurisdictions } from "./fields.ts";
-import { applyRenames, extractFields, extractFieldsFromBytes } from "./pdf.ts";
-import { loadExclusions, processPdf } from "./schema.ts";
-import { loadSchemaFields, suggestName } from "./suggest.ts";
+} from "./define";
+import { loadJurisdictions } from "./fields";
+import { applyRenames, extractFields, extractFieldsFromBytes } from "./pdf";
+import { loadExclusions, processPdf } from "./schema";
+import { loadSchemaFields, suggestName } from "./suggest";
 
 export async function handleListPdfs(c: Context) {
   return c.json(

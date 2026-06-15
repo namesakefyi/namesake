@@ -1,6 +1,6 @@
 import { Controller, useFormContext } from "react-hook-form";
-import type { FieldName } from "../../../constants/fields";
-import { smartquotes } from "../../../utils/smartquotes";
+import type { FieldName } from "#constants/fields";
+import { smartquotes } from "#lib/utils/smartquotes";
 import { TextField, type TextFieldProps } from "../../common/TextField";
 import "./ShortTextField.css";
 

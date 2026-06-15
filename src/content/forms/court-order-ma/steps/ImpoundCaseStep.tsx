@@ -1,14 +1,14 @@
-import { Banner } from "../../../../components/common/Banner";
+import { Banner } from "#components/common/Banner";
 import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "../../../../components/forms/FormStep";
-import { LongTextField } from "../../../../components/forms/LongTextField";
-import { YesNoField } from "../../../../components/forms/YesNoField";
-import type { Step } from "../../../../forms/types";
+} from "#components/forms/FormStep";
+import { LongTextField } from "#components/forms/LongTextField";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const impoundCaseStep: Step = {
+export const impoundCaseStep = defineStep({
   id: "impound-case",
   title: "Would you like to impound your case?",
   description:
@@ -62,4 +62,4 @@ export const impoundCaseStep: Step = {
       </FormStep>
     );
   },
-};
+});

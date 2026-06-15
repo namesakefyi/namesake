@@ -1,8 +1,8 @@
-import { FormStep } from "../../../../components/forms/FormStep";
-import { NameField } from "../../../../components/forms/NameField";
-import type { Step } from "../../../../forms/types";
+import { FormStep } from "#components/forms/FormStep";
+import { NameField } from "#components/forms/NameField";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const newNameStep: Step = {
+export const newNameStep = defineStep({
   id: "new-name",
   title: "What is the minor's new name?",
   description: "This is the name being made official!",
@@ -12,4 +12,4 @@ export const newNameStep: Step = {
       <NameField type="newName" />
     </FormStep>
   ),
-};
+});

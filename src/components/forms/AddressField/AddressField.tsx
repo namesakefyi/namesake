@@ -1,8 +1,8 @@
 import { type MaskitoOptions, maskitoTransform } from "@maskito/core";
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import type { FieldName } from "../../../constants/fields";
-import { JURISDICTIONS } from "../../../constants/jurisdictions";
+import type { FieldName } from "#constants/fields";
+import { JURISDICTIONS } from "#constants/jurisdictions";
 import { ComboBox, ComboBoxItem } from "../../common/ComboBox";
 import { TextField } from "../../common/TextField";
 import "./AddressField.css";

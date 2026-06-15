@@ -1,9 +1,6 @@
 import { Controller, useFormContext } from "react-hook-form";
-import {
-  type FieldName,
-  PREFER_NOT_TO_ANSWER,
-} from "../../../constants/fields";
-import { smartquotes } from "../../../utils/smartquotes";
+import { type FieldName, PREFER_NOT_TO_ANSWER } from "#constants/fields";
+import { smartquotes } from "#lib/utils/smartquotes";
 import {
   Radio,
   RadioGroup,

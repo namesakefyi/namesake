@@ -1,8 +1,8 @@
-import { CheckboxField } from "../../../../components/forms/CheckboxField";
-import { FormStep } from "../../../../components/forms/FormStep";
-import type { Step } from "../../../../forms/types";
+import { CheckboxField } from "#components/forms/CheckboxField";
+import { FormStep } from "#components/forms/FormStep";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const publicAssistanceStep: Step = {
+export const publicAssistanceStep = defineStep({
   id: "public-assistance",
   title: "Which type of public assistance do you receive?",
   description: "Check all that apply.",
@@ -35,4 +35,4 @@ export const publicAssistanceStep: Step = {
       />
     </FormStep>
   ),
-};
+});

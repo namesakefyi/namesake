@@ -1,9 +1,9 @@
-import { FormStep } from "../../../../components/forms/FormStep";
-import { YesNoField } from "../../../../components/forms/YesNoField";
-import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
+import { FormStep } from "#components/forms/FormStep";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#lib/forms/defineStep";
+import { nameOrFallback } from "#lib/forms/resolveStepContent";
 
-export const birthCertificateParentsStep: Step = {
+export const birthCertificateParentsStep = defineStep({
   id: "birth-certificate-parents",
   title: (data) =>
     `Are both parents listed on ${nameOrFallback(data, "the minor")}'s birth certificate?`,
@@ -19,4 +19,4 @@ export const birthCertificateParentsStep: Step = {
       />
     </FormStep>
   ),
-};
+});

@@ -1,9 +1,9 @@
-import { Banner } from "../../../../components/common/Banner";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { RadioGroupField } from "../../../../components/forms/RadioGroupField";
-import type { Step } from "../../../../forms/types";
+import { Banner } from "#components/common/Banner";
+import { FormStep } from "#components/forms/FormStep";
+import { RadioGroupField } from "#components/forms/RadioGroupField";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const sexStep: Step = {
+export const sexStep = defineStep({
   id: "sex",
   title: "What is your sex?",
   description:
@@ -57,4 +57,4 @@ export const sexStep: Step = {
       </Banner>
     </FormStep>
   ),
-};
+});

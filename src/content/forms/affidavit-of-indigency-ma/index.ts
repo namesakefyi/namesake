@@ -1,4 +1,4 @@
-import { defineForm } from "../../../forms/defineForm";
+import { defineForm } from "#lib/forms/defineForm";
 import { addressStep } from "./steps/AddressStep";
 import { currentNameStep } from "./steps/CurrentNameStep";
 import { extraFeesStep } from "./steps/ExtraFeesStep";

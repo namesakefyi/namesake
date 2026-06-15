@@ -1,19 +1,19 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { ComboBox, ComboBoxItem } from "../../../../components/common/ComboBox";
-import { EmailField } from "../../../../components/forms/EmailField";
+import { ComboBox, ComboBoxItem } from "#components/common/ComboBox";
+import { EmailField } from "#components/forms/EmailField";
 import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "../../../../components/forms/FormStep";
-import { PhoneField } from "../../../../components/forms/PhoneField";
-import { ShortTextField } from "../../../../components/forms/ShortTextField";
-import { YesNoField } from "../../../../components/forms/YesNoField";
-import { JURISDICTIONS } from "../../../../constants/jurisdictions";
-import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
+} from "#components/forms/FormStep";
+import { PhoneField } from "#components/forms/PhoneField";
+import { ShortTextField } from "#components/forms/ShortTextField";
+import { YesNoField } from "#components/forms/YesNoField";
+import { JURISDICTIONS } from "#constants/jurisdictions";
+import { defineStep } from "#lib/forms/defineStep";
+import { nameOrFallback } from "#lib/forms/resolveStepContent";
 
-export const guardianStep: Step = {
+export const guardianStep = defineStep({
   id: "guardian",
   title: (data) =>
     `Does ${nameOrFallback(data, "the minor")} have a court-appointed guardian?`,
@@ -58,7 +58,7 @@ export const guardianStep: Step = {
       </FormStep>
     );
   },
-};
+});
 
 function GuardianStateField() {
   const { control } = useFormContext();

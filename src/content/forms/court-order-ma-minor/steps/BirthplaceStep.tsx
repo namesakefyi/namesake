@@ -1,15 +1,12 @@
-import { ComboBoxField } from "../../../../components/forms/ComboBoxField";
-import {
-  FormStep,
-  useFieldVisible,
-} from "../../../../components/forms/FormStep";
-import { ShortTextField } from "../../../../components/forms/ShortTextField";
-import { COUNTRIES } from "../../../../constants/countries";
-import { JURISDICTIONS } from "../../../../constants/jurisdictions";
-import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
+import { ComboBoxField } from "#components/forms/ComboBoxField";
+import { FormStep, useFieldVisible } from "#components/forms/FormStep";
+import { ShortTextField } from "#components/forms/ShortTextField";
+import { COUNTRIES } from "#constants/countries";
+import { JURISDICTIONS } from "#constants/jurisdictions";
+import { defineStep } from "#lib/forms/defineStep";
+import { nameOrFallback } from "#lib/forms/resolveStepContent";
 
-export const birthplaceStep: Step = {
+export const birthplaceStep = defineStep({
   id: "birthplace",
   title: (data) => `Where was ${nameOrFallback(data, "the minor")} born?`,
   fields: [
@@ -45,4 +42,4 @@ export const birthplaceStep: Step = {
       </FormStep>
     );
   },
-};
+});

@@ -1,9 +1,9 @@
-import { AddressField } from "../../../../components/forms/AddressField";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
+import { AddressField } from "#components/forms/AddressField";
+import { FormStep } from "#components/forms/FormStep";
+import { defineStep } from "#lib/forms/defineStep";
+import { nameOrFallback } from "#lib/forms/resolveStepContent";
 
-export const addressStep: Step = {
+export const addressStep = defineStep({
   id: "address",
   title: (data) => `What is ${nameOrFallback(data, "the minor")}'s address?`,
   description: (data) =>
@@ -22,4 +22,4 @@ export const addressStep: Step = {
       </FormStep>
     );
   },
-};
+});

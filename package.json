@@ -35,6 +35,19 @@
     "pdf:schema": "tsx scripts/extract-pdf-schema.ts",
     "pdf:manage": "vite --config pdf-manager/vite.config.ts --open"
   },
+  "imports": {
+    "#*": [
+      "./src/*",
+      "./src/*.ts",
+      "./src/*.tsx",
+      "./src/*.js",
+      "./src/*.jsx",
+      "./src/*/index.ts",
+      "./src/*/index.tsx",
+      "./src/*/index.js",
+      "./src/*/index.jsx"
+    ]
+  },
   "simple-git-hooks": {
     "pre-commit": "./node_modules/.bin/nano-staged"
   },

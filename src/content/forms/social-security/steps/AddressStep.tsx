@@ -1,8 +1,8 @@
-import { AddressField } from "../../../../components/forms/AddressField";
-import { FormStep } from "../../../../components/forms/FormStep";
-import type { Step } from "../../../../forms/types";
+import { AddressField } from "#components/forms/AddressField";
+import { FormStep } from "#components/forms/FormStep";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const addressStep: Step = {
+export const addressStep = defineStep({
   id: "address",
   title: "What is your mailing address?",
   fields: [
@@ -17,4 +17,4 @@ export const addressStep: Step = {
       <AddressField type="mailing" />
     </FormStep>
   ),
-};
+});

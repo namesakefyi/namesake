@@ -1,8 +1,8 @@
-import { FormStep } from "../../../../components/forms/FormStep";
-import { YesNoField } from "../../../../components/forms/YesNoField";
-import type { Step } from "../../../../forms/types";
+import { FormStep } from "#components/forms/FormStep";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const birthCertificateStep: Step = {
+export const birthCertificateStep = defineStep({
   id: "birth-certificate",
   title: "Do you want to update your Rhode Island birth certificate?",
   fields: ["shouldChangeBirthCertificate"],
@@ -17,4 +17,4 @@ export const birthCertificateStep: Step = {
       />
     </FormStep>
   ),
-};
+});

@@ -1,10 +1,10 @@
-import { Banner } from "../../../../components/common/Banner";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { LongTextField } from "../../../../components/forms/LongTextField";
-import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
+import { Banner } from "#components/common/Banner";
+import { FormStep } from "#components/forms/FormStep";
+import { LongTextField } from "#components/forms/LongTextField";
+import { defineStep } from "#lib/forms/defineStep";
+import { nameOrFallback } from "#lib/forms/resolveStepContent";
 
-export const reasonStep: Step = {
+export const reasonStep = defineStep({
   id: "reason",
   title: (data) =>
     `What is the reason ${nameOrFallback(data, "the minor")} is changing names?`,
@@ -32,4 +32,4 @@ export const reasonStep: Step = {
       </Banner>
     </FormStep>
   ),
-};
+});

@@ -1,9 +1,9 @@
-import { TextField } from "../../../../components/common/TextField";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { RepeatingEntry } from "../../../../components/forms/RepeatingEntry";
-import type { Step } from "../../../../forms/types";
+import { TextField } from "#components/common/TextField";
+import { FormStep } from "#components/forms/FormStep";
+import { RepeatingEntry } from "#components/forms/RepeatingEntry";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const previousAddressesStep: Step = {
+export const previousAddressesStep = defineStep({
   id: "previous-addresses",
   title: "What are your most recent addresses?",
   description:
@@ -28,4 +28,4 @@ export const previousAddressesStep: Step = {
       </RepeatingEntry>
     </FormStep>
   ),
-};
+});

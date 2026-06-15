@@ -1,10 +1,10 @@
 import { useFormContext } from "react-hook-form";
-import { Banner } from "../../../../components/common/Banner";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { YesNoField } from "../../../../components/forms/YesNoField";
-import type { Step } from "../../../../forms/types";
+import { Banner } from "#components/common/Banner";
+import { FormStep } from "#components/forms/FormStep";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const previousNameChangeStep: Step = {
+export const previousNameChangeStep = defineStep({
   id: "previous-name-change",
   title: "Have you ever changed your name before?",
   fields: ["hasPreviousNameChange"],
@@ -29,4 +29,4 @@ export const previousNameChangeStep: Step = {
       </FormStep>
     );
   },
-};
+});

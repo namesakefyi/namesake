@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button, FileTrigger } from "react-aria-components";
-import type { Diff, Field, FieldPreview, PdfMeta, Rename } from "../types.ts";
-import { fileToBase64 } from "../utils.ts";
+import type { Diff, Field, FieldPreview, PdfMeta, Rename } from "../types";
+import { fileToBase64 } from "../utils";
 import { DiffBanner } from "./DiffBanner.tsx";
 import { FieldList } from "./FieldList.tsx";
 import { FieldMapper } from "./FieldMapper.tsx";

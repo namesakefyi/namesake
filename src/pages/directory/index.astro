@@ -8,14 +8,10 @@ import {
   RiPhoneLine,
   RiVerifiedBadgeFill,
 } from "@remixicon/react";
-import PageHeader from "../../components/PageHeader.astro";
-import {
-  SERVICE_LABELS,
-  SERVICES,
-  type Service,
-} from "../../constants/services";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { formatCleanUrl } from "../../utils/formatCleanUrl";
+import PageHeader from "#components/PageHeader.astro";
+import { SERVICE_LABELS, SERVICES, type Service } from "#constants/services";
+import BaseLayout from "#layouts/BaseLayout.astro";
+import { formatCleanUrl } from "#lib/utils/formatCleanUrl";
 
 const stateParam = Astro.url.searchParams.get("state");
 const serviceParam = Astro.url.searchParams.get("service");

@@ -1,9 +1,9 @@
-import { Banner } from "../../../../components/common/Banner";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { YesNoField } from "../../../../components/forms/YesNoField";
-import type { Step } from "../../../../forms/types";
+import { Banner } from "#components/common/Banner";
+import { FormStep } from "#components/forms/FormStep";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const ethnicityStep: Step = {
+export const ethnicityStep = defineStep({
   id: "ethnicity",
   title: "What is your ethnicity?",
   description:
@@ -24,4 +24,4 @@ export const ethnicityStep: Step = {
       </Banner>
     </FormStep>
   ),
-};
+});

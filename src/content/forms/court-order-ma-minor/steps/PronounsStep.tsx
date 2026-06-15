@@ -2,13 +2,13 @@ import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "../../../../components/forms/FormStep";
-import { PronounSelectField } from "../../../../components/forms/PronounSelectField";
-import { YesNoField } from "../../../../components/forms/YesNoField";
-import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
+} from "#components/forms/FormStep";
+import { PronounSelectField } from "#components/forms/PronounSelectField";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#lib/forms/defineStep";
+import { nameOrFallback } from "#lib/forms/resolveStepContent";
 
-export const pronounsStep: Step = {
+export const pronounsStep = defineStep({
   id: "pronouns",
   title: (data) =>
     `Do you want to share ${nameOrFallback(data, "the minor")}'s pronouns with the court staff?`,
@@ -35,4 +35,4 @@ export const pronounsStep: Step = {
       </FormStep>
     );
   },
-};
+});

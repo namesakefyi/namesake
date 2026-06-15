@@ -1,8 +1,8 @@
-import { FormStep } from "../../../../components/forms/FormStep";
-import { NameField } from "../../../../components/forms/NameField";
-import type { Step } from "../../../../forms/types";
+import { FormStep } from "#components/forms/FormStep";
+import { NameField } from "#components/forms/NameField";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const oldNameStep: Step = {
+export const oldNameStep = defineStep({
   id: "old-name",
   title: "What was your name at birth?",
   description:
@@ -13,4 +13,4 @@ export const oldNameStep: Step = {
       <NameField type="oldName" />
     </FormStep>
   ),
-};
+});

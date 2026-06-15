@@ -1,9 +1,9 @@
-import { Banner } from "../../../../components/common/Banner";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { ShortTextField } from "../../../../components/forms/ShortTextField";
-import type { Step } from "../../../../forms/types";
+import { Banner } from "#components/common/Banner";
+import { FormStep } from "#components/forms/FormStep";
+import { ShortTextField } from "#components/forms/ShortTextField";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const mothersMaidenNameStep: Step = {
+export const mothersMaidenNameStep = defineStep({
   id: "mothers-maiden-name",
   title: "What is your mother's maiden name?",
   description:
@@ -18,4 +18,4 @@ export const mothersMaidenNameStep: Step = {
       </Banner>
     </FormStep>
   ),
-};
+});

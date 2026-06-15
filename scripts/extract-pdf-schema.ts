@@ -3,18 +3,18 @@
 /**
  * Extracts AcroForm field names from PDFs and writes schema.ts files.
  * Usage: pnpm pdf:schema [path/to/file.pdf] [--quiet]
- *   No arg: all PDFs in src/pdfs. With arg: single PDF. --quiet: no output.
+ *   No arg: all PDFs in src/content/pdfs. With arg: single PDF. --quiet: no output.
  */
 
 import { spawnSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { intro, log, taskLog } from "@clack/prompts";
-import { findPdfFiles, processPdf } from "../pdf-manager/lib/schema.ts";
+import { findPdfFiles, processPdf } from "../pdf-manager/lib/schema";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const PDFS_DIR = join(ROOT, "src/pdfs");
+const PDFS_DIR = join(ROOT, "src/content/pdfs");
 
 async function main() {
   const argv = process.argv.slice(2);
@@ -37,7 +37,7 @@ async function main() {
   }
 
   if (pdfPaths.length === 0) {
-    if (!quiet) log.warn("No PDF files found in src/pdfs");
+    if (!quiet) log.warn("No PDF files found in src/content/pdfs");
     return;
   }
 

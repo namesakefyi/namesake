@@ -1,8 +1,8 @@
-import { FormStep } from "../../../../components/forms/FormStep";
-import { PhoneField } from "../../../../components/forms/PhoneField";
-import type { Step } from "../../../../forms/types";
+import { FormStep } from "#components/forms/FormStep";
+import { PhoneField } from "#components/forms/PhoneField";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const phoneNumberStep: Step = {
+export const phoneNumberStep = defineStep({
   id: "phone-number",
   title: "What is your phone number?",
   fields: ["phoneNumber"],
@@ -11,4 +11,4 @@ export const phoneNumberStep: Step = {
       <PhoneField name="phoneNumber" />
     </FormStep>
   ),
-};
+});

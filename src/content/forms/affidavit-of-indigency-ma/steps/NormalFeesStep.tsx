@@ -1,14 +1,11 @@
 import { useFormContext } from "react-hook-form";
-import { CheckboxField } from "../../../../components/forms/CheckboxField";
-import { CostsTable } from "../../../../components/forms/CostsTable";
-import { useFormStep } from "../../../../components/forms/FormContainer";
-import {
-  FormStep,
-  FormSubsection,
-} from "../../../../components/forms/FormStep";
-import { NumberField } from "../../../../components/forms/NumberField";
-import { ShortTextField } from "../../../../components/forms/ShortTextField";
-import type { Step } from "../../../../forms/types";
+import { CheckboxField } from "#components/forms/CheckboxField";
+import { CostsTable } from "#components/forms/CostsTable";
+import { useFormStep } from "#components/forms/FormContainer";
+import { FormStep, FormSubsection } from "#components/forms/FormStep";
+import { NumberField } from "#components/forms/NumberField";
+import { ShortTextField } from "#components/forms/ShortTextField";
+import { defineStep } from "#lib/forms/defineStep";
 
 const amountProps = {
   label: "Amount (if known)",
@@ -20,7 +17,7 @@ const amountProps = {
   },
 } as const;
 
-export const normalFeesStep: Step = {
+export const normalFeesStep = defineStep({
   id: "normal-fees",
   title: "Which court fees would you like waived?",
   description: "Check all that apply. Enter the amount if you know it.",
@@ -114,4 +111,4 @@ export const normalFeesStep: Step = {
       </FormStep>
     );
   },
-};
+});

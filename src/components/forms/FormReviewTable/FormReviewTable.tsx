@@ -1,14 +1,11 @@
 import { useFormContext } from "react-hook-form";
-import type { FormData } from "../../../constants/fields";
-import { resolveFormVisibility } from "../../../forms/formVisibility";
-import type { Step } from "../../../forms/types";
-import {
-  formatFieldValue,
-  getFieldLabel,
-} from "../../../utils/formatReviewFields";
+import type { FormData } from "#constants/fields";
+import { resolveFormVisibility } from "#lib/forms/formVisibility";
+import type { Step } from "#lib/forms/types";
+import { formatFieldValue, getFieldLabel } from "#lib/utils/formatReviewFields";
 import { useFormStep } from "../FormContainer";
 import "./FormReviewTable.css";
-import { smartquotes } from "../../../utils/smartquotes";
+import { smartquotes } from "#lib/utils/smartquotes";
 
 export interface FormReviewTableProps {
   steps: readonly Step[];

@@ -1,10 +1,10 @@
-import { Banner } from "../../../../components/common/Banner";
-import { CheckboxField } from "../../../../components/forms/CheckboxField";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { LongTextField } from "../../../../components/forms/LongTextField";
-import type { Step } from "../../../../forms/types";
+import { Banner } from "#components/common/Banner";
+import { CheckboxField } from "#components/forms/CheckboxField";
+import { FormStep } from "#components/forms/FormStep";
+import { LongTextField } from "#components/forms/LongTextField";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const reasonStep: Step = {
+export const reasonStep = defineStep({
   id: "reason",
   title: "What is the reason you're changing your name?",
   fields: [
@@ -38,4 +38,4 @@ export const reasonStep: Step = {
       />
     </FormStep>
   ),
-};
+});

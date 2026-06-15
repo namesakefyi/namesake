@@ -5,7 +5,7 @@ import { geoPath } from "d3-geo";
 import type { Feature } from "geojson";
 import { feature } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
-import { formatStateList } from "../utils/formatStateList";
+import { formatStateList } from "#lib/utils/formatStateList";
 
 const stateEntries = await getCollection("states");
 

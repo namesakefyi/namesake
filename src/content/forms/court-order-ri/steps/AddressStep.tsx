@@ -1,14 +1,14 @@
-import { Banner } from "../../../../components/common/Banner";
-import { AddressField } from "../../../../components/forms/AddressField";
-import { CheckboxField } from "../../../../components/forms/CheckboxField";
+import { Banner } from "#components/common/Banner";
+import { AddressField } from "#components/forms/AddressField";
+import { CheckboxField } from "#components/forms/CheckboxField";
 import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "../../../../components/forms/FormStep";
-import type { Step } from "../../../../forms/types";
+} from "#components/forms/FormStep";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const addressStep: Step = {
+export const addressStep = defineStep({
   id: "address",
   title: "What is your residential address?",
   description:
@@ -78,4 +78,4 @@ export const addressStep: Step = {
       </FormStep>
     );
   },
-};
+});

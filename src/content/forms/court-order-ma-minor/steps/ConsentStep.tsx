@@ -2,12 +2,12 @@ import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "../../../../components/forms/FormStep";
-import { LongTextField } from "../../../../components/forms/LongTextField";
-import { YesNoField } from "../../../../components/forms/YesNoField";
-import type { Step } from "../../../../forms/types";
+} from "#components/forms/FormStep";
+import { LongTextField } from "#components/forms/LongTextField";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const consentStep: Step = {
+export const consentStep = defineStep({
   id: "consent",
   title: "Does everyone consent to the name change?",
   fields: [
@@ -79,4 +79,4 @@ export const consentStep: Step = {
       </FormStep>
     );
   },
-};
+});

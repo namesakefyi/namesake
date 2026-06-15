@@ -2,13 +2,13 @@ import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "../../../../components/forms/FormStep";
-import { RadioGroupField } from "../../../../components/forms/RadioGroupField";
-import { ShortTextField } from "../../../../components/forms/ShortTextField";
-import { YesNoField } from "../../../../components/forms/YesNoField";
-import type { Step } from "../../../../forms/types";
+} from "#components/forms/FormStep";
+import { RadioGroupField } from "#components/forms/RadioGroupField";
+import { ShortTextField } from "#components/forms/ShortTextField";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const filingForSomeoneElseStep: Step = {
+export const filingForSomeoneElseStep = defineStep({
   id: "filing-for-someone-else",
   title: "Are you filing this form for someone else?",
   fields: [
@@ -67,4 +67,4 @@ export const filingForSomeoneElseStep: Step = {
       </FormStep>
     );
   },
-};
+});

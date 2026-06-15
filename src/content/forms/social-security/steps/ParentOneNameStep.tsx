@@ -1,8 +1,8 @@
-import { FormStep } from "../../../../components/forms/FormStep";
-import { NameField } from "../../../../components/forms/NameField";
-import type { Step } from "../../../../forms/types";
+import { FormStep } from "#components/forms/FormStep";
+import { NameField } from "#components/forms/NameField";
+import { defineStep } from "#lib/forms/defineStep";
 
-export const parentOneNameStep: Step = {
+export const parentOneNameStep = defineStep({
   id: "parent-one",
   title: "What is your mother's (or first parent's) name?",
   description:
@@ -13,4 +13,4 @@ export const parentOneNameStep: Step = {
       <NameField type="mothersName" />
     </FormStep>
   ),
-};
+});
