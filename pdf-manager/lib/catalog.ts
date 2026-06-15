@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
-export const PDFS_DIR = join(ROOT, "src/pdfs");
+export const PDFS_DIR = join(ROOT, "src/content/pdfs");
 
 interface PdfMeta {
   title: string;
@@ -50,7 +50,7 @@ function countSchemaFields(pdfDir: string): number {
 export function listAllPdfs(): PdfEntry[] {
   const result: PdfEntry[] = [];
   for (const entry of readdirSync(PDFS_DIR, { withFileTypes: true })) {
-    if (!entry.isDirectory() || entry.name === "utils") continue;
+    if (!entry.isDirectory()) continue;
     const jurisdictionDir = join(PDFS_DIR, entry.name);
     for (const pdfEntry of readdirSync(jurisdictionDir, {
       withFileTypes: true,
@@ -81,7 +81,7 @@ export function findPdfById(
 ): { pdfDir: string; pdfPath: string } | null {
   if (!id || id.includes("..")) return null;
   for (const entry of readdirSync(PDFS_DIR, { withFileTypes: true })) {
-    if (!entry.isDirectory() || entry.name === "utils") continue;
+    if (!entry.isDirectory()) continue;
     const pdfDir = join(PDFS_DIR, entry.name, id);
     if (!existsSync(pdfDir)) continue;
     const pdfFile = readdirSync(pdfDir).find((f) => f.endsWith(".pdf"));

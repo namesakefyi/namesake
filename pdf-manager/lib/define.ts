@@ -50,7 +50,7 @@ function generateDefinition({
     "pdfPath: pdf,",
   ];
   const fieldLines = pdfFields.map((f) => `  ${escapeKey(f.name)}: undefined,`);
-  return `import { definePdf } from "../../utils/definePdf";
+  return `import { definePdf } from "../../../../pdfs/definePdf";
 import pdf from "./${id}.pdf";
 import type { PdfFieldName } from "./schema";
 
@@ -91,8 +91,8 @@ function generateStarterTest({
       : "    // TODO: Add form data for resolver";
 
   return `import { describe, it } from "vitest";
-import type { FormData } from "../../../constants/fields";
-import { expectPdfFieldsMatch } from "../../utils/expectPdfFieldsMatch";
+import type { FormData } from "../../../../constants/fields";
+import { expectPdfFieldsMatch } from "../../../../pdfs/expectPdfFieldsMatch";
 import ${importName} from ".";
 
 describe("${escapedTitle}", () => {
@@ -149,8 +149,8 @@ export function computeOutputPaths({
   const id = generatePdfId(code, title);
   const jurisdictionDir =
     jurisdiction.toLowerCase() === "federal"
-      ? join(ROOT, "src/pdfs/federal")
-      : join(ROOT, "src/pdfs", jurisdiction.toLowerCase());
+      ? join(ROOT, "src/content/pdfs/federal")
+      : join(ROOT, "src/content/pdfs", jurisdiction.toLowerCase());
   const pdfDir = join(jurisdictionDir, id);
   return {
     id,

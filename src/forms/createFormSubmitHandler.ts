@@ -22,8 +22,8 @@ export function createFormSubmitHandler(
     );
 
     const [{ loadPdfs }, { downloadMergedPdf }] = await Promise.all([
-      import("../pdfs/utils/loadPdfs"),
-      import("../pdfs/utils/downloadMergedPdf"),
+      import("../pdfs/loadPdfs"),
+      import("../pdfs/downloadMergedPdf"),
     ]);
 
     const pdfs = await loadPdfs(pdfsToInclude);
