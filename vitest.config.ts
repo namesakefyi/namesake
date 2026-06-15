@@ -30,8 +30,7 @@ export default defineConfig({
         "**/*.config.?(c|m)[jt]s?(x)",
         "**/*.stories.tsx",
         "src/components/**/index.ts",
-        "src/content/pdfs/index.ts",
-        "src/content/pdfs/**/schema.ts",
+        "src/content/pdfs/**/{index,schema}.ts",
       ],
       thresholds: {
         lines: 85,
