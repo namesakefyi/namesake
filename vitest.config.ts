@@ -18,10 +18,9 @@ export default defineConfig({
       reportOnFailure: true,
       include: [
         "src/components/**/*.{ts,tsx}",
+        "src/content/pdfs/**/*.{ts,tsx}",
         "src/db/**/*.{ts,tsx}",
-        "src/forms/*.ts",
-        "src/pdfs/**/*.{ts,tsx}",
-        "src/utils/**/*.{ts,tsx}",
+        "src/lib/**/*.{ts,tsx}",
       ],
       exclude: [
         ...coverageConfigDefaults.exclude,
@@ -31,8 +30,8 @@ export default defineConfig({
         "**/*.config.?(c|m)[jt]s?(x)",
         "**/*.stories.tsx",
         "src/components/**/index.ts",
-        "src/pdfs/index.ts",
-        "src/pdfs/**/schema.ts",
+        "src/content/pdfs/index.ts",
+        "src/content/pdfs/**/schema.ts",
       ],
       thresholds: {
         lines: 85,
