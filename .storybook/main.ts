@@ -1,4 +1,3 @@
-import path from "node:path";
 import type { StorybookConfig } from "@storybook/react-vite";
 
 const excludedProps = new Set([
@@ -41,15 +40,6 @@ const config: StorybookConfig = {
       propFilter: (prop) =>
         !prop.name.startsWith("aria-") && !excludedProps.has(prop.name),
     },
-  },
-  viteFinal: async (config) => {
-    if (config.resolve) {
-      config.resolve.alias = {
-        ...config.resolve?.alias,
-        "~": path.resolve(__dirname, "src"),
-      };
-    }
-    return config;
   },
 };
 

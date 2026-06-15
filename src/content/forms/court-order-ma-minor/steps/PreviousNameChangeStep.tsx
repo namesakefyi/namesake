@@ -2,12 +2,12 @@ import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "~/components/forms/FormStep";
-import { LongTextField } from "~/components/forms/LongTextField";
-import { ShortTextField } from "~/components/forms/ShortTextField";
-import { YesNoField } from "~/components/forms/YesNoField";
-import { defineStep } from "~/forms/defineStep";
-import { nameOrFallback } from "~/forms/resolveStepContent";
+} from "#components/forms/FormStep";
+import { LongTextField } from "#components/forms/LongTextField";
+import { ShortTextField } from "#components/forms/ShortTextField";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#forms/defineStep";
+import { nameOrFallback } from "#forms/resolveStepContent";
 
 export const previousNameChangeStep = defineStep({
   id: "previous-name-change",

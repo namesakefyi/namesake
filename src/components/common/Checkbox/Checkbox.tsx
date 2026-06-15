@@ -9,7 +9,7 @@ import { FieldError } from "../Form";
 
 import "./Checkbox.css";
 import clsx from "clsx";
-import { smartquotes } from "~/utils/smartquotes";
+import { smartquotes } from "#utils/smartquotes";
 
 export interface CheckboxProps extends CheckboxFieldProps {
   label?: string;

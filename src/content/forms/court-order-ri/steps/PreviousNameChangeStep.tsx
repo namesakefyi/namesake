@@ -1,8 +1,8 @@
 import { useFormContext } from "react-hook-form";
-import { Banner } from "~/components/common/Banner";
-import { FormStep } from "~/components/forms/FormStep";
-import { YesNoField } from "~/components/forms/YesNoField";
-import { defineStep } from "~/forms/defineStep";
+import { Banner } from "#components/common/Banner";
+import { FormStep } from "#components/forms/FormStep";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#forms/defineStep";
 
 export const previousNameChangeStep = defineStep({
   id: "previous-name-change",

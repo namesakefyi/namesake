@@ -1,6 +1,6 @@
 import { RiDeleteBin2Line } from "@remixicon/react";
 import { useEffect, useState } from "react";
-import { clearAllFields, getAllFields } from "~/db/database";
+import { clearAllFields, getAllFields } from "#db/database";
 import { Button } from "../../common/Button";
 import { Heading } from "../../common/Content";
 import { Dialog, DialogTrigger } from "../../common/Dialog";

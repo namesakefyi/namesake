@@ -50,7 +50,7 @@ function generateDefinition({
     "pdfPath: pdf,",
   ];
   const fieldLines = pdfFields.map((f) => `  ${escapeKey(f.name)}: undefined,`);
-  return `import { definePdf } from "~/pdfs/definePdf";
+  return `import { definePdf } from "#pdfs/definePdf";
 import pdf from "./${id}.pdf";
 import type { PdfFieldName } from "./schema";
 
@@ -91,8 +91,8 @@ function generateStarterTest({
       : "    // TODO: Add form data for resolver";
 
   return `import { describe, it } from "vitest";
-import type { FormData } from "~/constants/fields";
-import { expectPdfFieldsMatch } from "~/pdfs/expectPdfFieldsMatch";
+import type { FormData } from "#constants/fields";
+import { expectPdfFieldsMatch } from "#pdfs/expectPdfFieldsMatch";
 import ${importName} from ".";
 
 describe("${escapedTitle}", () => {

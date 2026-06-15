@@ -1,7 +1,7 @@
-import { Banner } from "~/components/common/Banner";
-import { CheckboxGroupField } from "~/components/forms/CheckboxGroupField";
-import { FormStep } from "~/components/forms/FormStep";
-import { defineStep } from "~/forms/defineStep";
+import { Banner } from "#components/common/Banner";
+import { CheckboxGroupField } from "#components/forms/CheckboxGroupField";
+import { FormStep } from "#components/forms/FormStep";
+import { defineStep } from "#forms/defineStep";
 
 export const raceStep = defineStep({
   id: "race",

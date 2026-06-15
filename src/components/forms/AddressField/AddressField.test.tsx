@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { JURISDICTIONS } from "~/constants/jurisdictions";
+import { JURISDICTIONS } from "#constants/jurisdictions";
 import { renderWithFormProvider, screen } from "../test-utils";
 import { AddressField } from "./AddressField";
 

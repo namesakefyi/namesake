@@ -1,6 +1,6 @@
-import { CheckboxField } from "~/components/forms/CheckboxField";
-import { FormStep } from "~/components/forms/FormStep";
-import { defineStep } from "~/forms/defineStep";
+import { CheckboxField } from "#components/forms/CheckboxField";
+import { FormStep } from "#components/forms/FormStep";
+import { defineStep } from "#forms/defineStep";
 
 export const publicAssistanceStep = defineStep({
   id: "public-assistance",

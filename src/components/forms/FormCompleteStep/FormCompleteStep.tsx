@@ -1,12 +1,12 @@
 import { RiDownloadLine, RiRestartLine } from "@remixicon/react";
 import { useEffect, useState } from "react";
-import { clearFormProgress } from "~/db/database";
+import { clearFormProgress } from "#db/database";
 import { Button } from "../../common/Button";
 import { Heading } from "../../common/Content/Content";
 import { DeleteFormDataModal } from "../DeleteFormDataModal";
 import { FormFeedback } from "../FormFeedback/FormFeedback";
 import "./FormCompleteStep.css";
-import type { FormSlug } from "~/constants/forms";
+import type { FormSlug } from "#constants/forms";
 
 export interface FormCompleteStepProps {
   slug: FormSlug;

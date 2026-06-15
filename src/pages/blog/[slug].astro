@@ -6,8 +6,8 @@ import {
   getEntry,
   render,
 } from "astro:content";
-import TableOfContents from "~/components/TableOfContents.astro";
-import ProseLayout from "~/layouts/ProseLayout.astro";
+import TableOfContents from "#components/TableOfContents.astro";
+import ProseLayout from "#layouts/ProseLayout.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");

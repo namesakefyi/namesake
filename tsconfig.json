@@ -2,11 +2,10 @@
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
     "allowJs": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "paths": {
-      "~/*": ["./src/*"]
-    },
     "types": ["./worker-configuration.d.ts", "node"],
     "verbatimModuleSyntax": true
   },

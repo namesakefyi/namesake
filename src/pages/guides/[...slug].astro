@@ -1,10 +1,10 @@
 ---
 import { getCollection, getEntry, render } from "astro:content";
-import type { BreadcrumbItem } from "~/components/Breadcrumbs.astro";
-import GuideFooter from "~/components/GuideFooter.astro";
-import StubBanner from "~/components/StubBanner.astro";
-import TableOfContents from "~/components/TableOfContents.astro";
-import ProseLayout from "~/layouts/ProseLayout.astro";
+import type { BreadcrumbItem } from "#components/Breadcrumbs.astro";
+import GuideFooter from "#components/GuideFooter.astro";
+import StubBanner from "#components/StubBanner.astro";
+import TableOfContents from "#components/TableOfContents.astro";
+import ProseLayout from "#layouts/ProseLayout.astro";
 
 export async function getStaticPaths() {
   const guides = await getCollection("guides", ({ data }) => !data.unlisted);

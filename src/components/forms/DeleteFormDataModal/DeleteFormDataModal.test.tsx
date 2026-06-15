@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { DeleteFormDataModal } from "./DeleteFormDataModal";
 
 // Mock the database module
-vi.mock("~/db/database", () => ({
+vi.mock("#db/database", () => ({
   clearAllFields: vi.fn().mockResolvedValue(undefined),
   getAllFields: vi.fn().mockResolvedValue([
     { field: "firstName", value: "John" },
@@ -32,7 +32,7 @@ describe("DeleteFormDataModal", () => {
   });
 
   it("shows no data message when no responses exist", async () => {
-    const { getAllFields } = await import("~/db/database");
+    const { getAllFields } = await import("#db/database");
     vi.mocked(getAllFields).mockResolvedValueOnce([]);
 
     render(<DeleteFormDataModal />);
@@ -43,7 +43,7 @@ describe("DeleteFormDataModal", () => {
   });
 
   it("hides delete button when no data exists", async () => {
-    const { getAllFields } = await import("~/db/database");
+    const { getAllFields } = await import("#db/database");
     vi.mocked(getAllFields).mockResolvedValueOnce([]);
 
     render(<DeleteFormDataModal />);
@@ -113,7 +113,7 @@ describe("DeleteFormDataModal", () => {
 
   it("calls clearAllFields when delete is clicked", async () => {
     const user = userEvent.setup();
-    const { clearAllFields } = await import("~/db/database");
+    const { clearAllFields } = await import("#db/database");
 
     render(<DeleteFormDataModal />);
 

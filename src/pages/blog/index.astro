@@ -1,8 +1,8 @@
 ---
 import { getCollection } from "astro:content";
-import ArticleLink from "~/components/ArticleLink.astro";
-import PageHeader from "~/components/PageHeader.astro";
-import BaseLayout from "~/layouts/BaseLayout.astro";
+import ArticleLink from "#components/ArticleLink.astro";
+import PageHeader from "#components/PageHeader.astro";
+import BaseLayout from "#layouts/BaseLayout.astro";
 
 const [allPosts, allAuthors] = await Promise.all([
   getCollection("posts"),

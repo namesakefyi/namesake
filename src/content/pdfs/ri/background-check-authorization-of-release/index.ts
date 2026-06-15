@@ -1,7 +1,7 @@
-import { definePdf } from "~/pdfs/definePdf";
-import { formatAddress } from "~/utils/formatAddress";
-import { formatDateMMDDYYYY } from "~/utils/formatDateMMDDYYYY";
-import { joinNames } from "~/utils/joinNames";
+import { definePdf } from "#pdfs/definePdf";
+import { formatAddress } from "#utils/formatAddress";
+import { formatDateMMDDYYYY } from "#utils/formatDateMMDDYYYY";
+import { joinNames } from "#utils/joinNames";
 import pdf from "./background-check-authorization-of-release.pdf";
 import type { PdfFieldName } from "./schema";
 

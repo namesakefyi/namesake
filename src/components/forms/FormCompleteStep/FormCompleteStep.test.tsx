@@ -6,7 +6,7 @@ import {
   type FormCompleteStepProps,
 } from "./FormCompleteStep";
 
-vi.mock("~/db/database", () => ({
+vi.mock("#db/database", () => ({
   clearFormProgress: vi.fn().mockResolvedValue(undefined),
   getAllFields: vi.fn().mockResolvedValue([]),
 }));
@@ -155,7 +155,7 @@ describe("FormCompleteStep", () => {
       const reloadSpy = vi.fn();
       vi.stubGlobal("location", { reload: reloadSpy });
 
-      const { clearFormProgress } = await import("~/db/database");
+      const { clearFormProgress } = await import("#db/database");
 
       render(<FormCompleteStep {...defaultProps} />);
       await user.click(screen.getByRole("button", { name: /restart/i }));

@@ -2,10 +2,10 @@ import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "~/components/forms/FormStep";
-import { NameField } from "~/components/forms/NameField";
-import { YesNoField } from "~/components/forms/YesNoField";
-import { defineStep } from "~/forms/defineStep";
+} from "#components/forms/FormStep";
+import { NameField } from "#components/forms/NameField";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#forms/defineStep";
 
 export const previousSocialSecurityCardStep = defineStep({
   id: "previous-social-security-card",
