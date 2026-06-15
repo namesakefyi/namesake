@@ -1,7 +1,7 @@
 import { env as cfWorkersEnv } from "cloudflare:workers";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { isRateLimited } from "../../../utils/rateLimitByIp";
+import { isRateLimited } from "#utils/rateLimitByIp";
 import { POST } from "../feedback";
 
 /** Same object `feedback.ts` imports; widened so tests can clear optional bindings. */
@@ -10,7 +10,7 @@ const env = cfWorkersEnv as {
   RESEND_API_KEY: string | undefined;
 };
 
-vi.mock("../../../utils/rateLimitByIp", () => ({
+vi.mock("#utils/rateLimitByIp", () => ({
   isRateLimited: vi.fn().mockResolvedValue(false),
 }));
 

@@ -1,6 +1,6 @@
 import type { CollectionEntry } from "astro:content";
 import { getCollection, getEntry } from "astro:content";
-import { GUIDE_CATEGORY_ORDER } from "../../constants/guides";
+import { GUIDE_CATEGORY_ORDER } from "#constants/guides";
 
 const categoryRank = (id: string) => {
   const i = GUIDE_CATEGORY_ORDER.indexOf(id);

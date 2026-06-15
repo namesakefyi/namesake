@@ -1,9 +1,9 @@
 import { useFormContext } from "react-hook-form";
-import { Banner } from "../../../../components/common/Banner";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { YesNoField } from "../../../../components/forms/YesNoField";
-import { defineStep } from "../../../../forms/defineStep";
-import { nameOrFallback } from "../../../../forms/resolveStepContent";
+import { Banner } from "#components/common/Banner";
+import { FormStep } from "#components/forms/FormStep";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#forms/defineStep";
+import { nameOrFallback } from "#forms/resolveStepContent";
 
 export const parentsDeceasedStep = defineStep({
   id: "parent-deceased",

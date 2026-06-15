@@ -1,12 +1,12 @@
-import { Banner } from "../../../../components/common/Banner";
+import { Banner } from "#components/common/Banner";
 import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "../../../../components/forms/FormStep";
-import { LongTextField } from "../../../../components/forms/LongTextField";
-import { YesNoField } from "../../../../components/forms/YesNoField";
-import { defineStep } from "../../../../forms/defineStep";
+} from "#components/forms/FormStep";
+import { LongTextField } from "#components/forms/LongTextField";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#forms/defineStep";
 
 export const otherNamesStep = defineStep({
   id: "other-names",

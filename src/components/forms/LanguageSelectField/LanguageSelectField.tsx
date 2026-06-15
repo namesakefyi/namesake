@@ -1,7 +1,7 @@
 import languageNameMap from "language-name-map/map";
 import { Text } from "react-aria-components";
 import { Controller, useFormContext } from "react-hook-form";
-import type { FieldName } from "../../../constants/fields";
+import type { FieldName } from "#constants/fields";
 import { ComboBox, ComboBoxItem } from "../../common/ComboBox";
 import "./LanguageSelectField.css";
 

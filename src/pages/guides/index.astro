@@ -1,8 +1,8 @@
 ---
-import GuideLinkGroup from "../../components/GuideLinkGroup.astro";
-import PageHeader from "../../components/PageHeader.astro";
+import GuideLinkGroup from "#components/GuideLinkGroup.astro";
+import PageHeader from "#components/PageHeader.astro";
+import BaseLayout from "#layouts/BaseLayout.astro";
 import { getGuidesByState } from "../../content/queries/guides";
-import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const { generalGuides, guidesByState } = await getGuidesByState();
 ---

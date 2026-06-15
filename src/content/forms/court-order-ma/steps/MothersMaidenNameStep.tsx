@@ -1,7 +1,7 @@
-import { Banner } from "../../../../components/common/Banner";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { ShortTextField } from "../../../../components/forms/ShortTextField";
-import { defineStep } from "../../../../forms/defineStep";
+import { Banner } from "#components/common/Banner";
+import { FormStep } from "#components/forms/FormStep";
+import { ShortTextField } from "#components/forms/ShortTextField";
+import { defineStep } from "#forms/defineStep";
 
 export const mothersMaidenNameStep = defineStep({
   id: "mothers-maiden-name",

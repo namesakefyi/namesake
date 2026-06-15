@@ -1,6 +1,6 @@
-import { FormStep } from "../../../../components/forms/FormStep";
-import { NameField } from "../../../../components/forms/NameField";
-import { defineStep } from "../../../../forms/defineStep";
+import { FormStep } from "#components/forms/FormStep";
+import { NameField } from "#components/forms/NameField";
+import { defineStep } from "#forms/defineStep";
 
 export const currentNameStep = defineStep({
   id: "current-name",

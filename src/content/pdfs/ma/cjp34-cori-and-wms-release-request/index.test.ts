@@ -1,5 +1,5 @@
 import { describe, it } from "vitest";
-import { expectPdfFieldsMatch } from "../../../../pdfs/expectPdfFieldsMatch";
+import { expectPdfFieldsMatch } from "#pdfs/expectPdfFieldsMatch";
 import coriAndWmsReleaseRequest from ".";
 
 describe("CJP34 CORI and WMS Release Request", () => {
