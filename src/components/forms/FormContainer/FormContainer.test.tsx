@@ -1,13 +1,13 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { FormConfig } from "../../../constants/forms";
-import * as db from "../../../db/database";
-import type { Step } from "../../../forms/types";
+import type { FormConfig } from "~/constants/forms";
+import * as db from "~/db/database";
+import type { Step } from "~/forms/types";
 import { FormStep } from "../FormStep/FormStep";
 import { FormContainer } from "./FormContainer";
 
-vi.mock("../../../db/database", () => ({
+vi.mock("~/db/database", () => ({
   getFormProgress: vi.fn().mockResolvedValue(undefined),
   saveFormProgress: vi.fn().mockResolvedValue(undefined),
   clearFormProgress: vi.fn().mockResolvedValue(undefined),
@@ -17,12 +17,12 @@ vi.mock("../../../db/database", () => ({
   deleteField: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.mock("../../../forms/getFormConfig");
-vi.mock("../../../forms/getFormPdfMetadata", () => ({
+vi.mock("~/forms/getFormConfig");
+vi.mock("~/forms/getFormPdfMetadata", () => ({
   getFormPdfMetadata: vi.fn().mockResolvedValue([]),
 }));
 
-import { getFormConfig } from "../../../forms/getFormConfig";
+import { getFormConfig } from "~/forms/getFormConfig";
 
 const plainStep: Step = {
   id: "plain",

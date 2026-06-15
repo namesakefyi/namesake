@@ -1,7 +1,7 @@
 import { RiAddLine, RiDeleteBinLine } from "@remixicon/react";
 import { useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import type { FieldName, FormData } from "../../../constants/fields";
+import type { FieldName, FormData } from "~/constants/fields";
 import { Button } from "../../common/Button";
 import "./RepeatingEntry.css";
 

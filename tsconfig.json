@@ -4,6 +4,9 @@
     "allowJs": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
+    "paths": {
+      "~/*": ["./src/*"]
+    },
     "types": ["./worker-configuration.d.ts", "node"],
     "verbatimModuleSyntax": true
   },

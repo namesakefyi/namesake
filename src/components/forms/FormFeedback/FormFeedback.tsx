@@ -9,7 +9,7 @@ import {
   RiThumbUpLine,
 } from "@remixicon/react";
 import { useActionState, useRef } from "react";
-import type { FormFeedbackSentiment, FormSlug } from "../../../constants/forms";
+import type { FormFeedbackSentiment, FormSlug } from "~/constants/forms";
 import { Button } from "../../common/Button";
 import { Form } from "../../common/Form";
 import { Radio, RadioGroup } from "../../common/RadioGroup";

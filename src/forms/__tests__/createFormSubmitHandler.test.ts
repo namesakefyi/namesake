@@ -1,8 +1,8 @@
 import type { SubmitEvent } from "react";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { FormConfig } from "../../constants/forms";
-import type { PDFId } from "../../constants/pdf";
+import type { FormConfig } from "~/constants/forms";
+import type { PDFId } from "~/constants/pdf";
 import { downloadMergedPdf } from "../../pdfs/downloadMergedPdf";
 import { loadPdfs } from "../../pdfs/loadPdfs";
 import { createFormSubmitHandler } from "../createFormSubmitHandler";

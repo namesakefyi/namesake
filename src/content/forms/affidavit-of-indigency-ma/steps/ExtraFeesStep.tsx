@@ -1,12 +1,9 @@
 import { useFormContext } from "react-hook-form";
-import { CheckboxField } from "../../../../components/forms/CheckboxField";
-import {
-  FormStep,
-  FormSubsection,
-} from "../../../../components/forms/FormStep";
-import { NumberField } from "../../../../components/forms/NumberField";
-import { ShortTextField } from "../../../../components/forms/ShortTextField";
-import { defineStep } from "../../../../forms/defineStep";
+import { CheckboxField } from "~/components/forms/CheckboxField";
+import { FormStep, FormSubsection } from "~/components/forms/FormStep";
+import { NumberField } from "~/components/forms/NumberField";
+import { ShortTextField } from "~/components/forms/ShortTextField";
+import { defineStep } from "~/forms/defineStep";
 
 const amountProps = {
   label: "Amount (if known)",

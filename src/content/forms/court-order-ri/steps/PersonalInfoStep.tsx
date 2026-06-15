@@ -1,7 +1,7 @@
-import { ComboBoxField } from "../../../../components/forms/ComboBoxField";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { ShortTextField } from "../../../../components/forms/ShortTextField";
-import { defineStep } from "../../../../forms/defineStep";
+import { ComboBoxField } from "~/components/forms/ComboBoxField";
+import { FormStep } from "~/components/forms/FormStep";
+import { ShortTextField } from "~/components/forms/ShortTextField";
+import { defineStep } from "~/forms/defineStep";
 
 const MARITAL_STATUS_OPTIONS = [
   { label: "Single", value: "Single" },

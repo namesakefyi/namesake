@@ -1,7 +1,7 @@
-import { FormStep } from "../../../../components/forms/FormStep";
-import { YesNoField } from "../../../../components/forms/YesNoField";
-import { defineStep } from "../../../../forms/defineStep";
-import { nameOrFallback } from "../../../../forms/resolveStepContent";
+import { FormStep } from "~/components/forms/FormStep";
+import { YesNoField } from "~/components/forms/YesNoField";
+import { defineStep } from "~/forms/defineStep";
+import { nameOrFallback } from "~/forms/resolveStepContent";
 
 export const birthCertificateParentsStep = defineStep({
   id: "birth-certificate-parents",

@@ -1,5 +1,5 @@
-import { defineForm } from "../../../forms/defineForm";
-import { deriveCurrentAge } from "../../../utils/deriveCurrentAge";
+import { defineForm } from "~/forms/defineForm";
+import { deriveCurrentAge } from "~/utils/deriveCurrentAge";
 import { addressStep } from "./steps/AddressStep";
 import { birthCertificateParentsStep } from "./steps/BirthCerticiateParentsStep";
 import { birthplaceStep } from "./steps/BirthplaceStep";

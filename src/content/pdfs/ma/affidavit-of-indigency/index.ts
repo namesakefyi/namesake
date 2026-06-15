@@ -1,5 +1,5 @@
-import { definePdf } from "../../../../pdfs/definePdf";
-import { joinNames } from "../../../../utils/joinNames";
+import { definePdf } from "~/pdfs/definePdf";
+import { joinNames } from "~/utils/joinNames";
 import pdf from "./affidavit-of-indigency.pdf";
 import type { PdfFieldName } from "./schema";
 

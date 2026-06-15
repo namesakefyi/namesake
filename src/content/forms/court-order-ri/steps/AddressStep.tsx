@@ -1,12 +1,12 @@
-import { Banner } from "../../../../components/common/Banner";
-import { AddressField } from "../../../../components/forms/AddressField";
-import { CheckboxField } from "../../../../components/forms/CheckboxField";
+import { Banner } from "~/components/common/Banner";
+import { AddressField } from "~/components/forms/AddressField";
+import { CheckboxField } from "~/components/forms/CheckboxField";
 import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "../../../../components/forms/FormStep";
-import { defineStep } from "../../../../forms/defineStep";
+} from "~/components/forms/FormStep";
+import { defineStep } from "~/forms/defineStep";
 
 export const addressStep = defineStep({
   id: "address",

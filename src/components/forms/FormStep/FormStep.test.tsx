@@ -2,7 +2,7 @@ import { fireEvent, render, renderHook, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
-import type { FormPhase, Step } from "../../../forms/types";
+import type { FormPhase, Step } from "~/forms/types";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormStep, FormSubsection, useFieldVisible } from "./FormStep";
 

@@ -1,12 +1,9 @@
-import { ComboBoxField } from "../../../../components/forms/ComboBoxField";
-import {
-  FormStep,
-  useFieldVisible,
-} from "../../../../components/forms/FormStep";
-import { ShortTextField } from "../../../../components/forms/ShortTextField";
-import { COUNTRIES } from "../../../../constants/countries";
-import { JURISDICTIONS } from "../../../../constants/jurisdictions";
-import { defineStep } from "../../../../forms/defineStep";
+import { ComboBoxField } from "~/components/forms/ComboBoxField";
+import { FormStep, useFieldVisible } from "~/components/forms/FormStep";
+import { ShortTextField } from "~/components/forms/ShortTextField";
+import { COUNTRIES } from "~/constants/countries";
+import { JURISDICTIONS } from "~/constants/jurisdictions";
+import { defineStep } from "~/forms/defineStep";
 
 export const birthplaceStep = defineStep({
   id: "birthplace",

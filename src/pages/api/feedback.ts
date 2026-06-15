@@ -7,8 +7,8 @@ import {
   FORM_FEEDBACK_SENTIMENT,
   FORM_SLUGS,
   type FormFeedbackSentiment,
-} from "../../constants/forms";
-import { isRateLimited } from "../../utils/rateLimitByIp";
+} from "~/constants/forms";
+import { isRateLimited } from "~/utils/rateLimitByIp";
 
 const PRODUCTION_ORIGIN = "https://namesake.fyi";
 const ALLOWED_ORIGINS = [PRODUCTION_ORIGIN, "http://localhost:4321"];

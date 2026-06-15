@@ -1,4 +1,4 @@
-import type { FieldName } from "../../../constants/fields";
+import type { FieldName } from "~/constants/fields";
 import { ShortTextField } from "../ShortTextField/ShortTextField";
 import "./NameField.css";
 

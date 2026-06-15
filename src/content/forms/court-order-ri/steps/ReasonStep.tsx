@@ -1,7 +1,7 @@
-import { Banner } from "../../../../components/common/Banner";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { LongTextField } from "../../../../components/forms/LongTextField";
-import { defineStep } from "../../../../forms/defineStep";
+import { Banner } from "~/components/common/Banner";
+import { FormStep } from "~/components/forms/FormStep";
+import { LongTextField } from "~/components/forms/LongTextField";
+import { defineStep } from "~/forms/defineStep";
 
 export const reasonStep = defineStep({
   id: "reason",

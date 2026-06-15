@@ -2,10 +2,10 @@ import {
   FormStep,
   FormSubsection,
   useFieldVisible,
-} from "../../../../components/forms/FormStep";
-import { LanguageSelectField } from "../../../../components/forms/LanguageSelectField";
-import { YesNoField } from "../../../../components/forms/YesNoField";
-import { defineStep } from "../../../../forms/defineStep";
+} from "~/components/forms/FormStep";
+import { LanguageSelectField } from "~/components/forms/LanguageSelectField";
+import { YesNoField } from "~/components/forms/YesNoField";
+import { defineStep } from "~/forms/defineStep";
 
 export const interpreterStep = defineStep({
   id: "interpreter",

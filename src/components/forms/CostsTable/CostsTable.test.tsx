@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import type { FormCost } from "../../../constants/forms";
+import type { FormCost } from "~/constants/forms";
 import { CostsTable } from "./CostsTable";
 
 const filingFee: FormCost = {

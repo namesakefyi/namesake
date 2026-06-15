@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { Banner } from "../../../../components/common/Banner";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { NumberField } from "../../../../components/forms/NumberField";
-import { RadioGroupField } from "../../../../components/forms/RadioGroupField";
-import { defineStep } from "../../../../forms/defineStep";
-import type { PovertyGuideline } from "../../../../utils/fetchPovertyGuideline";
-import { fetchPovertyGuideline } from "../../../../utils/fetchPovertyGuideline";
+import { Banner } from "~/components/common/Banner";
+import { FormStep } from "~/components/forms/FormStep";
+import { NumberField } from "~/components/forms/NumberField";
+import { RadioGroupField } from "~/components/forms/RadioGroupField";
+import { defineStep } from "~/forms/defineStep";
+import type { PovertyGuideline } from "~/utils/fetchPovertyGuideline";
+import { fetchPovertyGuideline } from "~/utils/fetchPovertyGuideline";
 import "./IncomePovertyStep.css";
 
 export const INCOME_MULTIPLIERS: Record<string, number> = {

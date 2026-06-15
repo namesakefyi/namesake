@@ -1,8 +1,8 @@
-import { definePdf } from "../../../../pdfs/definePdf";
-import { deriveCurrentAge } from "../../../../utils/deriveCurrentAge";
-import { formatDateMMDDYYYY } from "../../../../utils/formatDateMMDDYYYY";
-import { formatLanguage } from "../../../../utils/formatLanguage";
-import { joinPronouns } from "../../../../utils/joinPronouns";
+import { definePdf } from "~/pdfs/definePdf";
+import { deriveCurrentAge } from "~/utils/deriveCurrentAge";
+import { formatDateMMDDYYYY } from "~/utils/formatDateMMDDYYYY";
+import { formatLanguage } from "~/utils/formatLanguage";
+import { joinPronouns } from "~/utils/joinPronouns";
 import pdf from "./cjp25-petition-to-change-name-of-minor.pdf";
 import type { PdfFieldName } from "./schema";
 

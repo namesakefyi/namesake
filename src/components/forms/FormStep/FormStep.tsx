@@ -1,15 +1,12 @@
 import { RiArrowRightLine } from "@remixicon/react";
 import { Heading } from "react-aria-components";
 import { useFormContext } from "react-hook-form";
-import type { FieldName, FormData } from "../../../constants/fields";
-import { getFieldWhen } from "../../../forms/formVisibility";
-import {
-  resolveDescription,
-  resolveTitle,
-} from "../../../forms/resolveStepContent";
-import type { Step } from "../../../forms/types";
-import { slugify } from "../../../utils/slugify";
-import { smartquotes } from "../../../utils/smartquotes";
+import type { FieldName, FormData } from "~/constants/fields";
+import { getFieldWhen } from "~/forms/formVisibility";
+import { resolveDescription, resolveTitle } from "~/forms/resolveStepContent";
+import type { Step } from "~/forms/types";
+import { slugify } from "~/utils/slugify";
+import { smartquotes } from "~/utils/smartquotes";
 import { Button } from "../../common/Button";
 import { useFormStep } from "../FormContainer";
 import "./FormStep.css";

@@ -1,5 +1,4 @@
 ---
-
 import { Image } from "astro:assets";
 import {
   type CollectionEntry,
@@ -7,8 +6,8 @@ import {
   getEntry,
   render,
 } from "astro:content";
-import TableOfContents from "../../components/TableOfContents.astro";
-import ProseLayout from "../../layouts/ProseLayout.astro";
+import TableOfContents from "~/components/TableOfContents.astro";
+import ProseLayout from "~/layouts/ProseLayout.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
@@ -86,17 +85,22 @@ const ogAlt = post.data.image?.alt ?? post.data.title;
             <div class="content">
               <strong>{author.data.name}</strong>
               <p>{author.data.bio}</p>
-              {author.data.socialLinks && author.data.socialLinks.length > 0 && (
-                <ul class="social">
-                  {author.data.socialLinks.map((link) => (
-                    <li>
-                      <a href={link.url} target="_blank" rel="noopener noreferrer">
-                        {link.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              {author.data.socialLinks &&
+                author.data.socialLinks.length > 0 && (
+                  <ul class="social">
+                    {author.data.socialLinks.map((link) => (
+                      <li>
+                        <a
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {link.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
             </div>
           </div>
         ))}

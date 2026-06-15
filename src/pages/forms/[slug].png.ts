@@ -1,6 +1,6 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import type { APIRoute, GetStaticPaths } from "astro";
-import { createOgImageResponse } from "../../utils/createOgImageResponse";
+import { createOgImageResponse } from "~/utils/createOgImageResponse";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const forms = await getCollection("forms");

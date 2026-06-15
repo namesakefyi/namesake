@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FormProvider } from "react-hook-form";
-import type { FormSlug } from "../../../constants/forms";
-import { createFormSubmitHandler } from "../../../forms/createFormSubmitHandler";
-import { getFormConfig } from "../../../forms/getFormConfig";
+import type { FormSlug } from "~/constants/forms";
+import { createFormSubmitHandler } from "~/forms/createFormSubmitHandler";
+import { getFormConfig } from "~/forms/getFormConfig";
 import {
   type FormPdfMetadata,
   getFormPdfMetadata,
-} from "../../../forms/getFormPdfMetadata";
-import { useFormData } from "../../../forms/useFormData";
-import { useFormState } from "../../../forms/useFormState";
+} from "~/forms/getFormPdfMetadata";
+import { useFormData } from "~/forms/useFormData";
+import { useFormState } from "~/forms/useFormState";
 import { ProgressCircle } from "../../common/ProgressCircle";
 import { FormCompleteStep } from "../FormCompleteStep";
 import { FormNavigation } from "../FormNavigation";

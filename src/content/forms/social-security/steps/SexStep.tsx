@@ -1,7 +1,7 @@
-import { Banner } from "../../../../components/common/Banner";
-import { FormStep } from "../../../../components/forms/FormStep";
-import { RadioGroupField } from "../../../../components/forms/RadioGroupField";
-import { defineStep } from "../../../../forms/defineStep";
+import { Banner } from "~/components/common/Banner";
+import { FormStep } from "~/components/forms/FormStep";
+import { RadioGroupField } from "~/components/forms/RadioGroupField";
+import { defineStep } from "~/forms/defineStep";
 
 export const sexStep = defineStep({
   id: "sex",

@@ -3,7 +3,7 @@ import { Banner } from "../../common/Banner";
 import { Button } from "../../common/Button";
 import "./FormReviewStep.css";
 import { RiDownloadLine } from "@remixicon/react";
-import type { Step } from "../../../forms/types";
+import type { Step } from "~/forms/types";
 import { useFormStep } from "../FormContainer/FormStepContext";
 import { FormReviewTable } from "../FormReviewTable";
 

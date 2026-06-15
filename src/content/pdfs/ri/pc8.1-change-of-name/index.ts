@@ -1,8 +1,8 @@
-import { definePdf } from "../../../../pdfs/definePdf";
-import { formatBirthplaceCountryOrState } from "../../../../utils/formatBirthplaceCountryOrState";
-import { formatDateMMDDYYYY } from "../../../../utils/formatDateMMDDYYYY";
-import { joinNames } from "../../../../utils/joinNames";
-import { joinParts } from "../../../../utils/joinParts";
+import { definePdf } from "~/pdfs/definePdf";
+import { formatBirthplaceCountryOrState } from "~/utils/formatBirthplaceCountryOrState";
+import { formatDateMMDDYYYY } from "~/utils/formatDateMMDDYYYY";
+import { joinNames } from "~/utils/joinNames";
+import { joinParts } from "~/utils/joinParts";
 import pdf from "./pc8.1-change-of-name.pdf";
 import type { PdfFieldName } from "./schema";
 

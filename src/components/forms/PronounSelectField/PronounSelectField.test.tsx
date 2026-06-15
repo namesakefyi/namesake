@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { COMMON_PRONOUNS } from "../../../constants/fields";
+import { COMMON_PRONOUNS } from "~/constants/fields";
 import { renderWithFormProvider, screen } from "../test-utils";
 import { PronounSelectField } from "./PronounSelectField";
 
