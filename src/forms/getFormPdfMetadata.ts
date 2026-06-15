@@ -1,6 +1,6 @@
 import type { FormSlug } from "../constants/forms";
 import type { PDFId } from "../constants/pdf";
-import { getPdfDefinition } from "../pdfs";
+import { getPdfDefinition } from "../pdfs/getPdfDefinition";
 import { getFormConfig } from "./getFormConfig";
 
 /**

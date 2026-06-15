@@ -4,6 +4,7 @@ import { z } from "astro/zod";
 import { ANNOTATION_TYPES } from "./constants/annotations";
 import { COLOR_KEYS } from "./constants/colors";
 import type { FormConfig } from "./constants/forms";
+import type { PDFDefinition } from "./constants/pdf";
 import { SERVICES } from "./constants/services";
 
 const authors = defineCollection({
@@ -114,6 +115,32 @@ const pages = defineCollection({
   }),
 });
 
+const pdfs = defineCollection({
+  loader: () => {
+    const modules = import.meta.glob<{ default: PDFDefinition }>(
+      "./content/pdfs/*/*/index.ts",
+      { eager: true },
+    );
+    return Object.entries(modules).map(([path, module]) => {
+      const id = path.match(/\/([^/]+)\/index\.ts$/)?.[1] ?? "";
+      const config = module.default;
+      return {
+        id,
+        title: config.title,
+        code: config.code,
+        state: config.jurisdiction?.toLowerCase(),
+        canonicalUrl: config.canonicalUrl,
+      };
+    });
+  },
+  schema: z.object({
+    title: z.string(),
+    code: z.string().optional(),
+    state: reference("states").optional(),
+    canonicalUrl: z.url(),
+  }),
+});
+
 const posts = defineCollection({
   loader: glob({ base: "./src/content/posts", pattern: "**/index.mdx" }),
   schema: ({ image }) =>
@@ -175,6 +202,7 @@ export const collections = {
   forms,
   guides,
   pages,
+  pdfs,
   posts,
   press,
   sponsors,
