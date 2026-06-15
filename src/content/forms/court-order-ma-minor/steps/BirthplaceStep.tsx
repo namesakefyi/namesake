@@ -6,10 +6,10 @@ import {
 import { ShortTextField } from "../../../../components/forms/ShortTextField";
 import { COUNTRIES } from "../../../../constants/countries";
 import { JURISDICTIONS } from "../../../../constants/jurisdictions";
+import { defineStep } from "../../../../forms/defineStep";
 import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
 
-export const birthplaceStep: Step = {
+export const birthplaceStep = defineStep({
   id: "birthplace",
   title: (data) => `Where was ${nameOrFallback(data, "the minor")} born?`,
   fields: [
@@ -45,4 +45,4 @@ export const birthplaceStep: Step = {
       </FormStep>
     );
   },
-};
+});

@@ -4,7 +4,7 @@ import { Banner } from "../../../../components/common/Banner";
 import { FormStep } from "../../../../components/forms/FormStep";
 import { NumberField } from "../../../../components/forms/NumberField";
 import { RadioGroupField } from "../../../../components/forms/RadioGroupField";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 import type { PovertyGuideline } from "../../../../utils/fetchPovertyGuideline";
 import { fetchPovertyGuideline } from "../../../../utils/fetchPovertyGuideline";
 import "./IncomePovertyStep.css";
@@ -161,7 +161,7 @@ function PovertyResult({
   );
 }
 
-export const incomePovertyStep: Step = {
+export const incomePovertyStep = defineStep({
   id: "income-poverty",
   title: "What is your income after taxes?",
   description:
@@ -232,4 +232,4 @@ export const incomePovertyStep: Step = {
       </FormStep>
     );
   },
-};
+});

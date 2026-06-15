@@ -1,9 +1,9 @@
 import { EmailField } from "../../../../components/forms/EmailField";
 import { FormStep } from "../../../../components/forms/FormStep";
 import { PhoneField } from "../../../../components/forms/PhoneField";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
-export const contactInfoStep: Step = {
+export const contactInfoStep = defineStep({
   id: "contact-info",
   title: "What is your contact information?",
   description:
@@ -15,4 +15,4 @@ export const contactInfoStep: Step = {
       <EmailField name="email" />
     </FormStep>
   ),
-};
+});

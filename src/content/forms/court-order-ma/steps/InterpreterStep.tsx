@@ -5,9 +5,9 @@ import {
 } from "../../../../components/forms/FormStep";
 import { LanguageSelectField } from "../../../../components/forms/LanguageSelectField";
 import { YesNoField } from "../../../../components/forms/YesNoField";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
-export const interpreterStep: Step = {
+export const interpreterStep = defineStep({
   id: "interpreter",
   title:
     "If there is a hearing for your name change, do you need an interpreter?",
@@ -33,4 +33,4 @@ export const interpreterStep: Step = {
       </FormStep>
     );
   },
-};
+});

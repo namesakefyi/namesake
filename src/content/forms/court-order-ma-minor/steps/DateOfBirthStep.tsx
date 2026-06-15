@@ -2,11 +2,11 @@ import { useFormContext } from "react-hook-form";
 import { Banner } from "../../../../components/common/Banner";
 import { FormStep } from "../../../../components/forms/FormStep";
 import { MemorableDateField } from "../../../../components/forms/MemorableDateField";
+import { defineStep } from "../../../../forms/defineStep";
 import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
 import { deriveCurrentAge } from "../../../../utils/deriveCurrentAge";
 
-export const dateOfBirthStep: Step = {
+export const dateOfBirthStep = defineStep({
   id: "date-of-birth",
   title: (data) =>
     `What is ${nameOrFallback(data, "the minor")}'s date of birth?`,
@@ -40,4 +40,4 @@ export const dateOfBirthStep: Step = {
       </FormStep>
     );
   },
-};
+});

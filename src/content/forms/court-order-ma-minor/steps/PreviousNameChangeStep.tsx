@@ -6,10 +6,10 @@ import {
 import { LongTextField } from "../../../../components/forms/LongTextField";
 import { ShortTextField } from "../../../../components/forms/ShortTextField";
 import { YesNoField } from "../../../../components/forms/YesNoField";
+import { defineStep } from "../../../../forms/defineStep";
 import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
 
-export const previousNameChangeStep: Step = {
+export const previousNameChangeStep = defineStep({
   id: "previous-name-change",
   title: (data) =>
     `Has ${nameOrFallback(data, "the minor")} ever changed their legal name before?`,
@@ -40,4 +40,4 @@ export const previousNameChangeStep: Step = {
       </FormStep>
     );
   },
-};
+});

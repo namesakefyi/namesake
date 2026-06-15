@@ -2,10 +2,10 @@ import { useFormContext } from "react-hook-form";
 import { Banner } from "../../../../components/common/Banner";
 import { FormStep } from "../../../../components/forms/FormStep";
 import { YesNoField } from "../../../../components/forms/YesNoField";
+import { defineStep } from "../../../../forms/defineStep";
 import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
 
-export const parentsDeceasedStep: Step = {
+export const parentsDeceasedStep = defineStep({
   id: "parent-deceased",
   title: (data) =>
     `Are any of ${nameOrFallback(data, "the minor")}'s legal parents deceased?`,
@@ -31,4 +31,4 @@ export const parentsDeceasedStep: Step = {
       </FormStep>
     );
   },
-};
+});

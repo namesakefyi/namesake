@@ -5,12 +5,12 @@ import {
   FormStep,
   useFieldVisible,
 } from "../../../../components/forms/FormStep";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
 const whenNotUnhoused = (data: Record<string, unknown>) =>
   data.isCurrentlyUnhoused !== true;
 
-export const addressStep: Step = {
+export const addressStep = defineStep({
   id: "address",
   title: "What is your residential address?",
   fields: [
@@ -52,4 +52,4 @@ export const addressStep: Step = {
       </FormStep>
     );
   },
-};
+});

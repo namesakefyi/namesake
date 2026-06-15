@@ -5,9 +5,9 @@ import {
 } from "../../../../components/forms/FormStep";
 import { NameField } from "../../../../components/forms/NameField";
 import { YesNoField } from "../../../../components/forms/YesNoField";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
-export const previousSocialSecurityCardStep: Step = {
+export const previousSocialSecurityCardStep = defineStep({
   id: "previous-social-security-card",
   title: "Do you have a previous Social Security card?",
   description:
@@ -46,4 +46,4 @@ export const previousSocialSecurityCardStep: Step = {
       </FormStep>
     );
   },
-};
+});

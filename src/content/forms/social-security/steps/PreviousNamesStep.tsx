@@ -5,9 +5,9 @@ import {
 } from "../../../../components/forms/FormStep";
 import { LongTextField } from "../../../../components/forms/LongTextField";
 import { YesNoField } from "../../../../components/forms/YesNoField";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
-export const previousNamesStep: Step = {
+export const previousNamesStep = defineStep({
   id: "previous-names",
   title: "Have you used any other legal names?",
   fields: [
@@ -37,4 +37,4 @@ export const previousNamesStep: Step = {
       </FormStep>
     );
   },
-};
+});

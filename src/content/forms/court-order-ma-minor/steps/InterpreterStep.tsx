@@ -5,9 +5,9 @@ import {
   useFieldVisible,
 } from "../../../../components/forms/FormStep";
 import { LanguageSelectField } from "../../../../components/forms/LanguageSelectField";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
-export const interpreterStep: Step = {
+export const interpreterStep = defineStep({
   id: "interpreter",
   title: "If there is a hearing, does anyone need an interpreter?",
   description: "In most cases, a hearing is not required.",
@@ -51,4 +51,4 @@ export const interpreterStep: Step = {
       </FormStep>
     );
   },
-};
+});

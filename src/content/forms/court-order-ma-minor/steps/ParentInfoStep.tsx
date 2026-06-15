@@ -5,10 +5,10 @@ import {
 } from "../../../../components/forms/FormStep";
 import { PhoneField } from "../../../../components/forms/PhoneField";
 import { ShortTextField } from "../../../../components/forms/ShortTextField";
+import { defineStep } from "../../../../forms/defineStep";
 import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
 
-export const parentInfoStep: Step = {
+export const parentInfoStep = defineStep({
   id: "parent-info",
   title: "What are both parents' information?",
   description: (data) =>
@@ -35,4 +35,4 @@ export const parentInfoStep: Step = {
       </FormSubsection>
     </FormStep>
   ),
-};
+});
