@@ -1,6 +1,6 @@
 import type { FormCost } from "#constants/forms";
-import { formatCurrency } from "#utils/formatCurrency";
-import { formatTotalCosts } from "#utils/formatTotalCosts";
+import { formatCurrency } from "#lib/utils/formatCurrency";
+import { formatTotalCosts } from "#lib/utils/formatTotalCosts";
 import "./CostsTable.css";
 
 interface CostsTableProps {

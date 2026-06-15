@@ -1,5 +1,5 @@
 import { describe, it } from "vitest";
-import { expectPdfFieldsMatch } from "#pdfs/expectPdfFieldsMatch";
+import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import affidavitOfIndigency from ".";
 
 describe("Affidavit of Indigency", () => {

@@ -5,7 +5,7 @@ import {
 } from "#components/forms/FormStep";
 import { LanguageSelectField } from "#components/forms/LanguageSelectField";
 import { YesNoField } from "#components/forms/YesNoField";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const interpreterStep = defineStep({
   id: "interpreter",

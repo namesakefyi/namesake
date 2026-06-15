@@ -5,7 +5,7 @@ import {
 } from "#components/forms/FormStep";
 import { PronounSelectField } from "#components/forms/PronounSelectField";
 import { YesNoField } from "#components/forms/YesNoField";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const pronounsStep = defineStep({
   id: "pronouns",

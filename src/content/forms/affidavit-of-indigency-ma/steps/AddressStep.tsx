@@ -2,7 +2,7 @@ import { Banner } from "#components/common/Banner";
 import { AddressField } from "#components/forms/AddressField";
 import { CheckboxField } from "#components/forms/CheckboxField";
 import { FormStep, useFieldVisible } from "#components/forms/FormStep";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 const whenNotUnhoused = (data: Record<string, unknown>) =>
   data.isCurrentlyUnhoused !== true;

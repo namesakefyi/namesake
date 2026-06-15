@@ -1,6 +1,6 @@
 import { Controller, useFormContext } from "react-hook-form";
 import type { FieldName } from "#constants/fields";
-import { smartquotes } from "#utils/smartquotes";
+import { smartquotes } from "#lib/utils/smartquotes";
 import { Checkbox, type CheckboxProps } from "../../common/Checkbox";
 import "./CheckboxField.css";
 

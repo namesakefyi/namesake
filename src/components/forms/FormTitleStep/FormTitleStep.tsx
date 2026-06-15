@@ -7,11 +7,11 @@ import {
 } from "@remixicon/react";
 import { useEffect, useState } from "react";
 import { type IBrowser, type IDevice, UAParser } from "ua-parser-js";
-import type { FormPdfMetadata } from "#forms/getFormPdfMetadata";
-import { formatBrowser } from "#utils/formatBrowser";
-import { formatDevice } from "#utils/formatDevice";
-import { formatTimeEstimate } from "#utils/formatTimeEstimate";
-import { smartquotes } from "#utils/smartquotes";
+import type { FormPdfMetadata } from "#lib/forms/getFormPdfMetadata";
+import { formatBrowser } from "#lib/utils/formatBrowser";
+import { formatDevice } from "#lib/utils/formatDevice";
+import { formatTimeEstimate } from "#lib/utils/formatTimeEstimate";
+import { smartquotes } from "#lib/utils/smartquotes";
 import { Button } from "../../common/Button";
 import { Heading } from "../../common/Content/Content";
 import "./FormTitleStep.css";

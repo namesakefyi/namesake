@@ -1,7 +1,7 @@
 import { PDFDropdown } from "@cantoo/pdf-lib";
 import { expect } from "vitest";
-import type { FormData } from "../constants/fields";
-import type { PDFDefinition } from "../constants/pdf";
+import type { FormData } from "#constants/fields";
+import type { PDFDefinition } from "#constants/pdf";
 import { getPdfForm } from "./getPdfForm";
 
 /**

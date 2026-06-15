@@ -1,6 +1,6 @@
 import { describe, it } from "vitest";
 import type { FormData } from "#constants/fields";
-import { expectPdfFieldsMatch } from "#pdfs/expectPdfFieldsMatch";
+import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import pc81ChangeOfName from ".";
 
 describe("Change of Name", () => {

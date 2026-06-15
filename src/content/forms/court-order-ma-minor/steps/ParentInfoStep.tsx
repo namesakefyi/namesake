@@ -2,8 +2,8 @@ import { EmailField } from "#components/forms/EmailField";
 import { FormStep, FormSubsection } from "#components/forms/FormStep";
 import { PhoneField } from "#components/forms/PhoneField";
 import { ShortTextField } from "#components/forms/ShortTextField";
-import { defineStep } from "#forms/defineStep";
-import { nameOrFallback } from "#forms/resolveStepContent";
+import { defineStep } from "#lib/forms/defineStep";
+import { nameOrFallback } from "#lib/forms/resolveStepContent";
 
 export const parentInfoStep = defineStep({
   id: "parent-info",

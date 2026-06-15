@@ -5,7 +5,7 @@ import {
 } from "#components/forms/FormStep";
 import { NameField } from "#components/forms/NameField";
 import { YesNoField } from "#components/forms/YesNoField";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const previousSocialSecurityCardStep = defineStep({
   id: "previous-social-security-card",

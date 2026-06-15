@@ -1,6 +1,6 @@
 import { CheckboxField } from "#components/forms/CheckboxField";
 import { FormStep } from "#components/forms/FormStep";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const presentedByStep = defineStep({
   id: "presented-by",

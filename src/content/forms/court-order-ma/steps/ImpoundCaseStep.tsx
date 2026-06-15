@@ -6,7 +6,7 @@ import {
 } from "#components/forms/FormStep";
 import { LongTextField } from "#components/forms/LongTextField";
 import { YesNoField } from "#components/forms/YesNoField";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const impoundCaseStep = defineStep({
   id: "impound-case",

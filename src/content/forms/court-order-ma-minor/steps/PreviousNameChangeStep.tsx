@@ -6,8 +6,8 @@ import {
 import { LongTextField } from "#components/forms/LongTextField";
 import { ShortTextField } from "#components/forms/ShortTextField";
 import { YesNoField } from "#components/forms/YesNoField";
-import { defineStep } from "#forms/defineStep";
-import { nameOrFallback } from "#forms/resolveStepContent";
+import { defineStep } from "#lib/forms/defineStep";
+import { nameOrFallback } from "#lib/forms/resolveStepContent";
 
 export const previousNameChangeStep = defineStep({
   id: "previous-name-change",

@@ -1,7 +1,7 @@
 import { GoogleFont, ImageResponse } from "cf-workers-og";
 import { createElement } from "react";
-import { OgImage } from "../components/OgImage";
-import type { NamesakeColor } from "../constants/colors";
+import { OgImage } from "#components/OgImage";
+import type { NamesakeColor } from "#constants/colors";
 
 type OgImageOptions = {
   subhead: string;

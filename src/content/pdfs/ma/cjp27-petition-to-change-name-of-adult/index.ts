@@ -1,7 +1,7 @@
-import { definePdf } from "#pdfs/definePdf";
-import { formatDateMMDDYYYY } from "#utils/formatDateMMDDYYYY";
-import { formatLanguage } from "#utils/formatLanguage";
-import { joinPronouns } from "#utils/joinPronouns";
+import { definePdf } from "#lib/pdfs/definePdf";
+import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
+import { formatLanguage } from "#lib/utils/formatLanguage";
+import { joinPronouns } from "#lib/utils/joinPronouns";
 import pdf from "./cjp27-petition-to-change-name-of-adult.pdf";
 import type { PdfFieldName } from "./schema";
 

@@ -16,8 +16,8 @@ import {
   ListBox,
   Popover,
 } from "react-aria-components";
-import { useFieldRowRect, useScrollSelectedIntoView } from "../hooks.ts";
-import type { Diff, FieldPreview } from "../types.ts";
+import { useFieldRowRect, useScrollSelectedIntoView } from "../hooks";
+import type { Diff, FieldPreview } from "../types";
 import { FieldItem } from "./FieldList.tsx";
 import { PdfCanvas } from "./PdfCanvas.tsx";
 

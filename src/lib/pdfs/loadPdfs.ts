@@ -1,4 +1,4 @@
-import type { PDFId } from "../constants/pdf";
+import type { PDFId } from "#constants/pdf";
 import { getPdfDefinition } from "./getPdfDefinition";
 
 /**

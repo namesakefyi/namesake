@@ -1,8 +1,8 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
 import type { FormSlug } from "#constants/forms";
-import { getFormConfig } from "#forms/getFormConfig";
 import BaseLayout from "#layouts/BaseLayout.astro";
+import { getFormConfig } from "#lib/forms/getFormConfig";
 import { FormContainer } from "../../components/forms/FormContainer";
 
 export async function getStaticPaths() {

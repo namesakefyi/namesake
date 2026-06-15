@@ -12,8 +12,8 @@ import {
   ModalOverlay,
   TextField,
 } from "react-aria-components";
-import type { AddPdfResult, Jurisdiction } from "../types.ts";
-import { fileToBase64 } from "../utils.ts";
+import type { AddPdfResult, Jurisdiction } from "../types";
+import { fileToBase64 } from "../utils";
 
 interface AddPdfModalProps {
   isOpen: boolean;

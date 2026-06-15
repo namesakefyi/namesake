@@ -3,8 +3,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { escapeKey } from "../../scripts/utils.mjs";
-import { buildTestDataEntries, loadFormFields } from "./fields.ts";
-import type { PdfFieldInfo } from "./pdf.ts";
+import { buildTestDataEntries, loadFormFields } from "./fields";
+import type { PdfFieldInfo } from "./pdf";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
@@ -50,7 +50,7 @@ function generateDefinition({
     "pdfPath: pdf,",
   ];
   const fieldLines = pdfFields.map((f) => `  ${escapeKey(f.name)}: undefined,`);
-  return `import { definePdf } from "#pdfs/definePdf";
+  return `import { definePdf } from "#lib/pdfs/definePdf";
 import pdf from "./${id}.pdf";
 import type { PdfFieldName } from "./schema";
 
@@ -92,7 +92,7 @@ function generateStarterTest({
 
   return `import { describe, it } from "vitest";
 import type { FormData } from "#constants/fields";
-import { expectPdfFieldsMatch } from "#pdfs/expectPdfFieldsMatch";
+import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import ${importName} from ".";
 
 describe("${escapedTitle}", () => {

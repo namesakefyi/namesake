@@ -5,7 +5,7 @@ import {
   useFieldVisible,
 } from "#components/forms/FormStep";
 import { LanguageSelectField } from "#components/forms/LanguageSelectField";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const interpreterStep = defineStep({
   id: "interpreter",

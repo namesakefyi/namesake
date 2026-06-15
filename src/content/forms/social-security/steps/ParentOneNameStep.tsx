@@ -1,6 +1,6 @@
 import { FormStep } from "#components/forms/FormStep";
 import { NameField } from "#components/forms/NameField";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const parentOneNameStep = defineStep({
   id: "parent-one",

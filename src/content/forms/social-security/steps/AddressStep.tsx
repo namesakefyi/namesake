@@ -1,6 +1,6 @@
 import { AddressField } from "#components/forms/AddressField";
 import { FormStep } from "#components/forms/FormStep";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const addressStep = defineStep({
   id: "address",

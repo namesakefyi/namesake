@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FormConfig } from "#constants/forms";
 import * as db from "#db/database";
-import type { Step } from "#forms/types";
+import type { Step } from "#lib/forms/types";
 import { FormStep } from "../FormStep/FormStep";
 import { FormContainer } from "./FormContainer";
 
@@ -17,12 +17,12 @@ vi.mock("#db/database", () => ({
   deleteField: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.mock("#forms/getFormConfig");
-vi.mock("#forms/getFormPdfMetadata", () => ({
+vi.mock("#lib/forms/getFormConfig");
+vi.mock("#lib/forms/getFormPdfMetadata", () => ({
   getFormPdfMetadata: vi.fn().mockResolvedValue([]),
 }));
 
-import { getFormConfig } from "#forms/getFormConfig";
+import { getFormConfig } from "#lib/forms/getFormConfig";
 
 const plainStep: Step = {
   id: "plain",

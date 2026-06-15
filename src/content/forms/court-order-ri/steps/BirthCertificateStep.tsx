@@ -1,6 +1,6 @@
 import { FormStep } from "#components/forms/FormStep";
 import { YesNoField } from "#components/forms/YesNoField";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const birthCertificateStep = defineStep({
   id: "birth-certificate",

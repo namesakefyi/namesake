@@ -1,6 +1,6 @@
 import type { SubmitEvent } from "react";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
-import { type FormConfig, resolveInstructions } from "../constants/forms";
+import { type FormConfig, resolveInstructions } from "#constants/forms";
 import { resolveFormVisibility } from "./formVisibility";
 
 /**
@@ -22,8 +22,8 @@ export function createFormSubmitHandler(
     );
 
     const [{ loadPdfs }, { downloadMergedPdf }] = await Promise.all([
-      import("../pdfs/loadPdfs"),
-      import("../pdfs/downloadMergedPdf"),
+      import("#lib/pdfs/loadPdfs"),
+      import("#lib/pdfs/downloadMergedPdf"),
     ]);
 
     const pdfs = await loadPdfs(pdfsToInclude);

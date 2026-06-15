@@ -1,7 +1,7 @@
 import { EmailField } from "#components/forms/EmailField";
 import { FormStep } from "#components/forms/FormStep";
 import { PhoneField } from "#components/forms/PhoneField";
-import { defineStep } from "#forms/defineStep";
+import { defineStep } from "#lib/forms/defineStep";
 
 export const contactInfoStep = defineStep({
   id: "contact-info",
