@@ -6,9 +6,9 @@ import {
 import { ShortTextField } from "../../../../components/forms/ShortTextField";
 import { COUNTRIES } from "../../../../constants/countries";
 import { JURISDICTIONS } from "../../../../constants/jurisdictions";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
-export const birthplaceStep: Step = {
+export const birthplaceStep = defineStep({
   id: "birthplace",
   title: "Where were you born?",
   fields: [
@@ -47,4 +47,4 @@ export const birthplaceStep: Step = {
       </FormStep>
     );
   },
-};
+});

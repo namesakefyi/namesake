@@ -1,9 +1,9 @@
 import { FormStep } from "../../../../components/forms/FormStep";
 import { YesNoField } from "../../../../components/forms/YesNoField";
+import { defineStep } from "../../../../forms/defineStep";
 import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
 
-export const youthServicesStep: Step = {
+export const youthServicesStep = defineStep({
   id: "youth-services",
   title: (data) =>
     `Is ${nameOrFallback(data, "the minor")} under the supervision of the Massachusetts Department of Youth Services?`,
@@ -19,4 +19,4 @@ export const youthServicesStep: Step = {
       />
     </FormStep>
   ),
-};
+});

@@ -6,9 +6,9 @@ import {
 import { LongTextField } from "../../../../components/forms/LongTextField";
 import { ShortTextField } from "../../../../components/forms/ShortTextField";
 import { YesNoField } from "../../../../components/forms/YesNoField";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
-export const previousNameChangeStep: Step = {
+export const previousNameChangeStep = defineStep({
   id: "previous-name-change",
   title: "Have you ever changed your name before?",
   fields: [
@@ -40,4 +40,4 @@ export const previousNameChangeStep: Step = {
       </FormStep>
     );
   },
-};
+});

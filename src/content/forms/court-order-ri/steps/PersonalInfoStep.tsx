@@ -1,7 +1,7 @@
 import { ComboBoxField } from "../../../../components/forms/ComboBoxField";
 import { FormStep } from "../../../../components/forms/FormStep";
 import { ShortTextField } from "../../../../components/forms/ShortTextField";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
 const MARITAL_STATUS_OPTIONS = [
   { label: "Single", value: "Single" },
@@ -10,7 +10,7 @@ const MARITAL_STATUS_OPTIONS = [
   { label: "Widowed", value: "Widowed" },
 ];
 
-export const personalInfoStep: Step = {
+export const personalInfoStep = defineStep({
   id: "personal-info",
   title: "What is your occupation and marital status?",
   fields: ["occupation", "maritalStatus"],
@@ -25,4 +25,4 @@ export const personalInfoStep: Step = {
       />
     </FormStep>
   ),
-};
+});

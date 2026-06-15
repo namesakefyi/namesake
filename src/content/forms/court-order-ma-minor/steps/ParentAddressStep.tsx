@@ -7,10 +7,10 @@ import {
   FormSubsection,
   useFieldVisible,
 } from "../../../../components/forms/FormStep";
+import { defineStep } from "../../../../forms/defineStep";
 import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
 
-export const parentAddressStep: Step = {
+export const parentAddressStep = defineStep({
   id: "parent-address",
   title: (data) =>
     `Where do ${nameOrFallback(data, "the minor")}'s parents live?`,
@@ -90,4 +90,4 @@ export const parentAddressStep: Step = {
       </FormStep>
     );
   },
-};
+});

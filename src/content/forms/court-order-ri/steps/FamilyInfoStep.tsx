@@ -3,9 +3,9 @@ import {
   FormSubsection,
 } from "../../../../components/forms/FormStep";
 import { NameField } from "../../../../components/forms/NameField";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
-export const familyInfoStep: Step = {
+export const familyInfoStep = defineStep({
   id: "family-info",
   title: "What are your parents' names?",
   fields: [
@@ -26,4 +26,4 @@ export const familyInfoStep: Step = {
       </FormSubsection>
     </FormStep>
   ),
-};
+});

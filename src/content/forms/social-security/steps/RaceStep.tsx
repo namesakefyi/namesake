@@ -1,9 +1,9 @@
 import { Banner } from "../../../../components/common/Banner";
 import { CheckboxGroupField } from "../../../../components/forms/CheckboxGroupField";
 import { FormStep } from "../../../../components/forms/FormStep";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
-export const raceStep: Step = {
+export const raceStep = defineStep({
   id: "race",
   title: "What is your race?",
   description: "This response is optional.",
@@ -51,4 +51,4 @@ export const raceStep: Step = {
       </Banner>
     </FormStep>
   ),
-};
+});

@@ -2,9 +2,9 @@ import { useFormContext } from "react-hook-form";
 import { Banner } from "../../../../components/common/Banner";
 import { FormStep } from "../../../../components/forms/FormStep";
 import { RadioGroupField } from "../../../../components/forms/RadioGroupField";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
-export const indigencyBasisStep: Step = {
+export const indigencyBasisStep = defineStep({
   id: "indigency-basis",
   title: "Why are you requesting a fee waiver?",
   fields: ["indigencyBasis"],
@@ -56,4 +56,4 @@ export const indigencyBasisStep: Step = {
       </FormStep>
     );
   },
-};
+});

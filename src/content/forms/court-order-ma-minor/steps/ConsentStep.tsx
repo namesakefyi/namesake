@@ -5,9 +5,9 @@ import {
 } from "../../../../components/forms/FormStep";
 import { LongTextField } from "../../../../components/forms/LongTextField";
 import { YesNoField } from "../../../../components/forms/YesNoField";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
-export const consentStep: Step = {
+export const consentStep = defineStep({
   id: "consent",
   title: "Does everyone consent to the name change?",
   fields: [
@@ -79,4 +79,4 @@ export const consentStep: Step = {
       </FormStep>
     );
   },
-};
+});

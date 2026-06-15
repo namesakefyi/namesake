@@ -6,9 +6,9 @@ import {
   FormSubsection,
   useFieldVisible,
 } from "../../../../components/forms/FormStep";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
-export const addressStep: Step = {
+export const addressStep = defineStep({
   id: "address",
   title: "What is your residential address?",
   description:
@@ -78,4 +78,4 @@ export const addressStep: Step = {
       </FormStep>
     );
   },
-};
+});

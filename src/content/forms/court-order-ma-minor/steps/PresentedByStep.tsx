@@ -1,8 +1,8 @@
 import { CheckboxField } from "../../../../components/forms/CheckboxField";
 import { FormStep } from "../../../../components/forms/FormStep";
-import type { Step } from "../../../../forms/types";
+import { defineStep } from "../../../../forms/defineStep";
 
-export const presentedByStep: Step = {
+export const presentedByStep = defineStep({
   id: "presented-by",
   title: "Who is presenting this petition?",
   description: "Select all that apply.",
@@ -27,4 +27,4 @@ export const presentedByStep: Step = {
       />
     </FormStep>
   ),
-};
+});

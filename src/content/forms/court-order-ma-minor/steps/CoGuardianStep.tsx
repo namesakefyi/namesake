@@ -10,10 +10,10 @@ import { PhoneField } from "../../../../components/forms/PhoneField";
 import { ShortTextField } from "../../../../components/forms/ShortTextField";
 import { YesNoField } from "../../../../components/forms/YesNoField";
 import { JURISDICTIONS } from "../../../../constants/jurisdictions";
+import { defineStep } from "../../../../forms/defineStep";
 import { nameOrFallback } from "../../../../forms/resolveStepContent";
-import type { Step } from "../../../../forms/types";
 
-export const coGuardianStep: Step = {
+export const coGuardianStep = defineStep({
   id: "co-guardian",
   title: (data) =>
     `Does ${nameOrFallback(data, "the minor")} have a court-appointed co-guardian?`,
@@ -65,7 +65,7 @@ export const coGuardianStep: Step = {
       </FormStep>
     );
   },
-};
+});
 
 function CoGuardianStateField() {
   const { control } = useFormContext();
