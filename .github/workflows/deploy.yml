@@ -28,7 +28,7 @@ jobs:
       pull-requests: write
       statuses: write
     outputs:
-      url: ${{ steps.deploy.outputs.deployment-url }}
+      url: ${{ steps.deploy.outputs.deployment-alias-url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.3
@@ -61,7 +61,7 @@ jobs:
               '| Web | 🔄 Building... | — |',
               '| Docs | 🔄 Building... | — |',
               '',
-              `_Generated in workflow [#${runNumber}](${workflowUrl}) for commit [\`${shaShort}\`](${commitUrl})_`,
+              `_Generated in workflow [#${runNumber}](${workflowUrl}) for commit [${shaShort}](${commitUrl})_`,
             ].join('\n');
 
             const { data: comments } = await github.rest.issues.listComments({
@@ -122,7 +122,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           SHA: ${{ github.event.pull_request.head.sha }}
-          DEPLOY_URL: ${{ steps.deploy.outputs.deployment-url }}
+          DEPLOY_URL: ${{ steps.deploy.outputs.deployment-alias-url }}
         run: |
           gh api "repos/$REPO/statuses/$SHA" \
             -f state=success \
@@ -150,7 +150,7 @@ jobs:
       deployments: write
       statuses: write
     outputs:
-      url: ${{ steps.deploy.outputs.deployment-url }}
+      url: ${{ steps.deploy.outputs.deployment-alias-url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.3
@@ -188,7 +188,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           SHA: ${{ github.event.pull_request.head.sha }}
-          DEPLOY_URL: ${{ steps.deploy.outputs.deployment-url }}
+          DEPLOY_URL: ${{ steps.deploy.outputs.deployment-alias-url }}
         run: |
           gh api "repos/$REPO/statuses/$SHA" \
             -f state=success \
@@ -253,7 +253,7 @@ jobs:
               '| :--- | :--- | :--- |',
               rows,
               '',
-              `_Generated in workflow [#${runNumber}](${workflowUrl}) for commit [\`${shaShort}\`](${commitUrl})_`,
+              `_Generated in workflow [#${runNumber}](${workflowUrl}) for commit [${shaShort}](${commitUrl})_`,
             ].join('\n');
 
             const { data: comments } = await github.rest.issues.listComments({
