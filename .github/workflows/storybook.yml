@@ -3,8 +3,16 @@ name: Storybook
 on:
   pull_request:
     branches: [main]
+    paths:
+      - "web/src/**"
+      - "web/.storybook/**"
+      - "web/package.json"
   push:
     branches: [main]
+    paths:
+      - "web/src/**"
+      - "web/.storybook/**"
+      - "web/package.json"
   workflow_dispatch:
 
 permissions:
@@ -38,13 +46,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build Storybook
-        run: pnpm storybook:build
+        run: pnpm --filter namesake-web storybook:build
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v5
         with:
-          path: storybook-static
+          path: web/storybook-static
 
   deploy:
     name: Deploy

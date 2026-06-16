@@ -5,9 +5,8 @@ on:
     branches: [main]
     paths-ignore:
       - ".changeset/**"
-      - ".storybook/**"
       - ".vscode/**"
-      - "public/**"
+      - "docs/**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -42,13 +41,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Test coverage
-        run: pnpm test:coverage
+        run: pnpm --filter namesake-web test:coverage
 
       - name: Upload coverage
         uses: actions/upload-artifact@v7
         with:
           name: coverage-branch
-          path: coverage
+          path: web/coverage
           overwrite: true
 
   test-coverage-main:
@@ -78,13 +77,13 @@ jobs:
         run: pnpm install
 
       - name: Test coverage
-        run: pnpm test:coverage
+        run: pnpm --filter namesake-web test:coverage
 
       - name: Upload coverage
         uses: actions/upload-artifact@v7
         with:
           name: coverage-main
-          path: coverage
+          path: web/coverage
           overwrite: true
 
   report-coverage:

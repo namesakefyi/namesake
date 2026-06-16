@@ -1,21 +1,8 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "compilerOptions": {
-    "allowJs": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
-    "types": ["./worker-configuration.d.ts", "node"],
-    "verbatimModuleSyntax": true
-  },
-  "exclude": [
-    ".wrangler",
-    "dist",
-    "node_modules",
-    "playwright-report",
-    "public",
-    "storybook-static",
-    "test-results"
+  "files": [],
+  "references": [
+    { "path": "./web" },
+    { "path": "./docs" },
+    { "path": "./pdf-manager" }
   ]
 }

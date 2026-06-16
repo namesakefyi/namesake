@@ -20,5 +20,10 @@
       "database_name": "namesake",
       "database_id": "24c35a7d-dfc9-4680-81d5-720469986bca"
     }
-  ]
+  ],
+  "env": {
+    "preview": {
+      "name": "namesake-fyi-preview"
+    }
+  }
 }

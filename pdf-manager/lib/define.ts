@@ -2,9 +2,9 @@ import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { escapeKey } from "../../scripts/utils.mjs";
 import { buildTestDataEntries, loadFormFields } from "./fields";
 import type { PdfFieldInfo } from "./pdf";
+import { escapeKey } from "./utils.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
