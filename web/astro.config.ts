@@ -79,6 +79,11 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
+  session: {
+    driver: {
+      entrypoint: "unstorage/drivers/null",
+    },
+  },
   server: {
     host: true,
   },

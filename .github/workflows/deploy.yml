@@ -61,30 +61,33 @@ jobs:
           WEB_CHANGED: ${{ needs.changes.outputs.web }}
           DOCS_CHANGED: ${{ needs.changes.outputs.docs }}
           PR_SHA: ${{ github.event.pull_request.head.sha }}
-          ACTOR: ${{ github.actor }}
+          RUN_NUMBER: ${{ github.run_number }}
+          RUN_ID: ${{ github.run_id }}
         with:
           script: |
             const marker = '<!-- namesake-preview -->';
             const sha = process.env.PR_SHA;
             const shaShort = sha.slice(0, 7);
-            const actor = process.env.ACTOR;
-            const commitUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${context.issue.number}/commits/${sha}`;
+            const runNumber = process.env.RUN_NUMBER;
+            const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${process.env.RUN_ID}`;
+            const commitUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${sha}`;
 
             const packages = [
               { label: 'Web', changed: process.env.WEB_CHANGED === 'true' },
               { label: 'Docs', changed: process.env.DOCS_CHANGED === 'true' },
             ].filter(p => p.changed);
 
-            const rows = packages.map(p => `| ${p.label} | 🔄 Building... |`).join('\n');
+            const rows = packages.map(p => `| ${p.label} | 🔄 Building... | — |`).join('\n');
 
             const body = [
               marker,
               `## Preview Deploys`,
-              `**@${actor}** · [\`${shaShort}\`](${commitUrl})`,
               '',
-              '| Package | Status |',
-              '| --- | --- |',
+              '| Package | Status | URL |',
+              '| --- | --- | --- |',
               rows,
+              '',
+              `_Generated in [workflow #${runNumber}](${workflowUrl}) for commit [\`${shaShort}\`](${commitUrl})_`,
             ].join('\n');
 
             const { data: comments } = await github.rest.issues.listComments({
@@ -120,7 +123,7 @@ jobs:
       deployments: write
       statuses: write
     outputs:
-      url: ${{ steps.preview.outputs.deployment-url }}
+      url: ${{ steps.deploy.outputs.deployment-url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.3
@@ -143,28 +146,14 @@ jobs:
       - name: Build
         run: pnpm --filter namesake-web build:only
 
-      - name: Deploy (Production)
-        if: github.event_name == 'push'
+      - name: Deploy
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: web
           command: deploy
-          secrets: |
-            RESEND_API_KEY
-        env:
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-
-      - name: Deploy (Preview)
-        if: github.event_name == 'pull_request'
-        id: preview
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: web
-          command: deploy --env preview
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           secrets: |
             RESEND_API_KEY
@@ -177,7 +166,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           SHA: ${{ github.event.pull_request.head.sha }}
-          DEPLOY_URL: ${{ steps.preview.outputs.deployment-url }}
+          DEPLOY_URL: ${{ steps.deploy.outputs.deployment-url }}
         run: |
           gh api "repos/$REPO/statuses/$SHA" \
             -f state=success \
@@ -207,7 +196,7 @@ jobs:
       deployments: write
       statuses: write
     outputs:
-      url: ${{ steps.preview.outputs.deployment-url }}
+      url: ${{ steps.deploy.outputs.deployment-url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.3
@@ -229,24 +218,14 @@ jobs:
       - name: Build
         run: pnpm --filter namesake-docs build:only
 
-      - name: Deploy (Production)
-        if: github.event_name == 'push'
+      - name: Deploy
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: docs
           command: deploy
-
-      - name: Deploy (Preview)
-        if: github.event_name == 'pull_request'
-        id: preview
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: docs
-          command: deploy --env preview
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set commit status (success)
@@ -255,7 +234,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           SHA: ${{ github.event.pull_request.head.sha }}
-          DEPLOY_URL: ${{ steps.preview.outputs.deployment-url }}
+          DEPLOY_URL: ${{ steps.deploy.outputs.deployment-url }}
         run: |
           gh api "repos/$REPO/statuses/$SHA" \
             -f state=success \
@@ -294,14 +273,16 @@ jobs:
           DOCS_URL: ${{ needs.deploy-docs.outputs.url }}
           DOCS_RESULT: ${{ needs.deploy-docs.result }}
           PR_SHA: ${{ github.event.pull_request.head.sha }}
-          ACTOR: ${{ github.actor }}
+          RUN_NUMBER: ${{ github.run_number }}
+          RUN_ID: ${{ github.run_id }}
         with:
           script: |
             const marker = '<!-- namesake-preview -->';
             const sha = process.env.PR_SHA;
             const shaShort = sha.slice(0, 7);
-            const actor = process.env.ACTOR;
-            const commitUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${context.issue.number}/commits/${sha}`;
+            const runNumber = process.env.RUN_NUMBER;
+            const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${process.env.RUN_ID}`;
+            const commitUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${sha}`;
 
             const deployments = [
               { label: 'Web', result: process.env.WEB_RESULT, url: process.env.WEB_URL },
@@ -309,18 +290,19 @@ jobs:
             ].filter(d => d.result !== 'skipped');
 
             const rows = deployments.map(d => {
-              if (d.result === 'success') return `| ${d.label} | ✅ [View preview](${d.url}) |`;
-              return `| ${d.label} | ❌ Deploy failed |`;
+              if (d.result === 'success') return `| ${d.label} | ✅ Deployed | [View preview](${d.url}) |`;
+              return `| ${d.label} | ❌ Failed | — |`;
             }).join('\n');
 
             const body = [
               marker,
               `## Preview Deploys`,
-              `**@${actor}** · [\`${shaShort}\`](${commitUrl})`,
               '',
-              '| Package | Status |',
-              '| --- | --- |',
+              '| Package | Status | URL |',
+              '| --- | --- | --- |',
               rows,
+              '',
+              `_Generated in [workflow #${runNumber}](${workflowUrl}) for commit [\`${shaShort}\`](${commitUrl})_`,
             ].join('\n');
 
             const { data: comments } = await github.rest.issues.listComments({
