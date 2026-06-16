@@ -19,8 +19,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  format:
-    name: Format
+  check:
+    name: Check
     runs-on: ubuntu-latest
 
     steps:
@@ -42,12 +42,12 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Sync Astro types
-        run: pnpm --filter @namesake/web astro sync
+        run: pnpm --filter "@namesake/web" --filter "@namesake/docs" exec astro sync
 
       - name: Typecheck
-        run: pnpm --filter @namesake/web exec tsc --noEmit
+        run: pnpm -r exec tsc --noEmit
 
-      - name: Biome Linter, Formatter, and Import Sorter
+      - name: Biome
         run: pnpm biome ci
 
   test:
@@ -73,27 +73,3 @@ jobs:
 
       - name: Run tests
         run: pnpm --filter @namesake/web test
-
-  docs-check:
-    name: Docs Check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6.0.3
-        with:
-          persist-credentials: false
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v6.0.8
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24.x"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Check docs
-        run: pnpm --filter @namesake/docs check
