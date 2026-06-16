@@ -4,7 +4,7 @@ import { PDFDocument } from "@cantoo/pdf-lib";
 import { PDFS_DIR } from "./catalog";
 import { convertDropdownsToTextFields, fieldReadingOrder } from "./pdf";
 import { loadSchemaFields } from "./suggest";
-import { escapeKey } from "./utils.mjs";
+import { escapeKey } from "./utils";
 
 interface PdfFieldWithClass {
   name: string;

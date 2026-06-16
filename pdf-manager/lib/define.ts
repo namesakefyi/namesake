@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildTestDataEntries, loadFormFields } from "./fields";
 import type { PdfFieldInfo } from "./pdf";
-import { escapeKey } from "./utils.mjs";
+import { escapeKey } from "./utils";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");

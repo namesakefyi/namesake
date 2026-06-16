@@ -45,7 +45,7 @@ jobs:
         run: pnpm --filter namesake-web astro sync
 
       - name: Typecheck
-        run: pnpm tsc -b
+        run: pnpm --filter namesake-web exec tsc --noEmit
 
       - name: Biome Linter, Formatter, and Import Sorter
         run: pnpm biome ci
