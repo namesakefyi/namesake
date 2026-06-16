@@ -88,7 +88,6 @@ export interface FormConfig {
   costs?: readonly FormCost[];
   /** If true, excluded from the public forms listing */
   unlisted?: boolean;
-
   /** Ordered steps, including optional guards for conditional inclusion. */
   steps: readonly Step[];
   /** PDFs included in this form */

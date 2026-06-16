@@ -470,7 +470,6 @@ export const FIELD_DEFS = [
     label: "Relationship to the person you are filing for (other)",
     type: "string",
   },
-  // Affidavit of Indigency
   {
     name: "indigencyBasis",
     label: "Reason for indigency",
