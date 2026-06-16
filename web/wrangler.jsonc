@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "namesake-fyi",
+  "name": "web",
   "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2025-10-22",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
@@ -23,7 +23,7 @@
   ],
   "env": {
     "preview": {
-      "name": "namesake-fyi-preview"
+      "name": "web-preview"
     }
   }
 }

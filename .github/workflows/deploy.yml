@@ -45,6 +45,71 @@ jobs:
               - "docs/**"
               - "pnpm-lock.yaml"
 
+  init-comment:
+    name: Initialize Preview Comment
+    needs: changes
+    if: |
+      github.event_name == 'pull_request' &&
+      (needs.changes.outputs.web == 'true' || needs.changes.outputs.docs == 'true')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Post building comment
+        uses: actions/github-script@v7
+        env:
+          WEB_CHANGED: ${{ needs.changes.outputs.web }}
+          DOCS_CHANGED: ${{ needs.changes.outputs.docs }}
+          PR_SHA: ${{ github.event.pull_request.head.sha }}
+          ACTOR: ${{ github.actor }}
+        with:
+          script: |
+            const marker = '<!-- namesake-preview -->';
+            const sha = process.env.PR_SHA;
+            const shaShort = sha.slice(0, 7);
+            const actor = process.env.ACTOR;
+            const commitUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${context.issue.number}/commits/${sha}`;
+
+            const packages = [
+              { label: 'Web', changed: process.env.WEB_CHANGED === 'true' },
+              { label: 'Docs', changed: process.env.DOCS_CHANGED === 'true' },
+            ].filter(p => p.changed);
+
+            const rows = packages.map(p => `| ${p.label} | 🔄 Building... |`).join('\n');
+
+            const body = [
+              marker,
+              `## Preview Deploys`,
+              `**@${actor}** · [\`${shaShort}\`](${commitUrl})`,
+              '',
+              '| Package | Status |',
+              '| --- | --- |',
+              rows,
+            ].join('\n');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+
   deploy-web:
     name: Web (${{ github.event_name == 'pull_request' && 'Preview' || 'Production' }})
     needs: changes
@@ -56,7 +121,6 @@ jobs:
       statuses: write
     outputs:
       url: ${{ steps.preview.outputs.deployment-url }}
-      duration: ${{ steps.duration.outputs.value }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.3
@@ -75,10 +139,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Start timer
-        id: timer
-        run: echo "start=$(date +%s)" >> $GITHUB_OUTPUT
 
       - name: Build
         run: pnpm --filter namesake-web build:only
@@ -111,26 +171,18 @@ jobs:
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
 
-      - name: Calculate duration
-        id: duration
-        if: github.event_name == 'pull_request'
-        env:
-          START_TIME: ${{ steps.timer.outputs.start }}
-        run: echo "value=$(( $(date +%s) - START_TIME ))s" >> $GITHUB_OUTPUT
-
       - name: Set commit status (success)
         if: github.event_name == 'pull_request' && success()
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           SHA: ${{ github.event.pull_request.head.sha }}
-          DURATION: ${{ steps.duration.outputs.value }}
           DEPLOY_URL: ${{ steps.preview.outputs.deployment-url }}
         run: |
           gh api "repos/$REPO/statuses/$SHA" \
             -f state=success \
             -f context="Preview / Web" \
-            -f description="Preview deployed in $DURATION" \
+            -f description="Preview deployed" \
             -f target_url="$DEPLOY_URL"
 
       - name: Set commit status (failure)
@@ -156,7 +208,6 @@ jobs:
       statuses: write
     outputs:
       url: ${{ steps.preview.outputs.deployment-url }}
-      duration: ${{ steps.duration.outputs.value }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.3
@@ -174,10 +225,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Start timer
-        id: timer
-        run: echo "start=$(date +%s)" >> $GITHUB_OUTPUT
 
       - name: Build
         run: pnpm --filter namesake-docs build:only
@@ -202,26 +249,18 @@ jobs:
           command: deploy --env preview
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Calculate duration
-        id: duration
-        if: github.event_name == 'pull_request'
-        env:
-          START_TIME: ${{ steps.timer.outputs.start }}
-        run: echo "value=$(( $(date +%s) - START_TIME ))s" >> $GITHUB_OUTPUT
-
       - name: Set commit status (success)
         if: github.event_name == 'pull_request' && success()
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           SHA: ${{ github.event.pull_request.head.sha }}
-          DURATION: ${{ steps.duration.outputs.value }}
           DEPLOY_URL: ${{ steps.preview.outputs.deployment-url }}
         run: |
           gh api "repos/$REPO/statuses/$SHA" \
             -f state=success \
             -f context="Preview / Docs" \
-            -f description="Preview deployed in $DURATION" \
+            -f description="Preview deployed" \
             -f target_url="$DEPLOY_URL"
 
       - name: Set commit status (failure)
@@ -242,18 +281,18 @@ jobs:
     if: |
       always() &&
       github.event_name == 'pull_request' &&
-      (needs.deploy-web.result == 'success' || needs.deploy-docs.result == 'success')
+      (needs.deploy-web.result != 'skipped' || needs.deploy-docs.result != 'skipped')
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
     steps:
-      - name: Post or update preview comment
+      - name: Update preview comment
         uses: actions/github-script@v7
         env:
           WEB_URL: ${{ needs.deploy-web.outputs.url }}
-          WEB_DURATION: ${{ needs.deploy-web.outputs.duration }}
+          WEB_RESULT: ${{ needs.deploy-web.result }}
           DOCS_URL: ${{ needs.deploy-docs.outputs.url }}
-          DOCS_DURATION: ${{ needs.deploy-docs.outputs.duration }}
+          DOCS_RESULT: ${{ needs.deploy-docs.result }}
           PR_SHA: ${{ github.event.pull_request.head.sha }}
           ACTOR: ${{ github.actor }}
         with:
@@ -265,21 +304,22 @@ jobs:
             const commitUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${context.issue.number}/commits/${sha}`;
 
             const deployments = [
-              { label: 'Web', url: process.env.WEB_URL, duration: process.env.WEB_DURATION },
-              { label: 'Docs', url: process.env.DOCS_URL, duration: process.env.DOCS_DURATION },
-            ].filter(d => d.url);
+              { label: 'Web', result: process.env.WEB_RESULT, url: process.env.WEB_URL },
+              { label: 'Docs', result: process.env.DOCS_RESULT, url: process.env.DOCS_URL },
+            ].filter(d => d.result !== 'skipped');
 
-            const rows = deployments
-              .map(d => `| ${d.label} | ${d.url} | ${d.duration} |`)
-              .join('\n');
+            const rows = deployments.map(d => {
+              if (d.result === 'success') return `| ${d.label} | ✅ [View preview](${d.url}) |`;
+              return `| ${d.label} | ❌ Deploy failed |`;
+            }).join('\n');
 
             const body = [
               marker,
-              `### Previews`,
+              `## Preview Deploys`,
               `**@${actor}** · [\`${shaShort}\`](${commitUrl})`,
               '',
-              '| Package | URL | Duration |',
-              '| --- | --- | --- |',
+              '| Package | Status |',
+              '| --- | --- |',
               rows,
             ].join('\n');
 
