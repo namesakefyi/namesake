@@ -44,7 +44,12 @@ export default defineConfig({
         },
         {
           label: "Guides",
-          items: ["guides/setup", "guides/new-pdfs", "guides/building-forms"],
+          items: [
+            "guides/setup",
+            "guides/new-pdfs",
+            "guides/building-forms",
+            "guides/writing",
+          ],
         },
         {
           label: "Understanding",

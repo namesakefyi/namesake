@@ -1,0 +1,107 @@
+---
+title: Writing and Style Guide
+description: The name change process can be made easier to understand by following these writing guidelines.  
+---
+
+The guidelines below are designed to help craft guides for Namesake that are easy to understand and follow.
+
+## Writing
+
+### Use plain language
+
+All readers can benefit from clear, straightforward writing, but this can be particularly important for people who:
+
+- are reading in a non-native language
+- are frustrated, tired, or in a hurry
+- have cognitive, learning, or attention difficulties
+- do not have familiarity with the legal system
+
+Aim for **clear** and **helpful** documentation that serves the reader above all else.
+
+Usually this means choosing:
+
+- shorter sentences and paragraphs
+- simpler vocabulary and phrases
+- less jargon
+- fewer assumptions about what the reader already knows
+- bullet points and section headings to break up chunks of text
+
+For more information, read [plainlanguage.gov](https://www.plainlanguage.gov/).
+
+### Write out abbreviations and acronyms
+
+The first time you use an acronym, write it out in full.
+
+> ✅ Mail your documents to the Rhode Island Bureau of Criminal Investigation (BCI).
+> 
+> ❌ Mail your documents to BCI.
+
+### Keep headings short
+
+Headings display in the sidebar and should be kept short and descriptive. Headings should use the active voice and start with a verb.
+
+> ✅ Get prepared
+> 
+> ❌ Collect everything you need for your name change application
+
+### Use descriptive links
+
+When linking to external resources, use descriptive text that clearly indicates what the link is for. Avoid using generic phrases like "click here" or "learn more".
+
+> ✅ [Get a certified copy of your birth certificate](https://www.mass.gov/ordering-a-certificate) from the Registry of Vital Records.
+> 
+> ❌ Get a certified copy of your birth certificate [here](https://www.mass.gov/ordering-a-certificate).
+
+### Don't rely on external links for important info
+
+A Namesake guide should be _self-contained_, allowing a reader to understand the process without navigating to other webpages. Put the information inline, and link to the source for readers who want to verify details.
+
+### Collapse non-essential information
+
+There are questions about the name change process which are important to answer but may not apply to the majority of readers. Answer these questions without making the page look long and intimidating by hiding them behind a toggle.
+
+Use the `<details>` element to collapse non-essential information. For example:
+
+```mdx wrap
+<details>
+  <summary>What if my birth certificate is not written in English?</summary>
+
+  Birth certificates that are not written in English must include a written translation signed by the person translating the birth certificate with a statement that they are fluent in the foreign language and English and that the translation is a true and accurate translation. The translators signature must be notarized.
+
+</details>
+```
+
+Will display:
+
+<details>
+  <summary>What if my birth certificate is not written in English?</summary>
+
+  Birth certificates that are not written in English must include a written translation signed by the person translating the birth certificate with a statement that they are fluent in the foreign language and English and that the translation is a true and accurate translation. The translators signature must be notarized.
+
+</details>
+
+`<details>` elements should be placed _after_ the main content of a section.
+
+## Technical
+
+### Prevent link rot
+
+When URLs are renamed, existing links to Namesake will break, causing [link rot](https://en.wikipedia.org/wiki/Link_rot). Avoid renaming files within `src/content` and `src/pages`, since these filenames are used to generate site URLs.
+
+If renaming is unavoidable, add an entry to `redirects` in `astro.config.ts`:
+
+```ts {3-5}
+// astro.config.ts
+export default defineConfig({
+  redirects: {
+    '/old-url': '/new-url',
+  },
+});
+```
+
+## Resources
+
+- [Plain Language](https://plainlanguage.gov)
+- [Diátaxis](https://diataxis.fr)
+- [Hemingway](https://hemingwayapp.com)
+- [Astro Docs Docs](https://contribute.docs.astro.build/)
