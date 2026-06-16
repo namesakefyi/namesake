@@ -1,0 +1,100 @@
+---
+title: Uploading New PDFs
+description: This guide shows you how to add a new PDF to the Namesake repository along with metadata.
+---
+import { LinkCard } from '@astrojs/starlight/components';
+
+This guide shows you how to add a new PDF to the Namesake repository along with metadata.
+
+## Download the original file
+
+First, download the original PDF file. If the PDF you found is from an unofficial source, find the canonical latest version from a `.gov` website.
+
+## Start the PDF Manager
+
+From the `namesake` directory, run:
+
+```zsh
+pnpm pdf:manage
+```
+
+This will open the PDF Manager at [http://localhost:3456](http://localhost:3456).
+
+## Upload the PDF
+
+Once the PDF Manager is running, click **Add PDF** and upload your file.
+
+You will be prompted for:
+
+1. **Form title** — _e.g. "Petition to Change Name of Adult"_
+2. **Form code** (optional) — _e.g. "CJP-27"_
+3. **Canonical URL** — _the URL for the original file, e.g. https://www.mass.gov/doc/petition-to-change-name-of-adult-cjp-27/download_
+4. **Jurisdiction** — _e.g. "MA"_
+
+Complete the fields and click **Create**.
+
+On success, you will see your new PDF appear in the PDF Manager alongside a list of form fields.
+
+Behind the scenes, the PDF has been copied into a new folder inside `src/pdfs` alongside new `index.ts`, `index.test.ts`, and `schema.ts` files. Take a look inside these files to see what's inside them.
+
+:::caution[Don't edit schemas manually]
+
+All `schema.ts` files are automatically generated based on the fields embedded within the PDF. Manual edits to `schema.ts` will be overwritten.
+
+:::
+
+Now it's time to clean up the form fields.
+
+## Exclude unused fields
+
+Some fields, like internal bureaucratic coding, will never be filled in by a Namesake user.
+
+**Any field that will never take user input should be excluded from the schema.**
+
+To exclude a field using the PDF Manager, select the field name from the list and press `Delete` or `Backspace`. Excluded fields will appear at the bottom of the list with a strikethrough. Click **Save** to write all exclusions to disk.
+
+## Rename remaining fields
+
+Once unused fields have been excluded, the remaining fields should be renamed. We rename fields to make it easier to work with PDFs, and because the default names are often undescriptive.
+
+:::note[PDF field naming conventions]
+
+1. **Use `camelCase`.** (e.g. `residenceStreetAddress`, `newFirstName`)
+2. **Prefix checkbox fields with `is`, `should`, or `has`.** (e.g. `isReceivingMedicaid`, `shouldReturnOriginalDocuments`)
+   - If a question has two separate "Yes" and "No" checkboxes, use the suffix `True` and `False`. (e.g. `hasPreviousNameChangeTrue`, `hasPreviousNameChangeFalse`)
+3. **Try to match [existing field definitions](https://github.com/namesakefyi/namesake/blob/main/src/constants/fields.ts).** Exact matches aren't required, but staying close will make it easier to connect PDF fields to user data.
+4. **Don't be afraid of long names.** A long but clear name is preferable to a short and ambiguous one.
+
+:::
+
+First, select a field in the list. The PDF preview highlights the current field so you can see it in context. Press `Enter` or double-click the list item to rename it. When you have finished renaming fields, click **Save** to write changes to disk.
+
+## Connect PDF fields to user data
+
+The `index.ts` file for each PDF contains an exported `PDFDefinition`. This lists the id, title, code, and other metadata about the PDF, along with a `resolver`. The resolver is a function that maps PDF field names to user data. At the start, all data will be listed as `undefined`.
+
+```ts title="index.ts" {5-14}
+export default definePdf<PdfFieldName>({
+  id: "cjp27-petition-to-change-name-of-adult",
+  title: "Petition to Change Name of Adult",
+  // ...
+  resolver: (data) => ({
+    petitionerFirstName: undefined,
+    petitionerMiddleName: undefined,
+    petitionerLastName: undefined,
+    county: undefined,
+    oldFirstName: undefined,
+    oldMiddleName: undefined,
+    oldLastName: undefined,
+    // ...
+  }),
+});
+```
+
+We want to replace `undefined` values with `data` from the user, but before we can do that, we will need to [build a user-facing form](/guides/building-forms) to collect data!
+
+Since building a form will take a fair amount of work, let's go ahead and [open a pull request](https://github.com/namesakefyi/namesake/pulls) to get our new PDF definition reviewed with fields mapped to `undefined`. Once we've built the form, we can come back and map the values to `data` from the user.
+
+<LinkCard title="Building Forms" description="Learn how to build a user-facing form to collect data for your PDF." href="/guides/building-forms" />
+
+Congrats! You've added a new PDF to Namesake.

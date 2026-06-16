@@ -1,0 +1,179 @@
+---
+title: Building An Interactive Form
+description: How to add a new interactive form to Namesake.
+---
+
+import { FileTree, LinkCard } from '@astrojs/starlight/components';
+
+Once you have [added new PDFs](/guides/new-pdfs) to the codebase, you are ready to create an interactive [form](https://namesake.fyi/forms).
+
+## Set up your form folder
+
+Add a new folder to `src/content/forms` with the following structure:
+
+<FileTree>
+
+- my-form
+  - steps
+    - NewNameStep.tsx
+    - OldNameStep.tsx
+    - AddressStep.tsx
+    - ...
+  - e2e.spec.ts
+  - index.ts
+
+</FileTree>
+
+## Define the form
+
+Inside `index.ts`, import `defineForm` and provide a config.
+
+```ts {2}
+// index.ts
+import { defineForm } from "#lib/forms/defineForm";
+
+export default defineForm({
+  title: "Court Order",
+  description: "If you live in Massachusetts and want to update your name, this is the place to start.",
+  state: "ma",
+  category: "court-order",
+  steps: [
+    // Step definitions...
+  ],
+  // Additional form config...
+});
+```
+
+## Define steps
+
+Within `steps/`, create a new `.tsx` file for each step. Import `defineStep` and provide an `id`, `title`, `fields`, and `component`.
+
+```tsx {4}
+// NameStep.tsx
+import { FormStep } from "#components/forms/FormStep";
+import { ShortTextField } from "#components/forms/ShortTextField";
+import { defineStep } from "#lib/forms/defineStep";
+
+export const nameStep = defineStep({
+  id: "new-name",
+  title: "What is your name?",
+  fields: ["newFirstName", "newLastName"],
+  component: ({ stepConfig }) => (
+    <FormStep stepConfig={stepConfig}>
+      <ShortTextField name="newFirstName" label="First name" />
+      <ShortTextField name="newLastName" label="Last name" />
+    </FormStep>
+  ),
+});
+```
+
+The `fields` array controls what gets saved, restored, and shown on the review page.
+
+### Skip a step conditionally
+
+Add a `when` predicate to exclude a step when a condition isn't met:
+
+```tsx {7}
+// FeeWaiverStep.tsx
+import { FormStep } from "#components/forms/FormStep";
+import { defineStep } from "#lib/forms/defineStep";
+
+export const feeWaiverDocumentsStep = defineStep({
+  id: "fee-waiver-documents",
+  when: (data) => data.shouldApplyForFeeWaiver === true,
+  title: "Upload your fee waiver documents",
+  fields: ["feeWaiverDocument"],
+  component: ({ stepConfig }) => (
+    <FormStep stepConfig={stepConfig}>...</FormStep>
+  ),
+});
+```
+
+### Show fields conditionally
+
+When a step has follow-up questions that only apply given a previous answer, use `{ id, when }` inside the `fields` array and call `useFieldVisible` in the component:
+
+```tsx {17-20,23}
+// OtherNamesStep.tsx
+import { Banner } from "#components/common/Banner";
+import {
+  FormStep,
+  FormSubsection,
+  useFieldVisible,
+} from "#components/forms/FormStep";
+import { LongTextField } from "#components/forms/LongTextField";
+import { YesNoField } from "#components/forms/YesNoField";
+import { defineStep } from "#lib/forms/defineStep";
+
+export const otherNamesStep = defineStep({
+  id: "other-names",
+  title: "Have you used any other name or alias?",
+  fields: [
+    "hasUsedOtherNameOrAlias",
+    {
+      id: "otherNamesOrAliases",
+      when: (data) => data.hasUsedOtherNameOrAlias === true,
+    },
+  ],
+  component: ({ stepConfig }) => {
+    const otherNamesVisible = useFieldVisible(stepConfig, "otherNamesOrAliases");
+    return (
+      <FormStep stepConfig={stepConfig}>
+        <YesNoField name="hasUsedOtherNameOrAlias" ... />
+        <FormSubsection isVisible={otherNamesVisible}>
+          <LongTextField name="otherNamesOrAliases" ... />
+        </FormSubsection>
+      </FormStep>
+    );
+  },
+});
+```
+
+For multiple fields sharing one predicate, use `{ ids, when }`:
+
+```tsx {3-10}
+fields: [
+  "hasPreviousSocialSecurityCard",
+  {
+    ids: [
+      "previousSocialSecurityCardFirstName",
+      "previousSocialSecurityCardMiddleName",
+      "previousSocialSecurityCardLastName",
+    ],
+    when: (data) => data.hasPreviousSocialSecurityCard === true,
+  },
+],
+```
+
+## Render the form
+
+In your guide, render `FormContainer` with your form's `slug`:
+
+```mdx
+// court-order.mdx
+
+## Fill out forms
+
+<FormContainer client:load slug="court-order-ma" inline />
+```
+
+## Connect PDF fields
+
+Now that your form collects data, go back to `src/content/pdfs` and update the resolver values in `index.ts` with the matching fields from `data`:
+
+```ts {4-9}
+// index.ts
+export default definePdf<PdfFieldName>({
+  // ...
+  resolver: (data) => ({
+    petitionerFirstName: data.newFirstName,
+    petitionerMiddleName: data.newMiddleName,
+    petitionerLastName: data.newLastName,
+    // Map remaining PDF fields to form data...
+  }),
+});
+```
+
+## Write end-to-end tests
+
+Add end-to-end tests to `e2e.spec.ts` covering the full form flow. Look at existing form specs in `src/content/forms` for examples of how to fill in steps, verify the review page, and confirm PDF output.
