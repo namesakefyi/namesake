@@ -82,6 +82,7 @@ export default defineConfig({
         },
       ],
       customCss: ["./src/styles/theme.css"],
+      routeMiddleware: "./src/routeData.ts",
     }),
   ],
   devToolbar: {
