@@ -3,18 +3,18 @@
 /**
  * Extracts AcroForm field names from PDFs and writes schema.ts files.
  * Usage: pnpm pdf:schema [path/to/file.pdf] [--quiet]
- *   No arg: all PDFs in src/content/pdfs. With arg: single PDF. --quiet: no output.
+ *   No arg: all PDFs in web/src/content/pdfs. With arg: single PDF. --quiet: no output.
  */
 
 import { spawnSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { intro, log, taskLog } from "@clack/prompts";
-import { findPdfFiles, processPdf } from "../pdf-manager/lib/schema";
+import { findPdfFiles, processPdf } from "../lib/schema";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, "..");
-const PDFS_DIR = join(ROOT, "src/content/pdfs");
+const MONOREPO_ROOT = join(__dirname, "..", "..");
+const PDFS_DIR = join(MONOREPO_ROOT, "web/src/content/pdfs");
 
 async function main() {
   const argv = process.argv.slice(2);
@@ -37,7 +37,7 @@ async function main() {
   }
 
   if (pdfPaths.length === 0) {
-    if (!quiet) log.warn("No PDF files found in src/content/pdfs");
+    if (!quiet) log.warn("No PDF files found in web/src/content/pdfs");
     return;
   }
 
@@ -65,7 +65,7 @@ async function main() {
   const result = spawnSync(
     "pnpm",
     ["exec", "biome", "format", "--write", ...schemaPaths],
-    { cwd: ROOT, stdio: quiet ? "pipe" : "inherit" },
+    { cwd: MONOREPO_ROOT, stdio: quiet ? "pipe" : "inherit" },
   );
   if (result.status !== 0) process.exit(result.status ?? 1);
 

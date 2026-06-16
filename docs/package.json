@@ -1,0 +1,27 @@
+{
+  "name": "@namesake/docs",
+  "private": true,
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "build:only": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/cloudflare": "^13.6.1",
+    "@astrojs/starlight": "^0.40.0",
+    "@mermaid-js/layout-elk": "^0.2.1",
+    "astro": "^6.4.6",
+    "astro-mermaid": "^2.0.2",
+    "mermaid": "^11.15.0",
+    "sharp": "^0.34.5",
+    "starlight-theme-flexoki": "^0.2.2",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.98.0"
+  }
+}

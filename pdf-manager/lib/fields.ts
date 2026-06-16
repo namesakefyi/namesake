@@ -4,8 +4,8 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
-const FIELDS_PATH = join(ROOT, "src/constants/fields.ts");
-const JURISDICTIONS_PATH = join(ROOT, "src/constants/jurisdictions.ts");
+const FIELDS_PATH = join(ROOT, "web/src/constants/fields.ts");
+const JURISDICTIONS_PATH = join(ROOT, "web/src/constants/jurisdictions.ts");
 
 /** Common PDF field name → form field name mappings. */
 const PDF_TO_FORM_FIELD_MAP: Record<string, string> = {

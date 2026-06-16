@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button, FileTrigger } from "react-aria-components";
 import type { Diff, Field, FieldPreview, PdfMeta, Rename } from "../types";
-import { fileToBase64 } from "../utils";
+import { fileToBase64, parseJson } from "../utils";
 import { DiffBanner } from "./DiffBanner.tsx";
 import { FieldList } from "./FieldList.tsx";
 import { FieldMapper } from "./FieldMapper.tsx";
@@ -45,7 +45,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
     let cancelled = false;
     async function fetchMeta() {
       const res = await fetch("/api/pdfs");
-      const allPdfs = await res.json<PdfMeta[]>();
+      const allPdfs = await parseJson<PdfMeta[]>(res);
       if (!cancelled) setMeta(allPdfs.find((p) => p.id === pdfId) ?? null);
     }
     fetchMeta();
@@ -70,7 +70,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ pdfBase64: base64 }),
         });
-        const data = await res.json<FieldPreview>();
+        const data = await parseJson<FieldPreview>(res);
         if (cancelled) return;
         if (!res.ok) throw new Error(data.error ?? "Failed to load preview");
         const preview = data;
@@ -102,7 +102,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ renames, deletes, unexcludes }),
       });
-      const result = await res.json<Diff>();
+      const result = await parseJson<Diff>(res);
       if (!res.ok) throw new Error(result.error ?? "Save failed");
       setStagedRenames({});
       setStagedDeletes(new Set());

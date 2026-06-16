@@ -5,10 +5,7 @@ on:
     branches: [main]
     paths-ignore:
       - ".changeset/**"
-      - ".storybook/**"
       - ".vscode/**"
-      - "docs/**"
-      - "public/**"
       - "CHANGELOG.md"
   push:
     branches: [main]
@@ -22,8 +19,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  format:
-    name: Format
+  check:
+    name: Check
     runs-on: ubuntu-latest
 
     steps:
@@ -45,12 +42,15 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Sync Astro types
-        run: pnpm astro sync
+        run: pnpm --filter "@namesake/web" --filter "@namesake/docs" exec astro sync
+
+      - name: Typecheck (Astro)
+        run: pnpm --filter "@namesake/web" --filter "@namesake/docs" exec astro check
 
       - name: Typecheck
-        run: pnpm tsc -b
+        run: pnpm --filter "@namesake/pdf-manager" exec tsc --noEmit
 
-      - name: Biome Linter, Formatter, and Import Sorter
+      - name: Biome
         run: pnpm biome ci
 
   test:
@@ -75,4 +75,4 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run tests
-        run: pnpm test
+        run: pnpm --filter @namesake/web test

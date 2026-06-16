@@ -79,8 +79,14 @@ export default defineConfig({
   devToolbar: {
     enabled: false,
   },
+  session: {
+    driver: {
+      entrypoint: "unstorage/drivers/null",
+    },
+  },
   server: {
     host: true,
+    open: true,
   },
   vite: {
     assetsInclude: ["**/*.wasm"],
