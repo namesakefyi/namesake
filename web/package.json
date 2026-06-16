@@ -10,7 +10,7 @@
     "defaults"
   ],
   "scripts": {
-    "dev": "astro dev --open",
+    "dev": "astro dev",
     "start": "astro dev",
     "build": "wrangler types && astro check && astro build",
     "build:only": "astro build",

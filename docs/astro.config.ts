@@ -13,6 +13,10 @@ export default defineConfig({
       entrypoint: "unstorage/drivers/null",
     },
   },
+  server: {
+    port: 5432,
+    open: true,
+  },
   integrations: [
     mermaid({
       mermaidConfig: {

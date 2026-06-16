@@ -86,6 +86,7 @@ export default defineConfig({
   },
   server: {
     host: true,
+    open: true,
   },
   vite: {
     assetsInclude: ["**/*.wasm"],
