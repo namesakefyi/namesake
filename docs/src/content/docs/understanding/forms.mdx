@@ -57,7 +57,7 @@ On its own, the state machine doesn't "know" about any of the values the user en
 
 As the user progresses through the form, they will enter data which affects the visibility of other fields and steps. To make sure we are displaying the correct fields on the review table and writing the correct data to the final PDF, visibility must be **resolved**.
 
-The [`resolveFormVisibility`](https://github.com/namesakefyi/namesake/blob/main/src/lib/forms/formVisibility.ts#L82) function  takes an input of `steps`, user `formData`, and `pdfs`, and parses the visibility rules. It returns:
+The [`resolveFormVisibility`](https://github.com/namesakefyi/namesake/blob/main/web/src/lib/forms/formVisibility.ts#L82) function  takes an input of `steps`, user `formData`, and `pdfs`, and parses the visibility rules. It returns:
 
 - `visibleStepIds` — steps not excluded by `when` predicates
 - `visibleFields` — field values for visible fields only
