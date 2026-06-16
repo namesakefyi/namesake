@@ -1,5 +1,5 @@
 {
-  "name": "pdf-manager",
+  "name": "@namesake/pdf-manager",
   "private": true,
   "type": "module",
   "version": "0.0.1",

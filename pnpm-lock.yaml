@@ -205,9 +205,6 @@ importers:
         specifier: ^5.32.0
         version: 5.32.0
     devDependencies:
-      '@biomejs/biome':
-        specifier: ^2.4.16
-        version: 2.4.16
       '@playwright/test':
         specifier: ^1.60.0
         version: 1.60.0

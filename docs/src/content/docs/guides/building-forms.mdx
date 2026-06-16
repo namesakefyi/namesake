@@ -9,7 +9,7 @@ Once you have [added new PDFs](/guides/new-pdfs) to the codebase, you are ready 
 
 ## Set up your form folder
 
-Add a new folder to `src/content/forms` with the following structure:
+Add a new folder to `web/src/content/forms` with the following structure:
 
 <FileTree>
 
@@ -159,7 +159,7 @@ In your guide, render `FormContainer` with your form's `slug`:
 
 ## Connect PDF fields
 
-Now that your form collects data, go back to `src/content/pdfs` and update the resolver values in `index.ts` with the matching fields from `data`:
+Now that your form collects data, go back to `web/src/content/pdfs` and update the resolver values in `index.ts` with the matching fields from `data`:
 
 ```ts {4-9}
 // index.ts
@@ -176,4 +176,4 @@ export default definePdf<PdfFieldName>({
 
 ## Write end-to-end tests
 
-Add end-to-end tests to `e2e.spec.ts` covering the full form flow. Look at existing form specs in `src/content/forms` for examples of how to fill in steps, verify the review page, and confirm PDF output.
+Add end-to-end tests to `e2e.spec.ts` covering the full form flow. Look at existing form specs in `web/src/content/forms` for examples of how to fill in steps, verify the review page, and confirm PDF output.

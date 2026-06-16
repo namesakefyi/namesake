@@ -1,5 +1,5 @@
 {
-  "name": "namesake-docs",
+  "name": "@namesake/docs",
   "private": true,
   "type": "module",
   "version": "0.0.1",
@@ -9,9 +9,7 @@
     "build": "astro check && astro build",
     "build:only": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "check": "astro check && biome check",
-    "check:fix": "astro check && biome check --write"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",

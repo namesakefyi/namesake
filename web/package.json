@@ -1,5 +1,5 @@
 {
-  "name": "namesake-web",
+  "name": "@namesake/web",
   "type": "module",
   "version": "0.0.1",
   "license": "GPL-3.0",
@@ -16,12 +16,6 @@
     "build:only": "astro build",
     "preview": "wrangler types && astro preview",
     "astro": "astro",
-    "lint": "biome lint",
-    "lint:fix": "biome lint --write",
-    "format": "biome format",
-    "format:fix": "biome format --write",
-    "check": "astro check && biome check",
-    "check:fix": "astro check && biome check --write",
     "test": "vitest",
     "test:once": "vitest run",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
@@ -82,7 +76,6 @@
     "xstate": "^5.32.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.16",
     "@playwright/test": "^1.60.0",
     "@react-aria/test-utils": "1.0.0-beta.3",
     "@storybook/addon-links": "^10.4.1",

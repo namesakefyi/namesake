@@ -8,7 +8,7 @@ import { escapeKey } from "./utils";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
-const PDF_TS_PATH = join(ROOT, "src/constants/pdf.ts");
+const PDF_TS_PATH = join(ROOT, "web/src/constants/pdf.ts");
 
 /** Returns a kebab-case PDF id from code and title. */
 export function generatePdfId(code: string, title: string): string {
@@ -149,8 +149,8 @@ export function computeOutputPaths({
   const id = generatePdfId(code, title);
   const jurisdictionDir =
     jurisdiction.toLowerCase() === "federal"
-      ? join(ROOT, "src/content/pdfs/federal")
-      : join(ROOT, "src/content/pdfs", jurisdiction.toLowerCase());
+      ? join(ROOT, "web/src/content/pdfs/federal")
+      : join(ROOT, "web/src/content/pdfs", jurisdiction.toLowerCase());
   const pdfDir = join(jurisdictionDir, id);
   return {
     id,

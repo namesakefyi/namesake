@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
-export const PDFS_DIR = join(ROOT, "src/content/pdfs");
+export const PDFS_DIR = join(ROOT, "web/src/content/pdfs");
 
 interface PdfMeta {
   title: string;

@@ -15,7 +15,7 @@ First, download the original PDF file. If the PDF you found is from an unofficia
 From the `namesake` directory, run:
 
 ```zsh
-pnpm pdf:manage
+pnpm dev:pdf
 ```
 
 This will open the PDF Manager at [http://localhost:3456](http://localhost:3456).
@@ -62,7 +62,7 @@ Once unused fields have been excluded, the remaining fields should be renamed. W
 1. **Use `camelCase`.** (e.g. `residenceStreetAddress`, `newFirstName`)
 2. **Prefix checkbox fields with `is`, `should`, or `has`.** (e.g. `isReceivingMedicaid`, `shouldReturnOriginalDocuments`)
    - If a question has two separate "Yes" and "No" checkboxes, use the suffix `True` and `False`. (e.g. `hasPreviousNameChangeTrue`, `hasPreviousNameChangeFalse`)
-3. **Try to match [existing field definitions](https://github.com/namesakefyi/namesake/blob/main/src/constants/fields.ts).** Exact matches aren't required, but staying close will make it easier to connect PDF fields to user data.
+3. **Try to match [existing field definitions](https://github.com/namesakefyi/namesake/blob/main/web/src/constants/fields.ts).** Exact matches aren't required, but staying close will make it easier to connect PDF fields to user data.
 4. **Don't be afraid of long names.** A long but clear name is preferable to a short and ambiguous one.
 
 :::

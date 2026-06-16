@@ -48,7 +48,7 @@ export default defineConfig({
         },
       ],
       editLink: {
-        baseUrl: "https://github.com/namesakefyi/docs/edit/main/",
+        baseUrl: "https://github.com/namesakefyi/namesake/edit/main/docs/",
       },
       lastUpdated: true,
       titleDelimiter: "·",

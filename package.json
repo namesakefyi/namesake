@@ -8,13 +8,17 @@
   "packageManager": "pnpm@11.5.3",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "dev": "pnpm --filter namesake-web dev",
-    "dev:docs": "pnpm --filter namesake-docs dev",
-    "dev:pdf": "pnpm --filter pdf-manager dev",
+    "dev": "pnpm --filter @namesake/web dev",
+    "dev:docs": "pnpm --filter @namesake/docs dev",
+    "dev:pdf": "pnpm --filter @namesake/pdf-manager dev",
     "dev:all": "pnpm -r --parallel dev",
     "build": "pnpm -r build",
-    "check": "pnpm -r check",
-    "check:fix": "pnpm -r check:fix",
+    "lint": "biome lint",
+    "lint:fix": "biome lint --write",
+    "format": "biome format",
+    "format:fix": "biome format --write",
+    "check": "biome check",
+    "check:fix": "biome check --write",
     "test": "pnpm -r test"
   },
   "simple-git-hooks": {

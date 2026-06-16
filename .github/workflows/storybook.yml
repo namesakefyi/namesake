@@ -46,7 +46,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build Storybook
-        run: pnpm --filter namesake-web storybook:build
+        run: pnpm --filter @namesake/web storybook:build
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
