@@ -44,8 +44,11 @@ jobs:
       - name: Sync Astro types
         run: pnpm --filter "@namesake/web" --filter "@namesake/docs" exec astro sync
 
+      - name: Typecheck (Astro)
+        run: pnpm --filter "@namesake/web" --filter "@namesake/docs" exec astro check
+
       - name: Typecheck
-        run: pnpm -r exec tsc --noEmit
+        run: pnpm --filter "@namesake/pdf-manager" exec tsc --noEmit
 
       - name: Biome
         run: pnpm biome ci
