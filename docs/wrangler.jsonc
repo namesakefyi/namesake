@@ -13,7 +13,7 @@
   },
   "env": {
     "preview": {
-      "name": "namesake-docs-preview"
+      "name": "docs-preview"
     }
   }
 }
