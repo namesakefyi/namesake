@@ -7,7 +7,7 @@ import starlightThemeFlexoki from "starlight-theme-flexoki";
 // https://astro.build/config
 export default defineConfig({
   site: "https://docs.namesake.fyi",
-  adapter: cloudflare(),
+  adapter: cloudflare({ prerenderEnvironment: "node" }),
   session: {
     driver: {
       entrypoint: "unstorage/drivers/null",
@@ -82,6 +82,7 @@ export default defineConfig({
         },
       ],
       customCss: ["./src/styles/theme.css"],
+      routeMiddleware: "./src/routeData.ts",
     }),
   ],
   devToolbar: {
