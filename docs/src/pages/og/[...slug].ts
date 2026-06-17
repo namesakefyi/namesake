@@ -32,7 +32,7 @@ export const { getStaticPaths, GET } = await OGImageRoute({
         description: {
           color: [17, 17, 17],
           size: 40,
-          weight: "Regular",
+          weight: "Normal",
           families: ["Atkinson Hyperlegible Soft", "Helvetica", "sans-serif"],
         },
       },
