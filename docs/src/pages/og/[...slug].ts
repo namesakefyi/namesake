@@ -14,17 +14,26 @@ export const { getStaticPaths, GET } = await OGImageRoute({
       title: page.data.title,
       description: page.data.description,
       bgGradient: [[225, 225, 225]],
-      border: { color: [136, 67, 182], width: 20 },
       padding: 90,
+      logo: {
+        path: "./src/pages/og/_images/logo.svg",
+      },
+      fonts: [
+        "./src/fonts/AtkinsonHyperlegibleSoft-Regular.ttf",
+        "./src/fonts/AtkinsonHyperlegibleSoft-Bold.ttf",
+      ],
       font: {
         title: {
           color: [17, 17, 17],
           size: 70,
           weight: "Bold",
+          families: ["Atkinson Hyperlegible Soft", "Helvetica", "sans-serif"],
         },
         description: {
           color: [17, 17, 17],
           size: 40,
+          weight: "Regular",
+          families: ["Atkinson Hyperlegible Soft", "Helvetica", "sans-serif"],
         },
       },
     };
