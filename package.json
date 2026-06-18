@@ -53,6 +53,7 @@
     "@astrojs/sitemap": "^3.7.3",
     "@axe-core/playwright": "^4.11.3",
     "@cantoo/pdf-lib": "^2.7.1",
+    "@geoapify/geocoder-autocomplete": "^3.0.1",
     "@hono/node-server": "^2.0.4",
     "@internationalized/date": "^3.12.2",
     "@maskito/core": "^5.2.2",

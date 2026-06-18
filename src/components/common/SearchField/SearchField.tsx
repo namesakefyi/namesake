@@ -9,12 +9,15 @@ import {
 import { Text } from "../Content";
 import { FieldError, Label } from "../Form";
 import "./SearchField.css";
+import { ProgressCircle } from "../ProgressCircle";
 
 export interface SearchFieldProps extends AriaSearchFieldProps {
   label?: string;
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);
   placeholder?: string;
+  isLoading?: boolean;
+  size?: number;
 }
 
 export function SearchField({
@@ -22,12 +25,15 @@ export function SearchField({
   description,
   errorMessage,
   placeholder,
+  isLoading,
+  size,
   ...props
 }: SearchFieldProps) {
   return (
     <AriaSearchField {...props}>
       {label && <Label>{label}</Label>}
-      <Input placeholder={placeholder} />
+      <Input size={size} placeholder={placeholder} />
+      {isLoading && <ProgressCircle aria-label="Loading.." isIndeterminate={true}  />}
       <Button>
         <RiCloseLine size={20} />
       </Button>

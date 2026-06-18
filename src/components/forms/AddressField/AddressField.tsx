@@ -1,13 +1,32 @@
 import { type MaskitoOptions, maskitoTransform } from "@maskito/core";
-import { useState } from "react";
+import { useEffect, useRef, useState, type Key } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import type { FieldName } from "../../../constants/fields";
 import { JURISDICTIONS } from "../../../constants/jurisdictions";
 import { ComboBox, ComboBoxItem } from "../../common/ComboBox";
 import { TextField } from "../../common/TextField";
 import "./AddressField.css";
+import { Autocomplete } from "../../common/Autocomplete";
+import { MenuItem } from "../../common/Menu";
+import { useAsyncList } from "react-aria-components";
+import type { GeoapifyResult } from "../../../pages/api/location";
 
 type AddressType = "residence" | "mailing" | "parent1" | "parent2";
+
+// Custom hook that waits a set delay before showing a spinner
+// unsure where this should live.
+function useDelayedFlag(active: boolean, delayms = 200) {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    if (!active) {
+      setShow(false);
+      return;
+    }
+    const id = setTimeout(() => setShow(true), delayms);
+    return () => clearTimeout(id);
+  }, [active, delayms]);
+  return show;
+}
 
 export interface AddressFieldProps {
   children?: React.ReactNode;
@@ -22,7 +41,7 @@ export function AddressField({
   includeAddress2 = false,
   includeCounty = false,
 }: AddressFieldProps) {
-  const { control, getValues } = useFormContext();
+  const { control, getValues, setValue } = useFormContext();
 
   const names: Record<
     AddressType,
@@ -76,6 +95,60 @@ export function AddressField({
     mask: [/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/],
   };
 
+  const apiFailedRef = useRef(false);
+
+  const list = useAsyncList<GeoapifyResult>({
+    async load({ signal, filterText }) {
+      if (!filterText || filterText.length < 3 ) {
+        return { items: [] };
+      }
+      try {
+        const res = await fetch(
+          `/api/location?text=${encodeURIComponent(filterText)}`,
+          { signal },
+        );
+        if (!res.ok) throw new Error(`Location API ${res.status}`);
+        const json: any = await res.json();
+        return { items: json.results };
+      } catch (err) {
+        // This isn't a failure if the request was canceled due to a keystroke
+        if (signal.aborted) throw err;
+        apiFailedRef.current = true;
+        return { items: [] };
+      }
+    },
+  });
+
+  const showLoading = useDelayedFlag(list.isLoading);
+
+  const autocompleteAddress = (id: Key): void => {
+    const place = list.items.find((i) => i.place_id === id);
+    if (!place) return;
+    setValue(
+      names[type].street,
+      [place.housenumber, place.street].filter(Boolean).join(" "),
+    );
+    setValue(names[type].city, place.city ?? "", {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+    setValue(names[type].state, place.state_code ?? "", {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+    setValue(names[type].zip, place.postcode ?? "", {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+    if (names[type].county) {
+      setValue(names[type].county, place.county ?? "", {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+    list.setFilterText("");
+  };
+
   return (
     <div className="namesake-address-field">
       <Controller
@@ -83,16 +156,26 @@ export function AddressField({
         name={names[type].street}
         defaultValue=""
         render={({ field, fieldState: { invalid, error } }) => (
-          <TextField
+          <Autocomplete
             {...field}
-            label="Street address"
             autoComplete="address-line1"
-            className="namesake-address-field-street"
-            maxLength={40}
+            label="Street address"
             size={30}
+            items={list.items}
+            inputValue={field.value}
+            onInputChange={(text) => {
+              list.setFilterText(text);
+              field.onChange(text);
+              setValue(names[type].street, text);
+            }}
+            isAsync={true}
+            isLoading={showLoading}
+            onAction={autocompleteAddress}
             isInvalid={invalid}
             errorMessage={error?.message}
-          />
+          >
+            {(item) => <MenuItem id={item.place_id}>{item.formatted}</MenuItem>}
+          </Autocomplete>
         )}
       />
       {canAddAddress2 &&

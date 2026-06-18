@@ -17,6 +17,13 @@ export interface AutocompleteProps<T extends object>
   children: React.ReactNode | ((item: T) => React.ReactNode);
   onAction?: (id: Key) => void;
   renderEmptyState?: () => React.ReactNode;
+  isAsync?: boolean;
+  isLoading?: boolean;
+  isInvalid?: boolean;
+  errorMessage?: string;
+  size?: number;
+  name?: string;
+  autoComplete?: string;
 }
 
 export function Autocomplete<T extends object>({
@@ -26,13 +33,30 @@ export function Autocomplete<T extends object>({
   children,
   onAction,
   renderEmptyState,
+  isAsync,
+  isLoading,
+  isInvalid,
+  errorMessage,
+  size,
+  name,
+  autoComplete,
   ...props
 }: AutocompleteProps<T>) {
   const { contains } = useFilter({ sensitivity: "base" });
+  const appliedFilter = isAsync ? undefined : contains;
 
   return (
-    <AriaAutocomplete filter={contains} {...props}>
-      <SearchField label={label} placeholder={placeholder} />
+    <AriaAutocomplete filter={appliedFilter} {...props}>
+      <SearchField
+        isInvalid={isInvalid}
+        isLoading={isLoading}
+        errorMessage={errorMessage}
+        size={size}
+        label={label}
+        placeholder={placeholder}
+        name={name}
+        autoComplete={autoComplete}
+      />
       <Menu
         items={items}
         onAction={onAction}

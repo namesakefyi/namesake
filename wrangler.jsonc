@@ -12,7 +12,7 @@
     "enabled": true
   },
   "secrets": {
-    "required": ["RESEND_API_KEY"]
+    "required": ["RESEND_API_KEY", "GEOAPIFY_API_KEY"]
   },
   "d1_databases": [
     {
