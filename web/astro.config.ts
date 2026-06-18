@@ -8,6 +8,7 @@ import {
   fontProviders,
   passthroughImageService,
 } from "astro/config";
+import pagefind from "astro-pagefind";
 import browserslist from "browserslist";
 import { browserslistToTargets } from "lightningcss";
 import { remarkModifiedTime } from "./scripts/remark-modified-time.mjs";
@@ -29,6 +30,7 @@ export default defineConfig({
       }),
     }),
     react(),
+    pagefind(),
   ],
   prefetch: true,
   trailingSlash: "never",

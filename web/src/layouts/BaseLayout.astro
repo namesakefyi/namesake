@@ -79,12 +79,10 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
     />
     <script is:inline async defer src="https://embeds.every.org/0.4/button.js"
     ></script>
-    <link href="/pagefind/pagefind-component-ui.css" rel="stylesheet" />
-    <script src="/pagefind/pagefind-component-ui.js" type="module"></script>
   </head>
   <body data-color={color}>
     <Header />
-    <main>
+    <main data-pagefind-body>
       <slot />
     </main>
     <Footer />

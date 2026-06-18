@@ -141,9 +141,6 @@ importers:
       '@maskito/core':
         specifier: ^5.2.2
         version: 5.3.0
-      '@pagefind/component-ui':
-        specifier: ^1.5.2
-        version: 1.5.2
       '@remixicon/react':
         specifier: ^4.9.0
         version: 4.9.0(react@19.2.7)
@@ -156,6 +153,9 @@ importers:
       astro:
         specifier: 6.4.5
         version: 6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
+      astro-pagefind:
+        specifier: ^2.0.0
+        version: 2.0.0(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))
       browserslist:
         specifier: ^4.28.2
         version: 4.28.2
@@ -316,9 +316,6 @@ importers:
       optimo:
         specifier: ^0.0.27
         version: 0.0.27
-      pagefind:
-        specifier: ^1.5.2
-        version: 1.5.2
       react-compiler-runtime:
         specifier: ^1.0.0
         version: 1.0.0(react@19.2.7)
@@ -1937,6 +1934,9 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  '@polka/url@1.0.0-next.29':
+    resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
+
   '@poppinss/colors@4.1.6':
     resolution: {integrity: sha512-H9xkIdFswbS8n1d6vmRd8+c10t2Qe+rZITbbDHHkQixH5+2x1FDGmi/0K+WgWiqQFKPSlIYB7jlH6Kpfn6Fleg==}
 
@@ -2701,6 +2701,11 @@ packages:
     resolution: {integrity: sha512-6omy7MJeOPwxdYH5+eL3zFIY9MhuDRUMuASuCx/eXNrHGUogq9ZHdx19A428KtWhLVuXVcLt7Klw5fxqASAHmg==}
     peerDependencies:
       astro: ^5.0.0 || ^6.0.0-alpha
+
+  astro-pagefind@2.0.0:
+    resolution: {integrity: sha512-i270YlJ/8aX/eRkvtuAPANSk+WK1uyp9DEj/TuuWem4pA0xBUGQk7agNFdu71nRxtH0j7TZxee2qwQRlrfZa1g==}
+    peerDependencies:
+      astro: ^2.0.4 || ^3 || ^4 || ^5 || ^6
 
   astro@6.4.5:
     resolution: {integrity: sha512-0R7WLD1+WD/mTPcZxyKtcF0CztQi9ahFRtGM7oChJhxjNbr4lSBenxi+mk91k5bPTaUEoZ6edg1fDo2qP8bCwg==}
@@ -4842,6 +4847,10 @@ packages:
   simple-swizzle@0.2.4:
     resolution: {integrity: sha512-nAu1WFPQSMNr2Zn9PGSZK9AGn4t/y97lEm+MXTtUDwfP0ksAIX4nO+6ruD9Jwut4C49SB1Ws+fbXsm/yScWOHw==}
 
+  sirv@3.0.2:
+    resolution: {integrity: sha512-2wcC/oGxHis/BoHkkPwldgiPSYcpZK3JU28WoMVv55yHJgcZ8rlXvuG9iZggz+sU1d4bRgIGASwyWqjxu3FM0g==}
+    engines: {node: '>=18'}
+
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
 
@@ -5022,6 +5031,10 @@ packages:
   topojson-client@3.1.0:
     resolution: {integrity: sha512-605uxS6bcYxGXw9qi62XyrV6Q3xwbndjachmNxu8HWTtVPxZfEJN9fd/SZS1Q54Sn2y0TMyMxFj/cJINqGHrKw==}
     hasBin: true
+
+  totalist@3.0.1:
+    resolution: {integrity: sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ==}
+    engines: {node: '>=6'}
 
   tough-cookie@6.0.1:
     resolution: {integrity: sha512-LktZQb3IeoUWB9lqR5EWTHgW/VTITCXg4D21M+lvybRVdylLrRMnqaIONLVb5mav8vM19m44HIcGq4qASeu2Qw==}
@@ -6883,6 +6896,8 @@ snapshots:
     dependencies:
       playwright: 1.61.0
 
+  '@polka/url@1.0.0-next.29': {}
+
   '@poppinss/colors@4.1.6':
     dependencies:
       kleur: 4.1.5
@@ -7667,6 +7682,13 @@ snapshots:
       canvaskit-wasm: 0.41.1
       deterministic-object-hash: 2.0.2
       entities: 8.0.0
+
+  astro-pagefind@2.0.0(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)):
+    dependencies:
+      '@pagefind/component-ui': 1.5.2
+      astro: 6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
+      pagefind: 1.5.2
+      sirv: 3.0.2
 
   astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0):
     dependencies:
@@ -10487,6 +10509,12 @@ snapshots:
     dependencies:
       is-arrayish: 0.3.4
 
+  sirv@3.0.2:
+    dependencies:
+      '@polka/url': 1.0.0-next.29
+      mrmime: 2.0.1
+      totalist: 3.0.1
+
   sisteransi@1.0.5: {}
 
   sitemap@9.0.1:
@@ -10650,6 +10678,8 @@ snapshots:
   topojson-client@3.1.0:
     dependencies:
       commander: 2.20.3
+
+  totalist@3.0.1: {}
 
   tough-cookie@6.0.1:
     dependencies:

@@ -59,7 +59,7 @@ const ogAlt = post.data.image?.alt ?? post.data.title;
               densities={[1, 2]}
             />
             <div class="author-info">
-              <strong>{author.data.name}</strong>
+              <strong data-pagefind-filter="author">{author.data.name}</strong>
               <span class="role">{author.data.role}</span>
             </div>
           </span>

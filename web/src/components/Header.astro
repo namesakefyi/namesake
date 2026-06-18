@@ -15,10 +15,8 @@ const navLinks = [
 <header>
   <a href="/" aria-label="Home" id="logo"><Logo /></a>
   <nav aria-label="Site">
+    <Search />
     <ul>
-      <li>
-        <Search />
-      </li>
       {
         navLinks.map(({ href, label }) => (
           <li>

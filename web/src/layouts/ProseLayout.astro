@@ -8,6 +8,7 @@ import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
   title: string;
+  searchTitle?: string;
   date?: string;
   description?: string | null;
   showDescription?: boolean;
@@ -21,6 +22,7 @@ interface Props {
 
 const {
   title,
+  searchTitle,
   date,
   description,
   showDescription,
@@ -53,6 +55,7 @@ const headerDescription =
   >
     <PageHeader
       title={title}
+      searchTitle={searchTitle}
       date={date}
       description={headerDescription}
       annotation={annotation}
