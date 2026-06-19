@@ -1,0 +1,63 @@
+---
+interface Props {
+  name: string;
+  address: {
+    address1: string;
+    address2?: string;
+    city: string;
+    state: string;
+    zip: string;
+  };
+}
+
+const { name, address } = Astro.props;
+
+const url = new URL("https://maps.google.com/maps");
+url.searchParams.set("q", name);
+url.searchParams.set("output", "embed");
+---
+
+<figure class="map-embed">
+  <div class="map">
+    <iframe
+      src={url.toString()}
+      width="800"
+      height="450"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+  <figcaption class="map-address">
+    <strong>{name}</strong><br />
+    {address.address1}
+    {address.address2}<br />
+    {address.city}, {address.state}
+    {address.zip}
+  </figcaption>
+</figure>
+
+<style>
+  .map-embed {
+    border: 1px solid var(--border-color);
+  }
+
+  .map-address {
+    padding: var(--space-m);
+  }
+
+  .map {
+    overflow: hidden;
+    padding-bottom: 56.25%;
+    position: relative;
+    height: 0;
+
+    iframe {
+      position: absolute;
+      border: 0;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+</style>
