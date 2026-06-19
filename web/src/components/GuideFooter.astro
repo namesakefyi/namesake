@@ -27,7 +27,7 @@ const displayDate = new Date(lastModified).toLocaleDateString("en-US", {
 <footer>
   {
     editUrl && (
-      <a href={editUrl} class="edit-link">
+      <a href={editUrl} class="edit-link" data-no-print>
         <RiPencilLine size={20} />
         Edit this page
       </a>
