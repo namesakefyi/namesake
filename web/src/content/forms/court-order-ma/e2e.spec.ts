@@ -142,11 +142,11 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
     await expect(page.getByText("We recommend reaching out to")).toBeVisible();
 
     await page.getByText("I am currently unhoused or").click();
-    await page.getByRole("textbox", { name: "Street address" }).click();
+    await page.getByRole("searchbox", { name: "Street address" }).click();
     await page
-      .getByRole("textbox", { name: "Street address" })
+      .getByRole("searchbox", { name: "Street address" })
       .fill("100 Main St");
-    await page.getByRole("textbox", { name: "Street address" }).press("Tab");
+    await page.getByRole("searchbox", { name: "Street address" }).press("Tab");
     await page.getByRole("textbox", { name: "City" }).fill("Boston");
     await page.getByRole("textbox", { name: "City" }).press("Tab");
     await page.getByRole("combobox", { name: "State" }).fill("ma");

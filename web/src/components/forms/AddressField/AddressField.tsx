@@ -1,15 +1,15 @@
 import { type MaskitoOptions, maskitoTransform } from "@maskito/core";
-import { useEffect, useRef, useState, type Key } from "react";
+import { type Key, useEffect, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import type { FieldName } from "#constants/fields";
 import { JURISDICTIONS } from "#constants/jurisdictions";
 import { ComboBox, ComboBoxItem } from "../../common/ComboBox";
 import { TextField } from "../../common/TextField";
 import "./AddressField.css";
-import { Autocomplete } from "../../common/Autocomplete";
-import { MenuItem } from "../../common/Menu";
 import { useAsyncList } from "react-aria-components";
 import type { GeoapifyResult } from "../../../pages/api/location";
+import { Autocomplete } from "../../common/Autocomplete";
+import { MenuItem } from "../../common/Menu";
 
 type AddressType = "residence" | "mailing" | "parent1" | "parent2";
 
@@ -99,7 +99,7 @@ export function AddressField({
 
   const list = useAsyncList<GeoapifyResult>({
     async load({ signal, filterText }) {
-      if (!filterText || filterText.length < 3 ) {
+      if (!filterText || filterText.length < 3) {
         return { items: [] };
       }
       try {
