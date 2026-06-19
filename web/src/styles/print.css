@@ -1,14 +1,10 @@
-/* These styles are only used when printing the page. */
 /* biome-ignore-all lint/complexity/noImportantStyles: print styles should always override site styles */
 
 @media print {
   html,
   body {
-    background-color: none;
-  }
-
-  body > *:not(main) {
-    display: none !important;
+    --background-color: white !important;
+    background-color: transparent !important;
   }
 
   body::before,
@@ -17,7 +13,7 @@
   }
 
   .rough-annotation {
-    display: none; /* Would display in odd location due to loading delay. */
+    display: none;
   }
 
   details::details-content {
@@ -26,11 +22,15 @@
     opacity: 1 !important;
   }
 
-  a[href]:not([href^="#"])::after {
+  a[href]:not([href^="#"]):not([data-no-print-url])::after {
     content: " (" attr(href) ")";
   }
 
   abbr[title]::after {
     content: " (" attr(title) ")";
+  }
+
+  [data-no-print] {
+    display: none !important;
   }
 }
