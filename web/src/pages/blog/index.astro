@@ -1,0 +1,57 @@
+---
+import { getCollection } from "astro:content";
+import ArticleLink from "#components/ArticleLink.astro";
+import PageHeader from "#components/PageHeader.astro";
+import BaseLayout from "#layouts/BaseLayout.astro";
+
+const [allPosts, allAuthors] = await Promise.all([
+  getCollection("posts"),
+  getCollection("authors"),
+]);
+
+const authorNames = Object.fromEntries(
+  allAuthors.map((a) => [a.id, a.data.name]),
+);
+
+const posts = allPosts
+  .filter((post) => post.data.publishDate <= new Date())
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+---
+
+<BaseLayout
+  title="Blog"
+  description="The latest news from Namesake."
+  color="blue"
+>
+  <PageHeader title="Blog" description="The latest news from Namesake." />
+  <div class="posts">
+    {
+      posts.length ? (
+        posts.map((post) => (
+          <ArticleLink
+            authors={post.data.authors?.map((id) => authorNames[id] ?? id)}
+            title={post.data.title}
+            date={post.data.publishDate}
+            url={`/blog/${post.id}`}
+            description={post.data.description}
+            image={post.data.image}
+          />
+        ))
+      ) : (
+        <p>No posts found.</p>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style lang="scss">
+  .posts {
+    padding-bottom: var(--space-3xl);
+    columns: 2;
+    column-gap: var(--space-3xl);
+
+    @media (width < 800px) {
+      columns: 1;
+    }
+  }
+</style>

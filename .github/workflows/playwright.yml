@@ -4,24 +4,24 @@ on:
     branches: [main]
     paths:
       [
-        "src/**/*.ts",
-        "src/**/*.spec.ts",
-        "src/**/*.astro",
-        "astro.config.ts",
-        "playwright.config.ts",
-        "package.json",
+        "web/src/**/*.ts",
+        "web/src/**/*.spec.ts",
+        "web/src/**/*.astro",
+        "web/astro.config.ts",
+        "web/playwright.config.ts",
+        "web/package.json",
         "pnpm-lock.yaml",
       ]
   pull_request:
     branches: [main]
     paths:
       [
-        "src/**/*.ts",
-        "src/**/*.spec.ts",
-        "src/**/*.astro",
-        "astro.config.ts",
-        "playwright.config.ts",
-        "package.json",
+        "web/src/**/*.ts",
+        "web/src/**/*.spec.ts",
+        "web/src/**/*.astro",
+        "web/astro.config.ts",
+        "web/playwright.config.ts",
+        "web/package.json",
         "pnpm-lock.yaml",
       ]
 
@@ -58,6 +58,7 @@ jobs:
 
       - name: Resolve Playwright version
         shell: bash
+        working-directory: web
         run: |
           VERSION=$(node -e "console.log(require('@playwright/test/package.json').version)")
           echo "PLAYWRIGHT_VERSION=$VERSION" >> "$GITHUB_ENV"
@@ -71,13 +72,16 @@ jobs:
 
       - name: Install Playwright browsers and OS dependencies
         if: steps.playwright-cache.outputs.cache-hit != 'true'
+        working-directory: web
         run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
 
       - name: Install Playwright OS dependencies
         if: steps.playwright-cache.outputs.cache-hit == 'true'
+        working-directory: web
         run: pnpm exec playwright install-deps ${{ matrix.browser }}
 
       - name: Run Playwright tests
+        working-directory: web
         run: pnpm exec playwright test --reporter=html --project=${{ matrix.browser }}
 
       - name: Upload Playwright results
@@ -85,5 +89,5 @@ jobs:
         if: always()
         with:
           name: playwright-report-${{ matrix.browser }}
-          path: playwright-report/
+          path: web/playwright-report/
           retention-days: 30

@@ -1,0 +1,442 @@
+---
+import { getCollection } from "astro:content";
+import usaStates from "@severo_bo/us-atlas-2023/states-albers-10m.json";
+import { geoPath } from "d3-geo";
+import type { Feature } from "geojson";
+import { feature } from "topojson-client";
+import type { GeometryCollection, Topology } from "topojson-specification";
+import { formatStateList } from "#lib/utils/formatStateList";
+
+const stateEntries = await getCollection("states");
+
+const stateSupport = stateEntries.reduce(
+  (acc: Record<string, string>, entry) => {
+    acc[entry.data.name] = entry.data.namesakeSupport;
+    return acc;
+  },
+  {},
+);
+
+const topology = usaStates as unknown as Topology;
+const featureCollection = feature(
+  topology,
+  topology.objects.states as GeometryCollection,
+);
+
+const stateFeatures = featureCollection.features.map((geoFeature: Feature) => ({
+  ...geoFeature,
+  properties: {
+    ...geoFeature.properties,
+    name: geoFeature.properties?.name || "",
+    supportLevel: stateSupport[geoFeature.properties?.name] || "none",
+  },
+}));
+
+const fullSupportStates = stateEntries
+  .filter((e) => e.data.namesakeSupport === "full")
+  .map((e) => e.data.name);
+const prioritizedStates = stateEntries
+  .filter((e) => e.data.namesakeSupport === "prioritized")
+  .map((e) => e.data.name);
+
+const supportMessage = `We fully support ${formatStateList(fullSupportStates)}, and we are prioritizing support for ${formatStateList(prioritizedStates)} next.`;
+
+const MAP_CONFIG = {
+  width: 975,
+  height: 610,
+  legendPosition: { x: 0.8, y: 40 },
+  patterns: {
+    hatch: {
+      width: 5,
+      height: 5,
+      strokeWidth: 1.4,
+    },
+    dots: {
+      width: 4,
+      height: 4,
+      radius: 0.6,
+    },
+  },
+} as const;
+
+const path = geoPath();
+
+function generateHatchPaths(width: number, height: number): string[] {
+  return [
+    `M-1,${height + 1} L${width + 1},-1`,
+    "M-1,1 L1,-1",
+    `M${width - 1},${height + 1} L${width + 1},${height - 1}`,
+  ];
+}
+
+function generateDotPositions(
+  width: number,
+  height: number,
+): Array<{ cx: number; cy: number }> {
+  const spacing = Math.min(width, height) / 2;
+  return [
+    { cx: spacing / 2, cy: spacing / 2 },
+    { cx: width - spacing / 2, cy: height - spacing / 2 },
+  ];
+}
+
+function getFillForSupportLevel(supportLevel: string): string {
+  const fillMap = {
+    full: "var(--text-color)",
+    prioritized: "url(#hatchmarks)",
+    none: "url(#dots)",
+  };
+  return fillMap[supportLevel as keyof typeof fillMap] || "url(#dots)";
+}
+---
+
+<section class="support">
+  <header>
+    <h2>States we support</h2>
+    <p set:html={supportMessage} />
+  </header>
+  <figure class="map-container">
+    <svg class="map" viewBox={`0 0 ${MAP_CONFIG.width} ${MAP_CONFIG.height}`}>
+      <defs>
+        <pattern
+          id="hatchmarks"
+          patternUnits="userSpaceOnUse"
+          patternContentUnits="userSpaceOnUse"
+          width={MAP_CONFIG.patterns.hatch.width}
+          height={MAP_CONFIG.patterns.hatch.height}
+        >
+          {
+            generateHatchPaths(
+              MAP_CONFIG.patterns.hatch.width,
+              MAP_CONFIG.patterns.hatch.height,
+            ).map((pathData) => (
+              <path
+                d={pathData}
+                stroke="var(--text-color)"
+                stroke-linecap="square"
+                stroke-width={MAP_CONFIG.patterns.hatch.strokeWidth}
+              />
+            ))
+          }
+        </pattern>
+        <pattern
+          id="dots"
+          patternUnits="userSpaceOnUse"
+          patternContentUnits="userSpaceOnUse"
+          width={MAP_CONFIG.patterns.dots.width}
+          height={MAP_CONFIG.patterns.dots.height}
+        >
+          {
+            generateDotPositions(
+              MAP_CONFIG.patterns.dots.width,
+              MAP_CONFIG.patterns.dots.height,
+            ).map((pos) => (
+              <circle
+                cx={pos.cx}
+                cy={pos.cy}
+                r={MAP_CONFIG.patterns.dots.radius}
+                fill="var(--text-color)"
+              />
+            ))
+          }
+        </pattern>
+      </defs>
+      {
+        stateFeatures.map((feature) => (
+          <path
+            class="state"
+            d={path(feature)}
+            fill={getFillForSupportLevel(feature.properties.supportLevel)}
+            data-support={feature.properties.supportLevel}
+            data-name={feature.properties.name}
+          />
+        ))
+      }
+    </svg>
+    <figcaption class="legend">
+      {
+        [
+          {
+            type: "full",
+            label: "Full Support",
+            fill: "var(--text-color)",
+            count: stateFeatures.filter(
+              (f) => f.properties.supportLevel === "full",
+            ).length,
+          },
+          {
+            type: "prioritized",
+            label: "Next Up",
+            fill: "url(#hatchmarks)",
+            count: stateFeatures.filter(
+              (f) => f.properties.supportLevel === "prioritized",
+            ).length,
+          },
+          {
+            type: "none",
+            label: "No Support Yet",
+            fill: "url(#dots)",
+            count: stateFeatures.filter(
+              (f) => f.properties.supportLevel === "none",
+            ).length,
+          },
+        ].map((item) => (
+          <div class="legend-item" data-type={item.type}>
+            <div class="legend-box">
+              <svg
+                class="legend-pattern"
+                width="100%"
+                height="100%"
+                viewBox="0 0 18 18"
+              >
+                <rect width="18" height="18" fill={item.fill} />
+              </svg>
+            </div>
+            <span class="legend-count">{item.count}</span>
+            <span class="legend-label">{item.label}</span>
+          </div>
+        ))
+      }
+    </figcaption>
+    <div class="map-tooltip" role="tooltip"></div>
+  </figure>
+</section>
+
+<script>
+  import { select, selectAll } from "d3-selection";
+
+  const container = select(".map-container");
+  const svg = container.select("svg");
+  const states = svg.selectAll("path.state");
+  const legendItems = selectAll(".legend-item");
+  const tooltip = container.select(".map-tooltip");
+
+  function updatePatternScales() {
+    const svgNode = svg.node() as SVGSVGElement;
+    const containerNode = container.node() as HTMLElement;
+
+    if (svgNode && containerNode) {
+      const svgRect = svgNode.getBoundingClientRect();
+      const scale = svgRect.width / 975;
+
+      svg.selectAll("pattern").attr("patternTransform", `scale(${1 / scale})`);
+
+      selectAll(".legend-pattern rect")
+        .attr("width", 18 / scale)
+        .attr("height", 18 / scale)
+        .attr("transform", `scale(${scale})`);
+    }
+  }
+
+  updatePatternScales();
+  window.addEventListener("resize", updatePatternScales);
+
+  function positionTooltip(event: MouseEvent) {
+    const tooltipNode = tooltip.node() as HTMLElement;
+    const containerNode = container.node() as HTMLElement;
+    const tooltipRect = tooltipNode.getBoundingClientRect();
+    const containerRect = containerNode.getBoundingClientRect();
+
+    const containerX = event.clientX - containerRect.left;
+    const containerY = event.clientY - containerRect.top;
+
+    let left = containerX + 16;
+    let top = containerY + 16;
+
+    if (left < 0) left = 16;
+    if (top < 0) top = 16;
+    if (left + tooltipRect.width > containerRect.width) {
+      left = containerRect.width - tooltipRect.width - 16;
+    }
+
+    tooltip.style("top", top + "px").style("left", left + "px");
+  }
+
+  function clearHoverState() {
+    states.attr("data-hovered", null);
+    tooltip.attr("data-visible", null);
+  }
+
+  states
+    .on("mouseenter", function (event: MouseEvent) {
+      const element = this as SVGPathElement;
+      const stateName = element.getAttribute("data-name") || "";
+      const supportLevel = element.getAttribute("data-support") || "none";
+
+      const textMap = {
+        full: "Full Support",
+        prioritized: "Support Coming Soon",
+        none: "No Support Yet",
+      };
+      const supportText =
+        textMap[supportLevel as keyof typeof textMap] || "No Support Yet";
+
+      states.attr("data-hovered", null);
+      const hoveredState = select(this as SVGPathElement);
+      hoveredState.attr("data-hovered", "true");
+
+      const node = hoveredState.node() as SVGPathElement;
+      if (node && node.parentNode) node.parentNode.appendChild(node);
+
+      tooltip
+        .attr("data-visible", "true")
+        .html(`<strong>${stateName}</strong><br/>${supportText}`);
+      positionTooltip(event);
+    })
+    .on("mousemove", function (event: MouseEvent) {
+      positionTooltip(event);
+    })
+    .on("mouseleave", function () {
+      select(this as SVGPathElement).attr("data-hovered", null);
+      tooltip.attr("data-visible", null);
+    });
+
+  svg.on("mouseleave", function () {
+    clearHoverState();
+  });
+
+  legendItems
+    .on("mouseover", function () {
+      const element = this as HTMLElement;
+      const hoveredType = element.getAttribute("data-type");
+
+      states.attr("data-dimmed", "true");
+
+      states
+        .filter(function () {
+          return (
+            (this as SVGPathElement).getAttribute("data-support") ===
+            hoveredType
+          );
+        })
+        .attr("data-dimmed", null)
+        .attr("data-hovered", "true");
+
+      legendItems
+        .filter(function () {
+          return (
+            (this as HTMLElement).getAttribute("data-type") !== hoveredType
+          );
+        })
+        .attr("data-dimmed", "true");
+    })
+    .on("mouseout", function () {
+      states.attr("data-dimmed", null).attr("data-hovered", null);
+      legendItems.attr("data-dimmed", null);
+    });
+</script>
+
+<style>
+  .support {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-l);
+    padding-block-start: var(--space-3xl);
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-m);
+    text-wrap: balance;
+    max-width: 600px;
+  }
+
+  .map-container {
+    position: relative;
+    width: 100%;
+    max-width: 975px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-m);
+
+    .map {
+      width: 100%;
+      height: auto;
+    }
+
+    pattern {
+      transform-origin: 0 0;
+    }
+  }
+
+  .state {
+    stroke: var(--background-color);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+
+    &[data-hovered="true"] {
+      stroke: var(--text-color);
+      stroke-width: 2;
+    }
+
+    &[data-dimmed="true"] {
+      opacity: 0.2;
+    }
+  }
+
+  .legend {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--step--1);
+    white-space: nowrap;
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2xs);
+      padding: var(--space-s) var(--space-m);
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+
+      &[data-dimmed="true"] {
+        opacity: 0.3;
+      }
+    }
+
+    .legend-count {
+      font-weight: var(--weight-bold);
+    }
+
+    .legend-box {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      border-radius: 4.5px;
+      overflow: hidden;
+    }
+
+    .legend-pattern {
+      display: block;
+    }
+  }
+
+  .map-tooltip {
+    position: absolute;
+    white-space: nowrap;
+    background: var(--text-color);
+    color: var(--background-color);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 1000;
+    visibility: hidden;
+
+    &[data-visible="true"] {
+      visibility: visible;
+    }
+  }
+</style>

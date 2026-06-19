@@ -6,8 +6,8 @@ import {
   useState,
 } from "react";
 import { ListBox, ListBoxItem } from "react-aria-components";
-import { useScrollSelectedIntoView } from "../hooks.ts";
-import type { Field } from "../types.ts";
+import { useScrollSelectedIntoView } from "../hooks";
+import type { Field } from "../types";
 
 function RenameInput({
   currentName,

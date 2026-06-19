@@ -1,6 +1,11 @@
+packages:
+  - "web"
+  - "docs"
+  - "pdf-manager"
+
 allowBuilds:
   esbuild: true
   "@parcel/watcher": false
-  sharp: false
-  simple-git-hooks: false
-  workerd: false
+  sharp: true
+  simple-git-hooks: true
+  workerd: true

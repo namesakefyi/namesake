@@ -1,0 +1,170 @@
+---
+import type { MarkdownHeading } from "astro";
+import { smartquotes } from "#lib/utils/smartquotes";
+
+interface Props {
+  headings?: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+const showTOC = headings && headings.length > 0;
+---
+
+<section class="toc">
+  <slot />
+  {
+    showTOC && (
+      <nav aria-labelledby="tocHeader">
+        <h2 class="toc-header" id="tocHeader">
+          On this page
+        </h2>
+        <table-of-contents>
+          <ul>
+            {headings.map(({ depth, slug, text }) => (
+              <li style={"--depth: " + depth}>
+                <a href={`#${slug}`}>{smartquotes(text)}</a>
+              </li>
+            ))}
+          </ul>
+        </table-of-contents>
+      </nav>
+    )
+  }
+</section>
+
+<script>
+  import { annotate } from "rough-notation";
+  import type { RoughAnnotation } from "rough-notation/lib/model";
+
+  customElements.define(
+    "table-of-contents",
+    class extends HTMLElement {
+      #io: IntersectionObserver;
+      #links: HTMLAnchorElement[];
+      #headings: HTMLHeadingElement[];
+      #annotations: Map<HTMLAnchorElement, RoughAnnotation>;
+      #activeIndex = -1;
+
+      constructor() {
+        super();
+        this.#annotations = new Map();
+
+        // 90% of the viewport, to expand subtract from this value to bring the bottom threshold lower
+        const ioBottomThreshold = window.innerHeight * 0.9;
+        this.#io = new IntersectionObserver(
+          (entries, _obs) => {
+            for (const entry of entries) {
+              const target = entry.target as HTMLHeadingElement;
+              const { boundingClientRect, intersectionRect, isIntersecting } =
+                entry;
+
+              if (
+                boundingClientRect.top < intersectionRect.bottom &&
+                isIntersecting
+              ) {
+                this.#activeIndex = this.#headings.indexOf(target);
+                this.updateAnnotation();
+                /**
+                 * Make sure it isn't intersecting so we aren't calling this
+                 * when the heading is scrolling off screen
+                 */
+              } else if (
+                boundingClientRect.top > intersectionRect.bottom &&
+                !isIntersecting
+              ) {
+                this.#activeIndex = this.#headings.indexOf(target) - 1;
+                this.updateAnnotation();
+              }
+            }
+          },
+          {
+            threshold: 0,
+            rootMargin: `0px 0px ${-ioBottomThreshold}px 0px`,
+          },
+        );
+
+        this.#headings = [];
+        this.#links = Array.from(this.querySelectorAll("a"), (link) => {
+          const { hash } = new URL(link.href);
+          const heading = document.querySelector<HTMLHeadingElement>(hash)!;
+
+          this.#headings.push(heading);
+
+          return link;
+        });
+        /**
+         * Observing the element runs the callback,
+         * this leads to the second to last item being annotated
+         *
+         * here we reverse the array, and observe them from bottom
+         * to top and avoid any annotations rendering when the
+         * user is at the top of the page
+         */
+        this.#headings.toReversed().forEach((h) => this.#io.observe(h));
+      }
+
+      updateAnnotation() {
+        const activeHeading = this.#headings[this.#activeIndex];
+
+        this.#headings.forEach((h, i) => {
+          const annotation = this.getAnnotationFromIndex(i);
+
+          Object.is(h, activeHeading) ? annotation?.show() : annotation?.hide();
+        });
+      }
+
+      getAnnotationFromIndex(i: number): RoughAnnotation | null {
+        if (i < 0 || i > this.#links.length - 1) return null;
+        const item = this.#links[i];
+
+        if (!this.#annotations.has(item)) {
+          this.#annotations.set(
+            item,
+            annotate(item, {
+              type: "underline",
+              animate: false,
+              iterations: 1,
+              multiline: true,
+              padding: 0,
+            }),
+          );
+        }
+
+        return this.#annotations.get(item)!;
+      }
+    },
+  );
+</script>
+
+<style>
+  .toc {
+    margin-block-start: var(--space-xs);
+    padding-block-end: var(--space-l);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  h2 {
+    font-size: var(--step-0);
+  }
+
+  ul {
+    list-style-type: none;
+    padding-inline-start: 0;
+    padding-block-start: var(--space-l);
+    display: flex;
+    flex-flow: column;
+    gap: var(--space-2xs);
+  }
+
+  li {
+    font-size: var(--step--1);
+    margin-inline-start: calc((var(--depth) - 2) * var(--space-m));
+  }
+
+  a {
+    text-decoration: none;
+  }
+</style>

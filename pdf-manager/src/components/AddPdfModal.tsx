@@ -12,8 +12,8 @@ import {
   ModalOverlay,
   TextField,
 } from "react-aria-components";
-import type { AddPdfResult, Jurisdiction } from "../types.ts";
-import { fileToBase64 } from "../utils.ts";
+import type { AddPdfResult, Jurisdiction } from "../types";
+import { fileToBase64, parseJson } from "../utils";
 
 interface AddPdfModalProps {
   isOpen: boolean;
@@ -29,7 +29,7 @@ export function AddPdfModal({ isOpen, onClose, onSuccess }: AddPdfModalProps) {
 
   useEffect(() => {
     fetch("/api/jurisdictions")
-      .then((r) => r.json<Jurisdiction[]>())
+      .then(parseJson<Jurisdiction[]>)
       .then(setJurisdictions)
       .catch(() => setError("Failed to load jurisdictions"));
   }, []);
@@ -61,7 +61,7 @@ export function AddPdfModal({ isOpen, onClose, onSuccess }: AddPdfModalProps) {
           pdfBase64,
         }),
       });
-      const result = await res.json<AddPdfResult>();
+      const result = await parseJson<AddPdfResult>(res);
       if (!res.ok) throw new Error(result.error ?? "Failed to add PDF");
       onSuccess(result.id);
     } catch (err) {

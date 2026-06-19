@@ -1,3 +1,7 @@
+export function parseJson<T>(res: Response): Promise<T> {
+  return res.json();
+}
+
 export async function fileToBase64(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer();
   const uint8 = new Uint8Array(arrayBuffer);

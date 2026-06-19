@@ -1,0 +1,90 @@
+---
+import { Font } from "astro:assets";
+import Footer from "#components/Footer.astro";
+import Header from "#components/Header.astro";
+import type { NamesakeColor } from "#constants/colors";
+import { COLORS } from "#constants/colors";
+import { siteInfo } from "#constants/site-info";
+import "../styles/base.css";
+import "../styles/reset.css";
+import "../styles/theme.css";
+
+export interface Props {
+  title: string;
+  description?: string | null;
+  author?: string;
+  ogImage?: string;
+  ogAlt?: string;
+  color?: NamesakeColor | null;
+}
+
+const {
+  title,
+  description = siteInfo.description,
+  author = siteInfo.fullName,
+  ogImage = siteInfo.image.src,
+  ogAlt = siteInfo.image.alt,
+  color = "purple",
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <script>
+      import * as Fathom from "fathom-client";
+      Fathom.load("GQAJEJLZ");
+    </script>
+    <Font
+      cssVariable="--font-sans"
+      preload={[
+        { subset: "latin", style: "normal" },
+        { weight: "400" },
+        { weight: "700" },
+      ]}
+    />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content={COLORS[color ?? "purple"]?.hex} />
+    <link rel="icon" href="/favicon.ico?v3" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v3" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="description" content={description} />
+    <meta name="author" content={author} />
+    <meta property="og:title" content={title} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={new URL(ogImage, Astro.url.origin)} />
+    <meta property="og:image:alt" content={ogAlt} />
+    <meta property="og:author" content={author} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Namesake" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Namesake"
+      href={new URL("rss.xml", Astro.site)}
+    />
+    <script is:inline async defer src="https://embeds.every.org/0.4/button.js"
+    ></script>
+  </head>
+  <body data-color={color}>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

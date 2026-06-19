@@ -1,0 +1,146 @@
+---
+import { Image } from "astro:assets";
+import { RiArrowRightLine, RiMegaphoneLine } from "@remixicon/react";
+import { Banner } from "#components/common/Banner";
+import Sponsors from "#components/Sponsors.astro";
+import SupportMap from "#components/SupportMap.astro";
+import { siteInfo } from "#constants/site-info";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import passport from "./home/passport.png";
+---
+
+<BaseLayout
+  title={siteInfo.title}
+  description={siteInfo.description}
+  ogImage={siteInfo.image.src}
+  ogAlt={siteInfo.image.alt}
+>
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Your name is <span class="hero-highlight">yours</span> to change</h1>
+      <p class="subtitle">
+        Namesake publishes name change guides and tools for trans people in the
+        U.S. It's free, <a href={siteInfo.socialLinks.github.href}
+          >open&nbsp;source</a
+        >, and always will be.
+      </p>
+      <div class="buttons">
+        <a href={siteInfo.urls.guides} class="button primary"
+          >Browse guides <RiArrowRightLine className="icon" /></a
+        >
+        <a href={siteInfo.urls.chat}>Join us on Discord</a>
+      </div>
+    </div>
+    <Image
+      class="hero-image"
+      src={passport}
+      alt=""
+      width={440}
+      densities={[1, 2]}
+    />
+  </div>
+  <Banner icon={RiMegaphoneLine} className="fundraiser-banner">
+    We're raising funds to help expand our guides and forms to more states. <a
+      href="https://www.every.org/namesake/f/help-simplify-name-changes"
+      >Support Namesake this Pride Month.</a
+    >
+  </Banner>
+  <SupportMap />
+  <Sponsors />
+</BaseLayout>
+
+<script>
+  import { annotate } from "rough-notation";
+
+  const heroHighlight: HTMLElement | null =
+    document.querySelector(".hero-highlight");
+
+  if (heroHighlight) {
+    const highlight = annotate(heroHighlight, {
+      type: "circle",
+      iterations: 2,
+      padding: 4,
+      strokeWidth: 3,
+    });
+    highlight.show();
+  }
+</script>
+
+<style lang="scss">
+  .hero {
+    width: min(100vw, 1200px);
+    padding-inline: var(--space-l);
+    margin-inline: calc(var(--space-l) * -1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-l);
+    padding-block: var(--space-2xl);
+  }
+
+  .hero-image {
+    flex-shrink: 0;
+    mix-blend-mode: multiply;
+
+    @media (width < 1200px) {
+      margin-inline-end: -48px;
+    }
+
+    @media (width < 1060px) {
+      width: 400px;
+      margin-inline-end: -80px;
+    }
+
+    @media (width < 920px) {
+      width: 360px;
+    }
+
+    @media (width < 860px) {
+      width: 320px;
+      margin-block-start: var(--space-3xl);
+      align-self: flex-start;
+    }
+
+    @media (width < 580px) {
+      display: none;
+    }
+  }
+
+  h1 {
+    font-size: var(--step-5);
+    text-wrap: balance;
+
+    @media (width >= 600px) {
+      font-size: var(--step-6);
+    }
+  }
+
+  .subtitle {
+    font-size: var(--step-1);
+    max-width: 58ch;
+    text-wrap: balance;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-l);
+  }
+
+  .icon {
+    margin-inline-end: calc(var(--space-2xs) * -1);
+  }
+
+  .fundraiser-banner {
+    margin-block-start: var(--space-m);
+  }
+</style>

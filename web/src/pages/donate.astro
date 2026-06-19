@@ -1,0 +1,9 @@
+---
+export const prerender = false;
+
+// We have to import siteInfo as _siteInfo to avoid an Astro type bug
+// See https://github.com/withastro/astro/issues/14684
+import { siteInfo as _siteInfo } from "#constants/site-info";
+
+return Astro.redirect(_siteInfo.urls.donate, 308);
+---

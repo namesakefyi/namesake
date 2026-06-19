@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { AddPdfModal } from "./components/AddPdfModal.tsx";
 import { PdfEditor } from "./components/PdfEditor.tsx";
 import { PdfList } from "./components/PdfList.tsx";
-import type { PdfMeta } from "./types.ts";
+import type { PdfMeta } from "./types";
 
 export function App() {
   const [pdfs, setPdfs] = useState<PdfMeta[]>([]);

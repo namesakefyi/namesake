@@ -1,0 +1,120 @@
+---
+import { COLORS } from "#constants/colors";
+---
+
+<ul class="swatches">
+  {
+    Object.values(COLORS)
+      .filter((color) => !color.forText)
+      .map((color) => (
+        <li
+          class="swatch"
+          style={{
+            backgroundColor: color.hex,
+            "--background-color": color.hex,
+          }}
+        >
+          <div class="swatch-title">
+            <strong class="swatch-name">{color.name}</strong>
+            <div class="swatch-hex">{color.hex}</div>
+          </div>
+          <div class="buttons">
+            <button
+              class="button secondary small swatch-toggle"
+              data-name={color.id}
+              data-color={color.hex}
+              title={`Use ${color.name} for site background`}
+            >
+              Set bg
+            </button>
+            <button
+              class="button secondary small copy-hex"
+              data-clipboard-text={color.hex}
+              title={`Copy ${color.name} hex code`}
+            >
+              Copy hex
+            </button>
+          </div>
+        </li>
+      ))
+  }
+</ul>
+
+<script>
+  const swatchToggles: NodeListOf<HTMLButtonElement> =
+    document.querySelectorAll(".swatch-toggle");
+
+  swatchToggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      const name = toggle.dataset.name;
+      if (name) document.body.setAttribute("data-color", name);
+    });
+  });
+
+  const copyButtons: NodeListOf<HTMLButtonElement> =
+    document.querySelectorAll(".copy-hex");
+
+  copyButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const text = button.dataset.clipboardText;
+      if (text) {
+        navigator.clipboard.writeText(text).then(() => {
+          button.textContent = "Copied!";
+          setTimeout(() => {
+            button.textContent = "Copy hex";
+          }, 2000);
+        });
+      }
+    });
+  });
+</script>
+
+<style lang="scss">
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-s);
+    list-style: none;
+    padding-inline-start: 0;
+    margin-block: var(--space-xl);
+
+    @media (width < 760px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (width < 500px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .swatch {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-m);
+    align-items: center;
+    border: 3px solid var(--text-color);
+    border-radius: 3px;
+    position: relative;
+
+    @media (width >= 500px) {
+      flex-direction: column;
+      aspect-ratio: 5 / 3;
+      align-items: flex-start;
+    }
+
+    @media (width < 400px) {
+      gap: var(--space-l);
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    gap: var(--space-xs);
+  }
+
+  .button {
+    display: inline-flex;
+  }
+</style>

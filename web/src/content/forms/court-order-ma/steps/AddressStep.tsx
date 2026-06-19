@@ -1,0 +1,88 @@
+import { Banner } from "#components/common/Banner";
+import { AddressField } from "#components/forms/AddressField";
+import { CheckboxField } from "#components/forms/CheckboxField";
+import {
+  FormStep,
+  FormSubsection,
+  useFieldVisible,
+} from "#components/forms/FormStep";
+import { defineStep } from "#lib/forms/defineStep";
+
+const whenNotUnhoused = (data: Record<string, unknown>) =>
+  data.isCurrentlyUnhoused !== true;
+
+const whenMailing = (data: Record<string, unknown>) =>
+  data.isCurrentlyUnhoused !== true &&
+  data.isMailingAddressDifferentFromResidence === true;
+
+export const addressStep = defineStep({
+  id: "address",
+  title: "What is your residential address?",
+  description:
+    "You must file your name change in the county where you live. We'll help you find where to file.",
+  fields: [
+    "isCurrentlyUnhoused",
+    {
+      ids: [
+        "residenceStreetAddress",
+        "residenceStreetAddress2",
+        "residenceCity",
+        "residenceCounty",
+        "residenceState",
+        "residenceZipCode",
+        "isMailingAddressDifferentFromResidence",
+      ],
+      when: whenNotUnhoused,
+    },
+    {
+      ids: [
+        "mailingStreetAddress",
+        "mailingStreetAddress2",
+        "mailingCity",
+        "mailingState",
+        "mailingZipCode",
+      ],
+      when: whenMailing,
+    },
+  ],
+  component: ({ stepConfig }) => {
+    const residenceVisible = useFieldVisible(
+      stepConfig,
+      "residenceStreetAddress",
+    );
+    const mailingVisible = useFieldVisible(stepConfig, "mailingStreetAddress");
+    return (
+      <FormStep stepConfig={stepConfig}>
+        <CheckboxField
+          name="isCurrentlyUnhoused"
+          label="I am currently unhoused or without permanent housing"
+        />
+        {!residenceVisible && (
+          <Banner variant="info">
+            We recommend reaching out to the{" "}
+            <a href="https://www.masstpc.org/homelessness/">
+              Massachusetts Transgender Political Coalition
+            </a>
+            . MTPC can provide an address to use for your name change
+            application and connect you with housing resources.
+          </Banner>
+        )}
+        {residenceVisible && (
+          <>
+            <AddressField type="residence" includeAddress2 includeCounty />
+            <CheckboxField
+              name="isMailingAddressDifferentFromResidence"
+              label="I use a different mailing address"
+            />
+          </>
+        )}
+        <FormSubsection
+          title="What is your mailing address?"
+          isVisible={mailingVisible}
+        >
+          <AddressField type="mailing" includeAddress2 />
+        </FormSubsection>
+      </FormStep>
+    );
+  },
+});

@@ -25,7 +25,7 @@ jobs:
       - name: Run Lychee
         uses: lycheeverse/lychee-action@v2
         with:
-          args: "--no-progress --config .lychee.toml ."
+          args: "--no-progress --config web/.lychee.toml ."
 
       - name: Create Issue From File
         if: env.lychee_exit_code != 0

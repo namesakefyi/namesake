@@ -1,0 +1,67 @@
+---
+title: Setting Up Your Dev Environment
+description: This guide will walk you through how to get Namesake running locally on your machine.
+---
+import { Steps } from '@astrojs/starlight/components';
+
+This guide will walk you through how to get Namesake running locally on your machine.
+
+## Prerequisites
+
+Before you get started, you will need:
+
+1. A [GitHub](https://github.com) account.
+2. A terminal (Terminal.app, [Ghostty](https://ghostty.org), Windows Terminal, etc.).
+3. A code editor such as [VS Code](https://code.visualstudio.com) or [Zed](https://zed.dev).
+4. [Node.js](https://nodejs.org/en/download) installed on your machine.
+5. [pnpm](https://pnpm.io/installation) installed on your machine.
+
+You will need some basic familiarity with the command line, Git, HTML, CSS, and React.
+
+## Fork and clone the repository
+
+<Steps>
+
+1. Fork the repository.
+
+   Click the "Fork" button on the top right of the [`namesake` repository](https://github.com/namesakefyi/namesake/) to create your own copy of the repository.
+
+2. Clone your fork.
+
+   ```shell
+   git clone https://github.com/MY_USERNAME/namesake.git
+   ```
+
+</Steps>
+
+You should now have a `namesake` folder on your computer.
+
+## Start the development server
+
+<Steps>
+
+1. From the `namesake` directory, install packages.
+
+   ```bash
+   pnpm install
+   ```
+
+   If this is your first time installing packages, it may take awhile to download everything. 
+
+   :::tip
+   Run `pnpm install` whenever you pull new changes from GitHub.
+   :::
+
+2. Start the development server.
+
+   ```bash
+   pnpm dev
+   ```
+
+</Steps>
+
+You should now be able to see the Namesake website at [http://localhost:4321](http://localhost:4321)! Changes will automatically refresh in your browser as you make edits to the code.
+
+Leave this process running in the background while you work on the codebase. To stop the server, press `Ctrl + C` in the terminal.
+
+Congrats! You are ready to develop on the Namesake codebase.

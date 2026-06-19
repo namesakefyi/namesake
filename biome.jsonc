@@ -1,5 +1,6 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+  "root": true,
   "files": {
     "includes": [
       "**",
@@ -9,8 +10,8 @@
       "!**/dist",
       "!**/.vscode",
       "!**/src/styles/theme.css",
-      "!.astro",
-      "!worker-configuration.d.ts",
+      "!**/.astro",
+      "!**/worker-configuration.d.ts",
       "!**/coverage"
     ]
   },

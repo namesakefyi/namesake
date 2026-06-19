@@ -1,0 +1,50 @@
+---
+import GuideLinkGroup from "#components/GuideLinkGroup.astro";
+import PageHeader from "#components/PageHeader.astro";
+import BaseLayout from "#layouts/BaseLayout.astro";
+import { getGuidesByState } from "#lib/queries/guides";
+
+const { generalGuides, guidesByState } = await getGuidesByState();
+---
+
+<BaseLayout
+  title="Guides"
+  description="Step-by-step name change guides for identity documents."
+  color="white"
+>
+  <PageHeader
+    title="Guides"
+    description="Step-by-step name change guides for identity documents."
+  />
+  <div class="guides">
+    {
+      generalGuides.length > 0 && (
+        <GuideLinkGroup guides={generalGuides} title="General" />
+      )
+    }
+    {
+      guidesByState.map(({ state, guides }) => (
+        <GuideLinkGroup
+          guides={guides}
+          title={state.data.name}
+          titleHref={`/guides/${state.id}`}
+        />
+      ))
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .guides {
+    padding-block-end: var(--space-2xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
+
+    @supports (display: grid-lanes) {
+      display: grid-lanes;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      flow-tolerance: 1em;
+    }
+  }
+</style>

@@ -2,13 +2,13 @@ import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { escapeKey } from "../../scripts/utils.mjs";
-import { buildTestDataEntries, loadFormFields } from "./fields.ts";
-import type { PdfFieldInfo } from "./pdf.ts";
+import { buildTestDataEntries, loadFormFields } from "./fields";
+import type { PdfFieldInfo } from "./pdf";
+import { escapeKey } from "./utils";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
-const PDF_TS_PATH = join(ROOT, "src/constants/pdf.ts");
+const PDF_TS_PATH = join(ROOT, "web/src/constants/pdf.ts");
 
 /** Returns a kebab-case PDF id from code and title. */
 export function generatePdfId(code: string, title: string): string {
@@ -50,7 +50,7 @@ function generateDefinition({
     "pdfPath: pdf,",
   ];
   const fieldLines = pdfFields.map((f) => `  ${escapeKey(f.name)}: undefined,`);
-  return `import { definePdf } from "../../utils/definePdf";
+  return `import { definePdf } from "#lib/pdfs/definePdf";
 import pdf from "./${id}.pdf";
 import type { PdfFieldName } from "./schema";
 
@@ -91,8 +91,8 @@ function generateStarterTest({
       : "    // TODO: Add form data for resolver";
 
   return `import { describe, it } from "vitest";
-import type { FormData } from "../../../constants/fields";
-import { expectPdfFieldsMatch } from "../../utils/expectPdfFieldsMatch";
+import type { FormData } from "#constants/fields";
+import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import ${importName} from ".";
 
 describe("${escapedTitle}", () => {
@@ -149,8 +149,8 @@ export function computeOutputPaths({
   const id = generatePdfId(code, title);
   const jurisdictionDir =
     jurisdiction.toLowerCase() === "federal"
-      ? join(ROOT, "src/pdfs/federal")
-      : join(ROOT, "src/pdfs", jurisdiction.toLowerCase());
+      ? join(ROOT, "web/src/content/pdfs/federal")
+      : join(ROOT, "web/src/content/pdfs", jurisdiction.toLowerCase());
   const pdfDir = join(jurisdictionDir, id);
   return {
     id,

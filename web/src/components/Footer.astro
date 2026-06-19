@@ -1,0 +1,261 @@
+---
+import { RiHeart3Line } from "@remixicon/react";
+import { siteInfo } from "#constants/site-info";
+import Logo from "./Logo.astro";
+import Subscribe from "./Subscribe.astro";
+
+const { socialLinks } = siteInfo;
+
+type Link = {
+  href: string;
+  label: string;
+  title?: string;
+};
+
+type LinkGroup = {
+  title: string;
+  links: Link[];
+};
+
+const linkGroups: LinkGroup[] = [
+  {
+    title: "About",
+    links: [
+      { href: siteInfo.urls.blog, label: "Blog" },
+      { href: "/press", label: "Press" },
+      { href: "/brand-assets", label: "Brand" },
+      { href: siteInfo.urls.donate, label: "Donate" },
+      { href: siteInfo.urls.contribute, label: "Contribute" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { href: "/terms", label: "Terms" },
+      { href: "/privacy", label: "Privacy" },
+      { href: "/abuse", label: "Abuse" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { href: siteInfo.urls.guides, label: "Guides" },
+      { href: siteInfo.urls.forms, label: "Forms" },
+      { href: siteInfo.urls.chat, label: "Chat" },
+      { href: siteInfo.urls.status, label: "Status" },
+    ],
+  },
+];
+---
+
+<footer>
+  <div class="footer-illustration">
+    <img
+      src="/site/footer/snail.png"
+      alt="A snail moving to the left"
+      width="240"
+    />
+  </div>
+  <div class="content">
+    <Subscribe />
+    <div class="links">
+      {
+        linkGroups.map(({ title, links }) => (
+          <div class="linkGroup">
+            <strong>{title}</strong>
+            {links.map(({ href, label, title }) => (
+              <a {href} {title}>
+                {label}
+              </a>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <div class="logo">
+    <Logo />
+  </div>
+  <div class="content end">
+    <div class="copyright">
+      T4T <RiHeart3Line className="heart" />
+      <span
+        >A project of <a href={siteInfo.fiscalSponsor.url}
+          >{siteInfo.fiscalSponsor.name}</a
+        ></span
+      >
+    </div>
+    <div class="social">
+      {
+        Object.values(socialLinks).map(({ href, Icon, text }) => (
+          <a {href} title={text}>
+            <Icon size={28} />
+          </a>
+        ))
+      }
+    </div>
+  </div>
+
+  <style lang="scss">
+    footer {
+      --footerBg: var(--text-color);
+      --footerText: var(--background-color);
+
+      background: var(--footerBg);
+      color: var(--footerText);
+      line-height: 1.5;
+      width: 100%;
+      padding-block-start: var(--space-xl);
+      margin-block-start: var(--space-2xl);
+      position: relative;
+
+      :focus-visible {
+        outline-color: var(--footerText);
+      }
+
+      @media (hover: hover) {
+        a:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .content {
+      padding-inline: var(--space-l);
+      flex: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin-inline: auto;
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-xl);
+
+      + .content {
+        margin-block-start: var(--space-xl);
+      }
+
+      &.end {
+        align-items: center;
+        gap: var(--space-l);
+        padding-block-end: var(--space-2xl);
+      }
+
+      @media (width < 900px) {
+        flex-direction: column;
+        gap: var(--space-xl);
+
+        .linkGroup {
+          width: unset;
+          flex: 1;
+        }
+
+        .social {
+          gap: var(--space-l);
+        }
+
+        .copyright {
+          order: 1;
+        }
+      }
+    }
+
+    @keyframes snailing {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(calc(-100% - 100vw));
+      }
+    }
+
+    .footer-illustration {
+      width: 100%;
+      position: absolute;
+      bottom: 100%;
+      height: 48px;
+      overflow: hidden;
+
+      img {
+        height: 100%;
+        width: auto;
+        position: absolute;
+        left: 100%;
+        bottom: -4px;
+        mix-blend-mode: multiply;
+        user-select: none;
+        animation: snailing 300s infinite linear;
+        // Offset start
+        animation-delay: -24s;
+      }
+    }
+
+    .links {
+      display: flex;
+      gap: var(--space-m);
+      align-items: stretch;
+
+      a {
+        font-size: var(--step-0);
+        border-radius: 5px;
+      }
+    }
+
+    .linkGroup {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 12ch;
+
+      > * {
+        padding-block: var(--space-xs);
+      }
+
+      @media (width < 900px) {
+        > * {
+          padding-block: var(--space-s);
+        }
+      }
+    }
+
+    .copyright {
+      font-size: var(--step--1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+
+      .heart {
+        width: 1em;
+        height: 1em;
+      }
+    }
+
+    .social {
+      display: flex;
+      gap: var(--space-m);
+      font-size: var(--step-2);
+
+      a {
+        border-radius: 5px;
+      }
+    }
+
+    .logo {
+      padding-block: var(--space-2xl);
+
+      @media (width >= 900px) {
+        padding-block-end: var(--space-l);
+      }
+
+      padding-inline: var(--space-l);
+      max-width: 1200px;
+      margin-inline: auto;
+
+      :global(svg) {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</footer>

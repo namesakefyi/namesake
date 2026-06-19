@@ -5,9 +5,9 @@ on:
     branches: [main]
     paths-ignore:
       - ".changeset/**"
-      - ".storybook/**"
       - ".vscode/**"
-      - "public/**"
+      - "docs/**"
+      - "pdf-manager/**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -36,19 +36,19 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: "24.x"
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Test coverage
-        run: pnpm test:coverage
+        run: pnpm --filter @namesake/web test:coverage
 
       - name: Upload coverage
         uses: actions/upload-artifact@v7
         with:
           name: coverage-branch
-          path: coverage
+          path: web/coverage
           overwrite: true
 
   test-coverage-main:
@@ -72,19 +72,19 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: "24.x"
-          cache: 'pnpm'
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install
 
       - name: Test coverage
-        run: pnpm test:coverage
+        run: pnpm --filter @namesake/web test:coverage
 
       - name: Upload coverage
         uses: actions/upload-artifact@v7
         with:
           name: coverage-main
-          path: coverage
+          path: web/coverage
           overwrite: true
 
   report-coverage:

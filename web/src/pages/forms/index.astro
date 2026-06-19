@@ -1,0 +1,73 @@
+---
+import { getCollection } from "astro:content";
+import FormLink from "#components/FormLink.astro";
+import PageHeader from "#components/PageHeader.astro";
+import type { FormSlug } from "#constants/forms";
+import BaseLayout from "#layouts/BaseLayout.astro";
+import { getFormConfig } from "#lib/forms/getFormConfig";
+import { getFormPdfMetadata } from "#lib/forms/getFormPdfMetadata";
+import { formatTimeEstimate } from "#lib/utils/formatTimeEstimate";
+
+const allForms = await getCollection("forms", ({ data }) => !data.unlisted);
+
+const formsWithPdfs = await Promise.all(
+  allForms.map(async (form) => {
+    const config = getFormConfig(form.id);
+    const pdfs = config ? await getFormPdfMetadata(form.id as FormSlug) : [];
+    const stepCount = config?.steps.length ?? 0;
+    const timeEstimate = formatTimeEstimate(stepCount);
+
+    return {
+      title: form.data.title,
+      slug: form.id,
+      pdfs,
+      timeEstimate,
+    };
+  }),
+);
+---
+
+<BaseLayout
+  title="Forms"
+  description="Namesake's guided forms can help you fill out all the name change documents you need to file."
+  color="white"
+>
+  <PageHeader
+    title="Forms"
+    description="Namesake's guided forms can help you fill out all the name change documents you need to file."
+  />
+  <div class="forms">
+    {
+      formsWithPdfs.length ? (
+        formsWithPdfs.map((form) => (
+          <FormLink
+            title={form.title}
+            slug={form.slug}
+            documentCount={form.pdfs.length}
+            timeEstimate={form.timeEstimate}
+          />
+        ))
+      ) : (
+        <p>No forms found.</p>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .forms {
+    display: grid;
+    gap: var(--space-m);
+    padding-block-end: var(--space-2xl);
+    grid-template-columns: 1fr 1fr;
+
+    @media (width > 600px) {
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: var(--space-l);
+    }
+
+    @media (width > 1000px) {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+</style>

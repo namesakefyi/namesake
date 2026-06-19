@@ -1,0 +1,97 @@
+---
+import type { RoughAnnotationType } from "rough-notation/lib/model";
+import { smartquotes } from "#lib/utils/smartquotes";
+import Breadcrumbs, { type BreadcrumbItem } from "./Breadcrumbs.astro";
+
+interface Props {
+  title: string;
+  date?: string;
+  description?: string | null;
+  annotation?: RoughAnnotationType | null;
+  breadcrumbs?: BreadcrumbItem[];
+}
+
+const {
+  title,
+  date,
+  description,
+  annotation = "circle",
+  breadcrumbs,
+} = Astro.props;
+
+const formatter = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "long",
+  timeZone: "UTC",
+});
+
+let formattedDate = "";
+if (date) {
+  formattedDate = formatter.format(new Date(date));
+}
+---
+
+<div class="page-head">
+  {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
+  {
+    date && (
+      <time class="date" datetime={date}>
+        {formattedDate}
+      </time>
+    )
+  }
+  <h1 data-annotation={annotation}>
+    {smartquotes(title)}
+  </h1>
+  {description && <p class="subhead">{smartquotes(description)}</p>}
+</div>
+
+<script>
+  import { annotate } from "rough-notation";
+  import type { RoughAnnotationType } from "rough-notation/lib/model";
+  import { annotationConfig } from "#constants/annotations";
+
+  const header: HTMLElement | null = document.querySelector(".page-head h1");
+  const isForcedColors = window.matchMedia("(forced-colors: active)").matches;
+
+  if (header && !isForcedColors) {
+    const annotation = header.dataset.annotation as RoughAnnotationType;
+
+    if (annotation === "highlight")
+      header.style.color = "var(--background-color)";
+
+    const highlight = annotate(header, {
+      type: annotation,
+      ...annotationConfig[annotation],
+    });
+    highlight.show();
+  }
+</script>
+
+<style lang="scss">
+  .page-head {
+    padding-block: var(--space-2xl);
+
+    .date {
+      font-weight: var(--weight-bold);
+      display: block;
+      margin-block-end: var(--space-l);
+    }
+
+    h1 {
+      display: inline;
+      text-wrap: balance;
+      margin-inline-start: -0.06em; // Visual alignment
+
+      @media (width < 700px) {
+        font-size: var(--step-5);
+      }
+    }
+
+    .subhead {
+      margin-block-start: var(--space-l);
+      font-size: var(--step-2);
+      line-height: var(--line-height-display);
+      text-wrap: balance;
+    }
+  }
+</style>
