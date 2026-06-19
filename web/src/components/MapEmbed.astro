@@ -14,7 +14,6 @@ const { name, address } = Astro.props;
 
 const url = new URL("https://maps.google.com/maps");
 url.searchParams.set("q", name);
-url.searchParams.set("t", "m"); // Map type: 'm'=map, 'k'=satellite, 'h'=hybrid, 'p'=terrain
 url.searchParams.set("output", "embed");
 ---
 
