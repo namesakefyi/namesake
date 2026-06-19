@@ -2,12 +2,20 @@
 title: Birth Certificate
 state: ma
 category: birth-certificate
-stub: true
 ---
 
-In Massachusetts, you can only update your birth certificate if you are also updating the sex designation. You cannot update a birth certificate if you are only changing names.
+import Costs from "../../../components/Costs.astro";
+import { FormContainer } from "../../../components/forms/FormContainer";
 
-Please follow the instructions to [amend a birth certificate for sex of the subject](https://www.mass.gov/how-to/amend-a-birth-certificate-for-sex-of-the-subject).
+## Get prepared
+
+To amend a birth certificate, you will need:
+
+1. An affidavit indicating your sex and name
+   - A parent or guardian must complete this form if the record change is for a minor 
+2. A court-certified copy of your [legal name change](/guides/ma/court-order), if you are updating your name 
+
+In Massachusetts, you can only update your birth certificate if you are also updating the sex designation. You cannot update a birth certificate if you are only changing names.
 
 <details>
 <summary>Do I need to update my birth certificate?</summary>
@@ -15,3 +23,48 @@ Please follow the instructions to [amend a birth certificate for sex of the subj
 In most cases, no. A birth certificate matching your current name and gender marker is a highly uncommon requirement for other forms. Not all states allow updating birth certificates, and many trans people forego the process due to its limited utility. However, if you decide to update your birth certificate, we are here to support you through the process!
 
 </details>
+
+## Fill out forms
+
+Please download the affidavit and follow instructions to [amend a birth certificate for sex of the subject](https://www.mass.gov/how-to/amend-a-birth-certificate-for-sex-of-the-subject).
+
+## Gather funds or waive fees
+
+<Costs
+  costs={[
+    { title: "Amendment fee", amount: 50 },
+    { title: "Certified copy of amended record (by mail)", amount: 32, required: "notRequired" },
+    { title: "Certified copy of amended record (in person)", amount: 20, required: "notRequired" }
+  ]}
+/>
+
+You can waive court fees if you meet the [eligibility requirements in Massachusetts](https://www.mass.gov/info-details/eligibility-requirements-for-indigency-waiver-of-fees). The Massachusetts Transgender Political Coalition also offers financial assistance through its [Identity Document Assistance](https://www.masstpc.org/what-we-do/ida-network/) network.
+
+## File your documents
+
+You can file your documents by mail or in person.
+
+### Submit by mail
+
+To submit by mail, gather:
+
+1. Your completed, notarized affidavit
+2. A check or money order payable to Commonwealth of Massachusetts
+3. Your court-certified name change, if applicable
+
+Mail all documents to:
+
+**Registry of Vital Records and Statistics**  
+150 Mt. Vernon St.  
+1st Floor  
+Dorchester, MA 02125
+
+### File in person
+
+Make an appointment with the Registry of Vital Records and Statistics by emailing [vip-amend@state.ma.us](mailto:vip-amend@state.ma.us) or calling [(617) 740-2600](tel:6177402600).
+
+Amendments may also be made in your city or town of birth. Please contact the local city or town clerk, or Boston Registrar, for more information.
+
+## References
+
+- Massachusetts Registry of Vital Records and Statistics. [Amend a birth certificate for sex of the subject](https://www.mass.gov/how-to/amend-a-birth-certificate-for-sex-of-the-subject).
