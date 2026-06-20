@@ -16,6 +16,39 @@ import { MenuItem } from "../../common/Menu";
 
 type AddressType = "residence" | "mailing" | "parent1" | "parent2";
 
+interface AddressNames {
+  street: FieldName;
+  street2?: FieldName;
+  city: FieldName;
+  state: FieldName;
+  zip: FieldName;
+  county?: FieldName;
+}
+
+const FIELD_FOR_GEOAPIFY = {
+  address_line1: "street",
+  city: "city",
+  state_code: "state",
+  postcode: "zip",
+  county: "county",
+} as const satisfies Partial<Record<keyof GeoapifyResult, keyof AddressNames>>;
+
+export function mapPlaceToFields(
+  place: GeoapifyResult,
+  names: AddressNames,
+): Array<[FieldName, string]> {
+  const updates: Array<[FieldName, string]> = [];
+  for (const [source, key] of Object.entries(FIELD_FOR_GEOAPIFY) as [
+    keyof GeoapifyResult,
+    keyof AddressNames,
+  ][]) {
+    const fieldName = names[key];
+    if (!fieldName) continue;
+    updates.push([fieldName, place[source] ?? ""]);
+  }
+  return updates;
+}
+
 export interface AddressFieldProps {
   children?: React.ReactNode;
   type: AddressType;
@@ -31,17 +64,7 @@ export function AddressField({
 }: AddressFieldProps) {
   const { control, getValues, setValue } = useFormContext();
 
-  const names: Record<
-    AddressType,
-    {
-      street: FieldName;
-      street2?: FieldName;
-      city: FieldName;
-      state: FieldName;
-      zip: FieldName;
-      county?: FieldName;
-    }
-  > = {
+  const names: Record<AddressType, AddressNames> = {
     residence: {
       street: "residenceStreetAddress",
       street2: "residenceStreetAddress2",
@@ -88,24 +111,8 @@ export function AddressField({
   const autocompleteAddress = (id: Key): void => {
     const place = list.items.find((i) => i.place_id === id);
     if (!place) return;
-    setValue(names[type].street, place.address_line1);
-    setValue(names[type].city, place.city ?? "", {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
-    setValue(names[type].state, place.state_code ?? "", {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
-    setValue(names[type].zip, place.postcode ?? "", {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
-    if (names[type].county) {
-      setValue(names[type].county, place.county ?? "", {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
+    for (const [field, value] of mapPlaceToFields(place, names[type])) {
+      setValue(field, value, { shouldValidate: true, shouldDirty: true });
     }
     list.setFilterText("");
   };

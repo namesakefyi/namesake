@@ -1,8 +1,9 @@
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { JURISDICTIONS } from "#constants/jurisdictions";
+import type { GeoapifyResult } from "#lib/utils/fetchLocationResults.ts";
 import { renderWithFormProvider, screen } from "../test-utils";
-import { AddressField } from "./AddressField";
+import { AddressField, mapPlaceToFields } from "./AddressField";
 
 describe("AddressField", () => {
   it("renders all address input fields", () => {
@@ -70,7 +71,8 @@ describe("AddressField", () => {
     });
     const zipInput = screen.getByLabelText("ZIP");
 
-    expect(streetAddressInput).toHaveAttribute("autocomplete", "address-line1");
+    // Street uses its own location suggestions, so browser autofill is disabled.
+    expect(streetAddressInput).toHaveAttribute("autocomplete", "off");
     expect(cityInput).toHaveAttribute("autocomplete", "address-level2");
     expect(stateSelect).toHaveAttribute("autocomplete", "address-level1");
     expect(zipInput).toHaveAttribute("autocomplete", "postal-code");
@@ -219,5 +221,53 @@ describe("AddressField", () => {
 
     const countyInput = screen.getByLabelText("County");
     expect(countyInput).toHaveAttribute("name", "residenceCounty");
+  });
+});
+
+describe("mapPlaceToFields", () => {
+  const place: GeoapifyResult = {
+    address_line1: "100 Main St",
+    city: "Boston",
+    state_code: "MA",
+    postcode: "02108",
+    county: "Suffolk",
+    street: "Main St",
+    housenumber: "100",
+    formatted: "100 Main St, Boston, MA 02108",
+    place_id: "1",
+  };
+
+  it("maps geoapify properties onto the address type's field names", () => {
+    expect(
+      mapPlaceToFields(place, {
+        street: "residenceStreetAddress",
+        city: "residenceCity",
+        state: "residenceState",
+        zip: "residenceZipCode",
+        county: "residenceCounty",
+      }),
+    ).toEqual([
+      ["residenceStreetAddress", "100 Main St"],
+      ["residenceCity", "Boston"],
+      ["residenceState", "MA"],
+      ["residenceZipCode", "02108"],
+      ["residenceCounty", "Suffolk"],
+    ]);
+  });
+
+  it("skips fields the address type doesn't have, like county for parents", () => {
+    const fields = mapPlaceToFields(place, {
+      street: "parent1StreetAddress",
+      city: "parent1City",
+      state: "parent1State",
+      zip: "parent1ZipCode",
+    });
+
+    expect(fields.map(([name]) => name)).toEqual([
+      "parent1StreetAddress",
+      "parent1City",
+      "parent1State",
+      "parent1ZipCode",
+    ]);
   });
 });

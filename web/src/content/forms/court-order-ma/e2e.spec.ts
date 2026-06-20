@@ -2,6 +2,27 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 test("Massachusetts Court Order", async ({ page }, testInfo) => {
+  // Stub the location service so a single, known suggestion is returned.
+  await page.route("**/api/location*", (route) =>
+    route.fulfill({
+      json: {
+        results: [
+          {
+            place_id: "1",
+            formatted: "100 Main St, Boston, MA 02108",
+            address_line1: "100 Main St",
+            housenumber: "100",
+            street: "Main St",
+            city: "Boston",
+            state_code: "MA",
+            postcode: "02108",
+            county: "Suffolk",
+          },
+        ],
+      },
+    }),
+  );
+
   await test.step("Title", async () => {
     await page.goto("/forms/court-order-ma");
 
@@ -159,6 +180,35 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
       page.getByRole("heading", { name: "What is your mailing address?" }),
     ).toBeVisible();
     await page.getByText("I use a different mailing").click();
+    await page.getByRole("button", { name: "Continue" }).click();
+  });
+
+  await test.step("Residential address (autocomplete)", async () => {
+    await page.getByLabel("Previous step").click();
+    await page.getByRole("textbox", { name: "City" }).fill("");
+    await page.getByRole("combobox", { name: "State" }).fill("");
+    await page.getByRole("textbox", { name: "County" }).fill("");
+    await page.getByRole("textbox", { name: "ZIP" }).fill("");
+    const street = page.getByRole("searchbox", { name: "Street address" });
+    // Have to clear before entering, or the popover won't show.
+    await street.fill("");
+    await street.fill("100 Main St");
+
+    await page.getByRole("menuitem", { name: /100 Main St, Boston/ }).click();
+
+    await expect(street).toHaveValue("100 Main St");
+    await expect(page.getByRole("textbox", { name: "City" })).toHaveValue(
+      "Boston",
+    );
+    await expect(page.getByRole("textbox", { name: "County" })).toHaveValue(
+      "Suffolk",
+    );
+    await expect(page.getByRole("textbox", { name: "ZIP" })).toHaveValue(
+      "02108",
+    );
+    await expect(page.getByRole("combobox", { name: "State" })).toHaveValue(
+      "Massachusetts",
+    );
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
