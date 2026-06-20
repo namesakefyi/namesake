@@ -29,6 +29,7 @@ export const GET: APIRoute = async ({ url }) => {
   const geoapify = new URL("https://api.geoapify.com/v1/geocode/autocomplete");
   geoapify.searchParams.set("text", text);
   geoapify.searchParams.set("filter", "countrycode:us,ca");
+  geoapify.searchParams.set("bias", "countrycode:us,ca");
   geoapify.searchParams.set("format", "json");
   geoapify.searchParams.set("apiKey", geoapifyApiKey);
 
