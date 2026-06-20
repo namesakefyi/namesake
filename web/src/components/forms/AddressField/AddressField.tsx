@@ -1,5 +1,5 @@
 import { type MaskitoOptions, maskitoTransform } from "@maskito/core";
-import { type Key, useEffect, useRef, useState } from "react";
+import { type Key, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import type { FieldName } from "#constants/fields";
 import { JURISDICTIONS } from "#constants/jurisdictions";
@@ -7,26 +7,14 @@ import { ComboBox, ComboBoxItem } from "../../common/ComboBox";
 import { TextField } from "../../common/TextField";
 import "./AddressField.css";
 import { useAsyncList } from "react-aria-components";
-import type { GeoapifyResult } from "../../../pages/api/location";
+import {
+  createLocationLoader,
+  type GeoapifyResult,
+} from "#lib/utils/fetchLocationResults.ts";
 import { Autocomplete } from "../../common/Autocomplete";
 import { MenuItem } from "../../common/Menu";
 
 type AddressType = "residence" | "mailing" | "parent1" | "parent2";
-
-// Custom hook that waits a set delay before showing a spinner
-// unsure where this should live.
-function useDelayedFlag(active: boolean, delayms = 200) {
-  const [show, setShow] = useState(false);
-  useEffect(() => {
-    if (!active) {
-      setShow(false);
-      return;
-    }
-    const id = setTimeout(() => setShow(true), delayms);
-    return () => clearTimeout(id);
-  }, [active, delayms]);
-  return show;
-}
 
 export interface AddressFieldProps {
   children?: React.ReactNode;
@@ -95,39 +83,12 @@ export function AddressField({
     mask: [/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/],
   };
 
-  const apiFailedRef = useRef(false);
-
-  const list = useAsyncList<GeoapifyResult>({
-    async load({ signal, filterText }) {
-      if (!filterText || filterText.length < 3) {
-        return { items: [] };
-      }
-      try {
-        const res = await fetch(
-          `/api/location?text=${encodeURIComponent(filterText)}`,
-          { signal },
-        );
-        if (!res.ok) throw new Error(`Location API ${res.status}`);
-        const json: any = await res.json();
-        return { items: json.results };
-      } catch (err) {
-        // This isn't a failure if the request was canceled due to a keystroke
-        if (signal.aborted) throw err;
-        apiFailedRef.current = true;
-        return { items: [] };
-      }
-    },
-  });
-
-  const showLoading = useDelayedFlag(list.isLoading);
+  const list = useAsyncList<GeoapifyResult>({ load: createLocationLoader() });
 
   const autocompleteAddress = (id: Key): void => {
     const place = list.items.find((i) => i.place_id === id);
     if (!place) return;
-    setValue(
-      names[type].street,
-      [place.housenumber, place.street].filter(Boolean).join(" "),
-    );
+    setValue(names[type].street, place.address_line1);
     setValue(names[type].city, place.city ?? "", {
       shouldValidate: true,
       shouldDirty: true,
@@ -158,8 +119,8 @@ export function AddressField({
         render={({ field, fieldState: { invalid, error } }) => (
           <Autocomplete
             {...field}
-            autoComplete="address-line1"
             label="Street address"
+            autoComplete="off"
             size={30}
             items={list.items}
             inputValue={field.value}
@@ -169,7 +130,7 @@ export function AddressField({
               setValue(names[type].street, text);
             }}
             isAsync={true}
-            isLoading={showLoading}
+            isLoading={list.isLoading}
             onAction={autocompleteAddress}
             isInvalid={invalid}
             errorMessage={error?.message}

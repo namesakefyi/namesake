@@ -18,6 +18,7 @@ export interface SearchFieldProps extends AriaSearchFieldProps {
   placeholder?: string;
   isLoading?: boolean;
   size?: number;
+  ref?: React.Ref<HTMLDivElement>;
 }
 
 export function SearchField({

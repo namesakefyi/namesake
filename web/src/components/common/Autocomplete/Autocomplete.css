@@ -14,3 +14,8 @@
   text-decoration: none;
   cursor: pointer;
 }
+
+.react-aria-Popover {
+  width: var(--trigger-width);
+  max-width: var(--trigger-width);
+}

@@ -2,12 +2,14 @@ import {
   Autocomplete as AriaAutocomplete,
   type AutocompleteProps as AriaAutocompleteProps,
   type Key,
+  Popover,
   useFilter,
 } from "react-aria-components";
 import { Menu } from "../Menu";
 import { SearchField } from "../SearchField";
 
 import "./Autocomplete.css";
+import { useRef } from "react";
 
 export interface AutocompleteProps<T extends object>
   extends Omit<AriaAutocompleteProps, "children"> {
@@ -45,6 +47,9 @@ export function Autocomplete<T extends object>({
   const { contains } = useFilter({ sensitivity: "base" });
   const appliedFilter = isAsync ? undefined : contains;
 
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const isEmpty = !items || isEmptyIterable(items);
+
   return (
     <AriaAutocomplete filter={appliedFilter} {...props}>
       <SearchField
@@ -56,14 +61,22 @@ export function Autocomplete<T extends object>({
         placeholder={placeholder}
         name={name}
         autoComplete={autoComplete}
+        ref={triggerRef}
       />
-      <Menu
-        items={items}
-        onAction={onAction}
-        renderEmptyState={renderEmptyState}
-      >
-        {children}
-      </Menu>
+      <Popover isOpen={!isEmpty} triggerRef={triggerRef} isNonModal>
+        <Menu
+          items={items}
+          onAction={onAction}
+          renderEmptyState={renderEmptyState}
+        >
+          {children}
+        </Menu>
+      </Popover>
     </AriaAutocomplete>
   );
+}
+
+function isEmptyIterable<T>(items: Iterable<T>): boolean {
+  for (const _ of items) return false;
+  return true;
 }
