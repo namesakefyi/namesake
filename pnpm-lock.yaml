@@ -25,22 +25,22 @@ importers:
         version: 0.9.9(prettier@3.8.4)(typescript@6.0.3)
       '@astrojs/cloudflare':
         specifier: ^13.7.0
-        version: 13.7.0(@types/node@25.9.3)(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(workerd@1.20260611.1)(wrangler@4.100.0)(yaml@2.9.0)
+        version: 13.7.0(@types/node@25.9.3)(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(workerd@1.20260611.1)(wrangler@4.100.0)(yaml@2.9.0)
       '@astrojs/starlight':
         specifier: ^0.40.0
-        version: 0.40.0(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(typescript@6.0.3)
+        version: 0.40.0(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(typescript@6.0.3)
       '@mermaid-js/layout-elk':
         specifier: ^0.2.1
         version: 0.2.1(mermaid@11.15.0)
       astro:
-        specifier: ^6.4.5
-        version: 6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
+        specifier: ^6.4.6
+        version: 6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
       astro-mermaid:
         specifier: ^2.0.2
-        version: 2.0.2(@mermaid-js/layout-elk@0.2.1(mermaid@11.15.0))(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(mermaid@11.15.0)
+        version: 2.0.2(@mermaid-js/layout-elk@0.2.1(mermaid@11.15.0))(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(mermaid@11.15.0)
       astro-og-canvas:
         specifier: ^0.11.1
-        version: 0.11.1(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 0.11.1(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))
       canvaskit-wasm:
         specifier: ^0.41.1
         version: 0.41.1
@@ -52,7 +52,7 @@ importers:
         version: 0.34.5
       starlight-theme-flexoki:
         specifier: ^0.2.2
-        version: 0.2.2(@astrojs/starlight@0.40.0(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(typescript@6.0.3))
+        version: 0.2.2(@astrojs/starlight@0.40.0(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(typescript@6.0.3))
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -113,13 +113,13 @@ importers:
         version: 0.9.9(prettier@3.8.4)(typescript@6.0.3)
       '@astrojs/cloudflare':
         specifier: 13.7.0
-        version: 13.7.0(@types/node@25.9.3)(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(workerd@1.20260611.1)(wrangler@4.100.0)(yaml@2.9.0)
+        version: 13.7.0(@types/node@25.9.3)(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(workerd@1.20260611.1)(wrangler@4.100.0)(yaml@2.9.0)
       '@astrojs/markdown-remark':
         specifier: ^7.2.0
         version: 7.2.0
       '@astrojs/mdx':
         specifier: ^6.0.2
-        version: 6.0.3(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: 6.0.3(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))
       '@astrojs/react':
         specifier: ^5.0.6
         version: 5.0.7(@types/node@25.9.3)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(lightningcss@1.32.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
@@ -151,8 +151,8 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0(@types/react@19.2.17)(react@19.2.7)(xstate@5.32.1)
       astro:
-        specifier: 6.4.5
-        version: 6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
+        specifier: 6.4.6
+        version: 6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
       browserslist:
         specifier: ^4.28.2
         version: 4.28.2
@@ -2689,8 +2689,8 @@ packages:
     peerDependencies:
       astro: ^5.0.0 || ^6.0.0-alpha
 
-  astro@6.4.5:
-    resolution: {integrity: sha512-0R7WLD1+WD/mTPcZxyKtcF0CztQi9ahFRtGM7oChJhxjNbr4lSBenxi+mk91k5bPTaUEoZ6edg1fDo2qP8bCwg==}
+  astro@6.4.6:
+    resolution: {integrity: sha512-48OBTBKR9ctbf+DQxpOuxGl8ebfn59zTuNQMBzptmG/Mi/H8IdfMSbJgGuX1I/4U6g9yazG1p4BHlf4+2hWU4Q==}
     engines: {node: '>=22.12.0', npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
 
@@ -5606,12 +5606,12 @@ snapshots:
       - prettier
       - prettier-plugin-astro
 
-  '@astrojs/cloudflare@13.7.0(@types/node@25.9.3)(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(workerd@1.20260611.1)(wrangler@4.100.0)(yaml@2.9.0)':
+  '@astrojs/cloudflare@13.7.0(@types/node@25.9.3)(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(workerd@1.20260611.1)(wrangler@4.100.0)(yaml@2.9.0)':
     dependencies:
       '@astrojs/internal-helpers': 0.10.0
       '@astrojs/underscore-redirects': 1.0.3
       '@cloudflare/vite-plugin': 1.40.2(vite@7.3.5(@types/node@25.9.3)(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(workerd@1.20260611.1)(wrangler@4.100.0)
-      astro: 6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
+      astro: 6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
       piccolore: 0.1.3
       tinyglobby: 0.2.17
       vite: 7.3.5(@types/node@25.9.3)(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
@@ -5694,13 +5694,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/mdx@6.0.3(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@astrojs/mdx@6.0.3(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
       '@astrojs/internal-helpers': 0.10.0
       '@astrojs/markdown-remark': 7.2.0
       '@mdx-js/mdx': 3.1.1
       acorn: 8.17.0
-      astro: 6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
+      astro: 6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
       es-module-lexer: 2.1.0
       estree-util-visit: 2.0.0
       hast-util-to-html: 9.0.5
@@ -5755,17 +5755,17 @@ snapshots:
       stream-replace-string: 2.0.0
       zod: 4.4.3
 
-  '@astrojs/starlight@0.40.0(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(typescript@6.0.3)':
+  '@astrojs/starlight@0.40.0(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(typescript@6.0.3)':
     dependencies:
       '@astrojs/markdown-remark': 7.2.0
-      '@astrojs/mdx': 6.0.3(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))
+      '@astrojs/mdx': 6.0.3(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))
       '@astrojs/sitemap': 3.7.3
       '@pagefind/default-ui': 1.5.2
       '@types/hast': 3.0.4
       '@types/js-yaml': 4.0.9
       '@types/mdast': 4.0.4
-      astro: 6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
-      astro-expressive-code: 0.43.1(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))
+      astro: 6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
+      astro-expressive-code: 0.43.1(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))
       bcp-47: 2.1.0
       hast-util-from-html: 2.0.3
       hast-util-select: 6.0.4
@@ -7626,14 +7626,14 @@ snapshots:
 
   astring@1.9.0: {}
 
-  astro-expressive-code@0.43.1(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)):
+  astro-expressive-code@0.43.1(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)):
     dependencies:
-      astro: 6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
+      astro: 6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
       rehype-expressive-code: 0.43.1
 
-  astro-mermaid@2.0.2(@mermaid-js/layout-elk@0.2.1(mermaid@11.15.0))(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(mermaid@11.15.0):
+  astro-mermaid@2.0.2(@mermaid-js/layout-elk@0.2.1(mermaid@11.15.0))(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(mermaid@11.15.0):
     dependencies:
-      astro: 6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
+      astro: 6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
       import-meta-resolve: 4.2.0
       mdast-util-to-string: 4.0.0
       mermaid: 11.15.0
@@ -7641,14 +7641,14 @@ snapshots:
     optionalDependencies:
       '@mermaid-js/layout-elk': 0.2.1(mermaid@11.15.0)
 
-  astro-og-canvas@0.11.1(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)):
+  astro-og-canvas@0.11.1(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)):
     dependencies:
-      astro: 6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
+      astro: 6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
       canvaskit-wasm: 0.41.1
       deterministic-object-hash: 2.0.2
       entities: 8.0.0
 
-  astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0):
+  astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0):
     dependencies:
       '@astrojs/compiler': 4.0.0
       '@astrojs/internal-helpers': 0.10.0
@@ -10488,9 +10488,9 @@ snapshots:
 
   stackback@0.0.2: {}
 
-  starlight-theme-flexoki@0.2.2(@astrojs/starlight@0.40.0(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(typescript@6.0.3)):
+  starlight-theme-flexoki@0.2.2(@astrojs/starlight@0.40.0(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(typescript@6.0.3)):
     dependencies:
-      '@astrojs/starlight': 0.40.0(astro@6.4.5(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(typescript@6.0.3)
+      '@astrojs/starlight': 0.40.0(astro@6.4.6(@types/node@25.9.3)(lightningcss@1.32.0)(rollup@4.62.0)(sass-embedded@1.100.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(typescript@6.0.3)
 
   std-env@4.1.0: {}
 
