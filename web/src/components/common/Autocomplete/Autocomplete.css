@@ -6,6 +6,9 @@
   &[data-empty] {
     align-items: center;
     justify-content: center;
+    padding: var(--space-m);
+    color: var(--text-color-placeholder);
+    font-size: var(--step--1);
     font-style: italic;
   }
 }
