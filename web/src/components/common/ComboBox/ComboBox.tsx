@@ -33,12 +33,14 @@ export function ComboBox<T extends object>({
   children,
   className,
   name,
+  items,
   ...props
 }: ComboBoxProps<T>) {
   return (
     <AriaComboBox
       className={clsx("namesake-combobox", className)}
       name={name}
+      items={items}
       {...props}
     >
       {({ isInvalid, isRequired }) => (
@@ -60,7 +62,7 @@ export function ComboBox<T extends object>({
           )}
           <FieldError>{errorMessage}</FieldError>
           <Popover hideArrow>
-            <ListBox>{children}</ListBox>
+            <ListBox items={items}>{children}</ListBox>
           </Popover>
         </>
       )}

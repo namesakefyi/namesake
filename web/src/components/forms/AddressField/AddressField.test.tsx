@@ -1,5 +1,5 @@
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { JURISDICTIONS } from "#constants/jurisdictions";
 import { renderWithFormProvider, screen } from "../test-utils";
 import { AddressField } from "./AddressField";
@@ -219,5 +219,67 @@ describe("AddressField", () => {
 
     const countyInput = screen.getByLabelText("County");
     expect(countyInput).toHaveAttribute("name", "residenceCounty");
+  });
+});
+
+describe("AddressField with Geoapify autocomplete", () => {
+  const SUGGESTION = {
+    place_id: "place-1",
+    formatted: "123 Main Street, Springfield, IL 62704, United States",
+    address_line1: "123 Main Street",
+    city: "Springfield",
+    state_code: "il",
+    county: "Sangamon County",
+    postcode: "62704",
+  };
+
+  beforeEach(() => {
+    vi.stubEnv("PUBLIC_GEOAPIFY_API_KEY", "test-key");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it("renders the street field as a combobox when enabled", () => {
+    renderWithFormProvider(<AddressField type="residence" />);
+
+    expect(
+      screen.getByRole("combobox", { name: "Street address" }),
+    ).toBeInTheDocument();
+  });
+
+  it("autofills sibling fields when a suggestion is selected", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() =>
+        Promise.resolve(
+          new Response(JSON.stringify({ results: [SUGGESTION] }), {
+            headers: { "content-type": "application/json" },
+          }),
+        ),
+      ),
+    );
+
+    renderWithFormProvider(<AddressField type="residence" includeCounty />);
+
+    const streetInput = screen.getByRole("combobox", {
+      name: "Street address",
+    });
+    await userEvent.type(streetInput, "123 Main");
+
+    const option = await screen.findByRole(
+      "option",
+      { name: /123 Main Street/ },
+      { timeout: 2000 },
+    );
+    await userEvent.click(option);
+
+    expect(streetInput).toHaveValue("123 Main Street");
+    expect(screen.getByLabelText("City")).toHaveValue("Springfield");
+    expect(screen.getByLabelText("ZIP")).toHaveValue("62704");
+    expect(screen.getByLabelText("County")).toHaveValue("Sangamon County");
   });
 });
