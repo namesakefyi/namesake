@@ -3,11 +3,13 @@ title: Writing Name Change Guides
 description: Clear, focused writing can help to demystify the name change process.  
 ---
 
-import { LinkCard } from '@astrojs/starlight/components';
+import { FileTree, LinkCard } from '@astrojs/starlight/components';
 
 Namesake organizes its information into [guides](https://namesake.fyi/guides). Each guide is written to direct someone, step-by-step, through the process of updating their name and/or gender marker with a specific institution.
 
-Each name change guide begins with [research](/guides/research) to help inform the writing.
+Before you write anything, conduct [research](/guides/research) to help understand the name change landscape.
+
+<LinkCard title="Conducting Research" description="Here's how to run a successful interview and learn more about the ins-and-outs of the name change process for a particular state." href="/guides/research" />
 
 ## Organization
 
@@ -19,7 +21,27 @@ Guides are created in `web/src/content/guides` using `.mdx` files which contain:
 
 ### Keep urls organized and easy to type
 
-State-specific guides should be nested under a two-letter directory containing the state abbreviation.
+State-specific guides should be nested under a two-letter directory containing the state abbreviation, such as `ma` or `ri`. Guides which are not specific to a state can be placed directly within `/guides`.
+
+<FileTree>
+
+- content
+  - guides
+    - ma Massachusetts
+      - birth-certificate.mdx
+      - court-order.mdx
+      - state-id.mdx
+    - ri Rhode Island
+      - birth-certificate.mdx
+      - court-order.mdx
+      - state-id.mdx
+    - passport.mdx
+    - social-security.mdx
+    - ...
+
+</FileTree>  
+
+Filenames should use `kebab-case` and be easy to type.
 
 :::tip[Prevent link rot]
 
