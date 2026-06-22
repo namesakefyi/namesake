@@ -25,19 +25,18 @@ State-specific guides should be nested under a two-letter directory containing t
 
 <FileTree>
 
-- content
-  - guides
-    - ma Massachusetts
-      - birth-certificate.mdx
-      - court-order.mdx
-      - state-id.mdx
-    - ri Rhode Island
-      - birth-certificate.mdx
-      - court-order.mdx
-      - state-id.mdx
-    - passport.mdx
-    - social-security.mdx
-    - ...
+- web/src/content/guides
+  - ma Massachusetts
+    - birth-certificate.mdx
+    - court-order.mdx
+    - state-id.mdx
+  - ri Rhode Island
+    - birth-certificate.mdx
+    - court-order.mdx
+    - state-id.mdx
+  - passport.mdx
+  - social-security.mdx
+  - ...
 
 </FileTree>  
 
@@ -63,10 +62,10 @@ export default defineConfig({
 
 ### Break the guide into key sections
 
-Aid scannability and help the user orient themselves in the process
+Short, descriptive section headers help the user orient themselves on the page and within the process. You should be able to scan the headings of any guide and understand the overall "shape" of the steps required.
 
-- **Aim for no more than 7 main sections.** The typical human can store about 7 discrete elements in working memory. Greater than that, and the guide can begin to feel overwhelming.
-- **Use level-two headings.** The page title is the first-level heading of the document, which means that the "top" headings within a guide should begin with `##`. Headings may be nested one level deeper at `###` when needed.
+- **Aim for fewer than 7 main sections.** The typical human can store about 7 items in working memory. Beyond that, things can begin to feel overwhelming. Keep it focused. If more content divisions are needed, consider using nested sub-sections.
+- **Use level-two headings.** The page title is the first-level heading of the document, which means that the "top" headings within a guide should begin with `##`. Headings may be nested 1-2 levels deeper (h3 `###` and h4 `####`) when needed.
 - **Keep headings short.** Headings display in the sidebar and should be kept short and descriptive.
 - **Use active voice.** Start headings with a verb, e.g. "_Get_ prepared", "_Fill_ out forms".
 - **Write from the perspective of the user.** (Think of it like completing the sentence: "In order to get through this step, I need to _____.")
