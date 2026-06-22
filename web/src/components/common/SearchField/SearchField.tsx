@@ -35,7 +35,7 @@ export function SearchField({
       {label && <Label>{label}</Label>}
       <Input size={size} placeholder={placeholder} />
       {isLoading && (
-        <ProgressCircle aria-label="Loading.." isIndeterminate={true} />
+        <ProgressCircle aria-label="Loading…" isIndeterminate={true} />
       )}
       <Button>
         <RiCloseLine size={20} />
