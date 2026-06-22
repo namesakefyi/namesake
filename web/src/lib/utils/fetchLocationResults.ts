@@ -24,14 +24,29 @@ export async function fetchLocations(
   return json.results;
 }
 
-export function createLocationLoader(): AsyncListLoadFunction<
-  GeoapifyResult,
-  string
-> {
+async function sleep(durationMs: number, signal?: AbortSignal) {
+  await new Promise((resolve, reject) => {
+    const timer = setTimeout(resolve, durationMs);
+    if (signal) {
+      signal.addEventListener("abort", () => {
+        clearTimeout(timer);
+        reject(signal.reason);
+      });
+    }
+  });
+}
+
+export function createLocationLoader(
+  debounceMs = 200,
+): AsyncListLoadFunction<GeoapifyResult, string> {
   let apiFailed = false;
   return async ({ signal, filterText }) => {
     if (!filterText || apiFailed) return { items: [] };
     try {
+      // Debounce the request, if the abort signal is sent
+      // by typing another key, the sleep aborts and we start over again
+      // with a new sleep call.
+      await sleep(debounceMs, signal);
       return { items: await fetchLocations(filterText, signal) };
     } catch (err) {
       if (signal.aborted) throw err; // cancellation, not a failure

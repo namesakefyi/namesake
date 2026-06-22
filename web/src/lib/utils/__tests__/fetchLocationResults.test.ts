@@ -66,14 +66,14 @@ describe("createLocationLoader", () => {
   it("returns items for a query", async () => {
     vi.mocked(global.fetch).mockResolvedValueOnce(okResponse([sampleResult]));
 
-    const load = createLocationLoader();
+    const load = createLocationLoader(0);
     const result = await runLoad(load, "123 main");
 
     expect(result.items).toEqual([sampleResult]);
   });
 
   it("short-circuits empty filter text without fetching", async () => {
-    const load = createLocationLoader();
+    const load = createLocationLoader(0);
     const result = await runLoad(load, "");
 
     expect(result.items).toEqual([]);
@@ -85,7 +85,7 @@ describe("createLocationLoader", () => {
       new Response(null, { status: 500 }),
     );
 
-    const load = createLocationLoader();
+    const load = createLocationLoader(0);
     const first = await runLoad(load, "fails");
     const second = await runLoad(load, "again");
 
@@ -96,26 +96,40 @@ describe("createLocationLoader", () => {
 
   it("does NOT latch when a request is aborted by a newer keystroke", async () => {
     const controller = new AbortController();
-    vi.mocked(global.fetch).mockImplementationOnce(
-      (_input, init) =>
-        new Promise((_resolve, reject) => {
-          init?.signal?.addEventListener("abort", () =>
-            reject(new DOMException("Aborted", "AbortError")),
-          );
-        }),
-    );
+    const load = createLocationLoader(0);
 
-    const load = createLocationLoader();
+    // Abort during the debounce window: the request never reaches the network,
+    // and the abort is re-thrown rather than swallowed as a failure.
     const pending = runLoad(load, "typing", controller.signal);
     controller.abort();
-
-    // The abort is re-thrown, not swallowed as a failure.
     await expect(pending).rejects.toThrow();
+    expect(global.fetch).not.toHaveBeenCalled();
 
     // Latch stayed off, so a later query still works.
     vi.mocked(global.fetch).mockResolvedValueOnce(okResponse([sampleResult]));
     const result = await runLoad(load, "works now");
 
     expect(result.items).toEqual([sampleResult]);
+  });
+
+  it("debounces for 200 ms before sending a request", async () => {
+    const controller = new AbortController();
+    vi.mocked(global.fetch).mockResolvedValueOnce(okResponse([sampleResult]));
+
+    const load = createLocationLoader();
+    const pending = runLoad(load, "typing", controller.signal);
+
+    // Abort after 50 ms
+    new Promise<void>((resolve) => {
+      setTimeout(() => {
+        controller.abort();
+        resolve();
+      }, 10);
+    });
+
+    // The abort is re-thrown, not swallowed as a failure.
+    await expect(pending).rejects.toThrow();
+
+    expect(global.fetch).not.toHaveBeenCalled();
   });
 });
