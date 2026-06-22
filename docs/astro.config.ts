@@ -46,9 +46,10 @@ export default defineConfig({
           label: "Guides",
           items: [
             "guides/setup",
+            "guides/research",
+            "guides/writing",
             "guides/new-pdfs",
             "guides/building-forms",
-            "guides/writing",
           ],
         },
         {
