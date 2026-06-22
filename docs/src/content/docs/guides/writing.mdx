@@ -98,7 +98,7 @@ Namesake uses guided [forms](https://namesake.fyi/forms) to help users fill out 
 ```mdx wrap
 # court-order.mdx
 
-import { FormContainer } from "../../../components/forms/FormContainer"
+import { FormContainer } from "#components/forms/FormContainer/index.ts"
 ```
 
 `Formcontainer` accepts a `slug` and should be set to `client:load` and `inline` for proper rendering within guides:
@@ -118,7 +118,7 @@ When an address is displayed, import the `MapEmbed` component:
 ```mdx wrap
 # ri/birth-certificate.mdx
 
-import MapEmbed from "../../../components/MapEmbed.astro"
+import MapEmbed from "#components/MapEmbed.astro"
 ```
 
 The component accepts a `name` string and `address` object.
