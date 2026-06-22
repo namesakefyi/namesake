@@ -24,10 +24,11 @@
 }
 
 input[autocomplete="off"]::-webkit-contacts-auto-fill-button {
-  visibility: hidden;
+  /* biome-ignore lint/complexity/noImportantStyles: required to hide the contact button in safari */
   display: none !important;
-  pointer-events: none;
-  height: 0;
+  visibility: hidden;
   width: 0;
+  height: 0;
   margin: 0;
+  pointer-events: none;
 }

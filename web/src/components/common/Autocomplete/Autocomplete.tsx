@@ -9,7 +9,7 @@ import { Menu } from "../Menu";
 import { SearchField } from "../SearchField";
 
 import "./Autocomplete.css";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export interface AutocompleteProps<T extends object>
   extends Omit<AriaAutocompleteProps, "children"> {
@@ -47,8 +47,14 @@ export function Autocomplete<T extends object>({
   const { contains } = useFilter({ sensitivity: "base" });
   const appliedFilter = isAsync ? undefined : contains;
 
-  const triggerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLInputElement>(null);
+  const [hasFocus, setFocus] = useState(false);
   const isEmpty = !items || isEmptyIterable(items);
+  const onBlur = () => {
+    if (document.activeElement !== triggerRef.current) {
+      setFocus(false);
+    }
+  };
 
   return (
     <AriaAutocomplete filter={appliedFilter} {...props}>
@@ -61,9 +67,16 @@ export function Autocomplete<T extends object>({
         placeholder={placeholder}
         name={name}
         autoComplete={autoComplete}
+        onFocus={() => setFocus(true)}
+        onBlur={onBlur}
         ref={triggerRef}
       />
-      <Popover isOpen={!isEmpty} triggerRef={triggerRef} isNonModal>
+      <Popover
+        trigger="MenuTrigger"
+        isOpen={!isEmpty && hasFocus}
+        triggerRef={triggerRef}
+        isNonModal
+      >
         <Menu
           items={items}
           onAction={onAction}

@@ -18,7 +18,7 @@ export interface SearchFieldProps extends AriaSearchFieldProps {
   placeholder?: string;
   isLoading?: boolean;
   size?: number;
-  ref?: React.Ref<HTMLDivElement>;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
 export function SearchField({
@@ -28,12 +28,13 @@ export function SearchField({
   placeholder,
   isLoading,
   size,
+  ref,
   ...props
 }: SearchFieldProps) {
   return (
     <AriaSearchField {...props}>
       {label && <Label>{label}</Label>}
-      <Input size={size} placeholder={placeholder} />
+      <Input ref={ref} size={size} placeholder={placeholder} />
       {isLoading && (
         <ProgressCircle aria-label="Loading…" isIndeterminate={true} />
       )}
