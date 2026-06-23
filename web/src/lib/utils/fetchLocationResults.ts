@@ -6,8 +6,8 @@ export interface GeoapifyResult {
   postcode: string;
   state_code: string;
   city: string;
-  street: any;
-  housenumber: any;
+  street: string;
+  housenumber: string;
   formatted: string;
   place_id: string;
 }
