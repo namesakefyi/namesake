@@ -26,7 +26,7 @@ describe("R-116 - MA - Affidavit to amend birth certificate", () => {
     nameChangeDecreeIncluded: true,
     paymentIncluded: false,
     guardianOneFullName: "Guardian first and last",
-    guardianTwoFullName: "", // Optional
+    // guardianTwoFullName // optional field. If empty, it should be undefined
   };
 
   it("maps all fields correctly to the PDF", async () => {
