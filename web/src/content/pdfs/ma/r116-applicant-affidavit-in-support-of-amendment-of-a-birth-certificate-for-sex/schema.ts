@@ -2,8 +2,8 @@
 import { PDFCheckBox, PDFRadioGroup, PDFTextField } from "@cantoo/pdf-lib";
 
 export const pdfSchema = {
-  currentLegalName: PDFTextField,
-  currentGender: PDFRadioGroup,
+  oldFullName: PDFTextField,
+  oldGender: PDFRadioGroup,
   dateOfBirth: PDFTextField,
   birthplaceCity: PDFTextField,
   parent1Name: PDFTextField,
@@ -11,19 +11,22 @@ export const pdfSchema = {
   newFullName: PDFTextField,
   newGender: PDFRadioGroup,
   mailingAddress: PDFTextField,
-  contactInformation: PDFTextField,
   phoneNumber: PDFTextField,
   email: PDFTextField,
   nameChangeDecreeIncluded: PDFCheckBox,
   paymentIncluded: PDFCheckBox,
-  "Name of Parent/Guardian1": PDFTextField,
-  "Name of Parent/Guardian2": PDFTextField,
-  parent1Signature: PDFTextField,
-  parent1SignatureDate: PDFTextField,
-  parent2Signature: PDFTextField,
-  parent2SignatureDate: PDFTextField,
-  signature: PDFTextField,
-  signatureDate: PDFTextField,
+  guardianOneFullName: PDFTextField,
+  guardianTwoFullName: PDFTextField,
 } as const;
 
 export type PdfFieldName = keyof typeof pdfSchema;
+
+export const pdfExcludedFields = [
+  "Applicants contact information",
+  "ParentGuardian1 SignatureDate",
+  "ParentGuardian2 SignatureDate",
+  "ParentGuardian2 SignatureX",
+  "Signature of ParentGuardian 1 X",
+  "Signature of Subject",
+  "SubjectSignatureDate",
+] as const;

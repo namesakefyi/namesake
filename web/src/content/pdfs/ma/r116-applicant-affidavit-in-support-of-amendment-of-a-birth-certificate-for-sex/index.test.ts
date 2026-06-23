@@ -1,19 +1,36 @@
-import { describe, it } from "vitest";
+import { describe, it, vi } from "vitest";
 import type { FormData } from "#constants/fields";
 import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
-import applicantAffidavitInSupportOfAmendmentOfABirthCertificateForSex from ".";
+import birthCertificateAmendment from ".";
 
-describe("Applicant Affidavit in Support of Amendment of a Birth Certificate for Sex", () => {
+describe("R-116 - MA - Affidavit to amend birth certificate", () => {
   const testData: Partial<FormData> = {
-    // TODO: map PDF fields to form data: Name First Middle Last, Sex Listed, Date of Birth, CityTown of Birth, Parent 1 Name, Parent 2 Name, Name First Middle Last to appear, Sex to appear, Mailing Address, Applicants contact information, Telephone optional, Email, A courtcertified copy of a legal name change decree if applicable and, A check or money order payable to the Commonwealth of Massachusetts as follows, Name of Parent/Guardian1, Name of Parent/Guardian2, Signature of ParentGuardian 1 X, ParentGuardian1 SignatureDate, ParentGuardian2 SignatureX, ParentGuardian2 SignatureDate, Signature of Subject, SubjectSignatureDate
+    oldFirstName: "Oirst",
+    oldMiddleName: "Oiddle",
+    oldLastName: "Oast",
+    oldGender: "Male",
+    dateOfBirth: "2010-01-31",
+    birthplaceCity: "Port Townsend",
+    parent1FullName: "First parent full name",
+    parent2FullName: "Second parent full name",
+    newFirstName: "Nirst",
+    newMiddleName: "Niddle",
+    newLastName: "Nast",
+    newGender: "X",
+    mailingStreetAddress: "123 Main St",
+    mailingCity: "Austin",
+    mailingState: "TX",
+    mailingZipCode: "78703",
+    phoneNumber: "+12143334444",
+    email: "hello@namesake.fyi",
+    nameChangeDecreeIncluded: true,
+    paymentIncluded: false,
+    guardianOneFullName: "Guardian first and last",
+    // guardianTwoFullName // optional field. If empty, it should be undefined
   };
 
   it("maps all fields correctly to the PDF", async () => {
-    await expectPdfFieldsMatch(
-      applicantAffidavitInSupportOfAmendmentOfABirthCertificateForSex,
-      testData,
-    );
+    vi.setSystemTime(new Date(2025, 1, 31)); // The applicant is under 18 and therefore needs a guardian's consent
+    await expectPdfFieldsMatch(birthCertificateAmendment, testData);
   });
-
-  // Test any derived fields below
 });
