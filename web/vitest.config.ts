@@ -3,7 +3,6 @@ import {
   coverageConfigDefaults,
   defineConfig,
 } from "vitest/config";
-import { shimsPlugin } from "./vitest.shims";
 
 export default defineConfig({
   test: {
@@ -40,5 +39,4 @@ export default defineConfig({
       },
     },
   },
-  plugins: [shimsPlugin()],
 });
