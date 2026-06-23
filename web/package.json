@@ -12,9 +12,9 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "wrangler types && astro check && astro build",
+    "build": "wrangler types --check && astro check && astro build",
     "build:only": "astro build",
-    "preview": "wrangler types && astro preview",
+    "preview": "astro preview",
     "astro": "astro",
     "test": "vitest",
     "test:once": "vitest run",
