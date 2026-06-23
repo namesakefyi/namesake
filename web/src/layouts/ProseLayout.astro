@@ -59,7 +59,7 @@ const headerDescription =
       breadcrumbs={breadcrumbs}
     />
     <slot name="after-header" />
-    <section class="toc">
+    <section class="toc" data-no-print>
       <slot name="toc" />
     </section>
     <section itemprop="articleBody" class="prose">
@@ -245,30 +245,18 @@ const headerDescription =
     }
 
     details:not(:where(.not-content *)) {
-      --details-transition-duration: 0.2s;
-
       padding-inline-start: var(--space-2xl);
-      transition-property: margin-block-start;
-      transition-duration: var(--details-transition-duration);
-      transition-timing-function: ease;
 
-      @media (prefers-reduced-motion: no-preference) {
-        interpolate-size: allow-keywords;
-      }
-
-      &::details-content {
-        block-size: 0;
-        opacity: 0;
-        overflow-y: clip;
-        transition-property: content-visibility, block-size, opacity;
-        transition-duration: var(--details-transition-duration);
-        transition-timing-function: ease;
-        transition-behavior: allow-discrete;
-      }
-
-      &[open]::details-content {
-        block-size: auto;
-        opacity: 1;
+      summary::before {
+        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M18 12L9 17.196L9 6.804Z'%3E%3C/path%3E%3C/svg%3E");
+        scale: 0.9;
+        rotate: 0deg;
+        transition: rotate 0.3s ease-in-out;
+        position: absolute;
+        left: calc(var(--space-2xl) * -1);
+        top: -0.05em;
+        width: 1lh;
+        height: 1lh;
       }
 
       &[open] summary::before {
@@ -291,20 +279,6 @@ const headerDescription =
       &:-webkit-details-marker,
       &::marker {
         display: none;
-      }
-
-      &::before {
-        content: "";
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M13.1717 12.0007L8.22192 7.05093L9.63614 5.63672L16.0001 12.0007L9.63614 18.3646L8.22192 16.9504L13.1717 12.0007Z'%3E%3C/path%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: 75%;
-        transition: rotate 0.15s ease-out;
-        position: absolute;
-        left: calc(var(--space-2xl) * -1);
-        top: -0.05em;
-        width: 1lh;
-        height: 1lh;
       }
     }
   }
