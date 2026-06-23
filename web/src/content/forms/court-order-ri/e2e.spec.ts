@@ -92,7 +92,7 @@ test("Rhode Island Court Order", async ({ page }, testInfo) => {
       page.getByRole("heading", { name: "What is your residential address?" }),
     ).toBeVisible();
     await page
-      .getByRole("textbox", { name: "Street address" })
+      .getByRole("searchbox", { name: "Street address" })
       .fill("100 Main St");
     await page.getByRole("textbox", { name: "City" }).fill("Providence");
 

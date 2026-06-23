@@ -14,3 +14,7 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+.namesake-address-field .react-aria-SearchField {
+  width: fit-content;
+}

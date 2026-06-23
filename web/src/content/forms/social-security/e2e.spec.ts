@@ -288,7 +288,7 @@ test("Social Security", async ({ page }, testInfo) => {
       page.getByRole("heading", { name: "What is your mailing address?" }),
     ).toBeVisible();
     await page
-      .getByRole("textbox", { name: "Street address" })
+      .getByRole("searchbox", { name: "Street address" })
       .fill("200 Oak St");
     await page.getByRole("textbox", { name: "City" }).fill("Boston");
 
