@@ -49,3 +49,6 @@ stats.html
 
 # sanity generated schema
 schema.json
+
+# lighthouse
+.unlighthouse
