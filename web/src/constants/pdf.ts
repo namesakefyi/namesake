@@ -11,6 +11,7 @@ export const PDF_IDS = [
   "ss5-application-for-social-security-card",
   "pc8.1-change-of-name",
   "background-check-authorization-of-release",
+  "r116-applicant-affidavit-in-support-of-amendment-of-a-birth-certificate-for-sex",
 ] as const;
 
 export type PDFId = (typeof PDF_IDS)[number];
