@@ -16,7 +16,7 @@ describe("R-116 - MA - Affidavit to amend birth certificate", () => {
     newFirstName: "Nirst",
     newMiddleName: "Niddle",
     newLastName: "Nast",
-    newGender: "x",
+    newGender: "X",
     mailingStreetAddress: "123 Main St",
     mailingCity: "Austin",
     mailingState: "TX",
