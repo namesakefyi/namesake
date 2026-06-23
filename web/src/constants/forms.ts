@@ -9,6 +9,7 @@ export const FORM_SLUGS = [
   "court-order-ma-minor",
   "court-order-ri",
   "social-security",
+  "birth-certificate-affidavit-ma",
 ] as const;
 
 export type FormSlug = (typeof FORM_SLUGS)[number];

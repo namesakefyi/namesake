@@ -652,6 +652,39 @@ export const FIELD_DEFS = [
     label: "Substitution details (Section 3)",
     type: "string",
   },
+  {
+    name: "oldGender",
+    label: "Current documented gender",
+    type: "string",
+  },
+  {
+    name: "newGender",
+    label: "Desired gender",
+    type: "string",
+  },
+  {
+    // Specific to R-116 in MA
+    name: "nameChangeDecreeIncluded",
+    label:
+      "Applicant will include court-certified copy of legal name-change decree",
+    type: "boolean",
+  },
+  {
+    // Specific to R-116 in MA
+    name: "paymentIncluded",
+    label: "Applicant will include all fees with the application",
+    type: "boolean",
+  },
+  {
+    name: "guardianOneFullName",
+    label: "Guardian/parent 1's full name",
+    type: "string",
+  },
+  {
+    name: "guardianTwoFullName",
+    label: "Guardian/parent 2's full name",
+    type: "string",
+  },
 ] as const;
 
 export type FieldName = (typeof FIELD_DEFS)[number]["name"];
