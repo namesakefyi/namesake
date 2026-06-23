@@ -4,15 +4,13 @@ packages:
   - "pdf-manager"
 
 allowBuilds:
-  esbuild: true
+  esbuild: false
   "@parcel/watcher": false
   sharp: true
   simple-git-hooks: true
   workerd: true
 
+minimumReleaseAge: 1440
 minimumReleaseAgeExclude:
-  - '@astrojs/cloudflare@14.0.0'
-  - '@astrojs/markdown-satteri@0.3.1'
-  - '@astrojs/mdx@7.0.0'
-  - '@astrojs/react@6.0.0'
-  - astro@7.0.0
+  - "@astrojs/*"
+  - astro
