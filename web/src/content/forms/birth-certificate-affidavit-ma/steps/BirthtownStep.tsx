@@ -9,7 +9,7 @@ export const birthTownStep = defineStep({
   component: ({ stepConfig }) => {
     return (
       <FormStep stepConfig={stepConfig}>
-        <ShortTextField name="birthplaceCity" label="City" />
+        <ShortTextField name="birthplaceCity" label="City/town" />
       </FormStep>
     );
   },

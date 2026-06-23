@@ -16,15 +16,15 @@ export const newGenderStep = defineStep({
         options={[
           {
             label: "Female",
-            value: "female",
+            value: "Female",
           },
           {
             label: "Male",
-            value: "male",
+            value: "Male",
           },
           {
             label: "X",
-            value: "x",
+            value: "X",
           },
         ]}
       />

@@ -5,6 +5,8 @@ import { defineStep } from "#lib/forms/defineStep";
 export const supportingDocumentsStep = defineStep({
   id: "supporting-documents",
   title: "Are you submitting the following items?",
+  description:
+    "In addition to the affidavit, you have the option to submit the documents and payments below.",
   fields: ["nameChangeDecreeIncluded", "paymentIncluded"],
   component: ({ stepConfig }) => (
     <FormStep stepConfig={stepConfig}>
@@ -14,7 +16,7 @@ export const supportingDocumentsStep = defineStep({
       />
       <CheckboxField
         name="paymentIncluded"
-        label="A check or money order for all fees"
+        label="A check or money order for all the fees"
       />
     </FormStep>
   ),

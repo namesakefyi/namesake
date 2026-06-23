@@ -4,7 +4,7 @@ import { defineStep } from "#lib/forms/defineStep";
 
 export const parentNamesStep = defineStep({
   id: "parent-one",
-  title: "Parent names",
+  title: "What are your parents' names?",
   description: "Provide the full names of your parents",
   fields: ["parent1FullName", "parent2FullName"],
   component: ({ stepConfig }) => (

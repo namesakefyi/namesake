@@ -5,7 +5,8 @@ import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
 
 export const guardianAuthorizationStep = defineStep({
   id: "guardian-authorization-step",
-  title:
+  title: "Parent or guardian authorization",
+  description:
     "At least one parent or guardian must authorize this change if you are under 18 years old.",
   fields: ["guardianOneFullName", "guardianTwoFullName"],
   when(data) {
@@ -16,13 +17,13 @@ export const guardianAuthorizationStep = defineStep({
     return (
       <FormStep stepConfig={stepConfig}>
         <ShortTextField
-          label="Parent/guardian 1's full name"
+          label="Parent or guardian 1's full name"
           name="guardianOneFullName"
           size={24}
           isRequired
         />
         <ShortTextField
-          label="Parent/guardian 2's full name"
+          label="Parent or guardian 2's full name (optional)"
           name="guardianTwoFullName"
           size={24}
         />

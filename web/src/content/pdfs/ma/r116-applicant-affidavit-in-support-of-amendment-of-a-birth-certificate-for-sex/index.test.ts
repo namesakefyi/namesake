@@ -8,7 +8,7 @@ describe("R-116 - MA - Affidavit to amend birth certificate", () => {
     oldFirstName: "Oirst",
     oldMiddleName: "Oiddle",
     oldLastName: "Oast",
-    oldGender: "male",
+    oldGender: "Male",
     dateOfBirth: "2010-01-31",
     birthplaceCity: "Port Townsend",
     parent1FullName: "First parent full name",
@@ -33,6 +33,4 @@ describe("R-116 - MA - Affidavit to amend birth certificate", () => {
     vi.setSystemTime(new Date(2025, 5, 15)); // Jun 15, 2020 - the application is 15 and thus needs a guardian's consent
     await expectPdfFieldsMatch(birthCertificateAmendment, testData);
   });
-
-  // Test any derived fields below
 });

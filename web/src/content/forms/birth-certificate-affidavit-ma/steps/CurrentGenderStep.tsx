@@ -5,26 +5,26 @@ import { defineStep } from "#lib/forms/defineStep";
 
 export const currentGenderStep = defineStep({
   id: "current-gender",
-  title: "What is your current gender marker?",
-  fields: ["currentGender"],
+  title: "Which gender marker appears on your birth certificate?",
+  fields: ["oldGender"],
   component: ({ stepConfig }) => (
     <FormStep stepConfig={stepConfig}>
       <RadioGroupField
-        name="currentGender"
+        name="oldGender"
         labelHidden
-        label="Sex"
+        label="Current gender marker"
         options={[
           {
             label: "Female",
-            value: "female",
+            value: "Female",
           },
           {
             label: "Male",
-            value: "male",
+            value: "Male",
           },
           {
             label: "X",
-            value: "x",
+            value: "X",
           },
         ]}
       />
