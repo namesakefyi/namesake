@@ -3,8 +3,8 @@ import { RadioGroupField } from "#components/forms/RadioGroupField";
 
 import { defineStep } from "#lib/forms/defineStep";
 
-export const currentGenderStep = defineStep({
-  id: "current-gender",
+export const birthGenderStep = defineStep({
+  id: "birth-gender",
   title: "Which gender marker appears on your birth certificate?",
   fields: ["oldGender"],
   component: ({ stepConfig }) => (

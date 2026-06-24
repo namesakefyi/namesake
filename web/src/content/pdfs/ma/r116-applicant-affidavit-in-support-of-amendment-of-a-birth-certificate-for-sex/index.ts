@@ -1,6 +1,6 @@
 import { definePdf } from "#lib/pdfs/definePdf";
-import { joinNames } from "#lib/utils/joinNames.ts";
-import { joinParts } from "#lib/utils/joinParts.ts";
+import { joinNames } from "#lib/utils/joinNames";
+import { joinParts } from "#lib/utils/joinParts";
 import pdf from "./applicant-affidavit-in-support-of-amendment-of-a-birth-certificate-for-sex.pdf";
 import type { PdfFieldName } from "./schema";
 

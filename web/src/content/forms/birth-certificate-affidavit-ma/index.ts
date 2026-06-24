@@ -12,9 +12,9 @@ import { parentNamesStep } from "./steps/ParentNamesStep";
 import { supportingDocumentsStep } from "./steps/SupportingDocumentsSteps";
 
 export default defineForm({
-  title: "Birth certificate update: Massachusetts",
+  title: "Birth Certificate: Massachusetts",
   description:
-    "If you live in Massachusetts and want to update your name or gender, this is the place to start.",
+    "Use this form to update your legal name and gender marker on your Massachusetts birth certificate.",
   state: "ma",
   category: "birth-certificate",
   steps: [
@@ -40,11 +40,11 @@ export default defineForm({
         "r116-applicant-affidavit-in-support-of-amendment-of-a-birth-certificate-for-sex",
     },
   ],
-  downloadTitle: "Massachusetts birth certificate affidavit",
+  downloadTitle: "Massachusetts Birth Certificate Affidavit",
   instructions: [
     "Review all documents carefully.",
     "For a name change, you must first update your name with the Social Security Administration, then you must submit a legal name change order with the application.",
     "Provide a court-certified copy of your legal name change decree, if applicable",
-    "Sign and date the required fields!",
+    "Sign and date the required fields.",
   ],
 });

@@ -30,7 +30,7 @@ describe("R-116 - MA - Affidavit to amend birth certificate", () => {
   };
 
   it("maps all fields correctly to the PDF", async () => {
-    vi.setSystemTime(new Date(2025, 5, 15)); // Jun 15, 2020 - the application is 15 and thus needs a guardian's consent
+    vi.setSystemTime(new Date(2025, 1, 31)); // The applicant is under 18 and therefore needs a guardian's consent
     await expectPdfFieldsMatch(birthCertificateAmendment, testData);
   });
 });
