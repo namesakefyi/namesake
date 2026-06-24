@@ -2,7 +2,8 @@
  * Given a string, returns a lowercase, kebab-case slug.
  *
  * @example
- * slugify("What's your legal name?") -> "whats-your-legal-name"
+ * slugify("What's your legal name?")
+ * // "whats-your-legal-name"
  */
 export function slugify(input: string) {
   return input

@@ -5,7 +5,12 @@ import { formatCurrency } from "./formatCurrency";
 /**
  * Formats a field value for display in the review table based on its type
  * from FIELD_DEFS.
- * @returns The formatted value, or undefined if the field has no response
+ *
+ * @returns The formatted value, or undefined if the field has no response.
+ *
+ * @example
+ * formatFieldValue("dateOfBirth", "1990-06-15")
+ * // "June 15, 1990"
  */
 export function formatFieldValue(
   fieldName: FieldName,
@@ -87,7 +92,11 @@ function formatDate(date: string): string | undefined {
 }
 
 /**
- * Gets the label for a field from FIELD_DEFS
+ * Gets the label for a field from FIELD_DEFS.
+ *
+ * @example
+ * getFieldLabel("dateOfBirth")
+ * // "Date of birth"
  */
 export function getFieldLabel(fieldName: FieldName): string {
   const fieldDef = FIELD_DEFS.find((def) => def.name === fieldName);

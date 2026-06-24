@@ -1,8 +1,10 @@
 /**
  * Given a page title, optional delimiter, and site title,
  * return the full string to display in the page title.
-
- * @example formatPageTitle("Blog") -> "Blog · Namesake"
+ *
+ * @example
+ * formatPageTitle("Blog")
+ * // "Blog · Namesake"
  */
 export function formatPageTitle(
   title: string,

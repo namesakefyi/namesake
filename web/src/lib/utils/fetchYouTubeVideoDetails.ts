@@ -4,6 +4,15 @@ export interface YouTubeOEmbedResponse {
   thumbnail_url: string;
 }
 
+/**
+ * Fetches a YouTube video's title, author, and thumbnail via the oEmbed API.
+ *
+ * @returns The video details, or null if the request fails.
+ *
+ * @example
+ * await fetchYouTubeVideoDetails("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+ * // { title: "...", author_name: "...", thumbnail_url: "..." }
+ */
 export async function fetchYouTubeVideoDetails(
   url: string,
 ): Promise<YouTubeOEmbedResponse | null> {
