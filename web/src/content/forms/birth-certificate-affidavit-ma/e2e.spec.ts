@@ -29,11 +29,11 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
   await test.step("Title", async () => {
     await page.goto("/forms/birth-certificate-affidavit-ma");
 
-    expect(page).toHaveTitle(/Birth certificate update: Massachusetts/);
+    expect(page).toHaveTitle(/Birth Certificate: Massachusetts/);
 
     await expect(
       page.getByRole("heading", {
-        name: "Birth certificate update: Massachusetts",
+        name: "Birth Certificate: Massachusetts",
       }),
     ).toBeVisible();
 
@@ -50,7 +50,7 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
 
     await expect(
       page.getByText(
-        "If you live in Massachusetts and want to update your name or gender, this is the place to start.",
+        "Use this form to update your legal name and gender marker on your Massachusetts birth certificate.",
       ),
     ).toBeVisible();
     await expect(
@@ -117,10 +117,10 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
     ).toBeVisible();
 
     await page
-      .getByRole("textbox", { name: "Parent 1’s full name" })
+      .getByRole("textbox", { name: "Parent 1 full name" })
       .fill("Favorite parent");
     await page
-      .getByRole("textbox", { name: "Parent 2’s full name" })
+      .getByRole("textbox", { name: "Parent 2 full name" })
       .fill("Second favorite parent");
 
     await page.getByRole("button", { name: "Continue" }).click();
@@ -289,7 +289,7 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
     const download = await downloadPromise;
     expect(download).toBeDefined();
     expect(download.suggestedFilename()).toBe(
-      "Massachusetts birth certificate affidavit.pdf",
+      "Massachusetts Birth Certificate Affidavit.pdf",
     );
 
     await expect(
