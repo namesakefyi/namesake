@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.0
         with:
           persist-credentials: false
 
@@ -58,7 +58,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.0
         with:
           ref: main
           persist-credentials: false
@@ -97,7 +97,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.0
         with:
           persist-credentials: false
 
@@ -117,7 +117,7 @@ jobs:
 
       - name: Report coverage and comparison
         if: always() && hashFiles('coverage-main/coverage-summary.json') != ''
-        uses: davelosert/vitest-coverage-report-action@v2.12.0
+        uses: davelosert/vitest-coverage-report-action@v2.12.1
         with:
           json-summary-compare-path: coverage-main/coverage-summary.json
 
@@ -125,4 +125,4 @@ jobs:
         # if coverage from main is not available
       - name: Report coverage
         if: always() && hashFiles('coverage-main/coverage-summary.json') == ''
-        uses: davelosert/vitest-coverage-report-action@v2.12.0
+        uses: davelosert/vitest-coverage-report-action@v2.12.1
