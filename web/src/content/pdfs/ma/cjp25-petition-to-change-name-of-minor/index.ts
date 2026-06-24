@@ -140,7 +140,7 @@ export default definePdf<PdfFieldName>({
     coGuardianEmail: data.coGuardianEmail,
 
     // 8. Child under 12?
-    isChildUnder12: (deriveCurrentAge(data.dateOfBirth) ?? 0) < 12,
+    isChildUnder12: deriveCurrentAge(data.dateOfBirth) < 12,
 
     // 9. Legal parent 1 consents?
     isParent1AssentingTrue: data.isParent1Assenting,

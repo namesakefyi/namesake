@@ -2,14 +2,14 @@
  * Derives current age from a date-of-birth string (YYYY-MM-DD).
  * Treats the input as a calendar date with no timezone.
  */
-export const deriveCurrentAge = (dateOfBirth?: string): number | undefined => {
+export const deriveCurrentAge = (dateOfBirth?: string): number => {
   if (typeof dateOfBirth !== "string" || !dateOfBirth) {
-    return undefined;
+    return 0;
   }
 
   const birth = new Date(dateOfBirth);
   if (Number.isNaN(birth.getTime())) {
-    return undefined;
+    return 0;
   }
 
   const today = new Date();
