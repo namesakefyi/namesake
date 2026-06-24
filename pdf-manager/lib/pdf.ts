@@ -59,7 +59,23 @@ export function fieldReadingOrder(
 
 export interface PdfFieldInfo {
   name: string;
-  type: "text" | "checkbox";
+  type: "text" | "checkbox" | "radio";
+}
+
+/**
+ * Maps a pdf-lib form field to the simplified type used by the PDF Manager UI.
+ * Radio groups and checkboxes are detected explicitly; everything else (text
+ * fields and any field class we don't render specially) falls back to "text".
+ */
+function fieldType(field: PDFField): PdfFieldInfo["type"] {
+  switch (field.constructor.name) {
+    case "PDFCheckBox":
+      return "checkbox";
+    case "PDFRadioGroup":
+      return "radio";
+    default:
+      return "text";
+  }
 }
 
 export async function extractFields(pdfPath: string): Promise<PdfFieldInfo[]> {
@@ -75,7 +91,7 @@ export async function extractFieldsFromBytes(
   const sorted = fieldReadingOrder(form.getFields(), doc.getPages());
   return sorted.map((f) => ({
     name: f.getName(),
-    type: f.constructor.name === "PDFCheckBox" ? "checkbox" : "text",
+    type: fieldType(f),
   }));
 }
 
