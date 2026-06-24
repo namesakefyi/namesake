@@ -1,5 +1,5 @@
 /**
- * Given a date-of-birth string (YYYY-MM-DD), derive the current age.
+ * Given a date-of-birth string (YYYY-MM-DD), return the current age.
  * Treats the input as a calendar date with no timezone.
  *
  * @example

@@ -2,8 +2,8 @@ import { COUNTRIES } from "#constants/countries";
 import { JURISDICTIONS } from "#constants/jurisdictions";
 
 /**
- * Given a birthplace country and/or state, returns the country name if born
- * outside the US, or the state name otherwise.
+ * Given a birthplace country and/or state, return the country name
+ * if born outside the US, or the state name otherwise.
  *
  * @example
  * formatBirthplaceCountryOrState("MX")

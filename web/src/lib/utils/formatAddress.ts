@@ -6,7 +6,7 @@ type Address = {
 };
 
 /**
- * Given the parts of a mailing address, joins the ones that are present.
+ * Given the parts of a mailing address, return the present ones joined together.
  *
  * @example
  * formatAddress({ street: "123 Main St", city: "Boston", state: "MA", zip: "02108" })

@@ -3,10 +3,9 @@ import { FIELD_DEFS, type FieldName } from "#constants/fields";
 import { formatCurrency } from "./formatCurrency";
 
 /**
- * Formats a field value for display in the review table based on its type
- * from FIELD_DEFS.
- *
- * @returns The formatted value, or undefined if the field has no response.
+ * Given a field name and value, return the formatted value for display in
+ * the review table based on its type from FIELD_DEFS, or undefined if the
+ * field has no response.
  *
  * @example
  * formatFieldValue("dateOfBirth", "1990-06-15")
@@ -92,7 +91,7 @@ function formatDate(date: string): string | undefined {
 }
 
 /**
- * Gets the label for a field from FIELD_DEFS.
+ * Given a field name, return its label from FIELD_DEFS.
  *
  * @example
  * getFieldLabel("dateOfBirth")

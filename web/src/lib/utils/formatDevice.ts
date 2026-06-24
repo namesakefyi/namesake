@@ -1,10 +1,10 @@
 import type { IDevice } from "ua-parser-js";
 
 /**
- * @param device
- * Use with `UAParser(navigator.userAgent).device` from "ua-parser-js".
+ * Given a device from `UAParser()`, return the device name
+ * or "this device" if unknown.
  *
- * @returns The device name, or "this device" if unknown.
+ * Use with `UAParser(navigator.userAgent).device` from "ua-parser-js".
  *
  * @example
  * formatDevice({ type: "mobile", vendor: "Apple", model: "iPhone" })

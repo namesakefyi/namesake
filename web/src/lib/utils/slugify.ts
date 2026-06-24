@@ -1,5 +1,5 @@
 /**
- * Given a string, returns a lowercase, kebab-case slug.
+ * Given a string, return a lowercase, kebab-case slug.
  *
  * @example
  * slugify("What's your legal name?")

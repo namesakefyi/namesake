@@ -9,9 +9,13 @@ export interface PovertyGuideline {
 }
 
 /**
- * Fetches the federal poverty guideline for a given year, state, and
- * household size from the HHS ASPE API. Household size is clamped to 1–8
- * per API constraints. Returns null on any failure.
+ * Given a year, state, and household size, return the federal poverty
+ * guideline from the HHS ASPE API, or null on failure. Household size is
+ * clamped to 1–8 per API constraints.
+ *
+ * @example
+ * await fetchPovertyGuideline(2025, 3, "ma")
+ * // { year: 2025, state: "ma", householdSize: 3, povertyThreshold: ... }
  */
 export async function fetchPovertyGuideline(
   year: number,

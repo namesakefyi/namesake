@@ -10,8 +10,12 @@ interface RateLimitOptions {
 }
 
 /**
- * Returns true if the given IP has exceeded the submission rate limit
- * for the specified table within the time window.
+ * Given an IP and D1 table, return whether the submission rate limit has
+ * been exceeded for that IP within the time window.
+ *
+ * @example
+ * await isRateLimited({ db, ip: "203.0.113.1", table: "form_submissions" })
+ * // true
  */
 export async function isRateLimited({
   db,

@@ -1,6 +1,6 @@
 /**
- * Converts straight quotes, double hyphens, and ellipses to their
- * typographic equivalents.
+ * Given a string, return it with straight quotes, double hyphens, and
+ * ellipses converted to their typographic equivalents.
  *
  * @example
  * smartquotes(`"What's up?" -- she said...`)

@@ -1,5 +1,5 @@
 /**
- * @returns The URL without protocol, "www", or trailing slash.
+ * Given a URL, return the URL without protocol, "www", or trailing slash.
  *
  * @example
  * formatCleanUrl("https://www.masstpc.org/")

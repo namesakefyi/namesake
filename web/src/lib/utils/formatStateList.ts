@@ -1,5 +1,5 @@
 /**
- * Given a list of state names, joins them into a grammatical English list.
+ * Given a list of state names, return them joined into a grammatical English list.
  *
  * @example
  * formatStateList(["Massachusetts", "New York", "Vermont"])

@@ -4,7 +4,7 @@ import { formatCurrency } from "./formatCurrency";
 export type { FormCost as Cost };
 
 /**
- * Given a form's costs, returns the total as a string, accounting for
+ * Given a form's costs, return the total as a string, accounting for
  * optional costs and free forms.
  *
  * @example

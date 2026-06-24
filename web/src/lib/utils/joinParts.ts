@@ -1,11 +1,10 @@
 /**
- * Joins non-empty string parts with a comma, or returns undefined if none are present.
+ * Given string parts, return the non-empty ones joined with a comma,
+ * or undefined if none are present.
  *
  * @example
  * joinParts("Boston", "MA")
  * // "Boston, MA"
- * joinParts(undefined, undefined)
- * // undefined
  */
 export const joinParts = (
   ...parts: (string | undefined)[]

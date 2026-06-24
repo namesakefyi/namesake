@@ -10,6 +10,18 @@ type OgImageOptions = {
   origin: string;
 };
 
+/**
+ * Given a subhead, title, and color, return a rendered PNG Open Graph
+ * image response for social sharing previews.
+ *
+ * @example
+ * await createOgImageResponse({
+ *   subhead: "Massachusetts",
+ *   title: "Plan your name change",
+ *   origin: "https://namesake.fyi",
+ * })
+ * // ImageResponse (PNG, 1200x630)
+ */
 export async function createOgImageResponse({
   subhead,
   title,

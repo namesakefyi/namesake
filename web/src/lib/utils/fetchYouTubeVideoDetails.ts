@@ -5,9 +5,8 @@ export interface YouTubeOEmbedResponse {
 }
 
 /**
- * Fetches a YouTube video's title, author, and thumbnail via the oEmbed API.
- *
- * @returns The video details, or null if the request fails.
+ * Given a YouTube video URL, return its title, author, and thumbnail via
+ * the oEmbed API, or null if the request fails.
  *
  * @example
  * await fetchYouTubeVideoDetails("https://www.youtube.com/watch?v=dQw4w9WgXcQ")

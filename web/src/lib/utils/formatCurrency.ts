@@ -1,5 +1,6 @@
 /**
- * @returns The U.S. dollar amount, with cents if cost includes a fractional amount.
+ * Given a cost, return the U.S. dollar amount,
+ * with cents if cost includes a fractional amount.
  *
  * @example
  * formatCurrency(50)
