@@ -1,5 +1,6 @@
 import { parseDate } from "@internationalized/date";
 import { FIELD_DEFS, type FieldName } from "#constants/fields";
+import { formatCurrency } from "./formatCurrency";
 
 /**
  * Formats a field value for display in the review table based on its type
@@ -62,16 +63,6 @@ export function formatFieldValue(
 
       return String(value);
   }
-}
-
-function formatCurrency(value: string): string | undefined {
-  const num = Number(value);
-  if (Number.isNaN(num)) return String(value);
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(num);
 }
 
 function formatPhoneNumber(phone: string): string | undefined {
