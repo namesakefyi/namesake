@@ -6,7 +6,8 @@ import { defineStep } from "#lib/forms/defineStep";
 export const newGenderStep = defineStep({
   id: "new-gender",
   title: "What is your new gender marker?",
-  description: "This is the gender marker that will display on your amended birth certificate."
+  description:
+    "This is the gender marker that will display on your amended birth certificate.",
   fields: ["newGender"],
   component: ({ stepConfig }) => (
     <FormStep stepConfig={stepConfig}>

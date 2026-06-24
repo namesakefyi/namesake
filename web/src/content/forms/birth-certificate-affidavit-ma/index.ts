@@ -1,9 +1,9 @@
 import { defineForm } from "#lib/forms/defineForm";
 import { mailingAddressStep } from "./steps/AddressStep";
+import { birthGenderStep } from "./steps/BirthGenderStep";
+import { birthNameStep } from "./steps/BirthNameStep";
 import { birthTownStep } from "./steps/BirthtownStep";
 import { contactInfoStep } from "./steps/ContactInfoStep";
-import { currentGenderStep } from "./steps/CurrentGenderStep";
-import { currentNameStep } from "./steps/CurrentNameStep";
 import { dateOfBirthStep } from "./steps/DateOfBirthStep";
 import { guardianAuthorizationStep } from "./steps/GuardianAuthorizationStep";
 import { newGenderStep } from "./steps/NewGenderStep";
@@ -19,8 +19,8 @@ export default defineForm({
   category: "birth-certificate",
   steps: [
     // Section: Information on existing birth certificate
-    currentNameStep,
-    currentGenderStep,
+    birthNameStep,
+    birthGenderStep,
     dateOfBirthStep,
     birthTownStep,
     parentNamesStep,
