@@ -10,7 +10,4 @@ allowBuilds:
   simple-git-hooks: true
   workerd: true
 
-minimumReleaseAge: 1440
-minimumReleaseAgeExclude:
-  - "@astrojs/*"
-  - astro
+minimumReleaseAge: 0
