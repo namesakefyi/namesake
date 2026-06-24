@@ -12,6 +12,14 @@ export interface GeoapifyResult {
   place_id: string;
 }
 
+/**
+ * Given partial address text, return matching location results from the
+ * Geoapify-backed location API.
+ *
+ * @example
+ * await fetchLocations("123 Main St, Boston")
+ * // [{ formatted: "123 Main St, Boston, MA 02108, United States", ... }]
+ */
 export async function fetchLocations(
   text: string,
   signal?: AbortSignal,
@@ -36,6 +44,14 @@ async function sleep(durationMs: number, signal?: AbortSignal) {
   });
 }
 
+/**
+ * Given a debounce delay, return an async list loader for `<ComboBox>`-style
+ * location fields, debouncing requests and giving up on the API after one failure.
+ *
+ * @example
+ * createLocationLoader(200)
+ * // ({ signal, filterText }) => Promise<{ items: GeoapifyResult[] }>
+ */
 export function createLocationLoader(
   debounceMs = 200,
 ): AsyncListLoadFunction<GeoapifyResult, string> {

@@ -1,3 +1,11 @@
+/**
+ * Given a date string, return it formatted as MM/DD/YYYY, or an empty
+ * string if invalid.
+ *
+ * @example
+ * formatDateMMDDYYYY("1990-06-15")
+ * // "06/15/1990"
+ */
 export const formatDateMMDDYYYY = (date?: string) => {
   if (!date) return "";
   try {

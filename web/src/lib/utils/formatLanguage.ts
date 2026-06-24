@@ -1,9 +1,14 @@
 import languageNameMap from "language-name-map/map";
 
 /**
- * @param code Language code (e.g. "en", "es", "fr")
- * @param native Whether to return the native language name (e.g. "English", "Español", "Français")
- * @returns The language name (e.g. "English", "Spanish", "French")
+ * Given a language code, return the language name. Set `native`
+ * to return the name in that language instead of English.
+ *
+ * @example
+ * formatLanguage("es")
+ * // "Spanish"
+ * formatLanguage("es", true)
+ * // "Español"
  */
 export const formatLanguage = (code?: string, native?: boolean) => {
   if (!code) {

@@ -1,9 +1,9 @@
 /**
- * Formats a time estimate based on the number of steps in a form.
- * @param steps - The total number of form steps
- * @param minMinutesPerStep - The minimum estimated minutes per step (default: 1)
- * @param maxMinutesPerStep - The maximum estimated minutes per step (default: 2)
- * @returns A formatted time estimate range string (e.g., "About 5–10 minutes")
+ * Given the number of steps in a form, return a formatted time estimate range.
+ *
+ * @example
+ * formatTimeEstimate(10)
+ * // "3–8 minutes"
  */
 export function formatTimeEstimate(
   steps: number,
