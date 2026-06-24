@@ -109,7 +109,7 @@
     "optimo": "^0.0.27",
     "sass-embedded": "^1.100.0",
     "sharp": "^0.34.5",
-    "storybook": "^10.4.1",
+    "storybook": "^10.4.6",
     "vitest": "4.1.8",
     "wrangler": "^4.103.0"
   },

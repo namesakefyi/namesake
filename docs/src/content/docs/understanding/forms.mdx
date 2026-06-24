@@ -13,12 +13,16 @@ Each form's state is managed using [XState](https://xstate.js.org). The user beg
 
 ```mermaid
 ---
-title: Namesake Form State
+title: "Namesake Forms: State Machine Flow"
 ---
 stateDiagram-v2
     [*] --> Title
 
     Title --> Filling : START
+
+    state Filling {
+        currentStepId
+    }
 
     Filling --> Title   : GOTO_TITLE
     Filling --> Filling : GOTO_STEP
@@ -27,6 +31,10 @@ stateDiagram-v2
     Review --> Editing    : EDIT_STEP
     Review --> Filling    : GOTO_STEP
     Review --> Submitting : SUBMIT
+
+    state Editing {
+        editingStepId
+    }
 
     Editing --> Review : SAVE_EDIT
 
@@ -45,7 +53,13 @@ stateDiagram-v2
 | `submitting` | Loading state while PDFs are generated |
 | `complete` | Success page with options to redownload or restart |
 
-The state machine also stores `context` for the `formSlug`, `currentStepId`, and `editingStepId`.
+The state machine also stores `context`:
+
+| Context | Description |
+|---|---|
+| `formSlug` | Set once when the machine is created |
+| `currentStepId` | Set on `START` and updated on each `GOTO_STEP` while in `filling` |
+| `editingStepId` | Set on `EDIT_STEP` when entering `editing`, then cleared on `SAVE_EDIT` |
 
 :::note
 
