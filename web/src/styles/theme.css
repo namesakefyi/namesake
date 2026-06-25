@@ -44,23 +44,40 @@
 
   /* Core colors: prefer referencing the semantic colors, instead */
   --namesake-black: #111111;
-  --namesake-white: #E1E1E1;
-  --namesake-purple: #CDA5EF;
-  --namesake-pink: #ECADD4;
-  --namesake-blue: #96C7F2;
-  --namesake-yellow: #ECDD85;
-  --namesake-green: #97CF9C;
-  --namesake-brown: #DDB896;
+  --namesake-white: #e1e1e1;
+  --namesake-purple: #cda5ef;
+  --namesake-pink: #ecadd4;
+  --namesake-blue: #96c7f2;
+  --namesake-yellow: #ecdd85;
+  --namesake-green: #97cf9c;
+  --namesake-brown: #ddb896;
 
   /* Semantic colors */
   --background-color: var(--namesake-purple);
   --focus-ring-color: var(--namesake-black);
   --text-color: var(--namesake-black);
-  --text-color-disabled: color-mix(in srgb, var(--namesake-black) 35%, transparent);
-  --text-color-placeholder: color-mix(in srgb, var(--namesake-black) 50%, transparent);
+  --text-color-muted: color-mix(
+    in srgb,
+    var(--namesake-black) 50%,
+    transparent
+  );
+  --text-color-disabled: color-mix(
+    in srgb,
+    var(--namesake-black) 35%,
+    transparent
+  );
+  --text-color-placeholder: color-mix(
+    in srgb,
+    var(--namesake-black) 50%,
+    transparent
+  );
   --link-color: var(--namesake-black);
   --border-color: var(--namesake-black);
-  --border-color-disabled: color-mix(in srgb, var(--namesake-black) 35%, transparent);
+  --border-color-disabled: color-mix(
+    in srgb,
+    var(--namesake-black) 35%,
+    transparent
+  );
   --field-text-color: var(--namesake-black);
 }
 

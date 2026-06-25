@@ -1,0 +1,111 @@
+---
+import PagefindConfig from "astro-pagefind/components/PagefindConfig.astro";
+---
+
+<>
+  <PagefindConfig />
+  <pagefind-searchbox
+    hide-shortcut
+    placeholder="Search states, guides, and more…"></pagefind-searchbox>
+</>
+
+<style is:global>
+  :root {
+    /* Colors */
+    --pf-text: var(--text-color);
+    --pf-text-secondary: var(--text-color);
+    --pf-text-muted: var(--text-color-muted);
+    --pf-background: var(--background-color);
+    --pf-border: var(--border-color);
+    --pf-border-focus: var(--border-color);
+    --pf-skeleton: color-mix(in srgb, var(--namesake-black) 15%, transparent);
+    --pf-skeleton-shine: color-mix(
+      in srgb,
+      var(--namesake-black) 20%,
+      transparent
+    );
+    --pf-hover: var(--background-color);
+    --pf-mark: var(--text-color);
+    --pf-scroll-shadow: rgba(0, 0, 0, 0.08);
+
+    /* Shadows */
+    --pf-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --pf-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --pf-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.2);
+
+    /* Error states */
+    --pf-error-bg: #fef2f2;
+    --pf-error-border: #fecaca;
+    --pf-error-text: #dc2626;
+    --pf-error-text-secondary: #b91c1c;
+
+    /* Focus ring */
+    --pf-outline-focus: var(--focus-ring-color);
+    --pf-outline-width: 2px;
+    --pf-outline-offset: 2px;
+
+    /* Typography */
+    --pf-font: var(--font-sans);
+
+    /* Sizing */
+    --pf-input-height: auto;
+    --pf-input-font-size: var(
+      --step-0
+    ); /* Keep at 16px+ to prevent iOS auto-zoom on focus */
+    --pf-summary-font-size: var(--step-0);
+    --pf-result-title-font-size: var(--step-0);
+    --pf-result-excerpt-font-size: var(--step-0);
+
+    /* Results layout */
+    --pf-results-display: flex;
+    --pf-results-flex-direction: column;
+    --pf-results-flex-wrap: nowrap;
+    --pf-results-columns: none; /* grid-template-columns value, used when display is grid */
+    --pf-results-gap: var(--space-xs);
+
+    --pf-border-radius: 6px;
+    --pf-image-width: 64px;
+    --pf-image-height: 48px;
+
+    /* Modal */
+    --pf-modal-backdrop: rgba(0, 0, 0, 0.5);
+    --pf-modal-max-width: 560px;
+    --pf-modal-max-height: min(80dvh, 800px);
+    --pf-modal-top: 10dvh;
+
+    /* Searchbox dimensions */
+    --pf-searchbox-max-width: 480px;
+    --pf-searchbox-dropdown-max-height: 320px;
+
+    /* Dropdown settings */
+    --pf-dropdown-max-height: 280px;
+    --pf-dropdown-z-index: 9999;
+  }
+
+  .pf-searchbox.open .pf-searchbox-input:not(:focus-visible) {
+    outline: 2px solid var(--focus-ring-color) !important;
+  }
+
+  .pf-searchbox-input {
+    padding-inline: var(--space-2xl) var(--space-m) !important;
+    padding-block: var(--space-s) !important;
+  }
+
+  /* Icon */
+  .pf-searchbox-input-wrapper::before {
+    width: var(--space-l) !important;
+    height: var(--space-l) !important;
+    top: calc(50% - var(--space-l) / 2) !important;
+    inset-inline-start: var(--space-s) !important;
+    background-color: var(--text-color) !important;
+  }
+
+  .pf-searchbox-dropdown {
+    box-shadow: none !important;
+    outline: 2px solid var(--focus-ring-color) !important;
+  }
+
+  .pf-searchbox-result-title {
+    font-size: var(--step--1) !important;
+  }
+</style>

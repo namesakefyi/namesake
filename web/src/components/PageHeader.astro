@@ -5,6 +5,7 @@ import Breadcrumbs, { type BreadcrumbItem } from "./Breadcrumbs.astro";
 
 interface Props {
   title: string;
+  searchTitle?: string;
   date?: string;
   description?: string | null;
   annotation?: RoughAnnotationType | null;
@@ -13,6 +14,7 @@ interface Props {
 
 const {
   title,
+  searchTitle,
   date,
   description,
   annotation = "circle",
@@ -34,12 +36,15 @@ if (date) {
   {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
   {
     date && (
-      <time class="date" datetime={date}>
+      <time class="date" datetime={date} data-pagefind-sort={`date:${date}`}>
         {formattedDate}
       </time>
     )
   }
-  <h1 data-annotation={annotation}>
+  <h1
+    data-annotation={annotation}
+    data-pagefind-meta={`title:${searchTitle ?? title}`}
+  >
     {smartquotes(title)}
   </h1>
   {description && <p class="subhead">{smartquotes(description)}</p>}

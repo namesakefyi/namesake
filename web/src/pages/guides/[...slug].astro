@@ -19,10 +19,15 @@ const { Content, headings, remarkPluginFrontmatter } = await render(guide);
 const jurisdiction = guide.data.jurisdiction
   ? await getEntry(guide.data.jurisdiction)
   : null;
+
+const searchTitle = jurisdiction
+  ? `${jurisdiction.data.name}: ${guide.data.title}`
+  : guide.data.title;
 ---
 
 <ProseLayout
   title={guide.data.title}
+  searchTitle={searchTitle}
   description={guide.data.description}
   annotation="box"
   breadcrumbs={[
@@ -37,7 +42,6 @@ const jurisdiction = guide.data.jurisdiction
   ogAlt={guide.data.title}
 >
   <TableOfContents headings={headings} slot="toc" />
-
   {guide.data.stub && <StubBanner />}
   <Content />
   <GuideFooter
