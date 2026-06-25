@@ -9,7 +9,7 @@ describe("Affidavit of Indigency", () => {
     oldLastName: "Smith",
     residenceStreetAddress: "789 Elm St",
     residenceCity: "Springfield",
-    residenceState: "MA",
+    residenceState: "ma",
     residenceZipCode: "01103",
   };
 

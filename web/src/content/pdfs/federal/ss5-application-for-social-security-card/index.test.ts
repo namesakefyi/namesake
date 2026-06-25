@@ -16,7 +16,7 @@ describe("SS-5 Application for Social Security Card", () => {
 
     // Field 3: Birthplace
     birthplaceCity: "Elizabeth",
-    birthplaceState: "NJ",
+    birthplaceState: "nj",
 
     // Field 4: Date of Birth
     dateOfBirth: "1945-08-24",
@@ -57,7 +57,7 @@ describe("SS-5 Application for Social Security Card", () => {
     // Field 16: Address
     mailingStreetAddress: "123 Main St",
     mailingCity: "New York",
-    mailingState: "NY",
+    mailingState: "ny",
     mailingZipCode: "10001",
 
     // Field 18: Relationship

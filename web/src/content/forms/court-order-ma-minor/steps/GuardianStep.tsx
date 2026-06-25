@@ -78,9 +78,9 @@ function GuardianStateField() {
           errorMessage={error?.message}
           menuTrigger="focus"
         >
-          {Object.entries(JURISDICTIONS).map(([id, j]) => (
-            <ComboBoxItem key={id} id={id.toUpperCase()}>
-              {j.name}
+          {Object.entries(JURISDICTIONS).map(([id, jurisdiction]) => (
+            <ComboBoxItem key={id} id={id}>
+              {jurisdiction.name}
             </ComboBoxItem>
           ))}
         </ComboBox>
