@@ -1,4 +1,5 @@
 import type { Step } from "#lib/forms/types";
+import type { CategoryId } from "./categories";
 import type { FormData } from "./fields";
 import type { JurisdictionId } from "./jurisdictions";
 import type { PDFId } from "./pdf";
@@ -12,27 +13,6 @@ export const FORM_SLUGS = [
 ] as const;
 
 export type FormSlug = (typeof FORM_SLUGS)[number];
-
-export type CategoryId =
-  | "birth-certificate"
-  | "court-order"
-  | "devices"
-  | "education"
-  | "entertainment"
-  | "finance"
-  | "gaming"
-  | "government"
-  | "health"
-  | "housing"
-  | "other"
-  | "passport"
-  | "personal"
-  | "shopping"
-  | "social"
-  | "social-security"
-  | "state-id"
-  | "subscriptions"
-  | "travel";
 
 /**
  * Configuration for a PDF within a form.

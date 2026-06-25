@@ -1,7 +1,3 @@
-/**
- * Jurisdictions, a.k.a. US States and territories, keyed by lowercase
- * abbreviation (matching content collection jurisdiction IDs).
- */
 export const JURISDICTIONS = {
   al: { name: "Alabama", territory: false, namesakeSupport: "none" },
   ak: { name: "Alaska", territory: false, namesakeSupport: "none" },
@@ -76,10 +72,8 @@ export const JURISDICTIONS = {
   }
 >;
 
-/** Lowercase state/territory abbreviation, matching content collection jurisdiction IDs. */
 export type JurisdictionId = keyof typeof JURISDICTIONS;
 
-/** `{ label, value }` options for jurisdiction selects/comboboxes. */
 export const JURISDICTION_OPTIONS = Object.entries(JURISDICTIONS).map(
   ([id, jurisdiction]) => ({
     label: jurisdiction.name,

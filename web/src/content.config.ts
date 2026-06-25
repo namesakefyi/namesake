@@ -1,7 +1,8 @@
 import { defineCollection, reference } from "astro:content";
-import { file, glob } from "astro/loaders";
+import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { ANNOTATION_TYPES } from "./constants/annotations";
+import { CATEGORIES } from "./constants/categories";
 import { COLOR_KEYS } from "./constants/colors";
 import type { FormConfig } from "./constants/forms";
 import { JURISDICTIONS } from "./constants/jurisdictions";
@@ -28,7 +29,11 @@ const authors = defineCollection({
 });
 
 const categories = defineCollection({
-  loader: file("./src/content/categories/categories.yml"),
+  loader: () =>
+    Object.entries(CATEGORIES).map(([id, category]) => ({
+      id,
+      name: category.name,
+    })),
   schema: z.object({
     name: z.string(),
   }),
