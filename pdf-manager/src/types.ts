@@ -1,6 +1,6 @@
 export interface Field {
   name: string;
-  type: "text" | "checkbox";
+  type: "text" | "checkbox" | "radio";
   excluded?: boolean;
 }
 
@@ -14,8 +14,8 @@ export interface PdfMeta {
 }
 
 export interface Jurisdiction {
+  id: string;
   name: string;
-  abbreviation: string;
 }
 
 export interface Diff {

@@ -1,5 +1,5 @@
 import cloudflare from "@astrojs/cloudflare";
-import { unified } from "@astrojs/markdown-remark";
+import { satteri } from "@astrojs/markdown-satteri";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
@@ -10,7 +10,7 @@ import {
 } from "astro/config";
 import browserslist from "browserslist";
 import { browserslistToTargets } from "lightningcss";
-import { remarkModifiedTime } from "./scripts/remark-modified-time.mjs";
+import { satteriModifiedTime } from "./scripts/satteri-modified-time.mjs";
 
 export default defineConfig({
   site: "https://namesake.fyi",
@@ -21,15 +21,12 @@ export default defineConfig({
   image: {
     service: passthroughImageService(),
   },
-  integrations: [
-    sitemap(),
-    mdx({
-      processor: unified({
-        remarkPlugins: [remarkModifiedTime],
-      }),
+  markdown: {
+    processor: satteri({
+      mdastPlugins: [satteriModifiedTime],
     }),
-    react(),
-  ],
+  },
+  integrations: [sitemap(), mdx(), react()],
   prefetch: true,
   trailingSlash: "never",
   build: {
@@ -99,25 +96,8 @@ export default defineConfig({
         targets: browserslistToTargets(browserslist("defaults")),
       },
     },
-    // Re-enable this after Astro supports Vite v8
-    // https://github.com/vitejs/vite/issues/21293
-    // build: {
-    //   cssMinify: "lightningcss",
-    // },
     build: {
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (
-              (id.includes("/src/constants/") &&
-                !id.includes("/src/constants/forms")) ||
-              id.includes("/src/utils/")
-            ) {
-              return "shared";
-            }
-          },
-        },
-      },
+      cssMinify: "lightningcss",
     },
   },
 });

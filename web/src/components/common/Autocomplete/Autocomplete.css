@@ -6,11 +6,29 @@
   &[data-empty] {
     align-items: center;
     justify-content: center;
+    padding: var(--space-m);
+    font-size: var(--step--1);
     font-style: italic;
+    color: var(--text-color-placeholder);
   }
 }
 
 .react-aria-MenuItem[href] {
   text-decoration: none;
   cursor: pointer;
+}
+
+.react-aria-Popover {
+  width: var(--trigger-width);
+  max-width: var(--trigger-width);
+}
+
+input[autocomplete="off"]::-webkit-contacts-auto-fill-button {
+  /* biome-ignore lint/complexity/noImportantStyles: required to hide the contact button in safari */
+  display: none !important;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+  margin: 0;
+  pointer-events: none;
 }

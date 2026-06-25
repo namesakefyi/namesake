@@ -1,6 +1,6 @@
 name: Thundermist
 description: Thundermist Health Center is a community health center that has been serving Woonsocket, West Warwick, and South County for more than 55 years.
-states:
+jurisdictions:
   - ri
 url: https://www.thundermisthealth.org/
 services:

@@ -16,7 +16,7 @@ describe("loadPdfs", () => {
     const mockPdf1 = {
       id: "test-form-1" as any,
       title: "Test Form 1",
-      jurisdiction: "MA",
+      jurisdiction: "ma",
       pdfPath: "public/forms/test-form-1.pdf",
       fields: () => ({}),
     };
@@ -24,7 +24,7 @@ describe("loadPdfs", () => {
     const mockPdf2 = {
       id: "test-form-2" as any,
       title: "Test Form 2",
-      jurisdiction: "MA",
+      jurisdiction: "ma",
       pdfPath: "public/forms/test-form-2.pdf",
       fields: () => ({}),
     };
@@ -48,7 +48,7 @@ describe("loadPdfs", () => {
     const mockPdf = {
       id: "test-form-1" as any,
       title: "Test Form 1",
-      jurisdiction: "MA",
+      jurisdiction: "ma",
       pdfPath: "public/forms/test-form-1.pdf",
       fields: () => ({}),
     };

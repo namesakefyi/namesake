@@ -6,7 +6,7 @@ describe("formatPageTitle", () => {
     expect(formatPageTitle("Court Order")).toEqual("Court Order · Namesake");
   });
 
-  it("renders the title with custom divider", () => {
+  it("renders the title with custom delimiter", () => {
     expect(formatPageTitle("Court Order", " - ")).toEqual(
       "Court Order - Namesake",
     );
@@ -18,7 +18,7 @@ describe("formatPageTitle", () => {
     );
   });
 
-  it("hides the divider when site title is not provided", () => {
+  it("hides the delimiter when site title is not provided", () => {
     expect(formatPageTitle("Test Page", " · ", null)).toEqual("Test Page");
   });
 

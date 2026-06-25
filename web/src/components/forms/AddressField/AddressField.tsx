@@ -1,13 +1,53 @@
 import { type MaskitoOptions, maskitoTransform } from "@maskito/core";
-import { useState } from "react";
+import { type Key, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import type { FieldName } from "#constants/fields";
-import { JURISDICTIONS } from "#constants/jurisdictions";
+import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 import { ComboBox, ComboBoxItem } from "../../common/ComboBox";
 import { TextField } from "../../common/TextField";
 import "./AddressField.css";
+import { useAsyncList } from "react-aria-components";
+import {
+  createLocationLoader,
+  type GeoapifyResult,
+} from "#lib/utils/fetchLocationResults.ts";
+import { Autocomplete } from "../../common/Autocomplete";
+import { MenuItem } from "../../common/Menu";
 
 type AddressType = "residence" | "mailing" | "parent1" | "parent2";
+
+interface AddressNames {
+  street: FieldName;
+  street2?: FieldName;
+  city: FieldName;
+  state: FieldName;
+  zip: FieldName;
+  county?: FieldName;
+}
+
+const FIELD_FOR_GEOAPIFY = {
+  address_line1: "street",
+  city: "city",
+  state_code: "state",
+  postcode: "zip",
+  county: "county",
+} as const satisfies Partial<Record<keyof GeoapifyResult, keyof AddressNames>>;
+
+export function mapPlaceToFields(
+  place: GeoapifyResult,
+  names: AddressNames,
+): Array<[FieldName, string]> {
+  const updates: Array<[FieldName, string]> = [];
+  for (const [source, key] of Object.entries(FIELD_FOR_GEOAPIFY) as [
+    keyof GeoapifyResult,
+    keyof AddressNames,
+  ][]) {
+    const fieldName = names[key];
+    if (!fieldName) continue;
+    updates.push([fieldName, place[source] ?? ""]);
+  }
+  return updates;
+}
 
 export interface AddressFieldProps {
   children?: React.ReactNode;
@@ -22,19 +62,9 @@ export function AddressField({
   includeAddress2 = false,
   includeCounty = false,
 }: AddressFieldProps) {
-  const { control, getValues } = useFormContext();
+  const { control, getValues, setValue } = useFormContext();
 
-  const names: Record<
-    AddressType,
-    {
-      street: FieldName;
-      street2?: FieldName;
-      city: FieldName;
-      state: FieldName;
-      zip: FieldName;
-      county?: FieldName;
-    }
-  > = {
+  const names: Record<AddressType, AddressNames> = {
     residence: {
       street: "residenceStreetAddress",
       street2: "residenceStreetAddress2",
@@ -76,6 +106,17 @@ export function AddressField({
     mask: [/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/],
   };
 
+  const list = useAsyncList<GeoapifyResult>({ load: createLocationLoader() });
+
+  const autocompleteAddress = (id: Key): void => {
+    const place = list.items.find((i) => i.place_id === id);
+    if (!place) return;
+    for (const [field, value] of mapPlaceToFields(place, names[type])) {
+      setValue(field, value, { shouldValidate: true, shouldDirty: true });
+    }
+    list.setFilterText("");
+  };
+
   return (
     <div className="namesake-address-field">
       <Controller
@@ -83,16 +124,26 @@ export function AddressField({
         name={names[type].street}
         defaultValue=""
         render={({ field, fieldState: { invalid, error } }) => (
-          <TextField
+          <Autocomplete
             {...field}
             label="Street address"
-            autoComplete="address-line1"
-            className="namesake-address-field-street"
-            maxLength={40}
+            autoComplete="off"
             size={30}
+            items={list.items}
+            inputValue={field.value}
+            onInputChange={(text) => {
+              list.setFilterText(text);
+              field.onChange(text);
+              setValue(names[type].street, text);
+            }}
+            isAsync={true}
+            isLoading={list.isLoading}
+            onAction={autocompleteAddress}
             isInvalid={invalid}
             errorMessage={error?.message}
-          />
+          >
+            {(item) => <MenuItem id={item.place_id}>{item.formatted}</MenuItem>}
+          </Autocomplete>
         )}
       />
       {canAddAddress2 &&
@@ -155,9 +206,9 @@ export function AddressField({
             errorMessage={error?.message}
             menuTrigger="focus"
           >
-            {Object.entries(JURISDICTIONS).map(([value, label]) => (
-              <ComboBoxItem key={value} id={value}>
-                {label}
+            {JURISDICTION_OPTIONS.map((option) => (
+              <ComboBoxItem key={option.value} id={option.value}>
+                {option.label}
               </ComboBoxItem>
             ))}
           </ComboBox>
