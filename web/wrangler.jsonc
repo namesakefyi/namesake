@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "web",
   "main": "@astrojs/cloudflare/entrypoints/server",
-  "compatibility_date": "2025-10-22",
+  "compatibility_date": "2026-06-18",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "binding": "ASSETS",

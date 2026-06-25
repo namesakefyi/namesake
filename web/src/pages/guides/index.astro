@@ -2,9 +2,9 @@
 import GuideLinkGroup from "#components/GuideLinkGroup.astro";
 import PageHeader from "#components/PageHeader.astro";
 import BaseLayout from "#layouts/BaseLayout.astro";
-import { getGuidesByState } from "#lib/queries/guides";
+import { getGuidesByJurisdiction } from "#lib/queries/guides";
 
-const { generalGuides, guidesByState } = await getGuidesByState();
+const { generalGuides, guidesByJurisdiction } = await getGuidesByJurisdiction();
 ---
 
 <BaseLayout
@@ -23,11 +23,11 @@ const { generalGuides, guidesByState } = await getGuidesByState();
       )
     }
     {
-      guidesByState.map(({ state, guides }) => (
+      guidesByJurisdiction.map(({ jurisdiction, guides }) => (
         <GuideLinkGroup
           guides={guides}
-          title={state.data.name}
-          titleHref={`/guides/${state.id}`}
+          title={jurisdiction.data.name}
+          titleHref={`/guides/${jurisdiction.id}`}
         />
       ))
     }

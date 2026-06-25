@@ -1,26 +1,17 @@
 /**
- * Derives current age from a date-of-birth string (YYYY-MM-DD).
+ * Given a date-of-birth string (YYYY-MM-DD), return the current age.
  * Treats the input as a calendar date with no timezone.
+ *
+ * @example
+ * deriveCurrentAge("1990-06-15") // assuming today is 2026-06-24
+ * // 36
  */
 export const deriveCurrentAge = (dateOfBirth?: string): number => {
-  if (typeof dateOfBirth !== "string" || !dateOfBirth) {
-    return 0;
-  }
+  if (typeof dateOfBirth !== "string" || !dateOfBirth) return 0;
 
   const birth = new Date(dateOfBirth);
-  if (Number.isNaN(birth.getTime())) {
-    return 0;
-  }
+  if (Number.isNaN(birth.getTime())) return 0;
 
-  const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-
-  const hasBirthdayOccurredThisYear =
-    today.getMonth() > birth.getMonth() ||
-    (today.getMonth() === birth.getMonth() &&
-      today.getDate() >= birth.getDate());
-
-  if (!hasBirthdayOccurredThisYear) age -= 1;
-
-  return age;
+  const elapsed = new Date(Date.now() - birth.getTime());
+  return elapsed.getUTCFullYear() - new Date(0).getUTCFullYear();
 };

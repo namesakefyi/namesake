@@ -1,5 +1,5 @@
 import type { FormData } from "./fields";
-import type { Jurisdiction } from "./jurisdictions";
+import type { JurisdictionId } from "./jurisdictions";
 
 export type PDFFieldValue = string | boolean | undefined;
 
@@ -39,9 +39,9 @@ export interface PDFDefinition<TPdfFieldName extends string = string> {
 
   /**
    * The jurisdiction of the form.
-   * @example "MA"
+   * @example "ma"
    */
-  jurisdiction?: Jurisdiction;
+  jurisdiction?: JurisdictionId;
 
   /**
    * The canonical URL of the original form. This should be a link to a .gov website or other official source.

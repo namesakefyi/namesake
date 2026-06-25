@@ -1,3 +1,11 @@
+/**
+ * Given a string, return it with straight quotes, double hyphens, and
+ * ellipses converted to their typographic equivalents.
+ *
+ * @example
+ * smartquotes(`"What's up?" -- she said...`)
+ * // "“What’s up?” — she said…"
+ */
 export const smartquotes = (str: string) => {
   return str
     .replace(/(^|[-\u2014\s(["])'/g, "$1\u2018") // opening singles

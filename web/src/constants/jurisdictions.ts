@@ -1,74 +1,82 @@
-const usaStates = [
-  { name: "Alabama", abbreviation: "AL", territory: false },
-  { name: "Alaska", abbreviation: "AK", territory: false },
-  { name: "American Samoa", abbreviation: "AS", territory: true },
-  { name: "Arizona", abbreviation: "AZ", territory: false },
-  { name: "Arkansas", abbreviation: "AR", territory: false },
-  { name: "California", abbreviation: "CA", territory: false },
-  { name: "Colorado", abbreviation: "CO", territory: false },
-  { name: "Connecticut", abbreviation: "CT", territory: false },
-  { name: "Delaware", abbreviation: "DE", territory: false },
-  { name: "District Of Columbia", abbreviation: "DC", territory: false },
-  { name: "Florida", abbreviation: "FL", territory: false },
-  { name: "Georgia", abbreviation: "GA", territory: false },
-  { name: "Guam", abbreviation: "GU", territory: true },
-  { name: "Hawaii", abbreviation: "HI", territory: false },
-  { name: "Idaho", abbreviation: "ID", territory: false },
-  { name: "Illinois", abbreviation: "IL", territory: false },
-  { name: "Indiana", abbreviation: "IN", territory: false },
-  { name: "Iowa", abbreviation: "IA", territory: false },
-  { name: "Kansas", abbreviation: "KS", territory: false },
-  { name: "Kentucky", abbreviation: "KY", territory: false },
-  { name: "Louisiana", abbreviation: "LA", territory: false },
-  { name: "Maine", abbreviation: "ME", territory: false },
-  { name: "Maryland", abbreviation: "MD", territory: false },
-  { name: "Massachusetts", abbreviation: "MA", territory: false },
-  { name: "Michigan", abbreviation: "MI", territory: false },
-  { name: "Minnesota", abbreviation: "MN", territory: false },
-  { name: "Mississippi", abbreviation: "MS", territory: false },
-  { name: "Missouri", abbreviation: "MO", territory: false },
-  { name: "Montana", abbreviation: "MT", territory: false },
-  { name: "Nebraska", abbreviation: "NE", territory: false },
-  { name: "Nevada", abbreviation: "NV", territory: false },
-  { name: "New Hampshire", abbreviation: "NH", territory: false },
-  { name: "New Jersey", abbreviation: "NJ", territory: false },
-  { name: "New Mexico", abbreviation: "NM", territory: false },
-  { name: "New York", abbreviation: "NY", territory: false },
-  { name: "North Carolina", abbreviation: "NC", territory: false },
-  { name: "North Dakota", abbreviation: "ND", territory: false },
-  { name: "Northern Mariana Islands", abbreviation: "MP", territory: true },
-  { name: "Ohio", abbreviation: "OH", territory: false },
-  { name: "Oklahoma", abbreviation: "OK", territory: false },
-  { name: "Oregon", abbreviation: "OR", territory: false },
-  { name: "Pennsylvania", abbreviation: "PA", territory: false },
-  { name: "Puerto Rico", abbreviation: "PR", territory: true },
-  { name: "Rhode Island", abbreviation: "RI", territory: false },
-  { name: "South Carolina", abbreviation: "SC", territory: false },
-  { name: "South Dakota", abbreviation: "SD", territory: false },
-  { name: "Tennessee", abbreviation: "TN", territory: false },
-  { name: "Texas", abbreviation: "TX", territory: false },
-  { name: "Utah", abbreviation: "UT", territory: false },
-  { name: "Vermont", abbreviation: "VT", territory: false },
-  { name: "Virgin Islands", abbreviation: "VI", territory: true },
-  { name: "Virginia", abbreviation: "VA", territory: false },
-  { name: "Washington", abbreviation: "WA", territory: false },
-  { name: "West Virginia", abbreviation: "WV", territory: false },
-  { name: "Wisconsin", abbreviation: "WI", territory: false },
-  { name: "Wyoming", abbreviation: "WY", territory: false },
-] as const;
-
-/**
- * Jurisdictions, a.k.a. US States and territories.
- */
-export const JURISDICTIONS = usaStates.reduce(
-  (acc, state) => {
-    acc[state.abbreviation] = state.name;
-    return acc;
+export const JURISDICTIONS = {
+  al: { name: "Alabama", territory: false, namesakeSupport: "none" },
+  ak: { name: "Alaska", territory: false, namesakeSupport: "none" },
+  as: { name: "American Samoa", territory: true, namesakeSupport: "none" },
+  az: { name: "Arizona", territory: false, namesakeSupport: "none" },
+  ar: { name: "Arkansas", territory: false, namesakeSupport: "none" },
+  ca: { name: "California", territory: false, namesakeSupport: "none" },
+  co: { name: "Colorado", territory: false, namesakeSupport: "none" },
+  ct: { name: "Connecticut", territory: false, namesakeSupport: "none" },
+  de: { name: "Delaware", territory: false, namesakeSupport: "none" },
+  dc: {
+    name: "District of Columbia",
+    territory: false,
+    namesakeSupport: "none",
   },
-  {} as Record<string, string>,
+  fl: { name: "Florida", territory: false, namesakeSupport: "none" },
+  ga: { name: "Georgia", territory: false, namesakeSupport: "none" },
+  gu: { name: "Guam", territory: true, namesakeSupport: "none" },
+  hi: { name: "Hawaii", territory: false, namesakeSupport: "none" },
+  id: { name: "Idaho", territory: false, namesakeSupport: "none" },
+  il: { name: "Illinois", territory: false, namesakeSupport: "prioritized" },
+  in: { name: "Indiana", territory: false, namesakeSupport: "none" },
+  ia: { name: "Iowa", territory: false, namesakeSupport: "none" },
+  ks: { name: "Kansas", territory: false, namesakeSupport: "none" },
+  ky: { name: "Kentucky", territory: false, namesakeSupport: "none" },
+  la: { name: "Louisiana", territory: false, namesakeSupport: "none" },
+  me: { name: "Maine", territory: false, namesakeSupport: "none" },
+  md: { name: "Maryland", territory: false, namesakeSupport: "none" },
+  ma: { name: "Massachusetts", territory: false, namesakeSupport: "full" },
+  mi: { name: "Michigan", territory: false, namesakeSupport: "none" },
+  mn: { name: "Minnesota", territory: false, namesakeSupport: "none" },
+  ms: { name: "Mississippi", territory: false, namesakeSupport: "none" },
+  mo: { name: "Missouri", territory: false, namesakeSupport: "none" },
+  mt: { name: "Montana", territory: false, namesakeSupport: "none" },
+  ne: { name: "Nebraska", territory: false, namesakeSupport: "none" },
+  nv: { name: "Nevada", territory: false, namesakeSupport: "none" },
+  nh: { name: "New Hampshire", territory: false, namesakeSupport: "none" },
+  nj: { name: "New Jersey", territory: false, namesakeSupport: "none" },
+  nm: { name: "New Mexico", territory: false, namesakeSupport: "none" },
+  ny: { name: "New York", territory: false, namesakeSupport: "prioritized" },
+  nc: { name: "North Carolina", territory: false, namesakeSupport: "none" },
+  nd: { name: "North Dakota", territory: false, namesakeSupport: "none" },
+  mp: {
+    name: "Northern Mariana Islands",
+    territory: true,
+    namesakeSupport: "none",
+  },
+  oh: { name: "Ohio", territory: false, namesakeSupport: "none" },
+  ok: { name: "Oklahoma", territory: false, namesakeSupport: "none" },
+  or: { name: "Oregon", territory: false, namesakeSupport: "none" },
+  pa: { name: "Pennsylvania", territory: false, namesakeSupport: "none" },
+  pr: { name: "Puerto Rico", territory: true, namesakeSupport: "none" },
+  ri: { name: "Rhode Island", territory: false, namesakeSupport: "full" },
+  sc: { name: "South Carolina", territory: false, namesakeSupport: "none" },
+  sd: { name: "South Dakota", territory: false, namesakeSupport: "none" },
+  tn: { name: "Tennessee", territory: false, namesakeSupport: "none" },
+  tx: { name: "Texas", territory: false, namesakeSupport: "none" },
+  ut: { name: "Utah", territory: false, namesakeSupport: "none" },
+  vt: { name: "Vermont", territory: false, namesakeSupport: "none" },
+  vi: { name: "Virgin Islands", territory: true, namesakeSupport: "none" },
+  va: { name: "Virginia", territory: false, namesakeSupport: "none" },
+  wa: { name: "Washington", territory: false, namesakeSupport: "none" },
+  wv: { name: "West Virginia", territory: false, namesakeSupport: "none" },
+  wi: { name: "Wisconsin", territory: false, namesakeSupport: "none" },
+  wy: { name: "Wyoming", territory: false, namesakeSupport: "none" },
+} as const satisfies Record<
+  string,
+  {
+    name: string;
+    territory: boolean;
+    namesakeSupport: "full" | "prioritized" | "none";
+  }
+>;
+
+export type JurisdictionId = keyof typeof JURISDICTIONS;
+
+export const JURISDICTION_OPTIONS = Object.entries(JURISDICTIONS).map(
+  ([id, jurisdiction]) => ({
+    label: jurisdiction.name,
+    value: id.toUpperCase(),
+  }),
 );
-
-export type Jurisdiction = (typeof usaStates)[number]["abbreviation"];
-
-/** Lowercase state/territory abbreviation, matching content collection state IDs. */
-export type StateId = Lowercase<Jurisdiction>;

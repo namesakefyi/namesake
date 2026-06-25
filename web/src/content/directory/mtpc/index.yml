@@ -1,6 +1,6 @@
 name: Massachusetts Transgender Political Coalition
 description: MTPC works to ensure the wellbeing, safety, and lived equity of all trans, nonbinary, and gender expansive community members in Massachusetts.
-states:
+jurisdictions:
   - ma
 url: https://www.masstpc.org/
 services:

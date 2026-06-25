@@ -68,6 +68,23 @@ function FieldTypeIcon({ type }: { type: Field["type"] }) {
       </svg>
     );
   }
+  if (type === "radio") {
+    return (
+      <svg
+        className="field-type-icon"
+        viewBox="0 0 12 12"
+        width="12"
+        height="12"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        aria-hidden="true"
+      >
+        <circle cx="6" cy="6" r="4.5" />
+        <circle cx="6" cy="6" r="1.8" fill="currentColor" stroke="none" />
+      </svg>
+    );
+  }
   return (
     <svg
       className="field-type-icon"

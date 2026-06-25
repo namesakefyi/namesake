@@ -1,22 +1,16 @@
 /**
- * Given a string, returns a slug.
- * @param input The string to slugify.
- * @example "What's your current legal name?"
- * @returns The slug.
- * @example "whats-your-current-legal-name-in-the-state-of-massachusetts"
+ * Given a string, return a lowercase, kebab-case slug.
+ *
+ * @example
+ * slugify("What's your legal name?")
+ * // "whats-your-legal-name"
  */
 export function slugify(input: string) {
-  let sanitizedInput = input;
-  // Trim whitespace
-  sanitizedInput = sanitizedInput.trim();
-  // Replace German eszett with 'ss'
-  sanitizedInput = sanitizedInput.replace(/ß/g, "ss");
-  // Convert special characters to their canonical equivalents
-  sanitizedInput = sanitizedInput.normalize("NFKD");
-  // Remove punctuation except hyphens
-  sanitizedInput = sanitizedInput.replace(/[^\w\s-]/g, "");
-  // Replace multiple spaces or hyphens with a single hyphen
-  sanitizedInput = sanitizedInput.replace(/[\s-]+/g, "-");
-
-  return encodeURIComponent(sanitizedInput.toLowerCase());
+  return input
+    .trim()
+    .replace(/ß/g, "ss") // Replace German eszett with 'ss'
+    .normalize("NFKD") // Convert special characters to their canonical equivalents
+    .replace(/[^\w\s-]/g, "") // Remove punctuation except hyphens
+    .replace(/[\s-]+/g, "-") // Collapse whitespace/hyphens into a single hyphen
+    .toLowerCase();
 }

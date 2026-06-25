@@ -92,14 +92,14 @@ describe("Popover", () => {
           <Button>Open</Button>
           <Popover>
             <p>Help text</p>
-            <a href="/docs">Learn more</a>
+            <a href="/docs">Visit the docs</a>
           </Popover>
         </DialogTrigger>,
       );
       await userEvent.click(screen.getByRole("button", { name: "Open" }));
       expect(screen.getByText("Help text")).toBeInTheDocument();
       expect(
-        screen.getByRole("link", { name: "Learn more" }),
+        screen.getByRole("link", { name: "Visit the docs" }),
       ).toBeInTheDocument();
     });
   });
