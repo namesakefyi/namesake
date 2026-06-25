@@ -1,4 +1,5 @@
 import { defineForm } from "#lib/forms/defineForm";
+import { joinNames } from "#lib/utils/joinNames";
 import { mailingAddressStep } from "./steps/AddressStep";
 import { birthGenderStep } from "./steps/BirthGenderStep";
 import { birthNameStep } from "./steps/BirthNameStep";
@@ -15,7 +16,7 @@ export default defineForm({
   title: "Birth Certificate: Massachusetts",
   description:
     "Use this form to update your legal name and gender marker on your Massachusetts birth certificate.",
-  state: "ma",
+  jurisdiction: "ma",
   category: "birth-certificate",
   steps: [
     birthGenderStep,
@@ -40,7 +41,12 @@ export default defineForm({
   instructions: [
     "Review all documents carefully.",
     "For a name change, you must first update your name with the Social Security Administration, then you must submit a legal name change order with the application.",
-    "Provide a court-certified copy of your legal name change decree, if applicable",
+    {
+      text: "Provide a court-certified copy of your legal name change decree",
+      when: (data) =>
+        joinNames(data.oldFirstName, data.oldMiddleName, data.oldLastName) !==
+        joinNames(data.newFirstName, data.newMiddleName, data.newLastName),
+    },
     "Sign and date the required fields.",
   ],
 });
