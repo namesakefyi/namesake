@@ -11,11 +11,9 @@ This repository contains the source code for [namesake.fyi](https://namesake.fyi
 
 We 💖 our contributors! Namesake is built by, and for, the trans community, and we welcome contributors of all genders and skill levels.
 
-📖 Read the [contributior manual](https://docs.namesake.fyi) to learn how to set up your local environment, create new forms, and more.
-
-😌 Keep Namesake safe for everyone by reviewing our [code of conduct](https://github.com/namesakefyi/namesake?tab=coc-ov-file).
-
-🤲 [Donate](https://namesake.fyi/donate) to support our work.
+- Read the [contributior manual](https://docs.namesake.fyi) to learn how to set up your local environment, create new forms, and more.
+- Keep Namesake safe for everyone by reviewing our [code of conduct](https://github.com/namesakefyi/namesake?tab=coc-ov-file).
+- [Donate](https://namesake.fyi/donate) to support our work.
 
 ## Accessibility
 
