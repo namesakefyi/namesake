@@ -8,6 +8,7 @@ import { siteInfo } from "#constants/site-info";
 import "../styles/base.css";
 import "../styles/reset.css";
 import "../styles/theme.css";
+import "../styles/print.css";
 
 export interface Props {
   title: string;
@@ -77,8 +78,6 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
       title="Namesake"
       href={new URL("rss.xml", Astro.site)}
     />
-    <script is:inline async defer src="https://embeds.every.org/0.4/button.js"
-    ></script>
   </head>
   <body data-color={color}>
     <Header />
@@ -86,5 +85,13 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
       <slot />
     </main>
     <Footer />
+    <script>
+      // Print media lazy-loading bypass
+      window.addEventListener("beforeprint", () => {
+        document.querySelectorAll("img[loading]").forEach((img) => {
+          img.removeAttribute("loading");
+        });
+      });
+    </script>
   </body>
 </html>

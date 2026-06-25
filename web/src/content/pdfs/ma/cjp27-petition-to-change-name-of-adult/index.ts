@@ -9,7 +9,7 @@ export default definePdf<PdfFieldName>({
   id: "cjp27-petition-to-change-name-of-adult",
   title: "Petition to Change Name of Adult",
   code: "CJP-27",
-  jurisdiction: "MA",
+  jurisdiction: "ma",
   canonicalUrl:
     "https://www.mass.gov/doc/petition-to-change-name-of-adult-cjp-27/download",
   pdfPath: pdf,

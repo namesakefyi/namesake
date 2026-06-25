@@ -1,0 +1,36 @@
+/* biome-ignore-all lint/complexity/noImportantStyles: print styles should always override site styles */
+
+@media print {
+  html,
+  body {
+    --background-color: white !important;
+    background-color: transparent !important;
+  }
+
+  body::before,
+  body::after {
+    display: none;
+  }
+
+  .rough-annotation {
+    display: none;
+  }
+
+  details::details-content {
+    height: auto !important;
+    content-visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  a[href]:not([href^="#"]):not([data-no-print-url])::after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]::after {
+    content: " (" attr(title) ")";
+  }
+
+  [data-no-print] {
+    display: none !important;
+  }
+}

@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import { RiArrowRightLine, RiMegaphoneLine } from "@remixicon/react";
 import { Banner } from "#components/common/Banner";
+import Search from "#components/Search.astro";
 import Sponsors from "#components/Sponsors.astro";
 import SupportMap from "#components/SupportMap.astro";
 import { siteInfo } from "#constants/site-info";
@@ -24,6 +25,7 @@ import passport from "./home/passport.png";
           >open&nbsp;source</a
         >, and always will be.
       </p>
+      <Search />
       <div class="buttons">
         <a href={siteInfo.urls.guides} class="button primary"
           >Browse guides <RiArrowRightLine className="icon" /></a
@@ -71,7 +73,6 @@ import passport from "./home/passport.png";
     width: min(100vw, 1200px);
     padding-inline: var(--space-l);
     margin-inline: calc(var(--space-l) * -1);
-    overflow: hidden;
     display: flex;
     flex-direction: row;
     align-items: center;

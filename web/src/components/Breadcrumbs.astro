@@ -16,7 +16,9 @@ const { items } = Astro.props;
     {
       items.map((item) => (
         <li>
-          <a href={item.href}>{item.label}</a>
+          <a href={item.href} data-no-print-url>
+            {item.label}
+          </a>
         </li>
       ))
     }

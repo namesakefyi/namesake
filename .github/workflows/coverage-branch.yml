@@ -17,18 +17,19 @@ permissions:
   contents: read
 
 jobs:
+  # Test coverage for the branch under review.
   test-coverage-branch:
-    name: Test Coverage (${{ github.head_ref }})
+    name: Test Coverage
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.0
         with:
           persist-credentials: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.8
+        uses: pnpm/action-setup@v6.0.9
         with:
           run_install: false
 
@@ -51,44 +52,8 @@ jobs:
           path: web/coverage
           overwrite: true
 
-  test-coverage-main:
-    name: Test Coverage (main)
-    runs-on: ubuntu-latest
-    continue-on-error: true
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v6.0.3
-        with:
-          ref: main
-          persist-credentials: false
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.8
-        with:
-          run_install: false
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24.x"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Test coverage
-        run: pnpm --filter @namesake/web test:coverage
-
-      - name: Upload coverage
-        uses: actions/upload-artifact@v7
-        with:
-          name: coverage-main
-          path: web/coverage
-          overwrite: true
-
   report-coverage:
-    needs: [test-coverage-branch, test-coverage-main]
+    needs: [test-coverage-branch]
     name: Report Coverage
     runs-on: ubuntu-latest
     permissions:
@@ -97,32 +62,39 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.0
         with:
           persist-credentials: false
 
-      - name: Download coverage (${{ github.head_ref }})
+      - name: Download coverage (branch)
         uses: actions/download-artifact@v8
         with:
           name: coverage-branch
           path: coverage
 
-      - name: Download coverage (main)
+      - name: Restore coverage (main)
         id: download-main
-        continue-on-error: true
-        uses: actions/download-artifact@v8
+        uses: actions/cache/restore@v5.0.5
         with:
-          name: coverage-main
-          path: coverage-main
+          path: web/coverage
+          key: coverage-main-${{ github.sha }}
+          restore-keys: coverage-main-
+
+      - name: Move coverage (main)
+        if: steps.download-main.outputs.cache-matched-key != ''
+        run: mv web/coverage coverage-main
 
       - name: Report coverage and comparison
         if: always() && hashFiles('coverage-main/coverage-summary.json') != ''
-        uses: davelosert/vitest-coverage-report-action@v2.12.0
+        uses: davelosert/vitest-coverage-report-action@v2.12.1
         with:
+          vite-config-path: web/vitest.config.ts
           json-summary-compare-path: coverage-main/coverage-summary.json
 
         # Fallback to report branch coverage without comparison
         # if coverage from main is not available
       - name: Report coverage
         if: always() && hashFiles('coverage-main/coverage-summary.json') == ''
-        uses: davelosert/vitest-coverage-report-action@v2.12.0
+        uses: davelosert/vitest-coverage-report-action@v2.12.1
+        with:
+          vite-config-path: web/vitest.config.ts

@@ -16,10 +16,12 @@ export async function getStaticPaths() {
 
 const { guide } = Astro.props;
 const { Content, headings, remarkPluginFrontmatter } = await render(guide);
-const state = guide.data.state ? await getEntry(guide.data.state) : null;
+const jurisdiction = guide.data.jurisdiction
+  ? await getEntry(guide.data.jurisdiction)
+  : null;
 
-const searchTitle = state
-  ? `${state.data.name}: ${guide.data.title}`
+const searchTitle = jurisdiction
+  ? `${jurisdiction.data.name}: ${guide.data.title}`
   : guide.data.title;
 ---
 
@@ -31,7 +33,9 @@ const searchTitle = state
   breadcrumbs={[
     { label: "Namesake", href: "/" },
     { label: "Guides", href: "/guides" },
-    ...(state ? [{ label: state.data.name, href: `/guides/${state.id}` }] : []),
+    ...(jurisdiction
+      ? [{ label: jurisdiction.data.name, href: `/guides/${jurisdiction.id}` }]
+      : []),
   ] satisfies BreadcrumbItem[]}
   color="white"
   ogImage={`/guides/${guide.id}.png`}

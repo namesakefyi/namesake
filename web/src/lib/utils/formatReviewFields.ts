@@ -1,10 +1,15 @@
 import { parseDate } from "@internationalized/date";
 import { FIELD_DEFS, type FieldName } from "#constants/fields";
+import { formatCurrency } from "./formatCurrency";
 
 /**
- * Formats a field value for display in the review table based on its type
- * from FIELD_DEFS.
- * @returns The formatted value, or undefined if the field has no response
+ * Given a field name and value, return the formatted value for display in
+ * the review table based on its type from FIELD_DEFS, or undefined if the
+ * field has no response.
+ *
+ * @example
+ * formatFieldValue("dateOfBirth", "1990-06-15")
+ * // "June 15, 1990"
  */
 export function formatFieldValue(
   fieldName: FieldName,
@@ -64,16 +69,6 @@ export function formatFieldValue(
   }
 }
 
-function formatCurrency(value: string): string | undefined {
-  const num = Number(value);
-  if (Number.isNaN(num)) return String(value);
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(num);
-}
-
 function formatPhoneNumber(phone: string): string | undefined {
   if (!phone) return undefined;
   // Phone is already formatted by the mask, just return as-is
@@ -96,7 +91,11 @@ function formatDate(date: string): string | undefined {
 }
 
 /**
- * Gets the label for a field from FIELD_DEFS
+ * Given a field name, return its label from FIELD_DEFS.
+ *
+ * @example
+ * getFieldLabel("dateOfBirth")
+ * // "Date of birth"
  */
 export function getFieldLabel(fieldName: FieldName): string {
   const fieldDef = FIELD_DEFS.find((def) => def.name === fieldName);

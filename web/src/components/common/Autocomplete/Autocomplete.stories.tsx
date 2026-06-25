@@ -13,16 +13,29 @@ const meta: Meta<typeof Autocomplete> = {
 export default meta;
 type Story = StoryFn<typeof Autocomplete>;
 
+interface Command {
+  id: string;
+  name: string;
+}
+
+const commands: Command[] = [
+  { id: "new-file", name: "Create new file..." },
+  { id: "new-folder", name: "Create new folder..." },
+  { id: "assign", name: "Assign to..." },
+  { id: "assign-me", name: "Assign to me" },
+  { id: "change-status", name: "Change status..." },
+  { id: "change-priority", name: "Change priority..." },
+  { id: "add-label", name: "Add label..." },
+  { id: "remove-label", name: "Remove label..." },
+];
+
 export const Example: Story = (args) => (
-  <Autocomplete {...args}>
-    <MenuItem>Create new file...</MenuItem>
-    <MenuItem>Create new folder...</MenuItem>
-    <MenuItem>Assign to...</MenuItem>
-    <MenuItem>Assign to me</MenuItem>
-    <MenuItem>Change status...</MenuItem>
-    <MenuItem>Change priority...</MenuItem>
-    <MenuItem>Add label...</MenuItem>
-    <MenuItem>Remove label...</MenuItem>
+  <Autocomplete
+    {...args}
+    items={commands}
+    renderEmptyState={() => "No commands found"}
+  >
+    {(item: Command) => <MenuItem id={item.id}>{item.name}</MenuItem>}
   </Autocomplete>
 );
 

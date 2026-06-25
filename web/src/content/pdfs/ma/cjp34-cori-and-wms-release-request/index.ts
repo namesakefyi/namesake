@@ -8,7 +8,7 @@ export default definePdf<PdfFieldName>({
   id: "cjp34-cori-and-wms-release-request",
   title: "Court Activity Record Request Form",
   code: "CJP-34",
-  jurisdiction: "MA",
+  jurisdiction: "ma",
   canonicalUrl:
     "https://www.mass.gov/doc/court-activity-record-information-and-warrant-management-system-release-request-form-cjp-34/download",
   pdfPath: pdf,

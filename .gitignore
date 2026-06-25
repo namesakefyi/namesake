@@ -18,7 +18,9 @@ yarn-error.log*
 pnpm-debug.log*
 
 # environment variables
-.env*
+.env
+.env.local
+.env.production
 .dev.vars*
 
 # macOS-specific files
@@ -30,10 +32,10 @@ pnpm-debug.log*
 # tests
 artifacts/
 coverage/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
 
 # cloudflare
 .wrangler/
@@ -47,3 +49,6 @@ stats.html
 
 # sanity generated schema
 schema.json
+
+# lighthouse
+.unlighthouse

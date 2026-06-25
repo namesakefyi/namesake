@@ -6,7 +6,7 @@ import type { PdfFieldName } from "./schema";
 export default definePdf<PdfFieldName>({
   id: "affidavit-of-indigency",
   title: "Affidavit of Indigency",
-  jurisdiction: "MA",
+  jurisdiction: "ma",
   canonicalUrl: "https://www.mass.gov/doc/affidavit-of-indigency/download",
   pdfPath: pdf,
   resolver: (data) => ({

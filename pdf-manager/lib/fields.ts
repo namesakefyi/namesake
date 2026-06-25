@@ -21,8 +21,8 @@ export interface FormField {
 }
 
 export interface Jurisdiction {
+  id: string;
   name: string;
-  abbreviation: string;
 }
 
 let _formFields: FormField[] | null = null;
@@ -45,12 +45,11 @@ export function loadFormFields(): FormField[] {
 export function loadJurisdictions(): Jurisdiction[] {
   if (_jurisdictions) return _jurisdictions;
   const content = readFileSync(JURISDICTIONS_PATH, "utf8");
-  const regex = /\{\s*name:\s*"([^"]+)",\s*abbreviation:\s*"([^"]+)"/g;
-  const result: Jurisdiction[] = [];
-  for (const m of content.matchAll(regex)) {
-    result.push({ name: m[1], abbreviation: m[2] });
-  }
-  _jurisdictions = result;
+  const regex = /^\s*(\w{2}):\s*\{\s*name:\s*"([^"]+)"/gm;
+  _jurisdictions = [...content.matchAll(regex)].map(([, id, name]) => ({
+    id,
+    name,
+  }));
   return _jurisdictions;
 }
 

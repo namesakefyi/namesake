@@ -1,6 +1,6 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
   "root": true,
+  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
   "files": {
     "includes": [
       "**",
@@ -37,7 +37,10 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
+      "a11y": {
+        "noSvgWithoutTitle": "off"
+      },
       "style": {
         "noParameterAssign": "error",
         "useAsConstAssertion": "error",

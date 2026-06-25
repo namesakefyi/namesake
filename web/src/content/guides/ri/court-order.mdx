@@ -1,11 +1,12 @@
 ---
 title: Court Order
 description: Getting a court order is the first step to take when changing your name.
-state: ri
+jurisdiction: ri
 category: court-order
 ---
 
 import { FormContainer } from "../../../components/forms/FormContainer"
+import MapEmbed from "../../../components/MapEmbed.astro"
 
 ## Get prepared
 
@@ -128,10 +129,7 @@ To get a background check in person, you will need to travel to Cranston. Collec
 
 Bring your documents to:
 
-**Rhode Island Attorney General  
-Customer Service Center**  
-[4 Howard Avenue  
-Cranston, RI 02920](https://maps.app.goo.gl/YG6D9ko4THR6QWUb6)
+<MapEmbed name="Rhode Island Attorney General Customer Service Center" address={{ address1: "4 Howard Ave", city: "Cranston", state: "RI", zip: "02920" }} />
 
 Hours of operation are:
 

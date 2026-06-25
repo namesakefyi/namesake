@@ -227,8 +227,5 @@ export async function handleReplacePdf(c: Context) {
 }
 
 export async function handleGetJurisdictions(c: Context) {
-  return c.json([
-    { name: "Federal", abbreviation: "federal" },
-    ...loadJurisdictions(),
-  ]);
+  return c.json([{ id: "federal", name: "Federal" }, ...loadJurisdictions()]);
 }

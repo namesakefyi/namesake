@@ -6,7 +6,7 @@ describe("definePdf", () => {
     const definition = definePdf({
       id: "test-form" as any,
       title: "Test Form",
-      jurisdiction: "MA",
+      jurisdiction: "ma",
       canonicalUrl: "https://example.com",
       pdfPath: "public/forms/test-form.pdf",
       resolver: (data) => ({

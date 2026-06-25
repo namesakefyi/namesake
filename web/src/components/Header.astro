@@ -1,7 +1,6 @@
 ---
 import { siteInfo } from "#constants/site-info";
 import Logo from "./Logo.astro";
-import Search from "./Search.astro";
 
 const { pathname } = Astro.url;
 
@@ -12,10 +11,9 @@ const navLinks = [
 ];
 ---
 
-<header>
+<header data-no-print>
   <a href="/" aria-label="Home" id="logo"><Logo /></a>
   <nav aria-label="Site">
-    <Search />
     <ul>
       {
         navLinks.map(({ href, label }) => (
