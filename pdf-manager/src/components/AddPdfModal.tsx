@@ -136,9 +136,9 @@ export function AddPdfModal({ isOpen, onClose, onSuccess }: AddPdfModalProps) {
                 <option value="" disabled>
                   Select…
                 </option>
-                {jurisdictions.map((j) => (
-                  <option key={j.abbreviation} value={j.abbreviation}>
-                    {j.name}
+                {jurisdictions.map((jurisdiction) => (
+                  <option key={jurisdiction.id} value={jurisdiction.id}>
+                    {jurisdiction.name}
                   </option>
                 ))}
               </select>

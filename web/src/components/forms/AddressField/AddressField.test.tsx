@@ -47,7 +47,7 @@ describe("AddressField", () => {
     // Select a state
     await userEvent.click(stateSelect);
     const californiaOption = screen.getByRole("option", {
-      name: JURISDICTIONS.CA,
+      name: JURISDICTIONS.ca.name,
     });
     await userEvent.click(californiaOption);
 
@@ -238,7 +238,7 @@ describe("AddressField", () => {
     });
     await userEvent.click(stateSelect);
     const newYorkOption = screen.getByRole("option", {
-      name: JURISDICTIONS.NY,
+      name: JURISDICTIONS.ny.name,
     });
     await userEvent.click(newYorkOption);
 

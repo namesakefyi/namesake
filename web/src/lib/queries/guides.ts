@@ -7,33 +7,41 @@ const categoryRank = (id: string) => {
   return i === -1 ? GUIDE_CATEGORY_ORDER.length : i;
 };
 
-export type GuideStateGroup = {
-  state: CollectionEntry<"states">;
+export type GuideJurisdictionGroup = {
+  jurisdiction: CollectionEntry<"jurisdictions">;
   guides: CollectionEntry<"guides">[];
 };
 
-export async function getGuidesByState(): Promise<{
+export async function getGuidesByJurisdiction(): Promise<{
   generalGuides: CollectionEntry<"guides">[];
-  guidesByState: GuideStateGroup[];
+  guidesByJurisdiction: GuideJurisdictionGroup[];
 }> {
   const allGuides = await getCollection("guides", ({ data }) => !data.unlisted);
 
-  const generalGuides = allGuides.filter(({ data }) => !data.state);
+  const generalGuides = allGuides.filter(({ data }) => !data.jurisdiction);
 
-  const withState = await Promise.all(
+  const withJurisdiction = await Promise.all(
     allGuides.flatMap((guide) =>
-      guide.data.state
-        ? [getEntry(guide.data.state).then((state) => ({ guide, state }))]
+      guide.data.jurisdiction
+        ? [
+            getEntry(guide.data.jurisdiction).then((jurisdiction) => ({
+              guide,
+              jurisdiction,
+            })),
+          ]
         : [],
     ),
   );
 
-  const byState = Object.groupBy(withState, ({ state }) => state.id);
+  const byJurisdiction = Object.groupBy(
+    withJurisdiction,
+    ({ jurisdiction }) => jurisdiction.id,
+  );
 
-  const guidesByState = Object.values(byState)
-    .filter((group): group is typeof withState => !!group)
+  const guidesByJurisdiction = Object.values(byJurisdiction)
+    .filter((group): group is typeof withJurisdiction => !!group)
     .map((group) => ({
-      state: group[0].state,
+      jurisdiction: group[0].jurisdiction,
       guides: group
         .map(({ guide }) => guide)
         .sort(
@@ -43,7 +51,9 @@ export async function getGuidesByState(): Promise<{
             a.data.title.localeCompare(b.data.title),
         ),
     }))
-    .sort((a, b) => a.state.data.name.localeCompare(b.state.data.name));
+    .sort((a, b) =>
+      a.jurisdiction.data.name.localeCompare(b.jurisdiction.data.name),
+    );
 
-  return { generalGuides, guidesByState };
+  return { generalGuides, guidesByJurisdiction };
 }

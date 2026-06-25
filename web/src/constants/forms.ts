@@ -1,6 +1,6 @@
 import type { Step } from "#lib/forms/types";
 import type { FormData } from "./fields";
-import type { StateId } from "./jurisdictions";
+import type { JurisdictionId } from "./jurisdictions";
 import type { PDFId } from "./pdf";
 
 export const FORM_SLUGS = [
@@ -80,8 +80,8 @@ export interface FormConfig {
   title: string;
   /** Optional description */
   description?: string;
-  /** State abbreviation, e.g. "ma" */
-  state?: StateId;
+  /** Jurisdiction ID, e.g. "ma" */
+  jurisdiction?: JurisdictionId;
   /** Category identifier */
   category: CategoryId;
   /** Costs associated with this form */

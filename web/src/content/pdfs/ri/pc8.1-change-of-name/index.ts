@@ -10,7 +10,7 @@ export default definePdf<PdfFieldName>({
   id: "pc8.1-change-of-name",
   title: "Change of Name",
   code: "PC-8.1",
-  jurisdiction: "RI",
+  jurisdiction: "ri",
   canonicalUrl:
     "https://docs.sos.ri.gov/documents/BusinessServices/PC8.1-change-of-name.pdf",
   pdfPath: pdf,

@@ -2,7 +2,7 @@ import { type MaskitoOptions, maskitoTransform } from "@maskito/core";
 import { type Key, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import type { FieldName } from "#constants/fields";
-import { JURISDICTIONS } from "#constants/jurisdictions";
+import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 import { ComboBox, ComboBoxItem } from "../../common/ComboBox";
 import { TextField } from "../../common/TextField";
 import "./AddressField.css";
@@ -206,9 +206,9 @@ export function AddressField({
             errorMessage={error?.message}
             menuTrigger="focus"
           >
-            {Object.entries(JURISDICTIONS).map(([value, label]) => (
-              <ComboBoxItem key={value} id={value}>
-                {label}
+            {JURISDICTION_OPTIONS.map((option) => (
+              <ComboBoxItem key={option.value} id={option.value}>
+                {option.label}
               </ComboBoxItem>
             ))}
           </ComboBox>

@@ -14,8 +14,8 @@ export interface PdfMeta {
 }
 
 export interface Jurisdiction {
+  id: string;
   name: string;
-  abbreviation: string;
 }
 
 export interface Diff {
