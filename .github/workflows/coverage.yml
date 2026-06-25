@@ -27,7 +27,7 @@ jobs:
   # Runs on PRs: test coverage for the branch under review.
   test-coverage-branch:
     if: github.event_name == 'pull_request'
-    name: Test Coverage (${{ github.head_ref }})
+    name: Test Coverage (branch)
     runs-on: ubuntu-latest
 
     steps:
@@ -111,7 +111,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Download coverage (${{ github.head_ref }})
+      - name: Download coverage (branch)
         uses: actions/download-artifact@v8
         with:
           name: coverage-branch
