@@ -8,6 +8,13 @@ on:
       - ".vscode/**"
       - "docs/**"
       - "pdf-manager/**"
+  push:
+    branches: [main]
+    paths-ignore:
+      - ".changeset/**"
+      - ".vscode/**"
+      - "docs/**"
+      - "pdf-manager/**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,8 +24,10 @@ permissions:
   contents: read
 
 jobs:
+  # Runs on PRs: test coverage for the branch under review.
   test-coverage-branch:
-    name: Test Coverage (${{ github.head_ref }})
+    if: github.event_name == 'pull_request'
+    name: Test Coverage (branch)
     runs-on: ubuntu-latest
 
     steps:
@@ -51,16 +60,17 @@ jobs:
           path: web/coverage
           overwrite: true
 
+  # Runs on pushes to main: refresh the cached baseline coverage that PRs
+  # compare against, so PRs don't each have to re-run main's test suite.
   test-coverage-main:
+    if: github.event_name == 'push'
     name: Test Coverage (main)
     runs-on: ubuntu-latest
-    continue-on-error: true
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v7.0.0
         with:
-          ref: main
           persist-credentials: false
 
       - name: Setup pnpm
@@ -75,20 +85,20 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Test coverage
         run: pnpm --filter @namesake/web test:coverage
 
-      - name: Upload coverage
-        uses: actions/upload-artifact@v7
+      - name: Cache coverage
+        uses: actions/cache/save@v5.0.5
         with:
-          name: coverage-main
           path: web/coverage
-          overwrite: true
+          key: coverage-main-${{ github.sha }}
 
   report-coverage:
-    needs: [test-coverage-branch, test-coverage-main]
+    if: github.event_name == 'pull_request'
+    needs: [test-coverage-branch]
     name: Report Coverage
     runs-on: ubuntu-latest
     permissions:
@@ -101,24 +111,29 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Download coverage (${{ github.head_ref }})
+      - name: Download coverage (branch)
         uses: actions/download-artifact@v8
         with:
           name: coverage-branch
           path: coverage
 
-      - name: Download coverage (main)
+      - name: Restore coverage (main)
         id: download-main
-        continue-on-error: true
-        uses: actions/download-artifact@v8
+        uses: actions/cache/restore@v5.0.5
         with:
-          name: coverage-main
-          path: coverage-main
+          path: web/coverage
+          key: coverage-main-${{ github.sha }}
+          restore-keys: coverage-main-
+
+      - name: Move coverage (main)
+        if: steps.download-main.outputs.cache-matched-key != ''
+        run: mv web/coverage coverage-main
 
       - name: Report coverage and comparison
         if: always() && hashFiles('coverage-main/coverage-summary.json') != ''
         uses: davelosert/vitest-coverage-report-action@v2.12.1
         with:
+          vite-config-path: web/vitest.config.ts
           json-summary-compare-path: coverage-main/coverage-summary.json
 
         # Fallback to report branch coverage without comparison
@@ -126,3 +141,5 @@ jobs:
       - name: Report coverage
         if: always() && hashFiles('coverage-main/coverage-summary.json') == ''
         uses: davelosert/vitest-coverage-report-action@v2.12.1
+        with:
+          vite-config-path: web/vitest.config.ts
