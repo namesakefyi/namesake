@@ -32,10 +32,10 @@ pnpm-debug.log*
 # tests
 artifacts/
 coverage/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
 
 # cloudflare
 .wrangler/

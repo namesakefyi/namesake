@@ -30,7 +30,7 @@ export default defineForm({
     {
       ...birthCertificateStep,
       when: (data) =>
-        data.birthplaceCountry === "US" && data.birthplaceState === "ri",
+        data.birthplaceCountry === "US" && data.birthplaceState === "RI",
     },
     previousNameChangeStep,
     familyInfoStep,

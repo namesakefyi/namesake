@@ -5,7 +5,7 @@ import { formatBirthplaceCountryOrState } from "../formatBirthplaceCountryOrStat
 
 describe("formatBirthplaceCountryOrState", () => {
   it("returns state name when valid state is provided", () => {
-    expect(formatBirthplaceCountryOrState(undefined, "ca")).toBe(
+    expect(formatBirthplaceCountryOrState(undefined, "CA")).toBe(
       JURISDICTIONS.ca.name,
     );
   });
@@ -19,7 +19,7 @@ describe("formatBirthplaceCountryOrState", () => {
   });
 
   it("returns state name when both country and state are provided and country is the US", () => {
-    expect(formatBirthplaceCountryOrState("US", "ny")).toBe(
+    expect(formatBirthplaceCountryOrState("US", "NY")).toBe(
       JURISDICTIONS.ny.name,
     );
   });

@@ -14,7 +14,7 @@ describe("Background Check Authorization of Release", () => {
     dateOfBirth: "1970-01-01",
     residenceStreetAddress: "100 Main St",
     residenceCity: "Providence",
-    residenceState: "ri",
+    residenceState: "RI",
     residenceZipCode: "02903",
   };
 

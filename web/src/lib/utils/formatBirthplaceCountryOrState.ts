@@ -1,5 +1,5 @@
 import { COUNTRIES } from "#constants/countries";
-import { isJurisdictionId, JURISDICTIONS } from "#constants/jurisdictions";
+import { JURISDICTIONS, type JurisdictionId } from "#constants/jurisdictions";
 
 /**
  * Given a birthplace country and/or state, return the country name
@@ -8,7 +8,7 @@ import { isJurisdictionId, JURISDICTIONS } from "#constants/jurisdictions";
  * @example
  * formatBirthplaceCountryOrState("MX")
  * // "Mexico"
- * formatBirthplaceCountryOrState("US", "ma")
+ * formatBirthplaceCountryOrState("US", "MA")
  * // "Massachusetts"
  */
 export const formatBirthplaceCountryOrState = (
@@ -18,8 +18,8 @@ export const formatBirthplaceCountryOrState = (
   if (birthplaceCountry && birthplaceCountry !== "US") {
     return COUNTRIES[birthplaceCountry];
   }
-  if (birthplaceState && isJurisdictionId(birthplaceState)) {
-    return JURISDICTIONS[birthplaceState].name;
+  if (birthplaceState) {
+    return JURISDICTIONS[birthplaceState.toLowerCase() as JurisdictionId]?.name;
   }
   return "";
 };
