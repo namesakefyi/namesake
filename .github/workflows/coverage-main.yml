@@ -20,7 +20,7 @@ jobs:
   # Refreshes the cached baseline coverage that PRs compare against, so PRs
   # don't each have to re-run main's test suite.
   cache-coverage-main:
-    name: Cache Coverage (main)
+    name: Cache Coverage
     runs-on: ubuntu-latest
 
     steps:

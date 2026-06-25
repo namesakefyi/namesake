@@ -19,7 +19,7 @@ permissions:
 jobs:
   # Test coverage for the branch under review.
   test-coverage-branch:
-    name: Test Coverage (branch)
+    name: Test Coverage
     runs-on: ubuntu-latest
 
     steps:
