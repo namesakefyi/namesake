@@ -8,13 +8,6 @@ on:
       - ".vscode/**"
       - "docs/**"
       - "pdf-manager/**"
-  push:
-    branches: [main]
-    paths-ignore:
-      - ".changeset/**"
-      - ".vscode/**"
-      - "docs/**"
-      - "pdf-manager/**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -24,9 +17,8 @@ permissions:
   contents: read
 
 jobs:
-  # Runs on PRs: test coverage for the branch under review.
+  # Test coverage for the branch under review.
   test-coverage-branch:
-    if: github.event_name == 'pull_request'
     name: Test Coverage (branch)
     runs-on: ubuntu-latest
 
@@ -60,44 +52,7 @@ jobs:
           path: web/coverage
           overwrite: true
 
-  # Runs on pushes to main: refresh the cached baseline coverage that PRs
-  # compare against, so PRs don't each have to re-run main's test suite.
-  test-coverage-main:
-    if: github.event_name == 'push'
-    name: Test Coverage (main)
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v7.0.0
-        with:
-          persist-credentials: false
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6.0.9
-        with:
-          run_install: false
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: "24.x"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Test coverage
-        run: pnpm --filter @namesake/web test:coverage
-
-      - name: Cache coverage
-        uses: actions/cache/save@v5.0.5
-        with:
-          path: web/coverage
-          key: coverage-main-${{ github.sha }}
-
   report-coverage:
-    if: github.event_name == 'pull_request'
     needs: [test-coverage-branch]
     name: Report Coverage
     runs-on: ubuntu-latest
