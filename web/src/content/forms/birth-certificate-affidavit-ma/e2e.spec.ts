@@ -64,6 +64,26 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
     await page.getByRole("button", { name: "Start" }).click();
   });
 
+  await test.step("Old gender", async () => {
+    await expect(
+      page.getByRole("heading", {
+        name: "Which gender marker appears on your birth certificate?",
+      }),
+    ).toBeVisible();
+    await page.getByText("Female").click();
+    await page.getByRole("button", { name: "Continue" }).click();
+  });
+
+  await test.step("New gender", async () => {
+    await expect(
+      page.getByRole("heading", {
+        name: "What is your new gender marker?",
+      }),
+    ).toBeVisible();
+    await page.getByText("X").click();
+    await page.getByRole("button", { name: "Continue" }).click();
+  });
+
   await test.step("Old name", async () => {
     await expect(
       page.getByRole("heading", {
@@ -79,13 +99,20 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
-  await test.step("Old gender", async () => {
+  await test.step("New name", async () => {
     await expect(
       page.getByRole("heading", {
-        name: "Which gender marker appears on your birth certificate?",
+        name: "What is your new name?",
       }),
     ).toBeVisible();
-    await page.getByText("Female").click();
+    await expect(
+      page.getByRole("textbox", { name: "First name" }),
+    ).toBeVisible();
+    await page.getByRole("textbox", { name: "First name" }).fill("Elliot");
+    await page.getByRole("textbox", { name: "Middle name" }).fill("");
+    await page
+      .getByRole("textbox", { name: "Last or family name" })
+      .fill("Page");
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
@@ -126,33 +153,6 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
-  await test.step("New name", async () => {
-    await expect(
-      page.getByRole("heading", {
-        name: "What is your new name?",
-      }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("textbox", { name: "First name" }),
-    ).toBeVisible();
-    await page.getByRole("textbox", { name: "First name" }).fill("Elliot");
-    await page.getByRole("textbox", { name: "Middle name" }).fill("");
-    await page
-      .getByRole("textbox", { name: "Last or family name" })
-      .fill("Page");
-    await page.getByRole("button", { name: "Continue" }).click();
-  });
-
-  await test.step("New gender", async () => {
-    await expect(
-      page.getByRole("heading", {
-        name: "What is your new gender marker?",
-      }),
-    ).toBeVisible();
-    await page.getByText("X").click();
-    await page.getByRole("button", { name: "Continue" }).click();
-  });
-
   await test.step("Mailing address", async () => {
     await expect(
       page.getByRole("heading", { name: "What is your mailing address?" }),
@@ -190,19 +190,15 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
-  await test.step("Included documents", async () => {
+  await test.step("Waive fees", async () => {
     await expect(
       page.getByRole("heading", {
-        name: "Are you submitting the following items?",
+        name: "Do you need to waive the fees?",
       }),
     ).toBeVisible();
 
-    await page
-      .getByText(
-        "A court-certified copy of a legal name change decree (if applicable)",
-      )
-      .click();
-    await page.getByText("A check or money order for all the fees").click();
+    await expect(page.getByRole("checkbox")).toBeVisible();
+
     await page.getByRole("button", { name: "Continue" }).click();
   });
 
@@ -215,7 +211,7 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
 
     await expect(
       page.getByText(
-        "At least one parent or guardian must authorize this change if you are under 18 years old.",
+        "Since you are under 18 years old, at least one parent or guardian must authorize this change.",
       ),
     ).toBeVisible();
 
@@ -238,7 +234,7 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
     await expect(page.getByText("Old last name: Johnson")).toBeVisible();
 
     await expect(
-      page.getByText("Current documented gender: female"),
+      page.getByText("Existing gender marker: Female"),
     ).toBeVisible();
 
     await expect(
@@ -258,7 +254,7 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
     await expect(page.getByText("New middle name: Missing!")).toBeVisible();
     await expect(page.getByText("New last name: Page")).toBeVisible();
 
-    await expect(page.getByText("Desired gender: x")).toBeVisible();
+    await expect(page.getByText("Desired gender marker: X")).toBeVisible();
 
     await expect(
       page.getByText("Mailing street address: 100 Main St"),

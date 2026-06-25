@@ -654,12 +654,12 @@ export const FIELD_DEFS = [
   },
   {
     name: "oldGender",
-    label: "Current documented gender",
+    label: "Existing gender marker",
     type: "string",
   },
   {
     name: "newGender",
-    label: "Desired gender",
+    label: "Desired gender marker",
     type: "string",
   },
   {
@@ -684,6 +684,11 @@ export const FIELD_DEFS = [
     name: "guardianTwoFullName",
     label: "Guardian/parent 2's full name",
     type: "string",
+  },
+  {
+    name: "waveDocumentFees",
+    label: "Waive the fees",
+    type: "boolean",
   },
 ] as const;
 

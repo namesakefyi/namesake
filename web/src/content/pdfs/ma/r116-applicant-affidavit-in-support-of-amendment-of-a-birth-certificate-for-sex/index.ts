@@ -47,9 +47,12 @@ export default definePdf<PdfFieldName>({
     phoneNumber: data.phoneNumber,
     email: data.email,
     // A court certified copy of a legal name change decree if applicable and
-    nameChangeDecreeIncluded: data.nameChangeDecreeIncluded,
+    // We check this box if the applicant is changing their name
+    nameChangeDecreeIncluded:
+      joinNames(data.oldFirstName, data.oldMiddleName, data.oldLastName) !==
+      joinNames(data.newFirstName, data.newMiddleName, data.newLastName),
     // A check or money order payable to the Commonwealth of Massachusetts as follows
-    paymentIncluded: data.paymentIncluded,
+    paymentIncluded: !data.waveDocumentFees,
     // Name of Parent/Guardian1
     guardianOneFullName: data.guardianOneFullName,
     // Name of Parent/Guardian2

@@ -9,7 +9,7 @@ import { guardianAuthorizationStep } from "./steps/GuardianAuthorizationStep";
 import { newGenderStep } from "./steps/NewGenderStep";
 import { newNameStep } from "./steps/NewNameStep";
 import { parentNamesStep } from "./steps/ParentNamesStep";
-import { supportingDocumentsStep } from "./steps/SupportingDocumentsSteps";
+import { waiveCostsStep } from "./steps/WaiveCostsStep";
 
 export default defineForm({
   title: "Birth Certificate: Massachusetts",
@@ -18,20 +18,16 @@ export default defineForm({
   state: "ma",
   category: "birth-certificate",
   steps: [
-    // Section: Information on existing birth certificate
-    birthNameStep,
     birthGenderStep,
+    newGenderStep,
+    birthNameStep,
+    newNameStep,
     dateOfBirthStep,
     birthTownStep,
     parentNamesStep,
-    // Section: Name and Sex to appear on amended birth certificate
-    newNameStep,
-    newGenderStep,
     mailingAddressStep,
     contactInfoStep,
-    // Section: Applicant affidavit
-    supportingDocumentsStep,
-    // Section: For subjects under 18 years of age
+    waiveCostsStep,
     guardianAuthorizationStep,
   ],
   pdfs: [

@@ -7,7 +7,7 @@ export const guardianAuthorizationStep = defineStep({
   id: "guardian-authorization-step",
   title: "Parent or guardian authorization",
   description:
-    "At least one parent or guardian must authorize this change if you are under 18 years old.",
+    "Since you are under 18 years old, at least one parent or guardian must authorize this change.",
   fields: ["guardianOneFullName", "guardianTwoFullName"],
   when: (data) => deriveCurrentAge(data.dateOfBirth) < 18,
   component: ({ stepConfig }) => {
@@ -17,7 +17,6 @@ export const guardianAuthorizationStep = defineStep({
           label="Parent or guardian 1's full name"
           name="guardianOneFullName"
           size={24}
-          isRequired
         />
         <ShortTextField
           label="Parent or guardian 2's full name (optional)"
