@@ -81,7 +81,7 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
   </head>
   <body data-color={color}>
     <Header />
-    <main>
+    <main data-pagefind-body>
       <slot />
     </main>
     <Footer />

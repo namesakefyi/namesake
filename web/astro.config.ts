@@ -8,6 +8,7 @@ import {
   fontProviders,
   passthroughImageService,
 } from "astro/config";
+import pagefind from "astro-pagefind";
 import browserslist from "browserslist";
 import { browserslistToTargets } from "lightningcss";
 import { satteriModifiedTime } from "./scripts/satteri-modified-time.mjs";
@@ -26,7 +27,7 @@ export default defineConfig({
       mdastPlugins: [satteriModifiedTime],
     }),
   },
-  integrations: [sitemap(), mdx(), react()],
+  integrations: [sitemap(), mdx(), react(), pagefind()],
   prefetch: true,
   trailingSlash: "never",
   build: {

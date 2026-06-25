@@ -55,6 +55,7 @@
     "@severo_bo/us-atlas-2023": "^4.0.0",
     "@xstate/react": "^6.1.0",
     "astro": "7.0.2",
+    "astro-pagefind": "^2.0.0",
     "browserslist": "^4.28.2",
     "cf-workers-og": "^3.0.1",
     "d3": "^7.9.0",
