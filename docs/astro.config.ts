@@ -50,6 +50,7 @@ export default defineConfig({
             "guides/writing",
             "guides/new-pdfs",
             "guides/building-forms",
+            "guides/databases",
           ],
         },
         {
