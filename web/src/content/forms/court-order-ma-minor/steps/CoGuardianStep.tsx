@@ -9,7 +9,7 @@ import {
 import { PhoneField } from "#components/forms/PhoneField";
 import { ShortTextField } from "#components/forms/ShortTextField";
 import { YesNoField } from "#components/forms/YesNoField";
-import { JURISDICTIONS } from "#constants/jurisdictions";
+import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 import { defineStep } from "#lib/forms/defineStep";
 import { nameOrFallback } from "#lib/forms/resolveStepContent";
 
@@ -85,9 +85,9 @@ function CoGuardianStateField() {
           errorMessage={error?.message}
           menuTrigger="focus"
         >
-          {Object.entries(JURISDICTIONS).map(([id, jurisdiction]) => (
-            <ComboBoxItem key={id} id={id}>
-              {jurisdiction.name}
+          {JURISDICTION_OPTIONS.map((option) => (
+            <ComboBoxItem key={option.value} id={option.value}>
+              {option.label}
             </ComboBoxItem>
           ))}
         </ComboBox>

@@ -78,3 +78,11 @@ export const JURISDICTIONS = {
 
 /** Lowercase state/territory abbreviation, matching content collection jurisdiction IDs. */
 export type JurisdictionId = keyof typeof JURISDICTIONS;
+
+/** `{ label, value }` options for jurisdiction selects/comboboxes. */
+export const JURISDICTION_OPTIONS = Object.entries(JURISDICTIONS).map(
+  ([id, jurisdiction]) => ({
+    label: jurisdiction.name,
+    value: id as JurisdictionId,
+  }),
+);
