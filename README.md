@@ -15,6 +15,8 @@ We 💖 our contributors! Namesake is built by, and for, the trans community, an
 
 😌 Keep Namesake safe for everyone by reviewing our [code of conduct](https://github.com/namesakefyi/namesake?tab=coc-ov-file).
 
+🤲 [Donate](https://namesake.fyi/donate) to support our work.
+
 ## Accessibility
 
 Namesake aims to conform to the Level AA accessibility standards outlined in the [WCAG 2.2 specification](https://www.w3.org/TR/WCAG22/). If you experience an issue with accessing any part of this site, please [file an issue](https://github.com/namesakefyi/namesake/issues) and we will correct it.
