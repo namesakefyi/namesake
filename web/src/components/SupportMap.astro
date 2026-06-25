@@ -7,7 +7,7 @@ import { feature } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import { formatStateList } from "#lib/utils/formatStateList";
 
-const stateEntries = await getCollection("states");
+const stateEntries = await getCollection("jurisdictions");
 
 const stateSupport = stateEntries.reduce(
   (acc: Record<string, string>, entry) => {

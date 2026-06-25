@@ -206,9 +206,9 @@ export function AddressField({
             errorMessage={error?.message}
             menuTrigger="focus"
           >
-            {Object.entries(JURISDICTIONS).map(([value, label]) => (
-              <ComboBoxItem key={value} id={value}>
-                {label}
+            {Object.entries(JURISDICTIONS).map(([id, j]) => (
+              <ComboBoxItem key={id} id={id.toUpperCase()}>
+                {j.name}
               </ComboBoxItem>
             ))}
           </ComboBox>

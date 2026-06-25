@@ -99,7 +99,7 @@ describe("downloadPdf", () => {
     const customPdf = definePdf({
       id: "test-form" as any,
       title: "Custom Form Name",
-      jurisdiction: "MA",
+      jurisdiction: "ma",
       canonicalUrl: "https://example.com",
       pdfPath: "public/forms/test-form.pdf",
       resolver: () => ({}),

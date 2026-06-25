@@ -16,10 +16,10 @@ import { formatCleanUrl } from "#lib/utils/formatCleanUrl";
 const stateParam = Astro.url.searchParams.get("state");
 const serviceParam = Astro.url.searchParams.get("service");
 
-const [statesCollection, filteredEntries] = await Promise.all([
-  getCollection("states"),
+const [jurisdictionsCollection, filteredEntries] = await Promise.all([
+  getCollection("jurisdictions"),
   getCollection("directory", ({ data }) => {
-    if (stateParam && !data.states.some((ref) => ref.id === stateParam))
+    if (stateParam && !data.jurisdictions.some((ref) => ref.id === stateParam))
       return false;
     if (serviceParam && !data.services.includes(serviceParam as Service))
       return false;
@@ -37,10 +37,11 @@ const contacts = filteredEntries.map(({ id, data }) => ({
   slug: id,
   name: data.name,
   description: data.description,
-  states: data.states
+  jurisdictions: data.jurisdictions
     .map(
       (ref) =>
-        statesCollection.find((s) => s.id === ref.id)?.data.name ?? ref.id,
+        jurisdictionsCollection.find((j) => j.id === ref.id)?.data.name ??
+        ref.id,
     )
     .sort(),
   services: data.services,
@@ -65,7 +66,7 @@ const description =
         <option value="">All states</option>
         <hr />
         {
-          statesCollection.map(({ id, data }) => (
+          jurisdictionsCollection.map(({ id, data }) => (
             <option value={id} selected={id === stateParam}>
               {data.name}
             </option>
@@ -129,7 +130,7 @@ const description =
                 <li>
                   <RiMapPinLine size={18} />
                   <div class="contact-label">
-                    <span>{c.states.join(", ")}</span>
+                    <span>{c.jurisdictions.join(", ")}</span>
                   </div>
                 </li>
                 {c.url && (

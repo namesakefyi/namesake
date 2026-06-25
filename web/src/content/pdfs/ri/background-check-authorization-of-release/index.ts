@@ -8,7 +8,7 @@ import type { PdfFieldName } from "./schema";
 export default definePdf<PdfFieldName>({
   id: "background-check-authorization-of-release",
   title: "Background Check Authorization of Release",
-  jurisdiction: "RI",
+  jurisdiction: "ri",
   canonicalUrl: "https://riag.ri.gov/media/3906/download",
   pdfPath: pdf,
   resolver: (data) => ({

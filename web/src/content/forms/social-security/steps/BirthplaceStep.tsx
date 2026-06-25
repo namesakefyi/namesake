@@ -35,9 +35,9 @@ export const birthplaceStep = defineStep({
             name="birthplaceState"
             label="State"
             placeholder="Select a state"
-            options={Object.entries(JURISDICTIONS).map(([value, label]) => ({
-              label,
-              value,
+            options={Object.entries(JURISDICTIONS).map(([id, j]) => ({
+              label: j.name,
+              value: id.toUpperCase(),
             }))}
           />
         )}

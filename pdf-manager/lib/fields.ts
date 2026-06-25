@@ -45,10 +45,10 @@ export function loadFormFields(): FormField[] {
 export function loadJurisdictions(): Jurisdiction[] {
   if (_jurisdictions) return _jurisdictions;
   const content = readFileSync(JURISDICTIONS_PATH, "utf8");
-  const regex = /\{\s*name:\s*"([^"]+)",\s*abbreviation:\s*"([^"]+)"/g;
+  const regex = /^\s*(\w{2}):\s*\{\s*name:\s*"([^"]+)"/gm;
   const result: Jurisdiction[] = [];
   for (const m of content.matchAll(regex)) {
-    result.push({ name: m[1], abbreviation: m[2] });
+    result.push({ name: m[2], abbreviation: m[1].toUpperCase() });
   }
   _jurisdictions = result;
   return _jurisdictions;
