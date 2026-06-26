@@ -31,17 +31,20 @@ const { jurisdiction, guides } = Astro.props;
 const hasGuides = guides.length > 0;
 
 const searchTitle = `${jurisdiction.data.name}: All Guides`;
+const description = hasGuides
+  ? `Step-by-step name change guides for ${jurisdiction.data.name}.`
+  : `Namesake doesn't have guides for ${jurisdiction.data.name} yet.`;
 ---
 
 <BaseLayout
   title={jurisdiction.data.name}
-  description={`Step-by-step name change guides for ${jurisdiction.data.name}.`}
+  description={description}
   color="white"
 >
   <PageHeader
     title={jurisdiction.data.name}
     searchTitle={searchTitle}
-    description={`Step-by-step name change guides for ${jurisdiction.data.name}.`}
+    description={description}
     breadcrumbs={[
       { label: "Namesake", href: "/" },
       { label: "Guides", href: "/guides" },
@@ -54,10 +57,7 @@ const searchTitle = `${jurisdiction.data.name}: All Guides`;
       </div>
     ) : (
       <div class="placeholder">
-        <p>
-          Namesake doesn't have guides for {jurisdiction.data.name} yet. Want to
-          help build them?
-        </p>
+        <p>Help us add support:</p>
         <ul>
           <li>
             <a href={siteInfo.urls.contribute}>Read the contributor manual</a>
@@ -87,6 +87,7 @@ const searchTitle = `${jurisdiction.data.name}: All Guides`;
 
     p {
       font-size: var(--step-1);
+      font-weight: var(--weight-bold);
     }
 
     ul {

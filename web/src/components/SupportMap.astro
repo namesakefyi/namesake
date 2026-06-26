@@ -17,6 +17,11 @@ const stateSupport = stateEntries.reduce(
   {},
 );
 
+const stateSlug = stateEntries.reduce((acc: Record<string, string>, entry) => {
+  acc[entry.data.name] = entry.id;
+  return acc;
+}, {});
+
 const topology = usaStates as unknown as Topology;
 const featureCollection = feature(
   topology,
@@ -29,6 +34,7 @@ const stateFeatures = featureCollection.features.map((geoFeature: Feature) => ({
     ...geoFeature.properties,
     name: geoFeature.properties?.name || "",
     supportLevel: stateSupport[geoFeature.properties?.name] || "none",
+    slug: stateSlug[geoFeature.properties?.name] || "",
   },
 }));
 
@@ -149,6 +155,8 @@ function getFillForSupportLevel(supportLevel: string): string {
             fill={getFillForSupportLevel(feature.properties.supportLevel)}
             data-support={feature.properties.supportLevel}
             data-name={feature.properties.name}
+            data-slug={feature.properties.slug}
+            aria-label={feature.properties.name}
           />
         ))
       }
@@ -258,6 +266,10 @@ function getFillForSupportLevel(supportLevel: string): string {
   }
 
   states
+    .on("click", function () {
+      const slug = (this as SVGPathElement).getAttribute("data-slug");
+      if (slug) window.location.href = `/guides/${slug}`;
+    })
     .on("mouseenter", function (event: MouseEvent) {
       const element = this as SVGPathElement;
       const stateName = element.getAttribute("data-name") || "";
@@ -373,6 +385,7 @@ function getFillForSupportLevel(supportLevel: string): string {
     stroke-linejoin: round;
     stroke-width: 1.5;
     vector-effect: non-scaling-stroke;
+    cursor: pointer;
 
     &[data-hovered="true"] {
       stroke: var(--text-color);
