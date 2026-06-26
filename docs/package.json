@@ -25,5 +25,8 @@
     "starlight-theme-flexoki": "^0.2.2",
     "typescript": "^6.0.3",
     "wrangler": "^4.105.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.1"
   }
 }

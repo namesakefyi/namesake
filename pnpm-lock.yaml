@@ -59,6 +59,10 @@ importers:
       wrangler:
         specifier: ^4.105.0
         version: 4.105.0
+    devDependencies:
+      '@types/node':
+        specifier: ^26.0.1
+        version: 26.0.1
 
   pdf-manager:
     dependencies:
