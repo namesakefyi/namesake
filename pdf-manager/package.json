@@ -10,20 +10,20 @@
   },
   "dependencies": {
     "@cantoo/pdf-lib": "^2.7.1",
-    "@hono/node-server": "^2.0.4",
-    "hono": "^4.12.23",
+    "@hono/node-server": "^2.0.6",
+    "hono": "^4.12.27",
     "pdfjs-dist": "^6.0.227",
     "react": "^19.2.7",
-    "react-aria-components": "^1.18.0",
+    "react-aria-components": "^1.19.0",
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
-    "@clack/prompts": "^1.5.0",
-    "@types/react": "^19.2.16",
+    "@clack/prompts": "^1.6.0",
+    "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.2.0",
+    "@vitejs/plugin-react": "^6.0.3",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
-    "vite": "^8.0.16"
+    "vite": "^8.1.0"
   }
 }
