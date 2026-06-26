@@ -1,11 +1,207 @@
 ---
-title: Writing and Style Guide
-description: The name change process can be made easier to understand by following these writing guidelines.  
+title: Writing Name Change Guides
+description: Clear, focused writing can help to demystify the name change process.  
 ---
 
-The guidelines below are designed to help craft guides for Namesake that are easy to understand and follow.
+import { FileTree, LinkCard } from '@astrojs/starlight/components';
+
+Namesake organizes its information into [guides](https://namesake.fyi/guides). Each guide is written to direct someone, step-by-step, through the process of updating their name and/or gender marker with a specific institution.
+
+Before you write anything, conduct [research](/guides/research) to help understand the name change landscape.
+
+<LinkCard title="Conducting Research" description="Here's how to run a successful interview and learn more about the ins-and-outs of the name change process for a particular state." href="/guides/research" />
+
+## Organization
+
+Guides are created in `web/src/content/guides` using `.mdx` files which contain:
+
+1. **Frontmatter** (metadata about the guide, including its title and description)
+2. **Markdown** (plain text with specific syntax for things like `**bold**` and `_italics_`)
+3. **Components** (`.astro` and `.tsx` files with more complex behavior, for things like tables and embedded forms)
+
+### Keep urls organized and easy to type
+
+State-specific guides should be nested under a two-letter directory containing the state abbreviation, such as `ma` or `ri`. Guides which are not specific to a state can be placed directly within `/guides`.
+
+<FileTree>
+
+- web/src/content/guides
+  - ma Massachusetts
+    - birth-certificate.mdx
+    - court-order.mdx
+    - state-id.mdx
+  - ri Rhode Island
+    - birth-certificate.mdx
+    - court-order.mdx
+    - state-id.mdx
+  - passport.mdx
+  - social-security.mdx
+  - ...
+
+</FileTree>  
+
+Filenames should use `kebab-case` and be easy to type.
+
+:::tip[Prevent link rot]
+
+When URLs are renamed, existing links to Namesake will break, causing [link rot](https://en.wikipedia.org/wiki/Link_rot). Avoid renaming files within `src/content` and `src/pages`, since these filenames are used to generate site URLs.
+
+If renaming is unavoidable, add an entry to `redirects` in `astro.config.ts`:
+
+```ts {3-6}
+// astro.config.ts
+export default defineConfig({
+  redirects: {
+    '/old-url': '/new-url',
+    '/guides/old-name': '/guides/new-name',
+  },
+});
+```
+
+:::
+
+### Break the guide into key sections
+
+Short, descriptive section headers help the user orient themselves on the page and within the process. You should be able to scan the headings of any guide and understand the overall "shape" of the steps required.
+
+- **Aim for fewer than 7 main sections.** The typical human can store about 7 items in working memory. Beyond that, things can begin to feel overwhelming. Keep it focused. If more content divisions are needed, consider using nested sub-sections.
+- **Use level-two headings.** The page title is the first-level heading of the document, which means that the "top" headings within a guide should begin with `##`. Headings may be nested 1-2 levels deeper (h3 `###` and h4 `####`) when needed.
+- **Keep headings short.** Headings display in the sidebar and should be kept short and descriptive.
+- **Use active voice.** Start headings with a verb, e.g. "_Get_ prepared", "_Fill_ out forms".
+- **Write from the perspective of the user.** (Think of it like completing the sentence: "In order to get through this step, I need to _____.")
+
+### List prerequisites upfront
+
+The very first thing in a guide should be a list of the documents and steps that are required to file.
+
+For example:
+
+```mdx wrap
+# court-order.mdx
+
+## Get prepared
+
+To file, you will need:
+
+1. A certified copy of your birth certificate (long-form). This is available from the Registry of Vital Records or from the city or town where you were born.
+2. Past name change documents, if applicable. For example, a marriage certificate or Judgment of Divorce.
+```
+
+Common prerequisites include a completed court order, updated social security, and updated ID. When this is the case, link to existing Namesake guides for these requirements.
+
+### Don't hide important info behind external links
+
+A Namesake guide should be _self-contained_, allowing a reader to understand the process without navigating to other webpages. Put the information inline, and link to the source for readers who want to verify details.
+
+### Collapse non-essential details
+
+There are questions about the name change process which are important to answer but may not apply to the majority of readers. Answer these questions without making the page look long and intimidating by hiding them behind a toggle.
+
+Use the `<details>` element to collapse non-essential information. For example:
+
+```mdx wrap
+# court-order.mdx
+
+<details>
+  <summary>What if my birth certificate is not written in English?</summary>
+
+  Birth certificates that are not written in English must include a written translation signed by the person translating the birth certificate with a statement that they are fluent in the foreign language and English and that the translation is a true and accurate translation. The translators signature must be notarized.
+
+</details>
+```
+
+`<details>` elements should be placed _after_ the main content of a section.
+
+### Embed interactive forms
+
+Namesake uses guided [forms](https://namesake.fyi/forms) to help users fill out PDFs. Forms which are relevant to a particular guide should be displayed inline by importing `FormContainer`:
+
+```mdx wrap
+# court-order.mdx
+
+import { FormContainer } from "#components/forms/FormContainer/index.ts"
+```
+
+`Formcontainer` accepts a `slug` and should be set to `client:load` and `inline` for proper rendering within guides:
+
+```mdx wrap
+# court-order.mdx
+
+## Fill out forms
+
+<FormContainer client:load slug="court-order-ma" inline />
+```
+
+### Display maps beside addresses
+
+When an address is displayed, import the `MapEmbed` component:
+
+```mdx wrap
+# ri/birth-certificate.mdx
+
+import MapEmbed from "#components/MapEmbed.astro"
+```
+
+The component accepts a `name` string and `address` object.
+
+```mdx wrap
+Bring all documents to the Center for Vital Records:
+
+<MapEmbed
+  name="Rhode Island Department of Health Center for Vital Records"
+  address={{
+    address1: "Simpson Hall",
+    address2: "6 Harrington Road",
+    city: "Cranston",
+    state: "Rhode Island",
+    zip: "02920"
+  }}
+/>
+```
+
+The `name` is used to query Google Maps and display an `<iframe>` alongside the address itself. [See an example.](https://namesake.fyi/guides/ri/birth-certificate#submit-in-person)
+
+### Mark incomplete guides as "stubs"
+
+If a guide is incomplete or lacks important information, mark it as a stub in the frontmatter.
+
+```mdx wrap {5}
+# court-order.mdx
+
+title: Court Order
+description: This is an incomplete guide!
+stub: true
+```
+
+Stubbed guides include a banner at the top. Links to stubbed guides display in red text.
+
+### Cite your sources
+
+Add a "References" section at the botom of each guide. Within it, cite any sources that were used to supply info for the guide. Use this simple citation format:
+
+```md wrap
+## References
+
+- Author name or government agency name. [Page title](https://example.com).
+```
+
+For example:
+
+```md wrap
+## References
+
+- Massachusetts Registry of Vital Records and Statistics. [Amend a birth certificate for sex of the subject](https://www.mass.gov/how-to/amend-a-birth-certificate-for-sex-of-the-subject).
+```
 
 ## Writing
+
+### Do not use AI
+
+It is critical that Namesake provides information that is **accurate** and **reliable**. Never use ChatGPT, Claude, or other AI tools to generate guides.
+
+These tools hallucinate **wrong** but **plausible-sounding** information. Do not trust them.
+
+It is our responsibility to research and share vetted information about the name change process, and that's a responsibility we take very seriously.
 
 ### Use plain language
 
@@ -36,14 +232,6 @@ The first time you use an abbreviation or acronym, write it out in full.
 > 
 > ❌ Mail your documents to BCI.
 
-### Keep headings short
-
-Headings display in the sidebar and should be kept short and descriptive. Headings should use the active voice and start with a verb.
-
-> ✅ Get prepared
-> 
-> ❌ Collect everything you need for your name change application
-
 ### Use descriptive links
 
 When linking to external resources, use descriptive text that clearly indicates what the link is for. Avoid generic phrases like "click here" or "learn more".
@@ -52,54 +240,11 @@ When linking to external resources, use descriptive text that clearly indicates 
 > 
 > ❌ Get a certified copy of your birth certificate [here](https://www.mass.gov/ordering-a-certificate).
 
-### Don't hide important info behind external links
+### Celebrate success and link to next steps
 
-A Namesake guide should be _self-contained_, allowing a reader to understand the process without navigating to other webpages. Put the information inline, and link to the source for readers who want to verify details.
+The breaucratic process can feel cold and impersonal; it's important for Namesake to bring some humanity back into this process. At the end of each guide, congratulate the user for a job well-done! Provide links to recommended next steps.
 
-### Collapse non-essential information
-
-There are questions about the name change process which are important to answer but may not apply to the majority of readers. Answer these questions without making the page look long and intimidating by hiding them behind a toggle.
-
-Use the `<details>` element to collapse non-essential information. For example:
-
-```mdx wrap
-<details>
-  <summary>What if my birth certificate is not written in English?</summary>
-
-  Birth certificates that are not written in English must include a written translation signed by the person translating the birth certificate with a statement that they are fluent in the foreign language and English and that the translation is a true and accurate translation. The translators signature must be notarized.
-
-</details>
-```
-
-Will display:
-
-<details>
-  <summary>What if my birth certificate is not written in English?</summary>
-
-  Birth certificates that are not written in English must include a written translation signed by the person translating the birth certificate with a statement that they are fluent in the foreign language and English and that the translation is a true and accurate translation. The translators signature must be notarized.
-
-</details>
-
-`<details>` elements should be placed _after_ the main content of a section.
-
-## Technical
-
-### Prevent link rot
-
-When URLs are renamed, existing links to Namesake will break, causing [link rot](https://en.wikipedia.org/wiki/Link_rot). Avoid renaming files within `src/content` and `src/pages`, since these filenames are used to generate site URLs.
-
-If renaming is unavoidable, add an entry to `redirects` in `astro.config.ts`:
-
-```ts {3-5}
-// astro.config.ts
-export default defineConfig({
-  redirects: {
-    '/old-url': '/new-url',
-  },
-});
-```
-
-## Resources
+## Additional Resources
 
 - [Plain Language](https://plainlanguage.gov)
 - [Diátaxis](https://diataxis.fr)
