@@ -1,19 +1,34 @@
 ---
+import { getCollection } from "astro:content";
 import type { BreadcrumbItem } from "#components/Breadcrumbs.astro";
 import GuideLinkGroup from "#components/GuideLinkGroup.astro";
 import PageHeader from "#components/PageHeader.astro";
+import { siteInfo } from "#constants/site-info";
 import BaseLayout from "#layouts/BaseLayout.astro";
 import { getGuidesByJurisdiction } from "#lib/queries/guides";
 
 export async function getStaticPaths() {
+  const allJurisdictions = await getCollection("jurisdictions");
   const { guidesByJurisdiction } = await getGuidesByJurisdiction();
-  return guidesByJurisdiction.map(({ jurisdiction, guides }) => ({
+
+  const guideMap = new Map(
+    guidesByJurisdiction.map(({ jurisdiction, guides }) => [
+      jurisdiction.id,
+      guides,
+    ]),
+  );
+
+  return allJurisdictions.map((jurisdiction) => ({
     params: { jurisdiction: jurisdiction.id },
-    props: { jurisdiction, guides },
+    props: {
+      jurisdiction,
+      guides: guideMap.get(jurisdiction.id) ?? [],
+    },
   }));
 }
 
 const { jurisdiction, guides } = Astro.props;
+const hasGuides = guides.length > 0;
 
 const searchTitle = `${jurisdiction.data.name}: All Guides`;
 ---
@@ -32,13 +47,55 @@ const searchTitle = `${jurisdiction.data.name}: All Guides`;
       { label: "Guides", href: "/guides" },
     ] satisfies BreadcrumbItem[]}
   />
-  <div class="guides">
-    <GuideLinkGroup guides={guides} />
-  </div>
+  {
+    hasGuides ? (
+      <div class="guides">
+        <GuideLinkGroup guides={guides} />
+      </div>
+    ) : (
+      <div class="placeholder">
+        <p>
+          Namesake doesn't have guides for {jurisdiction.data.name} yet. Want to
+          help build them?
+        </p>
+        <ul>
+          <li>
+            <a href={siteInfo.urls.contribute}>Read the contributor manual</a>
+          </li>
+          <li>
+            <a href={siteInfo.urls.chat}>Join us on Discord</a>
+          </li>
+          <li>
+            <a href={siteInfo.socialLinks.email.href}>Send us an email</a>
+          </li>
+        </ul>
+      </div>
+    )
+  }
 </BaseLayout>
 
 <style>
   .guides {
     padding-block-end: var(--space-2xl);
+  }
+
+  .placeholder {
+    padding-block-end: var(--space-2xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-m);
+
+    p {
+      font-size: var(--step-1);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      font-size: var(--step-1);
+    }
   }
 </style>
