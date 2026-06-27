@@ -35,7 +35,7 @@ jobs:
 
       - name: Check PDF drift
         id: check
-        run: pnpm --filter @namesake/pdf-manager pdf-monitor
+        run: pnpm pdf:monitor
         continue-on-error: true
 
       - name: Open issue for changed PDFs
