@@ -29,6 +29,7 @@ export type DriftStatus =
   | "unverifiable"
   | "new"
   | "changed"
+  | "unresolved"
   | "error";
 
 type FetchResultMap = {
@@ -36,6 +37,7 @@ type FetchResultMap = {
   unverifiable: { reason: string };
   new: { hash: string; etag?: string };
   changed: { hash: string; etag?: string };
+  unresolved: Record<never, never>;
   error: { reason: string };
 };
 
@@ -48,6 +50,7 @@ export interface PdfHistoryEntry {
   hash: string;
   etag?: string;
   lastDetectedChange: string;
+  needsResolution?: boolean;
 }
 
 export type PdfHistory = Record<string, PdfHistoryEntry>;
@@ -99,7 +102,10 @@ async function* runChecks(
 ): AsyncGenerator<{ pdf: PdfEntry; result: FetchResult; ms: number }> {
   for (const pdf of pdfs) {
     const t = performance.now();
-    const result = await fetchPdfEntry(pdf.canonicalUrl, stored[pdf.id]);
+    let result = await fetchPdfEntry(pdf.canonicalUrl, stored[pdf.id]);
+    if (result.status === "unchanged" && stored[pdf.id]?.needsResolution) {
+      result = { status: "unresolved" };
+    }
     yield { pdf, result, ms: Math.round(performance.now() - t) };
   }
 }
@@ -113,6 +119,7 @@ const ICONS: Record<DriftStatus, string> = {
   unverifiable: SKIP,
   new: NEW,
   changed: FAIL,
+  unresolved: FAIL,
   error: FAIL,
 };
 
@@ -121,6 +128,7 @@ const STATUS_LABEL: Record<DriftStatus, (s: string) => string> = {
   unverifiable: pc.yellow,
   new: pc.magenta,
   changed: (s) => pc.bold(pc.yellow(s)),
+  unresolved: (s) => pc.bold(pc.red(s)),
   error: (s) => pc.bold(pc.red(s)),
 };
 
@@ -160,6 +168,11 @@ function printSummary(results: CheckResult[], totalMs: number): void {
       ? pc.gray("0 changed")
       : pc.bold(pc.yellow(`${count("changed")} changed`));
 
+  const unresolvedStr =
+    count("unresolved") === 0
+      ? pc.gray("0 unresolved")
+      : pc.bold(pc.red(`${count("unresolved")} unresolved`));
+
   const errorsStr =
     count("error") === 0
       ? pc.gray("0 errors")
@@ -168,7 +181,14 @@ function printSummary(results: CheckResult[], totalMs: number): void {
   const LABEL_PAD = 11;
   const label = (s: string) => `${pc.gray(s.padStart(LABEL_PAD))}  `;
   const cont = " ".repeat(LABEL_PAD + 2);
-  const stats = [newStr, unchangedStr, unverifiableStr, changedStr, errorsStr];
+  const stats = [
+    newStr,
+    unchangedStr,
+    unverifiableStr,
+    changedStr,
+    unresolvedStr,
+    errorsStr,
+  ];
 
   process.stdout.write(`\n${results.length} URLs scanned.\n\n`);
   process.stdout.write(`${label("PDF Files")}${stats.join(`\n${cont}`)}\n`);
@@ -209,7 +229,8 @@ function applyFetchResults(
     if (
       result.status === "error" ||
       result.status === "unchanged" ||
-      result.status === "unverifiable"
+      result.status === "unverifiable" ||
+      result.status === "unresolved"
     )
       continue;
     stored[pdf.id] = {
@@ -217,22 +238,40 @@ function applyFetchResults(
       hash: result.hash,
       ...(result.etag ? { etag: result.etag } : {}),
       lastDetectedChange: new Date().toISOString(),
+      needsResolution: result.status === "changed",
     };
     anyUpdated = true;
   }
   return anyUpdated;
 }
 
+export function resolvePdfs(dir: string, ids?: string[]): void {
+  const stored = loadPdfHistory(dir);
+  const targets = ids && ids.length > 0 ? ids : Object.keys(stored);
+  for (const id of targets) {
+    if (stored[id]) stored[id].needsResolution = false;
+  }
+  savePdfHistory(dir, stored);
+}
+
 function writeCiMetadata(results: CheckResult[]): void {
   const { GITHUB_OUTPUT, GITHUB_STEP_SUMMARY } = process.env;
   const changed = results.filter(byStatus("changed"));
+  const unresolved = results.filter(byStatus("unresolved"));
+  const hasNewChanges = changed.length > 0;
+  const hasUnresolved = unresolved.length > 0;
 
   if (GITHUB_OUTPUT) {
-    appendFileSync(GITHUB_OUTPUT, `has_changes=${changed.length > 0}\n`);
+    appendFileSync(
+      GITHUB_OUTPUT,
+      `has_changes=${hasNewChanges || hasUnresolved}\n`,
+    );
+    appendFileSync(GITHUB_OUTPUT, `has_new_changes=${hasNewChanges}\n`);
+    appendFileSync(GITHUB_OUTPUT, `has_unresolved=${hasUnresolved}\n`);
     appendFileSync(GITHUB_OUTPUT, `changed_count=${changed.length}\n`);
   }
 
-  if (GITHUB_STEP_SUMMARY && changed.length > 0) {
+  if (GITHUB_STEP_SUMMARY && hasNewChanges) {
     const lines = changed
       .map(
         ({ pdf }) => `- **${pdf.title}** (\`${pdf.id}\`): ${pdf.canonicalUrl}`,
@@ -273,12 +312,25 @@ async function main() {
   printSummary(results, Math.round(performance.now() - start));
   writeCiMetadata(results);
 
-  if (results.some(byStatus("changed"))) process.exit(1);
+  if (results.some(byStatus("changed")) || results.some(byStatus("unresolved")))
+    process.exit(1);
+}
+
+function resolve() {
+  const ids = process.argv.slice(3);
+  resolvePdfs(MONITOR_DIR, ids.length > 0 ? ids : undefined);
+  const target = ids.length > 0 ? ids.join(", ") : "all entries";
+  process.stdout.write(`Resolved ${target}.\n`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  main().catch((err) => {
-    process.stderr.write(`[error] ${(err as Error).message}\n`);
-    process.exit(2);
-  });
+  const subcommand = process.argv[2];
+  if (subcommand === "resolve") {
+    resolve();
+  } else {
+    main().catch((err) => {
+      process.stderr.write(`[error] ${(err as Error).message}\n`);
+      process.exit(2);
+    });
+  }
 }

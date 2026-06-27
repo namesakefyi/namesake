@@ -43,7 +43,7 @@ jobs:
         continue-on-error: true
 
       - name: Open issue for changed PDFs
-        if: steps.check.outputs.has_changes == 'true'
+        if: steps.check.outputs.has_new_changes == 'true'
         run: |
           existing=$(gh issue list \
             --state open \
@@ -57,4 +57,16 @@ jobs:
               --title "Upstream PDF changes detected" \
               --body-file "$GITHUB_STEP_SUMMARY" \
               --label automated
+          fi
+
+      - name: Auto-resolve if issue was closed
+        if: steps.check.outputs.has_unresolved == 'true' && steps.check.outputs.has_new_changes != 'true'
+        run: |
+          existing=$(gh issue list \
+            --state open \
+            --search "Upstream PDF changes detected in:title" \
+            --json number \
+            --jq '.[0].number // empty')
+          if [ -z "$existing" ]; then
+            pnpm pdf:resolve
           fi
