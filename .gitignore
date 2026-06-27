@@ -53,5 +53,5 @@ schema.json
 # lighthouse
 .unlighthouse
 
-# pdf monitor
-pdf-drift-results.md
+# pdf drift cache (managed by GitHub Actions cache)
+.pdfhistory
