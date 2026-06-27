@@ -33,7 +33,7 @@ jobs:
       - name: Restore PDF history
         uses: actions/cache@v5.0.5
         with:
-          path: .pdfmonitor
+          path: pdf-manager/.pdfmonitor
           key: pdf-monitor-${{ github.run_id }}
           restore-keys: pdf-monitor-
 

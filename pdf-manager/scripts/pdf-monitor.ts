@@ -108,19 +108,28 @@ function formatDuration(ms: number): string {
   return ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(2)}s`;
 }
 
-const RESULT_STYLES: Record<DriftStatus, { icon: string; statusText: string }> =
-  {
-    unchanged: { icon: PASS, statusText: pc.green("unchanged") },
-    unverifiable: { icon: SKIP, statusText: pc.yellow("unverifiable") },
-    new: { icon: NEW, statusText: pc.magenta("new") },
-    changed: { icon: FAIL, statusText: pc.bold(pc.yellow("changed")) },
-    error: { icon: FAIL },
-  };
+const ICONS: Record<DriftStatus, string> = {
+  unchanged: PASS,
+  unverifiable: SKIP,
+  new: NEW,
+  changed: FAIL,
+  error: FAIL,
+};
+
+const STATUS_LABEL: Record<DriftStatus, (s: string) => string> = {
+  unchanged: pc.green,
+  unverifiable: pc.yellow,
+  new: pc.magenta,
+  changed: (s) => pc.bold(pc.yellow(s)),
+  error: (s) => pc.bold(pc.red(s)),
+};
 
 function formatResult(result: FetchResult, url: string, dur: string): string {
-  const { icon, statusText } = RESULT_STYLES[result.status];
-  const label = result.status === "error" ? pc.red(result.reason) : statusText;
-  return label ? `${icon} ${label} ${url} ${dur}` : `${icon} ${url} ${dur}`;
+  const icon = ICONS[result.status];
+  const label = STATUS_LABEL[result.status](result.status);
+  const main = `${icon} ${label} ${url} ${dur}`;
+  if (result.status === "error") return `${main}\n  ${pc.red(result.reason)}`;
+  return main;
 }
 
 function printResult(pdf: PdfEntry, result: FetchResult, ms: number): void {
