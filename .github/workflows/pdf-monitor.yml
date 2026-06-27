@@ -1,0 +1,72 @@
+name: PDF Monitor
+
+on:
+  push:
+    branches: [watch-for-changes]
+  schedule:
+    - cron: "0 0 * * *" # daily
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  check-pdf-drift:
+    name: Check PDF Drift
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7.0.0
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@v6.0.9
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24.x"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Restore PDF history
+        uses: actions/cache@v5.0.5
+        with:
+          path: pdf-manager/.pdfmonitor
+          key: pdf-monitor-${{ github.run_id }}
+          restore-keys: pdf-monitor-
+
+      - name: Check PDF drift
+        id: check
+        run: pnpm pdf:monitor
+        continue-on-error: true
+
+      - name: Open issue for changed PDFs
+        if: steps.check.outputs.has_new_changes == 'true'
+        run: |
+          existing=$(gh issue list \
+            --state open \
+            --search "Upstream PDF changes detected in:title" \
+            --json number \
+            --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file "$GITHUB_STEP_SUMMARY"
+          else
+            gh issue create \
+              --title "Upstream PDF changes detected" \
+              --body-file "$GITHUB_STEP_SUMMARY" \
+              --label automated
+          fi
+
+      - name: Auto-resolve if issue was closed
+        if: steps.check.outputs.has_unresolved == 'true' && steps.check.outputs.has_new_changes != 'true'
+        run: |
+          existing=$(gh issue list \
+            --state open \
+            --search "Upstream PDF changes detected in:title" \
+            --json number \
+            --jq '.[0].number // empty')
+          if [ -z "$existing" ]; then
+            pnpm pdf:resolve
+          fi

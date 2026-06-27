@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "pdf:schema": "tsx scripts/extract-pdf-schema.ts"
+    "test": "vitest run",
+    "extract-schema": "tsx scripts/extract-pdf-schema.ts",
+    "monitor": "tsx scripts/pdf-monitor.ts",
+    "monitor:resolve": "tsx scripts/pdf-monitor.ts resolve"
   },
   "dependencies": {
     "@cantoo/pdf-lib": "^2.7.1",
@@ -22,8 +25,10 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
+    "picocolors": "^1.1.1",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
-    "vite": "^8.1.0"
+    "vite": "^8.1.0",
+    "vitest": "^4.1.9"
   }
 }
