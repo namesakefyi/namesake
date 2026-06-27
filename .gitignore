@@ -52,3 +52,6 @@ schema.json
 
 # lighthouse
 .unlighthouse
+
+# pdf monitor
+pdf-drift-results.md

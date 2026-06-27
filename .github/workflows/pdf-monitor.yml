@@ -1,0 +1,56 @@
+name: PDF Monitor
+
+on:
+  schedule:
+    - cron: "0 9 * * 1" # weekly, Mondays 9am UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write # commit updated upstream-pdfs.jsonc back to main
+  issues: write # open issue when upstream PDFs change
+
+jobs:
+  check-pdf-drift:
+    name: Check PDF Drift
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24.x"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check PDF drift
+        id: check
+        run: pnpm --filter @namesake/pdf-manager check-drift > pdf-drift-results.md
+        continue-on-error: true
+
+      - name: Commit updated hashes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pdf-manager/upstream-pdfs.jsonc
+          git diff --cached --quiet || (git commit -m "chore: update upstream-pdfs.jsonc [skip ci]" && git push)
+
+      - name: Check for changed PDFs
+        id: results
+        if: steps.check.outcome == 'failure'
+        run: |
+          if [ -s pdf-drift-results.md ]; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open issue for changed PDFs
+        if: steps.results.outputs.has_changes == 'true'
+        uses: peter-evans/create-issue-from-file@v6
+        with:
+          title: Upstream PDF changes detected
+          content-filepath: ./pdf-drift-results.md
+          labels: automated
