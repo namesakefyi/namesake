@@ -170,10 +170,9 @@ function printSummary(results: CheckResult[], totalMs: number): void {
   const cont = " ".repeat(LABEL_PAD + 2);
   const stats = [newStr, unchangedStr, unverifiableStr, changedStr, errorsStr];
 
-  process.stdout.write("\n");
+  process.stdout.write(`\n${results.length} URLs scanned.\n\n`);
   process.stdout.write(`${label("PDF Files")}${stats.join(`\n${cont}`)}\n`);
   process.stdout.write(`${label("Duration")}${formatDuration(totalMs)}\n`);
-  process.stdout.write("\n");
 }
 
 function latestHistoryFile(dir: string): string | null {
@@ -261,6 +260,8 @@ async function main() {
   const stored = loadPdfHistory(MONITOR_DIR);
   const pdfs = listAllPdfs().filter((p) => p.canonicalUrl);
   const results: CheckResult[] = [];
+
+  process.stdout.write(`Scanning ${pdfs.length} URLs for changes...\n\n`);
 
   for await (const { pdf, result, ms } of runChecks(pdfs, stored)) {
     results.push({ pdf, result });
