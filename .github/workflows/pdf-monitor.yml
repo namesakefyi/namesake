@@ -2,7 +2,7 @@ name: PDF Monitor
 
 on:
   schedule:
-    - cron: "0 9 * * 1" # weekly, Mondays 9am UTC
+    - cron: "0 0 * * *" # daily
   workflow_dispatch:
 
 permissions:
@@ -16,6 +16,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - uses: pnpm/action-setup@v4
 
