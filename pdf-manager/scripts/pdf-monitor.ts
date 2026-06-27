@@ -214,18 +214,7 @@ function applyFetchResults(
   return anyUpdated;
 }
 
-function writeCiOutputs(results: CheckResult[]): void {
-  for (const { pdf, result } of results) {
-    if (result.status === "unverifiable")
-      process.stderr.write(
-        `[skip] ${pdf.id} (${pdf.canonicalUrl}): ${result.reason}\n`,
-      );
-    if (result.status === "error")
-      process.stderr.write(
-        `[warn] ${pdf.id} (${pdf.canonicalUrl}): ${result.reason}\n`,
-      );
-  }
-
+function writeCiMetadata(results: CheckResult[]): void {
   const { GITHUB_OUTPUT, GITHUB_STEP_SUMMARY } = process.env;
   const changed = results.filter(byStatus("changed"));
 
@@ -264,14 +253,13 @@ async function main() {
 
   for await (const { pdf, result, ms } of runChecks(pdfs, stored)) {
     results.push({ pdf, result });
-    if (process.stdout.isTTY) printResult(pdf, result, ms);
+    printResult(pdf, result, ms);
   }
 
   if (applyFetchResults(results, stored)) savePdfHistory(MONITOR_DIR, stored);
 
-  if (process.stdout.isTTY)
-    printSummary(results, Math.round(performance.now() - start));
-  else writeCiOutputs(results);
+  printSummary(results, Math.round(performance.now() - start));
+  writeCiMetadata(results);
 
   if (results.some(byStatus("changed"))) process.exit(1);
 }
