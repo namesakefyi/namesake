@@ -1,6 +1,8 @@
 name: PDF Monitor
 
 on:
+  push:
+    branches: [watch-for-changes]
   schedule:
     - cron: "0 0 * * *" # daily
   workflow_dispatch:
