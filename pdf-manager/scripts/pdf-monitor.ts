@@ -108,18 +108,19 @@ function formatDuration(ms: number): string {
   return ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(2)}s`;
 }
 
-const RESULT_STYLES: Record<DriftStatus, { icon: string; suffix?: string }> = {
-  unchanged: { icon: PASS },
-  unverifiable: { icon: SKIP, suffix: pc.yellow("unverifiable") },
-  new: { icon: NEW, suffix: pc.magenta("new") },
-  changed: { icon: FAIL, suffix: pc.bold(pc.yellow("changed")) },
-  error: { icon: FAIL },
-};
+const RESULT_STYLES: Record<DriftStatus, { icon: string; statusText: string }> =
+  {
+    unchanged: { icon: PASS, statusText: pc.green("unchanged") },
+    unverifiable: { icon: SKIP, statusText: pc.yellow("unverifiable") },
+    new: { icon: NEW, statusText: pc.magenta("new") },
+    changed: { icon: FAIL, statusText: pc.bold(pc.yellow("changed")) },
+    error: { icon: FAIL },
+  };
 
 function formatResult(result: FetchResult, url: string, dur: string): string {
-  const { icon, suffix } = RESULT_STYLES[result.status];
-  const label = result.status === "error" ? pc.red(result.reason) : suffix;
-  return label ? `${icon} ${url} ${label} ${dur}` : `${icon} ${url} ${dur}`;
+  const { icon, statusText } = RESULT_STYLES[result.status];
+  const label = result.status === "error" ? pc.red(result.reason) : statusText;
+  return label ? `${icon} ${label} ${url} ${dur}` : `${icon} ${url} ${dur}`;
 }
 
 function printResult(pdf: PdfEntry, result: FetchResult, ms: number): void {
@@ -247,6 +248,7 @@ function writeCiMetadata(results: CheckResult[]): void {
 
 async function main() {
   const start = performance.now();
+  mkdirSync(MONITOR_DIR, { recursive: true });
   const stored = loadPdfHistory(MONITOR_DIR);
   const pdfs = listAllPdfs().filter((p) => p.canonicalUrl);
   const results: CheckResult[] = [];
