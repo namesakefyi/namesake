@@ -8,7 +8,7 @@
     "build": "vite build",
     "test": "vitest run",
     "extract-schema": "tsx scripts/extract-pdf-schema.ts",
-    "pdf-monitor": "tsx scripts/pdf-monitor.ts"
+    "monitor": "tsx scripts/pdf-monitor.ts"
   },
   "dependencies": {
     "@cantoo/pdf-lib": "^2.7.1",

@@ -29,13 +29,13 @@ jobs:
       - name: Restore PDF hash cache
         uses: actions/cache@v4
         with:
-          path: .pdfhistory
-          key: pdf-history-${{ github.run_id }}
-          restore-keys: pdf-history-
+          path: .pdfmonitor
+          key: pdf-monitor-${{ github.run_id }}
+          restore-keys: pdf-monitor-
 
       - name: Check PDF drift
         id: check
-        run: pnpm --filter @namesake/pdf-manager pdf-monitor .pdfhistory
+        run: pnpm --filter @namesake/pdf-manager pdf-monitor
         continue-on-error: true
 
       - name: Open issue for changed PDFs

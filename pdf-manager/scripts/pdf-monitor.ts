@@ -4,12 +4,17 @@ import { createHash } from "node:crypto";
 import {
   appendFileSync,
   existsSync,
+  mkdirSync,
+  readdirSync,
   readFileSync,
   writeFileSync,
 } from "node:fs";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import pc from "picocolors";
 import { listAllPdfs, type PdfEntry } from "../lib/catalog";
+
+const MONITOR_DIR = ".pdfmonitor";
 
 const USER_AGENT =
   "namesake-pdf-monitor/1.0 (+https://github.com/namesakefyi/namesake)";
@@ -17,6 +22,7 @@ const USER_AGENT =
 const PASS = pc.green("✓");
 const FAIL = pc.red("✗");
 const SKIP = pc.yellow("⊘");
+const NEW = pc.magenta("◆");
 
 export type DriftStatus =
   | "unchanged"
@@ -105,7 +111,7 @@ function formatDuration(ms: number): string {
 const RESULT_STYLES: Record<DriftStatus, { icon: string; suffix?: string }> = {
   unchanged: { icon: PASS },
   unverifiable: { icon: SKIP, suffix: pc.yellow("unverifiable") },
-  new: { icon: PASS, suffix: pc.green("new") },
+  new: { icon: NEW, suffix: pc.magenta("new") },
   changed: { icon: FAIL, suffix: pc.bold(pc.yellow("changed")) },
   error: { icon: FAIL },
 };
@@ -160,13 +166,29 @@ function printSummary(results: CheckResult[], totalMs: number): void {
   process.stdout.write("\n");
 }
 
-function loadPdfHistory(path: string): PdfHistory {
-  if (!existsSync(path)) return {};
-  return JSON.parse(readFileSync(path, "utf8"));
+function latestHistoryFile(dir: string): string | null {
+  const files = readdirSync(dir)
+    .filter((f) => f.endsWith(".json"))
+    .sort();
+  return files.length > 0 ? join(dir, files[files.length - 1]) : null;
 }
 
-function savePdfHistory(path: string, store: PdfHistory): void {
-  writeFileSync(path, `${JSON.stringify(store, null, 2)}\n`);
+function loadPdfHistory(dir: string): PdfHistory {
+  if (!existsSync(dir)) return {};
+  const latest = latestHistoryFile(dir);
+  return latest ? JSON.parse(readFileSync(latest, "utf8")) : {};
+}
+
+function savePdfHistory(dir: string, store: PdfHistory): void {
+  mkdirSync(dir, { recursive: true });
+  const timestamp = new Date()
+    .toISOString()
+    .replace(/:/g, "-")
+    .replace(/\.\d+Z$/, "Z");
+  writeFileSync(
+    join(dir, `${timestamp}.json`),
+    `${JSON.stringify(store, null, 2)}\n`,
+  );
 }
 
 function applyFetchResults(
@@ -234,9 +256,9 @@ function writeCiOutputs(results: CheckResult[]): void {
   }
 }
 
-async function main(historyPath: string) {
+async function main() {
   const start = performance.now();
-  const stored = loadPdfHistory(historyPath);
+  const stored = loadPdfHistory(MONITOR_DIR);
   const pdfs = listAllPdfs().filter((p) => p.canonicalUrl);
   const results: CheckResult[] = [];
 
@@ -245,7 +267,7 @@ async function main(historyPath: string) {
     if (process.stdout.isTTY) printResult(pdf, result, ms);
   }
 
-  if (applyFetchResults(results, stored)) savePdfHistory(historyPath, stored);
+  if (applyFetchResults(results, stored)) savePdfHistory(MONITOR_DIR, stored);
 
   if (process.stdout.isTTY)
     printSummary(results, Math.round(performance.now() - start));
@@ -255,12 +277,7 @@ async function main(historyPath: string) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const HISTORY_PATH = process.argv[2];
-  if (!HISTORY_PATH) {
-    process.stderr.write("Usage: pdf-monitor <hash-store-path>\n");
-    process.exit(2);
-  }
-  main(HISTORY_PATH).catch((err) => {
+  main().catch((err) => {
     process.stderr.write(`[error] ${(err as Error).message}\n`);
     process.exit(2);
   });
