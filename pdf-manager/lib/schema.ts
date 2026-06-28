@@ -14,12 +14,13 @@ function loadCurrentSchemaFields(schemaPath: string): Set<string> {
   try {
     const content = readFileSync(schemaPath, "utf8");
     const matches = content.matchAll(
-      /^\s+(?:([a-zA-Z_$][\w$]*)|"((?:[^"\\]|\\.)*)"):\s*"(?:text|checkbox|radio|button)"/gm,
+      /^\s+([^:]+):\s*"(?:text|checkbox|radio|button)"/gm,
     );
     return new Set(
-      [...matches].map((m) =>
-        m[1] !== undefined ? m[1] : JSON.parse(`"${m[2]}"`),
-      ),
+      [...matches].map((m) => {
+        const key = m[1].trim();
+        return key.startsWith('"') ? JSON.parse(key) : key;
+      }),
     );
   } catch {
     return new Set();
@@ -92,7 +93,6 @@ export interface ProcessPdfResult {
   path: string;
   displayPath: string;
   fieldNames: string[];
-  count: number;
 }
 
 /**
@@ -147,11 +147,9 @@ export async function processPdf(
   writeFileSync(schemaPath, generateTypesContent(stem, fields, excluded));
 
   const displayPath = relative(PDFS_DIR, join(dir, stem));
-  const fieldNames = fields.map((f) => f.name);
   return {
     path: schemaPath,
     displayPath,
-    fieldNames,
-    count: fields.length,
+    fieldNames: fields.map((f) => f.name),
   };
 }

@@ -123,10 +123,8 @@ export async function applyRenames(
     const parentRef = acro.getRef("Parent");
 
     if (!parentRef) {
-      // Already at AcroForm root — just update the leaf name
       acro.set("T", PdfString.fromString(to));
     } else if (fieldRef && acroForm) {
-      // Remove from parent's /Kids so the full qualified name becomes just `to`.
       // PdfRef instances are interned, so identity comparison is correct and simpler.
       const parentObj = doc.context.resolve(parentRef);
       if (parentObj instanceof PdfDict) {
@@ -144,7 +142,6 @@ export async function applyRenames(
       acroForm.addField(fieldRef);
       acro.set("T", PdfString.fromString(to));
     }
-    // else: nested field with no obtainable ref or no acroForm — skip rename
   }
   writeFileSync(pdfPath, await doc.save());
 }
