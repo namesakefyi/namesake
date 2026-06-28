@@ -35,7 +35,7 @@ export async function fillPdf({
     form?.fill(
       Object.fromEntries(
         Object.entries(fields).filter(
-          (e): e is [string, NonNullable<PDFFieldValue>] => e[1] !== undefined,
+          (e): e is [string, NonNullable<PDFFieldValue>] => e[1] != null,
         ),
       ),
     );

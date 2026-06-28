@@ -26,6 +26,18 @@ describe("fillPdf", () => {
     ).toBe(true);
   });
 
+  it("should skip null values instead of passing them to text fields", async () => {
+    // null means "not provided" — pdf-lib rejects non-string values for text fields
+    const result = await fillPdf({
+      pdf: testPdfDefinition,
+      userData: {},
+    });
+
+    const pdfDoc = await PDF.load(result);
+    const form = pdfDoc.getForm();
+    expect(form?.getTextField("newFirstName")?.getValue()).toBeFalsy();
+  });
+
   it("should handle empty or undefined values", async () => {
     const result = await fillPdf({
       pdf: testPdfDefinition,
