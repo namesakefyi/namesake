@@ -1,4 +1,4 @@
-import { PDFDocument } from "@cantoo/pdf-lib";
+import { PDF } from "@libpdf/core";
 import { describe, expect, it, vi } from "vitest";
 import { createCoverPage } from "../createCoverPage";
 
@@ -25,14 +25,13 @@ describe("createCoverPage", () => {
     expect(fetch).toHaveBeenCalledWith("/forms/pdf-cover-logo.png");
 
     // Load the PDF and verify its structure
-    const pdfDoc = await PDFDocument.load(result);
+    const pdfDoc = await PDF.load(result);
     const pages = pdfDoc.getPages();
     expect(pages).toHaveLength(1);
 
     const page = pages[0];
-    const { width, height } = page.getSize();
-    expect(width).toBe(612); // Standard US Letter width
-    expect(height).toBe(792); // Standard US Letter height
+    expect(page.width).toBe(612); // Standard US Letter width
+    expect(page.height).toBe(792); // Standard US Letter height
 
     consoleSpy.mockRestore();
   });

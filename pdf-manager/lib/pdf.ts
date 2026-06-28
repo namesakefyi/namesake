@@ -1,51 +1,47 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import type { PDFField, PDFPage } from "@cantoo/pdf-lib";
-import { PDFDocument, PDFDropdown, PDFName } from "@cantoo/pdf-lib";
+import type { FormField, PDFPage } from "@libpdf/core";
+import { PDF, PdfName, PdfString } from "@libpdf/core";
 
 // Fields within this many PDF points vertically are treated as the same row
 // and sorted left-to-right within that row. ~10pt ≈ 4mm.
 const SAME_ROW_THRESHOLD = 10;
 
 interface TaggedField {
-  field: PDFField;
+  field: FormField;
   pageIndex: number;
   y: number;
   x: number;
 }
 
 export function fieldReadingOrder(
-  fields: PDFField[],
+  fields: FormField[],
   pages: PDFPage[],
-): PDFField[] {
+): FormField[] {
   const pageByRef = new Map<string, { index: number; height: number }>();
   for (let i = 0; i < pages.length; i++) {
     const ref = pages[i].ref;
-    pageByRef.set(`${ref.objectNumber}:${ref.generationNumber}`, {
+    pageByRef.set(`${ref.objectNumber}:${ref.generation}`, {
       index: i,
-      height: pages[i].getHeight(),
+      height: pages[i].height,
     });
   }
 
   const tagged: TaggedField[] = fields.map((field) => {
-    const widget = field.acroField.getWidgets()[0];
+    const widget = field.getWidgets()[0];
     if (!widget) return { field, pageIndex: 0, y: 0, x: 0 };
 
-    const rect = widget.getRectangle();
-    const pRef = widget.P() as
-      | { objectNumber?: number; generationNumber?: number }
-      | undefined;
+    const [x1, , , y2] = widget.rect;
+    const pageRef = widget.pageRef;
     const refKey =
-      pRef?.objectNumber != null
-        ? `${pRef.objectNumber}:${pRef.generationNumber}`
-        : null;
+      pageRef != null ? `${pageRef.objectNumber}:${pageRef.generation}` : null;
     const pageInfo = refKey ? pageByRef.get(refKey) : null;
     const pageIndex = pageInfo?.index ?? 0;
     const pageHeight = pageInfo?.height ?? 792;
 
     // PDF origin is bottom-left; convert to reading-order (top = 0)
     // using the field's top edge so row grouping aligns with visual baselines.
-    const y = pageHeight - rect.y - rect.height;
-    return { field, pageIndex, y, x: rect.x };
+    const y = pageHeight - y2;
+    return { field, pageIndex, y, x: x1 };
   });
 
   tagged.sort((a, b) => {
@@ -63,15 +59,15 @@ export interface PdfFieldInfo {
 }
 
 /**
- * Maps a pdf-lib form field to the simplified type used by the PDF Manager UI.
+ * Maps a libpdf form field to the simplified type used by the PDF Manager UI.
  * Radio groups and checkboxes are detected explicitly; everything else (text
  * fields and any field class we don't render specially) falls back to "text".
  */
-function fieldType(field: PDFField): PdfFieldInfo["type"] {
-  switch (field.constructor.name) {
-    case "PDFCheckBox":
+function fieldType(field: FormField): PdfFieldInfo["type"] {
+  switch (field.type) {
+    case "checkbox":
       return "checkbox";
-    case "PDFRadioGroup":
+    case "radio":
       return "radio";
     default:
       return "text";
@@ -86,31 +82,32 @@ export async function extractFields(pdfPath: string): Promise<PdfFieldInfo[]> {
 export async function extractFieldsFromBytes(
   bytes: Uint8Array | Buffer,
 ): Promise<PdfFieldInfo[]> {
-  const doc = await PDFDocument.load(bytes);
+  const doc = await PDF.load(bytes);
   const form = doc.getForm();
-  const sorted = fieldReadingOrder(form.getFields(), doc.getPages());
+  const sorted = fieldReadingOrder(form?.getFields() ?? [], doc.getPages());
   return sorted.map((f) => ({
-    name: f.getName(),
+    name: f.name,
     type: fieldType(f),
   }));
 }
 
 /**
- * Converts all PDFDropdown fields to plain text fields in the PDF on disk.
+ * Converts all dropdown fields to plain text fields in the PDF on disk.
  * This lets fillPdf write any value without needing to match the PDF's fixed
- * option list, and ensures the generated schema never references PDFDropdown.
+ * option list, and ensures the generated schema never references dropdown fields.
  */
 export async function convertDropdownsToTextFields(
   pdfPath: string,
 ): Promise<void> {
   const bytes = readFileSync(pdfPath);
-  const doc = await PDFDocument.load(bytes);
+  const doc = await PDF.load(bytes);
   const form = doc.getForm();
   let changed = false;
-  for (const field of form.getFields()) {
-    if (field instanceof PDFDropdown) {
-      field.acroField.dict.set(PDFName.of("FT"), PDFName.of("Tx"));
-      field.acroField.dict.delete(PDFName.of("Opt"));
+  for (const field of form?.getFields() ?? []) {
+    if (field.type === "dropdown") {
+      const dict = field.acroField();
+      dict.set("FT", PdfName.of("Tx"));
+      dict.delete("Opt");
       changed = true;
     }
   }
@@ -127,19 +124,14 @@ export async function applyRenames(
   renames: Rename[],
 ): Promise<void> {
   const bytes = readFileSync(pdfPath);
-  const doc = await PDFDocument.load(bytes);
+  const doc = await PDF.load(bytes);
   const form = doc.getForm();
   for (const { from, to } of renames) {
-    if (form.getFieldMaybe(to)) continue;
-    try {
-      const field = form.getField(from);
-      form.acroForm.removeField(field.acroField);
-      field.acroField.setParent(undefined as any);
-      field.acroField.setPartialName(to);
-      form.acroForm.addField(field.acroField.ref);
-    } catch {
-      // field not found — skip
-    }
+    if (form?.hasField(to)) continue;
+    const field = form?.getField(from);
+    if (!field) continue;
+    // Change the partial name (/T) in the field dictionary
+    field.acroField().set("T", PdfString.fromString(to));
   }
   writeFileSync(pdfPath, await doc.save());
 }

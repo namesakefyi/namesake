@@ -15,9 +15,9 @@ export async function getPdfForm({
   userData: Partial<FormData>;
 }) {
   try {
-    const { PDFDocument } = await loadPdfLib();
+    const { PDF } = await loadPdfLib();
     const pdfBytes = await fillPdf({ pdf, userData });
-    const pdfDoc = await PDFDocument.load(pdfBytes);
+    const pdfDoc = await PDF.load(pdfBytes);
     return pdfDoc.getForm();
   } catch (error) {
     console.error(error);

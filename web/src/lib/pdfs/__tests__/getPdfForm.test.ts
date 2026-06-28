@@ -13,9 +13,9 @@ describe("getPdfForm", () => {
       },
     });
 
-    expect(form.getTextField("newFirstName").getText()).toBe("New");
-    expect(form.getTextField("oldFirstName").getText()).toBe("Old");
-    expect(form.getCheckBox("shouldReturnOriginalDocuments").isChecked()).toBe(
+    expect(form.getTextField("newFirstName").getValue()).toBe("New");
+    expect(form.getTextField("oldFirstName").getValue()).toBe("Old");
+    expect(form.getCheckbox("shouldReturnOriginalDocuments").isChecked()).toBe(
       true,
     );
   });

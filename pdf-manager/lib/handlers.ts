@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { PDFDocument } from "@cantoo/pdf-lib";
+import { PDF } from "@libpdf/core";
 import type { Context } from "hono";
 import { findPdfById, listAllPdfs } from "./catalog";
 import {
@@ -110,7 +110,7 @@ export async function handleAddPdf(c: Context) {
   }
 
   const rawBytes = Buffer.from(pdfBase64, "base64");
-  const pdfDoc = await PDFDocument.load(rawBytes);
+  const pdfDoc = await PDF.load(rawBytes);
   const cleanedBytes = await pdfDoc.save();
 
   const pdfFields = await extractFieldsFromBytes(cleanedBytes);
@@ -195,7 +195,7 @@ export async function handleReplacePdf(c: Context) {
 
   try {
     const newBytes = Buffer.from(pdfBase64, "base64");
-    const pdfDoc = await PDFDocument.load(newBytes);
+    const pdfDoc = await PDF.load(newBytes);
     writeFileSync(found.pdfPath, await pdfDoc.save());
 
     if (renames.length > 0) await applyRenames(found.pdfPath, renames);

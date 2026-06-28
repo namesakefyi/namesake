@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, extname, join, relative } from "node:path";
-import { PDFDocument } from "@cantoo/pdf-lib";
+import { PDF } from "@libpdf/core";
 import { PDFS_DIR } from "./catalog";
 import { convertDropdownsToTextFields, fieldReadingOrder } from "./pdf";
 import { loadSchemaFields } from "./suggest";
@@ -27,12 +27,12 @@ async function extractFieldsWithClass(
   pdfPath: string,
 ): Promise<PdfFieldWithClass[]> {
   const bytes = readFileSync(pdfPath);
-  const doc = await PDFDocument.load(bytes);
+  const doc = await PDF.load(bytes);
   const form = doc.getForm();
-  const sorted = fieldReadingOrder(form.getFields(), doc.getPages());
+  const sorted = fieldReadingOrder(form?.getFields() ?? [], doc.getPages());
   return sorted.map((f) => ({
-    name: f.getName(),
-    fieldClass: f.constructor.name,
+    name: f.name,
+    fieldClass: f.type,
   }));
 }
 
@@ -57,13 +57,8 @@ function generateTypesContent(
   fields: PdfFieldWithClass[],
   excluded: Set<string> = new Set(),
 ): string {
-  const usedClasses = [...new Set(fields.map((f) => f.fieldClass))];
-  const imports =
-    usedClasses.length > 0
-      ? `import { ${usedClasses.sort().join(", ")} } from "@cantoo/pdf-lib";`
-      : "";
   const schemaEntries = fields
-    .map((f) => `  ${escapeKey(f.name)}: ${f.fieldClass}`)
+    .map((f) => `  ${escapeKey(f.name)}: "${f.fieldClass}"`)
     .join(",\n");
   const schemaBody = schemaEntries ? `\n${schemaEntries},\n` : "\n";
 
@@ -74,7 +69,6 @@ function generateTypesContent(
       : "";
 
   return `/** Auto-generated from ${stem}.pdf — do not edit */
-${imports}
 
 export const pdfSchema = {${schemaBody}} as const;
 
@@ -141,7 +135,7 @@ export async function processPdf(
 
   const displayPath = relative(PDFS_DIR, join(dir, stem));
   const checkboxCount = fields.filter(
-    (f) => f.fieldClass === "PDFCheckBox",
+    (f) => f.fieldClass === "checkbox",
   ).length;
   return { path: schemaPath, displayPath, count: fields.length, checkboxCount };
 }
