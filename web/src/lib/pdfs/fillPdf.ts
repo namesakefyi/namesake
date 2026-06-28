@@ -1,5 +1,5 @@
 import type { FormData } from "#constants/fields";
-import type { PDFDefinition } from "#constants/pdf";
+import type { PDFDefinition, PDFFieldValue } from "#constants/pdf";
 import { fetchPdf } from "./fetchPdf";
 import { loadPdfLib } from "./loadPdfLib";
 
@@ -32,10 +32,13 @@ export async function fillPdf({
 
     // Fill out each field from the resolver
     const fields = pdf.resolver(userData);
-    const definedFields = Object.fromEntries(
-      Object.entries(fields).filter(([, v]) => v !== undefined),
+    form?.fill(
+      Object.fromEntries(
+        Object.entries(fields).filter(
+          (e): e is [string, NonNullable<PDFFieldValue>] => e[1] !== undefined,
+        ),
+      ),
     );
-    form?.fill(definedFields);
 
     // Serialize the PDFDocument to bytes
     return await pdfDoc.save();

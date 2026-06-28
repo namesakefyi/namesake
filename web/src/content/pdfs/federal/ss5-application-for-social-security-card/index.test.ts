@@ -82,6 +82,6 @@ describe("SS-5 Application for Social Security Card", () => {
       userData: dataWithForeignBirthplace,
     });
 
-    expect(form.getTextField("birthplaceState").getValue()).toBe("Canada");
+    expect(form.getTextField("birthplaceState")?.getValue()).toBe("Canada");
   });
 });

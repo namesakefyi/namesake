@@ -18,7 +18,9 @@ export async function getPdfForm({
     const { PDF } = await loadPdfLib();
     const pdfBytes = await fillPdf({ pdf, userData });
     const pdfDoc = await PDF.load(pdfBytes);
-    return pdfDoc.getForm();
+    const form = pdfDoc.getForm();
+    if (!form) throw new Error("PDF has no AcroForm");
+    return form;
   } catch (error) {
     console.error(error);
     throw error;
