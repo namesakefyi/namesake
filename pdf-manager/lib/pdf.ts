@@ -1,6 +1,13 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import type { FieldType, FormField, PDFPage } from "@libpdf/core";
-import { PDF, PdfName, PdfString } from "@libpdf/core";
+import {
+  PDF,
+  PdfArray,
+  PdfDict,
+  PdfName,
+  PdfRef,
+  PdfString,
+} from "@libpdf/core";
 
 // Fields within this many PDF points vertically are treated as the same row
 // and sorted left-to-right within that row. ~10pt ≈ 4mm.
@@ -100,6 +107,11 @@ export interface Rename {
   to: string;
 }
 
+/**
+ * Renames fields in the PDF, promoting each to the AcroForm root so the
+ * full qualified name becomes just `to` (matching the old pdf-lib behavior of
+ * removeField → setParent(undefined) → setPartialName → addField).
+ */
 export async function applyRenames(
   pdfPath: string,
   renames: Rename[],
@@ -107,12 +119,39 @@ export async function applyRenames(
   const bytes = readFileSync(pdfPath);
   const doc = await PDF.load(bytes);
   const form = doc.getForm();
+  const acroForm = form?.acroForm();
   for (const { from, to } of renames) {
     if (form?.hasField(to)) continue;
     const field = form?.getField(from);
     if (!field) continue;
-    // Change the partial name (/T) in the field dictionary
-    field.acroField().set("T", PdfString.fromString(to));
+
+    const acro = field.acroField();
+    const fieldRef = field.getRef();
+    const parentRef = acro.getRef("Parent");
+
+    if (parentRef && fieldRef && acroForm) {
+      // Remove from parent's /Kids so the full qualified name becomes just `to`
+      const parentObj = doc.context.resolve(parentRef);
+      if (parentObj instanceof PdfDict) {
+        const kids = parentObj.get("Kids");
+        if (kids instanceof PdfArray) {
+          for (let i = 0; i < kids.length; i++) {
+            const item = kids.at(i);
+            if (
+              item instanceof PdfRef &&
+              item.objectNumber === fieldRef.objectNumber
+            ) {
+              kids.remove(i);
+              break;
+            }
+          }
+        }
+      }
+      acro.delete("Parent");
+      acroForm.addField(fieldRef);
+    }
+
+    acro.set("T", PdfString.fromString(to));
   }
   writeFileSync(pdfPath, await doc.save());
 }

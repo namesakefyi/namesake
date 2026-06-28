@@ -37,14 +37,12 @@ function parsePdfMetadata(pdfDir: string): PdfMeta | null {
   };
 }
 
-/** Counts fields in schema.ts by counting PDF class references. */
+/** Counts active fields in schema.ts by counting string-literal type values. */
 function countSchemaFields(pdfDir: string): number {
   const schemaPath = join(pdfDir, "schema.ts");
   if (!existsSync(schemaPath)) return 0;
   const content = readFileSync(schemaPath, "utf8");
-  return (
-    content.match(/:\s*PDF(?:TextField|CheckBox|RadioGroup|Dropdown)/g) ?? []
-  ).length;
+  return (content.match(/:\s*"(?:text|checkbox|radio|button)"/g) ?? []).length;
 }
 
 export function listAllPdfs(): PdfEntry[] {

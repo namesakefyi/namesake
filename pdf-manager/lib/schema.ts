@@ -6,7 +6,6 @@ import {
   extractFields,
   type PdfFieldInfo,
 } from "./pdf";
-import { loadSchemaFields } from "./suggest";
 import { escapeKey } from "./utils";
 
 // These types cannot be filled by Namesake and are excluded from generated schemas
@@ -74,6 +73,7 @@ ${excludedSection}`;
 export interface ProcessPdfResult {
   path: string;
   displayPath: string;
+  fieldNames: string[];
   count: number;
   checkboxCount: number;
 }
@@ -82,9 +82,10 @@ export interface ProcessPdfResult {
  * Writes schema.ts next to the PDF, omitting any excluded fields.
  * Pass `exclude` to add new field names to the exclusion set (merged with any
  * previously excluded fields already recorded in schema.ts).
- * Pass `keep` to protect specific field names from auto-exclusion (e.g. rename
- * targets or intentionally-retained new fields that aren't in the old schema).
- * Returns { path, displayPath, count, checkboxCount }.
+ * Pass `keep` to declare which fields should remain active — any field present
+ * in the PDF but absent from `keep` (and not in `unexclude`) will be
+ * auto-excluded when a schema already exists.
+ * Returns the written path, display path, and final field list.
  */
 export async function processPdf(
   pdfPath: string,
@@ -111,20 +112,12 @@ export async function processPdf(
     if (NON_FILLABLE_TYPES.has(f.type)) excluded.add(f.name);
   }
 
-  // When updating an existing schema, auto-exclude any PDF field that is
-  // unknown — not currently active and not already excluded. This prevents
-  // unmapped PDF fields from silently appearing in the generated schema.
-  // Fields in `keep` are exempted: they are rename targets or intentionally
-  // retained new fields that the caller has already vetted.
+  // When a schema already exists, auto-exclude any field not in `keep` or
+  // `unexclude` — the caller is responsible for passing what should stay active.
   if (existsSync(schemaPath)) {
-    const activeNames = new Set(loadSchemaFields(pdfPath));
     const keepSet = new Set([...keep, ...unexclude]);
     for (const f of allFields) {
-      if (
-        !excluded.has(f.name) &&
-        !activeNames.has(f.name) &&
-        !keepSet.has(f.name)
-      ) {
+      if (!excluded.has(f.name) && !keepSet.has(f.name)) {
         excluded.add(f.name);
       }
     }
@@ -134,6 +127,13 @@ export async function processPdf(
   writeFileSync(schemaPath, generateTypesContent(stem, fields, excluded));
 
   const displayPath = relative(PDFS_DIR, join(dir, stem));
+  const fieldNames = fields.map((f) => f.name);
   const checkboxCount = fields.filter((f) => f.type === "checkbox").length;
-  return { path: schemaPath, displayPath, count: fields.length, checkboxCount };
+  return {
+    path: schemaPath,
+    displayPath,
+    fieldNames,
+    count: fields.length,
+    checkboxCount,
+  };
 }

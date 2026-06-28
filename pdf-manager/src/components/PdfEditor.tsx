@@ -68,7 +68,10 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
         const res = await fetch(`/api/pdf/${pdfId}/preview`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pdfBase64: base64 }),
+          body: JSON.stringify({
+            pdfBase64: base64,
+            activeFields: fields.filter((f) => !f.excluded).map((f) => f.name),
+          }),
         });
         const data = await parseJson<FieldPreview>(res);
         if (cancelled) return;
@@ -87,7 +90,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
     return () => {
       cancelled = true;
     };
-  }, [uploadFile, pdfId]);
+  }, [uploadFile, pdfId, fields.filter]);
 
   async function commit(
     renames: Rename[],
@@ -96,11 +99,12 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
   ) {
     if (saving) return;
     setSaving(true);
+    const activeFields = fields.filter((f) => !f.excluded).map((f) => f.name);
     try {
       const res = await fetch(`/api/pdf/${pdfId}/fields`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ renames, deletes, unexcludes }),
+        body: JSON.stringify({ activeFields, renames, deletes, unexcludes }),
       });
       const result = await parseJson<Diff>(res);
       if (!res.ok) throw new Error(result.error ?? "Save failed");
@@ -188,6 +192,9 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
         fileName={uploadFile?.name}
         pdfBase64={pdfBase64}
         preview={preview}
+        currentActiveFields={fields
+          .filter((f) => !f.excluded)
+          .map((f) => f.name)}
         onClose={() => {
           setPreview(null);
           setPdfBase64(null);
