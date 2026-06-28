@@ -1,6 +1,3 @@
-import { existsSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-
 const XFA_LEAF_MAP: Record<string, string> = {
   fn: "FirstName",
   ln: "LastName",
@@ -61,14 +58,4 @@ export function suggestName(fieldName: string, schemaFields: string[]): string {
     }
   }
   return bestScore >= 0.5 ? bestField : "";
-}
-
-/** Returns field names from the sibling schema.ts of a PDF path. */
-export function loadSchemaFields(pdfPath: string): string[] {
-  const schemaPath = join(dirname(pdfPath), "schema.ts");
-  if (!existsSync(schemaPath)) return [];
-  const content = readFileSync(schemaPath, "utf8");
-  return [
-    ...content.matchAll(/^\s+(?:([a-zA-Z_]\w*)|("(?:[^"\\]|\\.)*")):\s*PDF/gm),
-  ].map((m) => (m[1] !== undefined ? m[1] : JSON.parse(m[2])));
 }

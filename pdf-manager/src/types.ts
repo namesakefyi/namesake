@@ -1,6 +1,6 @@
 export interface Field {
   name: string;
-  type: "text" | "checkbox" | "radio";
+  type: "text" | "checkbox" | "radio" | "button";
   excluded?: boolean;
 }
 

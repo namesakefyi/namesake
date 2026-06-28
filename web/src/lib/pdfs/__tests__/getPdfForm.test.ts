@@ -2,6 +2,11 @@ import { describe, expect, it, vi } from "vitest";
 import { getPdfForm } from "../getPdfForm";
 import { testPdfDefinition } from "./helpers";
 
+vi.mock("../loadPdfLib", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../loadPdfLib")>();
+  return { loadPdfLib: vi.fn().mockImplementation(actual.loadPdfLib) };
+});
+
 describe("getPdfForm", () => {
   it("should return form object for testing", async () => {
     const form = await getPdfForm({
@@ -13,9 +18,9 @@ describe("getPdfForm", () => {
       },
     });
 
-    expect(form.getTextField("newFirstName").getText()).toBe("New");
-    expect(form.getTextField("oldFirstName").getText()).toBe("Old");
-    expect(form.getCheckBox("shouldReturnOriginalDocuments").isChecked()).toBe(
+    expect(form.getTextField("newFirstName")?.getValue()).toBe("New");
+    expect(form.getTextField("oldFirstName")?.getValue()).toBe("Old");
+    expect(form.getCheckbox("shouldReturnOriginalDocuments")?.isChecked()).toBe(
       true,
     );
   });

@@ -1,15 +1,39 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, extname, join, relative } from "node:path";
-import { PDFDocument } from "@cantoo/pdf-lib";
 import { PDFS_DIR } from "./catalog";
-import { convertDropdownsToTextFields, fieldReadingOrder } from "./pdf";
-import { loadSchemaFields } from "./suggest";
+import {
+  convertDropdownsToTextFields,
+  extractFields,
+  type PdfFieldInfo,
+} from "./pdf";
 import { escapeKey } from "./utils";
 
-interface PdfFieldWithClass {
-  name: string;
-  fieldClass: string;
+/** Returns the set of field names currently active (non-excluded) in schema.ts. */
+function loadCurrentSchemaFields(schemaPath: string): Set<string> {
+  if (!existsSync(schemaPath)) return new Set();
+  try {
+    const content = readFileSync(schemaPath, "utf8");
+    const matches = content.matchAll(
+      /^\s+([^:]+):\s*"(?:text|checkbox|radio|button)"/gm,
+    );
+    return new Set(
+      [...matches].map((m) => {
+        const key = m[1].trim();
+        return key.startsWith('"') ? JSON.parse(key) : key;
+      }),
+    );
+  } catch {
+    return new Set();
+  }
 }
+
+// These types cannot be filled by Namesake and are excluded from generated schemas
+const NON_FILLABLE_TYPES = new Set([
+  "signature",
+  "listbox",
+  "unknown",
+  "non-terminal",
+]);
 
 /** Recursively finds all .pdf files under dir. */
 export function findPdfFiles(dir: string): string[] {
@@ -21,19 +45,6 @@ export function findPdfFiles(dir: string): string[] {
       files.push(fullPath);
   }
   return files;
-}
-
-async function extractFieldsWithClass(
-  pdfPath: string,
-): Promise<PdfFieldWithClass[]> {
-  const bytes = readFileSync(pdfPath);
-  const doc = await PDFDocument.load(bytes);
-  const form = doc.getForm();
-  const sorted = fieldReadingOrder(form.getFields(), doc.getPages());
-  return sorted.map((f) => ({
-    name: f.getName(),
-    fieldClass: f.constructor.name,
-  }));
 }
 
 export function loadExclusions(pdfDir: string): Set<string> {
@@ -54,16 +65,11 @@ export function loadExclusions(pdfDir: string): Set<string> {
 
 function generateTypesContent(
   stem: string,
-  fields: PdfFieldWithClass[],
+  fields: PdfFieldInfo[],
   excluded: Set<string> = new Set(),
 ): string {
-  const usedClasses = [...new Set(fields.map((f) => f.fieldClass))];
-  const imports =
-    usedClasses.length > 0
-      ? `import { ${usedClasses.sort().join(", ")} } from "@cantoo/pdf-lib";`
-      : "";
   const schemaEntries = fields
-    .map((f) => `  ${escapeKey(f.name)}: ${f.fieldClass}`)
+    .map((f) => `  ${escapeKey(f.name)}: "${f.type}"`)
     .join(",\n");
   const schemaBody = schemaEntries ? `\n${schemaEntries},\n` : "\n";
 
@@ -74,9 +80,10 @@ function generateTypesContent(
       : "";
 
   return `/** Auto-generated from ${stem}.pdf — do not edit */
-${imports}
 
-export const pdfSchema = {${schemaBody}} as const;
+import type { PdfFieldType } from "#constants/pdf";
+
+export const pdfSchema = {${schemaBody}} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;
 ${excludedSection}`;
@@ -85,17 +92,17 @@ ${excludedSection}`;
 export interface ProcessPdfResult {
   path: string;
   displayPath: string;
-  count: number;
-  checkboxCount: number;
+  fieldNames: string[];
 }
 
 /**
  * Writes schema.ts next to the PDF, omitting any excluded fields.
  * Pass `exclude` to add new field names to the exclusion set (merged with any
  * previously excluded fields already recorded in schema.ts).
- * Pass `keep` to protect specific field names from auto-exclusion (e.g. rename
- * targets or intentionally-retained new fields that aren't in the old schema).
- * Returns { path, displayPath, count, checkboxCount }.
+ * Pass `keep` to declare which fields should remain active — any field present
+ * in the PDF but absent from `keep` (and not in `unexclude`) will be
+ * auto-excluded when a schema already exists.
+ * Returns the written path, display path, and final field list.
  */
 export async function processPdf(
   pdfPath: string,
@@ -115,22 +122,22 @@ export async function processPdf(
   for (const n of exclude) excluded.add(n);
 
   await convertDropdownsToTextFields(pdfPath);
-  const allFields = await extractFieldsWithClass(pdfPath);
+  const allFields = await extractFields(pdfPath);
 
-  // When updating an existing schema, auto-exclude any PDF field that is
-  // unknown — not currently active and not already excluded. This prevents
-  // unmapped PDF fields from silently appearing in the generated schema.
-  // Fields in `keep` are exempted: they are rename targets or intentionally
-  // retained new fields that the caller has already vetted.
+  // Always exclude non-fillable field types (signature, listbox, etc.)
+  for (const f of allFields) {
+    if (NON_FILLABLE_TYPES.has(f.type)) excluded.add(f.name);
+  }
+
+  // When a schema already exists, auto-exclude any field that isn't currently
+  // active and isn't explicitly kept. Reading active fields from the schema
+  // ensures callers that don't pass `keep` (e.g. the extract-pdf-schema script)
+  // preserve existing active fields rather than wiping them.
   if (existsSync(schemaPath)) {
-    const activeNames = new Set(loadSchemaFields(pdfPath));
-    const keepSet = new Set([...keep, ...unexclude]);
+    const activeNames = loadCurrentSchemaFields(schemaPath);
+    const keepSet = new Set([...activeNames, ...keep, ...unexclude]);
     for (const f of allFields) {
-      if (
-        !excluded.has(f.name) &&
-        !activeNames.has(f.name) &&
-        !keepSet.has(f.name)
-      ) {
+      if (!excluded.has(f.name) && !keepSet.has(f.name)) {
         excluded.add(f.name);
       }
     }
@@ -140,8 +147,9 @@ export async function processPdf(
   writeFileSync(schemaPath, generateTypesContent(stem, fields, excluded));
 
   const displayPath = relative(PDFS_DIR, join(dir, stem));
-  const checkboxCount = fields.filter(
-    (f) => f.fieldClass === "PDFCheckBox",
-  ).length;
-  return { path: schemaPath, displayPath, count: fields.length, checkboxCount };
+  return {
+    path: schemaPath,
+    displayPath,
+    fieldNames: fields.map((f) => f.name),
+  };
 }

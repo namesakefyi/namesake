@@ -13,19 +13,11 @@ export async function createCoverPage({
   instructions: string[];
   documents: Array<{ title: string; code?: string }>;
 }): Promise<Uint8Array> {
-  const {
-    PDFDocument,
-    StandardFonts,
-    pushGraphicsState,
-    popGraphicsState,
-    setCharacterSpacing,
-  } = await loadPdfLib();
+  const { PDF, StandardFonts } = await loadPdfLib();
 
-  const pdfDoc = await PDFDocument.create();
-  const page = pdfDoc.addPage([612, 792]); // Standard US Letter size
-  const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-  const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  const { height, width } = page.getSize();
+  const pdf = PDF.create();
+  const page = pdf.addPage({ width: 612, height: 792 }); // Standard US Letter size
+  const { width, height } = { width: page.width, height: page.height };
 
   const margin = 50;
   const contentWidth = width - margin * 2;
@@ -45,7 +37,7 @@ export async function createCoverPage({
       x: margin,
       y: y,
       size: 16,
-      font: helveticaBold,
+      font: StandardFonts.HelveticaBold,
     });
 
     const listText = items
@@ -57,9 +49,8 @@ export async function createCoverPage({
       x: margin + listOffset,
       y: y,
       size: 13,
-      font: helvetica,
+      font: StandardFonts.Helvetica,
       maxWidth: contentWidth - listOffset,
-      wordBreaks: [" "],
       lineHeight: 21,
     });
   }
@@ -68,7 +59,7 @@ export async function createCoverPage({
     x: margin,
     y: height - 65,
     size: 14,
-    font: helveticaBold,
+    font: StandardFonts.HelveticaBold,
   });
 
   page.drawLine({
@@ -77,17 +68,14 @@ export async function createCoverPage({
     thickness: 2.5,
   });
 
-  page.pushOperators(pushGraphicsState(), setCharacterSpacing(-1));
   page.drawText(smartquotes(title), {
-    x: margin - 1.5, // Optical fix
+    x: margin,
     y: height - 130,
     size: 44,
     lineHeight: 48,
     maxWidth: contentWidth,
-    wordBreaks: [" "],
-    font: helveticaBold,
+    font: StandardFonts.HelveticaBold,
   });
-  page.pushOperators(popGraphicsState());
 
   drawList({
     title: "Packet Includes",
@@ -106,7 +94,7 @@ export async function createCoverPage({
   try {
     const logoResponse = await fetch("/forms/pdf-cover-logo.png");
     const logoBytes = await logoResponse.arrayBuffer();
-    const logoImage = await pdfDoc.embedPng(new Uint8Array(logoBytes));
+    const logoImage = pdf.embedImage(new Uint8Array(logoBytes));
 
     page.drawImage(logoImage, {
       x: margin,
@@ -131,7 +119,7 @@ export async function createCoverPage({
     y: 80,
     size: 9,
     lineHeight: 11,
-    font: helvetica,
+    font: StandardFonts.Helvetica,
   });
 
   const disclaimer =
@@ -140,11 +128,10 @@ export async function createCoverPage({
     x: margin,
     y: 60,
     size: 9,
-    font: helvetica,
+    font: StandardFonts.Helvetica,
     maxWidth: contentWidth,
-    wordBreaks: [" "],
     lineHeight: 11,
   });
 
-  return await pdfDoc.save();
+  return await pdf.save();
 }

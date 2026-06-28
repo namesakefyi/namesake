@@ -1,4 +1,4 @@
-import { PDFDocument } from "@cantoo/pdf-lib";
+import { PDF } from "@libpdf/core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { definePdf } from "../definePdf";
 import { downloadMergedPdf } from "../downloadMergedPdf";
@@ -15,7 +15,7 @@ describe("downloadMergedPdf", () => {
     consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
     // Create a minimal valid PDF for testing
-    const pdfDoc = await PDFDocument.create();
+    const pdfDoc = PDF.create();
     const page = pdfDoc.addPage();
     page.drawText("Test PDF");
     mockPdfBytes = await pdfDoc.save();

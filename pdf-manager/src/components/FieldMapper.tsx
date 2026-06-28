@@ -136,6 +136,7 @@ interface FieldMapperProps {
   fileName?: string;
   pdfBase64: string;
   preview: FieldPreview;
+  currentActiveFields: string[];
   onClose: () => void;
   onSuccess: (result: Diff) => void;
 }
@@ -145,6 +146,7 @@ export function FieldMapper({
   fileName,
   pdfBase64,
   preview,
+  currentActiveFields,
   onClose,
   onSuccess,
 }: FieldMapperProps) {
@@ -341,6 +343,7 @@ export function FieldMapper({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           pdfBase64,
+          activeFields: currentActiveFields,
           renames,
           deletes: [...deletedFields],
         }),

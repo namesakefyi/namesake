@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { PDFDocument } from "@cantoo/pdf-lib";
+import { PDF } from "@libpdf/core";
 import type { Context } from "hono";
 import { findPdfById, listAllPdfs } from "./catalog";
 import {
@@ -11,7 +11,7 @@ import {
 import { loadJurisdictions } from "./fields";
 import { applyRenames, extractFields, extractFieldsFromBytes } from "./pdf";
 import { loadExclusions, processPdf } from "./schema";
-import { loadSchemaFields, suggestName } from "./suggest";
+import { suggestName } from "./suggest";
 
 export async function handleListPdfs(c: Context) {
   return c.json(
@@ -50,33 +50,31 @@ export async function handleSaveFields(c: Context) {
   if (!found) return c.json({ error: "Not found" }, 404);
 
   const {
+    activeFields = [],
     renames = [],
     deletes = [],
     unexcludes = [],
   } = await c.req.json<{
+    activeFields?: string[];
     renames?: Array<{ from: string; to: string }>;
     deletes?: string[];
     unexcludes?: string[];
   }>();
 
-  const oldSchemaFields = new Set(loadSchemaFields(found.pdfPath));
-
   if (renames.length > 0) await applyRenames(found.pdfPath, renames);
 
-  // Pass rename targets as `keep` so processPdf doesn't auto-exclude them —
-  // they're new names that aren't in the old schema yet.
-  const keepNames = renames.map((r) => r.to);
-  await processPdf(found.pdfPath, {
+  const { fieldNames } = await processPdf(found.pdfPath, {
     exclude: deletes,
-    keep: keepNames,
+    keep: [...activeFields, ...renames.map((r) => r.to)],
     unexclude: unexcludes,
   });
   formatFiles([join(found.pdfDir, "schema.ts")]);
 
-  const newSchemaFields = loadSchemaFields(found.pdfPath);
+  const before = new Set(activeFields);
+  const fieldSet = new Set(fieldNames);
   return c.json({
-    added: newSchemaFields.filter((f) => !oldSchemaFields.has(f)),
-    removed: [...oldSchemaFields].filter((f) => !newSchemaFields.includes(f)),
+    added: fieldNames.filter((f) => !before.has(f)),
+    removed: activeFields.filter((f) => !fieldSet.has(f)),
   });
 }
 
@@ -110,7 +108,7 @@ export async function handleAddPdf(c: Context) {
   }
 
   const rawBytes = Buffer.from(pdfBase64, "base64");
-  const pdfDoc = await PDFDocument.load(rawBytes);
+  const pdfDoc = await PDF.load(rawBytes);
   const cleanedBytes = await pdfDoc.save();
 
   const pdfFields = await extractFieldsFromBytes(cleanedBytes);
@@ -139,11 +137,14 @@ export async function handlePreviewReplace(c: Context) {
   const found = findPdfById(c.req.param("id"));
   if (!found) return c.json({ error: "Not found" }, 404);
 
-  const { pdfBase64 } = await c.req.json<{ pdfBase64?: string }>();
+  const { pdfBase64, activeFields = [] } = await c.req.json<{
+    pdfBase64?: string;
+    activeFields?: string[];
+  }>();
   if (!pdfBase64) return c.json({ error: "pdfBase64 is required" }, 400);
 
   // Include excluded fields so they can be offered as rename targets.
-  const activeOldNames = new Set(loadSchemaFields(found.pdfPath));
+  const activeOldNames = new Set(activeFields);
   const excludedOldNames = loadExclusions(found.pdfDir);
   const oldNames = new Set([...activeOldNames, ...excludedOldNames]);
 
@@ -179,23 +180,25 @@ export async function handleReplacePdf(c: Context) {
 
   const {
     pdfBase64,
+    activeFields = [],
     renames = [],
     deletes = [],
   } = await c.req.json<{
     pdfBase64?: string;
+    activeFields?: string[];
     renames?: Array<{ from: string; to: string }>;
     deletes?: string[];
   }>();
   if (!pdfBase64) return c.json({ error: "pdfBase64 is required" }, 400);
 
-  const oldSchemaFields = new Set(loadSchemaFields(found.pdfPath));
   const oldBytes = readFileSync(found.pdfPath);
   const schemaPath = join(found.pdfDir, "schema.ts");
   const oldSchemaContent = readFileSync(schemaPath, "utf8");
 
+  let fieldNames: string[];
   try {
     const newBytes = Buffer.from(pdfBase64, "base64");
-    const pdfDoc = await PDFDocument.load(newBytes);
+    const pdfDoc = await PDF.load(newBytes);
     writeFileSync(found.pdfPath, await pdfDoc.save());
 
     if (renames.length > 0) await applyRenames(found.pdfPath, renames);
@@ -209,7 +212,10 @@ export async function handleReplacePdf(c: Context) {
       .map((f) => f.name)
       .filter((n) => !deleteSet.has(n));
 
-    await processPdf(found.pdfPath, { exclude: deletes, keep: keepNames });
+    ({ fieldNames } = await processPdf(found.pdfPath, {
+      exclude: deletes,
+      keep: keepNames,
+    }));
     formatFiles([schemaPath]);
   } catch (err) {
     writeFileSync(found.pdfPath, oldBytes);
@@ -217,12 +223,13 @@ export async function handleReplacePdf(c: Context) {
     throw err;
   }
 
-  const newSchemaFields = loadSchemaFields(found.pdfPath);
+  const before = new Set(activeFields);
+  const fieldSet = new Set(fieldNames);
   return c.json({
-    added: newSchemaFields.filter((f) => !oldSchemaFields.has(f)),
-    removed: [...oldSchemaFields].filter((f) => !newSchemaFields.includes(f)),
-    unchanged: newSchemaFields.filter((f) => oldSchemaFields.has(f)),
-    fieldCount: newSchemaFields.length,
+    added: fieldNames.filter((f) => !before.has(f)),
+    removed: activeFields.filter((f) => !fieldSet.has(f)),
+    unchanged: fieldNames.filter((f) => before.has(f)),
+    fieldCount: fieldNames.length,
   });
 }
 

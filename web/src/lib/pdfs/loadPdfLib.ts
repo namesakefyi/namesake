@@ -3,21 +3,10 @@
  * @returns PDF library utilities
  */
 export async function loadPdfLib() {
-  const {
-    PDFDocument,
-    PDFDropdown,
-    popGraphicsState,
-    pushGraphicsState,
-    StandardFonts,
-    setCharacterSpacing,
-  } = await import("@cantoo/pdf-lib");
+  const { PDF, StandardFonts } = await import("@libpdf/core");
 
   return {
-    PDFDocument,
-    PDFDropdown,
-    popGraphicsState,
-    pushGraphicsState,
+    PDF,
     StandardFonts,
-    setCharacterSpacing,
   };
 }

@@ -1,18 +1,19 @@
+import type { PdfFieldType } from "#constants/pdf";
+
 /** Auto-generated from cjp34-cori-and-wms-release-request.pdf — do not edit */
-import { PDFCheckBox, PDFTextField } from "@cantoo/pdf-lib";
 
 export const pdfSchema = {
-  caseName: PDFTextField,
-  county: PDFTextField,
-  isChangeOfNameProceeding: PDFCheckBox,
-  oldName: PDFTextField,
-  dateOfBirth: PDFTextField,
-  ssnFirstThree: PDFTextField,
-  ssnMiddleTwo: PDFTextField,
-  ssnLastFour: PDFTextField,
-  mothersMaidenName: PDFTextField,
-  otherNamesOrAliases: PDFTextField,
-} as const;
+  caseName: "text",
+  county: "text",
+  isChangeOfNameProceeding: "checkbox",
+  oldName: "text",
+  dateOfBirth: "text",
+  ssnFirstThree: "text",
+  ssnMiddleTwo: "text",
+  ssnLastFour: "text",
+  mothersMaidenName: "text",
+  otherNamesOrAliases: "text",
+} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;
 

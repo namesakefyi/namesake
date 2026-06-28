@@ -52,7 +52,7 @@ async function main() {
       schemaPaths.push(result.path);
       if (!quiet) {
         task?.message(
-          `${result.displayPath}\n→ extracted ${result.count} fields (${result.checkboxCount} checkbox)`,
+          `${result.displayPath}\n→ extracted ${result.fieldNames.length} fields`,
         );
       }
     } catch (err) {
