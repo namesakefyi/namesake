@@ -92,7 +92,7 @@ describe("Petition to Change Name of Minor", () => {
       pdf: cjp25PetitionToChangeNameOfMinor,
       userData: testData, // dateOfBirth 2015-06-15 → age 10
     });
-    expect(form.getCheckBox("isChildUnder12").isChecked()).toBe(true);
+    expect(form.getCheckbox("isChildUnder12")?.isChecked()).toBe(true);
   });
 
   it("derives isChildUnder12 false when child is 12 or older", async () => {
@@ -107,7 +107,7 @@ describe("Petition to Change Name of Minor", () => {
       userData: dataWithOlderChild,
     });
 
-    expect(form.getCheckBox("isChildUnder12").isChecked()).toBe(false);
+    expect(form.getCheckbox("isChildUnder12")?.isChecked()).toBe(false);
   });
 
   it("derives hasPreviousNameChangeFalse when no previous name change", async () => {
@@ -120,10 +120,10 @@ describe("Petition to Change Name of Minor", () => {
       pdf: cjp25PetitionToChangeNameOfMinor,
       userData: dataWithNoPreviousChange,
     });
-    expect(form.getCheckBox("hasPreviousNameChangeTrue").isChecked()).toBe(
+    expect(form.getCheckbox("hasPreviousNameChangeTrue")?.isChecked()).toBe(
       false,
     );
-    expect(form.getCheckBox("hasPreviousNameChangeFalse").isChecked()).toBe(
+    expect(form.getCheckbox("hasPreviousNameChangeFalse")?.isChecked()).toBe(
       true,
     );
   });
@@ -138,10 +138,10 @@ describe("Petition to Change Name of Minor", () => {
       pdf: cjp25PetitionToChangeNameOfMinor,
       userData: dataWithNoGuardian,
     });
-    expect(form.getCheckBox("hasCountAppointedGuardianFalse").isChecked()).toBe(
-      true,
-    );
-    expect(form.getCheckBox("hasCourtAppointedGuardianTrue").isChecked()).toBe(
+    expect(
+      form.getCheckbox("hasCountAppointedGuardianFalse")?.isChecked(),
+    ).toBe(true);
+    expect(form.getCheckbox("hasCourtAppointedGuardianTrue")?.isChecked()).toBe(
       false,
     );
   });
@@ -157,7 +157,7 @@ describe("Petition to Change Name of Minor", () => {
       userData: dataWithBothParents,
     });
     expect(
-      form.getCheckBox("isOnlyOneParentListedOnBirthCertificate").isChecked(),
+      form.getCheckbox("isOnlyOneParentListedOnBirthCertificate")?.isChecked(),
     ).toBe(false);
   });
 });

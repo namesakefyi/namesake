@@ -54,6 +54,11 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
     };
   }, [pdfId]);
 
+  const activeFieldNames = useMemo(
+    () => fields.filter((f) => !f.excluded).map((f) => f.name),
+    [fields],
+  );
+
   // Auto-trigger preview when a file is selected
   useEffect(() => {
     if (!uploadFile) return;
@@ -68,7 +73,10 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
         const res = await fetch(`/api/pdf/${pdfId}/preview`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pdfBase64: base64 }),
+          body: JSON.stringify({
+            pdfBase64: base64,
+            activeFields: activeFieldNames,
+          }),
         });
         const data = await parseJson<FieldPreview>(res);
         if (cancelled) return;
@@ -87,7 +95,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
     return () => {
       cancelled = true;
     };
-  }, [uploadFile, pdfId]);
+  }, [uploadFile, pdfId, activeFieldNames]);
 
   async function commit(
     renames: Rename[],
@@ -100,7 +108,12 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
       const res = await fetch(`/api/pdf/${pdfId}/fields`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ renames, deletes, unexcludes }),
+        body: JSON.stringify({
+          activeFields: activeFieldNames,
+          renames,
+          deletes,
+          unexcludes,
+        }),
       });
       const result = await parseJson<Diff>(res);
       if (!res.ok) throw new Error(result.error ?? "Save failed");
@@ -188,6 +201,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
         fileName={uploadFile?.name}
         pdfBase64={pdfBase64}
         preview={preview}
+        currentActiveFields={activeFieldNames}
         onClose={() => {
           setPreview(null);
           setPdfBase64(null);

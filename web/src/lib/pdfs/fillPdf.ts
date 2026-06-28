@@ -1,5 +1,5 @@
 import type { FormData } from "#constants/fields";
-import type { PDFDefinition } from "#constants/pdf";
+import type { PDFDefinition, PDFFieldValue } from "#constants/pdf";
 import { fetchPdf } from "./fetchPdf";
 import { loadPdfLib } from "./loadPdfLib";
 
@@ -15,13 +15,13 @@ export async function fillPdf({
   userData: Partial<FormData>;
 }): Promise<Uint8Array> {
   try {
-    const { PDFDocument, PDFDropdown } = await loadPdfLib();
+    const { PDF } = await loadPdfLib();
 
     // Fetch the PDF with form fields
     const formPdfBytes = await fetchPdf(pdf.pdfPath);
 
-    // Load a PDF with form fields
-    const pdfDoc = await PDFDocument.load(formPdfBytes);
+    // Load a PDF with form fields (PDF.load requires Uint8Array, not ArrayBuffer)
+    const pdfDoc = await PDF.load(new Uint8Array(formPdfBytes));
 
     // Set the title
     pdfDoc.setTitle(pdf.title);
@@ -32,20 +32,13 @@ export async function fillPdf({
 
     // Fill out each field from the resolver
     const fields = pdf.resolver(userData);
-    for (const [fieldName, value] of Object.entries(fields)) {
-      if (value === undefined) continue;
-      if (typeof value === "boolean") {
-        const checkbox = form.getCheckBox(fieldName);
-        value ? checkbox.check() : checkbox.uncheck();
-      } else if (typeof value === "string") {
-        const field = form.getField(fieldName);
-        if (field instanceof PDFDropdown) {
-          field.select(value);
-        } else {
-          form.getTextField(fieldName).setText(value);
-        }
-      }
-    }
+    form?.fill(
+      Object.fromEntries(
+        Object.entries(fields).filter(
+          (e): e is [string, NonNullable<PDFFieldValue>] => e[1] != null,
+        ),
+      ),
+    );
 
     // Serialize the PDFDocument to bytes
     return await pdfDoc.save();

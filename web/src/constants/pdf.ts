@@ -1,7 +1,11 @@
 import type { FormData } from "./fields";
 import type { JurisdictionId } from "./jurisdictions";
 
-export type PDFFieldValue = string | boolean | undefined;
+/** Matches libpdf's FieldValue, plus undefined for omitted fields. */
+export type PDFFieldValue = string | boolean | string[] | null | undefined;
+
+/** Valid field types that can appear in a generated pdfSchema. */
+export type PdfFieldType = "text" | "checkbox" | "radio" | "button";
 
 export const PDF_IDS = [
   "affidavit-of-indigency",

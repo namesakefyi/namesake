@@ -19,36 +19,18 @@ export async function downloadMergedPdf({
   pdfs: PDFDefinition[];
   userData: Partial<FormData>;
 }) {
-  const { PDFDocument } = await loadPdfLib();
-  const mergedPdf = await PDFDocument.create();
+  const { PDF } = await loadPdfLib();
 
-  // Create and add cover page
-  const coverPageBytes = await createCoverPage({
-    title,
-    instructions,
-    documents: pdfs.map((pdf) => ({
-      title: pdf.title,
-      code: pdf.code,
-    })),
-  });
-  const coverPageDoc = await PDFDocument.load(coverPageBytes);
-  const [coverPage] = await mergedPdf.copyPages(coverPageDoc, [0]);
-  mergedPdf.addPage(coverPage);
+  const [coverPageBytes, ...filledPdfBytes] = await Promise.all([
+    createCoverPage({
+      title,
+      instructions,
+      documents: pdfs.map((pdf) => ({ title: pdf.title, code: pdf.code })),
+    }),
+    ...pdfs.map((pdf) => fillPdf({ pdf, userData })),
+  ]);
 
-  // Add the rest of the PDFs
-  for (const pdf of pdfs) {
-    const pdfBytes = await fillPdf({ pdf, userData });
-    const pdfDoc = await PDFDocument.load(pdfBytes);
-
-    const copiedPages = await mergedPdf.copyPages(
-      pdfDoc,
-      pdfDoc.getPageIndices(),
-    );
-    for (const page of copiedPages) {
-      mergedPdf.addPage(page);
-    }
-  }
-
+  const mergedPdf = await PDF.merge([coverPageBytes, ...filledPdfBytes]);
   const mergedPdfBytes = await mergedPdf.save();
   downloadPdf({ pdfBytes: mergedPdfBytes, title });
 }

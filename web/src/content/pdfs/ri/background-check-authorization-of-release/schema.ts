@@ -1,12 +1,13 @@
+import type { PdfFieldType } from "#constants/pdf";
+
 /** Auto-generated from background-check-authorization-of-release.pdf — do not edit */
-import { PDFTextField } from "@cantoo/pdf-lib";
 
 export const pdfSchema = {
-  fullName: PDFTextField,
-  otherNames: PDFTextField,
-  dateOfBirth: PDFTextField,
-  residenceAddress: PDFTextField,
-  nameChange: PDFTextField,
-} as const;
+  fullName: "text",
+  otherNames: "text",
+  dateOfBirth: "text",
+  residenceAddress: "text",
+  nameChange: "text",
+} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;

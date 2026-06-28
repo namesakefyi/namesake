@@ -12,8 +12,8 @@
     "monitor:resolve": "tsx scripts/pdf-monitor.ts resolve"
   },
   "dependencies": {
-    "@cantoo/pdf-lib": "^2.7.1",
     "@hono/node-server": "^2.0.6",
+    "@libpdf/core": "^0.4.0",
     "hono": "^4.12.27",
     "pdfjs-dist": "^6.0.227",
     "react": "^19.2.7",
