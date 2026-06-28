@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import type { FormField, PDFPage } from "@libpdf/core";
+import type { FieldType, FormField, PDFPage } from "@libpdf/core";
 import { PDF, PdfName, PdfString } from "@libpdf/core";
 
 // Fields within this many PDF points vertically are treated as the same row
@@ -55,23 +55,7 @@ export function fieldReadingOrder(
 
 export interface PdfFieldInfo {
   name: string;
-  type: "text" | "checkbox" | "radio";
-}
-
-/**
- * Maps a libpdf form field to the simplified type used by the PDF Manager UI.
- * Radio groups and checkboxes are detected explicitly; everything else (text
- * fields and any field class we don't render specially) falls back to "text".
- */
-function fieldType(field: FormField): PdfFieldInfo["type"] {
-  switch (field.type) {
-    case "checkbox":
-      return "checkbox";
-    case "radio":
-      return "radio";
-    default:
-      return "text";
-  }
+  type: FieldType;
 }
 
 export async function extractFields(pdfPath: string): Promise<PdfFieldInfo[]> {
@@ -85,10 +69,7 @@ export async function extractFieldsFromBytes(
   const doc = await PDF.load(bytes);
   const form = doc.getForm();
   const sorted = fieldReadingOrder(form?.getFields() ?? [], doc.getPages());
-  return sorted.map((f) => ({
-    name: f.name,
-    type: fieldType(f),
-  }));
+  return sorted.map((f) => ({ name: f.name, type: f.type }));
 }
 
 /**

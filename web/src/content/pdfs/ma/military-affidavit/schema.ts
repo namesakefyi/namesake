@@ -1,3 +1,5 @@
+import type { PdfFieldType } from "#constants/pdf";
+
 /** Auto-generated from military-affidavit.pdf — do not edit */
 
 export const pdfSchema = {
@@ -38,6 +40,6 @@ export const pdfSchema = {
   Date_af_date: "text",
   "Name, Address, Phone, E-Mail": "text",
   "BBO Number": "text",
-} as const;
+} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;

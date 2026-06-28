@@ -1,3 +1,5 @@
+import type { PdfFieldType } from "#constants/pdf";
+
 /** Auto-generated from cjp25-petition-to-change-name-of-minor.pdf — do not edit */
 
 export const pdfSchema = {
@@ -106,7 +108,7 @@ export const pdfSchema = {
   languages: "text",
   isOkayToSharePronouns: "checkbox",
   pronouns: "text",
-} as const;
+} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;
 

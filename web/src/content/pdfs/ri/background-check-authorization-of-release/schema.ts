@@ -1,3 +1,5 @@
+import type { PdfFieldType } from "#constants/pdf";
+
 /** Auto-generated from background-check-authorization-of-release.pdf — do not edit */
 
 export const pdfSchema = {
@@ -6,6 +8,6 @@ export const pdfSchema = {
   dateOfBirth: "text",
   residenceAddress: "text",
   nameChange: "text",
-} as const;
+} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;

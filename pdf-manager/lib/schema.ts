@@ -1,15 +1,21 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, extname, join, relative } from "node:path";
-import { PDF } from "@libpdf/core";
 import { PDFS_DIR } from "./catalog";
-import { convertDropdownsToTextFields, fieldReadingOrder } from "./pdf";
+import {
+  convertDropdownsToTextFields,
+  extractFields,
+  type PdfFieldInfo,
+} from "./pdf";
 import { loadSchemaFields } from "./suggest";
 import { escapeKey } from "./utils";
 
-interface PdfFieldWithClass {
-  name: string;
-  fieldClass: string;
-}
+// These types cannot be filled by Namesake and are excluded from generated schemas
+const NON_FILLABLE_TYPES = new Set([
+  "signature",
+  "listbox",
+  "unknown",
+  "non-terminal",
+]);
 
 /** Recursively finds all .pdf files under dir. */
 export function findPdfFiles(dir: string): string[] {
@@ -21,19 +27,6 @@ export function findPdfFiles(dir: string): string[] {
       files.push(fullPath);
   }
   return files;
-}
-
-async function extractFieldsWithClass(
-  pdfPath: string,
-): Promise<PdfFieldWithClass[]> {
-  const bytes = readFileSync(pdfPath);
-  const doc = await PDF.load(bytes);
-  const form = doc.getForm();
-  const sorted = fieldReadingOrder(form?.getFields() ?? [], doc.getPages());
-  return sorted.map((f) => ({
-    name: f.name,
-    fieldClass: f.type,
-  }));
 }
 
 export function loadExclusions(pdfDir: string): Set<string> {
@@ -54,11 +47,11 @@ export function loadExclusions(pdfDir: string): Set<string> {
 
 function generateTypesContent(
   stem: string,
-  fields: PdfFieldWithClass[],
+  fields: PdfFieldInfo[],
   excluded: Set<string> = new Set(),
 ): string {
   const schemaEntries = fields
-    .map((f) => `  ${escapeKey(f.name)}: "${f.fieldClass}"`)
+    .map((f) => `  ${escapeKey(f.name)}: "${f.type}"`)
     .join(",\n");
   const schemaBody = schemaEntries ? `\n${schemaEntries},\n` : "\n";
 
@@ -70,7 +63,9 @@ function generateTypesContent(
 
   return `/** Auto-generated from ${stem}.pdf — do not edit */
 
-export const pdfSchema = {${schemaBody}} as const;
+import type { PdfFieldType } from "#constants/pdf";
+
+export const pdfSchema = {${schemaBody}} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;
 ${excludedSection}`;
@@ -109,7 +104,12 @@ export async function processPdf(
   for (const n of exclude) excluded.add(n);
 
   await convertDropdownsToTextFields(pdfPath);
-  const allFields = await extractFieldsWithClass(pdfPath);
+  const allFields = await extractFields(pdfPath);
+
+  // Always exclude non-fillable field types (signature, listbox, etc.)
+  for (const f of allFields) {
+    if (NON_FILLABLE_TYPES.has(f.type)) excluded.add(f.name);
+  }
 
   // When updating an existing schema, auto-exclude any PDF field that is
   // unknown — not currently active and not already excluded. This prevents
@@ -134,8 +134,6 @@ export async function processPdf(
   writeFileSync(schemaPath, generateTypesContent(stem, fields, excluded));
 
   const displayPath = relative(PDFS_DIR, join(dir, stem));
-  const checkboxCount = fields.filter(
-    (f) => f.fieldClass === "checkbox",
-  ).length;
+  const checkboxCount = fields.filter((f) => f.type === "checkbox").length;
   return { path: schemaPath, displayPath, count: fields.length, checkboxCount };
 }

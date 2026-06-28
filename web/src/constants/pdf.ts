@@ -3,6 +3,9 @@ import type { JurisdictionId } from "./jurisdictions";
 
 export type PDFFieldValue = string | boolean | undefined;
 
+/** Valid field types that can appear in a generated pdfSchema. */
+export type PdfFieldType = "text" | "checkbox" | "radio" | "button";
+
 export const PDF_IDS = [
   "affidavit-of-indigency",
   "cjp25-petition-to-change-name-of-minor",

@@ -1,3 +1,5 @@
+import type { PdfFieldType } from "#constants/pdf";
+
 /** Auto-generated from affidavit-of-indigency.pdf — do not edit */
 
 export const pdfSchema = {
@@ -48,7 +50,7 @@ export const pdfSchema = {
   otherFeesSection3Details: "text",
   applySubstitutionSection3: "checkbox",
   substitutionDetailsSection3: "text",
-} as const;
+} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;
 

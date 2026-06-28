@@ -1,3 +1,5 @@
+import type { PdfFieldType } from "#constants/pdf";
+
 /** Auto-generated from cjp34-cori-and-wms-release-request.pdf — do not edit */
 
 export const pdfSchema = {
@@ -11,7 +13,7 @@ export const pdfSchema = {
   ssnLastFour: "text",
   mothersMaidenName: "text",
   otherNamesOrAliases: "text",
-} as const;
+} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;
 

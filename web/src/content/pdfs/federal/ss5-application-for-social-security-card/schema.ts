@@ -1,3 +1,5 @@
+import type { PdfFieldType } from "#constants/pdf";
+
 /** Auto-generated from ss5-application-for-social-security-card.pdf — do not edit */
 
 export const pdfSchema = {
@@ -60,6 +62,6 @@ export const pdfSchema = {
   isGuardian: "checkbox",
   isFilingOther: "checkbox",
   otherSpecify: "text",
-} as const;
+} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;

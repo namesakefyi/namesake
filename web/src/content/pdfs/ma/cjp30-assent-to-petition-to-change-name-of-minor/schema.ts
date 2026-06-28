@@ -1,3 +1,5 @@
+import type { PdfFieldType } from "#constants/pdf";
+
 /** Auto-generated from cjp30-assent-to-petition-to-change-name-of-minor.pdf — do not edit */
 
 export const pdfSchema = {
@@ -23,6 +25,6 @@ export const pdfSchema = {
   "form1[0].S10[0].TextField4[5]": "text",
   "form1[0].S10[0].TextField4[3]": "text",
   "form1[0].S10[0].TextField4[4]": "text",
-} as const;
+} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;

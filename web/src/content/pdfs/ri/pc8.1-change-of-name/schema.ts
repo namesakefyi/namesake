@@ -1,3 +1,5 @@
+import type { PdfFieldType } from "#constants/pdf";
+
 /** Auto-generated from pc8.1-change-of-name.pdf — do not edit */
 
 export const pdfSchema = {
@@ -28,7 +30,7 @@ export const pdfSchema = {
   newBirthCertFirstName: "text",
   newBirthCertMiddleName: "text",
   newBirthCertLastName: "text",
-} as const;
+} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;
 

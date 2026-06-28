@@ -1,3 +1,5 @@
+import type { PdfFieldType } from "#constants/pdf";
+
 /** Auto-generated from lic100-drivers-license-learners-permit-or-id-card.pdf — do not edit */
 
 export const pdfSchema = {
@@ -71,6 +73,6 @@ export const pdfSchema = {
   "Parent/Guardian's Printed Name": "text",
   "Parent/Guardian's Address": "text",
   Date: "text",
-} as const;
+} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;

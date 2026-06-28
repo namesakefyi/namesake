@@ -1,3 +1,5 @@
+import type { PdfFieldType } from "#constants/pdf";
+
 /** Auto-generated from ucsnc1-name-change-and-or-sex-designation-change-petition-for-individual-adult.pdf — do not edit */
 
 export const pdfSchema = {
@@ -50,6 +52,6 @@ export const pdfSchema = {
   signatureDay: "text",
   signatureMonth: "text",
   signatureYearEnding: "text",
-} as const;
+} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;
