@@ -94,7 +94,7 @@ export async function createCoverPage({
   try {
     const logoResponse = await fetch("/forms/pdf-cover-logo.png");
     const logoBytes = await logoResponse.arrayBuffer();
-    const logoImage = await pdf.embedImage(new Uint8Array(logoBytes));
+    const logoImage = pdf.embedImage(new Uint8Array(logoBytes));
 
     page.drawImage(logoImage, {
       x: margin,

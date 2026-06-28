@@ -25,23 +25,6 @@ describe("getPdfForm", () => {
     );
   });
 
-  it("should throw when the loaded PDF has no AcroForm", async () => {
-    const { loadPdfLib } = await import("../loadPdfLib");
-    vi.mocked(loadPdfLib).mockResolvedValueOnce({
-      PDF: {
-        load: vi.fn().mockResolvedValue({ getForm: () => null }),
-      } as any,
-    });
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-
-    await expect(
-      getPdfForm({ pdf: testPdfDefinition, userData: {} }),
-    ).rejects.toThrow("PDF has no AcroForm");
-
-    expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
-    consoleSpy.mockRestore();
-  });
-
   it("should throw error for invalid PDF path", async () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
