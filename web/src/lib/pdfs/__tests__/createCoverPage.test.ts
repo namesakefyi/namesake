@@ -4,8 +4,7 @@ import { createCoverPage } from "../createCoverPage";
 
 describe("createCoverPage", () => {
   it("should create a cover page with all required elements", async () => {
-    // Silence console.warn for expected UPNG.decode error
-    const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, "warn");
 
     const result = await createCoverPage({
       title: "Massachusetts Court Order",
@@ -33,6 +32,7 @@ describe("createCoverPage", () => {
     expect(page.width).toBe(612); // Standard US Letter width
     expect(page.height).toBe(792); // Standard US Letter height
 
+    expect(consoleSpy).not.toHaveBeenCalled();
     consoleSpy.mockRestore();
   });
 });

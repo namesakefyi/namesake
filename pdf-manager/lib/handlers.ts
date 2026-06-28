@@ -71,9 +71,10 @@ export async function handleSaveFields(c: Context) {
   formatFiles([join(found.pdfDir, "schema.ts")]);
 
   const before = new Set(activeFields);
+  const fieldSet = new Set(fieldNames);
   return c.json({
     added: fieldNames.filter((f) => !before.has(f)),
-    removed: activeFields.filter((f) => !fieldNames.includes(f)),
+    removed: activeFields.filter((f) => !fieldSet.has(f)),
   });
 }
 
@@ -223,9 +224,10 @@ export async function handleReplacePdf(c: Context) {
   }
 
   const before = new Set(activeFields);
+  const fieldSet = new Set(fieldNames);
   return c.json({
     added: fieldNames.filter((f) => !before.has(f)),
-    removed: activeFields.filter((f) => !fieldNames.includes(f)),
+    removed: activeFields.filter((f) => !fieldSet.has(f)),
     unchanged: fieldNames.filter((f) => before.has(f)),
     fieldCount: fieldNames.length,
   });

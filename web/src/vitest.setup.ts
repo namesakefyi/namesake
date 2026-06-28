@@ -21,7 +21,12 @@ beforeEach(() => {
     // Check if this looks like a file path rather than a full URL
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
       const relativePath = url.startsWith("/") ? url.slice(1) : url;
-      const filePath = path.join(process.cwd(), relativePath);
+      // Fall back to public/ so Vite's static assets resolve correctly in tests
+      const candidates = [
+        path.join(process.cwd(), relativePath),
+        path.join(process.cwd(), "public", relativePath),
+      ];
+      const filePath = candidates.find(fs.existsSync) ?? candidates[0];
 
       try {
         const buffer = fs.readFileSync(filePath);

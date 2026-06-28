@@ -1,13 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import type { FieldType, FormField, PDFPage } from "@libpdf/core";
-import {
-  PDF,
-  PdfArray,
-  PdfDict,
-  PdfName,
-  PdfRef,
-  PdfString,
-} from "@libpdf/core";
+import { PDF, PdfArray, PdfDict, PdfName, PdfString } from "@libpdf/core";
 
 // Fields within this many PDF points vertically are treated as the same row
 // and sorted left-to-right within that row. ~10pt ≈ 4mm.
@@ -129,18 +122,18 @@ export async function applyRenames(
     const fieldRef = field.getRef();
     const parentRef = acro.getRef("Parent");
 
-    if (parentRef && fieldRef && acroForm) {
-      // Remove from parent's /Kids so the full qualified name becomes just `to`
+    if (!parentRef) {
+      // Already at AcroForm root — just update the leaf name
+      acro.set("T", PdfString.fromString(to));
+    } else if (fieldRef && acroForm) {
+      // Remove from parent's /Kids so the full qualified name becomes just `to`.
+      // PdfRef instances are interned, so identity comparison is correct and simpler.
       const parentObj = doc.context.resolve(parentRef);
       if (parentObj instanceof PdfDict) {
         const kids = parentObj.get("Kids");
         if (kids instanceof PdfArray) {
           for (let i = 0; i < kids.length; i++) {
-            const item = kids.at(i);
-            if (
-              item instanceof PdfRef &&
-              item.objectNumber === fieldRef.objectNumber
-            ) {
+            if (kids.at(i) === fieldRef) {
               kids.remove(i);
               break;
             }
@@ -149,9 +142,9 @@ export async function applyRenames(
       }
       acro.delete("Parent");
       acroForm.addField(fieldRef);
+      acro.set("T", PdfString.fromString(to));
     }
-
-    acro.set("T", PdfString.fromString(to));
+    // else: nested field with no obtainable ref or no acroForm — skip rename
   }
   writeFileSync(pdfPath, await doc.save());
 }

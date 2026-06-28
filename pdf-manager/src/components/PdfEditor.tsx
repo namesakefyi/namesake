@@ -54,6 +54,11 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
     };
   }, [pdfId]);
 
+  const activeFieldNames = useMemo(
+    () => fields.filter((f) => !f.excluded).map((f) => f.name),
+    [fields],
+  );
+
   // Auto-trigger preview when a file is selected
   useEffect(() => {
     if (!uploadFile) return;
@@ -70,7 +75,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             pdfBase64: base64,
-            activeFields: fields.filter((f) => !f.excluded).map((f) => f.name),
+            activeFields: activeFieldNames,
           }),
         });
         const data = await parseJson<FieldPreview>(res);
@@ -90,7 +95,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
     return () => {
       cancelled = true;
     };
-  }, [uploadFile, pdfId, fields.filter]);
+  }, [uploadFile, pdfId, activeFieldNames]);
 
   async function commit(
     renames: Rename[],
@@ -99,12 +104,16 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
   ) {
     if (saving) return;
     setSaving(true);
-    const activeFields = fields.filter((f) => !f.excluded).map((f) => f.name);
     try {
       const res = await fetch(`/api/pdf/${pdfId}/fields`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ activeFields, renames, deletes, unexcludes }),
+        body: JSON.stringify({
+          activeFields: activeFieldNames,
+          renames,
+          deletes,
+          unexcludes,
+        }),
       });
       const result = await parseJson<Diff>(res);
       if (!res.ok) throw new Error(result.error ?? "Save failed");
@@ -192,9 +201,7 @@ export function PdfEditor({ pdfId, onFieldsChanged }: PdfEditorProps) {
         fileName={uploadFile?.name}
         pdfBase64={pdfBase64}
         preview={preview}
-        currentActiveFields={fields
-          .filter((f) => !f.excluded)
-          .map((f) => f.name)}
+        currentActiveFields={activeFieldNames}
         onClose={() => {
           setPreview(null);
           setPdfBase64(null);

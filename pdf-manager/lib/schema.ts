@@ -8,6 +8,24 @@ import {
 } from "./pdf";
 import { escapeKey } from "./utils";
 
+/** Returns the set of field names currently active (non-excluded) in schema.ts. */
+function loadCurrentSchemaFields(schemaPath: string): Set<string> {
+  if (!existsSync(schemaPath)) return new Set();
+  try {
+    const content = readFileSync(schemaPath, "utf8");
+    const matches = content.matchAll(
+      /^\s+(?:([a-zA-Z_$][\w$]*)|"((?:[^"\\]|\\.)*)"):\s*"(?:text|checkbox|radio|button)"/gm,
+    );
+    return new Set(
+      [...matches].map((m) =>
+        m[1] !== undefined ? m[1] : JSON.parse(`"${m[2]}"`),
+      ),
+    );
+  } catch {
+    return new Set();
+  }
+}
+
 // These types cannot be filled by Namesake and are excluded from generated schemas
 const NON_FILLABLE_TYPES = new Set([
   "signature",
@@ -75,7 +93,6 @@ export interface ProcessPdfResult {
   displayPath: string;
   fieldNames: string[];
   count: number;
-  checkboxCount: number;
 }
 
 /**
@@ -112,10 +129,13 @@ export async function processPdf(
     if (NON_FILLABLE_TYPES.has(f.type)) excluded.add(f.name);
   }
 
-  // When a schema already exists, auto-exclude any field not in `keep` or
-  // `unexclude` — the caller is responsible for passing what should stay active.
+  // When a schema already exists, auto-exclude any field that isn't currently
+  // active and isn't explicitly kept. Reading active fields from the schema
+  // ensures callers that don't pass `keep` (e.g. the extract-pdf-schema script)
+  // preserve existing active fields rather than wiping them.
   if (existsSync(schemaPath)) {
-    const keepSet = new Set([...keep, ...unexclude]);
+    const activeNames = loadCurrentSchemaFields(schemaPath);
+    const keepSet = new Set([...activeNames, ...keep, ...unexclude]);
     for (const f of allFields) {
       if (!excluded.has(f.name) && !keepSet.has(f.name)) {
         excluded.add(f.name);
@@ -128,12 +148,10 @@ export async function processPdf(
 
   const displayPath = relative(PDFS_DIR, join(dir, stem));
   const fieldNames = fields.map((f) => f.name);
-  const checkboxCount = fields.filter((f) => f.type === "checkbox").length;
   return {
     path: schemaPath,
     displayPath,
     fieldNames,
     count: fields.length,
-    checkboxCount,
   };
 }
