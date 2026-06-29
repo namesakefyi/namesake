@@ -1,23 +1,24 @@
+import type { PdfFieldType } from "#constants/pdf";
+
 /** Auto-generated from applicant-affidavit-in-support-of-amendment-of-a-birth-certificate-for-sex.pdf — do not edit */
-import { PDFCheckBox, PDFRadioGroup, PDFTextField } from "@cantoo/pdf-lib";
 
 export const pdfSchema = {
-  oldFullName: PDFTextField,
-  oldGender: PDFRadioGroup,
-  dateOfBirth: PDFTextField,
-  birthplaceCity: PDFTextField,
-  parent1Name: PDFTextField,
-  parent2Name: PDFTextField,
-  newFullName: PDFTextField,
-  newGender: PDFRadioGroup,
-  mailingAddress: PDFTextField,
-  phoneNumber: PDFTextField,
-  email: PDFTextField,
-  nameChangeDecreeIncluded: PDFCheckBox,
-  paymentIncluded: PDFCheckBox,
-  guardianOneFullName: PDFTextField,
-  guardianTwoFullName: PDFTextField,
-} as const;
+  oldFullName: "text",
+  oldGender: "radio",
+  dateOfBirth: "text",
+  birthplaceCity: "text",
+  parent1Name: "text",
+  parent2Name: "text",
+  newFullName: "text",
+  newGender: "radio",
+  mailingAddress: "text",
+  phoneNumber: "text",
+  email: "text",
+  nameChangeDecreeIncluded: "checkbox",
+  paymentIncluded: "checkbox",
+  guardianOneFullName: "text",
+  guardianTwoFullName: "text",
+} as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;
 
