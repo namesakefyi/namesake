@@ -8,8 +8,7 @@
     "build": "vite build",
     "test": "vitest run",
     "extract-schema": "tsx scripts/extract-pdf-schema.ts",
-    "monitor": "tsx scripts/pdf-monitor.ts",
-    "monitor:resolve": "tsx scripts/pdf-monitor.ts resolve"
+    "monitor": "tsx scripts/pdf-monitor.ts"
   },
   "dependencies": {
     "@hono/node-server": "^2.0.6",

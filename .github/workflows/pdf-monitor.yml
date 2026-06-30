@@ -59,14 +59,15 @@ jobs:
               --label automated
           fi
 
-      - name: Auto-resolve if issue was closed
-        if: steps.check.outputs.has_unresolved == 'true' && steps.check.outputs.has_new_changes != 'true'
+      - name: Close issue if PDFs are in sync
+        if: steps.check.outputs.has_new_changes != 'true'
         run: |
           existing=$(gh issue list \
             --state open \
             --search "Upstream PDF changes detected in:title" \
             --json number \
             --jq '.[0].number // empty')
-          if [ -z "$existing" ]; then
-            pnpm pdf:resolve
+          if [ -n "$existing" ]; then
+            gh issue close "$existing" \
+              --comment "All local PDFs now match their upstream canonical sources. Closing automatically."
           fi

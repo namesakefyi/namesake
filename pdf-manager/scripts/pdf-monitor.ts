@@ -11,8 +11,10 @@ import {
 } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { PDF } from "@libpdf/core";
 import pc from "picocolors";
 import { listAllPdfs, type PdfEntry } from "../lib/catalog";
+import { monitorConfig } from "../pdfmonitor.config";
 
 const MONITOR_DIR = ".pdfmonitor";
 
@@ -22,22 +24,18 @@ const USER_AGENT =
 const PASS = pc.green("✓");
 const FAIL = pc.red("✗");
 const SKIP = pc.yellow("⊘");
-const NEW = pc.magenta("◆");
 
-export type DriftStatus =
-  | "unchanged"
-  | "unverifiable"
-  | "new"
-  | "changed"
-  | "unresolved"
-  | "error";
+export type DriftStatus = "unchanged" | "unknown" | "changed" | "error";
 
 type FetchResultMap = {
   unchanged: Record<never, never>;
-  unverifiable: { reason: string };
-  new: { hash: string; etag?: string };
-  changed: { hash: string; etag?: string };
-  unresolved: Record<never, never>;
+  unknown: { reason: string };
+  changed: {
+    remoteTextHash: string;
+    remoteText: string;
+    localText: string;
+    etag?: string;
+  };
   error: { reason: string };
 };
 
@@ -47,10 +45,10 @@ export type FetchResult = {
 
 export interface PdfHistoryEntry {
   url: string;
-  hash: string;
+  remoteTextHash: string;
+  remoteText: string;
   etag?: string;
   lastDetectedChange: string;
-  needsResolution?: boolean;
 }
 
 export type PdfHistory = Record<string, PdfHistoryEntry>;
@@ -62,9 +60,27 @@ export const byStatus =
   ({ result }: CheckResult) =>
     result.status === status;
 
+async function extractPdfText(
+  bytes: ArrayBuffer,
+  excludePages?: Set<number>,
+): Promise<string> {
+  const pdf = await PDF.load(new Uint8Array(bytes));
+  return pdf
+    .extractText()
+    .filter((p) => !excludePages?.has(p.pageIndex + 1)) // pageIndex is 0-based; config uses 1-based
+    .map((p) => p.text)
+    .join("\n");
+}
+
+function hashText(text: string): string {
+  return `sha256:${createHash("sha256").update(text).digest("hex")}`;
+}
+
 async function fetchPdfEntry(
   url: string,
+  pdfPath: string,
   stored?: PdfHistoryEntry,
+  excludePages?: Set<number>,
 ): Promise<FetchResult> {
   try {
     const headers: Record<string, string> = { "User-Agent": USER_AGENT };
@@ -76,18 +92,46 @@ async function fetchPdfEntry(
       signal: AbortSignal.timeout(30_000),
     });
 
-    if (res.status === 304) return { status: "unchanged" };
+    if (res.status === 304) {
+      // Remote unchanged since last fetch — compare stored remote hash against local
+      if (!stored?.remoteTextHash) return { status: "unchanged" };
+      const localText = await extractPdfText(
+        readFileSync(pdfPath).buffer,
+        excludePages,
+      );
+      const localTextHash = hashText(localText);
+      if (localTextHash === stored.remoteTextHash)
+        return { status: "unchanged" };
+      return {
+        status: "changed",
+        remoteTextHash: stored.remoteTextHash,
+        remoteText: stored.remoteText ?? "",
+        localText,
+      };
+    }
+
     if (res.status === 403)
-      return { status: "unverifiable", reason: "HTTP 403 (blocked)" };
+      return { status: "unknown", reason: "HTTP 403 (blocked)" };
     if (!res.ok) return { status: "error", reason: `HTTP ${res.status}` };
 
     const buf = await res.arrayBuffer();
-    const hash = `sha256:${createHash("sha256").update(Buffer.from(buf)).digest("hex")}`;
     const etag = res.headers.get("etag") ?? undefined;
+    const remoteText = await extractPdfText(buf, excludePages);
+    const remoteTextHash = hashText(remoteText);
 
-    if (!stored?.hash) return { status: "new", hash, etag };
-    if (hash === stored.hash) return { status: "unchanged" };
-    return { status: "changed", hash, etag };
+    const localText = await extractPdfText(
+      readFileSync(pdfPath).buffer,
+      excludePages,
+    );
+    const localTextHash = hashText(localText);
+    if (localTextHash === remoteTextHash) return { status: "unchanged" };
+    return {
+      status: "changed",
+      remoteTextHash,
+      remoteText,
+      localText,
+      ...(etag ? { etag } : {}),
+    };
   } catch (err) {
     return {
       status: "error",
@@ -102,10 +146,16 @@ async function* runChecks(
 ): AsyncGenerator<{ pdf: PdfEntry; result: FetchResult; ms: number }> {
   for (const pdf of pdfs) {
     const t = performance.now();
-    let result = await fetchPdfEntry(pdf.canonicalUrl, stored[pdf.id]);
-    if (result.status === "unchanged" && stored[pdf.id]?.needsResolution) {
-      result = { status: "unresolved" };
-    }
+    const exclusions = monitorConfig[pdf.id]?.excludePages;
+    const excludePages = exclusions
+      ? new Set(exclusions.map((e) => e.page))
+      : undefined;
+    const result = await fetchPdfEntry(
+      pdf.canonicalUrl,
+      pdf.pdfPath,
+      stored[pdf.id],
+      excludePages,
+    );
     yield { pdf, result, ms: Math.round(performance.now() - t) };
   }
 }
@@ -116,62 +166,128 @@ function formatDuration(ms: number): string {
 
 const ICONS: Record<DriftStatus, string> = {
   unchanged: PASS,
-  unverifiable: SKIP,
-  new: NEW,
+  unknown: SKIP,
   changed: FAIL,
-  unresolved: FAIL,
   error: FAIL,
 };
 
 const STATUS_LABEL: Record<DriftStatus, (s: string) => string> = {
   unchanged: pc.green,
-  unverifiable: pc.yellow,
-  new: pc.magenta,
-  changed: (s) => pc.bold(pc.yellow(s)),
-  unresolved: (s) => pc.bold(pc.red(s)),
+  unknown: pc.yellow,
+  changed: (s) => pc.bold(pc.red(s)),
   error: (s) => pc.bold(pc.red(s)),
 };
 
-function formatResult(result: FetchResult, url: string, dur: string): string {
+type DiffLine = { type: "add" | "remove" | "context"; text: string };
+
+function computeLineDiff(local: string, remote: string): DiffLine[] {
+  const a = local.split("\n").filter((l) => l.trim());
+  const b = remote.split("\n").filter((l) => l.trim());
+  const m = a.length;
+  const n = b.length;
+
+  // LCS table using Uint32Array for efficiency
+  const dp = Array.from({ length: m + 1 }, () => new Uint32Array(n + 1));
+  for (let i = 1; i <= m; i++)
+    for (let j = 1; j <= n; j++)
+      dp[i][j] =
+        a[i - 1] === b[j - 1]
+          ? dp[i - 1][j - 1] + 1
+          : Math.max(dp[i - 1][j], dp[i][j - 1]);
+
+  // Backtrack to build diff operations
+  const ops: DiffLine[] = [];
+  let i = m;
+  let j = n;
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && a[i - 1] === b[j - 1]) {
+      ops.unshift({ type: "context", text: a[i - 1] });
+      i--;
+      j--;
+    } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+      ops.unshift({ type: "add", text: b[j - 1] });
+      j--;
+    } else {
+      ops.unshift({ type: "remove", text: a[i - 1] });
+      i--;
+    }
+  }
+  return ops;
+}
+
+function formatDiff(local: string, remote: string): string {
+  const CONTEXT = 2;
+  const diff = computeLineDiff(local, remote);
+
+  // Collect indices of changed lines and expand by context
+  const visible = new Set<number>();
+  for (let idx = 0; idx < diff.length; idx++) {
+    if (diff[idx].type === "context") continue;
+    for (
+      let c = Math.max(0, idx - CONTEXT);
+      c <= Math.min(diff.length - 1, idx + CONTEXT);
+      c++
+    )
+      visible.add(c);
+  }
+
+  if (visible.size === 0) return "";
+
+  const lines: string[] = [];
+  let lastVisible = -1;
+  for (let idx = 0; idx < diff.length; idx++) {
+    if (!visible.has(idx)) continue;
+    if (lastVisible >= 0 && idx > lastVisible + 1) lines.push(pc.dim("  …"));
+    const line = diff[idx];
+    if (line.type === "add") lines.push(pc.green(`  + ${line.text}`));
+    else if (line.type === "remove") lines.push(pc.red(`  - ${line.text}`));
+    else lines.push(pc.dim(`    ${line.text}`));
+    lastVisible = idx;
+  }
+  return lines.join("\n");
+}
+
+function formatPdfId(pdf: PdfEntry): string {
+  return `${pdf.jurisdiction.toLowerCase()} › ${pdf.id}`;
+}
+
+function formatResult(result: FetchResult, pdf: PdfEntry, dur: string): string {
   const icon = ICONS[result.status];
   const label = STATUS_LABEL[result.status](result.status);
-  const main = `${icon} ${label} ${url} ${dur}`;
+  const id = formatPdfId(pdf);
+  const main = `${icon} ${label} ${id} ${dur}`;
   if (result.status === "error") return `${main}\n  ${pc.red(result.reason)}`;
+  if (result.status === "unknown")
+    return `${main}\n  ${pc.yellow(result.reason)}`;
+  if (result.status === "changed") {
+    const diff = formatDiff(result.localText, result.remoteText);
+    return diff ? `${main}\n${diff}` : main;
+  }
   return main;
 }
 
 function printResult(pdf: PdfEntry, result: FetchResult, ms: number): void {
   const dur = pc.dim(formatDuration(ms));
-  process.stdout.write(`${formatResult(result, pdf.canonicalUrl, dur)}\n`);
+  process.stdout.write(`${formatResult(result, pdf, dur)}\n`);
 }
 
 function printSummary(results: CheckResult[], totalMs: number): void {
   const count = (s: DriftStatus) => results.filter(byStatus(s)).length;
 
-  const newStr =
-    count("new") === 0
-      ? pc.gray("0 new")
-      : pc.bold(pc.magenta(`${count("new")} new`));
-
-  const unchangedStr =
+  const upToDateStr =
     count("unchanged") === 0
       ? pc.gray("0 unchanged")
       : pc.bold(pc.green(`${count("unchanged")} unchanged`));
 
-  const unverifiableStr =
-    count("unverifiable") === 0
-      ? pc.gray("0 unverifiable")
-      : pc.bold(pc.yellow(`${count("unverifiable")} unverifiable`));
+  const unknownStr =
+    count("unknown") === 0
+      ? pc.gray("0 unknown")
+      : pc.bold(pc.yellow(`${count("unknown")} unknown`));
 
   const changedStr =
     count("changed") === 0
       ? pc.gray("0 changed")
-      : pc.bold(pc.yellow(`${count("changed")} changed`));
-
-  const unresolvedStr =
-    count("unresolved") === 0
-      ? pc.gray("0 unresolved")
-      : pc.bold(pc.red(`${count("unresolved")} unresolved`));
+      : pc.bold(pc.red(`${count("changed")} changed`));
 
   const errorsStr =
     count("error") === 0
@@ -181,16 +297,9 @@ function printSummary(results: CheckResult[], totalMs: number): void {
   const LABEL_PAD = 11;
   const label = (s: string) => `${pc.gray(s.padStart(LABEL_PAD))}  `;
   const cont = " ".repeat(LABEL_PAD + 2);
-  const stats = [
-    newStr,
-    unchangedStr,
-    unverifiableStr,
-    changedStr,
-    unresolvedStr,
-    errorsStr,
-  ];
+  const stats = [upToDateStr, unknownStr, changedStr, errorsStr];
 
-  process.stdout.write(`\n${results.length} URLs scanned.\n\n`);
+  process.stdout.write(`\n${results.length} PDFs scanned.\n\n`);
   process.stdout.write(`${label("PDF Files")}${stats.join(`\n${cont}`)}\n`);
   process.stdout.write(`${label("Duration")}${formatDuration(totalMs)}\n`);
 }
@@ -229,45 +338,28 @@ function applyFetchResults(
     if (
       result.status === "error" ||
       result.status === "unchanged" ||
-      result.status === "unverifiable" ||
-      result.status === "unresolved"
+      result.status === "unknown"
     )
       continue;
     stored[pdf.id] = {
       url: pdf.canonicalUrl,
-      hash: result.hash,
+      remoteTextHash: result.remoteTextHash,
+      remoteText: result.remoteText,
       ...(result.etag ? { etag: result.etag } : {}),
       lastDetectedChange: new Date().toISOString(),
-      needsResolution: result.status === "changed",
     };
     anyUpdated = true;
   }
   return anyUpdated;
 }
 
-export function resolvePdfs(dir: string, ids?: string[]): void {
-  const stored = loadPdfHistory(dir);
-  const targets = ids && ids.length > 0 ? ids : Object.keys(stored);
-  for (const id of targets) {
-    if (stored[id]) stored[id].needsResolution = false;
-  }
-  savePdfHistory(dir, stored);
-}
-
 function writeCiMetadata(results: CheckResult[]): void {
   const { GITHUB_OUTPUT, GITHUB_STEP_SUMMARY } = process.env;
-  const changed = results.filter(byStatus("changed"));
-  const unresolved = results.filter(byStatus("unresolved"));
+  const changed = results.filter((r) => r.result.status === "changed");
   const hasNewChanges = changed.length > 0;
-  const hasUnresolved = unresolved.length > 0;
 
   if (GITHUB_OUTPUT) {
-    appendFileSync(
-      GITHUB_OUTPUT,
-      `has_changes=${hasNewChanges || hasUnresolved}\n`,
-    );
     appendFileSync(GITHUB_OUTPUT, `has_new_changes=${hasNewChanges}\n`);
-    appendFileSync(GITHUB_OUTPUT, `has_unresolved=${hasUnresolved}\n`);
     appendFileSync(GITHUB_OUTPUT, `changed_count=${changed.length}\n`);
   }
 
@@ -300,7 +392,7 @@ async function main() {
   const pdfs = listAllPdfs().filter((p) => p.canonicalUrl);
   const results: CheckResult[] = [];
 
-  process.stdout.write(`Scanning ${pdfs.length} URLs for changes...\n\n`);
+  process.stdout.write(`Scanning ${pdfs.length} PDFs for changes...\n\n`);
 
   for await (const { pdf, result, ms } of runChecks(pdfs, stored)) {
     results.push({ pdf, result });
@@ -312,25 +404,12 @@ async function main() {
   printSummary(results, Math.round(performance.now() - start));
   writeCiMetadata(results);
 
-  if (results.some(byStatus("changed")) || results.some(byStatus("unresolved")))
-    process.exit(1);
-}
-
-function resolve() {
-  const ids = process.argv.slice(3);
-  resolvePdfs(MONITOR_DIR, ids.length > 0 ? ids : undefined);
-  const target = ids.length > 0 ? ids.join(", ") : "all entries";
-  process.stdout.write(`Resolved ${target}.\n`);
+  if (results.some(byStatus("changed"))) process.exit(1);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const subcommand = process.argv[2];
-  if (subcommand === "resolve") {
-    resolve();
-  } else {
-    main().catch((err) => {
-      process.stderr.write(`[error] ${(err as Error).message}\n`);
-      process.exit(2);
-    });
-  }
+  main().catch((err) => {
+    process.stderr.write(`[error] ${(err as Error).message}\n`);
+    process.exit(2);
+  });
 }

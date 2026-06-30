@@ -21,20 +21,28 @@ function makeResults(entries: Array<[PdfEntry, FetchResult]>): CheckResult[] {
 }
 
 describe("CheckResult", () => {
-  it("marks a new PDF as new, not changed", () => {
+  it("marks a mismatched PDF as changed", () => {
     const pdf = makePdf();
-    const results = makeResults([[pdf, { status: "new", hash: "sha256:abc" }]]);
-    expect(results.filter(byStatus("new"))).toHaveLength(1);
-    expect(results.filter(byStatus("new"))[0].pdf.id).toBe(pdf.id);
-    expect(results.filter(byStatus("changed"))).toHaveLength(0);
+    const results = makeResults([
+      [
+        pdf,
+        {
+          status: "changed",
+          remoteTextHash: "sha256:abc",
+          remoteText: "",
+          localText: "",
+        },
+      ],
+    ]);
+    expect(results.filter(byStatus("changed"))).toHaveLength(1);
+    expect(results.filter(byStatus("changed"))[0].pdf.id).toBe(pdf.id);
     expect(results.filter(byStatus("error"))).toHaveLength(0);
   });
 
-  it("ignores an unchanged hash", () => {
+  it("ignores an unchanged result", () => {
     const pdf = makePdf();
     const results = makeResults([[pdf, { status: "unchanged" }]]);
     expect(results.filter(byStatus("changed"))).toHaveLength(0);
-    expect(results.filter(byStatus("new"))).toHaveLength(0);
     expect(results.filter(byStatus("error"))).toHaveLength(0);
   });
 
@@ -42,18 +50,6 @@ describe("CheckResult", () => {
     const pdf = makePdf();
     const results = makeResults([[pdf, { status: "unchanged" }]]);
     expect(results.filter(byStatus("changed"))).toHaveLength(0);
-    expect(results.filter(byStatus("new"))).toHaveLength(0);
-    expect(results.filter(byStatus("error"))).toHaveLength(0);
-  });
-
-  it("marks a different hash as changed", () => {
-    const pdf = makePdf();
-    const results = makeResults([
-      [pdf, { status: "changed", hash: "sha256:xyz" }],
-    ]);
-    expect(results.filter(byStatus("changed"))).toHaveLength(1);
-    expect(results.filter(byStatus("changed"))[0].pdf.id).toBe(pdf.id);
-    expect(results.filter(byStatus("new"))).toHaveLength(0);
     expect(results.filter(byStatus("error"))).toHaveLength(0);
   });
 
@@ -74,18 +70,25 @@ describe("CheckResult", () => {
   it("treats unverifiable as neither changed nor an error", () => {
     const pdf = makePdf();
     const results = makeResults([
-      [pdf, { status: "unverifiable", reason: "HTTP 403 (blocked)" }],
+      [pdf, { status: "unknown", reason: "HTTP 403 (blocked)" }],
     ]);
     expect(results.filter(byStatus("error"))).toHaveLength(0);
     expect(results.filter(byStatus("changed"))).toHaveLength(0);
-    expect(results.filter(byStatus("new"))).toHaveLength(0);
   });
 
   it("separates changed from errors in a mixed result", () => {
     const pdf1 = makePdf({ id: "form-a", title: "Form A" });
     const pdf2 = makePdf({ id: "form-b", title: "Form B" });
     const results = makeResults([
-      [pdf1, { status: "changed", hash: "sha256:new" }],
+      [
+        pdf1,
+        {
+          status: "changed",
+          remoteTextHash: "sha256:new",
+          remoteText: "",
+          localText: "",
+        },
+      ],
       [pdf2, { status: "error", reason: "HTTP 503" }],
     ]);
     expect(results.filter(byStatus("changed"))).toHaveLength(1);

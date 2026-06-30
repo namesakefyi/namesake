@@ -21,8 +21,7 @@
     "check:fix": "biome check --write",
     "test": "pnpm -r test",
     "pdf:schema": "pnpm --filter @namesake/pdf-manager extract-schema",
-    "pdf:monitor": "pnpm --filter @namesake/pdf-manager monitor",
-    "pdf:resolve": "pnpm --filter @namesake/pdf-manager monitor:resolve"
+    "pdf:monitor": "pnpm --filter @namesake/pdf-manager monitor"
   },
   "simple-git-hooks": {
     "pre-commit": "./node_modules/.bin/nano-staged"
