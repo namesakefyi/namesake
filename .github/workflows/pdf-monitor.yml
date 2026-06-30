@@ -1,8 +1,6 @@
 name: PDF Monitor
 
 on:
-  push:
-    branches: [watch-for-changes]
   schedule:
     - cron: "0 0 * * *" # daily
   workflow_dispatch:
@@ -53,4 +51,3 @@ jobs:
               --body-file "$GITHUB_STEP_SUMMARY" \
               --label automated
           fi
-
