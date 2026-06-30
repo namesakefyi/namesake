@@ -44,6 +44,8 @@ jobs:
 
       - name: Open issue for changed PDFs
         if: steps.check.outputs.has_new_changes == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           existing=$(gh issue list \
             --state open \
@@ -61,6 +63,8 @@ jobs:
 
       - name: Close issue if PDFs are in sync
         if: steps.check.outputs.has_new_changes != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           existing=$(gh issue list \
             --state open \
