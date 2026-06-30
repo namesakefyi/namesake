@@ -19,7 +19,7 @@ export const guardianAuthorizationStep = defineStep({
           size={24}
         />
         <ShortTextField
-          label="Parent or guardian 2's full name (optional)"
+          label="Parent or guardian 2's full name"
           name="guardianTwoFullName"
           size={24}
         />

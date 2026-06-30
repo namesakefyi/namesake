@@ -6,18 +6,18 @@ describe("deriveCurrentAge", () => {
     vi.useRealTimers();
   });
 
-  it("returns 0 for undefined or empty string", () => {
-    expect(deriveCurrentAge(undefined)).toBe(0);
-    expect(deriveCurrentAge("")).toBe(0);
+  it("returns -1 for undefined or empty string", () => {
+    expect(deriveCurrentAge(undefined)).toBe(-1);
+    expect(deriveCurrentAge("")).toBe(-1);
   });
 
-  it("returns 0 for non-string input", () => {
-    expect(deriveCurrentAge(null as unknown as string)).toBe(0);
-    expect(deriveCurrentAge(123 as unknown as string)).toBe(0);
+  it("returns -1 for non-string input", () => {
+    expect(deriveCurrentAge(null as unknown as string)).toBe(-1);
+    expect(deriveCurrentAge(123 as unknown as string)).toBe(-1);
   });
 
   it("returns 0 for invalid date string", () => {
-    expect(deriveCurrentAge("not-a-date")).toBe(0);
+    expect(deriveCurrentAge("not-a-date")).toBe(-1);
   });
 
   it("returns 0 until birthday has occurred", () => {
