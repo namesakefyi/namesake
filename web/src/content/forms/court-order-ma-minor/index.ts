@@ -56,7 +56,7 @@ export default defineForm({
     { pdfId: "cjp25-petition-to-change-name-of-minor" },
     {
       pdfId: "cjp34-cori-and-wms-release-request",
-      when: (data) => (deriveCurrentAge(data.dateOfBirth) ?? 0) >= 12,
+      when: (data) => deriveCurrentAge(data.dateOfBirth) >= 12,
     },
     // TODO: Add CJP 31 and TC0002 PDFs
   ],

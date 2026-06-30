@@ -4,6 +4,7 @@ import { PDFS_DIR } from "./catalog";
 import {
   convertDropdownsToTextFields,
   extractFields,
+  normalizeRadioOptionNames,
   type PdfFieldInfo,
 } from "./pdf";
 import { escapeKey } from "./utils";
@@ -122,6 +123,7 @@ export async function processPdf(
   for (const n of exclude) excluded.add(n);
 
   await convertDropdownsToTextFields(pdfPath);
+  await normalizeRadioOptionNames(pdfPath);
   const allFields = await extractFields(pdfPath);
 
   // Always exclude non-fillable field types (signature, listbox, etc.)
