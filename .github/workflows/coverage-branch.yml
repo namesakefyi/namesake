@@ -74,7 +74,7 @@ jobs:
 
       - name: Restore coverage (main)
         id: download-main
-        uses: actions/cache/restore@v5.0.5
+        uses: actions/cache/restore@v6.1.0
         with:
           path: web/coverage
           key: coverage-main-${{ github.sha }}
