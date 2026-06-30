@@ -47,7 +47,7 @@ jobs:
         run: pnpm --filter @namesake/web test:coverage
 
       - name: Save coverage cache
-        uses: actions/cache/save@v5.0.5
+        uses: actions/cache/save@v6.1.0
         with:
           path: web/coverage
           key: coverage-main-${{ github.sha }}
