@@ -1,22 +1,12 @@
 #!/usr/bin/env tsx
 
 import { createHash } from "node:crypto";
-import {
-  appendFileSync,
-  existsSync,
-  mkdirSync,
-  readdirSync,
-  readFileSync,
-  writeFileSync,
-} from "node:fs";
-import { join } from "node:path";
+import { appendFileSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { PDF } from "@libpdf/core";
 import pc from "picocolors";
 import { listAllPdfs, type PdfEntry } from "../lib/catalog";
-import { monitorConfig } from "../pdfmonitor.config";
-
-const MONITOR_DIR = ".pdfmonitor";
+import { monitorConfig } from "../pdf-monitor.config";
 
 const USER_AGENT =
   "namesake-pdf-monitor/1.0 (+https://github.com/namesakefyi/namesake)";
@@ -30,28 +20,13 @@ export type DriftStatus = "unchanged" | "unknown" | "changed" | "error";
 type FetchResultMap = {
   unchanged: Record<never, never>;
   unknown: { reason: string };
-  changed: {
-    remoteTextHash: string;
-    remoteText: string;
-    localText: string;
-    etag?: string;
-  };
+  changed: { remoteText: string; localText: string };
   error: { reason: string };
 };
 
 export type FetchResult = {
   [K in DriftStatus]: { status: K } & FetchResultMap[K];
 }[DriftStatus];
-
-export interface PdfHistoryEntry {
-  url: string;
-  remoteTextHash: string;
-  remoteText: string;
-  etag?: string;
-  lastDetectedChange: string;
-}
-
-export type PdfHistory = Record<string, PdfHistoryEntry>;
 
 export type CheckResult = { pdf: PdfEntry; result: FetchResult };
 
@@ -79,59 +54,29 @@ function hashText(text: string): string {
 async function fetchPdfEntry(
   url: string,
   pdfPath: string,
-  stored?: PdfHistoryEntry,
   excludePages?: Set<number>,
 ): Promise<FetchResult> {
   try {
-    const headers: Record<string, string> = { "User-Agent": USER_AGENT };
-    if (stored?.etag) headers["If-None-Match"] = stored.etag;
-
     const res = await fetch(url, {
       redirect: "follow",
-      headers,
+      headers: { "User-Agent": USER_AGENT },
       signal: AbortSignal.timeout(30_000),
     });
-
-    if (res.status === 304) {
-      // Remote unchanged since last fetch — compare stored remote hash against local
-      if (!stored?.remoteTextHash) return { status: "unchanged" };
-      const localText = await extractPdfText(
-        readFileSync(pdfPath).buffer,
-        excludePages,
-      );
-      const localTextHash = hashText(localText);
-      if (localTextHash === stored.remoteTextHash)
-        return { status: "unchanged" };
-      return {
-        status: "changed",
-        remoteTextHash: stored.remoteTextHash,
-        remoteText: stored.remoteText ?? "",
-        localText,
-      };
-    }
 
     if (res.status === 403)
       return { status: "unknown", reason: "HTTP 403 (blocked)" };
     if (!res.ok) return { status: "error", reason: `HTTP ${res.status}` };
 
     const buf = await res.arrayBuffer();
-    const etag = res.headers.get("etag") ?? undefined;
     const remoteText = await extractPdfText(buf, excludePages);
-    const remoteTextHash = hashText(remoteText);
-
     const localText = await extractPdfText(
       readFileSync(pdfPath).buffer,
       excludePages,
     );
-    const localTextHash = hashText(localText);
-    if (localTextHash === remoteTextHash) return { status: "unchanged" };
-    return {
-      status: "changed",
-      remoteTextHash,
-      remoteText,
-      localText,
-      ...(etag ? { etag } : {}),
-    };
+
+    if (hashText(localText) === hashText(remoteText))
+      return { status: "unchanged" };
+    return { status: "changed", remoteText, localText };
   } catch (err) {
     return {
       status: "error",
@@ -142,7 +87,6 @@ async function fetchPdfEntry(
 
 async function* runChecks(
   pdfs: PdfEntry[],
-  stored: PdfHistory,
 ): AsyncGenerator<{ pdf: PdfEntry; result: FetchResult; ms: number }> {
   for (const pdf of pdfs) {
     const t = performance.now();
@@ -153,7 +97,6 @@ async function* runChecks(
     const result = await fetchPdfEntry(
       pdf.canonicalUrl,
       pdf.pdfPath,
-      stored[pdf.id],
       excludePages,
     );
     yield { pdf, result, ms: Math.round(performance.now() - t) };
@@ -304,55 +247,6 @@ function printSummary(results: CheckResult[], totalMs: number): void {
   process.stdout.write(`${label("Duration")}${formatDuration(totalMs)}\n`);
 }
 
-function latestHistoryFile(dir: string): string | null {
-  const files = readdirSync(dir)
-    .filter((f) => f.endsWith(".json"))
-    .sort();
-  return files.length > 0 ? join(dir, files[files.length - 1]) : null;
-}
-
-function loadPdfHistory(dir: string): PdfHistory {
-  if (!existsSync(dir)) return {};
-  const latest = latestHistoryFile(dir);
-  return latest ? JSON.parse(readFileSync(latest, "utf8")) : {};
-}
-
-function savePdfHistory(dir: string, store: PdfHistory): void {
-  mkdirSync(dir, { recursive: true });
-  const timestamp = new Date()
-    .toISOString()
-    .replace(/:/g, "-")
-    .replace(/\.\d+Z$/, "Z");
-  writeFileSync(
-    join(dir, `${timestamp}.json`),
-    `${JSON.stringify(store, null, 2)}\n`,
-  );
-}
-
-function applyFetchResults(
-  results: CheckResult[],
-  stored: PdfHistory,
-): boolean {
-  let anyUpdated = false;
-  for (const { pdf, result } of results) {
-    if (
-      result.status === "error" ||
-      result.status === "unchanged" ||
-      result.status === "unknown"
-    )
-      continue;
-    stored[pdf.id] = {
-      url: pdf.canonicalUrl,
-      remoteTextHash: result.remoteTextHash,
-      remoteText: result.remoteText,
-      ...(result.etag ? { etag: result.etag } : {}),
-      lastDetectedChange: new Date().toISOString(),
-    };
-    anyUpdated = true;
-  }
-  return anyUpdated;
-}
-
 function writeCiMetadata(results: CheckResult[]): void {
   const { GITHUB_OUTPUT, GITHUB_STEP_SUMMARY } = process.env;
   const changed = results.filter((r) => r.result.status === "changed");
@@ -387,19 +281,15 @@ function writeCiMetadata(results: CheckResult[]): void {
 
 async function main() {
   const start = performance.now();
-  mkdirSync(MONITOR_DIR, { recursive: true });
-  const stored = loadPdfHistory(MONITOR_DIR);
   const pdfs = listAllPdfs().filter((p) => p.canonicalUrl);
   const results: CheckResult[] = [];
 
   process.stdout.write(`Scanning ${pdfs.length} PDFs for changes...\n\n`);
 
-  for await (const { pdf, result, ms } of runChecks(pdfs, stored)) {
+  for await (const { pdf, result, ms } of runChecks(pdfs)) {
     results.push({ pdf, result });
     printResult(pdf, result, ms);
   }
-
-  if (applyFetchResults(results, stored)) savePdfHistory(MONITOR_DIR, stored);
 
   printSummary(results, Math.round(performance.now() - start));
   writeCiMetadata(results);

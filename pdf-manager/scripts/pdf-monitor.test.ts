@@ -24,15 +24,7 @@ describe("CheckResult", () => {
   it("marks a mismatched PDF as changed", () => {
     const pdf = makePdf();
     const results = makeResults([
-      [
-        pdf,
-        {
-          status: "changed",
-          remoteTextHash: "sha256:abc",
-          remoteText: "",
-          localText: "",
-        },
-      ],
+      [pdf, { status: "changed", remoteText: "", localText: "" }],
     ]);
     expect(results.filter(byStatus("changed"))).toHaveLength(1);
     expect(results.filter(byStatus("changed"))[0].pdf.id).toBe(pdf.id);
@@ -80,15 +72,7 @@ describe("CheckResult", () => {
     const pdf1 = makePdf({ id: "form-a", title: "Form A" });
     const pdf2 = makePdf({ id: "form-b", title: "Form B" });
     const results = makeResults([
-      [
-        pdf1,
-        {
-          status: "changed",
-          remoteTextHash: "sha256:new",
-          remoteText: "",
-          localText: "",
-        },
-      ],
+      [pdf1, { status: "changed", remoteText: "", localText: "" }],
       [pdf2, { status: "error", reason: "HTTP 503" }],
     ]);
     expect(results.filter(byStatus("changed"))).toHaveLength(1);

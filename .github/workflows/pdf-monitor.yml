@@ -30,13 +30,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Restore PDF history
-        uses: actions/cache@v5.0.5
-        with:
-          path: pdf-manager/.pdfmonitor
-          key: pdf-monitor-${{ github.run_id }}
-          restore-keys: pdf-monitor-
-
       - name: Check PDF drift
         id: check
         run: pnpm pdf:monitor
@@ -61,17 +54,3 @@ jobs:
               --label automated
           fi
 
-      - name: Close issue if PDFs are in sync
-        if: steps.check.outputs.has_new_changes != 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          existing=$(gh issue list \
-            --state open \
-            --search "Upstream PDF changes detected in:title" \
-            --json number \
-            --jq '.[0].number // empty')
-          if [ -n "$existing" ]; then
-            gh issue close "$existing" \
-              --comment "All local PDFs now match their upstream canonical sources. Closing automatically."
-          fi
