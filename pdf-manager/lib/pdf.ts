@@ -95,6 +95,72 @@ export async function convertDropdownsToTextFields(
   if (changed) writeFileSync(pdfPath, await doc.save());
 }
 
+/**
+ * Renames each radio button's appearance states from opaque numeric keys
+ * (e.g. "0", "1", "2") to the human-readable labels stored in the field's
+ * Opt array (e.g. "Male", "Female", "X"). After this runs, fillPdf can pass
+ * the label string directly and form.fill() will accept it without translation.
+ */
+export async function normalizeRadioOptionNames(
+  pdfPath: string,
+): Promise<void> {
+  const bytes = readFileSync(pdfPath);
+  const doc = await PDF.load(bytes);
+  const form = doc.getForm();
+  let changed = false;
+
+  for (const field of form?.getFields() ?? []) {
+    if (field.type !== "radio") continue;
+
+    const acro = field.acroField();
+    // Opt: ordered human-readable export values, one per radio button
+    const opt = acro.getArray("Opt");
+    if (!opt?.length) continue;
+
+    const labels = opt
+      .toArray()
+      .map((item) => (item instanceof PdfString ? item.asString() : null));
+
+    // Each widget is one radio button; its on-value is its selected state name
+    for (const widget of field.getWidgets()) {
+      const onValue = widget.getOnValue();
+      if (!onValue) continue;
+
+      const idx = Number(onValue);
+      if (!Number.isFinite(idx) || idx >= labels.length) continue;
+      const label = labels[idx];
+      if (!label || label === onValue) continue;
+
+      // Get appearance streams dictionary
+      const ap = widget.dict.getDict("AP");
+      if (ap) {
+        // Rename the state key in normal (N) and down/pressed (D) appearances
+        for (const subKey of ["N", "D"]) {
+          const sub = ap.getDict(subKey);
+          if (!sub?.has(onValue)) continue;
+          const val = sub.get(onValue);
+          if (val) {
+            sub.set(label, val);
+            sub.delete(onValue);
+          }
+        }
+      }
+
+      // Update current appearance state if this button is selected
+      const as = widget.dict.get("AS");
+      if (as instanceof PdfName && as.value === onValue) {
+        widget.dict.set("AS", PdfName.of(label));
+      }
+    }
+
+    // Opt is now redundant — state names are the labels
+    acro.delete("Opt");
+    changed = true;
+  }
+
+  if (changed) writeFileSync(pdfPath, await doc.save());
+}
+
 export interface Rename {
   from: string;
   to: string;

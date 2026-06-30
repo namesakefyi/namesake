@@ -16,8 +16,11 @@ export async function expectPdfFieldsMatch(
   for (const [fieldName, value] of Object.entries(expected)) {
     if (value === undefined) continue;
 
+    const field = form?.getField(fieldName);
     if (typeof value === "boolean") {
       expect(form?.getCheckbox(fieldName)?.isChecked()).toBe(value);
+    } else if (field?.type === "radio") {
+      expect(form?.getRadioGroup(fieldName)?.getValue()).toBe(value);
     } else {
       expect(form?.getTextField(fieldName)?.getValue()).toBe(value);
     }
