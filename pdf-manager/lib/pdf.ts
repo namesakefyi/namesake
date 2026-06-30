@@ -95,13 +95,6 @@ export async function convertDropdownsToTextFields(
   if (changed) writeFileSync(pdfPath, await doc.save());
 }
 
-function decodeOptLabel(bytes: Uint8Array): string {
-  if (bytes[0] === 0xfe && bytes[1] === 0xff) {
-    return new TextDecoder("utf-16be").decode(bytes.slice(2));
-  }
-  return new TextDecoder().decode(bytes);
-}
-
 /**
  * Renames each radio button's appearance states from opaque numeric keys
  * (e.g. "0", "1", "2") to the human-readable labels stored in the field's
@@ -120,41 +113,49 @@ export async function normalizeRadioOptionNames(
     if (field.type !== "radio") continue;
 
     const acro = field.acroField();
-    const opt = acro.get("Opt");
-    if (!opt?.items?.length) continue;
+    // Opt: ordered human-readable export values, one per radio button
+    const opt = acro.getArray("Opt");
+    if (!opt?.length) continue;
 
-    const labels = (opt.items as Array<{ bytes: Uint8Array }>).map((item) =>
-      decodeOptLabel(item.bytes),
-    );
+    const labels = opt
+      .toArray()
+      .map((item) => (item instanceof PdfString ? item.asString() : null));
 
+    // Each widget is one radio button; its on-value is its selected state name
     for (const widget of field.getWidgets()) {
-      const onValue = widget.getOnValue()?.toString();
-      if (!onValue || onValue === "Off") continue;
+      const onValue = widget.getOnValue();
+      if (!onValue) continue;
 
       const idx = Number(onValue);
       if (!Number.isFinite(idx) || idx >= labels.length) continue;
       const label = labels[idx];
-      if (label === onValue) continue;
+      if (!label || label === onValue) continue;
 
-      const ap = widget.dict.get("AP");
+      // Get appearance streams dictionary
+      const ap = widget.dict.getDict("AP");
       if (ap) {
+        // Rename the state key in normal (N) and down/pressed (D) appearances
         for (const subKey of ["N", "D"]) {
-          const sub = ap.get(subKey);
-          if (!sub?.has?.(onValue)) continue;
-          sub.set(label, sub.get(onValue));
-          sub.delete(onValue);
+          const sub = ap.getDict(subKey);
+          if (!sub?.has(onValue)) continue;
+          const val = sub.get(onValue);
+          if (val) {
+            sub.set(label, val);
+            sub.delete(onValue);
+          }
         }
       }
 
+      // Update current appearance state if this button is selected
       const as = widget.dict.get("AS");
-      if (as?.value === onValue) {
+      if (as instanceof PdfName && as.value === onValue) {
         widget.dict.set("AS", PdfName.of(label));
       }
-      changed = true;
     }
 
-    // Opt labels now match the appearance state names — no longer needed.
+    // Opt is now redundant — state names are the labels
     acro.delete("Opt");
+    changed = true;
   }
 
   if (changed) writeFileSync(pdfPath, await doc.save());
