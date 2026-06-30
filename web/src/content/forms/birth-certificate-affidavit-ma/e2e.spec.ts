@@ -193,7 +193,7 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
   await test.step("Waive fees", async () => {
     await expect(
       page.getByRole("heading", {
-        name: "Do you need to waive the fees?",
+        name: "Do you need to waive filing fees?",
       }),
     ).toBeVisible();
 

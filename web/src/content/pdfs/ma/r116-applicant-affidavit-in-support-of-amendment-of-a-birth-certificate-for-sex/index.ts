@@ -52,7 +52,7 @@ export default definePdf<PdfFieldName>({
       joinNames(data.oldFirstName, data.oldMiddleName, data.oldLastName) !==
       joinNames(data.newFirstName, data.newMiddleName, data.newLastName),
     // A check or money order payable to the Commonwealth of Massachusetts as follows
-    paymentIncluded: !data.waveDocumentFees,
+    paymentIncluded: !data.waiveDocumentFees,
     // Name of Parent/Guardian1
     guardianOneFullName: data.guardianOneFullName,
     // Name of Parent/Guardian2

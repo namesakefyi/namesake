@@ -687,7 +687,7 @@ export const FIELD_DEFS = [
   },
   {
     name: "waveDocumentFees",
-    label: "Waive the fees",
+    label: "Waive fees?",
     type: "boolean",
   },
 ] as const;

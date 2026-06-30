@@ -95,6 +95,71 @@ export async function convertDropdownsToTextFields(
   if (changed) writeFileSync(pdfPath, await doc.save());
 }
 
+function decodeOptLabel(bytes: Uint8Array): string {
+  if (bytes[0] === 0xfe && bytes[1] === 0xff) {
+    return new TextDecoder("utf-16be").decode(bytes.slice(2));
+  }
+  return new TextDecoder().decode(bytes);
+}
+
+/**
+ * Renames each radio button's appearance states from opaque numeric keys
+ * (e.g. "0", "1", "2") to the human-readable labels stored in the field's
+ * Opt array (e.g. "Male", "Female", "X"). After this runs, fillPdf can pass
+ * the label string directly and form.fill() will accept it without translation.
+ */
+export async function normalizeRadioOptionNames(
+  pdfPath: string,
+): Promise<void> {
+  const bytes = readFileSync(pdfPath);
+  const doc = await PDF.load(bytes);
+  const form = doc.getForm();
+  let changed = false;
+
+  for (const field of form?.getFields() ?? []) {
+    if (field.type !== "radio") continue;
+
+    const acro = field.acroField();
+    const opt = acro.get("Opt");
+    if (!opt?.items?.length) continue;
+
+    const labels = (opt.items as Array<{ bytes: Uint8Array }>).map((item) =>
+      decodeOptLabel(item.bytes),
+    );
+
+    for (const widget of field.getWidgets()) {
+      const onValue = widget.getOnValue()?.toString();
+      if (!onValue || onValue === "Off") continue;
+
+      const idx = Number(onValue);
+      if (!Number.isFinite(idx) || idx >= labels.length) continue;
+      const label = labels[idx];
+      if (label === onValue) continue;
+
+      const ap = widget.dict.get("AP");
+      if (ap) {
+        for (const subKey of ["N", "D"]) {
+          const sub = ap.get(subKey);
+          if (!sub?.has?.(onValue)) continue;
+          sub.set(label, sub.get(onValue));
+          sub.delete(onValue);
+        }
+      }
+
+      const as = widget.dict.get("AS");
+      if (as?.value === onValue) {
+        widget.dict.set("AS", PdfName.of(label));
+      }
+      changed = true;
+    }
+
+    // Opt labels now match the appearance state names — no longer needed.
+    acro.delete("Opt");
+  }
+
+  if (changed) writeFileSync(pdfPath, await doc.save());
+}
+
 export interface Rename {
   from: string;
   to: string;

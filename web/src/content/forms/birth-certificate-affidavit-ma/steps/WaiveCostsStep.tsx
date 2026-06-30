@@ -4,14 +4,14 @@ import { defineStep } from "#lib/forms/defineStep";
 
 export const waiveCostsStep = defineStep({
   id: "waive-costs",
-  title: "Do you need to waive the fees?",
+  title: "Do you need to waive filing fees?",
   description:
     "To waive the fees, you'll need to file the Affidavit of Indigency. We can help you with that.",
-  fields: ["waveDocumentFees"],
+  fields: ["waiveDocumentFees"],
   component: ({ stepConfig }) => {
     return (
       <FormStep stepConfig={stepConfig}>
-        <CheckboxField name="waveDocumentFees" label="Waive the fees" />
+        <CheckboxField name="waiveDocumentFees" label="Waive the fees" />
       </FormStep>
     );
   },
