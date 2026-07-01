@@ -2,7 +2,7 @@
 
 /**
  * Extracts AcroForm field names from PDFs and writes schema.ts files.
- * Usage: pnpm pdf:schema [path/to/file.pdf] [--quiet]
+ * Usage: pnpm extract-schema [path/to/file.pdf] [--quiet]
  *   No arg: all PDFs in web/src/content/pdfs. With arg: single PDF. --quiet: no output.
  */
 

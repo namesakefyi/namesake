@@ -1,0 +1,36 @@
+---
+title: PDF Monitoring
+description: How Namesake detects upstream PDF changes and how to resolve them.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+Government forms change without notice. Namesake runs an automated monitor daily to detect when a PDF at its canonical source URL has changed, so contributors can review and update the local copy before users fill it out with stale fields.
+
+## Running the monitor
+
+```zsh
+pnpm pdf:monitor
+```
+
+This fetches all PDFs with a `canonicalUrl`, compares extracted text against the local copy, and prints a status line for each. When changes are detected, a diff of the changed lines is shown inline. The command exits with a non-zero code if any PDFs report `changed`.
+
+## Excluding pages from comparison
+
+Some PDFs include pages that intentionally differ between the local and upstream copies. To exclude specific pages from the text comparison, update `pdf-monitor.config.ts`:
+
+```ts
+// pdf-monitor.config.ts
+export const monitorConfig: Record<string, MonitorConfig> = {
+  "my-form-id": {
+    excludePages: [
+      {
+        page: 2, // 1-based page number
+        reason: "Spanish translation not retained in local copy.",
+      },
+    ],
+  },
+};
+```
+
+Always include a `reason` so future contributors understand why the exclusion exists.
