@@ -1,9 +1,9 @@
 #!/usr/bin/env tsx
 
-import { createHash } from "node:crypto";
 import { appendFileSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { PDF } from "@libpdf/core";
+import { diffWords } from "diff";
 import pc from "picocolors";
 import { listAllPdfs, type PdfEntry } from "../lib/catalog";
 import { monitorConfig } from "../pdf-monitor.config";
@@ -36,19 +36,15 @@ export const byStatus =
     result.status === status;
 
 async function extractPdfText(
-  bytes: ArrayBuffer,
+  bytes: Uint8Array,
   excludePages?: Set<number>,
 ): Promise<string> {
-  const pdf = await PDF.load(new Uint8Array(bytes));
+  const pdf = await PDF.load(bytes);
   return pdf
     .extractText()
     .filter((p) => !excludePages?.has(p.pageIndex + 1)) // pageIndex is 0-based; config uses 1-based
     .map((p) => p.text)
     .join("\n");
-}
-
-function hashText(text: string): string {
-  return `sha256:${createHash("sha256").update(text).digest("hex")}`;
 }
 
 async function fetchPdfEntry(
@@ -68,14 +64,10 @@ async function fetchPdfEntry(
     if (!res.ok) return { status: "error", reason: `HTTP ${res.status}` };
 
     const buf = await res.arrayBuffer();
-    const remoteText = await extractPdfText(buf, excludePages);
-    const localText = await extractPdfText(
-      readFileSync(pdfPath).buffer,
-      excludePages,
-    );
+    const remoteText = await extractPdfText(new Uint8Array(buf), excludePages);
+    const localText = await extractPdfText(readFileSync(pdfPath), excludePages);
 
-    if (hashText(localText) === hashText(remoteText))
-      return { status: "unchanged" };
+    if (localText === remoteText) return { status: "unchanged" };
     return { status: "changed", remoteText, localText };
   } catch (err) {
     return {
@@ -85,22 +77,24 @@ async function fetchPdfEntry(
   }
 }
 
-async function* runChecks(
+async function runChecks(
   pdfs: PdfEntry[],
-): AsyncGenerator<{ pdf: PdfEntry; result: FetchResult; ms: number }> {
-  for (const pdf of pdfs) {
-    const t = performance.now();
-    const exclusions = monitorConfig[pdf.id]?.excludePages;
-    const excludePages = exclusions
-      ? new Set(exclusions.map((e) => e.page))
-      : undefined;
-    const result = await fetchPdfEntry(
-      pdf.canonicalUrl,
-      pdf.pdfPath,
-      excludePages,
-    );
-    yield { pdf, result, ms: Math.round(performance.now() - t) };
-  }
+): Promise<Array<{ pdf: PdfEntry; result: FetchResult; ms: number }>> {
+  return Promise.all(
+    pdfs.map(async (pdf) => {
+      const t = performance.now();
+      const exclusions = monitorConfig[pdf.id]?.excludePages;
+      const excludePages = exclusions
+        ? new Set(exclusions.map((e) => e.page))
+        : undefined;
+      const result = await fetchPdfEntry(
+        pdf.canonicalUrl,
+        pdf.pdfPath,
+        excludePages,
+      );
+      return { pdf, result, ms: Math.round(performance.now() - t) };
+    }),
+  );
 }
 
 function formatDuration(ms: number): string {
@@ -121,73 +115,10 @@ const STATUS_LABEL: Record<DriftStatus, (s: string) => string> = {
   error: (s) => pc.bold(pc.red(s)),
 };
 
-type DiffLine = { type: "add" | "remove" | "context"; text: string };
-
-function computeLineDiff(local: string, remote: string): DiffLine[] {
-  const a = local.split("\n").filter((l) => l.trim());
-  const b = remote.split("\n").filter((l) => l.trim());
-  const m = a.length;
-  const n = b.length;
-
-  // LCS table using Uint32Array for efficiency
-  const dp = Array.from({ length: m + 1 }, () => new Uint32Array(n + 1));
-  for (let i = 1; i <= m; i++)
-    for (let j = 1; j <= n; j++)
-      dp[i][j] =
-        a[i - 1] === b[j - 1]
-          ? dp[i - 1][j - 1] + 1
-          : Math.max(dp[i - 1][j], dp[i][j - 1]);
-
-  // Backtrack to build diff operations
-  const ops: DiffLine[] = [];
-  let i = m;
-  let j = n;
-  while (i > 0 || j > 0) {
-    if (i > 0 && j > 0 && a[i - 1] === b[j - 1]) {
-      ops.unshift({ type: "context", text: a[i - 1] });
-      i--;
-      j--;
-    } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
-      ops.unshift({ type: "add", text: b[j - 1] });
-      j--;
-    } else {
-      ops.unshift({ type: "remove", text: a[i - 1] });
-      i--;
-    }
-  }
-  return ops;
-}
-
-function formatDiff(local: string, remote: string): string {
-  const CONTEXT = 2;
-  const diff = computeLineDiff(local, remote);
-
-  // Collect indices of changed lines and expand by context
-  const visible = new Set<number>();
-  for (let idx = 0; idx < diff.length; idx++) {
-    if (diff[idx].type === "context") continue;
-    for (
-      let c = Math.max(0, idx - CONTEXT);
-      c <= Math.min(diff.length - 1, idx + CONTEXT);
-      c++
-    )
-      visible.add(c);
-  }
-
-  if (visible.size === 0) return "";
-
-  const lines: string[] = [];
-  let lastVisible = -1;
-  for (let idx = 0; idx < diff.length; idx++) {
-    if (!visible.has(idx)) continue;
-    if (lastVisible >= 0 && idx > lastVisible + 1) lines.push(pc.dim("  …"));
-    const line = diff[idx];
-    if (line.type === "add") lines.push(pc.green(`  + ${line.text}`));
-    else if (line.type === "remove") lines.push(pc.red(`  - ${line.text}`));
-    else lines.push(pc.dim(`    ${line.text}`));
-    lastVisible = idx;
-  }
-  return lines.join("\n");
+export function formatDiff(local: string, remote: string): string {
+  const changes = diffWords(local, remote);
+  if (changes.every((c) => !c.added && !c.removed)) return "";
+  return `  ${changes.map((c) => (c.added ? pc.green(c.value) : c.removed ? pc.red(c.value) : pc.dim(c.value))).join("")}`;
 }
 
 function formatPdfId(pdf: PdfEntry): string {
@@ -215,32 +146,29 @@ function printResult(pdf: PdfEntry, result: FetchResult, ms: number): void {
 }
 
 function printSummary(results: CheckResult[], totalMs: number): void {
-  const count = (s: DriftStatus) => results.filter(byStatus(s)).length;
+  const counts = results.reduce(
+    (acc, { result }) => {
+      acc[result.status]++;
+      return acc;
+    },
+    { unchanged: 0, unknown: 0, changed: 0, error: 0 } as Record<
+      DriftStatus,
+      number
+    >,
+  );
 
-  const upToDateStr =
-    count("unchanged") === 0
-      ? pc.gray("0 unchanged")
-      : pc.bold(pc.green(`${count("unchanged")} unchanged`));
-
-  const unknownStr =
-    count("unknown") === 0
-      ? pc.gray("0 unknown")
-      : pc.bold(pc.yellow(`${count("unknown")} unknown`));
-
-  const changedStr =
-    count("changed") === 0
-      ? pc.gray("0 changed")
-      : pc.bold(pc.red(`${count("changed")} changed`));
-
-  const errorsStr =
-    count("error") === 0
-      ? pc.gray("0 errors")
-      : pc.bold(pc.red(`${count("error")} errors`));
+  const stat = (n: number, text: string, color: (s: string) => string) =>
+    n === 0 ? pc.gray(`0 ${text}`) : pc.bold(color(`${n} ${text}`));
 
   const LABEL_PAD = 11;
   const label = (s: string) => `${pc.gray(s.padStart(LABEL_PAD))}  `;
   const cont = " ".repeat(LABEL_PAD + 2);
-  const stats = [upToDateStr, unknownStr, changedStr, errorsStr];
+  const stats = [
+    stat(counts.unchanged, "unchanged", pc.green),
+    stat(counts.unknown, "unknown", pc.yellow),
+    stat(counts.changed, "changed", pc.red),
+    stat(counts.error, "errors", pc.red),
+  ];
 
   process.stdout.write(`\n${results.length} PDFs scanned.\n\n`);
   process.stdout.write(`${label("PDF Files")}${stats.join(`\n${cont}`)}\n`);
@@ -252,10 +180,11 @@ function writeCiMetadata(results: CheckResult[]): void {
   const changed = results.filter((r) => r.result.status === "changed");
   const hasNewChanges = changed.length > 0;
 
-  if (GITHUB_OUTPUT) {
-    appendFileSync(GITHUB_OUTPUT, `has_new_changes=${hasNewChanges}\n`);
-    appendFileSync(GITHUB_OUTPUT, `changed_count=${changed.length}\n`);
-  }
+  if (GITHUB_OUTPUT)
+    appendFileSync(
+      GITHUB_OUTPUT,
+      `has_new_changes=${hasNewChanges}\nchanged_count=${changed.length}\n`,
+    );
 
   if (GITHUB_STEP_SUMMARY && hasNewChanges) {
     const lines = changed
@@ -280,13 +209,18 @@ function writeCiMetadata(results: CheckResult[]): void {
 }
 
 async function main() {
+  // Write defaults early so a crash before writeCiMetadata() doesn't leave outputs unset
+  const { GITHUB_OUTPUT } = process.env;
+  if (GITHUB_OUTPUT)
+    appendFileSync(GITHUB_OUTPUT, "has_new_changes=false\nchanged_count=0\n");
+
   const start = performance.now();
   const pdfs = listAllPdfs().filter((p) => p.canonicalUrl);
   const results: CheckResult[] = [];
 
   process.stdout.write(`Scanning ${pdfs.length} PDFs for changes...\n\n`);
 
-  for await (const { pdf, result, ms } of runChecks(pdfs)) {
+  for (const { pdf, result, ms } of await runChecks(pdfs)) {
     results.push({ pdf, result });
     printResult(pdf, result, ms);
   }

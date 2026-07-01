@@ -48,6 +48,5 @@ jobs:
           else
             gh issue create \
               --title "Upstream PDF changes detected" \
-              --body-file "$GITHUB_STEP_SUMMARY" \
-              --label automated
+              --body-file "$GITHUB_STEP_SUMMARY"
           fi

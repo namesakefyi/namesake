@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { PdfEntry } from "../lib/catalog";
-import { byStatus, type CheckResult, type FetchResult } from "./pdf-monitor";
+import {
+  byStatus,
+  type CheckResult,
+  type FetchResult,
+  formatDiff,
+} from "./pdf-monitor";
 
 function makePdf(overrides: Partial<PdfEntry> = {}): PdfEntry {
   return {
@@ -19,6 +24,32 @@ function makePdf(overrides: Partial<PdfEntry> = {}): PdfEntry {
 function makeResults(entries: Array<[PdfEntry, FetchResult]>): CheckResult[] {
   return entries.map(([pdf, result]) => ({ pdf, result }));
 }
+
+describe("formatDiff", () => {
+  it("returns empty string for identical text", () => {
+    expect(formatDiff("same text here", "same text here")).toBe("");
+  });
+
+  it("includes added words", () => {
+    const result = formatDiff("hello world", "hello beautiful world");
+    expect(result).toContain("beautiful");
+  });
+
+  it("includes removed words", () => {
+    const result = formatDiff("hello cruel world", "hello world");
+    expect(result).toContain("cruel");
+  });
+
+  it("includes unchanged context words", () => {
+    const result = formatDiff("hello world", "hello beautiful world");
+    expect(result).toContain("hello");
+    expect(result).toContain("world");
+  });
+
+  it("returns empty string when only whitespace differs", () => {
+    expect(formatDiff("a  b", "a b")).toBe("");
+  });
+});
 
 describe("CheckResult", () => {
   it("marks a mismatched PDF as changed", () => {
