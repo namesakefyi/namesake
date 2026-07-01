@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { PdfEntry } from "../lib/catalog";
-import {
-  byStatus,
-  type CheckResult,
-  type FetchResult,
-  formatDiff,
-} from "./pdf-monitor";
+import { type CheckResult, type FetchResult, formatDiff } from "./pdf-monitor";
+
+const byStatus =
+  (status: FetchResult["status"]) =>
+  ({ result }: CheckResult) =>
+    result.status === status;
 
 function makePdf(overrides: Partial<PdfEntry> = {}): PdfEntry {
   return {

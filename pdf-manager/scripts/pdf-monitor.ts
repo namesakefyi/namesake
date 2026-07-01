@@ -11,29 +11,13 @@ import { monitorConfig } from "../pdf-monitor.config";
 const USER_AGENT =
   "namesake-pdf-monitor/1.0 (+https://github.com/namesakefyi/namesake)";
 
-const PASS = pc.green("✓");
-const FAIL = pc.red("✗");
-const SKIP = pc.yellow("⊘");
-
-export type DriftStatus = "unchanged" | "unknown" | "changed" | "error";
-
-type FetchResultMap = {
-  unchanged: Record<never, never>;
-  unknown: { reason: string };
-  changed: { remoteText: string; localText: string };
-  error: { reason: string };
-};
-
-export type FetchResult = {
-  [K in DriftStatus]: { status: K } & FetchResultMap[K];
-}[DriftStatus];
+export type FetchResult =
+  | { status: "unchanged" }
+  | { status: "unknown"; reason: string }
+  | { status: "changed"; remoteText: string; localText: string }
+  | { status: "error"; reason: string };
 
 export type CheckResult = { pdf: PdfEntry; result: FetchResult };
-
-export const byStatus =
-  (status: DriftStatus) =>
-  ({ result }: CheckResult) =>
-    result.status === status;
 
 async function extractPdfText(
   bytes: Uint8Array,
@@ -101,48 +85,23 @@ function formatDuration(ms: number): string {
   return ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(2)}s`;
 }
 
-const ICONS: Record<DriftStatus, string> = {
-  unchanged: PASS,
-  unknown: SKIP,
-  changed: FAIL,
-  error: FAIL,
-};
-
-const STATUS_LABEL: Record<DriftStatus, (s: string) => string> = {
-  unchanged: pc.green,
-  unknown: pc.yellow,
-  changed: (s) => pc.bold(pc.red(s)),
-  error: (s) => pc.bold(pc.red(s)),
-};
-
 export function formatDiff(local: string, remote: string): string {
   const changes = diffWords(local, remote);
   if (changes.every((c) => !c.added && !c.removed)) return "";
   return `  ${changes.map((c) => (c.added ? pc.green(c.value) : c.removed ? pc.red(c.value) : pc.dim(c.value))).join("")}`;
 }
 
-function formatPdfId(pdf: PdfEntry): string {
-  return `${pdf.jurisdiction.toLowerCase()} › ${pdf.id}`;
-}
-
 function formatResult(result: FetchResult, pdf: PdfEntry, dur: string): string {
-  const icon = ICONS[result.status];
-  const label = STATUS_LABEL[result.status](result.status);
-  const id = formatPdfId(pdf);
-  const main = `${icon} ${label} ${id} ${dur}`;
-  if (result.status === "error") return `${main}\n  ${pc.red(result.reason)}`;
+  const id = `${pdf.jurisdiction.toLowerCase()} › ${pdf.id}`;
+  if (result.status === "unchanged")
+    return `${pc.green("✓")} ${pc.green("unchanged")} ${id} ${dur}`;
   if (result.status === "unknown")
-    return `${main}\n  ${pc.yellow(result.reason)}`;
-  if (result.status === "changed") {
-    const diff = formatDiff(result.localText, result.remoteText);
-    return diff ? `${main}\n${diff}` : main;
-  }
-  return main;
-}
-
-function printResult(pdf: PdfEntry, result: FetchResult, ms: number): void {
-  const dur = pc.dim(formatDuration(ms));
-  process.stdout.write(`${formatResult(result, pdf, dur)}\n`);
+    return `${pc.yellow("⊘")} ${pc.yellow("unknown")} ${id} ${dur}\n  ${pc.yellow(result.reason)}`;
+  if (result.status === "error")
+    return `${pc.red("✗")} ${pc.bold(pc.red("error"))} ${id} ${dur}\n  ${pc.red(result.reason)}`;
+  const diff = formatDiff(result.localText, result.remoteText);
+  const main = `${pc.red("✗")} ${pc.bold(pc.red("changed"))} ${id} ${dur}`;
+  return diff ? `${main}\n${diff}` : main;
 }
 
 function printSummary(results: CheckResult[], totalMs: number): void {
@@ -152,7 +111,7 @@ function printSummary(results: CheckResult[], totalMs: number): void {
       return acc;
     },
     { unchanged: 0, unknown: 0, changed: 0, error: 0 } as Record<
-      DriftStatus,
+      FetchResult["status"],
       number
     >,
   );
@@ -222,13 +181,16 @@ async function main() {
 
   for (const { pdf, result, ms } of await runChecks(pdfs)) {
     results.push({ pdf, result });
-    printResult(pdf, result, ms);
+    process.stdout.write(
+      `${formatResult(result, pdf, pc.dim(formatDuration(ms)))}\n`,
+    );
   }
 
   printSummary(results, Math.round(performance.now() - start));
   writeCiMetadata(results);
 
-  if (results.some(byStatus("changed"))) process.exit(1);
+  if (results.some(({ result }) => result.status === "changed"))
+    process.exit(1);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
