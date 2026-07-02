@@ -58,7 +58,15 @@ const description =
   "Need more name change support? These organizations can help.";
 ---
 
-<BaseLayout title={title} description={description} color="pink">
+<BaseLayout
+  title={title}
+  description={description}
+  color="pink"
+  previewImage={{
+    src: "/og/directory.png",
+    alt: "These organizations offer name change support.",
+  }}
+>
   <PageHeader title={title} description={description} />
   <section class="directory-filters" aria-label="Directory filters">
     <form id="directory-form" method="get" class="controls">

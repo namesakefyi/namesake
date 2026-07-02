@@ -13,8 +13,10 @@ import passport from "./home/passport.png";
 <BaseLayout
   title={siteInfo.title}
   description={siteInfo.description}
-  ogImage={siteInfo.image.src}
-  ogAlt={siteInfo.image.alt}
+  previewImage={{
+    src: siteInfo.image.src,
+    alt: siteInfo.image.alt,
+  }}
 >
   <div class="hero">
     <div class="hero-content">

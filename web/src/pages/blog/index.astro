@@ -20,10 +20,14 @@ const posts = allPosts
 
 <BaseLayout
   title="Blog"
-  description="The latest news from Namesake."
+  description="Name change news and site updates."
   color="blue"
+  previewImage={{
+    src: "/og/blog.png",
+    alt: "Name change news and site updates.",
+  }}
 >
-  <PageHeader title="Blog" description="The latest news from Namesake." />
+  <PageHeader title="Blog" description="Name change news and site updates." />
   <div class="posts">
     {
       posts.length ? (

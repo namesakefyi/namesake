@@ -24,7 +24,10 @@ if (!config) return Astro.redirect("/404");
   title={config.title}
   description={config.description}
   color="white"
-  ogImage={`/forms/${slug}.png`}
+  previewImage={{
+    src: `/forms/${slug}.png`,
+    alt: config.title,
+  }}
 >
   <FormContainer client:load slug={form.id as FormSlug} />
 </BaseLayout>

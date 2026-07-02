@@ -30,8 +30,10 @@ const authors = authorEntries.filter(
   (a): a is NonNullable<typeof a> => a !== undefined,
 );
 
-const ogImage = post.data.image ? post.data.image.src.src : `/blog/${slug}.png`;
-const ogAlt = post.data.image?.alt ?? post.data.title;
+const previewImage = {
+  src: post.data.image ? post.data.image.src.src : `/blog/${slug}.png`,
+  alt: post.data.image?.alt ?? post.data.title,
+};
 ---
 
 <ProseLayout
@@ -39,8 +41,7 @@ const ogAlt = post.data.image?.alt ?? post.data.title;
   date={post.data.publishDate.toISOString()}
   description={post.data.description}
   showDescription={post.data.showDescription}
-  ogImage={ogImage}
-  ogAlt={ogAlt}
+  previewImage={previewImage}
   author={authors.map((a) => a.data.name).join(", ")}
   color="blue"
   annotation={post.data.annotation ?? "highlight"}
