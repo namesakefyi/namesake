@@ -112,6 +112,43 @@ Use the `<details>` element to collapse non-essential information. For example:
 
 `<details>` elements should be placed _after_ the main content of a section.
 
+### Use snippets for repeated info
+
+Keep documentation DRY (don't repeat yourself). If the same block of content is used across many different guides, create a reusable snippet in `src/content/snippets`.
+
+For example:
+
+```md wrap
+# snippets/notaries.md
+
+<details>
+  <summary>What is a notary?</summary>
+  A notary is someone appointed to witness the signing of important documents, like name change petitions. Basically, the notary is making sure that you are who you say you are, and that you’re signing the document voluntarily.
+</details>
+
+<details>
+  <summary>How does the notarization process work?</summary>
+  ...
+</details>
+
+<details>
+  <summary>Where can I find a notary?</summary>
+  ...
+</details>
+```
+
+Then, in your guide, import the `Content` of the snippet and render it:
+
+```mdx wrap
+# court-order.mdx
+
+import { Content as NotarySnippet } from "#content/snippets/notaries.md"
+
+To file your name change, you’ll also need a certified copy of your birth certificate, and legal records of any previous name changes.
+
+<NotarySnippet />
+```
+
 ### Embed interactive forms
 
 Namesake uses guided [forms](https://namesake.fyi/forms) to help users fill out PDFs. Forms which are relevant to a particular guide should be displayed inline by importing `FormContainer`:
