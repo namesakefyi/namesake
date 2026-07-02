@@ -66,10 +66,7 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
     <meta name="author" content={author} />
     <meta property="og:title" content={title} />
     <meta property="og:type" content="website" />
-    <meta
-      property="og:image"
-      content={new URL(previewImage.src, Astro.url.origin)}
-    />
+    <meta property="og:image" content={previewImage.src} />
     <meta property="og:image:alt" content={previewImage.alt} />
     <meta property="og:author" content={author} />
     <meta property="og:description" content={description} />
