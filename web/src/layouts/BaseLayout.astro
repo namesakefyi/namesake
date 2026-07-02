@@ -14,8 +14,10 @@ export interface Props {
   title: string;
   description?: string | null;
   author?: string;
-  ogImage?: string;
-  ogAlt?: string;
+  previewImage?: {
+    src: string;
+    alt: string;
+  };
   color?: NamesakeColor | null;
 }
 
@@ -23,8 +25,10 @@ const {
   title,
   description = siteInfo.description,
   author = siteInfo.fullName,
-  ogImage = siteInfo.image.src,
-  ogAlt = siteInfo.image.alt,
+  previewImage = {
+    src: siteInfo.image.src,
+    alt: siteInfo.image.alt,
+  },
   color = "purple",
 } = Astro.props;
 
@@ -62,8 +66,11 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
     <meta name="author" content={author} />
     <meta property="og:title" content={title} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content={new URL(ogImage, Astro.url.origin)} />
-    <meta property="og:image:alt" content={ogAlt} />
+    <meta
+      property="og:image"
+      content={new URL(previewImage.src, Astro.url.origin)}
+    />
+    <meta property="og:image:alt" content={previewImage.alt} />
     <meta property="og:author" content={author} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />

@@ -13,8 +13,10 @@ interface Props {
   description?: string | null;
   showDescription?: boolean;
   author?: string;
-  ogImage?: string;
-  ogAlt?: string;
+  previewImage?: {
+    src: string;
+    alt: string;
+  };
   annotation?: RoughAnnotationType | null;
   color?: NamesakeColor | null;
   breadcrumbs?: BreadcrumbItem[];
@@ -27,8 +29,7 @@ const {
   description,
   showDescription,
   author,
-  ogImage: ogImageUrl,
-  ogAlt,
+  previewImage,
   annotation,
   color,
   breadcrumbs,
@@ -44,8 +45,7 @@ const headerDescription =
   title={title}
   description={description && smartquotes(description)}
   author={author}
-  ogImage={ogImageUrl}
-  ogAlt={ogAlt}
+  previewImage={previewImage}
   color={color}
 >
   <article

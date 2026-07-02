@@ -38,8 +38,11 @@ const searchTitle = jurisdiction
       : []),
   ] satisfies BreadcrumbItem[]}
   color="white"
-  ogImage={`/guides/${guide.id}.png`}
-  ogAlt={guide.data.title}
+  previewImage={{
+    src: `/guides/${guide.id}.png`,
+    alt: guide.data.title,
+  }}
+  }
 >
   <TableOfContents headings={headings} slot="toc" />
   {guide.data.stub && <StubBanner />}
