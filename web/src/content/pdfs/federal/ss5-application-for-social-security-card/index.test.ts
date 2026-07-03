@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PREFER_NOT_TO_ANSWER } from "#constants/fields";
+import { DONT_KNOW } from "#constants/fields";
 import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import { getPdfForm } from "#lib/pdfs/getPdfForm";
 import ss5Application from ".";
@@ -81,7 +81,7 @@ describe("SS-5 Application for Social Security Card", () => {
       pdf: ss5Application,
       userData: {
         ...testData,
-        hasPreviousSocialSecurityCard: PREFER_NOT_TO_ANSWER,
+        hasPreviousSocialSecurityCard: DONT_KNOW,
       },
     });
     expect(

@@ -1,5 +1,9 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { type FieldName, PREFER_NOT_TO_ANSWER } from "#constants/fields";
+import {
+  DONT_KNOW,
+  type FieldName,
+  PREFER_NOT_TO_ANSWER,
+} from "#constants/fields";
 import { smartquotes } from "#lib/utils/smartquotes";
 import {
   Radio,
@@ -8,27 +12,19 @@ import {
 } from "../../common/RadioGroup";
 import "./YesNoField.css";
 
-type YesNoValue = boolean | typeof PREFER_NOT_TO_ANSWER;
+type YesNoValue = boolean | typeof PREFER_NOT_TO_ANSWER | typeof DONT_KNOW;
 
-/**
- * Converts a boolean value to a string value.
- * @param value - The boolean value to convert.
- * @returns "yes" if the value is true, "no" if the value is false, "preferNotToAnswer" if the value is null.
- */
 export const getYesNoStringFromBoolean = (value: YesNoValue) => {
   if (value === undefined || value === null) return null;
   if (value === PREFER_NOT_TO_ANSWER) return PREFER_NOT_TO_ANSWER;
+  if (value === DONT_KNOW) return DONT_KNOW;
   if (value) return "yes";
   return "no";
 };
 
-/**
- * Converts a string value to a boolean value.
- * @param value - The string value to convert.
- * @returns true if the value is "yes", false if the value is "no", null if the value is "preferNotToAnswer".
- */
 export const getBooleanValueFromYesNoString = (value: string): YesNoValue => {
   if (value === PREFER_NOT_TO_ANSWER) return PREFER_NOT_TO_ANSWER;
+  if (value === DONT_KNOW) return DONT_KNOW;
   return value === "yes";
 };
 
@@ -40,7 +36,7 @@ export interface YesNoFieldProps extends RadioGroupProps {
   yesLabel?: string;
   noLabel?: string;
   includePreferNotToAnswer?: boolean;
-  preferNotToAnswerLabel?: string;
+  includeDontKnow?: boolean;
 }
 
 export function YesNoField({
@@ -52,7 +48,7 @@ export function YesNoField({
   children,
   defaultValue,
   includePreferNotToAnswer,
-  preferNotToAnswerLabel,
+  includeDontKnow,
 }: YesNoFieldProps) {
   const { control, setValue } = useFormContext();
 
@@ -77,9 +73,10 @@ export function YesNoField({
             <Radio value="yes">{smartquotes(yesLabel ?? "Yes")}</Radio>
             <Radio value="no">{smartquotes(noLabel ?? "No")}</Radio>
             {includePreferNotToAnswer && (
-              <Radio value={PREFER_NOT_TO_ANSWER}>
-                {smartquotes(preferNotToAnswerLabel ?? "Prefer not to answer")}
-              </Radio>
+              <Radio value={PREFER_NOT_TO_ANSWER}>Prefer not to answer</Radio>
+            )}
+            {includeDontKnow && (
+              <Radio value={DONT_KNOW}>I don&apos;t know</Radio>
             )}
           </RadioGroup>
         )}

@@ -1,4 +1,4 @@
-import { PREFER_NOT_TO_ANSWER } from "#constants/fields";
+import { DONT_KNOW } from "#constants/fields";
 import { definePdf } from "#lib/pdfs/definePdf";
 import { formatBirthplaceCountryOrState } from "#lib/utils/formatBirthplaceCountryOrState";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
@@ -53,7 +53,7 @@ export default definePdf<PdfFieldName>({
     hasNoPreviousSocialSecurityCard:
       data.hasPreviousSocialSecurityCard === false,
     previousSocialSecurityCardUnknown:
-      data.hasPreviousSocialSecurityCard === PREFER_NOT_TO_ANSWER,
+      data.hasPreviousSocialSecurityCard === DONT_KNOW,
     previousSocialSecurityCardFirstName:
       data.previousSocialSecurityCardFirstName,
     previousSocialSecurityCardMiddleName:
