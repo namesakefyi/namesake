@@ -75,9 +75,7 @@ export function YesNoField({
             {includePreferNotToAnswer && (
               <Radio value={PREFER_NOT_TO_ANSWER}>Prefer not to answer</Radio>
             )}
-            {includeDontKnow && (
-              <Radio value={DONT_KNOW}>I don&apos;t know</Radio>
-            )}
+            {includeDontKnow && <Radio value={DONT_KNOW}>I don’t know</Radio>}
           </RadioGroup>
         )}
       />
