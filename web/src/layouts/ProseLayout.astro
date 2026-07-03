@@ -204,6 +204,14 @@ const headerDescription =
       margin-block: var(--space-xl);
     }
 
+    figure:not(:where(.not-content *)) > img {
+      margin-block: unset;
+    }
+
+    figcaption {
+      font-size: var(--step--1);
+    }
+
     ul:not(:where(.not-content *)),
     ol:not(:where(.not-content *)) {
       padding-inline-start: var(--space-xl);
@@ -282,6 +290,22 @@ const headerDescription =
       &:-webkit-details-marker,
       &::marker {
         display: none;
+      }
+    }
+
+    .float:not(:where(.not-content *)) {
+      margin: unset;
+      margin-block-end: var(--space-xl);
+      clear: both;
+
+      &.left {
+        float: left;
+        margin-inline-end: var(--space-xl);
+      }
+
+      &.right {
+        float: right;
+        margin-inline-start: var(--space-xl);
       }
     }
   }
