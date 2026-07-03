@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { PREFER_NOT_TO_ANSWER } from "#constants/fields";
 import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import { getPdfForm } from "#lib/pdfs/getPdfForm";
 import ss5Application from ".";
@@ -51,8 +52,8 @@ describe("SS-5 Application for Social Security Card", () => {
     previousSocialSecurityCardMiddleName: "M",
     previousSocialSecurityCardLastName: "Michaels, Jr.",
 
-    // Field 15: Phone number
-    phoneNumber: "555-555-5555",
+    // Field 15: Phone number (area code split into separate field by resolver)
+    phoneNumber: "212-867-5309",
 
     // Field 16: Address
     mailingStreetAddress: "123 Main St",
@@ -67,6 +68,31 @@ describe("SS-5 Application for Social Security Card", () => {
 
   it("maps all fields correctly to the PDF", async () => {
     await expectPdfFieldsMatch(ss5Application, testData);
+  });
+
+  it("splits phone number into area code and local number", async () => {
+    const form = await getPdfForm({ pdf: ss5Application, userData: testData });
+    expect(form.getTextField("areaCode")?.getValue()).toBe("212");
+    expect(form.getTextField("phoneNumber")?.getValue()).toBe("867-5309");
+  });
+
+  it("checks previousSocialSecurityCardUnknown when hasPreviousSocialSecurityCard is unknown", async () => {
+    const form = await getPdfForm({
+      pdf: ss5Application,
+      userData: {
+        ...testData,
+        hasPreviousSocialSecurityCard: PREFER_NOT_TO_ANSWER,
+      },
+    });
+    expect(
+      form.getCheckbox("previousSocialSecurityCardUnknown")?.isChecked(),
+    ).toBe(true);
+    expect(form.getCheckbox("hasPreviousSocialSecurityCard")?.isChecked()).toBe(
+      false,
+    );
+    expect(
+      form.getCheckbox("hasNoPreviousSocialSecurityCard")?.isChecked(),
+    ).toBe(false);
   });
 
   it("derives birthplaceState from country code when outside US", async () => {

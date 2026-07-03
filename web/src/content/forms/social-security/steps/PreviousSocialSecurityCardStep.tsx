@@ -36,6 +36,8 @@ export const previousSocialSecurityCardStep = defineStep({
           labelHidden
           yesLabel="Yes, I have a previous Social Security card or have applied for one"
           noLabel="No, I have never filed for or received a Social Security card before"
+          includePreferNotToAnswer
+          preferNotToAnswerLabel="I don't know"
         />
         <FormSubsection
           title="What is the name shown on your most recent Social Security card?"

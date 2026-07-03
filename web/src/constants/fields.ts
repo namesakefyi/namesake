@@ -702,7 +702,7 @@ export type FieldType<K extends FieldName> = K extends any
           (typeof FIELD_DEFS)[number],
           { name: K }
         >["type"] extends "boolean"
-      ? boolean
+      ? boolean | typeof PREFER_NOT_TO_ANSWER
       : Extract<
             (typeof FIELD_DEFS)[number],
             { name: K }

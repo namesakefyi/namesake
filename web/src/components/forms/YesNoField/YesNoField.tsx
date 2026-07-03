@@ -40,6 +40,7 @@ export interface YesNoFieldProps extends RadioGroupProps {
   yesLabel?: string;
   noLabel?: string;
   includePreferNotToAnswer?: boolean;
+  preferNotToAnswerLabel?: string;
 }
 
 export function YesNoField({
@@ -51,6 +52,7 @@ export function YesNoField({
   children,
   defaultValue,
   includePreferNotToAnswer,
+  preferNotToAnswerLabel,
 }: YesNoFieldProps) {
   const { control, setValue } = useFormContext();
 
@@ -75,7 +77,9 @@ export function YesNoField({
             <Radio value="yes">{smartquotes(yesLabel ?? "Yes")}</Radio>
             <Radio value="no">{smartquotes(noLabel ?? "No")}</Radio>
             {includePreferNotToAnswer && (
-              <Radio value={PREFER_NOT_TO_ANSWER}>Prefer not to answer</Radio>
+              <Radio value={PREFER_NOT_TO_ANSWER}>
+                {smartquotes(preferNotToAnswerLabel ?? "Prefer not to answer")}
+              </Radio>
             )}
           </RadioGroup>
         )}
