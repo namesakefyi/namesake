@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { PDF } from "@libpdf/core";
+
 import type { Context } from "hono";
 import { findPdfById, listAllPdfs } from "./catalog";
 import {
@@ -9,7 +9,12 @@ import {
   writeDefinitionFiles,
 } from "./define";
 import { loadJurisdictions } from "./fields";
-import { applyRenames, extractFields, extractFieldsFromBytes } from "./pdf";
+import {
+  applyRenames,
+  extractFields,
+  extractFieldsFromBytes,
+  loadPdf,
+} from "./pdf";
 import { loadExclusions, processPdf } from "./schema";
 import { suggestName } from "./suggest";
 
@@ -108,7 +113,7 @@ export async function handleAddPdf(c: Context) {
   }
 
   const rawBytes = Buffer.from(pdfBase64, "base64");
-  const pdfDoc = await PDF.load(rawBytes);
+  const pdfDoc = await loadPdf(rawBytes);
   const cleanedBytes = await pdfDoc.save();
 
   const pdfFields = await extractFieldsFromBytes(cleanedBytes);
@@ -198,7 +203,7 @@ export async function handleReplacePdf(c: Context) {
   let fieldNames: string[];
   try {
     const newBytes = Buffer.from(pdfBase64, "base64");
-    const pdfDoc = await PDF.load(newBytes);
+    const pdfDoc = await loadPdf(newBytes);
     writeFileSync(found.pdfPath, await pdfDoc.save());
 
     if (renames.length > 0) await applyRenames(found.pdfPath, renames);
@@ -216,12 +221,12 @@ export async function handleReplacePdf(c: Context) {
       exclude: deletes,
       keep: keepNames,
     }));
-    formatFiles([schemaPath]);
   } catch (err) {
     writeFileSync(found.pdfPath, oldBytes);
     writeFileSync(schemaPath, oldSchemaContent);
     throw err;
   }
+  formatFiles([schemaPath]);
 
   const before = new Set(activeFields);
   const fieldSet = new Set(fieldNames);
