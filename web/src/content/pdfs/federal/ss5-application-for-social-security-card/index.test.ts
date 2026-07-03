@@ -52,7 +52,7 @@ describe("SS-5 Application for Social Security Card", () => {
     previousSocialSecurityCardMiddleName: "M",
     previousSocialSecurityCardLastName: "Michaels, Jr.",
 
-    // Field 15: Phone number (area code split into separate field by resolver)
+    // Field 15: Phone number
     phoneNumber: "212-867-5309",
 
     // Field 16: Address

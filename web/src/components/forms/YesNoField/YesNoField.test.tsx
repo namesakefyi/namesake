@@ -161,6 +161,10 @@ describe("getYesNoStringFromBoolean", () => {
     );
   });
 
+  it("returns 'dontKnow' if the value is 'dontKnow'", () => {
+    expect(getYesNoStringFromBoolean("dontKnow")).toBe("dontKnow");
+  });
+
   it("returns null if the value is undefined", () => {
     expect(getYesNoStringFromBoolean(undefined as any)).toBeNull();
   });
@@ -183,6 +187,10 @@ describe("getBooleanValueFromYesNoString", () => {
     expect(getBooleanValueFromYesNoString("preferNotToAnswer")).toBe(
       "preferNotToAnswer",
     );
+  });
+
+  it("returns 'dontKnow' if the value is 'dontKnow'", () => {
+    expect(getBooleanValueFromYesNoString("dontKnow")).toBe("dontKnow");
   });
 
   it("returns false for other values", () => {
