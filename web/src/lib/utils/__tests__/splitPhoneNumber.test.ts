@@ -26,8 +26,12 @@ describe("splitPhoneNumber", () => {
     });
   });
 
-  it("returns empty object for invalid input", () => {
+  it("returns empty object for a number that fails validation", () => {
     expect(splitPhoneNumber("867-5309")).toEqual({});
+  });
+
+  it("returns empty object for input that throws during parsing", () => {
+    expect(splitPhoneNumber("not-a-phone-number")).toEqual({});
   });
 
   it("returns empty object for undefined input", () => {
