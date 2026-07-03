@@ -297,16 +297,21 @@ const headerDescription =
       margin: unset;
       margin-block-end: var(--space-xl);
       clear: both;
-      max-width: 50%;
 
       &.left {
-        float: left;
-        margin-inline-end: var(--space-xl);
+        @media (width > 400px) {
+          float: left;
+          margin-inline-end: var(--space-xl);
+          max-width: 50%;
+        }
       }
 
       &.right {
-        float: right;
-        margin-inline-start: var(--space-xl);
+        @media (width > 400px) {
+          float: right;
+          margin-inline-start: var(--space-xl);
+          max-width: 50%;
+        }
       }
     }
   }
