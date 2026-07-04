@@ -1,6 +1,8 @@
+import { DONT_KNOW } from "#constants/fields";
 import { definePdf } from "#lib/pdfs/definePdf";
 import { formatBirthplaceCountryOrState } from "#lib/utils/formatBirthplaceCountryOrState";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
+import { splitPhoneNumber } from "#lib/utils/splitPhoneNumber";
 import type { PdfFieldName } from "./schema";
 import pdf from "./ss5-application-for-social-security-card.pdf";
 
@@ -50,6 +52,8 @@ export default definePdf<PdfFieldName>({
     hasPreviousSocialSecurityCard: data.hasPreviousSocialSecurityCard === true,
     hasNoPreviousSocialSecurityCard:
       data.hasPreviousSocialSecurityCard === false,
+    previousSocialSecurityCardUnknown:
+      data.hasPreviousSocialSecurityCard === DONT_KNOW,
     previousSocialSecurityCardFirstName:
       data.previousSocialSecurityCardFirstName,
     previousSocialSecurityCardMiddleName:
@@ -60,7 +64,8 @@ export default definePdf<PdfFieldName>({
       day: "2-digit",
       year: "numeric",
     }),
-    phoneNumber: data.phoneNumber,
+    areaCode: splitPhoneNumber(data.phoneNumber).areaCode,
+    phoneNumber: splitPhoneNumber(data.phoneNumber).localNumber,
     mailingStreetAddress: data.mailingStreetAddress,
     mailingCity: data.mailingCity,
     mailingState: data.mailingState,

@@ -1,6 +1,6 @@
-import type { PdfFieldType } from "#constants/pdf";
-
 /** Auto-generated from ss5-application-for-social-security-card.pdf — do not edit */
+
+import type { PdfFieldType } from "#constants/pdf";
 
 export const pdfSchema = {
   newFirstName: "text",
@@ -47,11 +47,13 @@ export const pdfSchema = {
   isFatherSSNUnknown: "checkbox",
   hasPreviousSocialSecurityCard: "checkbox",
   hasNoPreviousSocialSecurityCard: "checkbox",
+  previousSocialSecurityCardUnknown: "checkbox",
   previousSocialSecurityCardFirstName: "text",
   previousSocialSecurityCardMiddleName: "text",
   previousSocialSecurityCardLastName: "text",
   differentDateOfBirthOnPreviousApplication: "text",
   todaysDate: "text",
+  areaCode: "text",
   phoneNumber: "text",
   mailingStreetAddress: "text",
   mailingCity: "text",
@@ -65,3 +67,16 @@ export const pdfSchema = {
 } as const satisfies Record<string, PdfFieldType>;
 
 export type PdfFieldName = keyof typeof pdfSchema;
+
+/** Fields present in the PDF but excluded from the schema */
+export const pdfExcludedFields = [
+  "topmostSubform[0].Page1[0].P1_First_FLD[0]",
+  "topmostSubform[0].Page1[0].P1_second_FLD[0]",
+  "topmostSubform[0].Page2[0].P2_First_FLD[0]",
+  "topmostSubform[0].Page2[0].P2_Second_FLD[0]",
+  "topmostSubform[0].Page3[0].P3_First_FLD[0]",
+  "topmostSubform[0].Page4[0].P4_First_FLD[0]",
+  "topmostSubform[0].Page4[0].P4_Second_FLD[0]",
+  "topmostSubform[0].Page5[0].P5_17Namesig_FLD[0]",
+  "topmostSubform[0].Page5[0].P5_Last_FLD[0]",
+] as const;

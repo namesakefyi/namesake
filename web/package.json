@@ -64,6 +64,7 @@
     "fathom-client": "^3.7.2",
     "idb": "^8.0.3",
     "language-name-map": "^0.3.0",
+    "libphonenumber-js": "^1.13.8",
     "react": "^19.2.7",
     "react-aria-components": "^1.19.0",
     "react-dom": "^19.2.7",

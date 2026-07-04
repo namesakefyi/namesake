@@ -702,7 +702,7 @@ export type FieldType<K extends FieldName> = K extends any
           (typeof FIELD_DEFS)[number],
           { name: K }
         >["type"] extends "boolean"
-      ? boolean
+      ? boolean | typeof PREFER_NOT_TO_ANSWER | typeof DONT_KNOW
       : Extract<
             (typeof FIELD_DEFS)[number],
             { name: K }
@@ -718,3 +718,4 @@ export type FormData = {
 export const COMMON_PRONOUNS = ["they/them", "she/her", "he/him"];
 
 export const PREFER_NOT_TO_ANSWER = "preferNotToAnswer";
+export const DONT_KNOW = "dontKnow";

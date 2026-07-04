@@ -1,4 +1,7 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import type { FieldType, FormField, PDFPage } from "@libpdf/core";
 import { PDF, PdfArray, PdfDict, PdfName, PdfString } from "@libpdf/core";
 
@@ -62,14 +65,61 @@ export async function extractFields(pdfPath: string): Promise<PdfFieldInfo[]> {
   return extractFieldsFromBytes(readFileSync(pdfPath));
 }
 
+export async function loadPdf(bytes: Uint8Array | Buffer): Promise<PDF> {
+  const doc = await PDF.load(bytes);
+  if (!doc.isEncrypted) return doc;
+  return PDF.load(decryptWithQpdf(bytes));
+}
+
 /** Same as extractFields but accepts raw bytes instead of a path. */
 export async function extractFieldsFromBytes(
   bytes: Uint8Array | Buffer,
 ): Promise<PdfFieldInfo[]> {
-  const doc = await PDF.load(bytes);
+  const doc = await loadPdf(bytes);
   const form = doc.getForm();
   const sorted = fieldReadingOrder(form?.getFields() ?? [], doc.getPages());
   return sorted.map((f) => ({ name: f.name, type: f.type }));
+}
+
+/**
+ * Temporary workaround for https://github.com/LibPDF-js/core/issues/82.
+ *
+ * When a PDF is encrypted with an empty user password but an unknown owner
+ * password, libpdf authenticates successfully (isAuthenticated: true) but
+ * removeProtection() throws PermissionDeniedError. Calling save() without
+ * removing protection regenerates the /ID trailer entry, invalidating the AES
+ * key derivation — the saved file is unreadable. qpdf derives the correct file
+ * key from the empty user password and strips encryption without needing the
+ * owner password. Remove this function and inline PDF.load() in loadPdf() once
+ * libpdf preserves the original /ID on save().
+ */
+function decryptWithQpdf(bytes: Uint8Array | Buffer): Buffer {
+  const tmpDir = mkdtempSync(join(tmpdir(), "namesake-pdf-"));
+  try {
+    const inPath = join(tmpDir, "input.pdf");
+    const outPath = join(tmpDir, "output.pdf");
+    writeFileSync(inPath, bytes);
+    const result = spawnSync("qpdf", ["--decrypt", inPath, outPath], {
+      timeout: 60_000,
+    });
+    if (result.error) {
+      const isNotFound =
+        (result.error as NodeJS.ErrnoException).code === "ENOENT";
+      throw new Error(
+        isNotFound
+          ? "qpdf is required to process encrypted PDFs. Install it with: brew install qpdf"
+          : `qpdf failed: ${result.error.message}`,
+      );
+    }
+    if (result.status !== 0) {
+      throw new Error(
+        "PDF is password-protected. Please provide an unprotected version.",
+      );
+    }
+    return readFileSync(outPath);
+  } finally {
+    rmSync(tmpDir, { recursive: true, force: true });
+  }
 }
 
 /**
@@ -81,7 +131,7 @@ export async function convertDropdownsToTextFields(
   pdfPath: string,
 ): Promise<void> {
   const bytes = readFileSync(pdfPath);
-  const doc = await PDF.load(bytes);
+  const doc = await loadPdf(bytes);
   const form = doc.getForm();
   let changed = false;
   for (const field of form?.getFields() ?? []) {
@@ -105,7 +155,7 @@ export async function normalizeRadioOptionNames(
   pdfPath: string,
 ): Promise<void> {
   const bytes = readFileSync(pdfPath);
-  const doc = await PDF.load(bytes);
+  const doc = await loadPdf(bytes);
   const form = doc.getForm();
   let changed = false;
 
@@ -176,7 +226,7 @@ export async function applyRenames(
   renames: Rename[],
 ): Promise<void> {
   const bytes = readFileSync(pdfPath);
-  const doc = await PDF.load(bytes);
+  const doc = await loadPdf(bytes);
   const form = doc.getForm();
   const acroForm = form?.acroForm();
   for (const { from, to } of renames) {
