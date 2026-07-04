@@ -28,7 +28,7 @@
   },
   "nano-staged": {
     "*.{astro,cjs,css,js,json,jsonc,jsx,mjs,ts,tsx}": [
-      "biome check --write"
+      "biome check --write --no-errors-on-unmatched"
     ]
   },
   "devDependencies": {
