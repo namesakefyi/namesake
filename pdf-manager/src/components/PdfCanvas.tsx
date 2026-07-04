@@ -91,7 +91,10 @@ export function PdfCanvas({
         const fields = new Map<string, Rect[]>();
         for (const ann of await page.getAnnotations()) {
           if (ann.subtype !== "Widget" || !ann.fieldName) continue;
-          const [x1, y1, x2, y2] = vp.convertToViewportRectangle(ann.rect);
+          const [x1, y1, x2, y2] = [
+            ...vp.convertToViewportPoint(ann.rect[0], ann.rect[1]),
+            ...vp.convertToViewportPoint(ann.rect[2], ann.rect[3]),
+          ];
           const rect: Rect = {
             x: Math.min(x1, x2),
             y: Math.min(y1, y2),
