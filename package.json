@@ -28,11 +28,11 @@
   },
   "nano-staged": {
     "*.{astro,cjs,css,js,json,jsonc,jsx,mjs,ts,tsx}": [
-      "biome check --write"
+      "biome check --write --no-errors-on-unmatched"
     ]
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.1",
+    "@biomejs/biome": "^2.5.2",
     "nano-staged": "^1.0.2",
     "simple-git-hooks": "^2.13.1"
   }
