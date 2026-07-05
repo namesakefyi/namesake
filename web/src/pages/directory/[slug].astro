@@ -133,7 +133,7 @@ const { name, description, services, email, phone, url, logo } = entry.data;
       <RelatedDirectoryEntries
         entries={relatedEntries}
         stateId={firstJurisdiction.id}
-        stateName={firstJurisdiction.name}
+        heading={`Also in ${firstJurisdiction.name}`}
       />
     )
   }

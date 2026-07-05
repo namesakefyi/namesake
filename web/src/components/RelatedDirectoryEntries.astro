@@ -11,17 +11,17 @@ export interface RelatedEntry {
 interface Props {
   entries: RelatedEntry[];
   stateId: string;
-  stateName: string;
+  heading: string;
 }
 
-const { entries, stateId, stateName } = Astro.props;
+const { entries, stateId, heading } = Astro.props;
 ---
 
 {
   entries.length > 0 && (
     <aside class="related">
       <h2>
-        Also in <a href={`/directory?state=${stateId}`}>{stateName}</a>
+        <a href={`/directory?state=${stateId}`}>{heading}</a>
       </h2>
       <ul>
         {entries.map((entry) => (
