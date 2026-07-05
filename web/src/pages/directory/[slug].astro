@@ -1,0 +1,164 @@
+---
+import { getCollection } from "astro:content";
+import DirectoryLogo from "#components/DirectoryLogo.astro";
+import InlineLinkList from "#components/InlineLinkList.astro";
+import PageHeader from "#components/PageHeader.astro";
+import RelatedDirectoryEntries, {
+  type RelatedEntry,
+} from "#components/RelatedDirectoryEntries.astro";
+import { SERVICE_LABELS, type Service } from "#constants/services";
+import BaseLayout from "#layouts/BaseLayout.astro";
+import { formatCleanUrl } from "#lib/utils/formatCleanUrl";
+
+export async function getStaticPaths() {
+  const [entries, jurisdictions] = await Promise.all([
+    getCollection("directory"),
+    getCollection("jurisdictions"),
+  ]);
+  return entries.map((entry) => {
+    const entryJurisdictions = entry.data.jurisdictions
+      .map((ref) => ({
+        id: ref.id,
+        name: jurisdictions.find((j) => j.id === ref.id)?.data.name ?? ref.id,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    const relatedEntries: RelatedEntry[] = entryJurisdictions[0]
+      ? entries
+          .filter(
+            (relatedEntry) =>
+              relatedEntry.id !== entry.id &&
+              relatedEntry.data.jurisdictions.some(
+                (ref) => ref.id === entryJurisdictions[0].id,
+              ),
+          )
+          .sort((a, b) => {
+            if (a.data.officialPartner !== b.data.officialPartner)
+              return a.data.officialPartner ? -1 : 1;
+            return a.data.name.localeCompare(b.data.name);
+          })
+          .slice(0, 3)
+          .map((relatedEntry) => ({
+            id: relatedEntry.id,
+            name: relatedEntry.data.name,
+            description: relatedEntry.data.description,
+            logo: relatedEntry.data.logo,
+          }))
+      : [];
+
+    return {
+      params: { slug: entry.id },
+      props: { entry, entryJurisdictions, relatedEntries },
+    };
+  });
+}
+
+const { entry, entryJurisdictions, relatedEntries } = Astro.props;
+const firstJurisdiction = entryJurisdictions[0];
+const { name, description, services, email, phone, url, logo } = entry.data;
+---
+
+<BaseLayout title={name} description={description} color="pink">
+  <PageHeader
+    title={name}
+    description={description}
+    annotation={null}
+    breadcrumbs={[{ label: "Directory", href: "/directory" }]}
+  >
+    {
+      logo && (
+        <DirectoryLogo
+          slot="before-header"
+          class="entry-logo"
+          logo={logo}
+          name={name}
+        />
+      )
+    }
+  </PageHeader>
+  <section class="entry-layout">
+    <dl class="entry-meta">
+      <dt>Services</dt>
+      <dd>
+        <InlineLinkList
+          items={services.map((svc) => ({
+            name: SERVICE_LABELS[svc as Service] ?? svc,
+            href: `/directory?service=${svc}`,
+          }))}
+        />
+      </dd>
+      <dt>{entryJurisdictions.length > 1 ? "States" : "State"}</dt>
+      <dd>
+        <InlineLinkList
+          items={entryJurisdictions.map((jurisdiction) => ({
+            name: jurisdiction.name,
+            href: `/directory?state=${jurisdiction.id}`,
+          }))}
+        />
+      </dd>
+      {
+        url && (
+          <>
+            <dt>Website</dt>
+            <dd>
+              <a href={url}>{formatCleanUrl(url)}</a>
+            </dd>
+          </>
+        )
+      }
+      {
+        email && (
+          <>
+            <dt>Email</dt>
+            <dd>
+              <a href={`mailto:${email}`}>{email}</a>
+            </dd>
+          </>
+        )
+      }
+      {
+        phone && (
+          <>
+            <dt>Phone</dt>
+            <dd>
+              <a href={`tel:${phone}`}>{phone}</a>
+            </dd>
+          </>
+        )
+      }
+    </dl>
+  </section>
+  {
+    firstJurisdiction && (
+      <RelatedDirectoryEntries
+        entries={relatedEntries}
+        stateId={firstJurisdiction.id}
+        heading={`Also in ${firstJurisdiction.name}`}
+      />
+    )
+  }
+</BaseLayout>
+
+<style>
+  .entry-logo {
+    max-height: 140px;
+    margin-block-end: var(--space-m);
+  }
+
+  .entry-layout {
+    margin-block-end: var(--space-xl);
+  }
+
+  .entry-meta {
+    margin: 0;
+
+    dt {
+      font-weight: var(--weight-bold);
+    }
+
+    dd {
+      margin: 0;
+      margin-block-end: var(--space-s);
+    }
+  }
+</style>

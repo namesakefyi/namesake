@@ -1,7 +1,6 @@
 ---
 export const prerender = false;
 
-import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import {
   RiGlobalLine,
@@ -10,6 +9,8 @@ import {
   RiPhoneLine,
   RiVerifiedBadgeFill,
 } from "@remixicon/react";
+import DirectoryLogo from "#components/DirectoryLogo.astro";
+import InlineLinkList from "#components/InlineLinkList.astro";
 import PageHeader from "#components/PageHeader.astro";
 import { SERVICE_LABELS, SERVICES, type Service } from "#constants/services";
 import BaseLayout from "#layouts/BaseLayout.astro";
@@ -40,12 +41,13 @@ const contacts = filteredEntries.map(({ id, data }) => ({
   name: data.name,
   description: data.description,
   jurisdictions: data.jurisdictions
-    .map(
-      (ref) =>
+    .map((ref) => ({
+      id: ref.id,
+      name:
         jurisdictionsCollection.find((j) => j.id === ref.id)?.data.name ??
         ref.id,
-    )
-    .sort(),
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name)),
   services: data.services,
   officialPartner: data.officialPartner,
   email: data.email,
@@ -113,57 +115,69 @@ const description =
     {
       contacts.length ? (
         <ul class="directory-list-items">
-          {contacts.map((c) => (
+          {contacts.map((contact) => (
             <li class="directory-list-item">
-              {c.logo &&
-                (c.logo.format === "svg" ? (
-                  <img class="logo" src={c.logo.src} alt={`${c.name} logo`} />
-                ) : (
-                  <Image class="logo" src={c.logo} alt={`${c.name} logo`} />
-                ))}
+              {contact.logo && (
+                <DirectoryLogo
+                  logo={contact.logo}
+                  name={contact.name}
+                  class="logo"
+                />
+              )}
               <header>
-                {c.officialPartner && (
+                {contact.officialPartner && (
                   <div class="badge">
                     <RiVerifiedBadgeFill size={16} />
                     Namesake Partner
                   </div>
                 )}
-                <h2>{c.name}</h2>
-                <p class="description">{c.description}</p>
+                <h2>
+                  <a href={`/directory/${contact.slug}`}>{contact.name}</a>
+                </h2>
+                <p class="description">{contact.description}</p>
               </header>
               <ul class="services" aria-label="Services">
-                {c.services.map((svc) => (
-                  <li>{SERVICE_LABELS[svc as Service] ?? svc}</li>
+                {contact.services.map((svc) => (
+                  <li>
+                    <a href={`/directory?service=${svc}`}>
+                      {SERVICE_LABELS[svc as Service] ?? svc}
+                    </a>
+                  </li>
                 ))}
               </ul>
               <ul class="contact-info">
                 <li>
                   <RiMapPinLine size={18} />
                   <div class="contact-label">
-                    <span>{c.jurisdictions.join(", ")}</span>
+                    <InlineLinkList
+                      items={contact.jurisdictions.map((jurisdiction) => ({
+                        name: jurisdiction.name,
+                        href: `/directory?state=${jurisdiction.id}`,
+                      }))}
+                    />
                   </div>
                 </li>
-                {c.url && (
+                {contact.url && (
                   <li>
                     <RiGlobalLine size={18} />
                     <div class="contact-label">
-                      <a href={c.url}>{formatCleanUrl(c.url)}</a>
+                      <a href={contact.url}>{formatCleanUrl(contact.url)}</a>
                     </div>
                   </li>
                 )}
-                {c.email && (
+                {contact.email && (
                   <li>
                     <RiMailSendLine size={18} />
                     <div class="contact-label">
-                      <a href={`mailto:${c.email}`}>{c.email}</a>
+                      <a href={`mailto:${contact.email}`}>{contact.email}</a>
                     </div>
                   </li>
                 )}
-                {c.phone && (
+                {contact.phone && (
                   <li>
                     <RiPhoneLine size={18} />
                     <div class="contact-label">
-                      <a href={`tel:${c.phone}`}>{c.phone}</a>
+                      <a href={`tel:${contact.phone}`}>{contact.phone}</a>
                     </div>
                   </li>
                 )}
@@ -374,13 +388,6 @@ const description =
     padding-block-end: var(--space-2xl);
     break-inside: avoid;
 
-    .logo {
-      width: auto;
-      max-height: 64px;
-      mix-blend-mode: multiply;
-      filter: grayscale(100%);
-    }
-
     header {
       display: flex;
       flex-direction: column;
@@ -392,6 +399,17 @@ const description =
       font-size: var(--step-1);
       line-height: var(--line-height-display);
       text-wrap: balance;
+
+      a {
+        color: inherit;
+        text-decoration: none;
+
+        @media (hover: hover) {
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
     }
 
     .description {
@@ -418,6 +436,10 @@ const description =
       }
     }
 
+    .logo {
+      max-height: 64px;
+    }
+
     .services {
       display: flex;
       flex-wrap: wrap;
@@ -427,11 +449,16 @@ const description =
       list-style: none;
 
       li {
-        padding: 0.15em 0.5em;
-        font-size: var(--step--1);
-        white-space: nowrap;
-        border: 1px solid var(--border-color);
-        border-left-width: 3px;
+        a {
+          display: inline-block;
+          color: inherit;
+          padding: 0.15em 0.5em;
+          font-size: var(--step--1);
+          white-space: nowrap;
+          border: 1px solid var(--border-color);
+          border-left-width: 3px;
+          text-decoration: none;
+        }
       }
     }
 
@@ -447,12 +474,13 @@ const description =
         grid-template-areas: "icon label";
         grid-template-columns: 1.15rem 1fr;
         gap: var(--space-2xs);
+        padding-block-end: var(--space-2xs);
         max-width: 100%;
 
         > svg {
           flex-shrink: 0;
           grid-area: icon;
-          margin-top: 0.3em;
+          margin-top: 0.2em;
         }
 
         .contact-label {
@@ -463,7 +491,6 @@ const description =
           > a {
             display: block;
             width: fit-content;
-            padding-block: 0.15em;
           }
 
           a {

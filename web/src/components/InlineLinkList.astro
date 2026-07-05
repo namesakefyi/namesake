@@ -1,0 +1,43 @@
+---
+interface Item {
+  name: string;
+  href: string;
+}
+
+interface Props {
+  items: Item[];
+  underlineStyle?: "constant" | "hover";
+}
+
+const { items, underlineStyle = "constant" } = Astro.props;
+---
+
+{
+  items.map((item, i) => (
+    <>
+      <a href={item.href} data-underline={underlineStyle}>
+        {item.name}
+      </a>
+      {i < items.length - 1 ? ", " : ""}
+    </>
+  ))
+}
+
+<style>
+  a {
+    color: var(--text-color);
+    text-decoration: none;
+
+    &[data-underline="constant"] {
+      text-decoration: underline;
+    }
+
+    &[data-underline="hover"] {
+      @media (hover: hover) {
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+</style>

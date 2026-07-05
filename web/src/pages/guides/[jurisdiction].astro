@@ -3,12 +3,18 @@ import { getCollection } from "astro:content";
 import type { BreadcrumbItem } from "#components/Breadcrumbs.astro";
 import GuideLinkGroup from "#components/GuideLinkGroup.astro";
 import PageHeader from "#components/PageHeader.astro";
+import RelatedDirectoryEntries, {
+  type RelatedEntry,
+} from "#components/RelatedDirectoryEntries.astro";
 import { siteInfo } from "#constants/site-info";
 import BaseLayout from "#layouts/BaseLayout.astro";
 import { getGuidesByJurisdiction } from "#lib/queries/guides";
 
 export async function getStaticPaths() {
-  const allJurisdictions = await getCollection("jurisdictions");
+  const [allJurisdictions, allDirectoryEntries] = await Promise.all([
+    getCollection("jurisdictions"),
+    getCollection("directory"),
+  ]);
   const { guidesByJurisdiction } = await getGuidesByJurisdiction();
 
   const guideMap = new Map(
@@ -18,16 +24,35 @@ export async function getStaticPaths() {
     ]),
   );
 
-  return allJurisdictions.map((jurisdiction) => ({
-    params: { jurisdiction: jurisdiction.id },
-    props: {
-      jurisdiction,
-      guides: guideMap.get(jurisdiction.id) ?? [],
-    },
-  }));
+  return allJurisdictions.map((jurisdiction) => {
+    const directoryEntries: RelatedEntry[] = allDirectoryEntries
+      .filter((entry) =>
+        entry.data.jurisdictions.some((ref) => ref.id === jurisdiction.id),
+      )
+      .sort((a, b) => {
+        if (a.data.officialPartner !== b.data.officialPartner)
+          return a.data.officialPartner ? -1 : 1;
+        return a.data.name.localeCompare(b.data.name);
+      })
+      .map((entry) => ({
+        id: entry.id,
+        name: entry.data.name,
+        description: entry.data.description,
+        logo: entry.data.logo,
+      }));
+
+    return {
+      params: { jurisdiction: jurisdiction.id },
+      props: {
+        jurisdiction,
+        guides: guideMap.get(jurisdiction.id) ?? [],
+        directoryEntries,
+      },
+    };
+  });
 }
 
-const { jurisdiction, guides } = Astro.props;
+const { jurisdiction, guides, directoryEntries } = Astro.props;
 const hasGuides = guides.length > 0;
 
 const searchTitle = `${jurisdiction.data.name}: All Guides`;
@@ -72,6 +97,11 @@ const description = hasGuides
       </div>
     )
   }
+  <RelatedDirectoryEntries
+    entries={directoryEntries}
+    stateId={jurisdiction.id}
+    heading={`${jurisdiction.data.name} support`}
+  />
 </BaseLayout>
 
 <style>
