@@ -1,6 +1,7 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
+import { getCollection } from "astro:content";
 import DirectoryLogo from "#components/DirectoryLogo.astro";
+import InlineLinkList from "#components/InlineLinkList.astro";
 import PageHeader from "#components/PageHeader.astro";
 import RelatedDirectoryEntries, {
   type RelatedEntry,
@@ -22,14 +23,13 @@ export async function getStaticPaths() {
       }))
       .sort((a, b) => a.name.localeCompare(b.name));
 
-    const firstJurisdiction = entryJurisdictions[0];
-    const relatedEntries: RelatedEntry[] = firstJurisdiction
+    const relatedEntries: RelatedEntry[] = entryJurisdictions[0]
       ? entries
           .filter(
-            (e) =>
-              e.id !== entry.id &&
-              e.data.jurisdictions.some(
-                (ref) => ref.id === firstJurisdiction.id,
+            (relatedEntry) =>
+              relatedEntry.id !== entry.id &&
+              relatedEntry.data.jurisdictions.some(
+                (ref) => ref.id === entryJurisdictions[0].id,
               ),
           )
           .sort((a, b) => {
@@ -38,30 +38,23 @@ export async function getStaticPaths() {
             return a.data.name.localeCompare(b.data.name);
           })
           .slice(0, 3)
-          .map((e) => ({
-            id: e.id,
-            name: e.data.name,
-            description: e.data.description,
-            logo: e.data.logo,
+          .map((relatedEntry) => ({
+            id: relatedEntry.id,
+            name: relatedEntry.data.name,
+            description: relatedEntry.data.description,
+            logo: relatedEntry.data.logo,
           }))
       : [];
 
     return {
       params: { slug: entry.id },
-      props: { entry, entryJurisdictions, relatedEntries, firstJurisdiction },
+      props: { entry, entryJurisdictions, relatedEntries },
     };
   });
 }
 
-interface Props {
-  entry: CollectionEntry<"directory">;
-  entryJurisdictions: { id: string; name: string }[];
-  relatedEntries: RelatedEntry[];
-  firstJurisdiction: { id: string; name: string } | undefined;
-}
-
-const { entry, entryJurisdictions, relatedEntries, firstJurisdiction } =
-  Astro.props;
+const { entry, entryJurisdictions, relatedEntries } = Astro.props;
+const firstJurisdiction = entryJurisdictions[0];
 const { name, description, services, email, phone, url, logo } = entry.data;
 ---
 
@@ -87,27 +80,17 @@ const { name, description, services, email, phone, url, logo } = entry.data;
     <dl class="entry-meta">
       <dt>Services</dt>
       <dd>
-        {
-          services.map((svc, i) => (
-            <>
-              <a href={`/directory?service=${svc}`}>
-                {SERVICE_LABELS[svc as Service] ?? svc}
-              </a>
-              {i < services.length - 1 ? ", " : ""}
-            </>
-          ))
-        }
+        <InlineLinkList items={services.map((svc) => ({
+          name: SERVICE_LABELS[svc as Service] ?? svc,
+          href: `/directory?service=${svc}`,
+        }))} />
       </dd>
       <dt>{entryJurisdictions.length > 1 ? "States" : "State"}</dt>
       <dd>
-        {
-          entryJurisdictions.map((j, i) => (
-            <>
-              <a href={`/directory?state=${j.id}`}>{j.name}</a>
-              {i < entryJurisdictions.length - 1 ? ", " : ""}
-            </>
-          ))
-        }
+        <InlineLinkList items={entryJurisdictions.map((jurisdiction) => ({
+          name: jurisdiction.name,
+          href: `/directory?state=${jurisdiction.id}`,
+        }))} />
       </dd>
       {
         url && (
@@ -141,13 +124,15 @@ const { name, description, services, email, phone, url, logo } = entry.data;
       }
     </dl>
   </section>
-  {firstJurisdiction && (
-    <RelatedDirectoryEntries
-      entries={relatedEntries}
-      stateId={firstJurisdiction.id}
-      stateName={firstJurisdiction.name}
-    />
-  )}
+  {
+    firstJurisdiction && (
+      <RelatedDirectoryEntries
+        entries={relatedEntries}
+        stateId={firstJurisdiction.id}
+        stateName={firstJurisdiction.name}
+      />
+    )
+  }
 </BaseLayout>
 
 <style>
@@ -172,15 +157,5 @@ const { name, description, services, email, phone, url, logo } = entry.data;
       margin-block-end: var(--space-s);
     }
 
-    a {
-      color: var(--text-color);
-      text-decoration: none;
-
-      @media (hover: hover) {
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
   }
 </style>

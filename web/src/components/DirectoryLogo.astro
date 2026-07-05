@@ -13,17 +13,12 @@ const { logo, name, class: className, ...rest } = Astro.props;
 
 {
   logo.format === "svg" ? (
-    <img
-      class:list={["logo", className]}
-      src={logo.src}
-      alt={`${name} logo`}
-      {...rest}
-    />
+    <img class:list={["logo", className]} src={logo.src} alt="" {...rest} />
   ) : (
     <Image
       class:list={["logo", className]}
       src={logo}
-      alt={`${name} logo`}
+      alt=""
       width={300}
       densities={[1, 2]}
       {...rest}
@@ -33,7 +28,7 @@ const { logo, name, class: className, ...rest } = Astro.props;
 
 <style>
   .logo {
-    width: 100%;
+    width: auto;
     max-width: fit-content;
     mix-blend-mode: multiply;
     filter: grayscale(100%);
