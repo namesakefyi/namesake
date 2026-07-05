@@ -62,7 +62,7 @@ const { name, description, services, email, phone, url, logo } = entry.data;
   <PageHeader
     title={name}
     description={description}
-    annotation="underline"
+    annotation={null}
     breadcrumbs={[{ label: "Directory", href: "/directory" }]}
   >
     {
@@ -80,17 +80,21 @@ const { name, description, services, email, phone, url, logo } = entry.data;
     <dl class="entry-meta">
       <dt>Services</dt>
       <dd>
-        <InlineLinkList items={services.map((svc) => ({
-          name: SERVICE_LABELS[svc as Service] ?? svc,
-          href: `/directory?service=${svc}`,
-        }))} />
+        <InlineLinkList
+          items={services.map((svc) => ({
+            name: SERVICE_LABELS[svc as Service] ?? svc,
+            href: `/directory?service=${svc}`,
+          }))}
+        />
       </dd>
       <dt>{entryJurisdictions.length > 1 ? "States" : "State"}</dt>
       <dd>
-        <InlineLinkList items={entryJurisdictions.map((jurisdiction) => ({
-          name: jurisdiction.name,
-          href: `/directory?state=${jurisdiction.id}`,
-        }))} />
+        <InlineLinkList
+          items={entryJurisdictions.map((jurisdiction) => ({
+            name: jurisdiction.name,
+            href: `/directory?state=${jurisdiction.id}`,
+          }))}
+        />
       </dd>
       {
         url && (
@@ -156,6 +160,5 @@ const { name, description, services, email, phone, url, logo } = entry.data;
       margin: 0;
       margin-block-end: var(--space-s);
     }
-
   }
 </style>
