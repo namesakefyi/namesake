@@ -1,0 +1,41 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  logo: ImageMetadata;
+  name: string;
+  class?: string;
+}
+
+const { logo, name, class: className, ...rest } = Astro.props;
+---
+
+{
+  logo.format === "svg" ? (
+    <img
+      class:list={["logo", className]}
+      src={logo.src}
+      alt={`${name} logo`}
+      {...rest}
+    />
+  ) : (
+    <Image
+      class:list={["logo", className]}
+      src={logo}
+      alt={`${name} logo`}
+      width={300}
+      densities={[1, 2]}
+      {...rest}
+    />
+  )
+}
+
+<style>
+  .logo {
+    width: 100%;
+    max-width: fit-content;
+    mix-blend-mode: multiply;
+    filter: grayscale(100%);
+  }
+</style>

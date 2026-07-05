@@ -1,7 +1,6 @@
 ---
 export const prerender = false;
 
-import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import {
   RiGlobalLine,
@@ -10,6 +9,7 @@ import {
   RiPhoneLine,
   RiVerifiedBadgeFill,
 } from "@remixicon/react";
+import DirectoryLogo from "#components/DirectoryLogo.astro";
 import PageHeader from "#components/PageHeader.astro";
 import { SERVICE_LABELS, SERVICES, type Service } from "#constants/services";
 import BaseLayout from "#layouts/BaseLayout.astro";
@@ -115,12 +115,9 @@ const description =
         <ul class="directory-list-items">
           {contacts.map((c) => (
             <li class="directory-list-item">
-              {c.logo &&
-                (c.logo.format === "svg" ? (
-                  <img class="logo" src={c.logo.src} alt={`${c.name} logo`} />
-                ) : (
-                  <Image class="logo" src={c.logo} alt={`${c.name} logo`} />
-                ))}
+              {c.logo && (
+                <DirectoryLogo logo={c.logo} name={c.name} class="logo" />
+              )}
               <header>
                 {c.officialPartner && (
                   <div class="badge">
@@ -128,7 +125,9 @@ const description =
                     Namesake Partner
                   </div>
                 )}
-                <h2>{c.name}</h2>
+                <h2>
+                  <a href={`/directory/${c.slug}`}>{c.name}</a>
+                </h2>
                 <p class="description">{c.description}</p>
               </header>
               <ul class="services" aria-label="Services">
@@ -374,13 +373,6 @@ const description =
     padding-block-end: var(--space-2xl);
     break-inside: avoid;
 
-    .logo {
-      width: auto;
-      max-height: 64px;
-      mix-blend-mode: multiply;
-      filter: grayscale(100%);
-    }
-
     header {
       display: flex;
       flex-direction: column;
@@ -392,6 +384,17 @@ const description =
       font-size: var(--step-1);
       line-height: var(--line-height-display);
       text-wrap: balance;
+
+      a {
+        color: inherit;
+        text-decoration: none;
+
+        @media (hover: hover) {
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
     }
 
     .description {
@@ -416,6 +419,10 @@ const description =
         width: 1rem;
         height: 1rem;
       }
+    }
+
+    .logo {
+      max-height: 64px;
     }
 
     .services {

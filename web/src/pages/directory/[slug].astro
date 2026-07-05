@@ -1,0 +1,186 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import DirectoryLogo from "#components/DirectoryLogo.astro";
+import PageHeader from "#components/PageHeader.astro";
+import RelatedDirectoryEntries, {
+  type RelatedEntry,
+} from "#components/RelatedDirectoryEntries.astro";
+import { SERVICE_LABELS, type Service } from "#constants/services";
+import BaseLayout from "#layouts/BaseLayout.astro";
+import { formatCleanUrl } from "#lib/utils/formatCleanUrl";
+
+export async function getStaticPaths() {
+  const [entries, jurisdictions] = await Promise.all([
+    getCollection("directory"),
+    getCollection("jurisdictions"),
+  ]);
+  return entries.map((entry) => {
+    const entryJurisdictions = entry.data.jurisdictions
+      .map((ref) => ({
+        id: ref.id,
+        name: jurisdictions.find((j) => j.id === ref.id)?.data.name ?? ref.id,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    const firstJurisdiction = entryJurisdictions[0];
+    const relatedEntries: RelatedEntry[] = firstJurisdiction
+      ? entries
+          .filter(
+            (e) =>
+              e.id !== entry.id &&
+              e.data.jurisdictions.some(
+                (ref) => ref.id === firstJurisdiction.id,
+              ),
+          )
+          .sort((a, b) => {
+            if (a.data.officialPartner !== b.data.officialPartner)
+              return a.data.officialPartner ? -1 : 1;
+            return a.data.name.localeCompare(b.data.name);
+          })
+          .slice(0, 3)
+          .map((e) => ({
+            id: e.id,
+            name: e.data.name,
+            description: e.data.description,
+            logo: e.data.logo,
+          }))
+      : [];
+
+    return {
+      params: { slug: entry.id },
+      props: { entry, entryJurisdictions, relatedEntries, firstJurisdiction },
+    };
+  });
+}
+
+interface Props {
+  entry: CollectionEntry<"directory">;
+  entryJurisdictions: { id: string; name: string }[];
+  relatedEntries: RelatedEntry[];
+  firstJurisdiction: { id: string; name: string } | undefined;
+}
+
+const { entry, entryJurisdictions, relatedEntries, firstJurisdiction } =
+  Astro.props;
+const { name, description, services, email, phone, url, logo } = entry.data;
+---
+
+<BaseLayout title={name} description={description} color="pink">
+  <PageHeader
+    title={name}
+    description={description}
+    annotation="underline"
+    breadcrumbs={[{ label: "Directory", href: "/directory" }]}
+  >
+    {
+      logo && (
+        <DirectoryLogo
+          slot="before-header"
+          class="entry-logo"
+          logo={logo}
+          name={name}
+        />
+      )
+    }
+  </PageHeader>
+  <section class="entry-layout">
+    <dl class="entry-meta">
+      <dt>Services</dt>
+      <dd>
+        {
+          services.map((svc, i) => (
+            <>
+              <a href={`/directory?service=${svc}`}>
+                {SERVICE_LABELS[svc as Service] ?? svc}
+              </a>
+              {i < services.length - 1 ? ", " : ""}
+            </>
+          ))
+        }
+      </dd>
+      <dt>{entryJurisdictions.length > 1 ? "States" : "State"}</dt>
+      <dd>
+        {
+          entryJurisdictions.map((j, i) => (
+            <>
+              <a href={`/directory?state=${j.id}`}>{j.name}</a>
+              {i < entryJurisdictions.length - 1 ? ", " : ""}
+            </>
+          ))
+        }
+      </dd>
+      {
+        url && (
+          <>
+            <dt>Website</dt>
+            <dd>
+              <a href={url}>{formatCleanUrl(url)}</a>
+            </dd>
+          </>
+        )
+      }
+      {
+        email && (
+          <>
+            <dt>Email</dt>
+            <dd>
+              <a href={`mailto:${email}`}>{email}</a>
+            </dd>
+          </>
+        )
+      }
+      {
+        phone && (
+          <>
+            <dt>Phone</dt>
+            <dd>
+              <a href={`tel:${phone}`}>{phone}</a>
+            </dd>
+          </>
+        )
+      }
+    </dl>
+  </section>
+  {firstJurisdiction && (
+    <RelatedDirectoryEntries
+      entries={relatedEntries}
+      stateId={firstJurisdiction.id}
+      stateName={firstJurisdiction.name}
+    />
+  )}
+</BaseLayout>
+
+<style>
+  .entry-logo {
+    max-height: 140px;
+    margin-block-end: var(--space-m);
+  }
+
+  .entry-layout {
+    margin-block-end: var(--space-xl);
+  }
+
+  .entry-meta {
+    margin: 0;
+
+    dt {
+      font-weight: var(--weight-bold);
+    }
+
+    dd {
+      margin: 0;
+      margin-block-end: var(--space-s);
+    }
+
+    a {
+      color: var(--text-color);
+      text-decoration: none;
+
+      @media (hover: hover) {
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+</style>
