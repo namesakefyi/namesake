@@ -19,7 +19,7 @@ const { entries, stateId, heading } = Astro.props;
 
 {
   entries.length > 0 && (
-    <aside class="related">
+    <aside class="related" data-pagefind-ignore>
       <h2>
         <a href={`/directory?state=${stateId}`}>{heading}</a>
       </h2>
