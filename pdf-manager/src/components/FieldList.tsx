@@ -211,6 +211,7 @@ export function FieldList({
     height: number;
   } | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const excludedListRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const focusList = () => setTimeout(() => listRef.current?.focus(), 0);
@@ -250,7 +251,12 @@ export function FieldList({
   // Capture phase so Delete/Backspace/Enter reach us before RAC's type-ahead and activation handlers.
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
-      if (!listRef.current?.contains(document.activeElement)) return;
+      const activeElement = document.activeElement;
+      const listHasFocus =
+        activeElement &&
+        (listRef.current?.contains(activeElement) ||
+          excludedListRef.current?.contains(activeElement));
+      if (!listHasFocus) return;
       if (renamingField) return;
       if ((e.key === "Delete" || e.key === "Backspace") && highlightedField) {
         e.preventDefault();
@@ -316,6 +322,7 @@ export function FieldList({
           <div className="field-excluded-group">
             <div className="field-section-label">Excluded</div>
             <ListBox
+              ref={excludedListRef}
               aria-label="Excluded fields"
               className="field-list field-list-excluded"
               selectionMode="single"
