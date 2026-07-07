@@ -16,6 +16,7 @@ export const PDF_IDS = [
   "pc8.1-change-of-name",
   "background-check-authorization-of-release",
   "r116-applicant-affidavit-in-support-of-amendment-of-a-birth-certificate-for-sex",
+  "ucsnc1-name-change-and-or-sex-designation-change-petition-for-individual-adult",
 ] as const;
 
 export type PDFId = (typeof PDF_IDS)[number];
