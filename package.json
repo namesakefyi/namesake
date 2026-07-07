@@ -5,9 +5,14 @@
   "engines": {
     "node": ">=24.0.0"
   },
-  "packageManager": "pnpm@11.5.3",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.10.0",
+      "onFail": "download"
+    }
+  },
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
     "dev": "pnpm --filter @namesake/web dev",
     "dev:docs": "pnpm --filter @namesake/docs dev",
     "dev:pdf": "pnpm --filter @namesake/pdf-manager dev",
