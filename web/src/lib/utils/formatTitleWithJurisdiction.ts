@@ -1,4 +1,4 @@
-import type { JurisdictionId } from "#constants/jurisdictions.ts";
+import type { JurisdictionName } from "#constants/jurisdictions.ts";
 
 /**
  * Given a title and jurisdiction
@@ -10,7 +10,7 @@ import type { JurisdictionId } from "#constants/jurisdictions.ts";
  */
 export function formatTitleWithJurisdiction(
   title: string,
-  jurisdiction?: JurisdictionId,
+  jurisdiction?: JurisdictionName,
 ) {
   return `${jurisdiction ? `${jurisdiction} ` : ""}${title}`;
 }

@@ -73,6 +73,7 @@ export const JURISDICTIONS = {
 >;
 
 export type JurisdictionId = keyof typeof JURISDICTIONS;
+export type JurisdictionName = (typeof JURISDICTIONS)[JurisdictionId]["name"];
 
 export const JURISDICTION_OPTIONS = Object.entries(JURISDICTIONS).map(
   ([id, jurisdiction]) => ({
