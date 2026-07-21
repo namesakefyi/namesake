@@ -21,9 +21,10 @@ const jurisdiction = guide.data.jurisdiction
   ? await getEntry(guide.data.jurisdiction)
   : null;
 
-const title = jurisdiction
-  ? formatTitleWithJurisdiction(guide.data.title, jurisdiction.data.name)
-  : guide.data.title;
+const title = formatTitleWithJurisdiction(
+  guide.data.title,
+  jurisdiction?.data.name,
+);
 ---
 
 <ProseLayout

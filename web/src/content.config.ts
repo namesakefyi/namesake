@@ -5,7 +5,7 @@ import { ANNOTATION_TYPES } from "./constants/annotations";
 import { CATEGORIES } from "./constants/categories";
 import { COLOR_KEYS } from "./constants/colors";
 import type { FormConfig } from "./constants/forms";
-import { JURISDICTIONS } from "./constants/jurisdictions";
+import { JURISDICTIONS, type JurisdictionId } from "./constants/jurisdictions";
 import type { PDFDefinition } from "./constants/pdf";
 import { SERVICES } from "./constants/services";
 
@@ -120,7 +120,7 @@ const jurisdictions = defineCollection({
       namesakeSupport: jurisdiction.namesakeSupport,
     })),
   schema: z.object({
-    name: z.string(),
+    name: z.string<JurisdictionId>(),
     territory: z.boolean(),
     namesakeSupport: z.enum(["full", "prioritized", "none"]),
   }),

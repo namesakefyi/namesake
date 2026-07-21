@@ -1,3 +1,5 @@
+import type { JurisdictionId } from "#constants/jurisdictions.ts";
+
 /**
  * Given a title and jurisdiction
  * return the full string to display in the page title.
@@ -8,7 +10,7 @@
  */
 export function formatTitleWithJurisdiction(
   title: string,
-  jurisdiction: string,
+  jurisdiction?: JurisdictionId,
 ) {
-  return `${jurisdiction} ${title}`;
+  return `${jurisdiction ? `${jurisdiction} ` : ""}${title}`;
 }
