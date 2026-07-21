@@ -5,6 +5,7 @@ import GuideFooter from "#components/GuideFooter.astro";
 import StubBanner from "#components/StubBanner.astro";
 import TableOfContents from "#components/TableOfContents.astro";
 import ProseLayout from "#layouts/ProseLayout.astro";
+import { formatTitleWithJurisdiction } from "#lib/utils/formatTitleWithJurisdiction.ts";
 
 export async function getStaticPaths() {
   const guides = await getCollection("guides", ({ data }) => !data.unlisted);
@@ -21,7 +22,7 @@ const jurisdiction = guide.data.jurisdiction
   : null;
 
 const title = jurisdiction
-  ? `${jurisdiction.data.name}: ${guide.data.title}`
+  ? formatTitleWithJurisdiction(guide.data.title, jurisdiction.data.name)
   : guide.data.title;
 ---
 
