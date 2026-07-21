@@ -20,14 +20,13 @@ const jurisdiction = guide.data.jurisdiction
   ? await getEntry(guide.data.jurisdiction)
   : null;
 
-const searchTitle = jurisdiction
+const title = jurisdiction
   ? `${jurisdiction.data.name}: ${guide.data.title}`
   : guide.data.title;
 ---
 
 <ProseLayout
-  title={guide.data.title}
-  searchTitle={searchTitle}
+  title={title}
   description={guide.data.description}
   annotation="box"
   breadcrumbs={[
