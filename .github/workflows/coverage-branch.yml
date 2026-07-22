@@ -86,7 +86,7 @@ jobs:
 
       - name: Report coverage and comparison
         if: always() && hashFiles('coverage-main/coverage-summary.json') != ''
-        uses: davelosert/vitest-coverage-report-action@v2.12.1
+        uses: davelosert/vitest-coverage-report-action@v2.12.2
         with:
           vite-config-path: web/vitest.config.ts
           json-summary-compare-path: coverage-main/coverage-summary.json
@@ -95,6 +95,6 @@ jobs:
         # if coverage from main is not available
       - name: Report coverage
         if: always() && hashFiles('coverage-main/coverage-summary.json') == ''
-        uses: davelosert/vitest-coverage-report-action@v2.12.1
+        uses: davelosert/vitest-coverage-report-action@v2.12.2
         with:
           vite-config-path: web/vitest.config.ts
