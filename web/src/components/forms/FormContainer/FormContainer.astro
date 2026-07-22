@@ -8,15 +8,15 @@ interface Props {
   inline?: boolean;
 }
 
-const { slug, inline = false } = Astro.props;
-const initialPdfs = await getFormPdfMetadata(slug);
+const { slug, inline = true } = Astro.props;
+const pdfMetadata = await getFormPdfMetadata(slug);
 ---
 
 <ReactFormContainer
   client:load
   slug={slug}
   inline={inline}
-  initialPdfs={initialPdfs}
+  pdfMetadata={pdfMetadata}
 >
   <slot />
 </ReactFormContainer>
