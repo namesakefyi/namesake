@@ -1,6 +1,7 @@
 import { RiDownloadLine, RiRestartLine } from "@remixicon/react";
 import { useEffect, useState } from "react";
 import { clearFormProgress } from "#db/database";
+import { Banner } from "../../common/Banner";
 import { Button } from "../../common/Button";
 import { Heading } from "../../common/Content/Content";
 import { DeleteFormDataModal } from "../DeleteFormDataModal";
@@ -12,6 +13,7 @@ export interface FormCompleteStepProps {
   slug: FormSlug;
   title: string;
   onRedownload: (e: React.SubmitEvent<HTMLFormElement>) => void | Promise<void>;
+  completionMessage?: string;
   inline?: boolean;
   headingLevel?: 1 | 2 | 3;
 }
@@ -20,6 +22,7 @@ export function FormCompleteStep({
   slug,
   title,
   onRedownload,
+  completionMessage,
   inline = false,
   headingLevel = 1,
 }: FormCompleteStepProps) {
@@ -63,6 +66,7 @@ export function FormCompleteStep({
         </p>
       </header>
       <div className="form-complete-step-content">
+        {completionMessage && <Banner>{completionMessage}</Banner>}
         <FormFeedback slug={slug} />
         <DeleteFormDataModal />
         <div className="form-complete-actions">

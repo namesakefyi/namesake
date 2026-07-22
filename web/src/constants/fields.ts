@@ -690,6 +690,238 @@ export const FIELD_DEFS = [
     label: "Waive fees?",
     type: "boolean",
   },
+  {
+    // Specific to LIC100 in MA
+    name: "stateIdType",
+    label: "ID type",
+    type: "string",
+    options: {
+      realId: "REAL ID",
+      standardId: "Standard ID",
+    },
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "stateIdDocumentType",
+    label: "Document to issue",
+    type: "string",
+    options: {
+      learnersPermit: "Learner's permit",
+      driversLicense: "Driver's license",
+      massachusettsIdCard: "Massachusetts ID card",
+    },
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "driversLicenseClass",
+    label: "Permit or license class",
+    type: "string",
+    options: {
+      passenger: "Passenger (Class D)",
+      motorcycle: "Motorcycle (Class M)",
+      both: "Both (Class D/M)",
+    },
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "nameSuffix",
+    label: "Name suffix",
+    type: "string",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "currentMassachusettsCredentialNumber",
+    label: "Current Massachusetts credential number",
+    type: "string",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "shouldChangeAddress",
+    label: "Change address?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "shouldChangeDateOfBirth",
+    label: "Change date of birth?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "shouldChangeGenderMarker",
+    label: "Change gender marker?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "shouldChangeHeight",
+    label: "Change height?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "shouldChangeEyeColor",
+    label: "Change eye color?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "phoneType",
+    label: "Phone type",
+    type: "string",
+    options: { cell: "Cell", home: "Home", work: "Work" },
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "hasEmergencyContact",
+    label: "Include an emergency contact?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "emergencyContactEmail",
+    label: "Emergency contact email",
+    type: "string",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "emergencyContactName",
+    label: "Emergency contact name",
+    type: "string",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "emergencyContactPhoneType",
+    label: "Emergency contact phone type",
+    type: "string",
+    options: { cell: "Cell", home: "Home", work: "Work" },
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "emergencyContactPhoneNumber",
+    label: "Emergency contact phone number",
+    type: "string",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "eyeColor",
+    label: "Eye color",
+    type: "string",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "heightFeet",
+    label: "Height (feet)",
+    type: "string",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "heightInches",
+    label: "Height (inches)",
+    type: "string",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "isOrganDonor",
+    label: "Organ and tissue donor?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "isActiveDutyMilitary",
+    label: "Active-duty military member?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "isVeteran",
+    label: "Veteran?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "shouldAddVeteranDesignation",
+    label: "Add veteran designation?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "militaryBranch",
+    label: "Military branch",
+    type: "string",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "isUSCitizen",
+    label: "U.S. citizen?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "hasOtherJurisdictionCredential",
+    label: "Held a license in another jurisdiction in the past 10 years?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "otherCredentialJurisdiction",
+    label: "Other credential jurisdiction",
+    type: "string",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "otherCredentialClass",
+    label: "Other credential class",
+    type: "string",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "otherCredentialNumber",
+    label: "Other credential number",
+    type: "string",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "currentOtherCredentials",
+    label: "Other current licenses or permits",
+    type: "string",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "hasDrivingImpairment",
+    label: "Impairment that may affect safe driving?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "takesDrivingMedication",
+    label: "Medication that may affect safe driving?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "hasSuspendedLicense",
+    label: "License or driving right suspended or revoked?",
+    type: "boolean",
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "consentProviderType",
+    label: "Person giving consent",
+    type: "string",
+    options: {
+      parent: "Parent",
+      legalGuardian: "Legal guardian",
+      departmentOfChildrenAndFamilies: "Department of Children and Families",
+      boardingSchoolHeadmaster: "Boarding school headmaster",
+    },
+  },
+  {
+    // Specific to LIC100 in MA
+    name: "guardianAddress",
+    label: "Parent or guardian address",
+    type: "string",
+  },
 ] as const;
 
 export type FieldName = (typeof FIELD_DEFS)[number]["name"];

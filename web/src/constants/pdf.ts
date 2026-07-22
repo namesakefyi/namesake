@@ -1,7 +1,7 @@
 import type { FormData } from "./fields";
 import type { JurisdictionId } from "./jurisdictions";
 
-/** Matches libpdf's FieldValue, plus undefined for omitted fields. */
+/** Matches libpdf's FieldValue, plus undefined for omitted fields. Arrays are list-box values. */
 export type PDFFieldValue = string | boolean | string[] | null | undefined;
 
 /** Valid field types that can appear in a generated pdfSchema. */
@@ -12,6 +12,7 @@ export const PDF_IDS = [
   "cjp25-petition-to-change-name-of-minor",
   "cjp27-petition-to-change-name-of-adult",
   "cjp34-cori-and-wms-release-request",
+  "lic100-drivers-license-learners-permit-or-id-card",
   "ss5-application-for-social-security-card",
   "pc8.1-change-of-name",
   "background-check-authorization-of-release",
@@ -69,6 +70,9 @@ export interface PDFDefinition<TPdfFieldName extends string = string> {
    * ```
    */
   resolver: PDFResolver<TPdfFieldName>;
+
+  /** Draw selected checkbox and radio values into page content before merging. */
+  drawFormControlValues?: boolean;
 }
 
 export type PDFResolver<

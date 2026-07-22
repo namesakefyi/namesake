@@ -1,4 +1,6 @@
 import userEvent from "@testing-library/user-event";
+import { useState } from "react";
+import { useFormContext } from "react-hook-form";
 import { describe, expect, it } from "vitest";
 import { renderWithFormProvider, screen } from "../test-utils";
 import { RadioGroupField } from "./RadioGroupField";
@@ -8,6 +10,23 @@ const mockOptions = [
   { label: "Option 2", value: "option2" },
   { label: "Option 3", value: "option3" },
 ];
+
+function FieldValue() {
+  const { getValues } = useFormContext();
+  const [value, setValue] = useState("");
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setValue(JSON.stringify(getValues("newGender")))}
+      >
+        Read field value
+      </button>
+      <output data-testid="field-value">{value}</output>
+    </>
+  );
+}
 
 describe("RadioGroupField", () => {
   it("renders radio group with correct label", () => {
@@ -38,6 +57,23 @@ describe("RadioGroupField", () => {
       const radioOption = screen.getByText(option.label);
       expect(radioOption).toBeInTheDocument();
     }
+  });
+
+  it("initializes an unanswered radio group with null", async () => {
+    const user = userEvent.setup();
+    renderWithFormProvider(
+      <>
+        <RadioGroupField
+          name="newGender"
+          label="Test Label"
+          options={mockOptions}
+        />
+        <FieldValue />
+      </>,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Read field value" }));
+    expect(screen.getByTestId("field-value")).toHaveTextContent("null");
   });
 
   it("allows selecting a radio option", async () => {

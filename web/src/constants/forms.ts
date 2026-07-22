@@ -11,6 +11,7 @@ export const FORM_SLUGS = [
   "court-order-ri",
   "social-security",
   "birth-certificate-affidavit-ma",
+  "state-id-ma",
 ] as const;
 
 export type FormSlug = (typeof FORM_SLUGS)[number];
@@ -75,6 +76,8 @@ export interface FormConfig {
   pdfs: readonly FormPdfConfig[];
   /** Title for the downloaded PDF package */
   downloadTitle: string;
+  /** Optional message shown after the form has downloaded */
+  completionMessage?: string;
   /**
    * Instructions shown on the cover page of the downloaded packet.
    * Plain string = always included.

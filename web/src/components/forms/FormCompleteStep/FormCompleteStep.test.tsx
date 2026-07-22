@@ -39,6 +39,18 @@ describe("FormCompleteStep", () => {
       expect(screen.getByText(/Massachusetts Court Order/)).toBeInTheDocument();
     });
 
+    it("renders a form-specific completion message", () => {
+      render(
+        <FormCompleteStep
+          {...defaultProps}
+          completionMessage="Remember to sign the application."
+        />,
+      );
+      expect(
+        screen.getByText("Remember to sign the application."),
+      ).toBeInTheDocument();
+    });
+
     it("renders a redownload button", () => {
       render(<FormCompleteStep {...defaultProps} />);
       expect(
