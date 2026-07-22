@@ -286,9 +286,6 @@ function getFillForSupportLevel(supportLevel: string): string {
       const hoveredState = select(this as SVGPathElement);
       hoveredState.attr("data-hovered", "true");
 
-      const node = hoveredState.node() as SVGPathElement;
-      if (node && node.parentNode) node.parentNode.appendChild(node);
-
       tooltip
         .attr("data-visible", "true")
         .html(`<strong>${stateName}</strong><br/>${supportText}`);
