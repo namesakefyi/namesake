@@ -6,7 +6,7 @@ category: court-order
 ---
 
 import Costs from "#components/Costs.astro"
-import { FormContainer } from "#components/forms/FormContainer/index.ts"
+import FormContainer from "#components/forms/FormContainer/FormContainer.astro"
 import { Content as NotarySnippet } from "#content/snippets/notaries.md"
 
 ## Get prepared
@@ -43,7 +43,7 @@ Birth certificates that are not written in English must include a written transl
 
 Namesake will walk you through all of the questions required to fill out forms for the court. Once finished, a PDF will be downloaded for you to review and sign.
 
-<FormContainer client:load slug="court-order-ma" inline />
+<FormContainer slug="court-order-ma" inline />
 
 ## Review and print documents
 
@@ -68,7 +68,7 @@ An Affidavit of Indigency is a fancy way of saying fee waiver. If you qualify by
 
 </details>
 
-<FormContainer client:load slug="affidavit-of-indigency-ma" inline />
+<FormContainer slug="affidavit-of-indigency-ma" inline />
 
 ## File documents
 

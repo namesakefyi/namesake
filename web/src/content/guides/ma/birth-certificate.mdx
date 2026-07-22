@@ -6,7 +6,7 @@ category: birth-certificate
 ---
 
 import Costs from "#components/Costs.astro";
-import { FormContainer } from "#components/forms/FormContainer/index.ts";
+import FormContainer from "#components/forms/FormContainer/FormContainer.astro";
 
 ## Get prepared
 
@@ -29,7 +29,7 @@ In most cases, no. A birth certificate matching your current name and gender mar
 
 Once finished, a PDF will be downloaded for you to review and sign.
 
-<FormContainer client:load slug="birth-certificate-affidavit-ma" inline />
+<FormContainer slug="birth-certificate-affidavit-ma" inline />
 
 ## Gather funds or waive fees
 

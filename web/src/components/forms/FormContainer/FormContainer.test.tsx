@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FormConfig } from "#constants/forms";
 import * as db from "#db/database";
+import { getFormPdfMetadata } from "#lib/forms/getFormPdfMetadata";
 import type { Step } from "#lib/forms/types";
 import { FormStep } from "../FormStep/FormStep";
 import { FormContainer } from "./FormContainer";
@@ -93,6 +94,26 @@ describe("FormContainer", () => {
       expect(
         await screen.findByRole("button", { name: "Start" }),
       ).toBeInTheDocument();
+    });
+
+    it("renders initial PDF metadata without loading it on the client", async () => {
+      render(
+        <FormContainer
+          slug="court-order-ma"
+          initialPdfs={[
+            {
+              pdfId: "cjp27-petition-to-change-name-of-adult",
+              title: "Petition to Change Name of Adult",
+              code: "CJP-27",
+            },
+          ]}
+        />,
+      );
+
+      expect(
+        await screen.findByText("Petition to Change Name of Adult (CJP-27)"),
+      ).toBeInTheDocument();
+      expect(getFormPdfMetadata).not.toHaveBeenCalled();
     });
 
     it("renders a loading spinner while saved progress is being fetched", async () => {

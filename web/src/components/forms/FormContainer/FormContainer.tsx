@@ -23,6 +23,9 @@ export interface FormContainerProps {
   /** Render inline within a page rather than as a full-page experience. */
   inline?: boolean;
 
+  /** PDF metadata rendered by Astro and passed into hydrated form islands. */
+  initialPdfs?: FormPdfMetadata[];
+
   /** Optional content to render on the title step (e.g. a <Banner>). */
   children?: React.ReactNode;
 }
@@ -30,16 +33,18 @@ export interface FormContainerProps {
 export function FormContainer({
   slug,
   inline = false,
+  initialPdfs,
   children,
 }: FormContainerProps) {
   const config = getFormConfig(slug);
   if (!config) throw new Error(`No form config found for slug: ${slug}`);
   const { title, description, costs, steps } = config;
 
-  const [pdfs, setPdfs] = useState<FormPdfMetadata[]>([]);
+  const [pdfs, setPdfs] = useState<FormPdfMetadata[]>(initialPdfs ?? []);
   useEffect(() => {
+    if (initialPdfs && initialPdfs.length > 0) return;
     getFormPdfMetadata(slug).then(setPdfs);
-  }, [slug]);
+  }, [slug, initialPdfs]);
   const form = useFormData(config);
   const onSubmit = createFormSubmitHandler(config, form);
 

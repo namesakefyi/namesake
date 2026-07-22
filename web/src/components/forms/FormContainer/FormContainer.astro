@@ -1,0 +1,22 @@
+---
+import type { FormSlug } from "#constants/forms";
+import { getFormPdfMetadata } from "#lib/forms/getFormPdfMetadata";
+import { FormContainer as ReactFormContainer } from "./FormContainer";
+
+interface Props {
+  slug: FormSlug;
+  inline?: boolean;
+}
+
+const { slug, inline = false } = Astro.props;
+const initialPdfs = await getFormPdfMetadata(slug);
+---
+
+<ReactFormContainer
+  client:load
+  slug={slug}
+  inline={inline}
+  initialPdfs={initialPdfs}
+>
+  <slot />
+</ReactFormContainer>
