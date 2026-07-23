@@ -28,7 +28,14 @@ It also helps to have some basic familiarity with the command line, Git, HTML, C
 
    Click the "Fork" button on the top right of the [`namesake` repository](https://github.com/namesakefyi/namesake/) to create your own copy of the repository.
 
+   <details>
+     <summary>Why do I have to do this?</summary>
+     The `namesakefyi/namesake` repository only allows people on the Namesake core team to create new branches and push changes. In order to propose changes, **you need to make edits on your _own_ copy** ("fork") of the repository. Once you've made your changes, you propose merging them back into the main repository with a **pull request**.
+   </details>
+
 2. Clone your fork.
+
+   Open your terminal and paste this line (updating `MY_USERNAME` to your own GitHub username), then press `enter` to run it:
 
    ```shell
    git clone https://github.com/MY_USERNAME/namesake.git
@@ -36,21 +43,23 @@ It also helps to have some basic familiarity with the command line, Git, HTML, C
 
 </Steps>
 
-You should now have a `namesake` folder on your computer.
+You should now have a `namesake` folder on your computer. Open the folder in your code editor and take a look around!
 
 ## Start the development server
 
 <Steps>
 
-1. From the `namesake` directory, install packages.
+1. Navigate to the `namesake` directory from your terminal, then install packages.
 
    ```bash
+   cd namesake
    pnpm install
    ```
 
-   :::tip{icon="pnpm"}
-   If you get **`error command not found: pnpm`**, [make sure pnpm is installed](https://pnpm.io/installation).
-   :::
+   <details>
+     <summary>I'm getting `error command not found: pnpm`</summary>
+     You need to install `pnpm`, the package manager we use. Follow the `pnpm` [installation guide](https://pnpm.io/installation). If you get stuck, reach out on Discord!
+   </details>
 
    If this is your first time installing packages, it may take awhile to download everything. 
 
@@ -66,7 +75,7 @@ You should now have a `namesake` folder on your computer.
 
 </Steps>
 
-You should now be able to see the Namesake website at [http://localhost:4321](http://localhost:4321)! Changes will automatically refresh in your browser as you make edits to the code.
+You should now be able to see the Namesake website at [http://localhost:4321](http://localhost:4321)! Changes will automatically refresh in your browser as you edit and save the code.
 
 Leave this process running in the background while you work on the codebase. To stop the server, press `Ctrl + C` in the terminal.
 
