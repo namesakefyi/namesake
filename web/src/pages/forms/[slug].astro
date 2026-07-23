@@ -1,8 +1,8 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
+import FormContainer from "#components/forms/FormContainer/FormContainer.astro";
 import type { FormSlug } from "#constants/forms";
 import BaseLayout from "#layouts/BaseLayout.astro";
-import { FormContainer } from "../../components/forms/FormContainer";
 import { getFormConfig } from "../../lib/forms/getFormConfig";
 
 export async function getStaticPaths() {
@@ -29,5 +29,5 @@ if (!config) return Astro.redirect("/404");
     alt: config.title,
   }}
 >
-  <FormContainer client:load slug={form.id as FormSlug} />
+  <FormContainer slug={form.id as FormSlug} inline={false} />
 </BaseLayout>

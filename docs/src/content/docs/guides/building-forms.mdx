@@ -152,9 +152,11 @@ In your guide, render `FormContainer` with your form's `slug`:
 ```mdx
 // court-order.mdx
 
+import FormContainer from "#components/forms/FormContainer/FormContainer.astro"
+
 ## Fill out forms
 
-<FormContainer client:load slug="court-order-ma" inline />
+<FormContainer slug="court-order-ma" />
 ```
 
 ## Connect PDF fields
