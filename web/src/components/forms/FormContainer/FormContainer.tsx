@@ -170,6 +170,7 @@ export function FormContainer({
             title={title}
             slug={slug}
             onRedownload={onSubmit}
+            completionMessage={config.completionMessage}
             inline={inline}
             headingLevel={inline ? 2 : 1}
           />
@@ -184,6 +185,7 @@ export function FormContainer({
     pdfs,
     title,
     description,
+    config.completionMessage,
     children,
     slug,
     totalSteps,

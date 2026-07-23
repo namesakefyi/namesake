@@ -6,6 +6,7 @@ category: state-id
 ---
 
 import Costs from "#components/Costs.astro"
+import { FormContainer } from "#components/forms/FormContainer/index.ts"
 
 ## Get prepared
 
@@ -13,9 +14,9 @@ To update your ID, you will need a completed **court order** certifying your nam
 
 ## Fill out forms
 
-Fill out required documents for the RMV.
+Namesake will walk you through the questions required to fill out the RMV application. Once finished, a PDF will be downloaded for you to review and sign.
 
-[Complete application](https://www.mass.gov/doc/license-and-id-application-0/download)
+<FormContainer client:load slug="state-id-ma" inline />
 
 <details>
 <summary>Can I update my ID or license online?</summary>
@@ -39,9 +40,9 @@ Name change requests must be completed at an RMV Service Center. You must [**sch
 
 ## Show up to your appointment
 
-<Costs costs={[{"title":"Massachusetts ID Card Fee","amount":25,"required":"required"}]} />
+<Costs costs={[{"title":"Driver's license/ID amendment fee","amount":25,"required":"required"}]} />
 
-Bring your completed application to your appointment. You'll need to bring your proof of name change as well as your new social security card. You may also need proof of residency, such as a recent bill or lease.
+Bring your completed application to your appointment. You'll need to bring your proof of name change as well as your new social security card. You may also need proof of residency, such as a recent bill or lease. A REAL ID requires two documents proving Massachusetts residency; a Standard ID requires one.
 
 The RMV will take your photo and get your new signature.
 
