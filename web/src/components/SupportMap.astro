@@ -159,6 +159,18 @@ function getFillForSupportLevel(supportLevel: string): string {
           />
         ))
       }
+      <g class="state-outlines" aria-hidden="true">
+        {
+          stateFeatures.map((feature) => (
+            <path
+              class="state-outline"
+              d={path(feature)}
+              data-support={feature.properties.supportLevel}
+              data-name={feature.properties.name}
+            />
+          ))
+        }
+      </g>
     </svg>
     <figcaption class="legend">
       {
@@ -215,6 +227,7 @@ function getFillForSupportLevel(supportLevel: string): string {
   const container = select(".map-container");
   const svg = container.select("svg");
   const states = svg.selectAll("path.state");
+  const stateOutlines = svg.selectAll("path.state-outline");
   const legendItems = selectAll(".legend-item");
   const tooltip = container.select(".map-tooltip");
 
@@ -261,6 +274,7 @@ function getFillForSupportLevel(supportLevel: string): string {
 
   function clearHoverState() {
     states.attr("data-hovered", null);
+    stateOutlines.attr("data-hovered", null);
     tooltip.attr("data-visible", null);
   }
 
@@ -283,11 +297,16 @@ function getFillForSupportLevel(supportLevel: string): string {
         textMap[supportLevel as keyof typeof textMap] || "No Support Yet";
 
       states.attr("data-hovered", null);
+      stateOutlines.attr("data-hovered", null);
       const hoveredState = select(this as SVGPathElement);
       hoveredState.attr("data-hovered", "true");
-
-      const node = hoveredState.node() as SVGPathElement;
-      if (node && node.parentNode) node.parentNode.appendChild(node);
+      stateOutlines
+        .filter(function () {
+          return (
+            (this as SVGPathElement).getAttribute("data-name") === stateName
+          );
+        })
+        .attr("data-hovered", "true");
 
       tooltip
         .attr("data-visible", "true")
@@ -298,7 +317,17 @@ function getFillForSupportLevel(supportLevel: string): string {
       positionTooltip(event);
     })
     .on("mouseleave", function () {
+      const stateName =
+        (this as SVGPathElement).getAttribute("data-name") || "";
+
       select(this as SVGPathElement).attr("data-hovered", null);
+      stateOutlines
+        .filter(function () {
+          return (
+            (this as SVGPathElement).getAttribute("data-name") === stateName
+          );
+        })
+        .attr("data-hovered", null);
       tooltip.attr("data-visible", null);
     });
 
@@ -323,6 +352,15 @@ function getFillForSupportLevel(supportLevel: string): string {
         .attr("data-dimmed", null)
         .attr("data-hovered", "true");
 
+      stateOutlines
+        .filter(function () {
+          return (
+            (this as SVGPathElement).getAttribute("data-support") ===
+            hoveredType
+          );
+        })
+        .attr("data-hovered", "true");
+
       legendItems
         .filter(function () {
           return (
@@ -333,6 +371,7 @@ function getFillForSupportLevel(supportLevel: string): string {
     })
     .on("mouseout", function () {
       states.attr("data-dimmed", null).attr("data-hovered", null);
+      stateOutlines.attr("data-hovered", null);
       legendItems.attr("data-dimmed", null);
     });
 </script>
@@ -386,13 +425,22 @@ function getFillForSupportLevel(supportLevel: string): string {
     vector-effect: non-scaling-stroke;
     cursor: pointer;
 
-    &[data-hovered="true"] {
-      stroke: var(--text-color);
-      stroke-width: 2;
-    }
-
     &[data-dimmed="true"] {
       opacity: 0.2;
+    }
+  }
+
+  .state-outline {
+    fill: none;
+    stroke: transparent;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+    pointer-events: none;
+
+    &[data-hovered="true"] {
+      stroke: var(--text-color);
     }
   }
 
