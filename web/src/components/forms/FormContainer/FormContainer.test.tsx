@@ -18,9 +18,6 @@ vi.mock("#db/database", () => ({
 }));
 
 vi.mock("#lib/forms/getFormConfig");
-vi.mock("#lib/forms/getFormPdfMetadata", () => ({
-  getFormPdfMetadata: vi.fn().mockResolvedValue([]),
-}));
 
 import { getFormConfig } from "#lib/forms/getFormConfig";
 
@@ -92,6 +89,25 @@ describe("FormContainer", () => {
       render(<FormContainer slug="court-order-ma" />);
       expect(
         await screen.findByRole("button", { name: "Start" }),
+      ).toBeInTheDocument();
+    });
+
+    it("renders PDF metadata provided by the Astro wrapper", async () => {
+      render(
+        <FormContainer
+          slug="court-order-ma"
+          pdfMetadata={[
+            {
+              pdfId: "cjp27-petition-to-change-name-of-adult",
+              title: "Petition to Change Name of Adult",
+              code: "CJP-27",
+            },
+          ]}
+        />,
+      );
+
+      expect(
+        await screen.findByText("Petition to Change Name of Adult (CJP-27)"),
       ).toBeInTheDocument();
     });
 
