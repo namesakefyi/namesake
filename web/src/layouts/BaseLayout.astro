@@ -46,12 +46,6 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
       import * as Fathom from "fathom-client";
       Fathom.load("GQAJEJLZ");
     </script>
-    <script>
-      window.addEventListener("vite:preloadError", (event) => {
-        event.preventDefault();
-        window.location.reload();
-      });
-    </script>
     <Font
       cssVariable="--font-sans"
       preload={[
