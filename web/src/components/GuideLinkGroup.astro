@@ -1,5 +1,5 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import { type CollectionEntry, render } from "astro:content";
 
 interface Props {
   guides: CollectionEntry<"guides">[];
@@ -8,13 +8,31 @@ interface Props {
 }
 
 const { guides, title, titleHref } = Astro.props;
+
+const formatter = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "medium",
+  timeZone: "UTC",
+});
+
+const guideLinks = await Promise.all(
+  guides.map(async (guide) => {
+    const { remarkPluginFrontmatter } = await render(guide);
+    const lastModified = remarkPluginFrontmatter.lastModified as string;
+
+    return {
+      guide,
+      lastModified,
+      formattedDate: formatter.format(new Date(lastModified)),
+    };
+  }),
+);
 ---
 
 <section class="guide-link-group">
   {title && <h2>{titleHref ? <a href={titleHref}>{title}</a> : title}</h2>}
   <ul>
     {
-      guides.map((guide) => (
+      guideLinks.map(({ guide, lastModified, formattedDate }) => (
         <li>
           <a
             href={`/guides/${guide.id}`}
@@ -22,6 +40,9 @@ const { guides, title, titleHref } = Astro.props;
           >
             {guide.data.title}
           </a>
+          <small>
+            Last modified <time datetime={lastModified}>{formattedDate}</time>
+          </small>
         </li>
       ))
     }
@@ -46,6 +67,20 @@ const { guides, title, titleHref } = Astro.props;
     flex-direction: column;
     gap: var(--space-xs);
     font-size: var(--step-1);
+  }
+
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    column-gap: var(--space-xs);
+  }
+
+  small {
+    flex-shrink: 0;
+    font-size: var(--step--2);
+    color: var(--text-color-muted);
   }
 
   a {
