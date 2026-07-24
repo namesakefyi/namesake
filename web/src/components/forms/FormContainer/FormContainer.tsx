@@ -1,12 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { FormProvider } from "react-hook-form";
 import type { FormSlug } from "#constants/forms";
 import { createFormSubmitHandler } from "#lib/forms/createFormSubmitHandler";
 import { getFormConfig } from "#lib/forms/getFormConfig";
-import {
-  type FormPdfMetadata,
-  getFormPdfMetadata,
-} from "#lib/forms/getFormPdfMetadata";
+import type { FormPdfMetadata } from "#lib/forms/getFormPdfMetadata";
 import { useFormData } from "#lib/forms/useFormData";
 import { useFormState } from "#lib/forms/useFormState";
 import { ProgressCircle } from "../../common/ProgressCircle";
@@ -23,6 +20,9 @@ export interface FormContainerProps {
   /** Render inline within a page rather than as a full-page experience. */
   inline?: boolean;
 
+  /** PDF metadata rendered by Astro and passed into hydrated form islands. */
+  pdfMetadata?: FormPdfMetadata[];
+
   /** Optional content to render on the title step (e.g. a <Banner>). */
   children?: React.ReactNode;
 }
@@ -30,16 +30,13 @@ export interface FormContainerProps {
 export function FormContainer({
   slug,
   inline = false,
+  pdfMetadata = [],
   children,
 }: FormContainerProps) {
   const config = getFormConfig(slug);
   if (!config) throw new Error(`No form config found for slug: ${slug}`);
   const { title, description, costs, steps } = config;
 
-  const [pdfs, setPdfs] = useState<FormPdfMetadata[]>([]);
-  useEffect(() => {
-    getFormPdfMetadata(slug).then(setPdfs);
-  }, [slug]);
   const form = useFormData(config);
   const onSubmit = createFormSubmitHandler(config, form);
 
@@ -147,7 +144,7 @@ export function FormContainer({
           <FormTitleStep
             title={title}
             description={description}
-            pdfs={pdfs ?? []}
+            pdfs={pdfMetadata}
             totalSteps={totalSteps}
             onStart={onStart}
             headingLevel={inline ? 2 : 1}
@@ -181,7 +178,7 @@ export function FormContainer({
     phase,
     steps,
     activeStep,
-    pdfs,
+    pdfMetadata,
     title,
     description,
     children,

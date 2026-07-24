@@ -10,7 +10,7 @@ export default definePdf<PdfFieldName>({
   jurisdiction: "ny",
   canonicalUrl: "https://www.nycourts.gov/media/32631",
   pdfPath: pdf,
-  resolver: (data) => ({
+  resolver: (_data) => ({
     // TODO: Map fields to form data
     shouldSealCourtRecord: undefined,
     hasBeenConvictedOfCrime: undefined,
