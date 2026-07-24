@@ -318,11 +318,7 @@ function getFillForSupportLevel(supportLevel: string): string {
 
       select(this as SVGPathElement).attr("data-hovered", null);
       stateOutlines
-        .filter(function () {
-          return (
-            (this as SVGPathElement).getAttribute("data-name") === stateName
-          );
-        })
+        .filter(`[data-name="${stateName}"]`)
         .attr("data-hovered", null);
       tooltip.attr("data-visible", null);
     });
