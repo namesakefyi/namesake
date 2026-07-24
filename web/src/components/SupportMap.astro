@@ -335,30 +335,16 @@ function getFillForSupportLevel(supportLevel: string): string {
       states.attr("data-dimmed", "true");
 
       states
-        .filter(function () {
-          return (
-            (this as SVGPathElement).getAttribute("data-support") ===
-            hoveredType
-          );
-        })
+        .filter(`[data-support="${hoveredType}"]`)
         .attr("data-dimmed", null)
         .attr("data-hovered", "true");
 
       stateOutlines
-        .filter(function () {
-          return (
-            (this as SVGPathElement).getAttribute("data-support") ===
-            hoveredType
-          );
-        })
+        .filter(`[data-support="${hoveredType}"]`)
         .attr("data-hovered", "true");
 
       legendItems
-        .filter(function () {
-          return (
-            (this as HTMLElement).getAttribute("data-type") !== hoveredType
-          );
-        })
+        .filter(`:not([data-type="${hoveredType}"])`)
         .attr("data-dimmed", "true");
     })
     .on("mouseout", function () {
