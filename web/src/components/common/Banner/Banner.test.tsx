@@ -43,19 +43,17 @@ describe("Banner", () => {
   });
 
   describe("data-variant attribute", () => {
-    it.each([
-      "info",
-      "success",
-      "warning",
-      "error",
-    ] as const)("sets data-variant to %s", (variant) => {
-      render(<Banner variant={variant}>Message</Banner>);
-      expect(
-        screen.getByRole(
-          variant === "error" || variant === "warning" ? "alert" : "status",
-        ),
-      ).toHaveAttribute("data-variant", variant);
-    });
+    it.each(["info", "success", "warning", "error"] as const)(
+      "sets data-variant to %s",
+      (variant) => {
+        render(<Banner variant={variant}>Message</Banner>);
+        expect(
+          screen.getByRole(
+            variant === "error" || variant === "warning" ? "alert" : "status",
+          ),
+        ).toHaveAttribute("data-variant", variant);
+      },
+    );
   });
 
   describe("icon", () => {
