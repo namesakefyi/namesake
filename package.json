@@ -35,8 +35,8 @@
     "*.{astro,cjs,css,js,json,jsonc,jsx,mjs,ts,tsx}": [
       "biome check --write --no-errors-on-unmatched"
     ],
-    "*.{png,jpg,jpeg,webp,avif,heic,gif,svg}": "npx optimo",
-    "*.{mp4,webm,mov}": "npx optimo"
+    "*.{png,jpg,jpeg,webp,avif,heic,gif,svg}": "pnpm dlx optimo",
+    "*.{mp4,webm,mov}": "pnpm dlx optimo"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",
