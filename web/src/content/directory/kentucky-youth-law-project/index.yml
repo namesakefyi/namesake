@@ -7,4 +7,4 @@ services:
   - financialAid
   - legal
 phone: 844-220-0226
-logo: ./logo.jpg
+logo: ./logo.png
