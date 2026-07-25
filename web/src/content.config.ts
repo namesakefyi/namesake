@@ -59,6 +59,7 @@ const directory = defineCollection({
         .string()
         .regex(/^\d{3}-\d{3}-\d{4}$/)
         .optional(),
+      phoneExtension: z.string().regex(/^\d+$/).optional(),
       logo: image().optional(),
     }),
 });

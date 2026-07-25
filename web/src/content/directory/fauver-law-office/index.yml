@@ -1,0 +1,12 @@
+name: Fauver Law Office - Rainbow Name Change Clinics
+description: Annual, rolling pop-up name change clinics throughout the central to northern Kentucky area, with financial assistance available on an as-needed basis. Event annoucements on their facebook page Fauver-Law-Office-PLLC
+jurisdictions:
+  - ky
+  - il
+url: https://www.fauverlaw.com/
+services:
+  - nameChangeClinic
+  - financialAid
+email: shannon@fauverlaw.com
+phone: 502-569-7710
+logo: ./logo.png
