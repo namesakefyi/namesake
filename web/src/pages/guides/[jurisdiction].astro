@@ -18,9 +18,9 @@ export async function getStaticPaths() {
   const { guidesByJurisdiction } = await getGuidesByJurisdiction();
 
   const guideMap = new Map(
-    guidesByJurisdiction.map(({ jurisdiction, guides }) => [
+    guidesByJurisdiction.map(({ jurisdiction, guides, lastModified }) => [
       jurisdiction.id,
-      guides,
+      { guides, lastModified },
     ]),
   );
 
@@ -45,14 +45,15 @@ export async function getStaticPaths() {
       params: { jurisdiction: jurisdiction.id },
       props: {
         jurisdiction,
-        guides: guideMap.get(jurisdiction.id) ?? [],
+        guides: guideMap.get(jurisdiction.id)?.guides ?? [],
+        lastModified: guideMap.get(jurisdiction.id)?.lastModified,
         directoryEntries,
       },
     };
   });
 }
 
-const { jurisdiction, guides, directoryEntries } = Astro.props;
+const { jurisdiction, guides, lastModified, directoryEntries } = Astro.props;
 const hasGuides = guides.length > 0;
 
 const searchTitle = `${jurisdiction.data.name}: All Guides`;
@@ -70,6 +71,7 @@ const description = hasGuides
     title={jurisdiction.data.name}
     searchTitle={searchTitle}
     description={description}
+    lastModified={lastModified}
     breadcrumbs={[
       { label: "Namesake", href: "/" },
       { label: "Guides", href: "/guides" },

@@ -1,5 +1,5 @@
 import type { CollectionEntry } from "astro:content";
-import { getCollection, getEntry } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 import { GUIDE_CATEGORY_ORDER } from "#constants/guides";
 
 const categoryRank = (id: string) => {
@@ -10,6 +10,20 @@ const categoryRank = (id: string) => {
 export type GuideJurisdictionGroup = {
   jurisdiction: CollectionEntry<"jurisdictions">;
   guides: CollectionEntry<"guides">[];
+  lastModified: string;
+};
+
+const getLastModified = async (guides: CollectionEntry<"guides">[]) => {
+  const lastModifiedDates = await Promise.all(
+    guides.map(async (guide) => {
+      const { remarkPluginFrontmatter } = await render(guide);
+      return remarkPluginFrontmatter.lastModified as string;
+    }),
+  );
+
+  return lastModifiedDates.reduce((latest, date) =>
+    Date.parse(date) > Date.parse(latest) ? date : latest,
+  );
 };
 
 export async function getGuidesByJurisdiction(): Promise<{
@@ -38,22 +52,30 @@ export async function getGuidesByJurisdiction(): Promise<{
     ({ jurisdiction }) => jurisdiction.id,
   );
 
-  const guidesByJurisdiction = Object.values(byJurisdiction)
-    .filter((group): group is typeof withJurisdiction => !!group)
-    .map((group) => ({
-      jurisdiction: group[0].jurisdiction,
-      guides: group
-        .map(({ guide }) => guide)
-        .sort(
-          (a, b) =>
-            categoryRank(a.data.category.id) -
-              categoryRank(b.data.category.id) ||
-            a.data.title.localeCompare(b.data.title),
-        ),
-    }))
-    .sort((a, b) =>
-      a.jurisdiction.data.name.localeCompare(b.jurisdiction.data.name),
-    );
+  const guidesByJurisdiction = (
+    await Promise.all(
+      Object.values(byJurisdiction)
+        .filter((group): group is typeof withJurisdiction => !!group)
+        .map(async (group) => {
+          const guides = group
+            .map(({ guide }) => guide)
+            .sort(
+              (a, b) =>
+                categoryRank(a.data.category.id) -
+                  categoryRank(b.data.category.id) ||
+                a.data.title.localeCompare(b.data.title),
+            );
+
+          return {
+            jurisdiction: group[0].jurisdiction,
+            guides,
+            lastModified: await getLastModified(guides),
+          };
+        }),
+    )
+  ).sort((a, b) =>
+    a.jurisdiction.data.name.localeCompare(b.jurisdiction.data.name),
+  );
 
   return { generalGuides, guidesByJurisdiction };
 }

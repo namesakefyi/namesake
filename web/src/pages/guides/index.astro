@@ -27,11 +27,12 @@ const { generalGuides, guidesByJurisdiction } = await getGuidesByJurisdiction();
       )
     }
     {
-      guidesByJurisdiction.map(({ jurisdiction, guides }) => (
+      guidesByJurisdiction.map(({ jurisdiction, guides, lastModified }) => (
         <GuideLinkGroup
           guides={guides}
           title={jurisdiction.data.name}
           titleHref={`/guides/${jurisdiction.id}`}
+          lastModified={lastModified}
         />
       ))
     }

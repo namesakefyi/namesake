@@ -5,13 +5,35 @@ interface Props {
   guides: CollectionEntry<"guides">[];
   title?: string;
   titleHref?: string;
+  lastModified?: string;
 }
 
-const { guides, title, titleHref } = Astro.props;
+const { guides, title, titleHref, lastModified } = Astro.props;
+
+const formatter = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "medium",
+  timeZone: "UTC",
+});
+
+const formattedDate = lastModified
+  ? formatter.format(new Date(lastModified))
+  : null;
 ---
 
 <section class="guide-link-group">
-  {title && <h2>{titleHref ? <a href={titleHref}>{title}</a> : title}</h2>}
+  {
+    title && (
+      <header>
+        <h2>{titleHref ? <a href={titleHref}>{title}</a> : title}</h2>
+        {formattedDate && (
+          <small>
+            Last modified{" "}
+            <time datetime={lastModified}>{formattedDate}</time>
+          </small>
+        )}
+      </header>
+    )
+  }
   <ul>
     {
       guides.map((guide) => (
@@ -37,6 +59,19 @@ const { guides, title, titleHref } = Astro.props;
 
   h2 {
     font-size: var(--step-2);
+  }
+
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--space-xs);
+  }
+
+  small {
+    flex-shrink: 0;
+    font-size: var(--step--2);
+    color: var(--text-color-muted);
   }
 
   ul {
