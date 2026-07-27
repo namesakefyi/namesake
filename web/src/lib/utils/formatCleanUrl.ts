@@ -1,10 +1,13 @@
 /**
- * Given a URL, return the URL without protocol, "www", or trailing slash.
+ * Given a URL or hostname, return its hostname without "www".
  *
  * @example
  * formatCleanUrl("https://www.masstpc.org/")
  * // "masstpc.org"
  */
 export function formatCleanUrl(url: string): string {
-  return url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+  // Ensure handling of links that are already hostnames without typeerror
+  const absoluteUrl = url.includes("://") ? url : `https://${url}`;
+
+  return new URL(absoluteUrl).hostname.replace(/^www\./, "");
 }
