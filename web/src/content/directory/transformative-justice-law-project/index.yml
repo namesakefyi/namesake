@@ -10,4 +10,4 @@ services:
   - legal
 email: namechange@tjlp.org
 phone: 312-558-1472
-logo: ./logo.webp
+logo: ./logo.png
