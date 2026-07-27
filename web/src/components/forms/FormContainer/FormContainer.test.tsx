@@ -92,6 +92,25 @@ describe("FormContainer", () => {
       ).toBeInTheDocument();
     });
 
+    it("renders PDF metadata provided by the Astro wrapper", async () => {
+      render(
+        <FormContainer
+          slug="court-order-ma"
+          pdfMetadata={[
+            {
+              pdfId: "cjp27-petition-to-change-name-of-adult",
+              title: "Petition to Change Name of Adult",
+              code: "CJP-27",
+            },
+          ]}
+        />,
+      );
+
+      expect(
+        await screen.findByText("Petition to Change Name of Adult (CJP-27)"),
+      ).toBeInTheDocument();
+    });
+
     it("renders a loading spinner while saved progress is being fetched", async () => {
       vi.mocked(db.getFormProgress).mockReturnValue(new Promise(() => {}));
 
