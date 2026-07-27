@@ -55,8 +55,7 @@ export async function getStaticPaths() {
 
 const { entry, entryJurisdictions, relatedEntries } = Astro.props;
 const firstJurisdiction = entryJurisdictions[0];
-const { name, description, services, email, phone, phoneExtension, url, logo } =
-  entry.data;
+const { name, description, services, email, phone, url, logo } = entry.data;
 ---
 
 <BaseLayout title={name} description={description} color="pink">
@@ -123,7 +122,6 @@ const { name, description, services, email, phone, phoneExtension, url, logo } =
             <dt>Phone</dt>
             <dd>
               <a href={`tel:${phone}`}>{phone}</a>
-              {phoneExtension && ` ext. ${phoneExtension}`}
             </dd>
           </>
         )

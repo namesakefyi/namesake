@@ -52,7 +52,6 @@ const contacts = filteredEntries.map(({ id, data }) => ({
   officialPartner: data.officialPartner,
   email: data.email,
   phone: data.phone,
-  phoneExtension: data.phoneExtension,
   url: data.url,
   logo: data.logo,
 }));
@@ -179,8 +178,6 @@ const description =
                     <RiPhoneLine size={18} />
                     <div class="contact-label">
                       <a href={`tel:${contact.phone}`}>{contact.phone}</a>
-                      {contact.phoneExtension &&
-                        ` ext. ${contact.phoneExtension}`}
                     </div>
                   </li>
                 )}

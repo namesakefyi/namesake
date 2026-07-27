@@ -10,5 +10,4 @@ services:
   - legal
 email: law-probono@uic.edu
 phone: 312-427-2737
-phoneExtension: "477"
 logo: ./logo.png
