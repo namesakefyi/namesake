@@ -18,9 +18,6 @@ vi.mock("#db/database", () => ({
 }));
 
 vi.mock("#lib/forms/getFormConfig");
-vi.mock("#lib/forms/getFormPdfMetadata", () => ({
-  getFormPdfMetadata: vi.fn().mockResolvedValue([]),
-}));
 
 import { getFormConfig } from "#lib/forms/getFormConfig";
 

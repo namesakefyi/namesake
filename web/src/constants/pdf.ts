@@ -1,7 +1,7 @@
 import type { FormData } from "./fields";
 import type { JurisdictionId } from "./jurisdictions";
 
-/** Matches libpdf's FieldValue, plus undefined for omitted fields. Arrays are list-box values. */
+/** Matches libpdf's FieldValue, plus undefined for omitted fields. */
 export type PDFFieldValue = string | boolean | string[] | null | undefined;
 
 /** Valid field types that can appear in a generated pdfSchema. */
