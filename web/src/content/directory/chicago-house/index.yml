@@ -1,0 +1,13 @@
+name: Chicago House
+description: Chicago House empowers transgender people and people living with or vulnerable to HIV/AIDS to lead healthy and dignified lives through housing and compassionate, client-centered support services.
+jurisdictions:
+  - il
+url: https://www.chicagohouse.org/translife-care
+services:
+  - nameChangeClinic
+  - formFilling
+  - financialAid
+  - legal
+email: pperez@chicagohouse.org
+phone: 773-248-5200
+logo: ./logo.webp
