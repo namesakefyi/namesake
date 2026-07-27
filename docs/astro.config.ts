@@ -48,6 +48,7 @@ export default defineConfig({
             "guides/setup",
             "guides/research",
             "guides/writing",
+            "guides/directory-updates",
             "guides/new-pdfs",
             "guides/pdf-monitoring",
             "guides/building-forms",
