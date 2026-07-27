@@ -1,0 +1,100 @@
+---
+title: Updating the Directory
+description: How to add a new organization or contact to Namesake's directory.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+This guide shows you how to update the [Namesake directory](https://namesake.fyi/directory).
+
+## Organization requirements
+
+All organizations added to the directory should meet the following requirements:
+
+1. **The organization must be active.** Information on any website should be up-to-date. If an organization has run events like name change clinics in the past, confirm that future events are scheduled.
+2. **The organization must demonstrate vocal support for trans people.** An organization which offers general legal support _without_ referencing trans people will not be accepted.
+3. **The services offered must be free or low-cost.**
+4. **Organizations must be based in (or primarily serve) people in the U.S.** Unfortunately, Namesake does not currently have the capacity to document or support name changes in other countries.
+
+## Collect organization info
+
+Each entry in the directory needs the following info:
+
+| Field | Description  |
+| ----- | ------------ |
+| Name | The name of the organization. |
+| Description | A sentence describing the organization's mission. This is often found on the organization's homepage or about page. |
+| Jurisdictions | The U.S. state (or states) which this organization serves. |
+| URL | A link to the organization's website. If the organization/website is large, link directly to the most relevant page for name change information. |
+| Services | One or more of the following tags: `financial aid`, `form filling help`, `legal support`, `name change clinics`, and `notary` |
+| Email | A contact email address. _Optional._ |
+| Phone | A contact phone number. Format should match `000-000-0000`. _Optional._ |
+| Logo | The organization's logo. _Optional._ |
+
+Usually, this information is available directly through an organization's website. If any details are uncertain, such as the services offered, email or call the organization to confirm.
+
+## Add data
+
+To update the directory, you will need to edit the Namesake codebase. If you haven't already, [set up your dev environment](/guides/setup) to get Namesake running on your computer.
+
+<Steps>
+
+1. Create a new git branch, then switch to that branch:
+
+   ```sh
+   git branch directory-updates
+   git checkout directory-updates
+
+   # or to create and checkout a branch all in one go:
+   # git checkout -b directory-updates
+   ```
+
+2. Navigate to `web/src/content/directory`. You will see a list of folders, one for each entry in the directory.
+
+3. For each new contact, add a folder using the organization's name in `kebab-case`. For example, the folder for "Youth Pride RI" is `youth-pride-ri`.
+
+4. Add an `index.yml` file inside the new folder with the following structure:
+
+    ```yml
+    name: Organization Name
+    description: The mission statement or organization description.
+    jurisdictions:
+      - ma
+    url: https://example.com
+    services:
+      - financialAid
+      - formFilling
+      - nameChangeClinic
+      - legalSupport
+      - notary
+    email: contact@example.com
+    phone: 555-555-5555
+    logo: ./logo.webp
+    ```
+
+5. Replace the example info.
+
+6. Repeat for any other new entries.
+
+</Steps>
+
+## Add the logo
+
+Find a high-quality version of the logo. Sometimes this is possible by right-clicking the logo on their website and downloading. Other times you may need to do additional searching and find a "brand" or "press" page, or search Google images.
+
+When selecting a logo:
+
+- `.svg` files are preferred. `.webp` and `.png` are also okay.
+- File should have a transparent or plain white background.
+- Crop away any margins. The logo boundaries should span edge-to-edge.
+
+Once you have a suitable logo, upload it to the same folder as your `index.yml` file. Change the filename to `logo`, and update `index.yml` to make sure the `logo:` line points to the correct filename and extension, starting with `./`:
+
+```yml
+logo: ./logo.svg
+# or .webp, or .png, etc.
+```
+
+## Submit a pull request
+
+Commit and push your changes to the directory, then open a new pull request in GitHub. We'll review your additions, and if everything looks good, we'll merge them in!
