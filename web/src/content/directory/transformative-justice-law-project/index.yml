@@ -1,0 +1,13 @@
+name: Transformative Justice Law Project
+description: TJLP consists of a group of activists, legal workers, and organizers who provide support, advocacy, and free, holistic legal services to poor and street-based transgender people in Illinois. Services available in English and Spanish.
+jurisdictions:
+  - il
+url: https://www.tjlp.org/
+services:
+  - nameChangeClinic
+  - formFilling
+  - financialAid
+  - legal
+email: namechange@tjlp.org
+phone: 312-558-1472
+logo: ./logo.png

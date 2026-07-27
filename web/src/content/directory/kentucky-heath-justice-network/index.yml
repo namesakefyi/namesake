@@ -1,0 +1,8 @@
+name: Kentucky Health Justice Network
+description: Statewide organization dedicated to providing educational, emotional, financial, and medical support for transgender Kentuckians of all ages. Service available in English and Spanish.
+jurisdictions:
+  - ky
+url: https://www.kentuckyhealthjusticenetwork.org/transhealth.html
+services:
+  - financialAid
+logo: ./logo.png

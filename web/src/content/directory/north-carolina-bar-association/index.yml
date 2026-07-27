@@ -1,0 +1,11 @@
+name: North Carolina Bar Association
+description: Volunteer bar association that offers free legal answers and a guide on filing adult name changes and record sealings, as well as occasionally hosting name change clinics throughout the state.
+jurisdictions:
+  - nc
+url: https://www.ncbarfoundation.org/north-carolina-adult-name-change-resources/
+services:
+  - nameChangeClinic
+  - formFilling
+  - legal
+phone: 919-677-0561
+logo: ./logo.png
