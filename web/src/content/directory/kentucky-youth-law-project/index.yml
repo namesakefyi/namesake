@@ -1,0 +1,10 @@
+name: Kentucky Youth Law Project
+description: Statewide organization dedicated to providing legal support for LGBTQIA+ Kentuckians age 24 years or younger, including name changes and gender marker changes. Services available in English and Spanish.
+jurisdictions:
+  - ky
+url: https://www.kylp.org/
+services:
+  - financialAid
+  - legal
+phone: 844-220-0226
+logo: ./logo.png

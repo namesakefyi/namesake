@@ -1,0 +1,13 @@
+name: UIC Law
+description: The Pro Bono Litigation Clinic assists transgender individuals who are faced with the task of changing their names and identification documents.
+jurisdictions:
+  - il
+url: https://law.uic.edu/experiential-education/clinics/pro-bono/projects/#transgender-name-gender-marker-change-services
+services:
+  - nameChangeClinic
+  - formFilling
+  - financialAid
+  - legal
+email: law-probono@uic.edu
+phone: 312-427-2737
+logo: ./logo.png
