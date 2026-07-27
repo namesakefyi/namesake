@@ -1,0 +1,10 @@
+name: Legal Aid Chicago
+description: Legal Aid Chicago also hosts regular, free face-to-face general legal clinics in Chicago for low-income individuals and families. Legal Aid Chicago only provides aid for individuals who have an annual income at or below 150% of the current poverty line. Services available in English and Spanish.
+jurisdictions:
+  - il
+url: https://legalaidchicago.org/
+services:
+  - financialAid
+  - legal
+phone: 312-341-1070
+logo: ./logo.svg
