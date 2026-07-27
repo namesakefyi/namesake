@@ -52,14 +52,6 @@ const formattedLastModified = lastModified
       </time>
     )
   }
-  {
-    formattedLastModified && (
-      <small class="last-modified">
-        Last modified{" "}
-        <time datetime={lastModified}>{formattedLastModified}</time>
-      </small>
-    )
-  }
   <slot name="before-header" />
   <h1
     data-annotation={annotation}
@@ -68,6 +60,14 @@ const formattedLastModified = lastModified
     {smartquotes(title)}
   </h1>
   {description && <p class="subhead">{smartquotes(description)}</p>}
+  {
+    formattedLastModified && (
+      <small class="last-modified">
+        Last modified{" "}
+        <time datetime={lastModified}>{formattedLastModified}</time>
+      </small>
+    )
+  }
 </div>
 
 <script>
@@ -114,7 +114,7 @@ const formattedLastModified = lastModified
 
     .last-modified {
       display: block;
-      margin-block-end: var(--space-l);
+      margin-block-start: var(--space-l);
       font-size: var(--step--2);
       color: var(--text-color-muted);
     }
