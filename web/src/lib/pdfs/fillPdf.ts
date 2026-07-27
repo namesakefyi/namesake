@@ -2,7 +2,6 @@ import type { FormData } from "#constants/fields";
 import type { PDFDefinition, PDFFieldValue } from "#constants/pdf";
 import { fetchPdf } from "./fetchPdf";
 import { loadPdfLib } from "./loadPdfLib";
-import { setFormControlVectorAppearances } from "./setFormControlVectorAppearances";
 
 /**
  * Fill out a PDF form with the given user data.
@@ -16,8 +15,7 @@ export async function fillPdf({
   userData: Partial<FormData>;
 }): Promise<Uint8Array> {
   try {
-    const pdfLib = await loadPdfLib();
-    const { PDF } = pdfLib;
+    const { PDF } = await loadPdfLib();
 
     // Fetch the PDF with form fields
     const formPdfBytes = await fetchPdf(pdf.pdfPath);
@@ -41,15 +39,6 @@ export async function fillPdf({
         ),
       ),
     );
-
-    // LIC100's font-based marks disappear in some PDF renderers.
-    if (pdf.useVectorFormControlAppearances && form) {
-      setFormControlVectorAppearances({
-        form,
-        fieldNames: Object.keys(fields),
-        pdfLib,
-      });
-    }
 
     // Serialize the PDFDocument to bytes
     return await pdfDoc.save();

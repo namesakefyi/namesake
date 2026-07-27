@@ -70,9 +70,6 @@ export interface PDFDefinition<TPdfFieldName extends string = string> {
    * ```
    */
   resolver: PDFResolver<TPdfFieldName>;
-
-  /** Replace font-based checkbox and radio appearances with portable vector marks. */
-  useVectorFormControlAppearances?: boolean;
 }
 
 export type PDFResolver<

@@ -1,4 +1,3 @@
-import { PDF } from "@libpdf/core";
 import { describe, expect, it } from "vitest";
 import type { FormData } from "#constants/fields";
 import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
@@ -82,50 +81,5 @@ describe("LIC100 Driver's License, Learner's Permit, or ID Card Application", ()
     await expect(
       fillPdf({ pdf: licenseAndIdApplication, userData: incompleteData }),
     ).resolves.toBeInstanceOf(Uint8Array);
-  });
-
-  it("uses font-independent vector appearances after filling and merging", async () => {
-    const filledBytes = await fillPdf({
-      pdf: licenseAndIdApplication,
-      userData: testData,
-    });
-    const mergedPdf = await PDF.merge([filledBytes]);
-    const mergedBytes = await mergedPdf.save();
-    const reloadedPdf = await PDF.load(mergedBytes);
-    const form = reloadedPdf.getForm();
-
-    expect(form).not.toBeNull();
-
-    // Check both checkbox and radio groups, including unselected options.
-    const controlNames = [
-      "Type",
-      "Document to Issue",
-      "Service Type",
-      "Name",
-      "Gender change",
-      "Gender",
-    ];
-    for (const name of controlNames) {
-      const field = form?.getCheckbox(name) ?? form?.getRadioGroup(name);
-      expect(field, `Expected form control "${name}"`).toBeDefined();
-
-      for (const widget of field?.getWidgets() ?? []) {
-        const onValue = widget.getOnValue();
-        expect(onValue, `Expected an on-state for "${name}"`).toBeTruthy();
-
-        const appearance = widget.getNormalAppearance(onValue ?? undefined);
-        expect(
-          appearance,
-          `Expected an on-state appearance for "${name}"`,
-        ).not.toBeNull();
-
-        const content = new TextDecoder().decode(appearance?.getDecodedData());
-        const vectorContent = content.slice(content.lastIndexOf("\nq\n"));
-
-        // A LibPDF upgrade must not reintroduce font glyphs into LIC100 marks.
-        expect(vectorContent).not.toMatch(/\/ZaDb|\bBT\b|\bTj\b/);
-        expect(vectorContent.match(/\nS\n/g)).toHaveLength(2);
-      }
-    }
   });
 });

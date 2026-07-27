@@ -64,7 +64,6 @@ export default definePdf<PdfFieldName>({
   canonicalUrl:
     "https://www.mass.gov/doc/license-and-id-application-0/download",
   pdfPath: pdf,
-  useVectorFormControlAppearances: true,
   resolver: (data) => ({
     // A. Service Type
     Type: stateIdType[radioValue(data.stateIdType) ?? ""],
