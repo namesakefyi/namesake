@@ -8,4 +8,4 @@ services:
   - formFilling
   - legal
 phone: 919-677-0561
-logo: ./logo.svg
+logo: ./logo.png
