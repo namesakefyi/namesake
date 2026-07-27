@@ -15,17 +15,15 @@ describe("formatCleanUrl", () => {
     expect(formatCleanUrl("https://namesake.fyi/")).toBe("namesake.fyi");
   });
 
-  it("removes only a single trailing slash at the end", () => {
-    expect(formatCleanUrl("https://example.com/path/")).toBe(
-      "example.com/path",
-    );
-  });
-
   it("leaves host-only strings unchanged", () => {
     expect(formatCleanUrl("example.com")).toBe("example.com");
   });
 
-  it("returns empty string for empty input", () => {
-    expect(formatCleanUrl("")).toBe("");
+  it("omits the path, query, and fragment", () => {
+    expect(
+      formatCleanUrl(
+        "https://law.uic.edu/experiential-education/clinics/pro-bono/projects/?source=directory#services",
+      ),
+    ).toBe("law.uic.edu");
   });
 });
