@@ -1,0 +1,12 @@
+name: Fauver Law Office
+description: Annual, rolling pop-up name change clinics throughout the central to northern Kentucky area, with financial assistance available on an as-needed basis.
+jurisdictions:
+  - ky
+  - il
+url: https://www.facebook.com/people/Fauver-Law-Office-PLLC/100063527021441/
+services:
+  - nameChangeClinic
+  - financialAid
+email: shannon@fauverlaw.com
+phone: 502-569-7710
+logo: ./logo.png
