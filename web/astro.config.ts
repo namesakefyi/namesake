@@ -3,11 +3,7 @@ import { satteri } from "@astrojs/markdown-satteri";
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import {
-  defineConfig,
-  fontProviders,
-  passthroughImageService,
-} from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import pagefind from "astro-pagefind";
 import browserslist from "browserslist";
 import { browserslistToTargets } from "lightningcss";
@@ -19,9 +15,6 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: "compile",
   }),
-  image: {
-    service: passthroughImageService(),
-  },
   markdown: {
     processor: satteri({
       mdastPlugins: [satteriModifiedTime],
