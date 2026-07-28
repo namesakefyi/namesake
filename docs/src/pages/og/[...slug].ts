@@ -16,7 +16,8 @@ export const { getStaticPaths, GET } = await OGImageRoute({
       bgGradient: [[225, 225, 225]],
       padding: 90,
       logo: {
-        path: "./src/pages/og/_images/logo.svg",
+        path: "./src/pages/og/_images/logo.png",
+        size: [240, 48],
       },
       fonts: [
         "./src/fonts/AtkinsonHyperlegibleSoft-Regular.ttf",
