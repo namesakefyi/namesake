@@ -9,5 +9,5 @@ services:
   - financialAid
   - legal
 email: law-probono@uic.edu
-phone: 312-427-2737
+phone: 312-427-2737;477
 logo: ./logo.png
