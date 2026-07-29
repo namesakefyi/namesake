@@ -15,6 +15,7 @@ import PageHeader from "#components/PageHeader.astro";
 import { SERVICE_LABELS, SERVICES, type Service } from "#constants/services";
 import BaseLayout from "#layouts/BaseLayout.astro";
 import { formatCleanUrl } from "#lib/utils/formatCleanUrl";
+import { formatPhone } from "#lib/utils/formatPhone";
 
 const stateParam = Astro.url.searchParams.get("state");
 const serviceParam = Astro.url.searchParams.get("service");
@@ -177,7 +178,9 @@ const description =
                   <li>
                     <RiPhoneLine size={18} />
                     <div class="contact-label">
-                      <a href={`tel:${contact.phone}`}>{contact.phone}</a>
+                      <a href={`tel:${contact.phone}`}>
+                        {formatPhone(contact.phone)}
+                      </a>
                     </div>
                   </li>
                 )}
