@@ -13,6 +13,7 @@
     }
   },
   "scripts": {
+    "prepare": "simple-git-hooks",
     "dev": "pnpm --filter @namesake/web dev",
     "dev:docs": "pnpm --filter @namesake/docs dev",
     "dev:pdf": "pnpm --filter @namesake/pdf-manager dev",

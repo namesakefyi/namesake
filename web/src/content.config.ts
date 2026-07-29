@@ -57,7 +57,7 @@ const directory = defineCollection({
       email: z.email().optional(),
       phone: z
         .string()
-        .regex(/^\d{3}-\d{3}-\d{4}$/)
+        .regex(/^\d{3}-\d{3}-\d{4}(;\d{1,4})?$/)
         .optional(),
       logo: image().optional(),
     }),
