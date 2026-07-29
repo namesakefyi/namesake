@@ -52,14 +52,6 @@ const formattedLastModified = lastModified
       </time>
     )
   }
-  <slot name="before-header" />
-  <h1
-    data-annotation={annotation}
-    data-pagefind-meta={`title:${searchTitle ?? title}`}
-  >
-    {smartquotes(title)}
-  </h1>
-  {description && <p class="subhead">{smartquotes(description)}</p>}
   {
     formattedLastModified && (
       <small class="last-modified">
@@ -68,6 +60,14 @@ const formattedLastModified = lastModified
       </small>
     )
   }
+  <slot name="before-header" />
+  <h1
+    data-annotation={annotation}
+    data-pagefind-meta={`title:${searchTitle ?? title}`}
+  >
+    {smartquotes(title)}
+  </h1>
+  {description && <p class="subhead">{smartquotes(description)}</p>}
 </div>
 
 <script>
@@ -114,7 +114,7 @@ const formattedLastModified = lastModified
 
     .last-modified {
       display: block;
-      margin-block-start: var(--space-l);
+      margin-block-end: var(--space-l);
       font-size: var(--step--2);
       color: var(--text-color-muted);
     }
