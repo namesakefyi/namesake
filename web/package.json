@@ -73,7 +73,7 @@
     "rough-notation": "^0.5.1",
     "sanitize-html": "^2.17.6",
     "topojson-client": "^3.1.0",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "ua-parser-js": "^2.0.10",
     "xstate": "^5.32.5"
   },
