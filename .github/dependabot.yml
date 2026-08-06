@@ -1,5 +1,5 @@
 version: 2
-updates:
+updates: 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -18,5 +18,12 @@ updates:
     groups:
       patch-minor:
         update-types: ["patch", "minor"]
+    cooldown:
+      default-days: 7
+
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: weekly
     cooldown:
       default-days: 7
