@@ -99,7 +99,7 @@ describe("createFormSubmitHandler", () => {
     expect(loadPdfs).toHaveBeenCalledWith(pdfsToInclude);
   });
 
-  it("resolves instructions against the submitted form data (see resolveInstructions.test.ts for branch coverage)", async () => {
+  it("resolves instructions against the submitted form data", async () => {
     const config = makeConfig({
       instructions: [
         "Always",

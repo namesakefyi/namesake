@@ -46,7 +46,7 @@ describe("downloadBlankPdfPacket", () => {
     ]);
   });
 
-  it("resolves instructions against empty form data (see resolveInstructions.test.ts for branch coverage)", async () => {
+  it("resolves instructions against empty form data", async () => {
     const config = makeConfig({
       instructions: [
         "Always",
