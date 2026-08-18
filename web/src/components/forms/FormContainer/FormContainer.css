@@ -69,4 +69,5 @@
 .form-container-loading {
   align-items: center;
   justify-content: center;
+  padding-block-start: var(--space-xl);
 }

@@ -8,9 +8,21 @@ import "./Button.css";
 import type { RemixiconComponentType } from "@remixicon/react";
 import clsx from "clsx";
 
+type ButtonSize = "medium" | "large";
+
+const ICON_SIZE: Record<ButtonSize, number> = {
+  medium: 24,
+  large: 28,
+};
+
+const PROGRESS_CIRCLE_SIZE: Record<ButtonSize, number> = {
+  medium: 20,
+  large: 24,
+};
+
 export interface ButtonProps extends RACButtonProps {
   variant?: "primary" | "secondary";
-  size?: "medium" | "large";
+  size?: ButtonSize;
   icon?: RemixiconComponentType | null;
   endIcon?: RemixiconComponentType | null;
 }
@@ -23,7 +35,7 @@ export function Button({
   className,
   ...props
 }: ButtonProps) {
-  const iconSize = size === "large" ? 28 : 24;
+  const iconSize = ICON_SIZE[size];
 
   return (
     <RACButton
@@ -40,7 +52,7 @@ export function Button({
           {isPending && (
             <ProgressCircle
               aria-label="Saving..."
-              size={size === "large" ? 24 : 20}
+              size={PROGRESS_CIRCLE_SIZE[size]}
               isIndeterminate
             />
           )}

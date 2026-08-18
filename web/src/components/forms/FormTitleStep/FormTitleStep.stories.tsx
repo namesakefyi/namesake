@@ -38,6 +38,7 @@ const sharedArgs = {
   description:
     "This guided form will help you complete your name change paperwork.",
   onStart: () => console.log("Start clicked"),
+  onDownloadBlank: async () => console.log("Download blank clicked"),
   pdfs: [
     {
       pdfId: "cjp27-petition-to-change-name-of-adult" as const,

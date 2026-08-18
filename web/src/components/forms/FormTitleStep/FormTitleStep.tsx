@@ -47,6 +47,7 @@ export interface FormTitleStepProps {
   description?: string | null;
   children?: React.ReactNode;
   onStart: () => void;
+  onDownloadBlank: () => Promise<void>;
   pdfs: FormPdfMetadata[];
   totalSteps: number;
   headingLevel?: 1 | 2 | 3;
@@ -57,13 +58,26 @@ export function FormTitleStep({
   description,
   children,
   onStart,
+  onDownloadBlank,
   pdfs,
   totalSteps,
   headingLevel = 1,
 }: FormTitleStepProps) {
   const [device, setDevice] = useState<IDevice | null>(null);
   const [browser, setBrowser] = useState<IBrowser | null>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
   const timeEstimate = formatTimeEstimate(totalSteps);
+
+  const handleDownloadBlank = async () => {
+    setIsDownloading(true);
+    try {
+      await onDownloadBlank();
+    } catch (error) {
+      console.error("Form download failed:", error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   useEffect(() => {
     if (typeof navigator !== "undefined") {
@@ -99,6 +113,17 @@ export function FormTitleStep({
                     {pdf.code && ` (${pdf.code})`}
                   </li>
                 ))}
+                <li>
+                  Prefer to do it yourself?{" "}
+                  <button
+                    type="button"
+                    className="form-info-download-blank-link"
+                    disabled={isDownloading}
+                    onClick={handleDownloadBlank}
+                  >
+                    {isDownloading ? "Downloading…" : "Download blank forms"}
+                  </button>
+                </li>
               </ul>
             </FormInfoItemDescription>
           )}
