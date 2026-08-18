@@ -179,6 +179,73 @@ describe("FormTitleStep", () => {
 
     expect(downloadButton).toBeDisabled();
 
+    const startButton = screen.getByRole("button", { name: /start/i });
+    expect(startButton).toBeDisabled();
+
     resolveDownload();
+  });
+
+  it("shows an inline error and re-enables the buttons when onDownloadBlank rejects", async () => {
+    const user = userEvent.setup();
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    const error = new Error("Download failed");
+    const onDownloadBlank = vi.fn().mockRejectedValue(error);
+
+    render(
+      <FormTitleStep
+        {...formTitleStep}
+        onDownloadBlank={onDownloadBlank}
+        pdfs={[{ pdfId: "pdf-1" as any, title: "Petition" }]}
+      />,
+      { wrapper: TestWrapper },
+    );
+
+    const downloadButton = screen.getByRole("button", {
+      name: /download blank forms/i,
+    });
+    await user.click(downloadButton);
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Form download failed:",
+      error,
+    );
+    expect(screen.getByText(/download failed/i)).toBeInTheDocument();
+    expect(downloadButton).not.toBeDisabled();
+    expect(screen.getByRole("button", { name: /start/i })).not.toBeDisabled();
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it("clears a previous download error once a retry succeeds", async () => {
+    const user = userEvent.setup();
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    const onDownloadBlank = vi
+      .fn()
+      .mockRejectedValueOnce(new Error("Download failed"))
+      .mockResolvedValueOnce(undefined);
+
+    render(
+      <FormTitleStep
+        {...formTitleStep}
+        onDownloadBlank={onDownloadBlank}
+        pdfs={[{ pdfId: "pdf-1" as any, title: "Petition" }]}
+      />,
+      { wrapper: TestWrapper },
+    );
+
+    const downloadButton = screen.getByRole("button", {
+      name: /download blank forms/i,
+    });
+    await user.click(downloadButton);
+    expect(screen.getByText(/download failed/i)).toBeInTheDocument();
+
+    await user.click(downloadButton);
+    expect(screen.queryByText(/download failed/i)).not.toBeInTheDocument();
+
+    consoleErrorSpy.mockRestore();
   });
 });

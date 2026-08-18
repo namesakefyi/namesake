@@ -66,14 +66,17 @@ export function FormTitleStep({
   const [device, setDevice] = useState<IDevice | null>(null);
   const [browser, setBrowser] = useState<IBrowser | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
   const timeEstimate = formatTimeEstimate(totalSteps);
 
   const handleDownloadBlank = async () => {
     setIsDownloading(true);
+    setDownloadError(null);
     try {
       await onDownloadBlank();
     } catch (error) {
       console.error("Form download failed:", error);
+      setDownloadError("Download failed. Please try again.");
     } finally {
       setIsDownloading(false);
     }
@@ -117,12 +120,17 @@ export function FormTitleStep({
                   Prefer to do it yourself?{" "}
                   <button
                     type="button"
-                    className="form-info-download-blank-link"
+                    className="button-as-link"
                     disabled={isDownloading}
                     onClick={handleDownloadBlank}
                   >
                     {isDownloading ? "Downloading…" : "Download blank forms"}
                   </button>
+                  {downloadError && (
+                    <span className="form-info-download-error" role="alert">
+                      {downloadError}
+                    </span>
+                  )}
                 </li>
               </ul>
             </FormInfoItemDescription>
@@ -156,6 +164,7 @@ export function FormTitleStep({
           size="large"
           endIcon={RiArrowRightLine}
           className="form-title-step-button"
+          isDisabled={isDownloading}
         >
           Start
         </Button>

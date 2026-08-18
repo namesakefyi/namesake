@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { FormProvider } from "react-hook-form";
 import type { FormSlug } from "#constants/forms";
-import { createDownloadBlankPdfsHandler } from "#lib/forms/createDownloadBlankPdfsHandler";
 import { createFormSubmitHandler } from "#lib/forms/createFormSubmitHandler";
+import { downloadBlankPdfPacket } from "#lib/forms/downloadBlankPdfPacket";
 import { getFormConfig } from "#lib/forms/getFormConfig";
 import type { FormPdfMetadata } from "#lib/forms/getFormPdfMetadata";
 import { useFormData } from "#lib/forms/useFormData";
@@ -40,8 +40,8 @@ export function FormContainer({
 
   const form = useFormData(config);
   const onSubmit = createFormSubmitHandler(config, form);
-  const onDownloadBlank = useMemo(
-    () => createDownloadBlankPdfsHandler(config),
+  const onDownloadBlank = useCallback(
+    () => downloadBlankPdfPacket(config),
     [config],
   );
 

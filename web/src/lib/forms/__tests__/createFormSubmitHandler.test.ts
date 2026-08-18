@@ -3,7 +3,7 @@ import type { FieldValues, UseFormReturn } from "react-hook-form";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FormConfig } from "#constants/forms";
 import type { PDFId } from "#constants/pdf";
-import { downloadMergedPdf } from "#lib/pdfs/downloadMergedPdf";
+import { downloadFilledPdf } from "#lib/pdfs/downloadFilledPdf";
 import { loadPdfs } from "#lib/pdfs/loadPdfs";
 import { createFormSubmitHandler } from "../createFormSubmitHandler";
 import { resolveFormVisibility } from "../formVisibility";
@@ -11,8 +11,8 @@ import { resolveFormVisibility } from "../formVisibility";
 vi.mock("../formVisibility", () => ({
   resolveFormVisibility: vi.fn(),
 }));
-vi.mock("../../pdfs/downloadMergedPdf", () => ({
-  downloadMergedPdf: vi.fn(),
+vi.mock("../../pdfs/downloadFilledPdf", () => ({
+  downloadFilledPdf: vi.fn(),
 }));
 vi.mock("../../pdfs/loadPdfs", () => ({ loadPdfs: vi.fn() }));
 
@@ -54,7 +54,7 @@ describe("createFormSubmitHandler", () => {
         { pdfId: "cjp27-petition-to-change-name-of-adult", include: true },
       ],
     });
-    vi.mocked(downloadMergedPdf).mockResolvedValue(undefined);
+    vi.mocked(downloadFilledPdf).mockResolvedValue(undefined);
   });
 
   afterEach(() => {
@@ -99,12 +99,12 @@ describe("createFormSubmitHandler", () => {
     expect(loadPdfs).toHaveBeenCalledWith(pdfsToInclude);
   });
 
-  it("passes plain string instructions directly to downloadMergedPdf", async () => {
+  it("passes plain string instructions directly to downloadFilledPdf", async () => {
     const config = makeConfig({ instructions: ["Do this", "Do that"] });
 
     await createFormSubmitHandler(config, makeForm())(makeEvent());
 
-    expect(downloadMergedPdf).toHaveBeenCalledWith(
+    expect(downloadFilledPdf).toHaveBeenCalledWith(
       expect.objectContaining({ instructions: ["Do this", "Do that"] }),
     );
   });
@@ -116,7 +116,7 @@ describe("createFormSubmitHandler", () => {
 
     await createFormSubmitHandler(config, makeForm())(makeEvent());
 
-    expect(downloadMergedPdf).toHaveBeenCalledWith(
+    expect(downloadFilledPdf).toHaveBeenCalledWith(
       expect.objectContaining({ instructions: ["Always", "Conditional"] }),
     );
   });
@@ -128,17 +128,17 @@ describe("createFormSubmitHandler", () => {
 
     await createFormSubmitHandler(config, makeForm())(makeEvent());
 
-    expect(downloadMergedPdf).toHaveBeenCalledWith(
+    expect(downloadFilledPdf).toHaveBeenCalledWith(
       expect.objectContaining({ instructions: ["Always"] }),
     );
   });
 
-  it("passes the download title, loaded PDFs, and visible data to downloadMergedPdf", async () => {
+  it("passes the download title, loaded PDFs, and visible data to downloadFilledPdf", async () => {
     const config = makeConfig({ downloadTitle: "My Package" });
 
     await createFormSubmitHandler(config, makeForm())(makeEvent());
 
-    expect(downloadMergedPdf).toHaveBeenCalledWith({
+    expect(downloadFilledPdf).toHaveBeenCalledWith({
       title: "My Package",
       instructions: ["Step 1", "Step 2"],
       pdfs: mockPdfs,

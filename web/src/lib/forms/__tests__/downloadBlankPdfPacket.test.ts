@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FormConfig } from "#constants/forms";
 import { downloadBlankPdfs } from "#lib/pdfs/downloadBlankPdfs";
 import { loadPdfs } from "#lib/pdfs/loadPdfs";
-import { createDownloadBlankPdfsHandler } from "../createDownloadBlankPdfsHandler";
+import { downloadBlankPdfPacket } from "../downloadBlankPdfPacket";
 
 vi.mock("../../pdfs/downloadBlankPdfs", () => ({
   downloadBlankPdfs: vi.fn(),
@@ -25,7 +25,7 @@ function makeConfig(overrides: Partial<FormConfig> = {}): FormConfig {
   } as unknown as FormConfig;
 }
 
-describe("createDownloadBlankPdfsHandler", () => {
+describe("downloadBlankPdfPacket", () => {
   beforeEach(() => {
     vi.mocked(loadPdfs).mockResolvedValue(mockPdfs as never);
     vi.mocked(downloadBlankPdfs).mockResolvedValue(undefined);
@@ -38,7 +38,7 @@ describe("createDownloadBlankPdfsHandler", () => {
   it("calls loadPdfs with every PDF id, ignoring conditional `when` predicates", async () => {
     const config = makeConfig();
 
-    await createDownloadBlankPdfsHandler(config)();
+    await downloadBlankPdfPacket(config);
 
     expect(loadPdfs).toHaveBeenCalledWith([
       { pdfId: "cjp27-petition-to-change-name-of-adult" },
@@ -49,7 +49,7 @@ describe("createDownloadBlankPdfsHandler", () => {
   it("passes plain string instructions directly to downloadBlankPdfs", async () => {
     const config = makeConfig({ instructions: ["Do this", "Do that"] });
 
-    await createDownloadBlankPdfsHandler(config)();
+    await downloadBlankPdfPacket(config);
 
     expect(downloadBlankPdfs).toHaveBeenCalledWith(
       expect.objectContaining({ instructions: ["Do this", "Do that"] }),
@@ -64,7 +64,7 @@ describe("createDownloadBlankPdfsHandler", () => {
       ],
     });
 
-    await createDownloadBlankPdfsHandler(config)();
+    await downloadBlankPdfPacket(config);
 
     expect(downloadBlankPdfs).toHaveBeenCalledWith(
       expect.objectContaining({ instructions: ["Always"] }),
@@ -76,7 +76,7 @@ describe("createDownloadBlankPdfsHandler", () => {
       instructions: ["Always", { text: "Also always", when: () => true }],
     });
 
-    await createDownloadBlankPdfsHandler(config)();
+    await downloadBlankPdfPacket(config);
 
     expect(downloadBlankPdfs).toHaveBeenCalledWith(
       expect.objectContaining({ instructions: ["Always", "Also always"] }),
@@ -86,7 +86,7 @@ describe("createDownloadBlankPdfsHandler", () => {
   it("passes the download title and loaded PDFs to downloadBlankPdfs", async () => {
     const config = makeConfig({ downloadTitle: "My Package" });
 
-    await createDownloadBlankPdfsHandler(config)();
+    await downloadBlankPdfPacket(config);
 
     expect(downloadBlankPdfs).toHaveBeenCalledWith({
       title: "My Package",

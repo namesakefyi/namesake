@@ -1,36 +1,36 @@
-import type { FormData } from "#constants/fields";
 import type { PDFDefinition } from "#constants/pdf";
 import { createCoverPage } from "./createCoverPage";
 import { downloadPdf } from "./downloadPdf";
-import { fillPdf } from "./fillPdf";
 import { loadPdfLib } from "./loadPdfLib";
 
 /**
- * Download a merged PDF with a cover page and multiple filled PDFs.
+ * Merge a cover page with per-PDF bytes produced by `getPdfBytes` and
+ * download the result. Shared by the filled and blank download flows, which
+ * differ only in how each PDF's bytes are produced.
  */
-export async function downloadMergedPdf({
+export async function mergePdfsWithCoverPage({
   title,
   instructions,
   pdfs,
-  userData,
+  getPdfBytes,
 }: {
   title: string;
   instructions: string[];
   pdfs: PDFDefinition[];
-  userData: Partial<FormData>;
+  getPdfBytes: (pdf: PDFDefinition) => Promise<Uint8Array>;
 }) {
   const { PDF } = await loadPdfLib();
 
-  const [coverPageBytes, ...filledPdfBytes] = await Promise.all([
+  const [coverPageBytes, ...pdfBytes] = await Promise.all([
     createCoverPage({
       title,
       instructions,
       documents: pdfs.map((pdf) => ({ title: pdf.title, code: pdf.code })),
     }),
-    ...pdfs.map((pdf) => fillPdf({ pdf, userData })),
+    ...pdfs.map((pdf) => getPdfBytes(pdf)),
   ]);
 
-  const mergedPdf = await PDF.merge([coverPageBytes, ...filledPdfBytes]);
+  const mergedPdf = await PDF.merge([coverPageBytes, ...pdfBytes]);
   const mergedPdfBytes = await mergedPdf.save();
   downloadPdf({ pdfBytes: mergedPdfBytes, title });
 }
