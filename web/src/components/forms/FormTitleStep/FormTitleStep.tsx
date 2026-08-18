@@ -127,9 +127,12 @@ export function FormTitleStep({
                     {isDownloading ? "Downloading…" : "Download blank forms"}
                   </button>
                   {downloadError && (
-                    <span className="form-info-download-error" role="alert">
-                      {downloadError}
-                    </span>
+                    <>
+                      {" "}
+                      <span className="form-info-download-error" role="alert">
+                        {downloadError}
+                      </span>
+                    </>
                   )}
                 </li>
               </ul>

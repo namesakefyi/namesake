@@ -74,7 +74,6 @@
 }
 
 .form-info-download-error {
-  margin-inline-start: var(--space-xs);
   color: var(--invalid-color);
 }
 
