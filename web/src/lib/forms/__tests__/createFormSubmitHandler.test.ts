@@ -99,37 +99,18 @@ describe("createFormSubmitHandler", () => {
     expect(loadPdfs).toHaveBeenCalledWith(pdfsToInclude);
   });
 
-  it("passes plain string instructions directly to downloadFilledPdf", async () => {
-    const config = makeConfig({ instructions: ["Do this", "Do that"] });
-
-    await createFormSubmitHandler(config, makeForm())(makeEvent());
-
-    expect(downloadFilledPdf).toHaveBeenCalledWith(
-      expect.objectContaining({ instructions: ["Do this", "Do that"] }),
-    );
-  });
-
-  it("includes conditional instructions when their predicate returns true", async () => {
+  it("resolves instructions against the submitted form data (see resolveInstructions.test.ts for branch coverage)", async () => {
     const config = makeConfig({
-      instructions: ["Always", { text: "Conditional", when: () => true }],
+      instructions: [
+        "Always",
+        { text: "Depends on data", when: (data) => !!data.oldFirstName },
+      ],
     });
 
     await createFormSubmitHandler(config, makeForm())(makeEvent());
 
     expect(downloadFilledPdf).toHaveBeenCalledWith(
-      expect.objectContaining({ instructions: ["Always", "Conditional"] }),
-    );
-  });
-
-  it("excludes conditional instructions when their predicate returns false", async () => {
-    const config = makeConfig({
-      instructions: ["Always", { text: "Conditional", when: () => false }],
-    });
-
-    await createFormSubmitHandler(config, makeForm())(makeEvent());
-
-    expect(downloadFilledPdf).toHaveBeenCalledWith(
-      expect.objectContaining({ instructions: ["Always"] }),
+      expect.objectContaining({ instructions: ["Always", "Depends on data"] }),
     );
   });
 

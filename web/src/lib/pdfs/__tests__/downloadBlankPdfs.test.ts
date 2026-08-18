@@ -1,51 +1,79 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { buildPdfPacket } from "../buildPdfPacket";
+import { definePdf } from "../definePdf";
 import { downloadBlankPdfs } from "../downloadBlankPdfs";
+import { downloadPdf } from "../downloadPdf";
 import { fetchPdf } from "../fetchPdf";
-import { mergePdfsWithCoverPage } from "../mergePdfsWithCoverPage";
 import { testPdfDefinition } from "./helpers";
 
-vi.mock("../mergePdfsWithCoverPage", () => ({
-  mergePdfsWithCoverPage: vi.fn(),
-}));
+vi.mock("../buildPdfPacket", () => ({ buildPdfPacket: vi.fn() }));
+vi.mock("../downloadPdf", () => ({ downloadPdf: vi.fn() }));
 vi.mock("../fetchPdf", () => ({ fetchPdf: vi.fn() }));
+
+const secondPdf = definePdf({
+  id: "test-form-2" as any,
+  title: "Test Form 2",
+  jurisdiction: "ma",
+  canonicalUrl: "https://example.com",
+  pdfPath: "public/forms/test-form-2.pdf",
+  resolver: (data) => ({ field1: data.newFirstName }),
+});
+
+const packetBytes = new Uint8Array([9, 9, 9]);
 
 describe("downloadBlankPdfs", () => {
   beforeEach(() => {
-    vi.mocked(mergePdfsWithCoverPage).mockResolvedValue(undefined);
-    vi.mocked(fetchPdf).mockResolvedValue(new Uint8Array([1, 2, 3]).buffer);
+    vi.mocked(buildPdfPacket).mockResolvedValue(packetBytes);
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it("delegates to mergePdfsWithCoverPage with the title, instructions, and pdfs", async () => {
+  it("fetches each PDF's raw bytes, unfilled", async () => {
+    vi.mocked(fetchPdf).mockResolvedValue(new Uint8Array([1, 2, 3]).buffer);
+
     await downloadBlankPdfs({
       title: "Test Packet",
-      instructions: ["First instruction"],
-      pdfs: [testPdfDefinition],
+      instructions: [],
+      pdfs: [testPdfDefinition, secondPdf],
     });
 
-    expect(mergePdfsWithCoverPage).toHaveBeenCalledWith(
-      expect.objectContaining({
-        title: "Test Packet",
-        instructions: ["First instruction"],
-        pdfs: [testPdfDefinition],
-      }),
-    );
+    expect(fetchPdf).toHaveBeenCalledWith(testPdfDefinition.pdfPath);
+    expect(fetchPdf).toHaveBeenCalledWith(secondPdf.pdfPath);
   });
 
-  it("fetches each PDF's raw bytes (no fill step) as the getPdfBytes callback", async () => {
+  it("builds the packet with each PDF's fetched bytes, in order", async () => {
+    vi.mocked(fetchPdf)
+      .mockResolvedValueOnce(new Uint8Array([1]).buffer)
+      .mockResolvedValueOnce(new Uint8Array([2]).buffer);
+
+    await downloadBlankPdfs({
+      title: "Multi-PDF Packet",
+      instructions: ["Step 1"],
+      pdfs: [testPdfDefinition, secondPdf],
+    });
+
+    expect(buildPdfPacket).toHaveBeenCalledWith({
+      title: "Multi-PDF Packet",
+      instructions: ["Step 1"],
+      pdfs: [testPdfDefinition, secondPdf],
+      pdfBytes: [new Uint8Array([1]), new Uint8Array([2])],
+    });
+  });
+
+  it("downloads the packet returned by buildPdfPacket, under the given title", async () => {
+    vi.mocked(fetchPdf).mockResolvedValue(new Uint8Array([1, 2, 3]).buffer);
+
     await downloadBlankPdfs({
       title: "Test Packet",
       instructions: [],
       pdfs: [testPdfDefinition],
     });
 
-    const { getPdfBytes } = vi.mocked(mergePdfsWithCoverPage).mock.calls[0][0];
-    const bytes = await getPdfBytes(testPdfDefinition);
-
-    expect(fetchPdf).toHaveBeenCalledWith(testPdfDefinition.pdfPath);
-    expect(bytes).toBeInstanceOf(Uint8Array);
+    expect(downloadPdf).toHaveBeenCalledWith({
+      pdfBytes: packetBytes,
+      title: "Test Packet",
+    });
   });
 });

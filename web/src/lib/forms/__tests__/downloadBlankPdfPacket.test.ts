@@ -46,21 +46,11 @@ describe("downloadBlankPdfPacket", () => {
     ]);
   });
 
-  it("passes plain string instructions directly to downloadBlankPdfs", async () => {
-    const config = makeConfig({ instructions: ["Do this", "Do that"] });
-
-    await downloadBlankPdfPacket(config);
-
-    expect(downloadBlankPdfs).toHaveBeenCalledWith(
-      expect.objectContaining({ instructions: ["Do this", "Do that"] }),
-    );
-  });
-
-  it("excludes conditional instructions whose predicate depends on data that hasn't been entered yet", async () => {
+  it("resolves instructions against empty form data (see resolveInstructions.test.ts for branch coverage)", async () => {
     const config = makeConfig({
       instructions: [
         "Always",
-        { text: "Conditional", when: (data) => !!data.oldFirstName },
+        { text: "Depends on data", when: (data) => !!data.oldFirstName },
       ],
     });
 
@@ -68,18 +58,6 @@ describe("downloadBlankPdfPacket", () => {
 
     expect(downloadBlankPdfs).toHaveBeenCalledWith(
       expect.objectContaining({ instructions: ["Always"] }),
-    );
-  });
-
-  it("includes conditional instructions whose predicate doesn't depend on form data", async () => {
-    const config = makeConfig({
-      instructions: ["Always", { text: "Also always", when: () => true }],
-    });
-
-    await downloadBlankPdfPacket(config);
-
-    expect(downloadBlankPdfs).toHaveBeenCalledWith(
-      expect.objectContaining({ instructions: ["Always", "Also always"] }),
     );
   });
 

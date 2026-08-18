@@ -1,6 +1,7 @@
 import type { PDFDefinition } from "#constants/pdf";
+import { buildPdfPacket } from "./buildPdfPacket";
+import { downloadPdf } from "./downloadPdf";
 import { fetchPdf } from "./fetchPdf";
-import { mergePdfsWithCoverPage } from "./mergePdfsWithCoverPage";
 
 /**
  * Download a merged PDF with a cover page and multiple blank (unfilled) PDFs.
@@ -14,11 +15,18 @@ export async function downloadBlankPdfs({
   instructions: string[];
   pdfs: PDFDefinition[];
 }) {
-  await mergePdfsWithCoverPage({
+  const pdfBytes = await Promise.all(
+    pdfs.map((pdf) =>
+      fetchPdf(pdf.pdfPath).then((bytes) => new Uint8Array(bytes)),
+    ),
+  );
+
+  const packetBytes = await buildPdfPacket({
     title,
     instructions,
     pdfs,
-    getPdfBytes: (pdf) =>
-      fetchPdf(pdf.pdfPath).then((bytes) => new Uint8Array(bytes)),
+    pdfBytes,
   });
+
+  downloadPdf({ pdfBytes: packetBytes, title });
 }
