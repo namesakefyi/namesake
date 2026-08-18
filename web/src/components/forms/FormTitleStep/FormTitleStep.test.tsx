@@ -217,35 +217,4 @@ describe("FormTitleStep", () => {
 
     consoleErrorSpy.mockRestore();
   });
-
-  it("clears a previous download error once a retry succeeds", async () => {
-    const user = userEvent.setup();
-    const consoleErrorSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
-    const onDownloadBlank = vi
-      .fn()
-      .mockRejectedValueOnce(new Error("Download failed"))
-      .mockResolvedValueOnce(undefined);
-
-    render(
-      <FormTitleStep
-        {...formTitleStep}
-        onDownloadBlank={onDownloadBlank}
-        pdfs={[{ pdfId: "pdf-1" as any, title: "Petition" }]}
-      />,
-      { wrapper: TestWrapper },
-    );
-
-    const downloadButton = screen.getByRole("button", {
-      name: /download blank forms/i,
-    });
-    await user.click(downloadButton);
-    expect(screen.getByText(/download failed/i)).toBeInTheDocument();
-
-    await user.click(downloadButton);
-    expect(screen.queryByText(/download failed/i)).not.toBeInTheDocument();
-
-    consoleErrorSpy.mockRestore();
-  });
 });

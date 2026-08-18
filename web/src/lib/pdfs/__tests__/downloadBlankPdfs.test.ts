@@ -1,134 +1,51 @@
-import { PDF } from "@libpdf/core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { definePdf } from "../definePdf";
 import { downloadBlankPdfs } from "../downloadBlankPdfs";
+import { fetchPdf } from "../fetchPdf";
+import { mergePdfsWithCoverPage } from "../mergePdfsWithCoverPage";
 import { testPdfDefinition } from "./helpers";
 
+vi.mock("../mergePdfsWithCoverPage", () => ({
+  mergePdfsWithCoverPage: vi.fn(),
+}));
+vi.mock("../fetchPdf", () => ({ fetchPdf: vi.fn() }));
+
 describe("downloadBlankPdfs", () => {
-  let createObjectURL: typeof URL.createObjectURL;
-  let revokeObjectURL: typeof URL.revokeObjectURL;
-  let mockPdfBytes: Uint8Array;
-  let consoleSpy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(async () => {
-    // Silence console.warn for expected UPNG.decode error
-    consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-
-    // Create a minimal valid PDF for testing
-    const pdfDoc = PDF.create();
-    const page = pdfDoc.addPage();
-    page.drawText("Test PDF");
-    mockPdfBytes = await pdfDoc.save();
-
-    // Store original functions
-    createObjectURL = URL.createObjectURL;
-    revokeObjectURL = URL.revokeObjectURL;
-
-    // Mock URL.createObjectURL
-    URL.createObjectURL = vi.fn().mockReturnValue("blob:mock-url");
-    URL.revokeObjectURL = vi.fn();
-
-    // Mock document.createElement
-    document.createElement = vi.fn().mockReturnValue({
-      href: "",
-      download: "",
-      click: vi.fn(),
-    });
-
-    // Mock fetch for all PDF files and logo
-    global.fetch = vi.fn().mockImplementation((url) => {
-      if (url === "/forms/pdf-cover-logo.png") {
-        return Promise.resolve(
-          new Response(new ArrayBuffer(8), {
-            headers: { "content-type": "image/png" },
-          }),
-        );
-      }
-      // Mock PDF files
-      if (
-        url === "public/forms/test-form.pdf" ||
-        url === "public/forms/test-form-2.pdf"
-      ) {
-        return Promise.resolve(
-          new Response(mockPdfBytes as BodyInit, {
-            headers: { "content-type": "application/pdf" },
-          }),
-        );
-      }
-      return Promise.reject(new Error("Not found"));
-    });
+  beforeEach(() => {
+    vi.mocked(mergePdfsWithCoverPage).mockResolvedValue(undefined);
+    vi.mocked(fetchPdf).mockResolvedValue(new Uint8Array([1, 2, 3]).buffer);
   });
 
   afterEach(() => {
-    // Restore original functions
-    URL.createObjectURL = createObjectURL;
-    URL.revokeObjectURL = revokeObjectURL;
-
-    // Restore console.warn
-    consoleSpy.mockRestore();
+    vi.clearAllMocks();
   });
 
-  it("should create and download a merged PDF with a cover page and blank PDFs", async () => {
-    const mockAnchor = {
-      href: "",
-      download: "",
-      click: vi.fn(),
-    };
-    document.createElement = vi.fn().mockReturnValue(mockAnchor);
-
+  it("delegates to mergePdfsWithCoverPage with the title, instructions, and pdfs", async () => {
     await downloadBlankPdfs({
       title: "Test Packet",
-      instructions: ["First instruction", "Second instruction"],
+      instructions: ["First instruction"],
       pdfs: [testPdfDefinition],
     });
 
-    // Verify Blob URL was created
-    expect(URL.createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
-
-    // Verify anchor element was configured correctly
-    expect(mockAnchor.href).toBe("blob:mock-url");
-    expect(mockAnchor.download).toBe("Test Packet.pdf");
-    expect(mockAnchor.click).toHaveBeenCalled();
-
-    // Verify PDF files were fetched directly (no fill step)
-    expect(fetch).toHaveBeenCalledWith("public/forms/test-form.pdf");
-    expect(fetch).toHaveBeenCalledWith("/forms/pdf-cover-logo.png");
+    expect(mergePdfsWithCoverPage).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: "Test Packet",
+        instructions: ["First instruction"],
+        pdfs: [testPdfDefinition],
+      }),
+    );
   });
 
-  it("should handle multiple PDFs in the packet", async () => {
-    const mockAnchor = {
-      href: "",
-      download: "",
-      click: vi.fn(),
-    };
-    document.createElement = vi.fn().mockReturnValue(mockAnchor);
-
-    const secondPdf = definePdf({
-      id: "test-form-2" as any,
-      title: "Test Form 2",
-      jurisdiction: "ma",
-      canonicalUrl: "https://example.com",
-      pdfPath: "public/forms/test-form-2.pdf",
-      resolver: (data) => ({ field1: data.newFirstName }),
-    });
-
+  it("fetches each PDF's raw bytes (no fill step) as the getPdfBytes callback", async () => {
     await downloadBlankPdfs({
-      title: "Multi-PDF Packet",
-      instructions: ["First instruction"],
-      pdfs: [testPdfDefinition, secondPdf],
+      title: "Test Packet",
+      instructions: [],
+      pdfs: [testPdfDefinition],
     });
 
-    // Verify Blob URL was created
-    expect(URL.createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
+    const { getPdfBytes } = vi.mocked(mergePdfsWithCoverPage).mock.calls[0][0];
+    const bytes = await getPdfBytes(testPdfDefinition);
 
-    // Verify anchor element was configured correctly
-    expect(mockAnchor.href).toBe("blob:mock-url");
-    expect(mockAnchor.download).toBe("Multi-PDF Packet.pdf");
-    expect(mockAnchor.click).toHaveBeenCalled();
-
-    // Verify all PDF files were fetched
-    expect(fetch).toHaveBeenCalledWith("public/forms/test-form.pdf");
-    expect(fetch).toHaveBeenCalledWith("public/forms/test-form-2.pdf");
-    expect(fetch).toHaveBeenCalledWith("/forms/pdf-cover-logo.png");
+    expect(fetchPdf).toHaveBeenCalledWith(testPdfDefinition.pdfPath);
+    expect(bytes).toBeInstanceOf(Uint8Array);
   });
 });

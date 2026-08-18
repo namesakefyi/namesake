@@ -14,7 +14,6 @@ describe("mergePdfsWithCoverPage", () => {
     // Silence console.warn for expected UPNG.decode error
     consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-    // Create a minimal valid PDF for testing
     const pdfDoc = PDF.create();
     const page = pdfDoc.addPage();
     page.drawText("Test PDF");
