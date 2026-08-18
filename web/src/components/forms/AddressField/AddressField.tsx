@@ -150,7 +150,7 @@ export function AddressField({
         (!address2Expanded ? (
           <button
             type="button"
-            className="namesake-address-field-add-address2"
+            className="button-as-link namesake-address-field-add-address2"
             onClick={() => setAddress2Expanded(true)}
           >
             Add apartment, suite, unit, etc.

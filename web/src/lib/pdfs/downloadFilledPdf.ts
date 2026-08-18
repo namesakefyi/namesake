@@ -29,5 +29,5 @@ export async function downloadFilledPdf({
     pdfBytes,
   });
 
-  downloadPdf({ pdfBytes: packetBytes, title });
+  await downloadPdf({ pdfBytes: packetBytes, title });
 }

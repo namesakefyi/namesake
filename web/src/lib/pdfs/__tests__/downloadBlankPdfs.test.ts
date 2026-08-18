@@ -1,23 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { buildPdfPacket } from "../buildPdfPacket";
-import { definePdf } from "../definePdf";
 import { downloadBlankPdfs } from "../downloadBlankPdfs";
 import { downloadPdf } from "../downloadPdf";
 import { fetchPdf } from "../fetchPdf";
-import { testPdfDefinition } from "./helpers";
+import { secondTestPdfDefinition, testPdfDefinition } from "./helpers";
 
 vi.mock("../buildPdfPacket", () => ({ buildPdfPacket: vi.fn() }));
 vi.mock("../downloadPdf", () => ({ downloadPdf: vi.fn() }));
 vi.mock("../fetchPdf", () => ({ fetchPdf: vi.fn() }));
-
-const secondPdf = definePdf({
-  id: "test-form-2" as any,
-  title: "Test Form 2",
-  jurisdiction: "ma",
-  canonicalUrl: "https://example.com",
-  pdfPath: "public/forms/test-form-2.pdf",
-  resolver: (data) => ({ field1: data.newFirstName }),
-});
 
 const packetBytes = new Uint8Array([9, 9, 9]);
 
@@ -36,11 +26,11 @@ describe("downloadBlankPdfs", () => {
     await downloadBlankPdfs({
       title: "Test Packet",
       instructions: [],
-      pdfs: [testPdfDefinition, secondPdf],
+      pdfs: [testPdfDefinition, secondTestPdfDefinition],
     });
 
     expect(fetchPdf).toHaveBeenCalledWith(testPdfDefinition.pdfPath);
-    expect(fetchPdf).toHaveBeenCalledWith(secondPdf.pdfPath);
+    expect(fetchPdf).toHaveBeenCalledWith(secondTestPdfDefinition.pdfPath);
   });
 
   it("builds the packet with each PDF's fetched bytes, in order", async () => {
@@ -51,13 +41,13 @@ describe("downloadBlankPdfs", () => {
     await downloadBlankPdfs({
       title: "Multi-PDF Packet",
       instructions: ["Step 1"],
-      pdfs: [testPdfDefinition, secondPdf],
+      pdfs: [testPdfDefinition, secondTestPdfDefinition],
     });
 
     expect(buildPdfPacket).toHaveBeenCalledWith({
       title: "Multi-PDF Packet",
       instructions: ["Step 1"],
-      pdfs: [testPdfDefinition, secondPdf],
+      pdfs: [testPdfDefinition, secondTestPdfDefinition],
       pdfBytes: [new Uint8Array([1]), new Uint8Array([2])],
     });
   });
@@ -75,5 +65,18 @@ describe("downloadBlankPdfs", () => {
       pdfBytes: packetBytes,
       title: "Test Packet",
     });
+  });
+
+  it("propagates a rejection from downloadPdf instead of swallowing it", async () => {
+    vi.mocked(fetchPdf).mockResolvedValue(new Uint8Array([1, 2, 3]).buffer);
+    vi.mocked(downloadPdf).mockRejectedValue(new Error("download failed"));
+
+    await expect(
+      downloadBlankPdfs({
+        title: "Test Packet",
+        instructions: [],
+        pdfs: [testPdfDefinition],
+      }),
+    ).rejects.toThrow("download failed");
   });
 });
