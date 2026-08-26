@@ -12,12 +12,6 @@ interface Props {
   address: Address;
 }
 
-/**
- * Splits an address into its two display lines, joining each part with a
- * single space. Without this, the whitespace between the expressions in the
- * markup is collapsed and the parts run together, e.g. "Simpson Hall6
- * Harrington Road".
- */
 function formatAddress(address: Address) {
   return {
     line1: [address.address1, address.address2].filter(Boolean).join(" "),
