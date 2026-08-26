@@ -1,16 +1,26 @@
 ---
+interface Address {
+  address1: string;
+  address2?: string;
+  city: string;
+  state: string;
+  zip: string;
+}
+
 interface Props {
   name: string;
-  address: {
-    address1: string;
-    address2?: string;
-    city: string;
-    state: string;
-    zip: string;
+  address: Address;
+}
+
+function formatAddress(address: Address) {
+  return {
+    line1: [address.address1, address.address2].filter(Boolean).join(" "),
+    line2: `${address.city}, ${address.state} ${address.zip}`,
   };
 }
 
 const { name, address } = Astro.props;
+const { line1, line2 } = formatAddress(address);
 
 const url = new URL("https://maps.google.com/maps");
 url.searchParams.set("q", name);
@@ -29,10 +39,9 @@ url.searchParams.set("output", "embed");
   </div>
   <figcaption class="map-address">
     <strong>{name}</strong><br />
-    {address.address1}
-    {address.address2}<br />
-    {address.city}, {address.state}
-    {address.zip}
+    {line1}
+    <br />
+    {line2}
   </figcaption>
 </figure>
 
