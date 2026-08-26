@@ -29,10 +29,8 @@ url.searchParams.set("output", "embed");
   </div>
   <figcaption class="map-address">
     <strong>{name}</strong><br />
-    {address.address1}
-    {address.address2}<br />
-    {address.city}, {address.state}
-    {address.zip}
+    {address.address1}{address.address2 && <>{" "}{address.address2}</>}<br />
+    {address.city}, {address.state}{" "}{address.zip}
   </figcaption>
 </figure>
 
