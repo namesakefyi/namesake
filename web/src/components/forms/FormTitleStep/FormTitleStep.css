@@ -73,6 +73,10 @@
   list-style-type: disc;
 }
 
+.form-info-download-error {
+  color: var(--invalid-color);
+}
+
 .form-title-step-footer {
   display: flex;
   flex-direction: column;

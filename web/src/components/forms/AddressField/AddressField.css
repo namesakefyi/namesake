@@ -7,12 +7,8 @@
 }
 
 .namesake-address-field-add-address2 {
-  all: unset;
   align-self: flex-start;
   font-size: var(--step--1);
-  color: inherit;
-  text-decoration: underline;
-  cursor: pointer;
 }
 
 .namesake-address-field .react-aria-SearchField {

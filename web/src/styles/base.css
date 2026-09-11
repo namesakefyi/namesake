@@ -131,6 +131,31 @@ a {
   }
 }
 
+.button-as-link {
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--text-color);
+  text-underline-offset: max(0.1em, 2.5px);
+  appearance: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    color: var(--text-color-muted);
+    text-decoration: none;
+    cursor: default;
+  }
+}
+
 img {
   max-width: 100%;
 }

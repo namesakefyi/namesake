@@ -62,9 +62,7 @@ describe("downloadPdf", () => {
     expect(mockAnchor.click).toHaveBeenCalled();
   });
 
-  it("should handle errors gracefully", async () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-
+  it("propagates errors instead of swallowing them", async () => {
     document.createElement = vi.fn().mockImplementation(() => {
       throw new Error("Failed to create element");
     });
@@ -78,14 +76,12 @@ describe("downloadPdf", () => {
       },
     });
 
-    await downloadPdf({
-      pdfBytes,
-      title: "Test Form",
-    });
-
-    expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
-
-    consoleSpy.mockRestore();
+    await expect(
+      downloadPdf({
+        pdfBytes,
+        title: "Test Form",
+      }),
+    ).rejects.toThrow("Failed to create element");
   });
 
   it("should use PDF title for filename", async () => {

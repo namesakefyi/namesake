@@ -2,6 +2,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { FormProvider } from "react-hook-form";
 import type { FormSlug } from "#constants/forms";
 import { createFormSubmitHandler } from "#lib/forms/createFormSubmitHandler";
+import { downloadBlankPdfPacket } from "#lib/forms/downloadBlankPdfPacket";
 import { getFormConfig } from "#lib/forms/getFormConfig";
 import type { FormPdfMetadata } from "#lib/forms/getFormPdfMetadata";
 import { useFormData } from "#lib/forms/useFormData";
@@ -39,6 +40,10 @@ export function FormContainer({
 
   const form = useFormData(config);
   const onSubmit = createFormSubmitHandler(config, form);
+  const onDownloadBlank = useCallback(
+    () => downloadBlankPdfPacket(config),
+    [config],
+  );
 
   const {
     isLoading,
@@ -147,6 +152,7 @@ export function FormContainer({
             pdfs={pdfMetadata}
             totalSteps={totalSteps}
             onStart={onStart}
+            onDownloadBlank={onDownloadBlank}
             headingLevel={inline ? 2 : 1}
           >
             {children}
@@ -185,6 +191,7 @@ export function FormContainer({
     slug,
     totalSteps,
     onStart,
+    onDownloadBlank,
     onSubmit,
     inline,
   ]);

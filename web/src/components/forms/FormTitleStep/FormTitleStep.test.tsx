@@ -33,6 +33,7 @@ describe("FormTitleStep", () => {
     pdfs: [],
     totalSteps: 5,
     onStart: vi.fn(),
+    onDownloadBlank: vi.fn().mockResolvedValue(undefined),
     updatedAt: "2025-01-01",
   };
 
@@ -105,5 +106,115 @@ describe("FormTitleStep", () => {
     );
 
     expect(screen.getByText("Petition (CJD 400)")).toBeInTheDocument();
+  });
+
+  it("renders a download blank forms button when PDFs are present", () => {
+    render(
+      <FormTitleStep
+        {...formTitleStep}
+        pdfs={[{ pdfId: "pdf-1" as any, title: "Petition" }]}
+      />,
+      { wrapper: TestWrapper },
+    );
+
+    expect(
+      screen.getByRole("button", { name: /download blank forms/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("does not render a download blank forms button when no PDFs are present", () => {
+    render(<FormTitleStep {...formTitleStep} pdfs={[]} />, {
+      wrapper: TestWrapper,
+    });
+
+    expect(
+      screen.queryByRole("button", { name: /download blank forms/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("calls onDownloadBlank when the download blank forms button is clicked", async () => {
+    const user = userEvent.setup();
+    const onDownloadBlank = vi.fn().mockResolvedValue(undefined);
+
+    render(
+      <FormTitleStep
+        {...formTitleStep}
+        onDownloadBlank={onDownloadBlank}
+        pdfs={[{ pdfId: "pdf-1" as any, title: "Petition" }]}
+      />,
+      { wrapper: TestWrapper },
+    );
+
+    const downloadButton = screen.getByRole("button", {
+      name: /download blank forms/i,
+    });
+    await user.click(downloadButton);
+
+    expect(onDownloadBlank).toHaveBeenCalledTimes(1);
+  });
+
+  it("disables the download blank forms button while downloading", async () => {
+    const user = userEvent.setup();
+    let resolveDownload: () => void = () => {};
+    const onDownloadBlank = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveDownload = resolve;
+        }),
+    );
+
+    render(
+      <FormTitleStep
+        {...formTitleStep}
+        onDownloadBlank={onDownloadBlank}
+        pdfs={[{ pdfId: "pdf-1" as any, title: "Petition" }]}
+      />,
+      { wrapper: TestWrapper },
+    );
+
+    const downloadButton = screen.getByRole("button", {
+      name: /download blank forms/i,
+    });
+    await user.click(downloadButton);
+
+    expect(downloadButton).toBeDisabled();
+
+    const startButton = screen.getByRole("button", { name: /start/i });
+    expect(startButton).toBeDisabled();
+
+    resolveDownload();
+  });
+
+  it("shows an inline error and re-enables the buttons when onDownloadBlank rejects", async () => {
+    const user = userEvent.setup();
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    const error = new Error("Download failed");
+    const onDownloadBlank = vi.fn().mockRejectedValue(error);
+
+    render(
+      <FormTitleStep
+        {...formTitleStep}
+        onDownloadBlank={onDownloadBlank}
+        pdfs={[{ pdfId: "pdf-1" as any, title: "Petition" }]}
+      />,
+      { wrapper: TestWrapper },
+    );
+
+    const downloadButton = screen.getByRole("button", {
+      name: /download blank forms/i,
+    });
+    await user.click(downloadButton);
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Form download failed:",
+      error,
+    );
+    expect(screen.getByText(/download failed/i)).toBeInTheDocument();
+    expect(downloadButton).not.toBeDisabled();
+    expect(screen.getByRole("button", { name: /start/i })).not.toBeDisabled();
+
+    consoleErrorSpy.mockRestore();
   });
 });

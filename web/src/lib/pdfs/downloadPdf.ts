@@ -13,12 +13,8 @@ export async function downloadPdf({
 }) {
   const url = URL.createObjectURL(new Blob([pdfBytes as BlobPart]));
 
-  try {
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${title}.pdf`;
-    a.click();
-  } catch (error) {
-    console.error(error);
-  }
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${title}.pdf`;
+  a.click();
 }
