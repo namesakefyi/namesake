@@ -92,9 +92,9 @@ export default defineConfig({
     },
     build: {
       cssMinify: "lightningcss",
-      // Prevent Vite from bundling FormContainer.css with otehr JS
-      // used when downloading forms. Was causing 404 /
-      // download failure on first attempt.
+      // Prevent Vite attempting to fetch FormContainer.css
+      // during form downloads. Downloads were previously
+      // failing on 1st try due to how Vite bundles code.
       cssCodeSplit: false,
     },
   },
