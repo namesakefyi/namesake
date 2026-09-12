@@ -92,6 +92,10 @@ export default defineConfig({
     },
     build: {
       cssMinify: "lightningcss",
+      // Prevent Vite attempting to fetch FormContainer.css
+      // during form downloads. Downloads were previously
+      // failing on 1st try due to how Vite bundles code.
+      cssCodeSplit: false,
     },
   },
 });
