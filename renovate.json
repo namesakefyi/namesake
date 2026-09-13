@@ -1,0 +1,111 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":configMigration",
+    ":widenPeerDependencies",
+    "docker:pinDigests",
+    "group:linters",
+    "group:test",
+    "group:vite",
+    "helpers:pinGitHubActionDigestsToSemver",
+    "mergeConfidence:all-badges",
+    "workarounds:all"
+  ],
+  "rangeStrategy": "bump",
+  "ignorePaths": ["**/node_modules/**"],
+  "minimumReleaseAge": "4 days",
+  "schedule": ["* * 1-2,15-16 * *"],
+  "postUpdateOptions": ["pnpmDedupe"],
+  "packageRules": [
+    {
+      "groupName": "github-actions",
+      "matchManagers": ["github-actions"]
+    },
+    {
+      "groupName": "devcontainer",
+      "matchManagers": ["devcontainer"]
+    },
+    {
+      "groupName": "astro",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": [
+        "astro",
+        "@astrojs/**",
+        "astro-pagefind",
+        "astro-mermaid",
+        "astro-og-canvas",
+        "starlight-theme-flexoki"
+      ]
+    },
+    {
+      "groupName": "react",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": [
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom",
+        "react-aria-components",
+        "@react-aria/test-utils",
+        "@internationalized/date",
+        "xstate",
+        "@xstate/react"
+      ]
+    },
+    {
+      "groupName": "d3",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": [
+        "d3",
+        "d3-geo",
+        "d3-selection",
+        "@types/d3",
+        "@types/d3-geo",
+        "@types/d3-selection",
+        "topojson-client",
+        "@types/topojson-client",
+        "@types/topojson-specification",
+        "@severo_bo/us-atlas-2023"
+      ]
+    },
+    {
+      "groupName": "storybook",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": [
+        "storybook",
+        "@storybook/**",
+        "@vueless/storybook-dark-mode"
+      ]
+    },
+    {
+      "groupName": "e2e-testing",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": [
+        "playwright",
+        "@playwright/test",
+        "@axe-core/playwright"
+      ]
+    },
+    {
+      "groupName": "tooling",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": [
+        "wrangler",
+        "cf-workers-og",
+        "@biomejs/biome",
+        "hono",
+        "@hono/node-server",
+        "@libpdf/core",
+        "pdfjs-dist"
+      ]
+    },
+    {
+      "description": "Don't update Node.js engines field (needed because of the use of rangeStrategy: 'bump' above)",
+      "matchPackageNames": ["node"],
+      "matchManagers": ["npm"],
+      "matchDepTypes": ["engines"],
+      "enabled": false
+    }
+  ]
+}
