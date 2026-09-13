@@ -12,7 +12,7 @@ on:
 
 permissions:
   actions: write # zizmor: ignore[excessive-permissions]
-  contents: read
+  contents: write # zizmor: ignore[excessive-permissions]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -27,7 +27,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7.0.1
         with:
-          persist-credentials: false
+          ref: ${{ github.head_ref || github.ref }}
+          persist-credentials: true
 
       - name: Setup PNPM
         uses: pnpm/action-setup@v6.0.10
@@ -41,6 +42,32 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Detect Biome/Wrangler updates
+        id: detect
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          git fetch origin "$BASE_REF" --depth=1
+          biome=false
+          wrangler=false
+          if ! git diff --quiet "origin/$BASE_REF"...HEAD -G'"@biomejs/biome"'; then
+            biome=true
+          fi
+          if ! git diff --quiet "origin/$BASE_REF"...HEAD -G'"wrangler"'; then
+            wrangler=true
+          fi
+          echo "biome=$biome" >> "$GITHUB_OUTPUT"
+          echo "wrangler=$wrangler" >> "$GITHUB_OUTPUT"
+
+      - name: Run Biome migrate
+        if: steps.detect.outputs.biome == 'true'
+        run: pnpm exec biome migrate --write
+
+      - name: Regenerate Wrangler types
+        if: steps.detect.outputs.wrangler == 'true'
+        run: pnpm --filter "@namesake/web" exec wrangler types
+
       - name: Sync Astro types
         run: pnpm --filter "@namesake/web" --filter "@namesake/docs" exec astro sync
 
@@ -52,3 +79,27 @@ jobs:
 
       - name: Biome
         run: pnpm biome ci
+
+      - name: Update Biome schema
+        if: >
+          github.event.pull_request.head.repo.full_name == github.repository &&
+          steps.detect.outputs.biome == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v7.2.0
+        with:
+          commit_message: "chore: run biome migrate"
+          commit_user_name: github-actions[bot]
+          commit_user_email: github-actions[bot]@users.noreply.github.com
+          file_pattern: "biome.jsonc"
+          branch: ${{ github.head_ref }}
+
+      - name: Update Wrangler types
+        if: >
+          github.event.pull_request.head.repo.full_name == github.repository &&
+          steps.detect.outputs.wrangler == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v7.2.0
+        with:
+          commit_message: "chore: regenerate wrangler types"
+          commit_user_name: github-actions[bot]
+          commit_user_email: github-actions[bot]@users.noreply.github.com
+          file_pattern: "web/worker-configuration.d.ts"
+          branch: ${{ github.head_ref }}
