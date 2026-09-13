@@ -1,4 +1,4 @@
-name: Renovate Postfix
+name: Renovate
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   postfix:
-    name: Run migrate/types commands
+    name: Update Biome and Wrangler
     if: >
       github.event.pull_request.user.login == 'renovate[bot]' &&
       github.event.pull_request.head.repo.full_name == github.repository
