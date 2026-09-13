@@ -1,0 +1,84 @@
+name: Renovate Postfix
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: renovate-postfix-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  postfix:
+    name: Run migrate/types commands
+    if: >
+      github.event.pull_request.user.login == 'renovate[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          persist-credentials: true
+
+      - name: Detect changes to Biome and Wrangler
+        id: detect
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          git fetch origin "$BASE_REF" --depth=1
+          biome=false
+          wrangler=false
+          if ! git diff --quiet "origin/$BASE_REF"...HEAD -G'"@biomejs/biome"'; then
+            biome=true
+          fi
+          if ! git diff --quiet "origin/$BASE_REF"...HEAD -G'"wrangler"'; then
+            wrangler=true
+          fi
+          echo "biome=$biome" >> "$GITHUB_OUTPUT"
+          echo "wrangler=$wrangler" >> "$GITHUB_OUTPUT"
+
+      - name: Setup PNPM
+        if: steps.detect.outputs.biome == 'true' || steps.detect.outputs.wrangler == 'true'
+        uses: pnpm/action-setup@v6.0.10
+
+      - name: Setup Node
+        if: steps.detect.outputs.biome == 'true' || steps.detect.outputs.wrangler == 'true'
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: "24.x"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        if: steps.detect.outputs.biome == 'true' || steps.detect.outputs.wrangler == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Run biome migrate
+        if: steps.detect.outputs.biome == 'true'
+        run: pnpm exec biome migrate --write
+
+      - name: Regenerate wrangler types
+        if: steps.detect.outputs.wrangler == 'true'
+        run: pnpm --filter "@namesake/web" exec wrangler types
+
+      - name: Commit fixes
+        if: steps.detect.outputs.biome == 'true' || steps.detect.outputs.wrangler == 'true'
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          if git diff --quiet; then
+            echo "Nothing to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: run biome migrate / wrangler types"
+          git push origin "HEAD:refs/heads/$HEAD_REF"
