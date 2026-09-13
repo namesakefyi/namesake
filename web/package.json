@@ -54,7 +54,7 @@
     "@remixicon/react": "^4.9.0",
     "@severo_bo/us-atlas-2023": "^4.0.0",
     "@xstate/react": "^6.1.0",
-    "astro": "7.1.5",
+    "astro": "7.2.8",
     "astro-pagefind": "^2.0.1",
     "browserslist": "^4.28.7",
     "cf-workers-og": "^3.0.1",
