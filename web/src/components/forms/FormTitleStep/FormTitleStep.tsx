@@ -11,10 +11,12 @@ import type { FormPdfMetadata } from "#lib/forms/getFormPdfMetadata";
 import { formatBrowser } from "#lib/utils/formatBrowser";
 import { formatDevice } from "#lib/utils/formatDevice";
 import { formatTimeEstimate } from "#lib/utils/formatTimeEstimate";
+import { pluralize } from "#lib/utils/pluralize";
 import { smartquotes } from "#lib/utils/smartquotes";
 import { Button } from "../../common/Button";
 import { Heading } from "../../common/Content/Content";
 import "./FormTitleStep.css";
+import { Banner } from "#components/common/Banner";
 
 function FormInfo({ children }: { children: React.ReactNode }) {
   return <ul className="form-info">{children}</ul>;
@@ -102,43 +104,38 @@ export function FormTitleStep({
         )}
       </header>
       {children}
+      {downloadError && <Banner variant="error">{downloadError}</Banner>}
       <FormInfo>
-        <FormInfoItem icon={RiFileCheckLine}>
-          <FormInfoItemTitle>
-            This form helps you fill out name change documents, including:
-          </FormInfoItemTitle>
-          {pdfs.length > 0 && (
+        {pdfs.length > 0 && (
+          <FormInfoItem icon={RiFileCheckLine}>
+            <FormInfoItemTitle>
+              Includes{" "}
+              <strong>
+                {pdfs.length} {pluralize(pdfs.length, "document")}.
+              </strong>{" "}
+              <button
+                type="button"
+                className="button-as-link"
+                disabled={isDownloading}
+                onClick={handleDownloadBlank}
+              >
+                {isDownloading ? "Downloading…" : "Download all, blank"}
+              </button>
+            </FormInfoItemTitle>
             <FormInfoItemDescription>
               <ul className="form-info-pdf-list">
                 {pdfs.map((pdf) => (
                   <li key={pdf.pdfId}>
-                    {pdf.title}
-                    {pdf.code && ` (${pdf.code})`}
+                    <a href={pdf.pdfPath}>
+                      {pdf.title}
+                      {pdf.code && ` (${pdf.code})`}
+                    </a>
                   </li>
                 ))}
-                <li>
-                  Prefer to do it yourself?{" "}
-                  <button
-                    type="button"
-                    className="button-as-link"
-                    disabled={isDownloading}
-                    onClick={handleDownloadBlank}
-                  >
-                    {isDownloading ? "Downloading…" : "Download blank forms"}
-                  </button>
-                  {downloadError && (
-                    <>
-                      {" "}
-                      <span className="form-info-download-error" role="alert">
-                        {downloadError}
-                      </span>
-                    </>
-                  )}
-                </li>
               </ul>
             </FormInfoItemDescription>
-          )}
-        </FormInfoItem>
+          </FormInfoItem>
+        )}
         {timeEstimate && (
           <FormInfoItem icon={RiTimerLine}>
             <FormInfoItemTitle>
@@ -151,12 +148,11 @@ export function FormTitleStep({
         )}
         <FormInfoItem icon={RiShieldKeyholeLine}>
           <FormInfoItemTitle>
-            Responses are securely stored in{" "}
-            <strong>{formatBrowser(browser)}</strong> on{" "}
+            Responses are stored in <strong>{formatBrowser(browser)}</strong> on{" "}
             <strong>{formatDevice(device)}</strong>.
           </FormInfoItemTitle>
           <FormInfoItemDescription>
-            For security, your information never leaves this device.
+            Your information never leaves this device.
           </FormInfoItemDescription>
         </FormInfoItem>
       </FormInfo>

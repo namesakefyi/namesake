@@ -44,6 +44,7 @@ const sharedArgs = {
       pdfId: "cjp27-petition-to-change-name-of-adult" as const,
       title: "Petition to Change Name of Adult",
       code: "CJP-27",
+      pdfPath: "/forms/cjp27-petition-to-change-name-of-adult.pdf",
     },
   ],
   totalSteps: 5,

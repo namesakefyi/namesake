@@ -29,6 +29,7 @@ describe("getFormPdfMetadata", () => {
       id: "cjp27-petition-to-change-name-of-adult",
       title: "Petition to Change Name of Adult",
       code: "CJP-27",
+      pdfPath: "/forms/cjp27-petition-to-change-name-of-adult.pdf",
     } as never);
 
     const result = await getFormPdfMetadata("court-order-ma");
@@ -39,6 +40,7 @@ describe("getFormPdfMetadata", () => {
         title: "Petition to Change Name of Adult",
         code: "CJP-27",
         conditional: false,
+        pdfPath: "/forms/cjp27-petition-to-change-name-of-adult.pdf",
       },
     ]);
   });

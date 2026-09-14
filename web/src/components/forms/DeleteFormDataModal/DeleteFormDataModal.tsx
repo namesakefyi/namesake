@@ -1,6 +1,7 @@
 import { RiDeleteBin2Line } from "@remixicon/react";
 import { useEffect, useState } from "react";
 import { clearAllFields, getAllFields } from "#db/database";
+import { pluralize } from "#lib/utils/pluralize";
 import { Button } from "../../common/Button";
 import { Heading } from "../../common/Content";
 import { Dialog, DialogTrigger } from "../../common/Dialog";
@@ -53,7 +54,9 @@ export function DeleteFormDataModal() {
       ) : hasData ? (
         <p>
           There are{" "}
-          <strong>{`${responseCount} response${responseCount !== 1 ? "s" : ""}`}</strong>{" "}
+          <strong>
+            {responseCount} {pluralize(responseCount, "response")}
+          </strong>{" "}
           stored on this browser. Anyone else who visits Namesake on{" "}
           <strong>{`this ${device.model ?? "device"}`}</strong> will be able to
           see your responses.
@@ -77,7 +80,7 @@ export function DeleteFormDataModal() {
                 <p className="delete-form-data-modal-description">
                   This will permanently delete all{" "}
                   <strong>
-                    {`${responseCount} form ${responseCount !== 1 ? "responses" : "response"}`}
+                    {`${responseCount} form ${pluralize(responseCount, "response")}`}
                   </strong>{" "}
                   from this browser. You cannot undo this action.
                 </p>
