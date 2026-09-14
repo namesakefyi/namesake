@@ -9,25 +9,18 @@ const shuffledSponsors = sponsors.sort(() => 0.5 - Math.random());
 <section class="sponsors">
   <h2>Support from</h2>
   <ul>
-    {
-      shuffledSponsors.map(({ data }) => (
-        <li>
-          <a
-            href={data.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Visit ${data.name}`}
-          >
-            <Image
-              src={data.logo}
-              alt={data.name}
-              width={200}
-              densities={[1, 2]}
-            />
-          </a>
-        </li>
-      ))
-    }
+    {shuffledSponsors.map(({ data }) => (
+      <li>
+        <a href={data.url} aria-label={`Visit ${data.name}`}>
+          <Image
+            src={data.logo}
+            alt={data.name}
+            width={200}
+            densities={[1, 2]}
+          />
+        </a>
+      </li>
+    ))}
   </ul>
 </section>
 
