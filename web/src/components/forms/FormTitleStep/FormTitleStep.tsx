@@ -148,7 +148,8 @@ export function FormTitleStep({
         )}
         <FormInfoItem icon={RiShieldKeyholeLine}>
           <FormInfoItemTitle>
-            Responses are stored in <strong>{formatBrowser(browser)}</strong> on{" "}
+            Responses are securely stored in{" "}
+            <strong>{formatBrowser(browser)}</strong> on{" "}
             <strong>{formatDevice(device)}</strong>.
           </FormInfoItemTitle>
           <FormInfoItemDescription>
