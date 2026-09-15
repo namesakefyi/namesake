@@ -13,7 +13,7 @@ export default defineConfig({
   site: "https://namesake.fyi",
   output: "static",
   adapter: cloudflare({
-    imageService: "compile",
+    imageService: "passthrough",
   }),
   markdown: {
     processor: satteri({
