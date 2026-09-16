@@ -5,9 +5,6 @@
     ":configMigration",
     ":widenPeerDependencies",
     "docker:pinDigests",
-    "group:linters",
-    "group:test",
-    "group:vite",
     "helpers:pinGitHubActionDigestsToSemver",
     "mergeConfidence:all-badges",
     "workarounds:all"
@@ -19,15 +16,13 @@
   "postUpdateOptions": ["pnpmDedupe"],
   "packageRules": [
     {
-      "groupName": "github-actions",
-      "matchManagers": ["github-actions"]
-    },
-    {
-      "groupName": "devcontainer",
-      "matchManagers": ["devcontainer"]
+      "groupName": "ci",
+      "separateMajorMinor": false,
+      "matchManagers": ["github-actions", "devcontainer"]
     },
     {
       "groupName": "astro",
+      "separateMajorMinor": false,
       "matchDatasources": ["npm"],
       "matchPackageNames": [
         "astro",
@@ -35,11 +30,13 @@
         "astro-pagefind",
         "astro-mermaid",
         "astro-og-canvas",
-        "starlight-theme-flexoki"
+        "starlight-theme-flexoki",
+        "satteri"
       ]
     },
     {
       "groupName": "react",
+      "separateMajorMinor": false,
       "matchDatasources": ["npm"],
       "matchPackageNames": [
         "react",
@@ -50,11 +47,13 @@
         "@react-aria/test-utils",
         "@internationalized/date",
         "xstate",
-        "@xstate/react"
+        "@xstate/react",
+        "react-hook-form"
       ]
     },
     {
-      "groupName": "d3",
+      "groupName": "data-viz",
+      "separateMajorMinor": false,
       "matchDatasources": ["npm"],
       "matchPackageNames": [
         "d3",
@@ -66,29 +65,32 @@
         "topojson-client",
         "@types/topojson-client",
         "@types/topojson-specification",
-        "@severo_bo/us-atlas-2023"
+        "@severo_bo/us-atlas-2023",
+        "mermaid",
+        "@mermaid-js/layout-elk",
+        "canvaskit-wasm"
       ]
     },
     {
-      "groupName": "storybook",
+      "groupName": "testing",
+      "separateMajorMinor": false,
       "matchDatasources": ["npm"],
       "matchPackageNames": [
         "storybook",
         "@storybook/**",
-        "@vueless/storybook-dark-mode"
-      ]
-    },
-    {
-      "groupName": "e2e-testing",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": [
+        "@vueless/storybook-dark-mode",
         "playwright",
         "@playwright/test",
-        "@axe-core/playwright"
+        "@axe-core/playwright",
+        "jsdom",
+        "vitest",
+        "@vitest/**",
+        "@testing-library/**"
       ]
     },
     {
       "groupName": "tooling",
+      "separateMajorMinor": false,
       "matchDatasources": ["npm"],
       "matchPackageNames": [
         "wrangler",
@@ -97,7 +99,30 @@
         "hono",
         "@hono/node-server",
         "@libpdf/core",
-        "pdfjs-dist"
+        "pdfjs-dist",
+        "tsx",
+        "typescript",
+        "vite",
+        "@vitejs/plugin-react",
+        "sass-embedded",
+        "simple-git-hooks",
+        "baseline-browser-mapping",
+        "browserslist",
+        "@types/node",
+        "@clack/prompts"
+      ]
+    },
+    {
+      "groupName": "app-dependencies",
+      "separateMajorMinor": false,
+      "matchDatasources": ["npm"],
+      "matchPackageNames": [
+        "sharp",
+        "sanitize-html",
+        "libphonenumber-js",
+        "react-lite-youtube-embed",
+        "@maskito/core",
+        "optimo"
       ]
     },
     {
