@@ -109,7 +109,7 @@
     "lightningcss": "^1.33.0",
     "optimo": "^0.0.30",
     "sass-embedded": "^1.100.0",
-    "satteri": "^0.9.5",
+    "satteri": "^0.10.5",
     "sharp": "^0.35.4",
     "storybook": "^10.6.0",
     "vitest": "5.0.0",
