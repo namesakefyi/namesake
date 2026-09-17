@@ -85,8 +85,16 @@ describe("FormTitleStep", () => {
       <FormTitleStep
         {...formTitleStep}
         pdfs={[
-          { pdfId: "pdf-1" as any, title: "Petition for Name Change" },
-          { pdfId: "pdf-2" as any, title: "Civil Cover Sheet" },
+          {
+            pdfId: "pdf-1" as any,
+            title: "Petition for Name Change",
+            pdfPath: "test-1.pdf",
+          },
+          {
+            pdfId: "pdf-2" as any,
+            title: "Civil Cover Sheet",
+            pdfPath: "test-2.pdf",
+          },
         ]}
       />,
       { wrapper: TestWrapper },
@@ -100,7 +108,14 @@ describe("FormTitleStep", () => {
     render(
       <FormTitleStep
         {...formTitleStep}
-        pdfs={[{ pdfId: "pdf-1" as any, title: "Petition", code: "CJD 400" }]}
+        pdfs={[
+          {
+            pdfId: "pdf-1" as any,
+            title: "Petition",
+            code: "CJD 400",
+            pdfPath: "test-1.pdf",
+          },
+        ]}
       />,
       { wrapper: TestWrapper },
     );
@@ -108,31 +123,33 @@ describe("FormTitleStep", () => {
     expect(screen.getByText("Petition (CJD 400)")).toBeInTheDocument();
   });
 
-  it("renders a download blank forms button when PDFs are present", () => {
+  it("renders a download all button when PDFs are present", () => {
     render(
       <FormTitleStep
         {...formTitleStep}
-        pdfs={[{ pdfId: "pdf-1" as any, title: "Petition" }]}
+        pdfs={[
+          { pdfId: "pdf-1" as any, title: "Petition", pdfPath: "test-1.pdf" },
+        ]}
       />,
       { wrapper: TestWrapper },
     );
 
     expect(
-      screen.getByRole("button", { name: /download blank forms/i }),
+      screen.getByRole("button", { name: /download all, blank/i }),
     ).toBeInTheDocument();
   });
 
-  it("does not render a download blank forms button when no PDFs are present", () => {
+  it("does not render a download all button when no PDFs are present", () => {
     render(<FormTitleStep {...formTitleStep} pdfs={[]} />, {
       wrapper: TestWrapper,
     });
 
     expect(
-      screen.queryByRole("button", { name: /download blank forms/i }),
+      screen.queryByRole("button", { name: /download all, blank/i }),
     ).not.toBeInTheDocument();
   });
 
-  it("calls onDownloadBlank when the download blank forms button is clicked", async () => {
+  it("calls onDownloadBlank when the download all button is clicked", async () => {
     const user = userEvent.setup();
     const onDownloadBlank = vi.fn().mockResolvedValue(undefined);
 
@@ -140,20 +157,22 @@ describe("FormTitleStep", () => {
       <FormTitleStep
         {...formTitleStep}
         onDownloadBlank={onDownloadBlank}
-        pdfs={[{ pdfId: "pdf-1" as any, title: "Petition" }]}
+        pdfs={[
+          { pdfId: "pdf-1" as any, title: "Petition", pdfPath: "test-1.pdf" },
+        ]}
       />,
       { wrapper: TestWrapper },
     );
 
     const downloadButton = screen.getByRole("button", {
-      name: /download blank forms/i,
+      name: /download all, blank/i,
     });
     await user.click(downloadButton);
 
     expect(onDownloadBlank).toHaveBeenCalledTimes(1);
   });
 
-  it("disables the download blank forms button while downloading", async () => {
+  it("disables the download all button while downloading", async () => {
     const user = userEvent.setup();
     let resolveDownload: () => void = () => {};
     const onDownloadBlank = vi.fn(
@@ -167,13 +186,15 @@ describe("FormTitleStep", () => {
       <FormTitleStep
         {...formTitleStep}
         onDownloadBlank={onDownloadBlank}
-        pdfs={[{ pdfId: "pdf-1" as any, title: "Petition" }]}
+        pdfs={[
+          { pdfId: "pdf-1" as any, title: "Petition", pdfPath: "test-1.pdf" },
+        ]}
       />,
       { wrapper: TestWrapper },
     );
 
     const downloadButton = screen.getByRole("button", {
-      name: /download blank forms/i,
+      name: /download all, blank/i,
     });
     await user.click(downloadButton);
 
@@ -197,13 +218,15 @@ describe("FormTitleStep", () => {
       <FormTitleStep
         {...formTitleStep}
         onDownloadBlank={onDownloadBlank}
-        pdfs={[{ pdfId: "pdf-1" as any, title: "Petition" }]}
+        pdfs={[
+          { pdfId: "pdf-1" as any, title: "Petition", pdfPath: "test-1.pdf" },
+        ]}
       />,
       { wrapper: TestWrapper },
     );
 
     const downloadButton = screen.getByRole("button", {
-      name: /download blank forms/i,
+      name: /download all, blank/i,
     });
     await user.click(downloadButton);
 

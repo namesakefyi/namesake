@@ -1,3 +1,5 @@
+import { pluralize } from "./pluralize";
+
 /**
  * Given the number of steps in a form, return a formatted time estimate range.
  *
@@ -15,7 +17,7 @@ export function formatTimeEstimate(
 
   // If min and max are the same, show single value
   if (minMinutes === maxMinutes) {
-    return `${minMinutes} minute${minMinutes !== 1 ? "s" : ""}`;
+    return `${minMinutes} ${pluralize(minMinutes, "minute")}`;
   }
 
   // Otherwise show range with en dash

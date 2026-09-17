@@ -15,6 +15,8 @@ export interface FormPdfMetadata {
   code?: string;
   /** Whether this PDF is conditionally included based on form data */
   conditional?: boolean;
+  /** The path to the blank PDF file */
+  pdfPath: string;
 }
 
 /**
@@ -37,6 +39,7 @@ export async function getFormPdfMetadata(
         title: definition.title,
         code: definition.code,
         conditional: !!pdf.when,
+        pdfPath: definition.pdfPath,
       };
     }),
   );
