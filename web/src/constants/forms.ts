@@ -52,10 +52,9 @@ export interface FormCost {
 }
 
 /**
- * Runtime configuration for a form: steps, PDFs, and download instructions.
- * Static display metadata (title, description, jurisdiction, category,
- * costs, unlisted) lives in the form's `index.yml`, validated by the
- * `forms` content collection's Zod schema — not duplicated here.
+ * Runtime configuration for a form. Static display metadata such as
+ * title and description are set in `index.yml` and fetched via Astro's
+ * content collection.
  */
 export interface FormConfig {
   /** Ordered steps, including optional guards for conditional inclusion. */
