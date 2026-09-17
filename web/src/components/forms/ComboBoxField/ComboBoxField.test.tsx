@@ -39,7 +39,7 @@ describe("ComboBoxField", () => {
     });
 
     await comboboxTester.open();
-    expect(comboboxTester.listbox).toBeInTheDocument();
+    expect(comboboxTester.getListbox()).toBeInTheDocument();
 
     for (const option of mockOptions) {
       expect(
@@ -67,9 +67,9 @@ describe("ComboBoxField", () => {
     });
 
     await comboboxTester.open();
-    await comboboxTester.selectOption({ option: "Option 2" });
+    await comboboxTester.toggleOptionSelection({ option: "Option 2" });
 
-    expect(comboboxTester.trigger).toHaveValue("Option 2");
+    expect(comboboxTester.getTrigger()).toHaveValue("Option 2");
   });
 
   it("supports optional children", () => {

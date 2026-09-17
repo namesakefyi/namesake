@@ -31,21 +31,21 @@ describe("GridList", () => {
 
     it("renders all items as rows", () => {
       const tester = renderGridList();
-      expect(tester.rows).toHaveLength(3);
+      expect(tester.getRows()).toHaveLength(3);
+      expect(tester.findRow({ indexOrText: "Court Order" })).toHaveTextContent(
+        "Court Order",
+      );
       expect(
-        tester.findRow({ rowIndexOrText: "Court Order" }),
-      ).toHaveTextContent("Court Order");
-      expect(
-        tester.findRow({ rowIndexOrText: "Social Security" }),
+        tester.findRow({ indexOrText: "Social Security" }),
       ).toHaveTextContent("Social Security");
-      expect(tester.findRow({ rowIndexOrText: "Passport" })).toHaveTextContent(
+      expect(tester.findRow({ indexOrText: "Passport" })).toHaveTextContent(
         "Passport",
       );
     });
 
     it("renders items by index", () => {
       const tester = renderGridList();
-      expect(tester.findRow({ rowIndexOrText: 0 })).toHaveTextContent(
+      expect(tester.findRow({ indexOrText: 0 })).toHaveTextContent(
         "Court Order",
       );
     });
@@ -54,10 +54,9 @@ describe("GridList", () => {
   describe("single selection", () => {
     it("selects a row when clicked", async () => {
       const tester = renderGridList({ selectionMode: "single" });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await tester.toggleRowSelection({ row: "Court Order" } as any);
-      expect(tester.selectedRows).toHaveLength(1);
-      expect(tester.selectedRows[0]).toHaveTextContent("Court Order");
+      await tester.toggleRowSelection({ row: "Court Order" });
+      expect(tester.getSelectedRows()).toHaveLength(1);
+      expect(tester.getSelectedRows()[0]).toHaveTextContent("Court Order");
     });
 
     it("moves selection when a different row is clicked", async () => {
@@ -65,11 +64,10 @@ describe("GridList", () => {
         selectionMode: "single",
         defaultSelectedKeys: ["court-order"],
       });
-      expect(tester.selectedRows).toHaveLength(1);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await tester.toggleRowSelection({ row: "Passport" } as any);
-      expect(tester.selectedRows).toHaveLength(1);
-      expect(tester.selectedRows[0]).toHaveTextContent("Passport");
+      expect(tester.getSelectedRows()).toHaveLength(1);
+      await tester.toggleRowSelection({ row: "Passport" });
+      expect(tester.getSelectedRows()).toHaveLength(1);
+      expect(tester.getSelectedRows()[0]).toHaveTextContent("Passport");
     });
 
     it("calls onSelectionChange when a row is selected", async () => {
@@ -78,8 +76,7 @@ describe("GridList", () => {
         selectionMode: "single",
         onSelectionChange,
       });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await tester.toggleRowSelection({ row: "Social Security" } as any);
+      await tester.toggleRowSelection({ row: "Social Security" });
       expect(onSelectionChange).toHaveBeenCalledOnce();
     });
   });
@@ -93,11 +90,9 @@ describe("GridList", () => {
 
     it("selects multiple rows independently", async () => {
       const tester = renderGridList({ selectionMode: "multiple" });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await tester.toggleRowSelection({ row: "Court Order" } as any);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await tester.toggleRowSelection({ row: "Passport" } as any);
-      expect(tester.selectedRows).toHaveLength(2);
+      await tester.toggleRowSelection({ row: "Court Order" });
+      await tester.toggleRowSelection({ row: "Passport" });
+      expect(tester.getSelectedRows()).toHaveLength(2);
     });
 
     it("pre-selects rows from defaultSelectedKeys", () => {
@@ -105,7 +100,7 @@ describe("GridList", () => {
         selectionMode: "multiple",
         defaultSelectedKeys: ["court-order", "social-security"],
       });
-      expect(tester.selectedRows).toHaveLength(2);
+      expect(tester.getSelectedRows()).toHaveLength(2);
     });
 
     it("deselects a row when toggled a second time", async () => {
@@ -113,9 +108,8 @@ describe("GridList", () => {
         selectionMode: "multiple",
         defaultSelectedKeys: ["court-order"],
       });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await tester.toggleRowSelection({ row: "Court Order" } as any);
-      expect(tester.selectedRows).toHaveLength(0);
+      await tester.toggleRowSelection({ row: "Court Order" });
+      expect(tester.getSelectedRows()).toHaveLength(0);
     });
   });
 
@@ -123,8 +117,7 @@ describe("GridList", () => {
     it("calls onAction when a row is activated", async () => {
       const onAction = vi.fn();
       const tester = renderGridList({ onAction });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await tester.triggerRowAction({ row: "Social Security" } as any);
+      await tester.triggerRowAction({ row: "Social Security" });
       expect(onAction).toHaveBeenCalledWith("social-security");
     });
   });
@@ -141,9 +134,10 @@ describe("GridList", () => {
         selectionMode: "single",
         disabledKeys: ["social-security"],
       });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await tester.toggleRowSelection({ row: "Social Security" } as any);
-      expect(tester.selectedRows).toHaveLength(0);
+      await expect(
+        tester.toggleRowSelection({ row: "Social Security" }),
+      ).rejects.toThrow("Cannot toggle selection on disabled row");
+      expect(tester.getSelectedRows()).toHaveLength(0);
     });
   });
 });
