@@ -1,4 +1,5 @@
 ---
+import { getEntry } from "astro:content";
 import type { FormSlug } from "#constants/forms";
 import { getFormPdfMetadata } from "#lib/forms/getFormPdfMetadata";
 import { FormContainer as ReactFormContainer } from "./FormContainer";
@@ -10,12 +11,18 @@ interface Props {
 
 const { slug, inline = true } = Astro.props;
 const pdfMetadata = await getFormPdfMetadata(slug);
+const entry = await getEntry("forms", slug);
+if (!entry) throw new Error(`No form found for slug: ${slug}`);
+const { title, description, costs } = entry.data;
 ---
 
 <ReactFormContainer
   client:load
   slug={slug}
   inline={inline}
+  title={title}
+  description={description}
+  costs={costs}
   pdfMetadata={pdfMetadata}
 >
   <slot />

@@ -8,14 +8,6 @@ import { normalFeesStep } from "./steps/NormalFeesStep";
 import { publicAssistanceStep } from "./steps/PublicAssistanceStep";
 
 export default defineForm({
-  title: "Affidavit of Indigency: Massachusetts",
-  description: "Fill out this form to waive court fees and other expenses.",
-  jurisdiction: "ma",
-  category: "court-order",
-  costs: [
-    { title: "Filing fee", amount: 150, required: "required" },
-    { title: "Surcharge fee", amount: 15, required: "required" },
-  ],
   steps: [
     currentNameStep,
     addressStep,

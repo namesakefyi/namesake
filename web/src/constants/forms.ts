@@ -1,7 +1,5 @@
 import type { Step } from "#lib/forms/types";
-import type { CategoryId } from "./categories";
 import type { FormData } from "./fields";
-import type { JurisdictionId } from "./jurisdictions";
 import type { PDFId } from "./pdf";
 
 export const FORM_SLUGS = [
@@ -50,25 +48,16 @@ export function resolveInstructions(
 export interface FormCost {
   title: string;
   amount: number;
-  required: "required" | "notRequired";
+  required: boolean;
 }
 
 /**
- * Complete configuration for a form.
+ * Runtime configuration for a form: steps, PDFs, and download instructions.
+ * Static display metadata (title, description, jurisdiction, category,
+ * costs, unlisted) lives in the form's `index.yml`, validated by the
+ * `forms` content collection's Zod schema — not duplicated here.
  */
 export interface FormConfig {
-  /** Display title */
-  title: string;
-  /** Optional description */
-  description?: string;
-  /** Jurisdiction ID, e.g. "ma" */
-  jurisdiction?: JurisdictionId;
-  /** Category identifier */
-  category: CategoryId;
-  /** Costs associated with this form */
-  costs?: readonly FormCost[];
-  /** If true, excluded from the public forms listing */
-  unlisted?: boolean;
   /** Ordered steps, including optional guards for conditional inclusion. */
   steps: readonly Step[];
   /** PDFs included in this form */

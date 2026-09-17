@@ -13,15 +13,6 @@ import { pronounsStep } from "./steps/PronounsStep";
 import { reasonStep } from "./steps/ReasonStep";
 
 export default defineForm({
-  title: "Court Order: Massachusetts",
-  description:
-    "If you live in Massachusetts and want to legally update your name, this is the place to start.",
-  jurisdiction: "ma",
-  category: "court-order",
-  costs: [
-    { title: "Filing fee", amount: 150, required: "required" },
-    { title: "Surcharge fee", amount: 15, required: "required" },
-  ],
   steps: [
     newNameStep,
     currentNameStep,

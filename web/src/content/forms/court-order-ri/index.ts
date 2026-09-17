@@ -13,11 +13,6 @@ import { previousNameChangeStep } from "./steps/PreviousNameChangeStep";
 import { reasonStep } from "./steps/ReasonStep";
 
 export default defineForm({
-  title: "Court Order: Rhode Island",
-  description:
-    "If you live in Rhode Island and want to legally update your name, this is the place to start.",
-  jurisdiction: "ri",
-  category: "court-order",
   steps: [
     newNameStep,
     currentNameStep,

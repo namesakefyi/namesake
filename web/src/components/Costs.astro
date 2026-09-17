@@ -26,7 +26,7 @@ const totalCosts = formatTotalCosts(costs);
           <tr>
             <td>
               {cost.title}
-              {cost.required === "notRequired" && " (optional)"}
+              {!cost.required && " (optional)"}
             </td>
             <td>{formatCurrency(cost.amount)}</td>
           </tr>

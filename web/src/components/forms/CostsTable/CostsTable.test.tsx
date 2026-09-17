@@ -6,17 +6,17 @@ import { CostsTable } from "./CostsTable";
 const filingFee: FormCost = {
   title: "Court filing fee",
   amount: 150,
-  required: "required",
+  required: true,
 };
 const optionalFee: FormCost = {
   title: "Publication fee",
   amount: 75,
-  required: "notRequired",
+  required: false,
 };
 const requiredFee: FormCost = {
   title: "Name change kit",
   amount: 25,
-  required: "required",
+  required: true,
 };
 
 describe("CostsTable", () => {
@@ -62,25 +62,18 @@ describe("CostsTable", () => {
     ).toBeInTheDocument();
   });
 
-  it("appends '(optional)' to the title when required is notRequired", () => {
+  it("appends '(optional)' to the title when required is false", () => {
     render(<CostsTable costs={[optionalFee]} />);
     expect(
       screen.getByRole("cell", { name: "Publication fee (optional)" }),
     ).toBeInTheDocument();
   });
 
-  it("does not append '(optional)' when required is required", () => {
+  it("does not append '(optional)' when required is true", () => {
     render(<CostsTable costs={[requiredFee]} />);
     expect(
       screen.getByRole("cell", { name: "Name change kit" }),
     ).toBeInTheDocument();
-    expect(
-      screen.queryByRole("cell", { name: /optional/ }),
-    ).not.toBeInTheDocument();
-  });
-
-  it("does not append '(optional)' when required is unset", () => {
-    render(<CostsTable costs={[filingFee]} />);
     expect(
       screen.queryByRole("cell", { name: /optional/ }),
     ).not.toBeInTheDocument();
