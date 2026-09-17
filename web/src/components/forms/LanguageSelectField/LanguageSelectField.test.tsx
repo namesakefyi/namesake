@@ -34,9 +34,9 @@ describe("LanguageSelectField", () => {
       interactionType: "keyboard",
     });
     await comboboxTester.open();
-    expect(comboboxTester.listbox).toBeInTheDocument();
+    expect(comboboxTester.getListbox()).toBeInTheDocument();
 
-    const languageOptions = comboboxTester.options();
+    const languageOptions = comboboxTester.getOptions();
     expect(languageOptions).toHaveLength(Object.keys(languageNameMap).length);
   });
 
@@ -53,14 +53,14 @@ describe("LanguageSelectField", () => {
     // Type "Fra" to filter for French
     await user.keyboard("Fra");
 
-    expect(comboboxTester.options()).toHaveLength(1);
-    expect(comboboxTester.options()[0]).toHaveTextContent(/French/);
+    expect(comboboxTester.getOptions()).toHaveLength(1);
+    expect(comboboxTester.getOptions()[0]).toHaveTextContent(/French/);
 
     await user.keyboard("{Backspace}{Backspace}{Backspace}");
     await user.keyboard("espa");
 
-    expect(comboboxTester.options()).toHaveLength(1);
-    expect(comboboxTester.options()[0]).toHaveTextContent(/Spanish/);
+    expect(comboboxTester.getOptions()).toHaveLength(1);
+    expect(comboboxTester.getOptions()[0]).toHaveTextContent(/Spanish/);
   });
 
   it("supports optional children", () => {
