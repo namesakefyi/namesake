@@ -16,9 +16,6 @@ import { raceStep } from "./steps/RaceStep";
 import { sexStep } from "./steps/SexStep";
 
 export default defineForm({
-  title: "Social Security",
-  description: "Apply for a new Social Security card with your updated name.",
-  category: "social-security",
   steps: [
     newNameStep,
     oldNameStep,

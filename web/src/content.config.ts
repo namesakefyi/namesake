@@ -4,7 +4,6 @@ import { z } from "astro/zod";
 import { ANNOTATION_TYPES } from "./constants/annotations";
 import { CATEGORIES } from "./constants/categories";
 import { COLOR_KEYS } from "./constants/colors";
-import type { FormConfig } from "./constants/forms";
 import {
   JURISDICTIONS,
   type JurisdictionName,
@@ -64,26 +63,7 @@ const directory = defineCollection({
 });
 
 const forms = defineCollection({
-  loader: () => {
-    const modules = import.meta.glob<{ default: FormConfig }>(
-      "./content/forms/*/index.ts",
-      { eager: true },
-    );
-    return Object.entries(modules).map(([path, module]) => {
-      const id =
-        path.match(/\.\/content\/forms\/([^/]+)\/index\.ts/)?.[1] ?? "";
-      const config = module.default;
-      return {
-        id,
-        title: config.title,
-        description: config.description,
-        jurisdiction: config.jurisdiction,
-        category: config.category,
-        costs: config.costs,
-        unlisted: config.unlisted ?? false,
-      };
-    });
-  },
+  loader: glob({ base: "./src/content/forms", pattern: "*/index.yml" }),
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
@@ -95,7 +75,7 @@ const forms = defineCollection({
         z.object({
           title: z.string(),
           amount: z.number(),
-          required: z.enum(["required", "notRequired"]),
+          required: z.boolean(),
         }),
       )
       .optional(),

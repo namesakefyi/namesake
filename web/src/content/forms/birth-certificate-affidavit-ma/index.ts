@@ -13,11 +13,6 @@ import { parentNamesStep } from "./steps/ParentNamesStep";
 import { waiveCostsStep } from "./steps/WaiveCostsStep";
 
 export default defineForm({
-  title: "Birth Certificate: Massachusetts",
-  description:
-    "Use this form to update your legal name and gender marker on your Massachusetts birth certificate.",
-  jurisdiction: "ma",
-  category: "birth-certificate",
   steps: [
     birthGenderStep,
     newGenderStep,

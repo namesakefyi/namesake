@@ -36,8 +36,6 @@ const formStepStep: Step = {
 };
 
 const plainConfig: FormConfig = {
-  title: "Test",
-  category: "court-order",
   steps: [plainStep],
   pdfs: [],
   downloadTitle: "Test",
@@ -45,8 +43,6 @@ const plainConfig: FormConfig = {
 };
 
 const formStepConfig: FormConfig = {
-  title: "Test",
-  category: "court-order",
   steps: [formStepStep],
   pdfs: [],
   downloadTitle: "Test",
@@ -72,21 +68,23 @@ describe("FormContainer", () => {
 
   describe("title step", () => {
     it("renders title on title step", async () => {
-      render(<FormContainer slug="court-order-ma" />);
+      render(<FormContainer slug="court-order-ma" title="Test" />);
       expect(await screen.findByText("Test")).toBeInTheDocument();
     });
 
     it("renders description on title step", async () => {
-      vi.mocked(getFormConfig).mockReturnValue({
-        ...plainConfig,
-        description: "Test Description",
-      });
-      render(<FormContainer slug="court-order-ma" />);
+      render(
+        <FormContainer
+          slug="court-order-ma"
+          title="Test"
+          description="Test Description"
+        />,
+      );
       expect(await screen.findByText("Test Description")).toBeInTheDocument();
     });
 
     it("renders start button on title step", async () => {
-      render(<FormContainer slug="court-order-ma" />);
+      render(<FormContainer slug="court-order-ma" title="Test" />);
       expect(
         await screen.findByRole("button", { name: "Start" }),
       ).toBeInTheDocument();
@@ -96,6 +94,7 @@ describe("FormContainer", () => {
       render(
         <FormContainer
           slug="court-order-ma"
+          title="Test"
           pdfMetadata={[
             {
               pdfId: "cjp27-petition-to-change-name-of-adult",
@@ -114,7 +113,7 @@ describe("FormContainer", () => {
     it("renders a loading spinner while saved progress is being fetched", async () => {
       vi.mocked(db.getFormProgress).mockReturnValue(new Promise(() => {}));
 
-      render(<FormContainer slug="court-order-ma" />);
+      render(<FormContainer slug="court-order-ma" title="Test" />);
       await act(async () => {});
 
       expect(
@@ -127,7 +126,7 @@ describe("FormContainer", () => {
   describe("filling phase", () => {
     it("renders step content and navigation after clicking Start", async () => {
       const user = userEvent.setup();
-      render(<FormContainer slug="court-order-ma" />);
+      render(<FormContainer slug="court-order-ma" title="Test" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
 
@@ -137,7 +136,7 @@ describe("FormContainer", () => {
 
     it("returns to title after clicking Previous step", async () => {
       const user = userEvent.setup();
-      render(<FormContainer slug="court-order-ma" />);
+      render(<FormContainer slug="court-order-ma" title="Test" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
       await user.click(screen.getByRole("button", { name: "Previous step" }));
@@ -151,7 +150,7 @@ describe("FormContainer", () => {
   describe("review phase", () => {
     it("renders review step after clicking Next step", async () => {
       const user = userEvent.setup();
-      render(<FormContainer slug="court-order-ma" />);
+      render(<FormContainer slug="court-order-ma" title="Test" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
       await user.click(screen.getByRole("button", { name: "Next step" }));
@@ -166,7 +165,7 @@ describe("FormContainer", () => {
     it("advances to review when a filling-phase form step is submitted", async () => {
       vi.mocked(getFormConfig).mockReturnValue(formStepConfig);
       const user = userEvent.setup();
-      render(<FormContainer slug="court-order-ma" />);
+      render(<FormContainer slug="court-order-ma" title="Test" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
       await user.click(screen.getByRole("button", { name: "Continue" }));

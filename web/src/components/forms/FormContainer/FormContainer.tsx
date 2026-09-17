@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { FormProvider } from "react-hook-form";
-import type { FormSlug } from "#constants/forms";
+import type { FormCost, FormSlug } from "#constants/forms";
 import { createFormSubmitHandler } from "#lib/forms/createFormSubmitHandler";
 import { downloadBlankPdfPacket } from "#lib/forms/downloadBlankPdfPacket";
 import { getFormConfig } from "#lib/forms/getFormConfig";
@@ -18,6 +18,15 @@ import "./FormContainer.css";
 export interface FormContainerProps {
   slug: FormSlug;
 
+  /** The form's display title, from the `forms` content collection. */
+  title: string;
+
+  /** The form's description, from the `forms` content collection. */
+  description?: string;
+
+  /** Costs associated with this form, from the `forms` content collection. */
+  costs?: readonly FormCost[];
+
   /** Render inline within a page rather than as a full-page experience. */
   inline?: boolean;
 
@@ -30,13 +39,16 @@ export interface FormContainerProps {
 
 export function FormContainer({
   slug,
+  title,
+  description,
+  costs,
   inline = false,
   pdfMetadata = [],
   children,
 }: FormContainerProps) {
   const config = getFormConfig(slug);
   if (!config) throw new Error(`No form config found for slug: ${slug}`);
-  const { title, description, costs, steps } = config;
+  const { steps } = config;
 
   const form = useFormData(config);
   const onSubmit = createFormSubmitHandler(config, form);

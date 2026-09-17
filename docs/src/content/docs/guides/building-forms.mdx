@@ -20,28 +20,28 @@ Add a new folder to `web/src/content/forms` with the following structure:
     - AddressStep.tsx
     - ...
   - e2e.spec.ts
-  - index.ts
+  - index.ts # Runtime info (form steps and PDFs)
+  - index.yml # Static metadata (title, description, jurisdiction, etc.)
 
 </FileTree>
 
-## Define the form
+## Define form metadata
 
-Inside `index.ts`, import `defineForm` and provide a config.
+Inside `index.yml`, fill out static metadata for the form, such as the title, description, and costs.
 
-```ts {2}
-// index.ts
-import { defineForm } from "#lib/forms/defineForm";
-
-export default defineForm({
-  title: "Court Order",
-  description: "If you live in Massachusetts and want to update your name, this is the place to start.",
-  jurisdiction: "ma",
-  category: "court-order",
-  steps: [
-    // Step definitions...
-  ],
-  // Additional form config...
-});
+```yml wrap
+# index.yml
+title: "Court Order: Massachusetts"
+description: "If you live in Massachusetts and want to legally update your name, this is the place to start."
+jurisdiction: "ma"
+category: "court-order"
+costs:
+  - title: "Filing fee"
+    amount: 150
+    required: true
+  - title: "Surcharge fee"
+    amount: 15
+    required: true
 ```
 
 ## Define steps
@@ -143,6 +143,36 @@ fields: [
     when: (data) => data.hasPreviousSocialSecurityCard === true,
   },
 ],
+```
+
+## Define form runtime info
+
+Once you have all of your steps, inside `index.ts`, import `defineForm` and provide an array of `steps`, `pdfs`, and more.
+
+```ts {2}
+// index.ts
+import { defineForm } from "#lib/forms/defineForm";
+
+export default defineForm({
+  steps: [
+    newNameStep,
+    currentNameStep,
+    reasonStep,
+    contactInfoStep,
+    // ...
+  ],
+  pdfs: [
+    { pdfId: "cjp27-petition-to-change-name-of-adult" },
+    { pdfId: "cjp34-cori-and-wms-release-request" },
+  ],
+  downloadTitle: "Massachusetts Court Order",
+  instructions: [
+    "Do not sign the Petition to Change Name (CJP 27) until in the presence of a notary.",
+    "Review all documents carefully.",
+    "File with the Probate and Family Court in your county.",
+    "Remember to bring a certified copy of your birth certificate and certified copies of any previous name changes.",
+  ],
+});
 ```
 
 ## Render the form

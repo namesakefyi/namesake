@@ -27,7 +27,7 @@ export function CostsTable({ costs }: CostsTableProps) {
           <tr key={cost.title}>
             <td>
               {cost.title}
-              {cost.required === "notRequired" && " (optional)"}
+              {!cost.required && " (optional)"}
             </td>
             <td>{formatCurrency(cost.amount)}</td>
           </tr>

@@ -8,11 +8,11 @@ export type { FormCost as Cost };
  * optional costs and free forms.
  *
  * @example
- * formatTotalCosts([{ title: "Filing fee", amount: 50, required: "required" }])
+ * formatTotalCosts([{ title: "Filing fee", amount: 50, required: true }])
  * // "$50"
  * formatTotalCosts([
- *   { title: "Filing fee", amount: 50, required: "required" },
- *   { title: "Certified copy", amount: 25, required: "notRequired" },
+ *   { title: "Filing fee", amount: 50, required: true },
+ *   { title: "Certified copy", amount: 25, required: false },
  * ])
  * // "$50–$75"
  * formatTotalCosts([])
@@ -22,7 +22,7 @@ export const formatTotalCosts = (costs?: readonly FormCost[] | null) => {
   if (!costs || costs.length === 0) return "Free";
 
   const requiredTotal = costs
-    .filter((cost) => cost.required !== "notRequired")
+    .filter((cost) => cost.required)
     .reduce((acc, cost) => acc + (cost.amount ?? 0), 0);
 
   const totalWithOptional = costs.reduce(

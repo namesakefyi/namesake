@@ -1,7 +1,5 @@
 import type { Step } from "#lib/forms/types";
-import type { CategoryId } from "./categories";
 import type { FormData } from "./fields";
-import type { JurisdictionId } from "./jurisdictions";
 import type { PDFId } from "./pdf";
 
 export const FORM_SLUGS = [
@@ -50,25 +48,15 @@ export function resolveInstructions(
 export interface FormCost {
   title: string;
   amount: number;
-  required: "required" | "notRequired";
+  required: boolean;
 }
 
 /**
- * Complete configuration for a form.
+ * Runtime configuration for a form. Static display metadata such as
+ * title and description are set in `index.yml` and fetched via Astro's
+ * content collection.
  */
 export interface FormConfig {
-  /** Display title */
-  title: string;
-  /** Optional description */
-  description?: string;
-  /** Jurisdiction ID, e.g. "ma" */
-  jurisdiction?: JurisdictionId;
-  /** Category identifier */
-  category: CategoryId;
-  /** Costs associated with this form */
-  costs?: readonly FormCost[];
-  /** If true, excluded from the public forms listing */
-  unlisted?: boolean;
   /** Ordered steps, including optional guards for conditional inclusion. */
   steps: readonly Step[];
   /** PDFs included in this form */
