@@ -113,7 +113,7 @@
     "sharp": "^0.35.4",
     "storybook": "^10.6.0",
     "vitest": "5.0.1",
-    "wrangler": "^4.132.0"
+    "wrangler": "^4.135.0"
   },
   "homepage": "https://namesake.fyi",
   "bugs": {
