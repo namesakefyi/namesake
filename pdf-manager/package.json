@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "@hono/node-server": "^2.0.12",
-    "@libpdf/core": "^0.4.1",
+    "@libpdf/core": "^0.4.2",
     "hono": "^4.12.32",
-    "pdfjs-dist": "^6.1.200",
+    "pdfjs-dist": "^6.3.289",
     "react": "^19.3.0",
     "react-aria-components": "^1.21.1",
     "react-dom": "^19.3.0"
