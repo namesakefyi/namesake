@@ -24,7 +24,7 @@
     "sharp": "^0.35.4",
     "starlight-theme-flexoki": "^0.3.0",
     "typescript": "^6.0.3",
-    "wrangler": "^4.132.0"
+    "wrangler": "^4.135.0"
   },
   "devDependencies": {
     "@types/node": "^26.1.2"
