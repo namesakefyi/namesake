@@ -135,7 +135,7 @@
     {
       "groupName": "linting",
       "matchDatasources": ["npm"],
-      "matchPackageNames": ["@biomejs/biome", "simple-git-hooks", "optimo"]
+      "matchPackageNames": ["@biomejs/biome", "simple-git-hooks"]
     },
     {
       "groupName": "browserslist",
