@@ -228,14 +228,14 @@ importers:
         specifier: ^2.0.12
         version: 2.0.12(hono@4.12.32)
       '@libpdf/core':
-        specifier: ^0.4.1
-        version: 0.4.1
+        specifier: ^0.4.2
+        version: 0.4.2
       hono:
         specifier: ^4.12.32
         version: 4.12.32
       pdfjs-dist:
-        specifier: ^6.1.200
-        version: 6.1.200
+        specifier: ^6.3.289
+        version: 6.3.289
       react:
         specifier: ^19.3.0
         version: 19.3.0
@@ -307,8 +307,8 @@ importers:
         specifier: ^3.12.4
         version: 3.12.4
       '@libpdf/core':
-        specifier: ^0.4.1
-        version: 0.4.1
+        specifier: ^0.4.2
+        version: 0.4.2
       '@maskito/core':
         specifier: ^5.4.0
         version: 5.4.0
@@ -1586,8 +1586,8 @@ packages:
     resolution: {integrity: sha512-CfBK4/EZ73uN/6b5/wOfvWju1Ev/6H+uXqS2Vqd7/dEQTyOsvv4BdOHDqESp4Efa9YyrPPvN3IHU+C4z9FAo3Q==}
     engines: {node: '>= 18'}
 
-  '@libpdf/core@0.4.1':
-    resolution: {integrity: sha512-DWGxWw1na8oFPixz+b6kOgu4tMD8xJLDgyPGVUNqIswO5POHAxsqmTvUvDW0IrwHP7kFRHBV3I3T/KhTABf9rA==}
+  '@libpdf/core@0.4.2':
+    resolution: {integrity: sha512-lbkIqLDZCCxjLpiC+8/Xvaru/ME7iVVoihl9tLqbp/CDUWZNF0q3u7s2tBJB9wRW/SzUWID6YPFvBWws770hrQ==}
     engines: {node: '>=20'}
     peerDependencies:
       '@google-cloud/kms': ^5.0.0
@@ -4311,8 +4311,8 @@ packages:
     resolution: {integrity: sha512-//nshmD55c46FuFw26xV/xFAaB5HF9Xdap7HJBBnrKdAd6/GxDBaNA1870O79+9ueg61cZLSVc+OaFlfmObYVQ==}
     engines: {node: '>= 14.16'}
 
-  pdfjs-dist@6.1.200:
-    resolution: {integrity: sha512-o8MolyzirkkLrcdsae/HEOiIcXWI7DS5zGpvqW8xTC2YUsW30rltFw2bDGvw/fskUdEMrQm2br68jzDS5BH2vw==}
+  pdfjs-dist@6.3.289:
+    resolution: {integrity: sha512-ZHjSVpDa3D6izMq8/04lvkhkATUmL9px6ChPaXc1k6nU2Mrhlg1/7F0bdUqCwUjw3NsPTfPZsMDUU6ZIcRaeQw==}
     engines: {node: '>=22.13.0 || >=24'}
 
   piccolore@0.1.3:
@@ -6405,7 +6405,7 @@ snapshots:
 
   '@kikobeats/time-span@1.0.13': {}
 
-  '@libpdf/core@0.4.1':
+  '@libpdf/core@0.4.2':
     dependencies:
       '@noble/ciphers': 2.2.0
       '@noble/hashes': 2.2.0
@@ -9165,7 +9165,7 @@ snapshots:
 
   pathval@2.0.1: {}
 
-  pdfjs-dist@6.1.200:
+  pdfjs-dist@6.3.289:
     optionalDependencies:
       '@napi-rs/canvas': 1.0.2
 
