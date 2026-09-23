@@ -9,6 +9,7 @@
     "mergeConfidence:all-badges",
     "workarounds:all"
   ],
+  "ignorePresets": ["group:monorepos"],
   "rangeStrategy": "bump",
   "ignorePaths": ["**/node_modules/**"],
   "minimumReleaseAge": "4 days",
@@ -17,12 +18,10 @@
   "packageRules": [
     {
       "groupName": "ci",
-      "separateMajorMinor": false,
       "matchManagers": ["github-actions", "devcontainer"]
     },
     {
       "groupName": "astro",
-      "separateMajorMinor": false,
       "matchDatasources": ["npm"],
       "matchPackageNames": [
         "astro",
@@ -30,99 +29,127 @@
         "astro-pagefind",
         "astro-mermaid",
         "astro-og-canvas",
+        "canvaskit-wasm",
         "starlight-theme-flexoki",
         "satteri"
       ]
     },
     {
       "groupName": "react",
-      "separateMajorMinor": false,
       "matchDatasources": ["npm"],
       "matchPackageNames": [
         "react",
         "react-dom",
         "@types/react",
         "@types/react-dom",
-        "react-aria-components",
-        "@react-aria/test-utils",
-        "@internationalized/date",
-        "xstate",
-        "@xstate/react",
-        "react-hook-form"
+        "react-hook-form",
+        "react-lite-youtube-embed"
       ]
     },
     {
-      "groupName": "data-viz",
-      "separateMajorMinor": false,
+      "groupName": "react-aria",
       "matchDatasources": ["npm"],
       "matchPackageNames": [
-        "d3",
-        "d3-geo",
-        "d3-selection",
-        "@types/d3",
-        "@types/d3-geo",
-        "@types/d3-selection",
-        "topojson-client",
-        "@types/topojson-client",
-        "@types/topojson-specification",
-        "@severo_bo/us-atlas-2023",
-        "mermaid",
-        "@mermaid-js/layout-elk",
-        "canvaskit-wasm"
+        "react-aria-components",
+        "@react-aria/**",
+        "@internationalized/**"
       ]
     },
     {
-      "groupName": "testing",
-      "separateMajorMinor": false,
+      "groupName": "xstate",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["xstate", "@xstate/**"]
+    },
+    {
+      "groupName": "d3",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["d3", "d3-*", "@types/d3", "@types/d3-*"]
+    },
+    {
+      "groupName": "topojson",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": [
+        "topojson-client",
+        "@types/topojson-*",
+        "@severo_bo/us-atlas-2023"
+      ]
+    },
+    {
+      "groupName": "mermaid",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["mermaid", "@mermaid-js/**"]
+    },
+    {
+      "groupName": "storybook",
       "matchDatasources": ["npm"],
       "matchPackageNames": [
         "storybook",
         "@storybook/**",
-        "@vueless/storybook-dark-mode",
-        "playwright",
-        "@playwright/test",
-        "@axe-core/playwright",
-        "jsdom",
+        "@vueless/storybook-dark-mode"
+      ]
+    },
+    {
+      "groupName": "vitest",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": [
         "vitest",
         "@vitest/**",
+        "jsdom",
         "@testing-library/**"
       ]
     },
     {
-      "groupName": "tooling",
-      "separateMajorMinor": false,
+      "groupName": "playwright",
       "matchDatasources": ["npm"],
       "matchPackageNames": [
-        "wrangler",
-        "cf-workers-og",
-        "@biomejs/biome",
-        "hono",
-        "@hono/node-server",
-        "@libpdf/core",
-        "pdfjs-dist",
-        "tsx",
-        "typescript",
-        "vite",
-        "@vitejs/plugin-react",
-        "sass-embedded",
-        "simple-git-hooks",
-        "baseline-browser-mapping",
-        "browserslist",
-        "@types/node",
-        "@clack/prompts"
+        "playwright",
+        "@playwright/test",
+        "@axe-core/playwright"
       ]
     },
     {
+      "groupName": "cloudflare",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["wrangler", "@cloudflare/**", "cf-workers-og"]
+    },
+    {
+      "groupName": "vite",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["vite", "@vitejs/plugin-react", "sass-embedded"]
+    },
+    {
+      "groupName": "hono",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["hono", "@hono/**"]
+    },
+    {
+      "groupName": "pdf",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["@libpdf/core", "pdfjs-dist"]
+    },
+    {
+      "groupName": "node",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["tsx", "@types/node"]
+    },
+    {
+      "groupName": "linting",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["@biomejs/biome", "simple-git-hooks", "optimo"]
+    },
+    {
+      "groupName": "browserslist",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["browserslist", "baseline-browser-mapping"]
+    },
+    {
       "groupName": "app-dependencies",
-      "separateMajorMinor": false,
       "matchDatasources": ["npm"],
       "matchPackageNames": [
         "sharp",
         "sanitize-html",
         "libphonenumber-js",
-        "react-lite-youtube-embed",
-        "@maskito/core",
-        "optimo"
+        "@maskito/core"
       ]
     },
     {
