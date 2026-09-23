@@ -27,6 +27,6 @@
     "wrangler": "^4.135.0"
   },
   "devDependencies": {
-    "@types/node": "^26.1.2"
+    "@types/node": "^26.6.2"
   }
 }

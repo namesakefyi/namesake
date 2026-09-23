@@ -94,7 +94,7 @@
     "@types/d3-geo": "^3.1.0",
     "@types/d3-selection": "^3.0.11",
     "@types/geojson": "^7946.0.16",
-    "@types/node": "^26.1.2",
+    "@types/node": "^26.6.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/sanitize-html": "^2.16.1",
