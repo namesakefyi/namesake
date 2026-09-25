@@ -120,14 +120,17 @@ small {
 
 a {
   text-decoration: underline;
-  text-decoration-color: var(--text-color);
+  text-decoration-color: var(--text-color-muted);
   text-underline-offset: max(0.1em, 2.5px);
-}
 
-@media (hover: hover) {
-  a:hover,
-  a:focus {
-    text-decoration-color: var(--text-color);
+  @media (hover: hover) {
+    &:hover {
+      text-decoration-color: var(--text-color);
+    }
+  }
+
+  &:focus-visible {
+    text-decoration-color: transparent;
   }
 }
 
@@ -137,7 +140,7 @@ a {
   font: inherit;
   color: inherit;
   text-decoration: underline;
-  text-decoration-color: var(--text-color);
+  text-decoration-color: var(--text-color-muted);
   text-underline-offset: max(0.1em, 2.5px);
   appearance: none;
   cursor: pointer;
@@ -145,6 +148,7 @@ a {
   border: none;
 
   &:focus-visible {
+    text-decoration-color: transparent;
     outline: 2px solid var(--focus-ring-color);
     outline-offset: 2px;
   }
@@ -153,6 +157,12 @@ a {
     color: var(--text-color-muted);
     text-decoration: none;
     cursor: default;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      text-decoration-color: var(--text-color);
+    }
   }
 }
 
