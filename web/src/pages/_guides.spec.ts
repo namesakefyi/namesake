@@ -4,7 +4,9 @@ test.describe("guides", () => {
   test("shows embedded form document names", async ({ page }) => {
     await page.goto("/guides/ma/court-order");
 
-    await expect(page.getByText("Includes 2 documents").first()).toBeVisible();
+    await expect(
+      page.getByText("Helps fill out 2 documents").first(),
+    ).toBeVisible();
     await expect(
       page.getByText("Petition to Change Name of Adult (CJP-27)"),
     ).toBeVisible();

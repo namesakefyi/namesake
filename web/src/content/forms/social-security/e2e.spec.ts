@@ -22,7 +22,7 @@ test("Social Security", async ({ page }, testInfo) => {
 
     expect(accessibilityScanResults.violations).toHaveLength(0);
 
-    await expect(page.getByText("Includes 1 document")).toBeVisible();
+    await expect(page.getByText("Helps fill out 1 document")).toBeVisible();
     await expect(
       page.getByText("Application for Social Security Card (SS-5)"),
     ).toBeVisible();

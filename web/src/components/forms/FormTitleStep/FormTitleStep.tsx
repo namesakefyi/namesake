@@ -109,7 +109,7 @@ export function FormTitleStep({
         {pdfs.length > 0 && (
           <FormInfoItem icon={RiFileCheckLine}>
             <FormInfoItemTitle>
-              Includes{" "}
+              Helps fill out{" "}
               <strong>
                 {pdfs.length} {pluralize(pdfs.length, "document")}.
               </strong>{" "}

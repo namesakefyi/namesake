@@ -43,7 +43,7 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
 
     expect(accessibilityScanResults.violations).toHaveLength(0);
 
-    await expect(page.getByText("Includes 2 documents")).toBeVisible();
+    await expect(page.getByText("Helps fill out 2 documents")).toBeVisible();
     await expect(
       page.getByText("Petition to Change Name of Adult (CJP-27)"),
     ).toBeVisible();
