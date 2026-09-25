@@ -5,11 +5,7 @@ test.describe("guides", () => {
     await page.goto("/guides/ma/court-order");
 
     await expect(
-      page
-        .getByText(
-          "This form helps you fill out name change documents, including:",
-        )
-        .first(),
+      page.getByText("Helps fill out 2 documents").first(),
     ).toBeVisible();
     await expect(
       page.getByText("Petition to Change Name of Adult (CJP-27)"),
