@@ -8,5 +8,8 @@ services:
   - formFilling
   - legal
   - notary
+languages:
+  - en
+  - es
 phone: 866-219-5262
 logo: ./logo.png

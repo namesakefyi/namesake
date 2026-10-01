@@ -9,6 +9,9 @@ services:
   - legal
   - nameChangeClinic
   - notary
+languages:
+  - en
+  - es
 email: dst@srlp.org
 phone: 212-337-8550
 logo: ./logo.png

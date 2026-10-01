@@ -7,6 +7,9 @@ services:
   - formFilling
   - nameChangeClinic
   - notary
+languages:
+  - en
+  - es
 email: info@pflagnyc.org
 phone: 646-240-4288
 logo: ./logo.png

@@ -7,5 +7,7 @@ services:
   - nameChangeClinic
   - formFilling
   - legal
+languages:
+  - en
 phone: 919-677-0561
 logo: ./logo.png

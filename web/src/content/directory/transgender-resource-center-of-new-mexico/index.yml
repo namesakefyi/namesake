@@ -7,6 +7,9 @@ services:
   - formFilling
   - legal
   - notary
+languages:
+  - en
+  - es
 email: tgrcnm@tgrcnm.org
 phone: 505-200-9086
 logo: ./logo.webp
