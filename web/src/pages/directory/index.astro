@@ -293,7 +293,7 @@ const description =
         cursor: pointer;
         transition: transform 80ms ease-out;
 
-        /* Selects scale separately below. */
+        /* Select buttons scale separately below. */
         @media (hover: hover) {
           &:not(select):hover {
             transform: scale(1.05);
@@ -322,11 +322,12 @@ const description =
         /* Chromium refits an open dropdown when its select button changes
            size. In Chrome on Windows this creates a white box around the
            options when the window is on a secondary monitor that has a
-           display scale differing from the primary's (tested at 150% with 
+           display scale differing from the primary's (tested at 150% with
            300% primary).
            Hold the hover size while the dropdown is open, and skip the
            press effect, so the select never changes size when the list
-           is open. Without :open support, select buttons don't scale at all. */
+           is open. Without :open support, select buttons keep the previous
+           hover and press effect. */
         @supports selector(:open) {
           @media (hover: hover) {
             &:hover,
@@ -337,6 +338,18 @@ const description =
 
           &:open {
             transition: none;
+          }
+        }
+
+        @supports not selector(:open) {
+          @media (hover: hover) {
+            &:hover {
+              transform: scale(1.05);
+            }
+
+            &:active {
+              transform: scale(0.98);
+            }
           }
         }
       }
