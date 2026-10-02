@@ -1,6 +1,6 @@
 // ISO 639-1 codes. English and Spanish come first, then the rest ordered
 // by display name. Use `formatLanguage` to get the display name.
-export const LANGUAGES = [
+export const DIRECTORY_LANGUAGES = [
   "en",
   "es",
   "ar",
@@ -11,4 +11,4 @@ export const LANGUAGES = [
   "vi",
 ] as const;
 
-export type Language = (typeof LANGUAGES)[number];
+export type DirectoryLanguage = (typeof DIRECTORY_LANGUAGES)[number];

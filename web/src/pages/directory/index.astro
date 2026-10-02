@@ -12,7 +12,10 @@ import {
 import DirectoryLogo from "#components/DirectoryLogo.astro";
 import InlineLinkList from "#components/InlineLinkList.astro";
 import PageHeader from "#components/PageHeader.astro";
-import { LANGUAGES, type Language } from "#constants/languages";
+import {
+  DIRECTORY_LANGUAGES,
+  type DirectoryLanguage,
+} from "#constants/languages";
 import { SERVICE_LABELS, SERVICES, type Service } from "#constants/services";
 import BaseLayout from "#layouts/BaseLayout.astro";
 import { formatCleanUrl } from "#lib/utils/formatCleanUrl";
@@ -30,7 +33,10 @@ const [jurisdictionsCollection, filteredEntries] = await Promise.all([
       return false;
     if (serviceParam && !data.services.includes(serviceParam as Service))
       return false;
-    if (languageParam && !data.languages.includes(languageParam as Language))
+    if (
+      languageParam &&
+      !data.languages.includes(languageParam as DirectoryLanguage)
+    )
       return false;
     return true;
   }),
@@ -107,7 +113,7 @@ const description =
         <option value="">All languages</option>
         <hr />
         {
-          LANGUAGES.map((code) => (
+          DIRECTORY_LANGUAGES.map((code) => (
             <option value={code} selected={code === languageParam}>
               {formatLanguage(code)}
             </option>
