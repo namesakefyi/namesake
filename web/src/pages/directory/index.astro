@@ -326,11 +326,11 @@ const description =
         transition: transform 80ms ease-out;
 
         @media (hover: hover) {
-          &:hover {
+          &:not(select):hover {
             transform: scale(1.05);
           }
 
-          &:active {
+          &:not(select):active {
             transform: scale(0.98);
           }
         }
