@@ -31,10 +31,9 @@
       ],
       "settings": {
         "files.autoSave": "afterDelay",
-        "workbench.secondarySideBar.defaultVisibility": "hidden",
         "workbench.startupEditor": "none",
         "editor.minimap.enabled": false,
-        "chat.commandCenter.enabled": false,
+        "chat.disableAIFeatures": true,
         "[markdown]": {
           "editor.wordWrap": "on"
         },
