@@ -13,20 +13,20 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
-    "@astrojs/cloudflare": "^14.3.2",
-    "@astrojs/starlight": "^0.42.1",
-    "@mermaid-js/layout-elk": "^0.2.2",
-    "astro": "^7.3.3",
+    "@astrojs/cloudflare": "^14.3.3",
+    "@astrojs/starlight": "^0.42.4",
+    "@mermaid-js/layout-elk": "^0.2.3",
+    "astro": "^7.3.5",
     "astro-mermaid": "^2.1.0",
-    "astro-og-canvas": "^0.13.1",
-    "canvaskit-wasm": "^0.41.1",
-    "mermaid": "^11.16.0",
+    "astro-og-canvas": "^0.13.2",
+    "canvaskit-wasm": "^0.42.0",
+    "mermaid": "^11.17.2",
     "sharp": "^0.35.4",
     "starlight-theme-flexoki": "^0.3.0",
     "typescript": "^6.0.3",
     "wrangler": "^4.135.0"
   },
   "devDependencies": {
-    "@types/node": "^26.6.2"
+    "@types/node": "^26.6.3"
   }
 }
