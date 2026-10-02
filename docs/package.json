@@ -23,7 +23,7 @@
     "mermaid": "^11.17.2",
     "sharp": "^0.35.4",
     "starlight-theme-flexoki": "^0.3.0",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "wrangler": "^4.135.0"
   },
   "devDependencies": {
