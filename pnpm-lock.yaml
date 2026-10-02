@@ -385,7 +385,7 @@ importers:
         specifier: ^2.0.10
         version: 2.0.10
       xstate:
-        specifier: ^5.33.0
+        specifier: ^5.33.2
         version: 5.33.2
     devDependencies:
       '@playwright/test':
