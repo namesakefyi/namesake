@@ -77,7 +77,8 @@ export default defineConfig({
   },
   server: {
     host: true,
-    open: true,
+    // Codespaces shows the preview in an editor pane instead
+    open: !process.env.CODESPACES,
   },
   vite: {
     assetsInclude: ["**/*.wasm"],

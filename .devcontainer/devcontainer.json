@@ -4,7 +4,7 @@
   "features": {
     "ghcr.io/devcontainers-extra/features/pnpm:2": {}
   },
-  "forwardPorts": [4321, 5432],
+  "forwardPorts": [4321],
   "portsAttributes": {
     "4321": {
       "label": "Website",
@@ -25,10 +25,23 @@
     "vscode": {
       "extensions": [
         "astro-build.astro-vscode",
+        "unifiedjs.vscode-mdx",
         "deque-systems.vscode-axe-linter",
-        "biomejs.biome",
-        "ms-playwright.playwright"
-      ]
+        "biomejs.biome"
+      ],
+      "settings": {
+        "files.autoSave": "afterDelay",
+        "workbench.startupEditor": "none",
+        "editor.minimap.enabled": false,
+        "chat.disableAIFeatures": true,
+        "extensions.ignoreRecommendations": true,
+        "[markdown]": {
+          "editor.wordWrap": "on"
+        },
+        "[mdx]": {
+          "editor.wordWrap": "on"
+        }
+      }
     }
   }
 }

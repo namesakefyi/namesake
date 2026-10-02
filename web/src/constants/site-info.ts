@@ -46,6 +46,7 @@ export type SiteInfo = {
     chat: string;
     status: string;
     donate: string;
+    edit: string;
     contribute: string;
     start: string;
   };
@@ -73,6 +74,7 @@ export const siteInfo: SiteInfo = {
     status: "/status",
     donate:
       "https://www.every.org/namesake?suggestedAmounts=20%2C40%2C100%2C250&theme_color=6E56CF&method=card%2Cbank%2Cpaypal%2Cvenmo%2Cpay%2Cdaf&utm_campaign=donate-link#/donate",
+    edit: "https://codespaces.new/namesakefyi/namesake?quickstart=1",
     contribute: "https://docs.namesake.fyi",
     start: "/guides/getting-started",
   },
