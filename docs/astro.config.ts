@@ -21,6 +21,7 @@ export default defineConfig({
     mermaid({
       mermaidConfig: {
         layout: "elk",
+        look: "classic",
       },
     }),
     starlight({
