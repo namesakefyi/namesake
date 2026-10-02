@@ -7,6 +7,9 @@ services:
   - financialAid
   - formFilling
   - notary
+languages:
+  - en
+  - es
 email: info@weberrenew.org
 phone: 401-383-4888
 logo: ./logo.svg

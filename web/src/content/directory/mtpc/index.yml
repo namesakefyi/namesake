@@ -7,6 +7,8 @@ services:
   - nameChangeClinic
   - formFilling
   - financialAid
+languages:
+  - en
 officialPartner: true
 email: info@masstpc.org
 phone: 617-778-0519

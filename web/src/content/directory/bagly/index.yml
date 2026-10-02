@@ -8,6 +8,8 @@ services:
   - formFilling
   - nameChangeClinic
   - notary
+languages:
+  - en
 email: info@bagly.org
 phone: 617-227-4313
 logo: ./logo.webp

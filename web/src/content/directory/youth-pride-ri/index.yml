@@ -6,6 +6,9 @@ url: https://www.youthprideri.org/
 services:
   - formFilling
   - nameChangeClinic
+languages:
+  - en
+  - es
 email: info@youthprideri.org
 phone: 401-421-5626
 logo: ./logo.png
