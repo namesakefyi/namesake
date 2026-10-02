@@ -20,7 +20,12 @@ export default defineConfig({
       mdastPlugins: [satteriModifiedTime],
     }),
   },
-  integrations: [sitemap(), mdx(), react(), pagefind()],
+  integrations: [
+    sitemap({ filter: (page) => !page.endsWith("/edit") }),
+    mdx(),
+    react(),
+    pagefind(),
+  ],
   prefetch: true,
   trailingSlash: "never",
   build: {

@@ -154,7 +154,7 @@ const posts = defineCollection({
       title: z.string(),
       description: z.string(),
       showDescription: z.boolean().default(true),
-      publishDate: z.date(),
+      publishDate: z.coerce.date(),
       annotation: z.enum(ANNOTATION_TYPES).optional(),
       authors: z.array(z.string()).optional(),
       image: z
@@ -173,7 +173,7 @@ const press = defineCollection({
       title: z.string(),
       outlet: z.string(),
       url: z.url(),
-      date: z.date(),
+      date: z.coerce.date(),
       image: z
         .object({
           src: image(),

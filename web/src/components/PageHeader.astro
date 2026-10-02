@@ -2,6 +2,7 @@
 import type { RoughAnnotationType } from "rough-notation/lib/model";
 import { smartquotes } from "#lib/utils/smartquotes";
 import Breadcrumbs, { type BreadcrumbItem } from "./Breadcrumbs.astro";
+import "../styles/page-head.css";
 
 interface Props {
   title: string;
@@ -72,32 +73,3 @@ if (date) {
     highlight.show();
   }
 </script>
-
-<style lang="scss">
-  .page-head {
-    padding-block: var(--space-2xl);
-
-    .date {
-      font-weight: var(--weight-bold);
-      display: block;
-      margin-block-end: var(--space-l);
-    }
-
-    h1 {
-      display: inline;
-      text-wrap: balance;
-      margin-inline-start: -0.06em; // Visual alignment
-
-      @media (width < 700px) {
-        font-size: var(--step-5);
-      }
-    }
-
-    .subhead {
-      margin-block-start: var(--space-l);
-      font-size: var(--step-2);
-      line-height: var(--line-height-display);
-      text-wrap: balance;
-    }
-  }
-</style>
