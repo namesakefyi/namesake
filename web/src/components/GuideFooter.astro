@@ -3,24 +3,17 @@ import { RiPencilLine } from "@remixicon/react";
 import { siteInfo } from "#constants/site-info";
 
 interface Props {
+  entryId: string;
   filePath?: string;
   lastModified: string;
 }
 
-const { filePath, lastModified } = Astro.props;
+const { entryId, filePath, lastModified } = Astro.props;
 
-// The CMS identifies a guide by its path within the guides folder,
-// without the extension, e.g. `ma/court-order`.
-const createEditUrl = (filePath?: string) =>
-  filePath
-    ? `${siteInfo.editGuideBaseUrl}${filePath
-        .replace(/^src\/content\/guides\//, "")
-        .replace(/\.mdx$/, "")}`
-    : undefined;
 const createHistoryUrl = (filePath?: string) =>
   filePath ? `${siteInfo.historyBaseUrl}${filePath}` : undefined;
 
-const editUrl = createEditUrl(filePath);
+const editUrl = `${siteInfo.editGuideBaseUrl}${entryId}`;
 const historyUrl = createHistoryUrl(filePath);
 
 const displayDate = new Date(lastModified).toLocaleDateString("en-US", {
@@ -31,14 +24,10 @@ const displayDate = new Date(lastModified).toLocaleDateString("en-US", {
 ---
 
 <footer>
-  {
-    editUrl && (
-      <a href={editUrl} class="edit-link" data-astro-prefetch="false" data-no-print>
-        <RiPencilLine size={20} />
-        Edit this page
-      </a>
-    )
-  }
+  <a href={editUrl} class="edit-link" data-astro-prefetch="false" data-no-print>
+    <RiPencilLine size={20} />
+    Edit this page
+  </a>
   {
     historyUrl && lastModified && (
       <small>

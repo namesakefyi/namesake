@@ -1,10 +1,11 @@
-import type { CmsConfig } from "@sveltia/cms";
+import type { CmsConfig, Field } from "@sveltia/cms";
 import { ANNOTATION_TYPES } from "#constants/annotations";
-import { CATEGORIES } from "#constants/categories";
+import { CATEGORY_OPTIONS } from "#constants/categories";
 import { COLOR_KEYS } from "#constants/colors";
 import { JURISDICTIONS } from "#constants/jurisdictions";
 import { DIRECTORY_LANGUAGES } from "#constants/languages";
 import { SERVICES } from "#constants/services";
+import { formatLanguage } from "#lib/utils/formatLanguage";
 
 const CONTENT = "web/src/content";
 
@@ -12,14 +13,8 @@ const jurisdictionOptions = Object.entries(JURISDICTIONS).map(
   ([id, jurisdiction]) => ({ label: jurisdiction.name, value: id }),
 );
 
-const categoryOptions = Object.entries(CATEGORIES).map(([id, category]) => ({
-  label: category.name,
-  value: id,
-}));
-
-const languageNames = new Intl.DisplayNames(["en"], { type: "language" });
 const languageOptions = DIRECTORY_LANGUAGES.map((language) => ({
-  label: languageNames.of(language) ?? language,
+  label: formatLanguage(language) ?? language,
   value: language,
 }));
 
@@ -27,6 +22,25 @@ const serviceOptions = SERVICES.map((service) => ({
   label: service.title,
   value: service.value,
 }));
+
+const annotationField: Field = {
+  name: "annotation",
+  label: "Title Annotation",
+  widget: "select",
+  options: [...ANNOTATION_TYPES],
+  required: false,
+};
+
+const imageField: Field = {
+  name: "image",
+  label: "Image",
+  widget: "object",
+  required: false,
+  fields: [
+    { name: "src", label: "Image", widget: "image" },
+    { name: "alt", label: "Alt Text" },
+  ],
+};
 
 export const cmsConfig: CmsConfig = {
   load_config_file: false,
@@ -56,9 +70,6 @@ export const cmsConfig: CmsConfig = {
       preview_path: "/blog/{{slug}}",
       path: "{{slug}}/index",
       extension: "mdx",
-      format: "yaml-frontmatter",
-      media_folder: "",
-      public_folder: "",
       sortable_fields: ["publishDate", "title"],
       fields: [
         { name: "title", label: "Title" },
@@ -87,23 +98,8 @@ export const cmsConfig: CmsConfig = {
           multiple: true,
           required: false,
         },
-        {
-          name: "image",
-          label: "Cover Image",
-          widget: "object",
-          required: false,
-          fields: [
-            { name: "src", label: "Image", widget: "image" },
-            { name: "alt", label: "Alt Text" },
-          ],
-        },
-        {
-          name: "annotation",
-          label: "Title Annotation",
-          widget: "select",
-          options: [...ANNOTATION_TYPES],
-          required: false,
-        },
+        { ...imageField, label: "Cover Image" },
+        annotationField,
         { name: "body", label: "Body", widget: "richtext" },
       ],
     },
@@ -114,7 +110,6 @@ export const cmsConfig: CmsConfig = {
       folder: `${CONTENT}/guides`,
       preview_path: "/guides/{{slug}}",
       extension: "mdx",
-      format: "yaml-frontmatter",
       nested: { subfolders: false },
       meta: { path: {} },
       fields: [
@@ -136,7 +131,7 @@ export const cmsConfig: CmsConfig = {
           name: "category",
           label: "Category",
           widget: "select",
-          options: categoryOptions,
+          options: CATEGORY_OPTIONS,
         },
         {
           name: "stub",
@@ -171,17 +166,10 @@ export const cmsConfig: CmsConfig = {
       folder: `${CONTENT}/pages`,
       preview_path: "/{{slug}}",
       extension: "md",
-      format: "yaml-frontmatter",
       fields: [
         { name: "title", label: "Title" },
         { name: "description", label: "Description", widget: "text" },
-        {
-          name: "annotation",
-          label: "Title Annotation",
-          widget: "select",
-          options: [...ANNOTATION_TYPES],
-          required: false,
-        },
+        annotationField,
         {
           name: "color",
           label: "Color",
@@ -200,10 +188,7 @@ export const cmsConfig: CmsConfig = {
       preview_path: "/directory/{{slug}}",
       path: "{{slug}}/index",
       extension: "yml",
-      format: "yml",
       identifier_field: "name",
-      media_folder: "",
-      public_folder: "",
       fields: [
         { name: "name", label: "Name" },
         { name: "description", label: "Description", widget: "text" },
@@ -257,10 +242,7 @@ export const cmsConfig: CmsConfig = {
       folder: `${CONTENT}/authors`,
       path: "{{slug}}/index",
       extension: "yml",
-      format: "yml",
       identifier_field: "name",
-      media_folder: "",
-      public_folder: "",
       fields: [
         { name: "name", label: "Name" },
         { name: "role", label: "Role" },
@@ -286,25 +268,13 @@ export const cmsConfig: CmsConfig = {
       preview_path: "/press",
       path: "{{slug}}/index",
       extension: "yml",
-      format: "yml",
-      media_folder: "",
-      public_folder: "",
       sortable_fields: ["date", "title"],
       fields: [
         { name: "title", label: "Title" },
         { name: "outlet", label: "Outlet" },
         { name: "url", label: "URL" },
         { name: "date", label: "Date", widget: "datetime", type: "date" },
-        {
-          name: "image",
-          label: "Image",
-          widget: "object",
-          required: false,
-          fields: [
-            { name: "src", label: "Image", widget: "image" },
-            { name: "alt", label: "Alt Text" },
-          ],
-        },
+        imageField,
       ],
     },
     {
@@ -315,10 +285,7 @@ export const cmsConfig: CmsConfig = {
       preview_path: "/",
       path: "{{slug}}/index",
       extension: "yml",
-      format: "yml",
       identifier_field: "name",
-      media_folder: "",
-      public_folder: "",
       fields: [
         { name: "name", label: "Name" },
         { name: "url", label: "URL" },

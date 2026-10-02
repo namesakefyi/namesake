@@ -21,7 +21,7 @@ export default defineConfig({
     }),
   },
   integrations: [
-    sitemap({ filter: (page) => !page.endsWith("/admin") }),
+    sitemap({ filter: (page) => !page.endsWith("/edit") }),
     mdx(),
     react(),
     pagefind(),

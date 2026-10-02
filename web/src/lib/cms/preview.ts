@@ -12,6 +12,7 @@ import boldItalicFont from "../../fonts/AtkinsonHyperlegibleSoft-BoldItalic.woff
 import regularFont from "../../fonts/AtkinsonHyperlegibleSoft-Regular.woff2?url";
 import regularItalicFont from "../../fonts/AtkinsonHyperlegibleSoft-RegularItalic.woff2?url";
 import baseCss from "../../styles/base.css?inline";
+import pageHeadCss from "../../styles/page-head.css?inline";
 import proseCss from "../../styles/prose.css?inline";
 import resetCss from "../../styles/reset.css?inline";
 import themeCss from "../../styles/theme.css?inline";
@@ -47,6 +48,7 @@ registerPreviewStyle(
     themeCss,
     baseCss,
     proseCss,
+    pageHeadCss,
     previewCss,
   ].join("\n"),
   { raw: true },
