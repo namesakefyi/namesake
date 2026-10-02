@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@hono/node-server": "^2.1.1",
-    "@libpdf/core": "^0.4.2",
+    "@libpdf/core": "^0.5.1",
     "hono": "^4.13.10",
     "pdfjs-dist": "^6.3.289",
     "react": "^19.3.0",
