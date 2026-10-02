@@ -5,4 +5,6 @@ jurisdictions:
 url: https://www.tsaz.org/
 services:
   - financialAid
+languages:
+  - en
 logo: ./logo.webp

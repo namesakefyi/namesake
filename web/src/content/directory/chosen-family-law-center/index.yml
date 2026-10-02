@@ -7,6 +7,8 @@ services:
   - notary
   - formFilling
   - legal
+languages:
+  - en
 email: contact@chosenfamilylawcenter.org
 phone: 732-639-1657
 logo: ./logo.webp

@@ -8,6 +8,7 @@ import {
   JURISDICTIONS,
   type JurisdictionName,
 } from "./constants/jurisdictions";
+import { DIRECTORY_LANGUAGES } from "./constants/languages";
 import type { PDFDefinition } from "./constants/pdf";
 import { SERVICES } from "./constants/services";
 
@@ -52,6 +53,7 @@ const directory = defineCollection({
       services: z.array(
         z.enum(SERVICES.map((s) => s.value) as [string, ...string[]]),
       ),
+      languages: z.array(z.enum(DIRECTORY_LANGUAGES)).default(["en"]),
       officialPartner: z.boolean().default(false),
       email: z.email().optional(),
       phone: z
@@ -152,7 +154,7 @@ const posts = defineCollection({
       title: z.string(),
       description: z.string(),
       showDescription: z.boolean().default(true),
-      publishDate: z.date(),
+      publishDate: z.coerce.date(),
       annotation: z.enum(ANNOTATION_TYPES).optional(),
       authors: z.array(z.string()).optional(),
       image: z
@@ -171,7 +173,7 @@ const press = defineCollection({
       title: z.string(),
       outlet: z.string(),
       url: z.url(),
-      date: z.date(),
+      date: z.coerce.date(),
       image: z
         .object({
           src: image(),

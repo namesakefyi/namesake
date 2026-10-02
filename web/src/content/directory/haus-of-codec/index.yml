@@ -6,6 +6,8 @@ url: https://www.hausofcodec.org/
 services:
   - formFilling
   - nameChangeClinic
+languages:
+  - en
 email: info@hausofcodec.org
 phone: 401-484-7465
 logo: ./logo.png

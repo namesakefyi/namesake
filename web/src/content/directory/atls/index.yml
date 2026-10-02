@@ -6,5 +6,7 @@ url: https://www.advocatesfortranslaw.org/
 services:
   - formFilling
   - nameChangeClinic
+languages:
+  - en
 email: atls@fordham.edu
 logo: ./logo.webp

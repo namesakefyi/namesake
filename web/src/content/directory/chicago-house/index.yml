@@ -8,6 +8,8 @@ services:
   - formFilling
   - financialAid
   - legal
+languages:
+  - en
 email: pperez@chicagohouse.org
 phone: 773-248-5200
 logo: ./logo.webp

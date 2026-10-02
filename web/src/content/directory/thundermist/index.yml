@@ -5,5 +5,14 @@ jurisdictions:
 url: https://www.thundermisthealth.org/
 services:
   - formFilling
+languages:
+  - en
+  - es
+  - ar
+  - zh
+  - fr
+  - lo
+  - pt
+  - vi
 phone: 401-767-4100
 logo: ./logo.webp

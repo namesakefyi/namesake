@@ -12,13 +12,19 @@ import {
 import DirectoryLogo from "#components/DirectoryLogo.astro";
 import InlineLinkList from "#components/InlineLinkList.astro";
 import PageHeader from "#components/PageHeader.astro";
+import {
+  DIRECTORY_LANGUAGES,
+  type DirectoryLanguage,
+} from "#constants/languages";
 import { SERVICE_LABELS, SERVICES, type Service } from "#constants/services";
 import BaseLayout from "#layouts/BaseLayout.astro";
 import { formatCleanUrl } from "#lib/utils/formatCleanUrl";
+import { formatLanguage } from "#lib/utils/formatLanguage";
 import { formatPhone } from "#lib/utils/formatPhone";
 
 const stateParam = Astro.url.searchParams.get("state");
 const serviceParam = Astro.url.searchParams.get("service");
+const languageParam = Astro.url.searchParams.get("language");
 
 const [jurisdictionsCollection, filteredEntries] = await Promise.all([
   getCollection("jurisdictions"),
@@ -26,6 +32,11 @@ const [jurisdictionsCollection, filteredEntries] = await Promise.all([
     if (stateParam && !data.jurisdictions.some((ref) => ref.id === stateParam))
       return false;
     if (serviceParam && !data.services.includes(serviceParam as Service))
+      return false;
+    if (
+      languageParam &&
+      !data.languages.includes(languageParam as DirectoryLanguage)
+    )
       return false;
     return true;
   }),
@@ -50,6 +61,7 @@ const contacts = filteredEntries.map(({ id, data }) => ({
     }))
     .sort((a, b) => a.name.localeCompare(b.name)),
   services: data.services,
+  languages: data.languages,
   officialPartner: data.officialPartner,
   email: data.email,
   phone: data.phone,
@@ -57,7 +69,7 @@ const contacts = filteredEntries.map(({ id, data }) => ({
   logo: data.logo,
 }));
 
-const hasActiveFilters = Boolean(stateParam || serviceParam);
+const hasActiveFilters = Boolean(stateParam || serviceParam || languageParam);
 const title = "Directory";
 const description =
   "Need more name change support? These organizations can help.";
@@ -93,6 +105,17 @@ const description =
           SERVICES.map(({ value, title }) => (
             <option value={value} selected={value === serviceParam}>
               {title}
+            </option>
+          ))
+        }
+      </select>
+      <select name="language" aria-label="Language">
+        <option value="">All languages</option>
+        <hr />
+        {
+          DIRECTORY_LANGUAGES.map((code) => (
+            <option value={code} selected={code === languageParam}>
+              {formatLanguage(code)}
             </option>
           ))
         }
@@ -142,6 +165,15 @@ const description =
                   <li>
                     <a href={`/directory?service=${svc}`}>
                       {SERVICE_LABELS[svc as Service] ?? svc}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <ul class="languages" aria-label="Languages">
+                {contact.languages.map((language) => (
+                  <li>
+                    <a href={`/directory?language=${language}`}>
+                      {formatLanguage(language)}
                     </a>
                   </li>
                 ))}
@@ -443,7 +475,8 @@ const description =
       max-height: 64px;
     }
 
-    .services {
+    .services,
+    .languages {
       display: flex;
       flex-wrap: wrap;
       gap: var(--space-2xs);

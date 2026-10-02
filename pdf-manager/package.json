@@ -11,24 +11,24 @@
     "monitor": "tsx scripts/pdf-monitor.ts"
   },
   "dependencies": {
-    "@hono/node-server": "^2.0.12",
-    "@libpdf/core": "^0.4.2",
-    "hono": "^4.12.32",
+    "@hono/node-server": "^2.1.1",
+    "@libpdf/core": "^0.5.1",
+    "hono": "^4.13.10",
     "pdfjs-dist": "^6.3.289",
     "react": "^19.3.0",
     "react-aria-components": "^1.21.1",
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
-    "@clack/prompts": "^1.7.0",
+    "@clack/prompts": "^1.8.1",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
     "diff": "^9.0.0",
     "picocolors": "^1.1.1",
-    "tsx": "^4.23.13",
+    "tsx": "^4.23.15",
     "typescript": "^6.0.3",
-    "vite": "^8.3.0",
-    "vitest": "^5.0.1"
+    "vite": "^8.3.1",
+    "vitest": "^5.0.2"
   }
 }

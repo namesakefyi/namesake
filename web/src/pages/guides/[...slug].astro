@@ -49,6 +49,7 @@ const title = formatTitleWithJurisdiction(
   {guide.data.stub && <StubBanner />}
   <Content />
   <GuideFooter
+    entryId={guide.id}
     filePath={guide.filePath}
     lastModified={remarkPluginFrontmatter.lastModified}
   />
