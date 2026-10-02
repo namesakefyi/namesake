@@ -1,4 +1,0 @@
-/* Prose styles already give the cover image its filter and radius. */
-.cover-image {
-  margin-block-end: var(--space-xl);
-}

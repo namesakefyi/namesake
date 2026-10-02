@@ -16,7 +16,6 @@ import pageHeadCss from "../../styles/page-head.css?inline";
 import proseCss from "../../styles/prose.css?inline";
 import resetCss from "../../styles/reset.css?inline";
 import themeCss from "../../styles/theme.css?inline";
-import previewCss from "./preview.css?inline";
 
 // Use the copy of React bundled with the CMS, without JSX: a .tsx file
 // here would be transformed for React Fast Refresh, which only works on
@@ -49,7 +48,6 @@ registerPreviewStyle(
     baseCss,
     proseCss,
     pageHeadCss,
-    previewCss,
   ].join("\n"),
   { raw: true },
 );
@@ -117,29 +115,16 @@ const ArticlePreview = ({
   );
 };
 
-const PostPreview = (props: CustomPreviewTemplateProps) => {
-  const { entry, getAsset, widgetFor } = props;
-  const imageSrc = getField<string>(entry, "image", "src");
-  const imageAlt = getField<string>(entry, "image", "alt") ?? "";
-  const imageUrl = imageSrc ? getAsset(imageSrc)?.url : undefined;
-
-  return h(
+const PostPreview = (props: CustomPreviewTemplateProps) =>
+  h(
     ArticlePreview,
     {
       ...props,
       color: "blue",
-      date: getField<string>(entry, "publishDate"),
+      date: getField<string>(props.entry, "publishDate"),
     },
-    imageUrl &&
-      h("img", {
-        className: "cover-image",
-        src: imageUrl,
-        alt: imageAlt,
-        "data-key-path": "image",
-      }),
-    widgetFor("body"),
+    props.widgetFor("body"),
   );
-};
 
 const PagePreview = (props: CustomPreviewTemplateProps) =>
   h(
