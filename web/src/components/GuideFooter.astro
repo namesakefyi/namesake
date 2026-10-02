@@ -9,8 +9,14 @@ interface Props {
 
 const { filePath, lastModified } = Astro.props;
 
+// The CMS identifies a guide by its path within the guides folder,
+// without the extension, e.g. `ma/court-order`.
 const createEditUrl = (filePath?: string) =>
-  filePath ? `${siteInfo.editBaseUrl}${filePath}` : undefined;
+  filePath
+    ? `${siteInfo.editGuideBaseUrl}${filePath
+        .replace(/^src\/content\/guides\//, "")
+        .replace(/\.mdx$/, "")}`
+    : undefined;
 const createHistoryUrl = (filePath?: string) =>
   filePath ? `${siteInfo.historyBaseUrl}${filePath}` : undefined;
 
@@ -27,7 +33,7 @@ const displayDate = new Date(lastModified).toLocaleDateString("en-US", {
 <footer>
   {
     editUrl && (
-      <a href={editUrl} class="edit-link" data-no-print>
+      <a href={editUrl} class="edit-link" data-astro-prefetch="false" data-no-print>
         <RiPencilLine size={20} />
         Edit this page
       </a>

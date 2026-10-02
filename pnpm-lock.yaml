@@ -318,6 +318,9 @@ importers:
       '@severo_bo/us-atlas-2023':
         specifier: ^4.0.0
         version: 4.0.0
+      '@sveltia/cms':
+        specifier: ^0.227.2
+        version: 0.227.2(@types/react@19.3.0)
       '@xstate/react':
         specifier: ^6.1.0
         version: 6.1.0(@types/react@19.3.0)(react@19.3.0)(xstate@5.33.2)
@@ -475,9 +478,6 @@ importers:
       lightningcss:
         specifier: ^1.33.0
         version: 1.33.0
-      sass-embedded:
-        specifier: ^1.105.0
-        version: 1.105.0
       satteri:
         specifier: ^0.10.5
         version: 0.10.5
@@ -1824,6 +1824,9 @@ packages:
     resolution: {integrity: sha512-j37dj/h6p6pots1L7pLPPNuABEEu9WP4OYg9pW1g+nYG331j0+3canE9OagtYdytYvdSAMG+2fKU5cxep6LgjA==}
     engines: {node: '>=22.12.0'}
 
+  '@mixmark-io/domino@2.2.0':
+    resolution: {integrity: sha512-Y28PR25bHXUg88kCV7nivXrP2Nj2RueZ3/l/jdx6J9f8J4nsEGcgX0Qe6lt7Pa+J79+kPiJU3LguR6O/6zrLOw==}
+
   '@napi-rs/canvas-android-arm64@1.0.2':
     resolution: {integrity: sha512-IMXKVQod0ol4vt3gmClUfXz4JAgHYESGPCUqmH3lQxBoL0K/2greJaQE1HVBVxWWFKfLc4OLZVdxg7kXVyXv+g==}
     engines: {node: '>= 10'}
@@ -2716,6 +2719,14 @@ packages:
       '@types/react-dom':
         optional: true
       typescript:
+        optional: true
+
+  '@sveltia/cms@0.227.2':
+    resolution: {integrity: sha512-sVcZEiIoowGacQVZntrVZ3xsyFX7aK7BavTS1NT8jCAz+Kf6F4sckyNyaNZArEpNolK1H3mpmp8FVry8xadXCw==}
+    peerDependencies:
+      '@types/react': ^19.3.0
+    peerDependenciesMeta:
+      '@types/react':
         optional: true
 
   '@swc/helpers@0.5.23':
@@ -3805,6 +3816,9 @@ packages:
   eventemitter3@5.0.4:
     resolution: {integrity: sha512-mlsTRyGaPBjPedk6Bvw+aqbsXDtoAyAzm5MO7JgU+yVRyMQ5O8bD4Kcci7BS85f93veegeCPkL8R4GLClnjLFw==}
 
+  exifr@7.1.3:
+    resolution: {integrity: sha512-g/aje2noHivrRSLbAUtBPWFbxKdKhgj/xr1vATDdUXPOFYJlQ62Ft0oy+72V6XLIpDJfHs6gXLbBLAolqOXYRw==}
+
   expect-type@1.4.0:
     resolution: {integrity: sha512-KfYbmpRm0VbLjEvVa9yGwCi9GI34xvi7A/HXYWQO65CSD2u3MczUJSuwXKFIxlGsgBQizV9q5J9NHj4VG0n+pA==}
     engines: {node: '>=12.0.0'}
@@ -4164,6 +4178,9 @@ packages:
 
   layout-base@2.0.1:
     resolution: {integrity: sha512-dp3s92+uNI1hWIpPGH3jK2kxE2lMjdXdr+DH8ynZHpd6PUlH6x6cbuXnoMmiNumznqaNO31xu9e79F0uuZ0JFg==}
+
+  leaflet@1.9.4:
+    resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
 
   libphonenumber-js@1.13.14:
     resolution: {integrity: sha512-llihgCcx0BFLksecLP+x1J+6JDE1GsXS1RN/LoPF6qcwpeQcnjj0lcvZxY8AzbEpYwyZWPZW/nDuqkqzm3amiw==}
@@ -5184,6 +5201,15 @@ packages:
     resolution: {integrity: sha512-gAQ9qrUN/UCypHtGFbbe7Rc/f9bzO88IwrG8TDo/aMKAApKyD6E3W4Cm0EfhfBb6Z6SKt59tTCTfD+n1xmAvMg==}
     engines: {node: '>=16.0.0'}
 
+  terra-draw-leaflet-adapter@1.0.3:
+    resolution: {integrity: sha512-yYUDwyKxGj69pUzd4L2YclXwAxNhuXI01DCm8KbOtGxnf4I+PmFsAQrwA/sU5EbdaOj1AaPrPqadihgFvrSOng==}
+    peerDependencies:
+      leaflet: ^1.9.4
+      terra-draw: ^1.0.0
+
+  terra-draw@1.35.0:
+    resolution: {integrity: sha512-uQI8lcPiUMqwVV29CexTfvT/AM4lGHtA+xWraW4njVExiM1+eGvRetYOBXmXEmgy5pL4X2dmjwMRH8JEYVtbgw==}
+
   tiny-inflate@1.0.3:
     resolution: {integrity: sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==}
 
@@ -5267,6 +5293,10 @@ packages:
     resolution: {integrity: sha512-Yiex1Ovn8z2xPpOWckIiysV1SSyRMY9BkLF++q0yKiDxCqRhosKfMg3janKkiLBwZ5c/YryloKwGZcrEmtwxKw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
+
+  turndown@7.2.4:
+    resolution: {integrity: sha512-I8yFsfRzmzK0WV1pNNOA4A7y4RDfFxPRxb3t+e3ui14qSGOxGtiSP6GjeX+Y6CHb7HYaFj7ECUD7VE5kQMZWGQ==}
+    engines: {node: '>=18', npm: '>=9'}
 
   typesafe-path@0.2.2:
     resolution: {integrity: sha512-OJabfkAg1WLZSqJAJ0Z6Sdt3utnbzr/jh+NAHoyWHJe8CMSy79Gm085094M9nvTPy22KzTVn5Zq5mbapCI/hPA==}
@@ -6288,7 +6318,8 @@ snapshots:
   '@bruits/satteri-win32-x64-msvc@0.10.5':
     optional: true
 
-  '@bufbuild/protobuf@2.12.1': {}
+  '@bufbuild/protobuf@2.12.1':
+    optional: true
 
   '@capsizecss/unpack@4.0.1':
     dependencies:
@@ -6982,6 +7013,8 @@ snapshots:
     dependencies:
       '@chevrotain/types': 13.2.0
 
+  '@mixmark-io/domino@2.2.0': {}
+
   '@napi-rs/canvas-android-arm64@1.0.2':
     optional: true
 
@@ -7590,6 +7623,20 @@ snapshots:
       typescript: 6.0.3
     transitivePeerDependencies:
       - supports-color
+
+  '@sveltia/cms@0.227.2(@types/react@19.3.0)':
+    dependencies:
+      '@shikijs/langs': 4.4.3
+      '@shikijs/themes': 4.4.3
+      exifr: 7.1.3
+      immutable: 5.1.9
+      leaflet: 1.9.4
+      svgo: 4.1.0
+      terra-draw: 1.35.0
+      terra-draw-leaflet-adapter: 1.0.3(leaflet@1.9.4)(terra-draw@1.35.0)
+      turndown: 7.2.4
+    optionalDependencies:
+      '@types/react': 19.3.0
 
   '@swc/helpers@0.5.23':
     dependencies:
@@ -8444,7 +8491,8 @@ snapshots:
   colorjs.io@0.5.2:
     optional: true
 
-  colorjs.io@0.7.1: {}
+  colorjs.io@0.7.1:
+    optional: true
 
   comma-separated-tokens@2.0.3: {}
 
@@ -8925,6 +8973,8 @@ snapshots:
 
   eventemitter3@5.0.4: {}
 
+  exifr@7.1.3: {}
+
   expect-type@1.4.0: {}
 
   expressive-code@0.44.1:
@@ -9023,7 +9073,8 @@ snapshots:
 
   hachure-fill@0.5.2: {}
 
-  has-flag@4.0.0: {}
+  has-flag@4.0.0:
+    optional: true
 
   hasown@2.0.4:
     dependencies:
@@ -9328,6 +9379,8 @@ snapshots:
   layout-base@1.0.2: {}
 
   layout-base@2.0.1: {}
+
+  leaflet@1.9.4: {}
 
   libphonenumber-js@1.13.14: {}
 
@@ -10139,6 +10192,7 @@ snapshots:
   rxjs@7.8.2:
     dependencies:
       tslib: 2.8.1
+    optional: true
 
   safer-buffer@2.1.2: {}
 
@@ -10326,6 +10380,7 @@ snapshots:
       sass-embedded-unknown-all: 1.105.0
       sass-embedded-win32-arm64: 1.105.0
       sass-embedded-win32-x64: 1.105.0
+    optional: true
 
   sass@1.100.0:
     dependencies:
@@ -10572,6 +10627,7 @@ snapshots:
   supports-color@8.1.1:
     dependencies:
       has-flag: 4.0.0
+    optional: true
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
@@ -10591,8 +10647,17 @@ snapshots:
   sync-child-process@1.0.2:
     dependencies:
       sync-message-port: 1.2.0
+    optional: true
 
-  sync-message-port@1.2.0: {}
+  sync-message-port@1.2.0:
+    optional: true
+
+  terra-draw-leaflet-adapter@1.0.3(leaflet@1.9.4)(terra-draw@1.35.0):
+    dependencies:
+      leaflet: 1.9.4
+      terra-draw: 1.35.0
+
+  terra-draw@1.35.0: {}
 
   tiny-inflate@1.0.3: {}
 
@@ -10661,6 +10726,10 @@ snapshots:
       esbuild: 0.28.2
     optionalDependencies:
       fsevents: 2.3.3
+
+  turndown@7.2.4:
+    dependencies:
+      '@mixmark-io/domino': 2.2.0
 
   typesafe-path@0.2.2: {}
 
@@ -10781,7 +10850,8 @@ snapshots:
 
   uuid@14.0.1: {}
 
-  varint@6.0.0: {}
+  varint@6.0.0:
+    optional: true
 
   verkit@0.4.0: {}
 

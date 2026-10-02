@@ -1,0 +1,36 @@
+/* Styles that live in scoped Astro components on the site, recreated
+   for the CMS preview pane. Keep in sync with PageHeader.astro. */
+
+.page-head {
+  padding-block: var(--space-2xl);
+
+  .date {
+    display: block;
+    margin-block-end: var(--space-l);
+    font-weight: var(--weight-bold);
+  }
+
+  h1 {
+    display: inline;
+    margin-inline-start: -0.06em;
+    text-wrap: balance;
+
+    @media (width < 700px) {
+      font-size: var(--step-5);
+    }
+  }
+
+  .subhead {
+    margin-block-start: var(--space-l);
+    font-size: var(--step-2);
+    line-height: var(--line-height-display);
+    text-wrap: balance;
+  }
+}
+
+.cover-image {
+  margin-block-end: var(--space-xl);
+  border-radius: var(--radius-2xs);
+  mix-blend-mode: luminosity;
+  filter: grayscale(100%);
+}
