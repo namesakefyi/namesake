@@ -56,7 +56,7 @@
     "@xstate/react": "^6.1.0",
     "astro": "7.3.5",
     "astro-pagefind": "^2.0.1",
-    "browserslist": "^4.29.1",
+    "browserslist": "^4.29.2",
     "cf-workers-og": "^3.0.1",
     "d3": "^7.9.0",
     "d3-geo": "^3.1.1",
