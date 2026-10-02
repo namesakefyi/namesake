@@ -34,6 +34,7 @@
         "workbench.startupEditor": "none",
         "editor.minimap.enabled": false,
         "chat.disableAIFeatures": true,
+        "extensions.ignoreRecommendations": true,
         "[markdown]": {
           "editor.wordWrap": "on"
         },
