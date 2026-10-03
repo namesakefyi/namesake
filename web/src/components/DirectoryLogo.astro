@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
+import "../styles/directory.css";
 
 interface Props {
   logo: ImageMetadata;
@@ -13,10 +14,10 @@ const { logo, name, class: className, ...rest } = Astro.props;
 
 {
   logo.format === "svg" ? (
-    <img class:list={["logo", className]} src={logo.src} alt="" {...rest} />
+    <img class:list={["directory-logo", className]} src={logo.src} alt="" {...rest} />
   ) : (
     <Image
-      class:list={["logo", className]}
+      class:list={["directory-logo", className]}
       src={logo}
       alt=""
       width={300}
@@ -25,12 +26,3 @@ const { logo, name, class: className, ...rest } = Astro.props;
     />
   )
 }
-
-<style>
-  .logo {
-    width: auto;
-    max-width: fit-content;
-    mix-blend-mode: multiply;
-    filter: grayscale(100%);
-  }
-</style>

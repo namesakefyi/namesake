@@ -124,6 +124,6 @@ export const siteInfo: SiteInfo = {
       Icon: RiRssFill,
     },
   },
-  editGuideBaseUrl: "/edit#/collections/guides/entries/",
+  editGuideBaseUrl: "/edit/#/collections/guides/entries/",
   historyBaseUrl: "https://github.com/namesakefyi/namesake/commits/main/web/",
 };
