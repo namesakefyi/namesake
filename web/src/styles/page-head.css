@@ -1,4 +1,3 @@
-/* Shared by PageHeader and the CMS preview pane. */
 .page-head {
   padding-block: var(--space-2xl);
 
@@ -10,7 +9,7 @@
 
   h1 {
     display: inline;
-    margin-inline-start: -0.06em; /* Visual alignment */
+    margin-inline-start: -0.06em;
     text-wrap: balance;
 
     @media (width < 700px) {

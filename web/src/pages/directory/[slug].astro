@@ -10,6 +10,7 @@ import { SERVICE_LABELS, type Service } from "#constants/services";
 import BaseLayout from "#layouts/BaseLayout.astro";
 import { formatCleanUrl } from "#lib/utils/formatCleanUrl";
 import { formatLanguage } from "#lib/utils/formatLanguage";
+import "../../styles/directory.css";
 
 export async function getStaticPaths() {
   const [entries, jurisdictions] = await Promise.all([
@@ -149,27 +150,3 @@ const { name, description, services, languages, email, phone, url, logo } =
     )
   }
 </BaseLayout>
-
-<style>
-  .entry-logo {
-    max-height: 140px;
-    margin-block-end: var(--space-m);
-  }
-
-  .entry-layout {
-    margin-block-end: var(--space-xl);
-  }
-
-  .entry-meta {
-    margin: 0;
-
-    dt {
-      font-weight: var(--weight-bold);
-    }
-
-    dd {
-      margin: 0;
-      margin-block-end: var(--space-s);
-    }
-  }
-</style>
