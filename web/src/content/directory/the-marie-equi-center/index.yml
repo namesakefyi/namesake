@@ -1,0 +1,11 @@
+name: The Marie Equi Center
+description: 'We work on both sides of queer displacement: strengthening community resilience in rural Oregon and providing a place to land in Portland for trans and queer people who are relocating, losing housing, or navigating instability while seeking safety, healthcare, resources, and connection.'
+jurisdictions:
+  - or
+url: https://www.marieequi.center/
+services:
+  - nameChangeClinic
+  - notary
+languages:
+  - en
+officialPartner: false
