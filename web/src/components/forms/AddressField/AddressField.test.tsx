@@ -13,6 +13,26 @@ async function waitForAsyncList() {
 }
 
 describe("AddressField", () => {
+  it("restores a saved county and allows choosing another county from the dropdown", async () => {
+    renderWithFormProvider(
+      <AddressField
+        type="residence"
+        includeCounty
+        countyOptions={[
+          { label: "Kings", value: "Kings" },
+          { label: "Queens", value: "Queens" },
+        ]}
+      />,
+      { defaultValues: { residenceCounty: "Kings County" } },
+    );
+    await waitForAsyncList();
+    const county = screen.getByRole("combobox", { name: "County" });
+    expect(county).toHaveValue("Kings");
+    await userEvent.clear(county);
+    await userEvent.type(county, "Que");
+    await userEvent.click(screen.getByRole("option", { name: "Queens" }));
+    expect(county).toHaveValue("Queens");
+  });
   it("renders all address input fields", async () => {
     renderWithFormProvider(<AddressField type="residence" />);
     await waitForAsyncList();
@@ -259,6 +279,29 @@ describe("mapPlaceToFields", () => {
     formatted: "100 Main St, Boston, MA 02108",
     place_id: "1",
   };
+
+  it("matches autocomplete counties to dropdown values while preserving free-text behavior", () => {
+    const names = {
+      street: "residenceStreetAddress",
+      city: "residenceCity",
+      state: "residenceState",
+      zip: "residenceZipCode",
+      county: "residenceCounty",
+    } as const;
+    const result = { ...place, county: "Suffolk County" };
+    expect(
+      mapPlaceToFields(result, names, [{ label: "Suffolk", value: "Suffolk" }]),
+    ).toContainEqual(["residenceCounty", "Suffolk"]);
+    expect(mapPlaceToFields(result, names)).toContainEqual([
+      "residenceCounty",
+      "Suffolk County",
+    ]);
+    expect(
+      mapPlaceToFields({ ...place, county: "Saint Lawrence County" }, names, [
+        { label: "St. Lawrence", value: "St. Lawrence" },
+      ]),
+    ).toContainEqual(["residenceCounty", "St. Lawrence"]);
+  });
 
   it("maps geoapify properties onto the address type's field names", () => {
     expect(
