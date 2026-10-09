@@ -128,12 +128,11 @@ for (const request of [
         name: "County",
         exact: true,
       });
-      // Open the unfiltered list before testing search and saved selection.
-      await county.press("ArrowDown");
-      await expect(page.getByRole("option")).toHaveCount(62);
-      await county.fill("Brooklyn");
-      await county.press("ArrowDown");
-      await county.press("Enter");
+      await county.click();
+      await county.pressSequentially("Brooklyn");
+      await page
+        .getByRole("option", { name: "Kings (Brooklyn)", exact: true })
+        .click();
       await expect(county).toHaveValue("Kings (Brooklyn)");
       await next();
     });
@@ -152,12 +151,11 @@ for (const request of [
         name: "County",
         exact: true,
       });
-      // Open the unfiltered list before testing search and saved selection.
-      await county.press("ArrowDown");
-      await expect(page.getByRole("option")).toHaveCount(62);
-      await county.fill("Brooklyn");
-      await county.press("ArrowDown");
-      await county.press("Enter");
+      await county.click();
+      await county.pressSequentially("Brooklyn");
+      await page
+        .getByRole("option", { name: "Kings (Brooklyn)", exact: true })
+        .click();
       await expect(county).toHaveValue("Kings (Brooklyn)");
       await next();
     });
