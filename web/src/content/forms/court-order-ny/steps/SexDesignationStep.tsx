@@ -1,10 +1,10 @@
+import { ComboBoxField } from "#components/forms/ComboBoxField";
 import {
   FormStep,
   FormSubsection,
   useFieldVisible,
 } from "#components/forms/FormStep";
 import { LongTextField } from "#components/forms/LongTextField";
-import { ShortTextField } from "#components/forms/ShortTextField";
 import { YesNoField } from "#components/forms/YesNoField";
 import { defineStep } from "#lib/forms/defineStep";
 import { requestsSexDesignationChange } from "../conditions";
@@ -36,7 +36,16 @@ export const sexDesignationStep = defineStep({
     const reasonVisible = useFieldVisible(stepConfig, "reasonForGenderChange");
     return (
       <FormStep stepConfig={stepConfig}>
-        <ShortTextField name="newGender" label="New sex designation" />
+        <ComboBoxField
+          name="newGender"
+          label="New sex designation"
+          placeholder="Select a sex designation"
+          options={[
+            { label: "M", value: "M" },
+            { label: "F", value: "F" },
+            { label: "X", value: "X" },
+          ]}
+        />
         <YesNoField
           name="hasPreviouslyFiledSexDesignationChange"
           label="Have you ever filed a sex designation change petition before?"

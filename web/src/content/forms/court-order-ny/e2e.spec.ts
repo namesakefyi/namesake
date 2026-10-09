@@ -254,8 +254,16 @@ for (const request of [
           }),
         ).toBeVisible();
         await page
-          .getByRole("textbox", { name: "New sex designation", exact: true })
-          .fill("X");
+          .getByRole("button", { name: "Show suggestions New sex designation" })
+          .click();
+        await expect(page.getByRole("option")).toHaveText(["M", "F", "X"]);
+        await page.getByRole("option", { name: "X", exact: true }).click();
+        await expect(
+          page.getByRole("combobox", {
+            name: "New sex designation",
+            exact: true,
+          }),
+        ).toHaveValue("X");
         await page
           .getByRole("radiogroup", {
             name: "Would you like to include your reasons?",
@@ -311,6 +319,11 @@ for (const request of [
         page.getByText("Old first name: Alex", { exact: true }),
       ).toBeVisible();
       await expect(page.getByText("Stale conviction details")).toBeHidden();
+      if (sexChange) {
+        await expect(
+          page.getByText("Desired gender marker: X", { exact: true }),
+        ).toBeVisible();
+      }
       await expect(
         page.getByRole("button", { name: "Finish and Download" }),
       ).toBeVisible();
