@@ -50,7 +50,7 @@ export default definePdf<PdfFieldName>({
       isRequestingNameChange: nameChange,
       isRequestingSexDesignationChange: sexChange,
 
-      // Section A: do not use saved answers from other forms for sex-only requests.
+      // Section A applies only when requesting a name change.
       newFullName: nameChange
         ? joinNames(data.newFirstName, data.newMiddleName, data.newLastName)
         : undefined,
