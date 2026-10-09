@@ -1,0 +1,13 @@
+name: Triangle Legal Clinic
+description: The Triangle Legal Clinic offers free legal support to low-income residents of Multnomah County.
+jurisdictions:
+  - or
+url: https://trianglelegalclinic.com/
+services:
+  - legal
+  - notary
+  - nameChangeClinic
+languages:
+  - en
+officialPartner: false
+logo: Triangle+Logo+(1500+x+300+px)+(800+x+300+px).webp
