@@ -8,7 +8,7 @@ export const currentNameStep = defineStep({
   title: "What is your current legal name?",
   description: (data) =>
     requestsNameChange(data)
-      ? "This is the name you're leaving behind. Type it exactly as it appears on your ID."
+      ? "This is the name you’re leaving behind. Type it exactly as it appears on your ID."
       : "Type it exactly as it appears on your ID.",
   fields: ["oldFirstName", "oldMiddleName", "oldLastName"],
   component: ({ stepConfig }) => {
