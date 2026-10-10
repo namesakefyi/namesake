@@ -16,6 +16,11 @@ import { MenuItem } from "../../common/Menu";
 
 type AddressType = "residence" | "mailing" | "parent1" | "parent2";
 
+interface CountyOption {
+  label: string;
+  value: string;
+}
+
 interface AddressNames {
   street: FieldName;
   street2?: FieldName;
@@ -36,6 +41,7 @@ const FIELD_FOR_GEOAPIFY = {
 export function mapPlaceToFields(
   place: GeoapifyResult,
   names: AddressNames,
+  countyOptions?: readonly CountyOption[],
 ): Array<[FieldName, string]> {
   const updates: Array<[FieldName, string]> = [];
   for (const [source, key] of Object.entries(FIELD_FOR_GEOAPIFY) as [
@@ -44,7 +50,11 @@ export function mapPlaceToFields(
   ][]) {
     const fieldName = names[key];
     if (!fieldName) continue;
-    updates.push([fieldName, place[source] ?? ""]);
+    const value = place[source] ?? "";
+    updates.push([
+      fieldName,
+      key === "county" && countyOptions ? value.replace(/ County$/, "") : value,
+    ]);
   }
   return updates;
 }
@@ -54,6 +64,8 @@ export interface AddressFieldProps {
   type: AddressType;
   includeAddress2?: boolean;
   includeCounty?: boolean;
+  /** Use a searchable dropdown instead of free text for the county. */
+  countyOptions?: readonly CountyOption[];
 }
 
 export function AddressField({
@@ -61,6 +73,7 @@ export function AddressField({
   type,
   includeAddress2 = false,
   includeCounty = false,
+  countyOptions,
 }: AddressFieldProps) {
   const { control, getValues, setValue } = useFormContext();
 
@@ -111,7 +124,11 @@ export function AddressField({
   const autocompleteAddress = (id: Key): void => {
     const place = list.items.find((i) => i.place_id === id);
     if (!place) return;
-    for (const [field, value] of mapPlaceToFields(place, names[type])) {
+    for (const [field, value] of mapPlaceToFields(
+      place,
+      names[type],
+      countyOptions,
+    )) {
       setValue(field, value, { shouldValidate: true, shouldDirty: true });
     }
     list.setFilterText("");
@@ -219,14 +236,33 @@ export function AddressField({
           control={control}
           name={names[type].county}
           defaultValue=""
-          render={({ field, fieldState: { invalid, error } }) => (
-            <TextField
-              {...field}
-              label="County"
-              isInvalid={invalid}
-              errorMessage={error?.message}
-            />
-          )}
+          render={({ field, fieldState: { invalid, error } }) =>
+            countyOptions ? (
+              <ComboBox
+                {...field}
+                label="County"
+                placeholder="Select a county"
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                isInvalid={invalid}
+                errorMessage={error?.message}
+                menuTrigger="focus"
+              >
+                {countyOptions.map(({ label, value }) => (
+                  <ComboBoxItem key={value} id={value} textValue={label}>
+                    {label}
+                  </ComboBoxItem>
+                ))}
+              </ComboBox>
+            ) : (
+              <TextField
+                {...field}
+                label="County"
+                isInvalid={invalid}
+                errorMessage={error?.message}
+              />
+            )
+          }
         />
       )}
       <Controller
