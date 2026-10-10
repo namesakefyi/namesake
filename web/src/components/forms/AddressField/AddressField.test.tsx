@@ -23,7 +23,7 @@ describe("AddressField", () => {
           { label: "Queens", value: "Queens" },
         ]}
       />,
-      { defaultValues: { residenceCounty: "Kings County" } },
+      { defaultValues: { residenceCounty: "Kings" } },
     );
     await waitForAsyncList();
     const county = screen.getByRole("combobox", { name: "County" });
@@ -280,7 +280,7 @@ describe("mapPlaceToFields", () => {
     place_id: "1",
   };
 
-  it("matches autocomplete counties to dropdown values while preserving free-text behavior", () => {
+  it("removes the County suffix from autocomplete results for county dropdowns only", () => {
     const names = {
       street: "residenceStreetAddress",
       city: "residenceCity",
@@ -296,11 +296,6 @@ describe("mapPlaceToFields", () => {
       "residenceCounty",
       "Suffolk County",
     ]);
-    expect(
-      mapPlaceToFields({ ...place, county: "Saint Lawrence County" }, names, [
-        { label: "St. Lawrence", value: "St. Lawrence" },
-      ]),
-    ).toContainEqual(["residenceCounty", "St. Lawrence"]);
   });
 
   it("maps geoapify properties onto the address type's field names", () => {

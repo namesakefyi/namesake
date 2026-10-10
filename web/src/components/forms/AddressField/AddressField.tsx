@@ -21,19 +21,6 @@ interface CountyOption {
   value: string;
 }
 
-function resolveCountyValue(value: string, options?: readonly CountyOption[]) {
-  const normalize = (name: string) =>
-    name
-      .trim()
-      .replace(/\s+County$/i, "")
-      .toLowerCase()
-      .replace(/^st\.? /, "saint ");
-  return (
-    options?.find((option) => normalize(option.value) === normalize(value))
-      ?.value ?? value
-  );
-}
-
 interface AddressNames {
   street: FieldName;
   street2?: FieldName;
@@ -66,7 +53,7 @@ export function mapPlaceToFields(
     const value = place[source] ?? "";
     updates.push([
       fieldName,
-      key === "county" ? resolveCountyValue(value, countyOptions) : value,
+      key === "county" && countyOptions ? value.replace(/ County$/, "") : value,
     ]);
   }
   return updates;
@@ -255,7 +242,7 @@ export function AddressField({
                 {...field}
                 label="County"
                 placeholder="Select a county"
-                value={resolveCountyValue(field.value ?? "", countyOptions)}
+                value={field.value ?? ""}
                 onChange={field.onChange}
                 isInvalid={invalid}
                 errorMessage={error?.message}
