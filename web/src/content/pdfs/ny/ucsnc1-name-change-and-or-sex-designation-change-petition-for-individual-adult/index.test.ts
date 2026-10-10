@@ -1,7 +1,16 @@
 import { describe, expect, it, vi } from "vitest";
 import type { FormData } from "#constants/fields";
+import formConfig from "#content/forms/court-order-ny";
+import { resolveFormVisibility } from "#lib/forms/formVisibility";
 import { getPdfForm } from "#lib/pdfs/getPdfForm";
 import pdf from ".";
+
+// Exercise the same visibility filtering used by createFormSubmitHandler.
+const visibleAnswers = (data: Partial<FormData>) =>
+  resolveFormVisibility(formConfig.steps, data, formConfig.pdfs).visibleFields;
+
+const getPetitionForm = (userData: Partial<FormData>) =>
+  getPdfForm({ pdf, userData: visibleAnswers(userData) });
 
 const names: Partial<FormData> = {
   oldFirstName: "Alex",
@@ -18,9 +27,9 @@ describe("New York petition names and request type", () => {
     ["Both", true, true],
   ] as const)("fills the PDF for %s", async (request, name, sex) => {
     // Include a saved new name to ensure sex-only requests do not use it.
-    const form = await getPdfForm({
-      pdf,
-      userData: { ...names, nyCourtOrderRequest: request },
+    const form = await getPetitionForm({
+      ...names,
+      nyCourtOrderRequest: request,
     });
     expect(form.getTextField("currentLegalName")?.getValue()).toBe(
       "Alex J Example",
@@ -47,13 +56,10 @@ describe("New York petition names and request type", () => {
   });
 
   it("uses the existing name when no new name was collected", async () => {
-    const form = await getPdfForm({
-      pdf,
-      userData: {
-        nyCourtOrderRequest: "Sex designation change",
-        oldFirstName: "Alex",
-        oldLastName: "Example",
-      },
+    const form = await getPetitionForm({
+      nyCourtOrderRequest: "Sex designation change",
+      oldFirstName: "Alex",
+      oldLastName: "Example",
     });
     expect(form.getTextField("currentLegalName")?.getValue()).toBe(
       "Alex Example",
@@ -160,9 +166,9 @@ describe("New York petition field mapping", () => {
   it("derives the age at download time", () => {
     vi.setSystemTime(new Date(2026, 5, 14));
     try {
-      expect(pdf.resolver(complete).currentAge).toBe("35");
+      expect(pdf.resolver(visibleAnswers(complete)).currentAge).toBe("35");
       vi.setSystemTime(new Date(2026, 5, 15));
-      expect(pdf.resolver(complete).currentAge).toBe("36");
+      expect(pdf.resolver(visibleAnswers(complete)).currentAge).toBe("36");
     } finally {
       vi.useRealTimers();
     }
@@ -171,16 +177,18 @@ describe("New York petition field mapping", () => {
   it.each(["dontKnow", "preferNotToAnswer"] as const)(
     "does not turn %s into a yes or no answer",
     (answer) => {
-      const result = pdf.resolver({
-        ...complete,
-        shouldSealCourtRecord: answer,
-      });
+      const result = pdf.resolver(
+        visibleAnswers({
+          ...complete,
+          shouldSealCourtRecord: answer,
+        }),
+      );
       expect(result.shouldSealCourtRecord).toBeUndefined();
       expect(result.reasonToSealCourtRecord).toBeUndefined();
     },
   );
   it("fills every collected answer in the saved PDF", async () => {
-    const form = await getPdfForm({ pdf, userData: complete });
+    const form = await getPetitionForm(complete);
     const expectedText = {
       currentLegalName: "Alex J Example",
       newFullName: "Taylor Example",
@@ -243,7 +251,7 @@ describe("New York petition field mapping", () => {
       // Both support-payment questions must be visible to exercise their radios.
       userData.paysChildSupport = true;
       userData.paysSpousalSupport = true;
-      const form = await getPdfForm({ pdf, userData });
+      const form = await getPetitionForm(userData);
       for (const name of radios) {
         const field = form.getRadioGroup(name);
         if (!field) throw new Error(`Missing radio: ${name}`);
@@ -262,10 +270,7 @@ describe("New York petition field mapping", () => {
   );
 
   it("leaves unanswered questions and personal information blank", async () => {
-    const form = await getPdfForm({
-      pdf,
-      userData: { nyCourtOrderRequest: "Both" },
-    });
+    const form = await getPetitionForm({ nyCourtOrderRequest: "Both" });
     for (const name of radios) {
       const field = form.getRadioGroup(name);
       if (!field) throw new Error(`Missing radio: ${name}`);
@@ -294,9 +299,9 @@ describe("New York petition field mapping", () => {
   it.each(["Name change", "Sex designation change"])(
     "omits the other section for %s, even with stale answers",
     async (request) => {
-      const form = await getPdfForm({
-        pdf,
-        userData: { ...complete, nyCourtOrderRequest: request },
+      const form = await getPetitionForm({
+        ...complete,
+        nyCourtOrderRequest: request,
       });
       const sexOnly = request === "Sex designation change";
       for (const name of sexOnly ? nameText : sexText) {
@@ -319,13 +324,10 @@ describe("New York petition field mapping", () => {
   );
 
   it("does not print hidden details after an answer changes to no", async () => {
-    const form = await getPdfForm({
-      pdf,
-      userData: {
-        ...complete,
-        ...Object.fromEntries(radios.map((name) => [name, false])),
-        hasPreviouslyFiledNameChange: false,
-      },
+    const form = await getPetitionForm({
+      ...complete,
+      ...Object.fromEntries(radios.map((name) => [name, false])),
+      hasPreviouslyFiledNameChange: false,
     });
     for (const name of [
       "courtOfConviction",
@@ -358,11 +360,13 @@ describe("New York petition field mapping", () => {
   });
 
   it("omits stale arrears when payments are up to date", () => {
-    const result = pdf.resolver({
-      ...complete,
-      areChildSupportPaymentsUpToDate: true,
-      areSpousalSupportPaymentsUpToDate: true,
-    });
+    const result = pdf.resolver(
+      visibleAnswers({
+        ...complete,
+        areChildSupportPaymentsUpToDate: true,
+        areSpousalSupportPaymentsUpToDate: true,
+      }),
+    );
     expect(result.childSupportArrearsAmount).toBeUndefined();
     expect(result.spousalSupportArrearsAmount).toBeUndefined();
     expect(result.courtIssuingChildSupportOrder).toBe(
@@ -371,14 +375,16 @@ describe("New York petition field mapping", () => {
   });
 
   it("uses the international birthplace region instead of a saved US state", () => {
-    const result = pdf.resolver({
-      ...complete,
-      birthplaceStreetAddress: "10 Example Road",
-      birthplaceCity: "Toronto",
-      birthplaceRegion: "Ontario",
-      birthplaceCountry: "CA",
-      birthplaceZipCode: "M5V 1A1",
-    });
+    const result = pdf.resolver(
+      visibleAnswers({
+        ...complete,
+        birthplaceStreetAddress: "10 Example Road",
+        birthplaceCity: "Toronto",
+        birthplaceRegion: "Ontario",
+        birthplaceCountry: "CA",
+        birthplaceZipCode: "M5V 1A1",
+      }),
+    );
     expect(result.placeOfBirth).toBe(
       "10 Example Road, Toronto, Ontario, M5V 1A1, Canada",
     );
