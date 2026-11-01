@@ -310,8 +310,8 @@ importers:
         specifier: ^0.5.2
         version: 0.5.3
       '@maskito/core':
-        specifier: ^5.6.0
-        version: 5.6.0
+        specifier: ^5.6.1
+        version: 5.6.1
       '@remixicon/react':
         specifier: ^4.9.0
         version: 4.9.0(react@19.3.0)
@@ -376,7 +376,7 @@ importers:
         specifier: ^0.5.1
         version: 0.5.1
       sanitize-html:
-        specifier: ^2.18.0
+        specifier: ^2.18.1
         version: 2.18.1
       topojson-client:
         specifier: ^3.1.0
@@ -1635,8 +1635,8 @@ packages:
       '@google-cloud/secret-manager':
         optional: true
 
-  '@maskito/core@5.6.0':
-    resolution: {integrity: sha512-CchnaPiXWy4llMEsb6AG4o7CwlyS2j/1ttHQXo0FMnLhcA5OwlFgMpEb6gCZkUN5a0Bns8UTjm7eUpVBHRoqUQ==}
+  '@maskito/core@5.6.1':
+    resolution: {integrity: sha512-P5XKR1wwkTLagzyH79ZE6TfQI20IR+eHeP8hoKrfqlr99luLo1QYTux9OFPvIH+o2GGzCkIBbgwYaquunZlC1Q==}
 
   '@mermaid-js/layout-elk@1.0.1':
     resolution: {integrity: sha512-6KzQTCAy4lSlETy5fBOYyUD0JQtZk/ihacVHSmAyo00hW7REOhKQGjNIxVwAnI+HtJdfpGnSMxkp9qnJDijppw==}
@@ -6506,7 +6506,7 @@ snapshots:
       pako: 2.2.0
       pkijs: 3.4.0
 
-  '@maskito/core@5.6.0': {}
+  '@maskito/core@5.6.1': {}
 
   '@mermaid-js/layout-elk@1.0.1(mermaid@12.1.0)':
     dependencies:
