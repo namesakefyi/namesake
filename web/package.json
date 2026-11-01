@@ -76,7 +76,7 @@
     "topojson-client": "^3.1.0",
     "typescript": "^6.0.3",
     "ua-parser-js": "^2.0.10",
-    "xstate": "^5.33.2"
+    "xstate": "^5.33.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.0",
