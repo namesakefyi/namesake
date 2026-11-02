@@ -38,7 +38,7 @@
     ]
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.15",
+    "@biomejs/biome": "^2.6.4",
     "nano-staged": "^1.0.2",
     "simple-git-hooks": "^2.14.0"
   }
