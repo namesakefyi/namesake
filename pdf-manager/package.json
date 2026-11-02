@@ -15,9 +15,9 @@
     "@libpdf/core": "^0.5.2",
     "hono": "^4.13.13",
     "pdfjs-dist": "^6.4.299",
-    "react": "^19.3.0",
+    "react": "^19.3.1",
     "react-aria-components": "^1.22.1",
-    "react-dom": "^19.3.0"
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
     "@clack/prompts": "^1.8.1",
