@@ -8,7 +8,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.12.1",
+      "version": "12.16.1",
       "onFail": "download"
     }
   },
@@ -26,6 +26,7 @@
     "check": "biome check",
     "check:fix": "biome check --write",
     "test": "pnpm -r test",
+    "types": "pnpm -r --if-present types",
     "pdf:schema": "pnpm --filter @namesake/pdf-manager extract-schema",
     "pdf:monitor": "pnpm --filter @namesake/pdf-manager monitor"
   },
@@ -38,7 +39,7 @@
     ]
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.15",
+    "@biomejs/biome": "^2.6.4",
     "nano-staged": "^1.0.2",
     "simple-git-hooks": "^2.14.0"
   }

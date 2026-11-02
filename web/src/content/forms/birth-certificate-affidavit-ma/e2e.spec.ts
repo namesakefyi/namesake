@@ -29,7 +29,7 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
   await test.step("Title", async () => {
     await page.goto("/forms/birth-certificate-affidavit-ma");
 
-    expect(page).toHaveTitle(/Birth Certificate: Massachusetts/);
+    await expect(page).toHaveTitle(/Birth Certificate: Massachusetts/);
 
     await expect(
       page.getByRole("heading", {

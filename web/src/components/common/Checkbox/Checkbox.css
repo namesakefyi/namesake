@@ -48,6 +48,16 @@
     transition: stroke-dashoffset 200ms ease-out;
   }
 
+  &[data-invalid] {
+    --selected-color: var(--invalid-color);
+    --selected-color-pressed: var(--invalid-color);
+    --checkmark-color: var(--highlight-foreground);
+
+    .checkbox {
+      border-color: var(--invalid-color);
+    }
+  }
+
   &[data-focus-visible] .checkbox {
     outline: 3px solid var(--focus-ring-color);
     outline-offset: 2px;
@@ -74,20 +84,6 @@
     & svg {
       fill: var(--checkmark-color);
       stroke: none;
-    }
-  }
-
-  &[data-invalid] {
-    .checkbox {
-      --checkmark-color: var(--highlight-foreground);
-      border-color: var(--invalid-color);
-    }
-
-    &[data-selected],
-    &[data-indeterminate] {
-      .checkbox {
-        background: var(--invalid-color);
-      }
     }
   }
 

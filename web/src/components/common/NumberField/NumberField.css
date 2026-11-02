@@ -66,6 +66,20 @@
     }
   }
 
+  &[data-invalid] {
+    .react-aria-Button,
+    .react-aria-Input {
+      border-color: var(--invalid-color);
+    }
+
+    &:focus-within {
+      .react-aria-Input,
+      .react-aria-Button {
+        border-color: var(--focus-ring-color);
+      }
+    }
+  }
+
   .react-aria-Group {
     display: flex;
     align-items: stretch;
@@ -87,20 +101,6 @@
     display: flex;
     flex-direction: column;
     align-self: stretch;
-  }
-
-  &[data-invalid] {
-    .react-aria-Button,
-    .react-aria-Input {
-      border-color: var(--invalid-color);
-    }
-
-    &:focus-within {
-      .react-aria-Input,
-      .react-aria-Button {
-        border-color: var(--focus-ring-color);
-      }
-    }
   }
 
   .react-aria-FieldError {
