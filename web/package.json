@@ -54,7 +54,7 @@
     "@maskito/core": "^5.6.1",
     "@remixicon/react": "^4.9.0",
     "@severo_bo/us-atlas-2023": "^4.0.0",
-    "@sveltia/cms": "^0.254.0",
+    "@sveltia/cms": "^0.255.0",
     "@xstate/react": "^6.1.0",
     "astro": "7.4.4",
     "astro-pagefind": "^2.0.1",
@@ -113,7 +113,7 @@
     "sharp": "^0.35.5",
     "storybook": "^10.6.5",
     "vitest": "5.0.5",
-    "wrangler": "^4.155.0"
+    "wrangler": "^4.156.0"
   },
   "homepage": "https://namesake.fyi",
   "bugs": {
