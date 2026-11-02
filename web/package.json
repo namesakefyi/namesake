@@ -16,6 +16,7 @@
     "build:only": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "types": "wrangler types",
     "test": "vitest",
     "test:once": "vitest run",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",

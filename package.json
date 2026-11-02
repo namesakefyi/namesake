@@ -26,6 +26,7 @@
     "check": "biome check",
     "check:fix": "biome check --write",
     "test": "pnpm -r test",
+    "types": "pnpm -r --if-present types",
     "pdf:schema": "pnpm --filter @namesake/pdf-manager extract-schema",
     "pdf:monitor": "pnpm --filter @namesake/pdf-manager monitor"
   },
