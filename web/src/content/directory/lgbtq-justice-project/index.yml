@@ -1,0 +1,14 @@
+name: LGBTQ Justice Project
+description: A branch of ACLU Mississippi, the LGBTQ Justice Project is a free legal clinic for LGBTQ identifying Mississippians.
+jurisdictions:
+  - ms
+url: https://www.aclu-ms.org/campaigns-initiatives/lgbtq-justice-project/
+services:
+  - formFilling
+  - legal
+languages:
+  - en
+officialPartner: false
+email: LGBTQ@aclu-ms.org
+phone: 601-354-3408;114
+logo: images.jpg
