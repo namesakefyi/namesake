@@ -39,7 +39,7 @@
     {
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
-      "description": "Bundles every non-major update into one PR. Must stay last so it overrides the groups above, which then only apply to major updates",
+      "description": "Bundles all non-major updates into one PR.",
       "matchPackageNames": ["*"],
       "matchUpdateTypes": [
         "minor",
@@ -49,6 +49,13 @@
         "digest",
         "replacement"
       ]
+    },
+    {
+      "description": "Treat 0.x minor updates as breaking: ungroup them from all-minor-patch and require Dependency Dashboard approval",
+      "matchCurrentVersion": "<1",
+      "matchUpdateTypes": ["minor"],
+      "groupName": null,
+      "dependencyDashboardApproval": true
     }
   ]
 }
