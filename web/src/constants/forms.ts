@@ -6,6 +6,7 @@ export const FORM_SLUGS = [
   "affidavit-of-indigency-ma",
   "court-order-ma",
   "court-order-ma-minor",
+  "court-order-ny",
   "court-order-ri",
   "social-security",
   "birth-certificate-affidavit-ma",

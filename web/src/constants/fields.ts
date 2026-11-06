@@ -690,6 +690,154 @@ export const FIELD_DEFS = [
     label: "Waive fees?",
     type: "boolean",
   },
+  // New York adult court-order petition (UCS-NC1).
+  {
+    name: "birthplaceRegion",
+    label: "Province or region of birth",
+    type: "string",
+  },
+  {
+    name: "nyCourtOrderRequest",
+    label: "Requested New York court order",
+    type: "string",
+  },
+  { name: "courtType", label: "Court type", type: "string" },
+  { name: "courtCounty", label: "Court county", type: "string" },
+  {
+    name: "birthplaceStreetAddress",
+    label: "Street address of birth",
+    type: "string",
+  },
+  { name: "birthplaceZipCode", label: "Postal code of birth", type: "string" },
+  {
+    name: "hasBeenConvictedOfCrime",
+    label: "Ever convicted of a crime?",
+    type: "boolean",
+  },
+  { name: "courtOfConviction", label: "Court of conviction", type: "string" },
+  { name: "crime", label: "Crime of conviction", type: "string" },
+  {
+    name: "hasFiledForBankruptcy",
+    label: "Ever filed for bankruptcy?",
+    type: "boolean",
+  },
+  {
+    name: "hasJudgmentsOrLiens",
+    label: "Judgments or liens?",
+    type: "boolean",
+  },
+  {
+    name: "isPartyToLawsuitOrCourtCase",
+    label: "Party to a lawsuit or court case?",
+    type: "boolean",
+  },
+  {
+    name: "bankruptcyJudgmentsLiensDetails",
+    label: "Bankruptcy, judgments, liens, or court case details",
+    type: "string",
+  },
+  { name: "isCurrentlyMarried", label: "Currently married?", type: "boolean" },
+  {
+    name: "wasPreviouslyMarried",
+    label: "Previously married?",
+    type: "boolean",
+  },
+  { name: "hasChildrenUnder21", label: "Children under 21?", type: "boolean" },
+  {
+    name: "paysChildSupport",
+    label: "Required to pay child support?",
+    type: "boolean",
+  },
+  {
+    name: "areChildSupportPaymentsUpToDate",
+    label: "Child support payments up to date?",
+    type: "boolean",
+  },
+  {
+    name: "childSupportArrearsAmount",
+    label: "Child support amount owed",
+    type: "string",
+  },
+  {
+    name: "courtIssuingChildSupportOrder",
+    label: "Court issuing child support order",
+    type: "string",
+  },
+  {
+    name: "supportCollectionsUnit",
+    label: "Child Support Collections Unit",
+    type: "string",
+  },
+  {
+    name: "paysSpousalSupport",
+    label: "Required to pay spousal support?",
+    type: "boolean",
+  },
+  {
+    name: "areSpousalSupportPaymentsUpToDate",
+    label: "Spousal support payments up to date?",
+    type: "boolean",
+  },
+  {
+    name: "spousalSupportArrearsAmount",
+    label: "Spousal support amount owed",
+    type: "string",
+  },
+  {
+    name: "courtIssuingSpousalSupportOrder",
+    label: "Court issuing spousal support order",
+    type: "string",
+  },
+  {
+    name: "hasPreviouslyFiledNameChange",
+    label: "Ever filed a name change petition?",
+    type: "boolean",
+  },
+  {
+    name: "previousNameChangePetitionDetails",
+    label: "Previous name change petition details",
+    type: "string",
+  },
+  {
+    name: "hasPreviouslyFiledSexDesignationChange",
+    label: "Ever filed a sex designation change petition?",
+    type: "boolean",
+  },
+  {
+    name: "previouslyFiledSexDesignationChangeDetails",
+    label: "Previous sex designation change petition details",
+    type: "string",
+  },
+  {
+    name: "isProvidingReasonForGenderChange",
+    label: "Include reasons for sex designation change?",
+    type: "boolean",
+  },
+  {
+    name: "reasonForGenderChange",
+    label: "Reason for sex designation change",
+    type: "string",
+  },
+  {
+    name: "shouldSealCourtRecord",
+    label: "Request sealing for personal safety?",
+    type: "boolean",
+  },
+  {
+    name: "reasonToSealCourtRecord",
+    label: "Reason to seal court record",
+    type: "string",
+  },
+  {
+    name: "hasAttachedSupportingDocuments",
+    label: "Attaching supporting documents or pages?",
+    type: "boolean",
+  },
+  {
+    name: "supportingDocumentsDetails",
+    label: "Supporting documents or additional pages",
+    type: "string",
+  },
 ] as const;
 
 export type FieldName = (typeof FIELD_DEFS)[number]["name"];
