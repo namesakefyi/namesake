@@ -162,6 +162,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@astrojs/starlight>satteri': 0.11.6
+
 importers:
 
   .:
@@ -5575,7 +5578,7 @@ snapshots:
       mdast-util-to-string: 4.0.0
       pagefind: 1.5.2
       remark-directive: 4.0.0(supports-color@10.2.2)
-      satteri: 0.10.5
+      satteri: 0.11.6
       ultrahtml: 1.7.0
       unified: 11.0.5
       unist-util-visit: 5.1.0

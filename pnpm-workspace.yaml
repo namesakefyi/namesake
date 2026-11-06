@@ -11,3 +11,8 @@ allowBuilds:
   workerd: true
 
 minimumReleaseAge: 0
+
+overrides:
+  # Starlight's <Steps> garbles its HTML output in builds when it uses a different
+  # satteri version than @astrojs/mdx. Remove once their versions match upstream.
+  "@astrojs/starlight>satteri": 0.11.6

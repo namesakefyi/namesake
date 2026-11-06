@@ -233,7 +233,15 @@ export const cmsConfig: CmsConfig = {
             "Use the format 555-555-5555, with an optional extension like ;123",
           ],
         },
-        { name: "logo", label: "Logo", widget: "image", required: false },
+        {
+          name: "logo",
+          label: "Logo",
+          widget: "image",
+          required: false,
+          media_libraries: {
+            default: { config: { filename_template: "logo" } },
+          },
+        },
       ],
     },
     {
