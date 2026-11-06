@@ -26,65 +26,17 @@ Each entry in the directory needs the following info:
 | Description | A sentence describing the organization's mission. This is often found on the organization's homepage or about page. |
 | Jurisdictions | The U.S. state (or states) which this organization serves. |
 | URL | A link to the organization's website. If the organization/website is large, link directly to the most relevant page for name change information. |
-| Services | One or more of the following tags: `financial aid`, `form filling help`, `legal support`, `name change clinics`, and `notary` |
-| Languages | The languages the organization offers its services in, as two-letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) codes. If left out, the entry is listed as English only. |
+| Services | One or more of the following: Financial aid, Form filling help, Legal support, Name change clinics, and Notary. |
+| Languages | The languages the organization offers its services in. If left out, the entry is listed as English only. |
 | Email | A contact email address. _Optional._ |
 | Phone | A contact phone number. Format should match `000-000-0000`. An extension can be added with a semicolon followed by the digits, e.g. `000-000-0000;1234`. _Optional._ |
 | Logo | The organization's logo. _Optional._ |
 
 Usually, this information is available directly through an organization's website. If any details are uncertain, such as the services or languages offered, email or call the organization to confirm.
 
-List languages in the Languages field instead of mentioning them in the description, so that the entries can be filtered by language. If an organization offers a language which isn't supported yet (see above), add its code to `web/src/constants/languages.ts`.
+List languages in the Languages field instead of mentioning them in the description, so that the entries can be filtered by language.
 
-## Add data
-
-To update the directory, you will need to edit the Namesake codebase. If you haven't already, [set up your dev environment](/guides/setup) to get Namesake running on your computer.
-
-<Steps>
-
-1. Create a new git branch, then switch to that branch:
-
-   ```sh
-   git branch directory-updates
-   git checkout directory-updates
-
-   # or to create and checkout a branch all in one go:
-   # git checkout -b directory-updates
-   ```
-
-2. Navigate to `web/src/content/directory`. You will see a list of folders, one for each entry in the directory.
-
-3. For each new contact, add a folder using the organization's name in `kebab-case`. For example, the folder for "Youth Pride RI" is `youth-pride-ri`.
-
-4. Add an `index.yml` file inside the new folder with the following structure:
-
-    ```yml
-    name: Organization Name
-    description: The mission statement or organization description.
-    jurisdictions:
-      - ma
-    url: https://example.com
-    services:
-      - financialAid
-      - formFilling
-      - nameChangeClinic
-      - legal
-      - notary
-    languages:
-      - en
-      - es
-    email: contact@example.com
-    phone: 555-555-5555
-    logo: ./logo.webp
-    ```
-
-5. Replace the example info.
-
-6. Repeat for any other new entries.
-
-</Steps>
-
-## Add the logo
+### Find a logo
 
 Find a high-quality version of the logo. Sometimes this is possible by right-clicking the logo on their website and downloading. Other times you may need to do additional searching and find a "brand" or "press" page, or search Google images.
 
@@ -94,13 +46,26 @@ When selecting a logo:
 - File should have a transparent or plain white background.
 - Crop away any margins. The logo boundaries should span edge-to-edge.
 
-Once you have a suitable logo, upload it to the same folder as your `index.yml` file. Change the filename to `logo`, and update `index.yml` to make sure the `logo:` line points to the correct filename and extension, starting with `./`:
+## Add the organization
 
-```yml
-logo: ./logo.svg
-# or .webp, or .png, etc.
-```
+The content management system (CMS) at [namesake.fyi/edit](https://namesake.fyi/edit) lets you add and update entries from your browser. You'll need a [GitHub](https://github.com) account to sign in.
 
-## Submit a pull request
+<Steps>
 
-Commit and push your changes to the directory, then open a new pull request in GitHub. We'll review your additions, and if everything looks good, we'll merge them in!
+1. Go to [namesake.fyi/edit](https://namesake.fyi/edit) and sign in with GitHub.
+
+2. Open the **Directory** collection. To add an entry, create a new organization. To update an entry, select it from the list.
+
+3. Fill out the form using the info you collected. Required fields must be complete before you can save. Leave **Official Partner** turned off unless a maintainer asks you to set it.
+
+4. Upload the logo using the **Logo** field, if you have one.
+
+5. Save your entry, then submit it for review. This creates a pull request on GitHub.
+
+6. Repeat for any other new entries.
+
+</Steps>
+
+We'll review your additions, and if everything looks good, we'll merge them in!
+
+The **Languages** field only lists languages the directory already supports. If an organization offers one which isn't listed, mention it in your pull request.
