@@ -30,4 +30,30 @@ test.describe("directory", () => {
     await expect(page).not.toHaveURL(/language=/);
     await expect(select).toHaveValue("");
   });
+
+  test("paginates entries and resets the page when filters change", async ({
+    page,
+  }) => {
+    await page.goto("/directory");
+
+    const results = page.locator("#directory-results");
+    const entries = page.locator(".directory-list-item");
+    await expect(entries).toHaveCount(20);
+    await expect(page.getByText("Page 1 of")).toBeVisible();
+
+    await page.getByRole("link", { name: "Next" }).click();
+    await expect(page).toHaveURL(/[?&]page=2/);
+    await expect(results).not.toHaveAttribute("aria-busy", "true");
+    await expect(page.getByText("Page 2 of")).toBeVisible();
+
+    await page.getByRole("link", { name: "Prev" }).click();
+    await expect(page).not.toHaveURL(/page=/);
+    await expect(page.getByText("Page 1 of")).toBeVisible();
+
+    await page.goto("/directory?page=2");
+    await page.getByRole("combobox", { name: "Service" }).selectOption({
+      index: 1,
+    });
+    await expect(page).not.toHaveURL(/page=/);
+  });
 });

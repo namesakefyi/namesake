@@ -1,6 +1,6 @@
 .directory-logo {
-  width: auto;
-  max-width: fit-content;
+  object-fit: contain;
+  object-position: left;
   mix-blend-mode: multiply;
   filter: grayscale(100%);
 }

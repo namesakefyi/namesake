@@ -3,6 +3,8 @@ export const prerender = false;
 
 import { getCollection } from "astro:content";
 import {
+  RiArrowLeftLine,
+  RiArrowRightLine,
   RiGlobalLine,
   RiMailSendLine,
   RiMapPinLine,
@@ -25,6 +27,9 @@ import { formatPhone } from "#lib/utils/formatPhone";
 const stateParam = Astro.url.searchParams.get("state");
 const serviceParam = Astro.url.searchParams.get("service");
 const languageParam = Astro.url.searchParams.get("language");
+const pageParam = Number.parseInt(Astro.url.searchParams.get("page") ?? "", 10);
+
+const PAGE_SIZE = 20;
 
 const [jurisdictionsCollection, filteredEntries] = await Promise.all([
   getCollection("jurisdictions"),
@@ -48,7 +53,27 @@ filteredEntries.sort((a, b) => {
   return a.data.name.localeCompare(b.data.name);
 });
 
-const contacts = filteredEntries.map(({ id, data }) => ({
+const totalPages = Math.max(1, Math.ceil(filteredEntries.length / PAGE_SIZE));
+const currentPage = Number.isNaN(pageParam)
+  ? 1
+  : Math.min(Math.max(pageParam, 1), totalPages);
+const pageEntries = filteredEntries.slice(
+  (currentPage - 1) * PAGE_SIZE,
+  currentPage * PAGE_SIZE,
+);
+
+function getPageHref(page: number) {
+  const url = new URL(Astro.url);
+  if (page > 1) url.searchParams.set("page", String(page));
+  else url.searchParams.delete("page");
+  return `${url.pathname}${url.search}`;
+}
+
+const prevHref = currentPage > 1 ? getPageHref(currentPage - 1) : undefined;
+const nextHref =
+  currentPage < totalPages ? getPageHref(currentPage + 1) : undefined;
+
+const contacts = pageEntries.map(({ id, data }) => ({
   slug: id,
   name: data.name,
   description: data.description,
@@ -87,7 +112,7 @@ const description =
   <PageHeader title={title} description={description} />
   <section class="directory-filters" aria-label="Directory filters">
     <form id="directory-form" method="get" class="controls">
-      <select name="state" aria-label="State">
+      <select class="control" name="state" aria-label="State">
         <option value="">All states</option>
         <hr />
         {
@@ -98,7 +123,7 @@ const description =
           ))
         }
       </select>
-      <select name="service" aria-label="Service">
+      <select class="control" name="service" aria-label="Service">
         <option value="">All services</option>
         <hr />
         {
@@ -109,7 +134,7 @@ const description =
           ))
         }
       </select>
-      <select name="language" aria-label="Language">
+      <select class="control" name="language" aria-label="Language">
         <option value="">All languages</option>
         <hr />
         {
@@ -120,14 +145,17 @@ const description =
           ))
         }
       </select>
-      <a id="filter-reset" href={Astro.url.pathname} hidden={!hasActiveFilters}
-        >Reset</a
+      <a
+        id="filter-reset"
+        class="control"
+        href={Astro.url.pathname}
+        hidden={!hasActiveFilters}>Reset</a
       >
     </form>
     <div class="metadata">
       <span id="filter-count" class="count">
-        {contacts.length}{" "}
-        {contacts.length === 1 ? "entry" : "entries"}
+        {filteredEntries.length}{" "}
+        {filteredEntries.length === 1 ? "entry" : "entries"}
       </span>
     </div>
   </section>
@@ -144,7 +172,6 @@ const description =
               {contact.logo && (
                 <DirectoryLogo
                   logo={contact.logo}
-                  name={contact.name}
                   class="logo"
                 />
               )}
@@ -228,6 +255,33 @@ const description =
         </p>
       )
     }
+    {
+      totalPages > 1 && (
+        <nav class="pagination" aria-label="Pagination">
+          <a
+            class="control"
+            href={prevHref}
+            rel="prev"
+            aria-disabled={prevHref ? undefined : "true"}
+          >
+            <RiArrowLeftLine size={20} aria-hidden="true" />
+            Prev
+          </a>
+          <a
+            class="control"
+            href={nextHref}
+            rel="next"
+            aria-disabled={nextHref ? undefined : "true"}
+          >
+            Next
+            <RiArrowRightLine size={20} aria-hidden="true" />
+          </a>
+          <span class="page-status">
+            Page {currentPage} of {totalPages}
+          </span>
+        </nav>
+      )
+    }
   </section>
 </BaseLayout>
 
@@ -263,32 +317,103 @@ const description =
     }
   }
 
-  function applyFilters() {
-    const url = new URL(location.pathname, location.origin);
-    new FormData(form).forEach((value, key) => {
-      if (value) url.searchParams.set(key, value as string);
+  function syncFormFromUrl(url: URL) {
+    form.querySelectorAll("select").forEach((select) => {
+      select.value = url.searchParams.get(select.name) ?? "";
     });
-    history.replaceState(null, "", url);
-    resetLink.hidden = !url.searchParams.size;
+    resetLink.hidden = ![...url.searchParams.keys()].some(
+      (key) => key !== "page",
+    );
+  }
+
+  // Filter changes replace the history entry; page changes push one so
+  // Back returns to the previous page.
+  function navigate(url: URL, historyMode: "push" | "replace" | "none") {
+    if (historyMode === "push") history.pushState(null, "", url);
+    if (historyMode === "replace") history.replaceState(null, "", url);
+    syncFormFromUrl(url);
     if (results.getBoundingClientRect().top <= 0) {
       results.scrollIntoView({ behavior: "instant", block: "start" });
     }
     updateResults(url);
   }
 
+  // Building the URL from the form alone drops `page`, so any filter
+  // change resets pagination to page 1.
+  function applyFilters() {
+    const url = new URL(location.pathname, location.origin);
+    new FormData(form).forEach((value, key) => {
+      if (value) url.searchParams.set(key, value as string);
+    });
+    navigate(url, "replace");
+  }
+
+  results.addEventListener("click", (event) => {
+    const isPlainClick =
+      event.button === 0 &&
+      !(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey);
+    const link = (event.target as Element).closest<HTMLAnchorElement>(
+      ".pagination a[href]",
+    );
+    if (!link || !isPlainClick || event.defaultPrevented) return;
+    event.preventDefault();
+    navigate(new URL(link.href), "push");
+  });
+
+  window.addEventListener("popstate", () => {
+    navigate(new URL(location.href), "none");
+  });
+
   form.addEventListener("change", () => form.requestSubmit());
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
     applyFilters();
   });
-  resetLink.addEventListener("click", (e) => {
-    e.preventDefault();
-    form.querySelectorAll("select").forEach((el) => (el.value = ""));
-    applyFilters();
+  resetLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    navigate(new URL(location.pathname, location.origin), "replace");
   });
 </script>
 
 <style>
+  .control:not([hidden]) {
+    display: inline-flex;
+    gap: var(--space-2xs);
+    align-items: center;
+    height: calc(var(--space-2xl) + var(--space-2xs));
+    padding-inline: var(--space-m);
+    font-size: var(--step-0);
+    font-weight: var(--weight-bold);
+    color: var(--text-color);
+    text-wrap: nowrap;
+    text-decoration: none;
+    background-color: var(--background-color);
+    border: 1px solid var(--text-color);
+    border-radius: var(--radius-s);
+    cursor: pointer;
+    transition: transform 80ms ease-out;
+
+    @media (hover: hover) {
+      &:is(a[href]):hover {
+        transform: scale(1.05);
+      }
+
+      &:is(a[href]):active {
+        transform: scale(0.98);
+      }
+    }
+
+    &:focus-visible {
+      outline: 3px solid var(--focus-ring-color);
+      outline-offset: 2px;
+    }
+
+    &[aria-disabled="true"] {
+      cursor: default;
+      opacity: 0.4;
+    }
+  }
+
   .directory-filters {
     position: sticky;
     top: 0;
@@ -306,40 +431,6 @@ const description =
       display: flex;
       gap: var(--space-xs);
       align-items: center;
-
-      select,
-      button,
-      a:not([hidden]) {
-        display: inline-flex;
-        align-items: center;
-        height: calc(var(--space-2xl) + var(--space-2xs));
-        padding-inline: var(--space-m);
-        font-size: var(--step-0);
-        font-weight: var(--weight-bold);
-        color: var(--text-color);
-        text-wrap: nowrap;
-        text-decoration: none;
-        background-color: var(--background-color);
-        border: 1px solid var(--text-color);
-        border-radius: var(--radius-s);
-        cursor: pointer;
-        transition: transform 80ms ease-out;
-
-        @media (hover: hover) {
-          &:not(select):hover {
-            transform: scale(1.05);
-          }
-
-          &:not(select):active {
-            transform: scale(0.98);
-          }
-        }
-
-        &:focus-visible {
-          outline: 3px solid var(--focus-ring-color);
-          outline-offset: 2px;
-        }
-      }
 
       select {
         appearance: none;
@@ -412,6 +503,19 @@ const description =
 
     @media (width < 800px) {
       columns: 1;
+    }
+  }
+
+  .pagination {
+    display: flex;
+    gap: var(--space-s);
+    align-items: center;
+    padding-block-start: var(--space-l);
+    border-block-start: 1px solid var(--border-color);
+
+    .page-status {
+      margin-inline-start: var(--space-xs);
+      font-variant-numeric: tabular-nums;
     }
   }
 
