@@ -10,4 +10,5 @@ services:
 languages:
   - en
 officialPartner: false
-logo: Triangle+Logo+(1500+x+300+px)+(800+x+300+px).webp
+email: trianglelegalfoundation@gmail.com
+logo: ./logo.webp
