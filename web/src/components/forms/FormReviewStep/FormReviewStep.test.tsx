@@ -10,10 +10,12 @@ function TestWrapper({
   children,
   phase = "review",
   submitError = null,
+  onSubmit = vi.fn(),
 }: {
   children: React.ReactNode;
   phase?: "review" | "submitting";
   submitError?: string | null;
+  onSubmit?: (event: React.SubmitEvent<HTMLFormElement>) => void;
 }) {
   const form = useForm();
   return (
@@ -26,7 +28,7 @@ function TestWrapper({
           currentStepIndex: 0,
           totalSteps: 5,
           phase,
-          onSubmit: vi.fn(),
+          onSubmit,
           onEditStep: vi.fn(),
           submitError,
         }}
@@ -83,30 +85,11 @@ describe("FormReviewStep", () => {
     const user = userEvent.setup();
     const handleSubmit = vi.fn((e) => e.preventDefault());
 
-    function TestForm() {
-      const form = useForm();
-      return (
-        <FormProvider {...form}>
-          <FormStepContext.Provider
-            value={{
-              onNext: vi.fn(),
-              onBack: vi.fn(),
-              formTitle: "Test Form",
-              currentStepIndex: 0,
-              totalSteps: 5,
-              phase: "review" as const,
-              onSubmit: handleSubmit,
-              onEditStep: vi.fn(),
-              submitError: null,
-            }}
-          >
-            <FormReviewStep steps={[]} />
-          </FormStepContext.Provider>
-        </FormProvider>
-      );
-    }
-
-    render(<TestForm />);
+    render(
+      <TestWrapper onSubmit={handleSubmit}>
+        <FormReviewStep steps={[]} />
+      </TestWrapper>,
+    );
 
     const button = screen.getByRole("button", {
       name: /finish and download/i,

@@ -9,6 +9,8 @@ permissions:
 
 jobs:
   congrats:
-    uses: namesakefyi/congratsbot/.github/workflows/congratsbot.yml@5656cc9c003b086baf0e787ed7f037ce5bedc628 # main
+    uses: namesakefyi/congratsbot/.github/workflows/congratsbot.yml@d05d5ca4216542a6ba6fa642eb370df88c17b717 # main
     secrets:
       DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_CONGRATS }}
+    with:
+      exclude-authors: '["renovate[bot]", "dependabot[bot]"]'

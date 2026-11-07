@@ -2,16 +2,15 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    ":configMigration",
     ":widenPeerDependencies",
     "docker:pinDigests",
+    "group:linters",
+    "group:test",
+    "group:vite",
     "helpers:pinGitHubActionDigestsToSemver",
-    "mergeConfidence:all-badges",
-    "workarounds:all"
+    "mergeConfidence:all-badges"
   ],
-  "ignorePresets": ["group:monorepos"],
   "rangeStrategy": "bump",
-  "ignorePaths": ["**/node_modules/**"],
   "minimumReleaseAge": "4 days",
   "schedule": ["* * 1-2,15-16 * *"],
   "postUpdateOptions": ["pnpmDedupe"],
@@ -23,134 +22,7 @@
     {
       "groupName": "astro",
       "matchDatasources": ["npm"],
-      "matchPackageNames": [
-        "astro",
-        "@astrojs/**",
-        "astro-pagefind",
-        "astro-mermaid",
-        "astro-og-canvas",
-        "canvaskit-wasm",
-        "starlight-theme-flexoki",
-        "satteri"
-      ]
-    },
-    {
-      "groupName": "react",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": [
-        "react",
-        "react-dom",
-        "@types/react",
-        "@types/react-dom",
-        "react-hook-form",
-        "react-lite-youtube-embed"
-      ]
-    },
-    {
-      "groupName": "react-aria",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": [
-        "react-aria-components",
-        "@react-aria/**",
-        "@internationalized/**"
-      ]
-    },
-    {
-      "groupName": "xstate",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": ["xstate", "@xstate/**"]
-    },
-    {
-      "groupName": "d3",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": ["d3", "d3-*", "@types/d3", "@types/d3-*"]
-    },
-    {
-      "groupName": "topojson",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": [
-        "topojson-client",
-        "@types/topojson-*",
-        "@severo_bo/us-atlas-2023"
-      ]
-    },
-    {
-      "groupName": "mermaid",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": ["mermaid", "@mermaid-js/**"]
-    },
-    {
-      "groupName": "storybook",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": [
-        "storybook",
-        "@storybook/**",
-        "@vueless/storybook-dark-mode"
-      ]
-    },
-    {
-      "groupName": "vitest",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": [
-        "vitest",
-        "@vitest/**",
-        "jsdom",
-        "@testing-library/**"
-      ]
-    },
-    {
-      "groupName": "playwright",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": [
-        "playwright",
-        "@playwright/test",
-        "@axe-core/playwright"
-      ]
-    },
-    {
-      "groupName": "cloudflare",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": ["wrangler", "@cloudflare/**", "cf-workers-og"]
-    },
-    {
-      "groupName": "vite",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": ["vite", "@vitejs/plugin-react", "sass-embedded"]
-    },
-    {
-      "groupName": "hono",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": ["hono", "@hono/**"]
-    },
-    {
-      "groupName": "pdf",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": ["@libpdf/core", "pdfjs-dist"]
-    },
-    {
-      "groupName": "node",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": ["tsx", "@types/node"]
-    },
-    {
-      "groupName": "linting",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": ["@biomejs/biome", "simple-git-hooks"]
-    },
-    {
-      "groupName": "browserslist",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": ["browserslist", "baseline-browser-mapping"]
-    },
-    {
-      "groupName": "app-dependencies",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": [
-        "sharp",
-        "sanitize-html",
-        "libphonenumber-js",
-        "@maskito/core"
-      ]
+      "matchPackageNames": ["astro", "@astrojs/**"]
     },
     {
       "description": "Don't update Node.js engines field (needed because of the use of rangeStrategy: 'bump' above)",
@@ -158,6 +30,32 @@
       "matchManagers": ["npm"],
       "matchDepTypes": ["engines"],
       "enabled": false
+    },
+    {
+      "description": "Major updates wait for approval in the Dependency Dashboard instead of opening PRs automatically",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch",
+      "description": "Bundles all non-major updates into one PR.",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "pinDigest",
+        "digest",
+        "replacement"
+      ]
+    },
+    {
+      "description": "Treat 0.x minor updates as breaking: ungroup them from all-minor-patch and require Dependency Dashboard approval",
+      "matchCurrentVersion": "<1",
+      "matchUpdateTypes": ["minor"],
+      "groupName": null,
+      "dependencyDashboardApproval": true
     }
   ]
 }

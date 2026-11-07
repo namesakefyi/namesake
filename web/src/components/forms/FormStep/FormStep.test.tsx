@@ -218,12 +218,12 @@ describe("FormStep", () => {
   });
 });
 
-describe("useFieldVisible", () => {
-  function TestWrapper({ children }: { children: ReactNode }) {
-    const form = useForm({ defaultValues: { middleName: "Lee" } });
-    return <FormProvider {...form}>{children}</FormProvider>;
-  }
+function FieldVisibleWrapper({ children }: { children: ReactNode }) {
+  const form = useForm({ defaultValues: { middleName: "Lee" } });
+  return <FormProvider {...form}>{children}</FormProvider>;
+}
 
+describe("useFieldVisible", () => {
   const stepConfig: Step = {
     id: "name",
     title: "Name",
@@ -234,7 +234,7 @@ describe("useFieldVisible", () => {
   it("returns true when field has no when callback", () => {
     const { result } = renderHook(
       () => useFieldVisible(stepConfig, "middleName" as any),
-      { wrapper: TestWrapper },
+      { wrapper: FieldVisibleWrapper },
     );
     expect(result.current).toBe(true);
   });
@@ -246,7 +246,7 @@ describe("useFieldVisible", () => {
     };
     const { result } = renderHook(
       () => useFieldVisible(config, "middleName" as any),
-      { wrapper: TestWrapper },
+      { wrapper: FieldVisibleWrapper },
     );
     expect(result.current).toBe(true);
   });
@@ -258,7 +258,7 @@ describe("useFieldVisible", () => {
     };
     const { result } = renderHook(
       () => useFieldVisible(config, "middleName" as any),
-      { wrapper: TestWrapper },
+      { wrapper: FieldVisibleWrapper },
     );
     expect(result.current).toBe(false);
   });
@@ -270,7 +270,7 @@ describe("useFieldVisible", () => {
       fields: [{ id: "middleName" as any, when }],
     };
     renderHook(() => useFieldVisible(config, "middleName" as any), {
-      wrapper: TestWrapper,
+      wrapper: FieldVisibleWrapper,
     });
     expect(when).toHaveBeenCalledWith(
       expect.objectContaining({ middleName: "Lee" }),
@@ -280,7 +280,7 @@ describe("useFieldVisible", () => {
   it("returns false for a field not listed in the step fields", () => {
     const { result } = renderHook(
       () => useFieldVisible(stepConfig, "unknownField" as any),
-      { wrapper: TestWrapper },
+      { wrapper: FieldVisibleWrapper },
     );
     expect(result.current).toBe(false);
   });

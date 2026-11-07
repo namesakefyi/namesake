@@ -2,6 +2,8 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Banner } from "./Banner";
 
+const CustomIcon = () => <svg data-testid="custom-icon" />;
+
 describe("Banner", () => {
   describe("children", () => {
     it("renders its children", () => {
@@ -63,7 +65,6 @@ describe("Banner", () => {
     });
 
     it("renders a custom icon when provided", () => {
-      const CustomIcon = () => <svg data-testid="custom-icon" />;
       render(<Banner icon={CustomIcon}>Message</Banner>);
       expect(screen.getByTestId("custom-icon")).toBeInTheDocument();
     });

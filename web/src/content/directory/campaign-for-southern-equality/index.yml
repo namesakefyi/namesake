@@ -1,0 +1,25 @@
+name: Campaign for Southern Equality
+description: Campaign for Southern Equality is fighting for legal equality for the LGBTQ+ community in the American South.
+jurisdictions:
+  - al
+  - ar
+  - fl
+  - ga
+  - ky
+  - la
+  - ms
+  - nc
+  - sc
+  - tn
+  - va
+  - wv
+url: http://southernequality.org/legal-resources/
+services:
+  - formFilling
+  - financialAid
+languages:
+  - en
+officialPartner: false
+email: info@southernequality.org
+phone: 828-242-1159
+logo: logo.png

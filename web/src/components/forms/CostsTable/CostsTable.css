@@ -12,15 +12,15 @@
     padding: var(--space-2xs) var(--space-l);
   }
 
-  tbody tr:not(:last-child) td {
-    border-bottom: 1px dotted var(--text-color);
-  }
-
   tfoot td {
     padding-block: var(--space-s);
     font-size: var(--step-1);
     font-weight: var(--weight-bold);
     border-top: 1px solid var(--text-color);
+  }
+
+  tbody tr:not(:last-child) td {
+    border-bottom: 1px dotted var(--text-color);
   }
 
   th:first-child,

@@ -21,14 +21,16 @@ const defaultContextValue = {
 function FormWrapper({
   children,
   defaultValues = {},
+  onEditStep = defaultContextValue.onEditStep,
 }: {
   children: ReactNode;
   defaultValues?: Record<string, unknown>;
+  onEditStep?: (stepId: string) => void;
 }) {
   const form = useForm({ defaultValues });
   return (
     <FormProvider {...form}>
-      <FormStepContext.Provider value={defaultContextValue}>
+      <FormStepContext.Provider value={{ ...defaultContextValue, onEditStep }}>
         {children}
       </FormStepContext.Provider>
     </FormProvider>
@@ -104,20 +106,14 @@ describe("FormReviewTable", () => {
   it("calls onEditStep with the step ID when Change is clicked", () => {
     const onEditStep = vi.fn();
 
-    function Wrapper({ children }: { children: ReactNode }) {
-      const form = useForm({ defaultValues: { oldFirstName: "Sylvia" } });
-      return (
-        <FormProvider {...form}>
-          <FormStepContext.Provider
-            value={{ ...defaultContextValue, onEditStep }}
-          >
-            {children}
-          </FormStepContext.Provider>
-        </FormProvider>
-      );
-    }
-
-    render(<FormReviewTable steps={[nameStep]} />, { wrapper: Wrapper });
+    render(
+      <FormWrapper
+        defaultValues={{ oldFirstName: "Sylvia" }}
+        onEditStep={onEditStep}
+      >
+        <FormReviewTable steps={[nameStep]} />
+      </FormWrapper>,
+    );
 
     screen.getByRole("button", { name: "Change" }).click();
     expect(onEditStep).toHaveBeenCalledWith("legal-name");
