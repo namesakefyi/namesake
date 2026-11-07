@@ -9,3 +9,6 @@ services:
 languages:
   - en
 officialPartner: false
+email: info@marieequi.center
+phone: 503-459-2584
+logo: ./logo.webp
