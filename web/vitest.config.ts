@@ -30,6 +30,8 @@ export default defineConfig({
         "**/*.stories.tsx",
         "src/components/**/index.ts",
         "src/content/pdfs/**/{index,schema}.ts",
+        "src/lib/cms/**",
+        "src/lib/queries/**",
       ],
       thresholds: {
         lines: 85,

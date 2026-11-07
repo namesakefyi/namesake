@@ -1,0 +1,28 @@
+.directory-logo {
+  width: auto;
+  max-width: fit-content;
+  mix-blend-mode: multiply;
+  filter: grayscale(100%);
+}
+
+.entry-logo {
+  max-height: 140px;
+  margin-block-end: var(--space-m);
+}
+
+.entry-layout {
+  margin-block-end: var(--space-xl);
+}
+
+.entry-meta {
+  margin: 0;
+
+  dt {
+    font-weight: var(--weight-bold);
+  }
+
+  dd {
+    margin: 0;
+    margin-block-end: var(--space-s);
+  }
+}

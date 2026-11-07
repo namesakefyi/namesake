@@ -26,7 +26,7 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
   await test.step("Title", async () => {
     await page.goto("/forms/court-order-ma");
 
-    expect(page).toHaveTitle(/Court Order: Massachusetts/);
+    await expect(page).toHaveTitle(/Court Order: Massachusetts/);
 
     await expect(
       page.getByRole("heading", { name: "Court Order: Massachusetts" }),
