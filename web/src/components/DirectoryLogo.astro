@@ -5,24 +5,17 @@ import "../styles/directory.css";
 
 interface Props {
   logo: ImageMetadata;
-  name: string;
   class?: string;
 }
 
-const { logo, name, class: className, ...rest } = Astro.props;
+const { logo, class: className, ...rest } = Astro.props;
 ---
 
-{
-  logo.format === "svg" ? (
-    <img class:list={["directory-logo", className]} src={logo.src} alt="" {...rest} />
-  ) : (
-    <Image
-      class:list={["directory-logo", className]}
-      src={logo}
-      alt=""
-      width={300}
-      densities={[1, 2]}
-      {...rest}
-    />
-  )
-}
+<Image
+  class:list={["directory-logo", className]}
+  src={logo}
+  alt=""
+  width={300}
+  densities={[1, 2]}
+  {...rest}
+/>
