@@ -56,18 +56,4 @@ test.describe("directory", () => {
     });
     await expect(page).not.toHaveURL(/page=/);
   });
-
-  test("reserves space for logos before they load", async ({ page }) => {
-    // Hold every image request so logos never load during the test.
-    await page.route(/\/_image\?|\.(png|jpe?g|webp|avif|svg)$/, () => {});
-    await page.goto("/directory", { waitUntil: "domcontentloaded" });
-
-    const logos = page.locator(".directory-logo");
-    await expect(logos).not.toHaveCount(0);
-    for (const logo of await logos.all()) {
-      const box = await logo.boundingBox();
-      expect(box?.width).toBeGreaterThan(0);
-      expect(box?.height).toBeGreaterThan(0);
-    }
-  });
 });

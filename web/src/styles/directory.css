@@ -1,5 +1,3 @@
-/* Keep the width attribute (no `width: auto`) so the reset's `height: auto`
-   resolves from the aspect ratio before the image loads. */
 .directory-logo {
   object-fit: contain;
   object-position: left;
