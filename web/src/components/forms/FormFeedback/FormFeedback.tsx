@@ -93,15 +93,14 @@ export function FormFeedback({ slug }: FormFeedbackProps) {
   const handleSubmit: NonNullable<FormProps["onSubmit"]> = (event) => {
     const formData = new FormData(event.currentTarget);
     if (
-      !shouldRequestShareConsent(
+      shouldRequestShareConsent(
         formData.get("sentiment") as FormFeedbackSentiment,
         formData.get("comment") as string,
       )
-    )
-      return;
-
-    event.preventDefault();
-    setPendingFormData(formData);
+    ) {
+      event.preventDefault();
+      setPendingFormData(formData);
+    }
   };
 
   const handleConsentSubmit = (shareConsent: boolean) => {
@@ -204,16 +203,15 @@ export function FormFeedback({ slug }: FormFeedbackProps) {
   );
 }
 
-/** Rendered inside the modal so its state resets each time it opens */
 function ShareConsentDialog({
   onSubmit,
 }: {
   onSubmit: (shareConsent: boolean) => void;
 }) {
-  const [shareConsent, setShareConsent] = useState("yes");
+  const [shareConsent, setShareConsent] = useState(true);
 
   return (
-    <Dialog className="react-aria-Dialog form-feedback-consent">
+    <Dialog className="form-feedback-consent">
       <Heading slot="title">Can we publicly share your feedback?</Heading>
       <p className="form-feedback-consent-description">
         Feedback is not tied to your name or identity. Positive feedback helps
@@ -221,16 +219,16 @@ function ShareConsentDialog({
       </p>
       <RadioGroup
         aria-label="Share feedback publicly"
-        value={shareConsent}
-        onChange={setShareConsent}
+        value={String(shareConsent)}
+        onChange={(value) => setShareConsent(value === "true")}
       >
-        <Radio value="yes">Yes</Radio>
-        <Radio value="no">No</Radio>
+        <Radio value="true">Yes</Radio>
+        <Radio value="false">No</Radio>
       </RadioGroup>
       <Button
         variant="primary"
         endIcon={RiArrowRightLine}
-        onPress={() => onSubmit(shareConsent === "yes")}
+        onPress={() => onSubmit(shareConsent)}
         className="form-feedback-consent-submit"
       >
         Submit

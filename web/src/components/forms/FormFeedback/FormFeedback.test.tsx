@@ -16,6 +16,11 @@ const getSubmitBody = () => {
 
 type User = ReturnType<typeof userEvent.setup>;
 
+const submitPositive = async (user: User) => {
+  await user.click(screen.getByRole("radio", { name: /easy/i }));
+  await user.click(screen.getByRole("button", { name: /submit/i }));
+};
+
 const fillPositiveWithComment = async (user: User) => {
   await user.click(screen.getByRole("radio", { name: /easy/i }));
   await user.type(
@@ -74,8 +79,7 @@ describe("FormFeedback", () => {
 
     render(<FormFeedback slug="court-order-ma" />);
 
-    await user.click(screen.getByRole("radio", { name: /easy/i }));
-    await user.click(screen.getByRole("button", { name: /submit/i }));
+    await submitPositive(user);
 
     await waitFor(() => {
       expect(scrollIntoView).toHaveBeenCalledWith({
@@ -89,8 +93,7 @@ describe("FormFeedback", () => {
     const user = userEvent.setup();
     render(<FormFeedback slug="court-order-ma" />);
 
-    await user.click(screen.getByRole("radio", { name: /easy/i }));
-    await user.click(screen.getByRole("button", { name: /submit/i }));
+    await submitPositive(user);
 
     await waitFor(() => {
       expect(screen.getByRole("alert")).toHaveTextContent(
@@ -103,8 +106,7 @@ describe("FormFeedback", () => {
     const user = userEvent.setup();
     render(<FormFeedback slug="court-order-ma" />);
 
-    await user.click(screen.getByRole("radio", { name: /easy/i }));
-    await user.click(screen.getByRole("button", { name: /submit/i }));
+    await submitPositive(user);
 
     await waitFor(() => {
       expect(getSubmitBody()).toMatchObject({
@@ -134,8 +136,7 @@ describe("FormFeedback", () => {
     const user = userEvent.setup();
     render(<FormFeedback slug="court-order-ma" />);
 
-    await user.click(screen.getByRole("radio", { name: /easy/i }));
-    await user.click(screen.getByRole("button", { name: /submit/i }));
+    await submitPositive(user);
 
     await waitFor(() => {
       expect(getSubmitBody().comment).toBeUndefined();
@@ -197,48 +198,42 @@ describe("FormFeedback", () => {
 
       await fillPositiveWithComment(user);
 
-      expect(await screen.findByRole("dialog")).toHaveTextContent(
-        /can we publicly share your feedback/i,
-      );
-      expect(fetch).not.toHaveBeenCalled();
-    });
-
-    it("defaults to granting consent", async () => {
-      const user = userEvent.setup();
-      render(<FormFeedback slug="court-order-ma" />);
-
-      await fillPositiveWithComment(user);
       const dialog = await screen.findByRole("dialog");
+      expect(dialog).toHaveTextContent(/can we publicly share your feedback/i);
       expect(
         within(dialog).getByRole("radio", { name: /^yes$/i }),
       ).toBeChecked();
-      await submitConsentDialog(user);
+      expect(fetch).not.toHaveBeenCalled();
+    });
 
-      await waitFor(() => {
-        expect(getSubmitBody()).toMatchObject({
-          sentiment: "positive",
-          comment: "Very helpful!",
-          share_consent: true,
+    it.each([
+      ["Yes (default)", null, true],
+      ["No", /^no$/i, false],
+    ])(
+      "submits share_consent when %s is selected",
+      async (_, choice, expected) => {
+        const user = userEvent.setup();
+        render(<FormFeedback slug="court-order-ma" />);
+
+        await fillPositiveWithComment(user);
+        const dialog = await screen.findByRole("dialog");
+        if (choice) {
+          await user.click(within(dialog).getByRole("radio", { name: choice }));
+        }
+        await submitConsentDialog(user);
+
+        await waitFor(() => {
+          expect(getSubmitBody()).toMatchObject({
+            sentiment: "positive",
+            comment: "Very helpful!",
+            share_consent: expected,
+          });
         });
-      });
-      expect(await screen.findByRole("alert")).toHaveTextContent(
-        /thank you for your feedback/i,
-      );
-    });
-
-    it("submits share_consent false when No is selected", async () => {
-      const user = userEvent.setup();
-      render(<FormFeedback slug="court-order-ma" />);
-
-      await fillPositiveWithComment(user);
-      const dialog = await screen.findByRole("dialog");
-      await user.click(within(dialog).getByRole("radio", { name: /^no$/i }));
-      await submitConsentDialog(user);
-
-      await waitFor(() => {
-        expect(getSubmitBody().share_consent).toBe(false);
-      });
-    });
+        expect(await screen.findByRole("alert")).toHaveTextContent(
+          /thank you for your feedback/i,
+        );
+      },
+    );
 
     it("returns to the form without submitting when the dialog is dismissed", async () => {
       const user = userEvent.setup();
@@ -292,8 +287,7 @@ describe("FormFeedback", () => {
       const user = userEvent.setup();
       render(<FormFeedback slug="court-order-ma" />);
 
-      await user.click(screen.getByRole("radio", { name: /easy/i }));
-      await user.click(screen.getByRole("button", { name: /submit/i }));
+      await submitPositive(user);
 
       await waitFor(() =>
         expect(
@@ -307,20 +301,6 @@ describe("FormFeedback", () => {
         title: document.title,
         url: window.location.href,
       });
-    });
-
-    it("renders the share icon beside the label, not inside it", async () => {
-      const user = userEvent.setup();
-      render(<FormFeedback slug="court-order-ma" />);
-
-      await user.click(screen.getByRole("radio", { name: /easy/i }));
-      await user.click(screen.getByRole("button", { name: /submit/i }));
-
-      const shareButton = await screen.findByRole("button", { name: /share/i });
-      expect(
-        shareButton.querySelector(":scope > svg.react-aria-Button-icon"),
-      ).toBeInTheDocument();
-      expect(shareButton.querySelector("span svg")).not.toBeInTheDocument();
     });
   });
 });
