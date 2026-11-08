@@ -13,10 +13,10 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",
-    "@astrojs/cloudflare": "^14.4.4",
-    "@astrojs/starlight": "^0.42.9",
+    "@astrojs/cloudflare": "14.4.6",
+    "@astrojs/starlight": "0.42.10",
     "@mermaid-js/layout-elk": "^1.0.2",
-    "astro": "^7.4.5",
+    "astro": "7.4.7",
     "astro-mermaid": "^2.2.0",
     "astro-og-canvas": "^0.13.3",
     "canvaskit-wasm": "^0.42.0",
