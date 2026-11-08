@@ -1,0 +1,12 @@
+name: Legal Aid Society of Palm Beach County
+description: Legal Aid Society of Palm Beach County provides free, high-quality civil legal services to the most vulnerable residents of Palm Beach County. Its LGBTQ+ Project helps transgender adults and children with name and gender marker changes.
+jurisdictions:
+  - fl
+url: https://legalaidpbc.org/lgbtq/
+services:
+  - legal
+languages:
+  - en
+officialPartner: false
+phone: 561-655-8944
+logo: logo.png
