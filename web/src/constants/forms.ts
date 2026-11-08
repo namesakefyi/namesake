@@ -80,3 +80,11 @@ export const FORM_FEEDBACK_SENTIMENT = {
 } as const;
 
 export type FormFeedbackSentiment = keyof typeof FORM_FEEDBACK_SENTIMENT;
+
+/** Only positive feedback with a comment is eligible to be shared publicly */
+export function shouldRequestShareConsent(
+  sentiment: FormFeedbackSentiment | null,
+  comment: string | null | undefined,
+): boolean {
+  return sentiment === "positive" && Boolean(comment?.trim());
+}

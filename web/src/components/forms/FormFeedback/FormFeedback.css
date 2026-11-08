@@ -25,6 +25,24 @@
   gap: var(--space-s);
 }
 
+.form-feedback-consent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.form-feedback-consent-description {
+  margin: 0;
+  font-size: var(--step-0);
+  line-height: var(--line-height-body);
+  color: var(--text-color-secondary);
+}
+
+.form-feedback-consent-submit {
+  align-self: flex-end;
+  margin-top: var(--space-s);
+}
+
 .form-feedback-title {
   font-size: var(--step-1);
   font-weight: var(--weight-bold);

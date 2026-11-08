@@ -7,6 +7,7 @@ import {
   FORM_FEEDBACK_SENTIMENT,
   FORM_SLUGS,
   type FormFeedbackSentiment,
+  shouldRequestShareConsent,
 } from "#constants/forms";
 import { isRateLimited } from "#lib/utils/rateLimitByIp";
 
@@ -22,6 +23,7 @@ const FeedbackSchema = z.object({
     ],
   ),
   comment: z.string().trim().max(1000).optional(),
+  share_consent: z.boolean().optional(),
 });
 
 export const POST: APIRoute = async ({ request }) => {
@@ -40,8 +42,13 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
-  const { form_slug, sentiment, comment } = result.data;
+  const { form_slug, sentiment, comment, share_consent } = result.data;
   const commentValue = comment || null;
+  const shareConsentValue =
+    shouldRequestShareConsent(sentiment, commentValue) &&
+    share_consent !== undefined
+      ? Number(share_consent)
+      : null;
 
   const ip =
     request.headers.get("CF-Connecting-IP") ??
@@ -75,12 +82,13 @@ export const POST: APIRoute = async ({ request }) => {
 
   await db
     .prepare(
-      "INSERT INTO form_feedback (form_slug, sentiment, comment, ip, user_agent, country, region, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO form_feedback (form_slug, sentiment, comment, share_consent, ip, user_agent, country, region, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
     )
     .bind(
       form_slug,
       sentiment,
       commentValue,
+      shareConsentValue,
       ip,
       userAgent,
       country,
@@ -112,7 +120,7 @@ export const POST: APIRoute = async ({ request }) => {
           from: "noreply@namesake.fyi",
           to: "hey@namesake.fyi",
           subject: `${sentimentLabel} feedback on ${form_slug}`,
-          html: `<p>A user ${location ? `in <strong>${location}</strong>` : ""} submitted <strong>${sentimentLabel}</strong> feedback on <a href="https://namesake.fyi/forms/${form_slug}">${form_slug}</a>.</p><p>${commentValue ? escapeHtml(commentValue) : "<em>No comment</em>"}</p>`,
+          html: `<p>A user ${location ? `in <strong>${location}</strong>` : ""} submitted <strong>${sentimentLabel}</strong> feedback on <a href="https://namesake.fyi/forms/${form_slug}">${form_slug}</a>.</p><p>${commentValue ? escapeHtml(commentValue) : "<em>No comment</em>"}</p>${shareConsentValue !== null ? `<p>Permission to share publicly: <strong>${shareConsentValue ? "Yes" : "No"}</strong></p>` : ""}`,
         }),
       });
       if (!emailRes.ok) {
