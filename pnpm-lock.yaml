@@ -479,8 +479,8 @@ importers:
         specifier: ^1.33.0
         version: 1.33.0
       satteri:
-        specifier: ^0.10.5
-        version: 0.10.5
+        specifier: ^0.11.7
+        version: 0.11.7
       sharp:
         specifier: ^0.35.5
         version: 0.35.5(@types/node@26.6.6)
