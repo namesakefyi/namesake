@@ -86,7 +86,7 @@ const forms = defineCollection({
 });
 
 const guides = defineCollection({
-  loader: guideLoader(),
+  loader: guideLoader({ base: "./src/content/guides", pattern: "**/*.mdx" }),
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),

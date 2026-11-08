@@ -1,9 +1,8 @@
 import { relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { AstroError } from "astro/errors";
 import { glob, type Loader } from "astro/loaders";
 import { JURISDICTIONS } from "#constants/jurisdictions";
-
-const BASE = "./src/content/guides";
 
 /**
  * Derives a guide's jurisdiction from its path relative to the guides folder.
@@ -23,38 +22,33 @@ export function parseJurisdictionFromPath(
 
   const [jurisdiction] = segments;
   if (segments.length > 2) {
-    throw invalidEntry(
-      entryPath,
-      "guides must be at the root or one folder deep (`{jurisdiction}/{name}`).",
+    throw new AstroError(
+      `Guide "${entryPath}" is nested too deeply.`,
+      "Move it to the root of the guides folder or one folder deep (`{jurisdiction}/{name}.mdx`).",
     );
   }
   if (!jurisdictions.includes(jurisdiction)) {
-    throw invalidEntry(
-      entryPath,
-      `"${jurisdiction}" is not a known jurisdiction. Expected one of: ${jurisdictions.join(", ")}.`,
+    throw new AstroError(
+      `Guide "${entryPath}" is in an unknown jurisdiction folder "${jurisdiction}".`,
+      `Use one of: ${jurisdictions.join(", ")}.`,
     );
   }
   return jurisdiction;
 }
 
-function invalidEntry(entryPath: string, reason: string) {
-  return new Error(`Invalid content entry "${entryPath}": ${reason}`);
-}
-
-/**
- * Content loader for guides. Guides live at the root of the collection
- * (applying to all jurisdictions) or in a jurisdiction folder, e.g.
- * `ma/court-order.mdx`. The folder is the single source of truth for each
- * guide's `jurisdiction`, which is injected into the entry data before schema
- * validation. Malformed structure fails the build.
- */
-export function guideLoader(): Loader {
-  const globLoader = glob({ base: BASE, pattern: "**/*.mdx" });
+export function guideLoader({
+  base,
+  pattern,
+}: {
+  base: string;
+  pattern: string;
+}): Loader {
+  const globLoader = glob({ base, pattern });
 
   return {
     name: "guide-loader",
     load: async (context) => {
-      const baseDir = fileURLToPath(new URL(BASE, context.config.root));
+      const baseDir = fileURLToPath(new URL(base, context.config.root));
 
       await globLoader.load({
         ...context,
@@ -64,9 +58,9 @@ export function guideLoader(): Loader {
             .join("/");
 
           if ("jurisdiction" in props.data) {
-            throw invalidEntry(
-              entryPath,
-              "remove `jurisdiction` from frontmatter; it is derived from the file path.",
+            throw new AstroError(
+              `Guide "${entryPath}" sets \`jurisdiction\` in its frontmatter.`,
+              "Remove it; the jurisdiction is derived from the guide's folder.",
             );
           }
 

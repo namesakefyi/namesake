@@ -33,7 +33,9 @@ async function loadEntries(entries: FakeEntry[]) {
     config: { root: new URL("file:///project/") },
     parseData,
   } as unknown as LoaderContext;
-  await guideLoader().load(context);
+  await guideLoader({ base: "./src/content/guides", pattern: "**/*.mdx" }).load(
+    context,
+  );
   return parseData;
 }
 
@@ -55,13 +57,13 @@ describe("parseJurisdictionFromPath", () => {
   it("throws for unknown jurisdiction folders", () => {
     expect(() =>
       parseJurisdictionFromPath("zz/court-order.mdx", jurisdictions),
-    ).toThrow(/"zz" is not a known jurisdiction/);
+    ).toThrow(/unknown jurisdiction folder "zz"/);
   });
 
   it("throws for entries nested more than one folder deep", () => {
     expect(() =>
       parseJurisdictionFromPath("ma/extra/court-order.mdx", jurisdictions),
-    ).toThrow(/root or one folder deep/);
+    ).toThrow(/nested too deeply/);
   });
 });
 
@@ -88,7 +90,7 @@ describe("guideLoader", () => {
   it("rejects entries in unknown folders", async () => {
     await expect(
       loadEntries([{ entry: "getting-started/intro.mdx", data: {} }]),
-    ).rejects.toThrow('Invalid content entry "getting-started/intro.mdx"');
+    ).rejects.toThrow('Guide "getting-started/intro.mdx"');
   });
 
   it("rejects entries that set jurisdiction in frontmatter", async () => {
@@ -96,6 +98,6 @@ describe("guideLoader", () => {
       loadEntries([
         { entry: "ma/court-order.mdx", data: { jurisdiction: "ri" } },
       ]),
-    ).rejects.toThrow("remove `jurisdiction` from frontmatter");
+    ).rejects.toThrow("sets `jurisdiction` in its frontmatter");
   });
 });
