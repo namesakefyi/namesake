@@ -9,7 +9,6 @@ export const PDFS_DIR = join(ROOT, "web/src/content/pdfs");
 interface PdfMeta {
   title: string;
   code: string;
-  jurisdiction: string;
   canonicalUrl: string;
 }
 
@@ -32,7 +31,6 @@ function parsePdfMetadata(pdfDir: string): PdfMeta | null {
   return {
     title: content.match(/\btitle:\s*"([^"]+)"/)?.[1] ?? "",
     code: content.match(/\bcode:\s*"([^"]+)"/)?.[1] ?? "",
-    jurisdiction: content.match(/\bjurisdiction:\s*"([^"]+)"/)?.[1] ?? "",
     canonicalUrl: content.match(/\bcanonicalUrl:\s*"([^"]+)"/)?.[1] ?? "",
   };
 }
@@ -61,7 +59,7 @@ export function listAllPdfs(): PdfEntry[] {
       if (!meta) continue;
       result.push({
         id: pdfEntry.name,
-        jurisdiction: meta.jurisdiction || entry.name.toUpperCase(),
+        jurisdiction: entry.name.toUpperCase(),
         title: meta.title,
         code: meta.code,
         canonicalUrl: meta.canonicalUrl,

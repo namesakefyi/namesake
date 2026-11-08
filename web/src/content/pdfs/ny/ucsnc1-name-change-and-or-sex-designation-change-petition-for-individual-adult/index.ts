@@ -16,7 +16,6 @@ export default definePdf<PdfFieldName>({
   title:
     "Name Change and/or Sex Designation Change Petition for Individual Adult",
   code: "UCS-NC1",
-  jurisdiction: "ny",
   canonicalUrl: "https://www.nycourts.gov/media/32631",
   pdfPath: pdf,
   resolver: (data) => {
