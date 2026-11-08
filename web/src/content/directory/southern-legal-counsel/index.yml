@@ -1,0 +1,14 @@
+name: Southern Legal Counsel
+description: Southern Legal Counsel’s Trans Rights Initiative works to fill gaps in access to justice for transgender Floridians, including free name and gender marker change clinics and FloridaNameChange.org, a free online tool that helps people fill out name change forms in all 67 counties.
+jurisdictions:
+  - fl
+url: https://www.southernlegal.org/promoting-lgbtq-equality
+services:
+  - legal
+  - nameChangeClinic
+  - formFilling
+languages:
+  - en
+officialPartner: false
+phone: 352-271-8890
+logo: logo.png
