@@ -12,6 +12,7 @@ import { DIRECTORY_LANGUAGES } from "./constants/languages";
 import type { PDFDefinition } from "./constants/pdf";
 import { SERVICES } from "./constants/services";
 import { guideLoader } from "./lib/loaders/guideLoader";
+import { pdfLoader } from "./lib/loaders/pdfLoader";
 
 const authors = defineCollection({
   loader: glob({ base: "./src/content/authors", pattern: "**/index.yml" }),
@@ -123,25 +124,12 @@ const pages = defineCollection({
 });
 
 const pdfs = defineCollection({
-  loader: () => {
-    const modules = import.meta.glob<{ default: PDFDefinition }>(
+  loader: pdfLoader({
+    modules: import.meta.glob<{ default: PDFDefinition }>(
       "./content/pdfs/*/*/index.ts",
       { eager: true },
-    );
-    return Object.entries(modules).map(([path, module]) => {
-      // Path shape: ./content/pdfs/{jurisdiction}/{id}/index.ts
-      const [, jurisdiction = "", id = ""] =
-        path.match(/\/([^/]+)\/([^/]+)\/index\.ts$/) ?? [];
-      const config = module.default;
-      return {
-        id,
-        title: config.title,
-        code: config.code,
-        jurisdiction: jurisdiction === "federal" ? undefined : jurisdiction,
-        canonicalUrl: config.canonicalUrl,
-      };
-    });
-  },
+    ),
+  }),
   schema: z.object({
     title: z.string(),
     code: z.string().optional(),
