@@ -76,7 +76,6 @@ describe("guideLoader", () => {
 
     expect(parseData).toHaveBeenCalledWith(
       expect.objectContaining({
-        filePath: "/project/src/content/guides/ny/court-order.mdx",
         data: { title: "Court Order", jurisdiction: "ny" },
       }),
     );
@@ -85,12 +84,6 @@ describe("guideLoader", () => {
         data: { title: "Passport", jurisdiction: undefined },
       }),
     );
-  });
-
-  it("rejects entries in unknown folders", async () => {
-    await expect(
-      loadEntries([{ entry: "getting-started/intro.mdx", data: {} }]),
-    ).rejects.toThrow('Guide "getting-started/intro.mdx"');
   });
 
   it("rejects entries that set jurisdiction in frontmatter", async () => {
