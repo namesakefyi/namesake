@@ -48,7 +48,7 @@ export default definePdf<PdfFieldName>({
 
     // 5. Has previous name change?
     hasPreviousNameChangeTrue: data.hasPreviousNameChange,
-    hasPreviousNameChangeFalse: !data.hasPreviousNameChange,
+    hasPreviousNameChangeFalse: data.hasPreviousNameChange === false,
     previousNameFrom: data.previousNameFrom,
     previousNameTo: data.previousNameTo,
     previousNameReason: data.previousNameReason,
@@ -108,13 +108,13 @@ export default definePdf<PdfFieldName>({
 
     // Parental info
     isOnlyOneParentListedOnBirthCertificate:
-      !data.areBothParentsListedOnBirthCertificate,
+      data.areBothParentsListedOnBirthCertificate === false,
     isALegalParentDeceased: data.isALegalParentDeceased,
     hasLegalParentHadParentalRightsTerminated:
       data.hasLegalParentHadParentalRightsTerminated,
 
     // 7. Court-appointed guardian
-    hasCountAppointedGuardianFalse: !data.hasCourtAppointedGuardian,
+    hasCountAppointedGuardianFalse: data.hasCourtAppointedGuardian === false,
     hasCourtAppointedGuardianTrue: data.hasCourtAppointedGuardian,
 
     guardianFirstName: undefined,
@@ -144,12 +144,12 @@ export default definePdf<PdfFieldName>({
 
     // 9. Legal parent 1 consents?
     isParent1AssentingTrue: data.isParent1Assenting,
-    isParent1AssentingFalse: !data.isParent1Assenting,
+    isParent1AssentingFalse: data.isParent1Assenting === false,
     parent1DissentReason: data.parent1DissentReason,
 
     // 10. Legal parent 2 consents?
     isParent2AssentingTrue: data.isParent2Assenting,
-    isParent2AssentingFalse: !data.isParent2Assenting,
+    isParent2AssentingFalse: data.isParent2Assenting === false,
     parent2DissentReason: data.parent2DissentReason,
 
     // 11. Legal parent 3 consents?
@@ -159,7 +159,7 @@ export default definePdf<PdfFieldName>({
 
     // 12. All court-appointed guardians consent?
     isAllGuardiansAssentingTrue: data.isAllGuardiansAssenting,
-    isAllGuardiansAssentingFalse: !data.isAllGuardiansAssenting,
+    isAllGuardiansAssentingFalse: data.isAllGuardiansAssenting === false,
     guardianDissentReason: data.guardianDissentReason,
 
     // 13. New name

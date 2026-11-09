@@ -248,3 +248,7 @@ export const COUNTRIES: Record<string, string> = {
   ZW: "Zimbabwe",
 };
 export type Country = keyof typeof COUNTRIES;
+
+export const COUNTRY_OPTIONS = Object.entries(COUNTRIES).map(
+  ([value, label]) => ({ value, label }),
+);

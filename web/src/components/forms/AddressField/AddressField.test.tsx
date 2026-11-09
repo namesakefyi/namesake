@@ -13,6 +13,18 @@ async function waitForAsyncList() {
 }
 
 describe("AddressField", () => {
+  it("restores a saved county and allows choosing another county from the dropdown", async () => {
+    renderWithFormProvider(<AddressField type="residence" includeCounty />, {
+      defaultValues: { residenceState: "NY", residenceCounty: "Kings" },
+    });
+    await waitForAsyncList();
+    const county = screen.getByRole("combobox", { name: "County" });
+    expect(county).toHaveValue("Kings (Brooklyn)");
+    await userEvent.clear(county);
+    await userEvent.type(county, "Que");
+    await userEvent.click(screen.getByRole("option", { name: "Queens" }));
+    expect(county).toHaveValue("Queens");
+  });
   it("renders all address input fields", async () => {
     renderWithFormProvider(<AddressField type="residence" />);
     await waitForAsyncList();
@@ -228,6 +240,18 @@ describe("AddressField", () => {
     expect(countyInput).toBeInTheDocument();
   });
 
+  it("uses free text for the county in states without a county list", async () => {
+    renderWithFormProvider(<AddressField type="residence" includeCounty />, {
+      defaultValues: { residenceState: "MA" },
+    });
+    await waitForAsyncList();
+
+    expect(
+      screen.queryByRole("combobox", { name: "County" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "County" })).toBeInTheDocument();
+  });
+
   it("renders the correct name for county field based on address type", async () => {
     renderWithFormProvider(<AddressField type="residence" includeCounty />);
     await waitForAsyncList();
@@ -242,7 +266,7 @@ describe("AddressField", () => {
     });
     await userEvent.click(newYorkOption);
 
-    const countyInput = screen.getByLabelText("County");
+    const countyInput = screen.getByRole("combobox", { name: "County" });
     expect(countyInput).toHaveAttribute("name", "residenceCounty");
   });
 });
@@ -259,6 +283,26 @@ describe("mapPlaceToFields", () => {
     formatted: "100 Main St, Boston, MA 02108",
     place_id: "1",
   };
+
+  it("removes the County suffix only for states with a county list", () => {
+    const names = {
+      street: "residenceStreetAddress",
+      city: "residenceCity",
+      state: "residenceState",
+      zip: "residenceZipCode",
+      county: "residenceCounty",
+    } as const;
+    const newYork = { ...place, state_code: "NY", county: "Suffolk County" };
+    const massachusetts = { ...place, county: "Suffolk County" };
+    expect(mapPlaceToFields(newYork, names)).toContainEqual([
+      "residenceCounty",
+      "Suffolk",
+    ]);
+    expect(mapPlaceToFields(massachusetts, names)).toContainEqual([
+      "residenceCounty",
+      "Suffolk County",
+    ]);
+  });
 
   it("maps geoapify properties onto the address type's field names", () => {
     expect(

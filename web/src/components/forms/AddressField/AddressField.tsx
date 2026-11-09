@@ -1,6 +1,7 @@
 import { type MaskitoOptions, maskitoTransform } from "@maskito/core";
 import { type Key, useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
+import { getCountyOptions, matchCounty } from "#constants/counties";
 import type { FieldName } from "#constants/fields";
 import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 import { ComboBox, ComboBoxItem } from "../../common/ComboBox";
@@ -44,7 +45,11 @@ export function mapPlaceToFields(
   ][]) {
     const fieldName = names[key];
     if (!fieldName) continue;
-    updates.push([fieldName, place[source] ?? ""]);
+    const value = place[source] ?? "";
+    updates.push([
+      fieldName,
+      key === "county" ? matchCounty(place.state_code, value) : value,
+    ]);
   }
   return updates;
 }
@@ -94,6 +99,9 @@ export function AddressField({
       zip: "parent2ZipCode",
     },
   };
+
+  const state = useWatch({ control, name: names[type].state });
+  const countyOptions = getCountyOptions(state);
 
   const street2Name = names[type].street2;
   const canAddAddress2 = includeAddress2 && !!street2Name;
@@ -219,14 +227,33 @@ export function AddressField({
           control={control}
           name={names[type].county}
           defaultValue=""
-          render={({ field, fieldState: { invalid, error } }) => (
-            <TextField
-              {...field}
-              label="County"
-              isInvalid={invalid}
-              errorMessage={error?.message}
-            />
-          )}
+          render={({ field, fieldState: { invalid, error } }) =>
+            countyOptions ? (
+              <ComboBox
+                {...field}
+                label="County"
+                placeholder="Select a county"
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                isInvalid={invalid}
+                errorMessage={error?.message}
+                menuTrigger="focus"
+              >
+                {countyOptions.map(({ label, value }) => (
+                  <ComboBoxItem key={value} id={value} textValue={label}>
+                    {label}
+                  </ComboBoxItem>
+                ))}
+              </ComboBox>
+            ) : (
+              <TextField
+                {...field}
+                label="County"
+                isInvalid={invalid}
+                errorMessage={error?.message}
+              />
+            )
+          }
         />
       )}
       <Controller

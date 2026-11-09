@@ -1,6 +1,6 @@
-import { Banner } from "#components/common/Banner";
 import { FormStep } from "#components/forms/FormStep";
 import { LongTextField } from "#components/forms/LongTextField";
+import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineStep } from "#lib/forms/defineStep";
 import { nameOrFallback } from "#lib/forms/resolveStepContent";
 
@@ -15,21 +15,7 @@ export const reasonStep = defineStep({
         name="reasonForChangingName"
         label="Reason for name change"
       />
-      <Banner>
-        <p>
-          <strong>What do I write?</strong> Provide a basic reason—no need to go
-          into detail. Examples:
-        </p>
-        <ul>
-          <li>"They want a name which aligns with their gender identity."</li>
-          <li>"This is the name everyone knows them by."</li>
-          <li>
-            "This is their preferred name and they wish to obtain proper
-            documentation."
-          </li>
-          <li>"They are transgender."</li>
-        </ul>
-      </Banner>
+      <NameChangeReasonBanner for="child" />
     </FormStep>
   ),
 });
