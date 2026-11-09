@@ -22,19 +22,6 @@ export function isFalse(field: BooleanFieldName): Condition {
   return withDeps((data) => data[field] === false, [field]);
 }
 
-/** True unless the field is `true`, so unanswered counts too. */
-export function isNotTrue(field: BooleanFieldName): Condition {
-  return withDeps((data) => data[field] !== true, [field]);
-}
-
-/** True when any of the fields is `true`. */
-export function anyTrue(...fields: readonly BooleanFieldName[]): Condition {
-  return withDeps(
-    (data) => fields.some((field) => data[field] === true),
-    fields,
-  );
-}
-
 /**
  * Declares fields a predicate reads that tracing can miss, such as a field
  * read only after `&&` or `||` short-circuits.
@@ -48,30 +35,48 @@ export function withDeps(
   return condition;
 }
 
-/** Combines conditions so all must hold. Returns undefined for none. */
-export function allOf(
+/** True when the condition is false. */
+export function not(condition: Condition): Condition {
+  return withDeps((data) => !condition(data), condition.deps ?? []);
+}
+
+/** True when every condition holds. */
+export function allOf(...conditions: readonly Condition[]): Condition {
+  return withDeps(
+    (data) => conditions.every((condition) => condition(data)),
+    conditions.flatMap((condition) => condition.deps ?? []),
+  );
+}
+
+/** True when at least one condition holds. */
+export function anyOf(...conditions: readonly Condition[]): Condition {
+  return withDeps(
+    (data) => conditions.some((condition) => condition(data)),
+    conditions.flatMap((condition) => condition.deps ?? []),
+  );
+}
+
+/**
+ * Combines the conditions that are present so all must hold, or returns
+ * undefined when there are none.
+ */
+export function combineConditions(
   conditions: readonly (Condition | undefined)[],
 ): Condition | undefined {
   const present = conditions.filter(
     (condition): condition is Condition => condition !== undefined,
   );
-  if (present.length === 0) return undefined;
-  if (present.length === 1) return present[0];
-  const combined: Condition = (data) =>
-    present.every((condition) => condition(data));
-  combined.deps = present.flatMap((condition) => condition.deps ?? []);
-  return combined;
+  if (present.length <= 1) return present[0];
+  return allOf(...present);
 }
 
 const FIELD_TYPES = new Map<string, string>(
   FIELD_DEFS.map((definition) => [definition.name, definition.type]),
 );
 
-const FIRST_OPTION = new Map<string, string>(
+const FIRST_VALUE = new Map<string, string>(
   FIELD_DEFS.flatMap((definition) =>
-    "options" in definition
-      ? [[definition.name, Object.keys(definition.options)[0]]]
-      : [],
+    "values" in definition ? [[definition.name, definition.values[0]]] : [],
   ),
 );
 
@@ -87,7 +92,7 @@ const SAMPLES: readonly Sample[] = [
       case "string[]":
         return ["other"];
       default:
-        return FIRST_OPTION.get(fieldName) ?? "1990-01-01";
+        return FIRST_VALUE.get(fieldName) ?? "1990-01-01";
     }
   },
   (fieldName) => {

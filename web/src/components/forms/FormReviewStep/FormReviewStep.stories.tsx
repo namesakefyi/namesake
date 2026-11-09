@@ -1,4 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
+import { field } from "#lib/forms/steps";
 import type { Step } from "#lib/forms/types";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormReviewStep, type FormReviewStepProps } from "./FormReviewStep";
@@ -7,14 +8,21 @@ const mockSteps: Step[] = [
   {
     id: "personal-info",
     title: "Personal Information",
-    fields: ["oldFirstName", "oldLastName"],
-    component: () => null,
+    body: [
+      field.shortText("oldFirstName", {
+        label: "First name",
+        reviewLabel: "Old first name",
+      }),
+      field.shortText("oldLastName", {
+        label: "Last name",
+        reviewLabel: "Old last name",
+      }),
+    ],
   },
   {
     id: "contact",
     title: "Contact Details",
-    fields: ["email"],
-    component: () => null,
+    body: [field.email("email")],
   },
 ];
 

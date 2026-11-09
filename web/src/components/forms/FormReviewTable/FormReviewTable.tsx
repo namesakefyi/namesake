@@ -1,8 +1,8 @@
 import { useFormContext } from "react-hook-form";
 import type { FormData } from "#constants/fields";
 import { resolveFormVisibility } from "#lib/forms/formVisibility";
+import { getStepFields, type StepField } from "#lib/forms/getStepFields";
 import { resolveText } from "#lib/forms/resolveStepContent";
-import { type ModelField, normalizeStep } from "#lib/forms/steps/normalize";
 import type { Step } from "#lib/forms/types";
 import { formatFieldValue } from "#lib/utils/formatReviewFields";
 import { useFormStep } from "../FormContainer/FormStepContext";
@@ -36,19 +36,19 @@ export function FormReviewTable({ steps }: FormReviewTableProps) {
     .filter(({ fields }) => fields.length > 0)
     .map(({ stepId, fields }) => {
       const step = stepsById.get(stepId) as Step;
-      const modelFields = new Map(
-        normalizeStep(step).fields.map((field) => [field.id, field]),
+      const stepFields = new Map(
+        getStepFields(step).map((field) => [field.id, field]),
       );
       return {
         stepId,
         fields: fields.map((fieldName) => {
-          const modelField = modelFields.get(fieldName) as ModelField;
+          const stepField = stepFields.get(fieldName) as StepField;
           return {
             fieldName,
-            label: smartquotes(resolveText(modelField.reviewLabel, formData)),
+            label: smartquotes(resolveText(stepField.reviewLabel, formData)),
             value: formatFieldValue(fieldName, formData[fieldName], {
-              options: modelField.options,
-              currency: modelField.currency,
+              options: stepField.options,
+              currency: stepField.currency,
             }),
           };
         }),

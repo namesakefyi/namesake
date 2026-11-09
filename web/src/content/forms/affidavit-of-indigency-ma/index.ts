@@ -5,8 +5,8 @@ import {
   block,
   field,
   is,
-  isNotTrue,
   isTrue,
+  not,
   type StepNode,
   type StringFieldName,
 } from "#lib/forms/steps";
@@ -58,7 +58,7 @@ export default defineForm({
           { when: isTrue("isCurrentlyUnhoused") },
         ),
         field.address("residence", {
-          when: isNotTrue("isCurrentlyUnhoused"),
+          when: not(isTrue("isCurrentlyUnhoused")),
         }),
       ],
     },

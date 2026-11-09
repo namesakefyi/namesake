@@ -3,8 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FormConfig } from "#constants/forms";
 import * as db from "#db/database";
+import { block } from "#lib/forms/steps";
 import type { Step } from "#lib/forms/types";
-import { FormStep } from "../FormStep/FormStep";
 import { FormContainer } from "./FormContainer";
 
 vi.mock("#db/database", () => ({
@@ -24,15 +24,13 @@ import { getFormConfig } from "#lib/forms/getFormConfig";
 const plainStep: Step = {
   id: "plain",
   title: "Plain Step",
-  fields: [],
-  component: () => <div>Step content</div>,
+  body: [block.note("Step content")],
 };
 
 const formStepStep: Step = {
   id: "form-step",
   title: "Form Step",
-  fields: [],
-  component: ({ stepConfig }) => <FormStep stepConfig={stepConfig} />,
+  body: [],
 };
 
 const plainConfig: FormConfig = {

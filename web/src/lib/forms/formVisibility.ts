@@ -1,54 +1,12 @@
 import type { FieldName, FormData } from "#constants/fields";
 import type { FormPdfConfig } from "#constants/forms";
 import type { PDFId } from "#constants/pdf";
-import { expandLegacyFields, normalizeStep } from "./steps/normalize";
-import type { Field, Step } from "./types";
-
-/** Extracts all field names from a legacy step's fields array. */
-export function getFieldNames(fields: readonly Field[]): FieldName[] {
-  return expandLegacyFields(fields).map((entry) => entry.id);
-}
+import { getStepFields } from "./getStepFields";
+import type { Step } from "./types";
 
 /** Extracts all field names written by form steps. */
 export function getFormFields(steps: readonly Step[]): FieldName[] {
-  return steps.flatMap((step) =>
-    normalizeStep(step).fields.map((field) => field.id),
-  );
-}
-
-/**
- * Looks up a field's `when` predicate from a legacy fields array.
- *
- * Returns the callback if the field is conditional, `null` if the field
- * exists but is unconditional (always visible), or `undefined` if the
- * field is not listed at all.
- */
-export function getFieldWhen(
-  fields: readonly Field[],
-  fieldName: FieldName,
-): ((data: Partial<FormData>) => boolean) | null | undefined {
-  const entry = expandLegacyFields(fields).find(
-    (candidate) => candidate.id === fieldName,
-  );
-  if (!entry) return undefined;
-  return entry.when ?? null;
-}
-
-/**
- * Whether a field a step writes is visible for the given answers, combining
- * the step's, enclosing subsections' and the field's own conditions.
- * Returns `false` if the step doesn't write the field.
- */
-export function isStepFieldVisible(
-  step: Step,
-  fieldName: FieldName,
-  data: Partial<FormData>,
-): boolean {
-  const field = normalizeStep(step).fields.find(
-    (candidate) => candidate.id === fieldName,
-  );
-  if (!field) return false;
-  return !field.when || field.when(data);
+  return steps.flatMap((step) => getStepFields(step).map((field) => field.id));
 }
 
 export interface VisibilitySection {
@@ -94,7 +52,7 @@ export function resolveFormVisibility(
     visibleStepIds.push(step.id);
 
     const visibleFieldNames: FieldName[] = [];
-    for (const { id: fieldId, when } of normalizeStep(step).fields) {
+    for (const { id: fieldId, when } of getStepFields(step)) {
       if (!when || when(formData)) {
         (visibleFields as Record<string, unknown>)[fieldId] = formData[fieldId];
         visibleFieldNames.push(fieldId);

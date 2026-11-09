@@ -1,6 +1,6 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineForm } from "#lib/forms/defineForm";
-import { anyTrue, block, field, is, isFalse, isTrue } from "#lib/forms/steps";
+import { anyOf, block, field, is, isFalse, isTrue } from "#lib/forms/steps";
 import {
   livesInNewYorkCity,
   requestsNameChange,
@@ -150,10 +150,10 @@ export default defineForm({
             }),
           ],
           {
-            when: anyTrue(
-              "hasFiledForBankruptcy",
-              "hasJudgmentsOrLiens",
-              "isPartyToLawsuitOrCourtCase",
+            when: anyOf(
+              isTrue("hasFiledForBankruptcy"),
+              isTrue("hasJudgmentsOrLiens"),
+              isTrue("isPartyToLawsuitOrCourtCase"),
             ),
           },
         ),

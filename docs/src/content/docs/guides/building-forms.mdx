@@ -3,7 +3,7 @@ title: Building An Interactive Form
 description: How to add a new interactive form to Namesake.
 ---
 
-import { FileTree, LinkCard } from '@astrojs/starlight/components';
+import { FileTree } from '@astrojs/starlight/components';
 
 Once you have [added new PDFs](/guides/new-pdfs) to the codebase, you are ready to create an interactive [form](https://namesake.fyi/forms).
 
@@ -14,13 +14,8 @@ Add a new folder to `web/src/content/forms` with the following structure:
 <FileTree>
 
 - my-form
-  - steps
-    - NewNameStep.tsx
-    - OldNameStep.tsx
-    - AddressStep.tsx
-    - ...
   - e2e.spec.ts
-  - index.ts # Runtime info (form steps and PDFs)
+  - index.ts # Steps, PDFs, and instructions
   - index.yml # Static metadata (title, description, jurisdiction, etc.)
 
 </FileTree>
@@ -44,136 +39,170 @@ costs:
     required: true
 ```
 
-## Define steps
+## Write the steps
 
-Within `steps/`, create a new `.tsx` file for each step. Import `defineStep` and provide an `id`, `title`, `fields`, and `component`.
+Inside `index.ts`, import `defineForm` and list the steps in the order people see them. Each step has an `id`, a `title`, and a `body` of questions and content.
 
-```tsx {4}
-// NameStep.tsx
-import { FormStep } from "#components/forms/FormStep";
-import { ShortTextField } from "#components/forms/ShortTextField";
-import { defineStep } from "#lib/forms/defineStep";
-
-export const nameStep = defineStep({
-  id: "new-name",
-  title: "What is your name?",
-  fields: ["newFirstName", "newLastName"],
-  component: ({ stepConfig }) => (
-    <FormStep stepConfig={stepConfig}>
-      <ShortTextField name="newFirstName" label="First name" />
-      <ShortTextField name="newLastName" label="Last name" />
-    </FormStep>
-  ),
-});
-```
-
-The `fields` array controls what gets saved, restored, and shown on the review page.
-
-### Skip a step conditionally
-
-Add a `when` predicate to exclude a step when a condition isn't met:
-
-```tsx {7}
-// FeeWaiverStep.tsx
-import { FormStep } from "#components/forms/FormStep";
-import { defineStep } from "#lib/forms/defineStep";
-
-export const feeWaiverDocumentsStep = defineStep({
-  id: "fee-waiver-documents",
-  when: (data) => data.shouldApplyForFeeWaiver === true,
-  title: "Upload your fee waiver documents",
-  fields: ["feeWaiverDocument"],
-  component: ({ stepConfig }) => (
-    <FormStep stepConfig={stepConfig}>...</FormStep>
-  ),
-});
-```
-
-### Show fields conditionally
-
-When a step has follow-up questions that only apply given a previous answer, use `{ id, when }` inside the `fields` array and call `useFieldVisible` in the component:
-
-```tsx {17-20,23}
-// OtherNamesStep.tsx
-import { Banner } from "#components/common/Banner";
-import {
-  FormStep,
-  FormSubsection,
-  useFieldVisible,
-} from "#components/forms/FormStep";
-import { LongTextField } from "#components/forms/LongTextField";
-import { YesNoField } from "#components/forms/YesNoField";
-import { defineStep } from "#lib/forms/defineStep";
-
-export const otherNamesStep = defineStep({
-  id: "other-names",
-  title: "Have you used any other name or alias?",
-  fields: [
-    "hasUsedOtherNameOrAlias",
-    {
-      id: "otherNamesOrAliases",
-      when: (data) => data.hasUsedOtherNameOrAlias === true,
-    },
-  ],
-  component: ({ stepConfig }) => {
-    const otherNamesVisible = useFieldVisible(stepConfig, "otherNamesOrAliases");
-    return (
-      <FormStep stepConfig={stepConfig}>
-        <YesNoField name="hasUsedOtherNameOrAlias" ... />
-        <FormSubsection isVisible={otherNamesVisible}>
-          <LongTextField name="otherNamesOrAliases" ... />
-        </FormSubsection>
-      </FormStep>
-    );
-  },
-});
-```
-
-For multiple fields sharing one predicate, use `{ ids, when }`:
-
-```tsx {3-10}
-fields: [
-  "hasPreviousSocialSecurityCard",
-  {
-    ids: [
-      "previousSocialSecurityCardFirstName",
-      "previousSocialSecurityCardMiddleName",
-      "previousSocialSecurityCardLastName",
-    ],
-    when: (data) => data.hasPreviousSocialSecurityCard === true,
-  },
-],
-```
-
-## Define form runtime info
-
-Once you have all of your steps, inside `index.ts`, import `defineForm` and provide an array of `steps`, `pdfs`, and more.
-
-```ts {2}
+```ts
 // index.ts
 import { defineForm } from "#lib/forms/defineForm";
+import { block, field } from "#lib/forms/steps";
 
 export default defineForm({
   steps: [
-    newNameStep,
-    currentNameStep,
-    reasonStep,
-    contactInfoStep,
-    // ...
+    {
+      id: "new-name",
+      title: "What is your new name?",
+      description: "Type it exactly as you want it to appear.",
+      body: [field.name("newName")],
+    },
+    {
+      id: "contact-info",
+      title: "What is your contact information?",
+      body: [
+        field.phone("phoneNumber"),
+        field.email("email"),
+      ],
+    },
   ],
+  // ...
+});
+```
+
+Everything a step asks is saved as the person types, restored when they come back, shown on the review page, and passed to the PDFs.
+
+### Choose a question type
+
+Start typing `field.` to see every question type. Each one matches a form component:
+
+| Builder | Asks for |
+|---|---|
+| `field.shortText` | A single line of text |
+| `field.longText` | A paragraph of text |
+| `field.number` | A number; add `currency: true` for dollar amounts |
+| `field.memorableDate` | A date, such as a date of birth |
+| `field.checkbox` | A single checkbox |
+| `field.yesNo` | A yes or no question |
+| `field.radioGroup` | One choice from a short list |
+| `field.checkboxGroup` | Any number of choices from a list |
+| `field.comboBox` | One choice from a long, searchable list |
+| `field.phone` | A phone number |
+| `field.email` | An email address |
+| `field.languageSelect` | A language |
+| `field.name` | First, middle, and last name |
+| `field.address` | A street address |
+| `field.pronounSelect` | Pronouns |
+| `field.repeatingEntry` | A list of short answers |
+
+Give each question a `label`. If a step asks a single question, leave out the label and the step title is used instead.
+
+For choices, label every option. The keys are what gets saved; the labels are what people see:
+
+```ts
+field.radioGroup("courtType", {
+  options: { Civil: "Civil Court", Supreme: "Supreme Court" },
+}),
+```
+
+### Label answers on the review page
+
+The review page lists each answer under its label. When a label only makes sense next to its question, add a `reviewLabel`:
+
+```ts
+field.shortText("birthplaceCity", {
+  label: "City",
+  reviewLabel: "City of birth",
+}),
+```
+
+### Skip a step
+
+Add `when` to a step to include it only for some answers:
+
+```ts
+import { is } from "#lib/forms/steps";
+
+{
+  id: "court",
+  title: "Which court would you like to file in?",
+  when: is("residenceCounty", "Bronx", "Kings", "New York", "Queens", "Richmond"),
+  body: [/* ... */],
+},
+```
+
+Build conditions from `is`, `isTrue`, and `isFalse`, and combine them with `allOf`, `anyOf`, and `not`. For example, `not(isTrue("isCurrentlyUnhoused"))` also includes people who haven't answered yet, while `isFalse("isCurrentlyUnhoused")` only includes people who answered no. For anything else, write a function of the answers, such as `(data) => deriveCurrentAge(data.dateOfBirth) >= 18`.
+
+### Ask follow-up questions
+
+Put follow-up questions in a `block.subsection` with a `when`. They appear only once the earlier answer calls for them, and are left off the review page and PDFs otherwise:
+
+```ts
+import { block, field, isTrue } from "#lib/forms/steps";
+
+body: [
+  field.yesNo("hasUsedOtherNameOrAlias"),
+  block.subsection(
+    [field.longText("otherNamesOrAliases", { label: "Other names or aliases" })],
+    {
+      title: "Please list all names you haven't previously listed.",
+      when: isTrue("hasUsedOtherNameOrAlias"),
+    },
+  ),
+],
+```
+
+A single question can also take its own `when`.
+
+### Add guidance
+
+Use `block.banner` for callouts. Banner text is markdown, so it can include links and **bold** text:
+
+```ts
+block.banner(
+  "Attach a copy of each prior court order or marriage license to your petition.",
+  { when: isTrue("hasPreviousNameChange") },
+),
+```
+
+Use `block.note` for a plain paragraph. To show a component that several forms share, such as `NameChangeReasonBanner`, use `block.display`.
+
+If the same copy appears more than once in a form, for example in a banner and in the instructions, define it once at the top of `index.ts`.
+
+### Add a new field
+
+If a question saves an answer that no form has asked for before, add it to `web/src/constants/fields.ts` with its `name` and `type`. For a fixed set of answers, also list its `values`:
+
+```ts
+{
+  name: "incomePeriod",
+  type: "string",
+  values: ["weekly", "biweekly", "monthly", "yearly"],
+},
+```
+
+## Add PDFs and instructions
+
+Finish `index.ts` with the PDFs to fill and the instructions for the cover page of the download:
+
+```ts
+export default defineForm({
+  steps: [/* ... */],
   pdfs: [
     { pdfId: "cjp27-petition-to-change-name-of-adult" },
     { pdfId: "cjp34-cori-and-wms-release-request" },
   ],
   downloadTitle: "Massachusetts Court Order",
   instructions: [
-    "Do not sign the Petition to Change Name (CJP 27) until in the presence of a notary.",
     "Review all documents carefully.",
-    "File with the Probate and Family Court in your county.",
-    "Remember to bring a certified copy of your birth certificate and certified copies of any previous name changes.",
+    {
+      text: "Attach a copy of each prior court order or marriage license to your petition.",
+      when: isTrue("hasPreviousNameChange"),
+    },
   ],
 });
 ```
+
+A PDF or instruction with a `when` is only included for matching answers.
 
 ## Render the form
 
@@ -206,6 +235,8 @@ export default definePdf<PdfFieldName>({
 });
 ```
 
-## Write end-to-end tests
+## Test the form
+
+Run the unit tests with `pnpm exec vitest run` and fix anything they report for your form. When you change your form's review page on purpose, update its snapshot with `pnpm exec vitest run -u`.
 
 Add end-to-end tests to `e2e.spec.ts` covering the full form flow. Look at existing form specs in `web/src/content/forms` for examples of how to fill in steps, verify the review page, and confirm PDF output.

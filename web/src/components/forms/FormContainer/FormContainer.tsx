@@ -5,7 +5,6 @@ import { createFormSubmitHandler } from "#lib/forms/createFormSubmitHandler";
 import { downloadBlankPdfPacket } from "#lib/forms/downloadBlankPdfPacket";
 import { getFormConfig } from "#lib/forms/getFormConfig";
 import type { FormPdfMetadata } from "#lib/forms/getFormPdfMetadata";
-import { StepBody } from "#lib/forms/steps/StepBody";
 import { useFormData } from "#lib/forms/useFormData";
 import { useFormState } from "#lib/forms/useFormState";
 import { ProgressCircle } from "../../common/ProgressCircle";
@@ -175,15 +174,7 @@ export function FormContainer({
       case "filling":
       case "editing": {
         if (!activeStep) return null;
-        if (activeStep.body) {
-          return (
-            <FormStep stepConfig={activeStep}>
-              <StepBody step={activeStep} />
-            </FormStep>
-          );
-        }
-        const StepComponent = activeStep.component;
-        return <StepComponent stepConfig={activeStep} />;
+        return <FormStep stepConfig={activeStep} />;
       }
       case "review":
       case "submitting":

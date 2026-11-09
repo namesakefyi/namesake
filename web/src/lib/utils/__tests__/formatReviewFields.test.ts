@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatFieldValue, getFieldLabel } from "../formatReviewFields";
+import { formatFieldValue } from "../formatReviewFields";
 
 describe("formatFieldValue", () => {
   describe("boolean fields", () => {
@@ -101,8 +101,28 @@ describe("formatFieldValue", () => {
 
   describe("currency formatting", () => {
     it("formats currency value", () => {
-      const result = formatFieldValue("incomeAmount", 1234);
+      const result = formatFieldValue("incomeAmount", 1234, { currency: true });
       expect(result).toBe("$1,234");
+    });
+
+    it("leaves amounts unformatted unless marked as currency", () => {
+      expect(formatFieldValue("incomeAmount", 1234)).toBe("1234");
+    });
+  });
+
+  describe("option labels", () => {
+    it("shows the label of the stored value", () => {
+      const options = { weekly: "Weekly", monthly: { label: "Monthly" } };
+      expect(formatFieldValue("incomePeriod", "monthly", { options })).toBe(
+        "Monthly",
+      );
+    });
+
+    it("labels each value in a list", () => {
+      const options = { asian: "Asian", black: "Black or African American" };
+      expect(formatFieldValue("race", ["asian", "black"], { options })).toBe(
+        "Asian, Black or African American",
+      );
     });
   });
 
@@ -111,20 +131,5 @@ describe("formatFieldValue", () => {
       // @ts-expect-error - testing with invalid field name
       expect(formatFieldValue("unknownField", 42)).toBe("42");
     });
-  });
-});
-
-describe("getFieldLabel", () => {
-  it("returns the label for a known field", () => {
-    expect(getFieldLabel("isCurrentlyUnhoused")).toBe("Currently unhoused?");
-  });
-
-  it("returns the label for another field", () => {
-    expect(getFieldLabel("oldFirstName")).toBe("Old first name");
-  });
-
-  it("returns the field name if not found", () => {
-    // @ts-expect-error - testing with invalid field name
-    expect(getFieldLabel("unknownField")).toBe("unknownField");
   });
 });

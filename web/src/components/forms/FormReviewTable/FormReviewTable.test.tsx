@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
+import { field } from "#lib/forms/steps";
 import type { Step } from "#lib/forms/types";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormReviewTable } from "./FormReviewTable";
@@ -44,18 +45,32 @@ function renderWithValues(
   return render(<FormWrapper defaultValues={defaultValues}>{ui}</FormWrapper>);
 }
 
+const hidden = () => false;
+
+const oldFirstName = (when?: () => boolean) =>
+  field.shortText("oldFirstName", {
+    label: "First name",
+    reviewLabel: "Old first name",
+    when,
+  });
+
+const oldLastName = (when?: () => boolean) =>
+  field.shortText("oldLastName", {
+    label: "Last name",
+    reviewLabel: "Old last name",
+    when,
+  });
+
 const nameStep: Step = {
   id: "legal-name",
   title: "Legal Name",
-  component: () => null,
-  fields: ["oldFirstName", "oldLastName"],
+  body: [oldFirstName(), oldLastName()],
 };
 
 const contactStep: Step = {
   id: "contact",
   title: "Contact",
-  component: () => null,
-  fields: ["phoneNumber"],
+  body: [field.phone("phoneNumber")],
 };
 
 describe("FormReviewTable", () => {
@@ -123,8 +138,11 @@ describe("FormReviewTable", () => {
     const yesNoStep: Step = {
       id: "yes-no-step",
       title: "Yes/No",
-      component: () => null,
-      fields: ["hasCourtAppointedGuardian"],
+      body: [
+        field.yesNo("hasCourtAppointedGuardian", {
+          reviewLabel: "Court-appointed guardian?",
+        }),
+      ],
     };
 
     renderWithValues(<FormReviewTable steps={[yesNoStep]} />, {
@@ -140,10 +158,7 @@ describe("FormReviewTable", () => {
     const hiddenStep: Step = {
       ...nameStep,
       id: "hidden-step",
-      fields: [
-        { id: "oldFirstName", when: () => false },
-        { id: "oldLastName", when: () => false },
-      ],
+      body: [oldFirstName(hidden), oldLastName(hidden)],
     };
 
     renderWithValues(<FormReviewTable steps={[hiddenStep, contactStep]} />, {
@@ -158,10 +173,7 @@ describe("FormReviewTable", () => {
   it("renders no sections when all steps have no visible fields", () => {
     const emptyStep: Step = {
       ...nameStep,
-      fields: [
-        { id: "oldFirstName", when: () => false },
-        { id: "oldLastName", when: () => false },
-      ],
+      body: [oldFirstName(hidden), oldLastName(hidden)],
     };
 
     renderWithValues(<FormReviewTable steps={[emptyStep]} />, {
@@ -175,7 +187,7 @@ describe("FormReviewTable", () => {
   it("only includes fields that are visible within a step", () => {
     const partialStep: Step = {
       ...nameStep,
-      fields: ["oldFirstName", { id: "oldLastName", when: () => false }],
+      body: [oldFirstName(), oldLastName(hidden)],
     };
 
     renderWithValues(<FormReviewTable steps={[partialStep]} />, {

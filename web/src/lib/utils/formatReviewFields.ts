@@ -1,13 +1,13 @@
 import { parseDate } from "@internationalized/date";
 import { FIELD_DEFS, type FieldName } from "#constants/fields";
-import { getOptionLabel } from "#lib/forms/steps/options";
-import type { OptionLabels } from "#lib/forms/steps/types";
+import { getOptionLabel } from "#lib/forms/optionLabels";
+import type { OptionLabels } from "#lib/forms/types";
 import { formatCurrency } from "./formatCurrency";
 
 /**
  * Given a field name and value, return the formatted value for display in
- * the review table based on its type from FIELD_DEFS, or undefined if the
- * field has no response.
+ * the review table based on its type, or undefined if the field has no
+ * response.
  *
  * @example
  * formatFieldValue("dateOfBirth", "1990-06-15")
@@ -22,7 +22,9 @@ export function formatFieldValue(
   { options, currency }: { options?: OptionLabels; currency?: boolean } = {},
 ): string | undefined {
   // Get the field definition to determine the type
-  const fieldDef = FIELD_DEFS.find((def) => def.name === fieldName);
+  const fieldDef = FIELD_DEFS.find(
+    (definition) => definition.name === fieldName,
+  );
   if (!fieldDef) {
     return String(value);
   }
@@ -37,10 +39,8 @@ export function formatFieldValue(
   }
 
   // Fields with labeled options show the label of each stored value
-  const labels: OptionLabels | undefined =
-    options ?? ("options" in fieldDef ? fieldDef.options : undefined);
   const labelOf = (item: unknown) => {
-    const option = labels?.[String(item)];
+    const option = options?.[String(item)];
     return option === undefined ? String(item) : getOptionLabel(option);
   };
 
@@ -57,15 +57,10 @@ export function formatFieldValue(
       }
       return undefined;
     default: {
-      if (labels) return labelOf(value);
+      if (options) return labelOf(value);
 
       // Currency fields: format as USD
-      if (
-        currency ||
-        ("format" in fieldDef && fieldDef.format === "currency")
-      ) {
-        return formatCurrency(value);
-      }
+      if (currency) return formatCurrency(value);
 
       // Phone number formatting
       if (fieldName === "phoneNumber") {
@@ -101,16 +96,4 @@ function formatDate(date: string): string | undefined {
   } catch {
     return date; // Return as-is if parsing fails
   }
-}
-
-/**
- * Given a field name, return its label from FIELD_DEFS.
- *
- * @example
- * getFieldLabel("dateOfBirth")
- * // "Date of birth"
- */
-export function getFieldLabel(fieldName: FieldName): string {
-  const fieldDef = FIELD_DEFS.find((def) => def.name === fieldName);
-  return fieldDef?.label || fieldName;
 }

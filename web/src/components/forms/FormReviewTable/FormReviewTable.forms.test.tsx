@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { FIELD_DEFS, type FieldName, type FormData } from "#constants/fields";
+import { FIELD_DEFS, type FormData } from "#constants/fields";
 import type { FormConfig } from "#constants/forms";
-import { getFormFields } from "#lib/forms/formVisibility";
 import { getFormConfigs } from "#lib/forms/getFormConfig";
+import { getStepFields, type StepField } from "#lib/forms/getStepFields";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { renderWithFormProvider } from "../test-utils";
 import { FormReviewTable } from "./FormReviewTable";
@@ -21,11 +21,11 @@ const contextValue = {
 
 /** A deterministic answer for every field a form writes. */
 function makeFixture(
-  fieldNames: readonly FieldName[],
+  fields: readonly StepField[],
   booleanAnswer: boolean,
 ): Partial<FormData> {
   const fixture: Record<string, unknown> = {};
-  for (const fieldName of fieldNames) {
+  for (const { id: fieldName, currency } of fields) {
     const definition = FIELD_DEFS.find(
       (candidate) => candidate.name === fieldName,
     );
@@ -34,9 +34,9 @@ function makeFixture(
       fixture[fieldName] = booleanAnswer;
     } else if (definition.type === "string[]") {
       fixture[fieldName] = [`${fieldName} 1`, `${fieldName} 2`];
-    } else if ("options" in definition) {
-      fixture[fieldName] = Object.keys(definition.options)[0];
-    } else if ("format" in definition) {
+    } else if ("values" in definition) {
+      fixture[fieldName] = definition.values[0];
+    } else if (currency) {
       fixture[fieldName] = "1234";
     } else if (fieldName === "dateOfBirth") {
       fixture[fieldName] = "1990-06-15";
@@ -71,7 +71,7 @@ function renderReview(config: FormConfig, data: Partial<FormData>): string {
 describe.each(Object.entries(getFormConfigs()))(
   "FormReviewTable for %s",
   (_slug, config) => {
-    const fieldNames = getFormFields(config.steps);
+    const fields = config.steps.flatMap(getStepFields);
 
     it.each([
       ["yes", true],
@@ -80,7 +80,7 @@ describe.each(Object.entries(getFormConfigs()))(
       "matches the review output when booleans are %s",
       (_label, booleanAnswer) => {
         expect(
-          renderReview(config, makeFixture(fieldNames, booleanAnswer)),
+          renderReview(config, makeFixture(fields, booleanAnswer)),
         ).toMatchSnapshot();
       },
     );

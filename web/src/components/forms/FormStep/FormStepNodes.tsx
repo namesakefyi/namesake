@@ -4,43 +4,47 @@ import {
   FormProvider,
   type UseFormReturn,
   useFormContext,
-  useWatch,
 } from "react-hook-form";
 import type { FieldName, FormData } from "#constants/fields";
-import { resolveText } from "../resolveStepContent";
-import type { BodyStep } from "../types";
-import {
-  getChildContext,
-  type NodeContext,
-  usesTitleAsLabel,
-} from "./normalize";
-import { toChoices } from "./options";
-import { renderers } from "./renderers";
+import { toChoices } from "#lib/forms/optionLabels";
+import { resolveText } from "#lib/forms/resolveStepContent";
 import type {
   AnyFieldNode,
   Data,
   FieldRenderProps,
+  Step,
   StepNode,
   WrittenField,
-} from "./types";
+} from "#lib/forms/types";
+import {
+  getChildContext,
+  getRootContext,
+  type NodeContext,
+  usesTitleAsLabel,
+} from "#lib/forms/walkNodes";
+import { renderers } from "./renderers";
 
-export interface StepBodyProps {
-  step: BodyStep;
+export interface FormStepNodesProps {
+  step: Step;
+  /** The live answers, watched once by `FormStep`. */
+  data: Data;
 }
 
-/**
- * Renders a step's body inside the `FormStep` shell. Watches the form once
- * and leaves nodes whose condition fails unmounted.
- */
-export function StepBody({ step }: StepBodyProps) {
-  const data = useWatch() as Data;
-  const context: NodeContext = { conditions: [], title: step.title };
-  return <Nodes nodes={step.body} step={step} data={data} context={context} />;
+/** Renders a step's body, leaving nodes whose condition fails unmounted. */
+export function FormStepNodes({ step, data }: FormStepNodesProps) {
+  return (
+    <Nodes
+      nodes={step.body}
+      step={step}
+      data={data}
+      context={getRootContext(step)}
+    />
+  );
 }
 
 interface NodesProps {
   nodes: readonly StepNode[];
-  step: BodyStep;
+  step: Step;
   data: Data;
   context: NodeContext;
 }
@@ -158,7 +162,7 @@ function DevWritesGuard({ writes, owner, children }: WritesGuardProps) {
       if (allowed.has(root) || warned.current.has(root)) return;
       warned.current.add(root);
       console.warn(
-        `[StepBody] The ${owner} registers "${root}", which is not in its writes.`,
+        `[FormStep] The ${owner} registers "${root}", which is not in its writes.`,
       );
     };
     const register: typeof methods.register = (name, options) => {

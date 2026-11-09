@@ -1,60 +1,11 @@
 import { describe, expect, it } from "vitest";
-import {
-  getFieldNames,
-  getFieldWhen,
-  getFormFields,
-  resolveFormVisibility,
-} from "../formVisibility";
+import { getFormFields, resolveFormVisibility } from "../formVisibility";
 import { makeStep } from "./testHelpers";
-
-describe("getFieldNames", () => {
-  it("returns field names from a mix of strings and objects", () => {
-    const fields = [
-      "alwaysVisible",
-      { id: "conditional", when: () => true },
-      { ids: ["group1", "group2"], when: () => true },
-    ] as any;
-    expect(getFieldNames(fields)).toEqual([
-      "alwaysVisible",
-      "conditional",
-      "group1",
-      "group2",
-    ]);
-  });
-
-  it("returns empty array for empty fields", () => {
-    expect(getFieldNames([])).toEqual([]);
-  });
-});
 
 describe("getFormFields", () => {
   it("flattens field names from all steps", () => {
     const steps = [makeStep("a", ["f1", "f2"]), makeStep("b", ["f3"])];
     expect(getFormFields(steps)).toEqual(["f1", "f2", "f3"]);
-  });
-});
-
-describe("getFieldWhen", () => {
-  it("returns null for a plain string field (unconditional)", () => {
-    const fields = ["alwaysVisible"] as any;
-    expect(getFieldWhen(fields, "alwaysVisible" as any)).toBeNull();
-  });
-
-  it("returns the when callback for a conditional field", () => {
-    const when = () => true;
-    const fields = [{ id: "conditional", when }] as any;
-    expect(getFieldWhen(fields, "conditional" as any)).toBe(when);
-  });
-
-  it("returns the when callback for a field in a group", () => {
-    const when = () => false;
-    const fields = [{ ids: ["group1", "group2"], when }] as any;
-    expect(getFieldWhen(fields, "group1" as any)).toBe(when);
-    expect(getFieldWhen(fields, "group2" as any)).toBe(when);
-  });
-
-  it("returns undefined for a field not in the array", () => {
-    expect(getFieldWhen(["other" as any], "missing" as any)).toBeUndefined();
   });
 });
 

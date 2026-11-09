@@ -8,7 +8,6 @@ import { CheckboxField } from "#components/forms/CheckboxField";
 import { CheckboxGroupField } from "#components/forms/CheckboxGroupField";
 import { ComboBoxField } from "#components/forms/ComboBoxField";
 import { EmailField } from "#components/forms/EmailField";
-import { FormSubsection } from "#components/forms/FormStep";
 import { LanguageSelectField } from "#components/forms/LanguageSelectField";
 import { LongTextField } from "#components/forms/LongTextField";
 import { MemorableDateField } from "#components/forms/MemorableDateField";
@@ -20,10 +19,10 @@ import { RadioGroupField } from "#components/forms/RadioGroupField";
 import { RepeatingEntry } from "#components/forms/RepeatingEntry";
 import { ShortTextField } from "#components/forms/ShortTextField";
 import { YesNoField } from "#components/forms/YesNoField";
+import { COMBO_BOX_SOURCES } from "#constants/comboBoxSources";
 import type { FieldName, FormData } from "#constants/fields";
-import { resolveText } from "../resolveStepContent";
-import { COMBO_BOX_SOURCES } from "./comboBoxSources";
-import { toChoices } from "./options";
+import { toChoices } from "#lib/forms/optionLabels";
+import { resolveText } from "#lib/forms/resolveStepContent";
 import type {
   BlockKind,
   BlockNode,
@@ -32,7 +31,8 @@ import type {
   FieldNode,
   ListFieldName,
   NodeKind,
-} from "./types";
+} from "#lib/forms/types";
+import { FormSubsection } from "./FormSubsection";
 
 /** What a field renderer receives: its node and the resolved label. */
 export interface FieldRendererProps<K extends FieldKind> {

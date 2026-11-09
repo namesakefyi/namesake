@@ -12,7 +12,7 @@ import {
   ADDRESS_FIELDS,
   type AddressNames,
   type AddressType,
-} from "#lib/forms/steps/fieldGroups";
+} from "#constants/fieldGroups";
 import {
   createLocationLoader,
   type GeoapifyResult,

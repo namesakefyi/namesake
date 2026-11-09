@@ -1,4 +1,4 @@
-import { NAME_FIELDS, type NameType } from "#lib/forms/steps/fieldGroups";
+import { NAME_FIELDS, type NameType } from "#constants/fieldGroups";
 import { ShortTextField } from "../ShortTextField/ShortTextField";
 import "./NameField.css";
 

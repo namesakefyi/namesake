@@ -3,13 +3,13 @@ import type { FormData } from "#constants/fields";
 import { defineForm } from "#lib/forms/defineForm";
 import { nameOrFallback } from "#lib/forms/resolveStepContent";
 import {
-  anyTrue,
+  anyOf,
   block,
   field,
   is,
   isFalse,
-  isNotTrue,
   isTrue,
+  not,
 } from "#lib/forms/steps";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
 
@@ -172,7 +172,7 @@ export default defineForm({
               when: isTrue("parentsHaveDifferentAddresses"),
             }),
           ],
-          { when: isNotTrue("parentsHaveUnknownAddresses") },
+          { when: not(isTrue("parentsHaveUnknownAddresses")) },
         ),
       ],
     },
@@ -415,11 +415,11 @@ export default defineForm({
           reviewLabel: "Interpreter needed for guardian?",
         }),
         block.subsection([field.languageSelect("language")], {
-          when: anyTrue(
-            "isInterpreterNeededForChild",
-            "isInterpreterNeededForParent1",
-            "isInterpreterNeededForParent2",
-            "isInterpreterNeededForGuardian",
+          when: anyOf(
+            isTrue("isInterpreterNeededForChild"),
+            isTrue("isInterpreterNeededForParent1"),
+            isTrue("isInterpreterNeededForParent2"),
+            isTrue("isInterpreterNeededForGuardian"),
           ),
         }),
       ],

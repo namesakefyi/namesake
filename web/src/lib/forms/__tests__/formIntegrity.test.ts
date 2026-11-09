@@ -2,20 +2,16 @@ import { describe, expect, it } from "vitest";
 import type { FieldName } from "#constants/fields";
 import type { FormConfig } from "#constants/forms";
 import type { PDFDefinition } from "#constants/pdf";
+import { traceReads } from "../conditions";
 import { getFormConfigs } from "../getFormConfig";
-import { traceReads } from "../steps/conditions";
-import {
-  expandLegacyFields,
-  getRootContext,
-  normalizeStep,
-  walkNodes,
-} from "../steps/normalize";
-import type { Condition } from "../steps/types";
+import { getStepFields } from "../getStepFields";
+import type { Condition, Step } from "../types";
+import { getRootContext, walkNodes } from "../walkNodes";
 
 /*
- * Integrity checks over every form's data. Each check reads the normalized
- * step model; resolvers and conditions are inspected by calling them with
- * recording proxies, never by parsing source.
+ * Integrity checks over every form's data. Each check reads the steps'
+ * fields and node trees; resolvers and conditions are inspected by calling
+ * them with recording proxies, never by parsing source.
  */
 
 const forms = Object.entries(getFormConfigs());
@@ -61,7 +57,7 @@ const SHARED_WRITERS: Record<string, Partial<Record<FieldName, string>>> = {};
 function getWrittenFields(config: FormConfig): Set<FieldName> {
   return new Set(
     config.steps.flatMap((step) =>
-      normalizeStep(step).fields.map((field) => field.id),
+      getStepFields(step).map((field) => field.id),
     ),
   );
 }
@@ -72,6 +68,39 @@ function getIncludedPdfs(config: FormConfig): PDFDefinition[] {
     if (!definition) throw new Error(`No PDF definition for ${pdfId}`);
     return definition;
   });
+}
+
+/** Fields read by a step's conditions and `block.display` nodes. */
+function getStepReads(step: Step): Set<FieldName> {
+  const reads = new Set<FieldName>();
+  const trace = (condition: Condition | undefined) => {
+    if (!condition) return;
+    for (const field of traceReads(condition)) reads.add(field);
+  };
+  trace(step.when);
+  walkNodes(step.body, getRootContext(step), (node) => {
+    if ("when" in node) trace(node.when);
+    if (node.type === "field") {
+      for (const written of node.writes) trace(written.when);
+    } else if (node.kind === "block.display") {
+      for (const field of node.reads) reads.add(field);
+    }
+  });
+  return reads;
+}
+
+/** How many `render` overrides and `block.custom` nodes a step uses. */
+function countFallbacks(step: Step): number {
+  let count = 0;
+  walkNodes(step.body, getRootContext(step), (node) => {
+    if (
+      node.kind === "block.custom" ||
+      (node.type === "field" && node.render)
+    ) {
+      count++;
+    }
+  });
+  return count;
 }
 
 /** Removes allowlisted findings and lists allowlist entries that went unused. */
@@ -135,7 +164,7 @@ describe("form integrity", () => {
         for (const field of traceReads(instruction.when)) read.add(field);
       }
       for (const step of config.steps) {
-        for (const field of normalizeStep(step).reads) read.add(field);
+        for (const field of getStepReads(step)) read.add(field);
         for (const text of [step.title, step.description]) {
           if (typeof text !== "function") continue;
           for (const field of traceReads(text)) read.add(field);
@@ -145,7 +174,7 @@ describe("form integrity", () => {
         (field) => !read.has(field),
       );
       const fallbacks = config.steps.reduce(
-        (total, step) => total + normalizeStep(step).fallbacks,
+        (total, step) => total + countFallbacks(step),
         0,
       );
       return unread.length > 0 || fallbacks > 0
@@ -181,24 +210,17 @@ describe("form integrity", () => {
 
         // Fields this step writes become known as the walk reaches them.
         check(step.when, "the step");
-        if (step.body) {
-          walkNodes(step.body, getRootContext(step), (node) => {
-            if ("when" in node) check(node.when, node.kind);
-            if (node.type === "field") {
-              for (const entry of node.writes) {
-                check(entry.when, entry.id);
-                known.add(entry.id);
-              }
-            } else if (node.kind === "block.custom") {
-              for (const id of node.writes) known.add(id);
+        walkNodes(step.body, getRootContext(step), (node) => {
+          if ("when" in node) check(node.when, node.kind);
+          if (node.type === "field") {
+            for (const entry of node.writes) {
+              check(entry.when, entry.id);
+              known.add(entry.id);
             }
-          });
-        } else {
-          for (const entry of expandLegacyFields(step.fields)) {
-            check(entry.when, entry.id);
-            known.add(entry.id);
+          } else if (node.kind === "block.custom") {
+            for (const id of node.writes) known.add(id);
           }
-        }
+        });
       }
     }
 
@@ -215,7 +237,7 @@ describe("form integrity", () => {
     const findings = forms.flatMap(([slug, config]) => {
       const writers = new Map<FieldName, string[]>();
       for (const step of config.steps) {
-        for (const { id } of normalizeStep(step).fields) {
+        for (const { id } of getStepFields(step)) {
           writers.set(id, [...(writers.get(id) ?? []), step.id]);
         }
       }

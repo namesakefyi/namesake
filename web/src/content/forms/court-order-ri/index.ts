@@ -1,8 +1,8 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineForm } from "#lib/forms/defineForm";
-import { allOf, block, field, is, isNotTrue, isTrue } from "#lib/forms/steps";
+import { allOf, block, field, is, isTrue, not } from "#lib/forms/steps";
 
-const isHoused = isNotTrue("isCurrentlyUnhoused");
+const isHoused = not(isTrue("isCurrentlyUnhoused"));
 
 export default defineForm({
   steps: [
@@ -62,10 +62,10 @@ export default defineForm({
         }),
         block.subsection([field.address("mailing")], {
           title: "What is your mailing address?",
-          when: allOf([
+          when: allOf(
             isHoused,
             isTrue("isMailingAddressDifferentFromResidence"),
-          ]),
+          ),
         }),
       ],
     },
@@ -115,7 +115,7 @@ export default defineForm({
     {
       id: "birth-certificate",
       title: "Do you want to update your Rhode Island birth certificate?",
-      when: allOf([is("birthplaceCountry", "US"), is("birthplaceState", "RI")]),
+      when: allOf(is("birthplaceCountry", "US"), is("birthplaceState", "RI")),
       body: [
         field.yesNo("shouldChangeBirthCertificate", {
           reviewLabel: "Update birth certificate?",

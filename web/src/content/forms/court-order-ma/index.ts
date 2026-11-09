@@ -1,8 +1,8 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineForm } from "#lib/forms/defineForm";
-import { allOf, block, field, is, isNotTrue, isTrue } from "#lib/forms/steps";
+import { allOf, block, field, is, isTrue, not } from "#lib/forms/steps";
 
-const isHoused = isNotTrue("isCurrentlyUnhoused");
+const isHoused = not(isTrue("isCurrentlyUnhoused"));
 
 export default defineForm({
   steps: [
@@ -100,10 +100,10 @@ export default defineForm({
         }),
         block.subsection([field.address("mailing", { address2: true })], {
           title: "What is your mailing address?",
-          when: allOf([
+          when: allOf(
             isHoused,
             isTrue("isMailingAddressDifferentFromResidence"),
-          ]),
+          ),
         }),
       ],
     },
