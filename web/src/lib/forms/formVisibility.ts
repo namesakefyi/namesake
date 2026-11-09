@@ -1,41 +1,23 @@
 import type { FieldName, FormData } from "#constants/fields";
 import type { FormPdfConfig } from "#constants/forms";
 import type { PDFId } from "#constants/pdf";
+import { expandLegacyFields, normalizeStep } from "./steps/normalize";
 import type { Field, Step } from "./types";
 
-type ExpandedField = {
-  id: FieldName;
-  when?: (data: Partial<FormData>) => boolean;
-};
-
-function expandFields(fields: readonly Field[]): ExpandedField[] {
-  const result: ExpandedField[] = [];
-  for (const f of fields) {
-    if (typeof f === "string") {
-      result.push({ id: f });
-    } else if ("id" in f) {
-      result.push({ id: f.id, when: f.when });
-    } else {
-      for (const id of f.ids) {
-        result.push({ id, when: f.when });
-      }
-    }
-  }
-  return result;
-}
-
-/** Extracts all field names from a step's fields array. */
+/** Extracts all field names from a legacy step's fields array. */
 export function getFieldNames(fields: readonly Field[]): FieldName[] {
-  return expandFields(fields).map((e) => e.id);
+  return expandLegacyFields(fields).map((entry) => entry.id);
 }
 
-/** Extracts all field names from form steps. */
+/** Extracts all field names written by form steps. */
 export function getFormFields(steps: readonly Step[]): FieldName[] {
-  return steps.flatMap((s) => getFieldNames(s.fields));
+  return steps.flatMap((step) =>
+    normalizeStep(step).fields.map((field) => field.id),
+  );
 }
 
 /**
- * Looks up a field's `when` predicate from the fields array.
+ * Looks up a field's `when` predicate from a legacy fields array.
  *
  * Returns the callback if the field is conditional, `null` if the field
  * exists but is unconditional (always visible), or `undefined` if the
@@ -45,10 +27,28 @@ export function getFieldWhen(
   fields: readonly Field[],
   fieldName: FieldName,
 ): ((data: Partial<FormData>) => boolean) | null | undefined {
-  const expanded = expandFields(fields);
-  const entry = expanded.find((e) => e.id === fieldName);
+  const entry = expandLegacyFields(fields).find(
+    (candidate) => candidate.id === fieldName,
+  );
   if (!entry) return undefined;
   return entry.when ?? null;
+}
+
+/**
+ * Whether a field a step writes is visible for the given answers, combining
+ * the step's, enclosing subsections' and the field's own conditions.
+ * Returns `false` if the step doesn't write the field.
+ */
+export function isStepFieldVisible(
+  step: Step,
+  fieldName: FieldName,
+  data: Partial<FormData>,
+): boolean {
+  const field = normalizeStep(step).fields.find(
+    (candidate) => candidate.id === fieldName,
+  );
+  if (!field) return false;
+  return !field.when || field.when(data);
 }
 
 export interface VisibilitySection {
@@ -94,8 +94,7 @@ export function resolveFormVisibility(
     visibleStepIds.push(step.id);
 
     const visibleFieldNames: FieldName[] = [];
-    const expanded = expandFields(step.fields);
-    for (const { id: fieldId, when } of expanded) {
+    for (const { id: fieldId, when } of normalizeStep(step).fields) {
       if (!when || when(formData)) {
         (visibleFields as Record<string, unknown>)[fieldId] = formData[fieldId];
         visibleFieldNames.push(fieldId);

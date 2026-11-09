@@ -13,6 +13,14 @@ export function nameOrFallback(
   return (typeof name === "string" && name.trim()) || fallback;
 }
 
+/** Resolves text that is either fixed or computed from the answers so far. */
+export function resolveText(
+  text: string | ((data: Partial<FormData>) => string),
+  data: Partial<FormData>,
+): string {
+  return typeof text === "function" ? text(data) : text;
+}
+
 /**
  * Resolves a step's title to a string, using form data when the title is dynamic.
  */
@@ -20,7 +28,7 @@ export function resolveTitle(
   step: Pick<Step, "title">,
   data: Partial<FormData>,
 ): string {
-  return typeof step.title === "function" ? step.title(data) : step.title;
+  return resolveText(step.title, data);
 }
 
 /**
@@ -30,6 +38,5 @@ export function resolveDescription(
   step: Pick<Step, "description">,
   data: Partial<FormData>,
 ): string | undefined {
-  const desc = step.description;
-  return typeof desc === "function" ? desc(data) : desc;
+  return step.description && resolveText(step.description, data);
 }

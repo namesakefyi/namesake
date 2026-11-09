@@ -1,3 +1,5 @@
+import { ALL } from "./all";
+
 export const FIELD_DEFS = [
   { name: "oldFirstName", label: "Old first name", type: "string" },
   { name: "oldMiddleName", label: "Old middle name", type: "string" },
@@ -857,6 +859,13 @@ export type FormData = {
 };
 
 export const COMMON_PRONOUNS = ["they/them", "she/her", "he/him"];
+
+/** Whether the pronoun selection calls for a free-text "other" answer. */
+export function shouldShowOtherPronouns(pronouns: unknown): boolean {
+  return (
+    pronouns === ALL || (Array.isArray(pronouns) && pronouns.includes("other"))
+  );
+}
 
 export const PREFER_NOT_TO_ANSWER = "preferNotToAnswer";
 export const DONT_KNOW = "dontKnow";

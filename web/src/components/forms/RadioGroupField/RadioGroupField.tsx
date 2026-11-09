@@ -19,7 +19,7 @@ export interface RadioGroupFieldProps extends RadioGroupProps {
   name: FieldName;
   label: string;
   labelHidden?: boolean;
-  options: RadioOption[];
+  options: readonly RadioOption[];
   includePreferNotToAnswer?: boolean;
 }
 

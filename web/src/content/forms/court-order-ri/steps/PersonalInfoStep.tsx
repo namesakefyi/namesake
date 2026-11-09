@@ -2,13 +2,7 @@ import { ComboBoxField } from "#components/forms/ComboBoxField";
 import { FormStep } from "#components/forms/FormStep";
 import { ShortTextField } from "#components/forms/ShortTextField";
 import { defineStep } from "#lib/forms/defineStep";
-
-const MARITAL_STATUS_OPTIONS = [
-  { label: "Single", value: "Single" },
-  { label: "Married", value: "Married" },
-  { label: "Divorced", value: "Divorced" },
-  { label: "Widowed", value: "Widowed" },
-];
+import { COMBO_BOX_SOURCES } from "#lib/forms/steps/comboBoxSources";
 
 export const personalInfoStep = defineStep({
   id: "personal-info",
@@ -21,7 +15,7 @@ export const personalInfoStep = defineStep({
         name="maritalStatus"
         label="Marital status (optional)"
         placeholder="Select marital status"
-        options={MARITAL_STATUS_OPTIONS}
+        options={COMBO_BOX_SOURCES.maritalStatus}
       />
     </FormStep>
   ),

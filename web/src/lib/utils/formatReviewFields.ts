@@ -1,5 +1,7 @@
 import { parseDate } from "@internationalized/date";
 import { FIELD_DEFS, type FieldName } from "#constants/fields";
+import { getOptionLabel } from "#lib/forms/steps/options";
+import type { OptionLabels } from "#lib/forms/steps/types";
 import { formatCurrency } from "./formatCurrency";
 
 /**
@@ -10,10 +12,13 @@ import { formatCurrency } from "./formatCurrency";
  * @example
  * formatFieldValue("dateOfBirth", "1990-06-15")
  * // "June 15, 1990"
+ *
+ * Pass `options` to label stored values with the step's own option labels.
  */
 export function formatFieldValue(
   fieldName: FieldName,
   value: any,
+  options?: OptionLabels,
 ): string | undefined {
   // Get the field definition to determine the type
   const fieldDef = FIELD_DEFS.find((def) => def.name === fieldName);
@@ -42,12 +47,13 @@ export function formatFieldValue(
         return nonEmpty.length > 0 ? nonEmpty.join(", ") : undefined;
       }
       return undefined;
-    default:
-      // Enum fields: map stored keys to human-readable labels
-      if ("options" in fieldDef) {
-        return (
-          (fieldDef.options as Record<string, string>)[value] ?? String(value)
-        );
+    default: {
+      // Fields with labeled options: map stored values to their labels
+      const labels: OptionLabels | undefined =
+        options ?? ("options" in fieldDef ? fieldDef.options : undefined);
+      if (labels) {
+        const option = labels[value];
+        return option === undefined ? String(value) : getOptionLabel(option);
       }
 
       // Currency fields: format as whole-dollar USD
@@ -66,6 +72,7 @@ export function formatFieldValue(
       }
 
       return String(value);
+    }
   }
 }
 

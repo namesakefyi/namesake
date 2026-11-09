@@ -12,3 +12,13 @@ export function getFormConfig(slug: string): FormConfig | undefined {
   if (!key) return undefined;
   return modules[key].default;
 }
+
+/** Every form's config, keyed by slug. */
+export function getFormConfigs(): Record<string, FormConfig> {
+  return Object.fromEntries(
+    Object.entries(modules).map(([path, module]) => [
+      path.split("/").at(-2) as string,
+      module.default,
+    ]),
+  );
+}

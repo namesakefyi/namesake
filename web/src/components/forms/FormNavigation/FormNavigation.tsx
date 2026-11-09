@@ -2,7 +2,7 @@ import { RiArrowLeftLine, RiArrowRightLine } from "@remixicon/react";
 import { memo } from "react";
 import { Button } from "../../common/Button";
 import { ProgressBar } from "../../common/ProgressBar";
-import { useFormStep } from "../FormContainer";
+import { useFormStep } from "../FormContainer/FormStepContext";
 import "./FormNavigation.css";
 import { Fragment } from "react/jsx-runtime";
 

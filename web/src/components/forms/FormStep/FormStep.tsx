@@ -2,7 +2,7 @@ import { RiArrowRightLine } from "@remixicon/react";
 import { Heading } from "react-aria-components";
 import { useFormContext } from "react-hook-form";
 import type { FieldName, FormData } from "#constants/fields";
-import { getFieldWhen } from "#lib/forms/formVisibility";
+import { isStepFieldVisible } from "#lib/forms/formVisibility";
 import {
   resolveDescription,
   resolveTitle,
@@ -11,7 +11,7 @@ import type { Step } from "#lib/forms/types";
 import { slugify } from "#lib/utils/slugify";
 import { smartquotes } from "#lib/utils/smartquotes";
 import { Button } from "../../common/Button";
-import { useFormStep } from "../FormContainer";
+import { useFormStep } from "../FormContainer/FormStepContext";
 import "./FormStep.css";
 import clsx from "clsx";
 import { useId } from "react";
@@ -20,7 +20,7 @@ import { useId } from "react";
  * Returns whether a specific field should be visible within a step, based on
  * the field's `when` predicate and the current live form values.
  *
- * Returns `false` if the field is not listed in the step's fields array.
+ * Returns `false` if the step doesn't write the field.
  * Returns `true` if the field has no `when` predicate (always visible).
  */
 export function useFieldVisible(
@@ -29,9 +29,7 @@ export function useFieldVisible(
 ): boolean {
   const form = useFormContext();
   const data = form.watch() as FormData;
-  const result = getFieldWhen(stepConfig.fields, fieldName);
-  if (result === undefined) return false;
-  return result === null || result(data);
+  return isStepFieldVisible(stepConfig, fieldName, data);
 }
 
 export interface FormStepProps {

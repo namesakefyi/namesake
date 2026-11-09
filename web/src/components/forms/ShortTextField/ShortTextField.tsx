@@ -1,17 +1,20 @@
 import { Controller, useFormContext } from "react-hook-form";
 import type { FieldName } from "#constants/fields";
+import { getLabelProps } from "#lib/utils/getLabelProps";
 import { smartquotes } from "#lib/utils/smartquotes";
 import { TextField, type TextFieldProps } from "../../common/TextField";
 import "./ShortTextField.css";
 
 export interface ShortTextFieldProps extends TextFieldProps {
   label: string;
+  labelHidden?: boolean;
   name: FieldName;
   children?: React.ReactNode;
 }
 
 export function ShortTextField({
   label,
+  labelHidden,
   name,
   children,
   defaultValue,
@@ -28,7 +31,7 @@ export function ShortTextField({
         render={({ field, fieldState: { invalid, error } }) => (
           <TextField
             {...field}
-            label={smartquotes(label)}
+            {...getLabelProps(smartquotes(label), labelHidden)}
             isInvalid={invalid}
             errorMessage={error?.message}
             {...props}

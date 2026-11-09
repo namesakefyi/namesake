@@ -18,7 +18,7 @@ export interface CheckboxGroupFieldProps extends CheckboxGroupProps {
   name: FieldName;
   label: string;
   labelHidden?: boolean;
-  options: CheckboxOption[];
+  options: readonly CheckboxOption[];
   includePreferNotToAnswer?: boolean;
 }
 

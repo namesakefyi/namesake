@@ -43,7 +43,7 @@ export function ComboBox<T extends object>({
     >
       {({ isInvalid, isRequired }) => (
         <>
-          <Label>{label}</Label>
+          {label && <Label>{label}</Label>}
           <div className="namesake-combobox-container">
             <Input
               placeholder={placeholder}
