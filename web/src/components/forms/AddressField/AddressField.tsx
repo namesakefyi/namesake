@@ -1,6 +1,7 @@
 import { type MaskitoOptions, maskitoTransform } from "@maskito/core";
 import { type Key, useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
+import { getCountyOptions, matchCounty } from "#constants/counties";
 import type { FieldName } from "#constants/fields";
 import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 import { ComboBox, ComboBoxItem } from "../../common/ComboBox";
@@ -15,11 +16,6 @@ import { Autocomplete } from "../../common/Autocomplete";
 import { MenuItem } from "../../common/Menu";
 
 type AddressType = "residence" | "mailing" | "parent1" | "parent2";
-
-interface CountyOption {
-  label: string;
-  value: string;
-}
 
 interface AddressNames {
   street: FieldName;
@@ -41,7 +37,6 @@ const FIELD_FOR_GEOAPIFY = {
 export function mapPlaceToFields(
   place: GeoapifyResult,
   names: AddressNames,
-  countyOptions?: readonly CountyOption[],
 ): Array<[FieldName, string]> {
   const updates: Array<[FieldName, string]> = [];
   for (const [source, key] of Object.entries(FIELD_FOR_GEOAPIFY) as [
@@ -53,7 +48,7 @@ export function mapPlaceToFields(
     const value = place[source] ?? "";
     updates.push([
       fieldName,
-      key === "county" && countyOptions ? value.replace(/ County$/, "") : value,
+      key === "county" ? matchCounty(place.state_code, value) : value,
     ]);
   }
   return updates;
@@ -63,9 +58,8 @@ export interface AddressFieldProps {
   children?: React.ReactNode;
   type: AddressType;
   includeAddress2?: boolean;
+  /** Shows a county dropdown for states with a county list, otherwise free text. */
   includeCounty?: boolean;
-  /** Use a searchable dropdown instead of free text for the county. */
-  countyOptions?: readonly CountyOption[];
 }
 
 export function AddressField({
@@ -73,7 +67,6 @@ export function AddressField({
   type,
   includeAddress2 = false,
   includeCounty = false,
-  countyOptions,
 }: AddressFieldProps) {
   const { control, getValues, setValue } = useFormContext();
 
@@ -108,6 +101,9 @@ export function AddressField({
     },
   };
 
+  const state = useWatch({ control, name: names[type].state });
+  const countyOptions = getCountyOptions(state);
+
   const street2Name = names[type].street2;
   const canAddAddress2 = includeAddress2 && !!street2Name;
   const [address2Expanded, setAddress2Expanded] = useState(
@@ -124,11 +120,7 @@ export function AddressField({
   const autocompleteAddress = (id: Key): void => {
     const place = list.items.find((i) => i.place_id === id);
     if (!place) return;
-    for (const [field, value] of mapPlaceToFields(
-      place,
-      names[type],
-      countyOptions,
-    )) {
+    for (const [field, value] of mapPlaceToFields(place, names[type])) {
       setValue(field, value, { shouldValidate: true, shouldDirty: true });
     }
     list.setFilterText("");

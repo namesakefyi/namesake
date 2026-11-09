@@ -71,8 +71,7 @@ describe("New York petition names and request type", () => {
 const complete: Partial<FormData> = {
   ...names,
   nyCourtOrderRequest: "Both",
-  courtType: "Supreme",
-  courtCounty: "Kings",
+  courtType: "Civil",
   dateOfBirth: "1990-06-15",
   residenceStreetAddress: "123 Example Street",
   residenceStreetAddress2: "Apt 4",
@@ -80,11 +79,9 @@ const complete: Partial<FormData> = {
   residenceState: "NY",
   residenceZipCode: "11201",
   residenceCounty: "Queens",
-  birthplaceStreetAddress: "1 Hospital Road",
   birthplaceCity: "Boston",
   birthplaceState: "MA",
   birthplaceCountry: "US",
-  birthplaceZipCode: "02108",
   hasBeenConvictedOfCrime: true,
   courtOfConviction: "Example Court",
   crime: "Example conviction",
@@ -176,15 +173,17 @@ describe("New York petition field mapping", () => {
 
   it.each(["dontKnow", "preferNotToAnswer"] as const)(
     "does not turn %s into a yes or no answer",
-    (answer) => {
-      const result = pdf.resolver(
-        visibleAnswers({
-          ...complete,
-          shouldSealCourtRecord: answer,
-        }),
-      );
-      expect(result.shouldSealCourtRecord).toBeUndefined();
-      expect(result.reasonToSealCourtRecord).toBeUndefined();
+    async (answer) => {
+      const form = await getPetitionForm({
+        ...complete,
+        shouldSealCourtRecord: answer,
+      });
+      expect(
+        form.getRadioGroup("shouldSealCourtRecord")?.getValue(),
+      ).toBeNull();
+      expect(
+        form.getTextField("reasonToSealCourtRecord")?.getValue() ?? "",
+      ).toBe("");
     },
   );
   it("fills every collected answer in the saved PDF", async () => {
@@ -192,13 +191,12 @@ describe("New York petition field mapping", () => {
     const expectedText = {
       currentLegalName: "Alex J Example",
       newFullName: "Taylor Example",
-      courtType: "Supreme",
-      county: "Kings",
+      courtType: "Civil",
+      county: "Queens",
       dateOfBirth: "06/15/1990",
       residenceAddress:
         "123 Example Street, Apt 4, Brooklyn, NY, 11201, United States",
-      placeOfBirth:
-        "1 Hospital Road, Boston, MA, 02108, United States of America",
+      placeOfBirth: "Boston, MA, United States of America",
       courtOfConviction: complete.courtOfConviction,
       crime: complete.crime,
       bankruptcyJudgmentsLiensDetails: complete.bankruptcyJudgmentsLiensDetails,
@@ -374,19 +372,24 @@ describe("New York petition field mapping", () => {
     );
   });
 
+  it("uses the chosen court in New York City and Supreme Court elsewhere", () => {
+    expect(pdf.resolver(visibleAnswers(complete)).courtType).toBe("Civil");
+    const outsideCity = pdf.resolver(
+      visibleAnswers({ ...complete, residenceCounty: "Albany" }),
+    );
+    expect(outsideCity.courtType).toBe("Supreme");
+    expect(outsideCity.county).toBe("Albany");
+  });
+
   it("uses the international birthplace region instead of a saved US state", () => {
     const result = pdf.resolver(
       visibleAnswers({
         ...complete,
-        birthplaceStreetAddress: "10 Example Road",
         birthplaceCity: "Toronto",
         birthplaceRegion: "Ontario",
         birthplaceCountry: "CA",
-        birthplaceZipCode: "M5V 1A1",
       }),
     );
-    expect(result.placeOfBirth).toBe(
-      "10 Example Road, Toronto, Ontario, M5V 1A1, Canada",
-    );
+    expect(result.placeOfBirth).toBe("Toronto, Ontario, Canada");
   });
 });

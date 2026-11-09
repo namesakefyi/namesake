@@ -2,7 +2,6 @@ import { defineForm } from "#lib/forms/defineForm";
 import { requestsNameChange } from "./conditions";
 import { addressStep } from "./steps/AddressStep";
 import { birthplaceStep } from "./steps/BirthplaceStep";
-import { childSupportStep } from "./steps/ChildSupportStep";
 import { convictionsStep } from "./steps/ConvictionsStep";
 import { courtCasesStep } from "./steps/CourtCasesStep";
 import { courtStep } from "./steps/CourtStep";
@@ -15,8 +14,8 @@ import { previousNamePetitionStep } from "./steps/PreviousNamePetitionStep";
 import { requestTypeStep } from "./steps/RequestTypeStep";
 import { sealRecordStep } from "./steps/SealRecordStep";
 import { sexDesignationStep } from "./steps/SexDesignationStep";
-import { spousalSupportStep } from "./steps/SpousalSupportStep";
 import { supportingDocumentsStep } from "./steps/SupportingDocumentsStep";
+import { supportPaymentsStep } from "./steps/SupportPaymentsStep";
 
 export default defineForm({
   steps: [
@@ -30,8 +29,7 @@ export default defineForm({
     convictionsStep,
     courtCasesStep,
     familyStep,
-    childSupportStep,
-    spousalSupportStep,
+    supportPaymentsStep,
     previousNamePetitionStep,
     nameReasonStep,
     sexDesignationStep,
@@ -45,5 +43,8 @@ export default defineForm({
     },
   ],
   downloadTitle: "New York Court Order",
-  instructions: [],
+  instructions: [
+    "Sign and date the petition in both places on the last page. You don’t need a notary.",
+    "File your petition with the court clerk in the county where you live.",
+  ],
 });

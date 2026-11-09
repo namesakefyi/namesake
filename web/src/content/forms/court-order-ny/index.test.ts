@@ -12,8 +12,7 @@ const nameSteps = [
   "convictions",
   "court-cases",
   "family",
-  "child-support",
-  "spousal-support",
+  "support-payments",
   "previous-name-petition",
   "name-reason",
 ];
@@ -22,7 +21,6 @@ const sharedSteps = [
   "current-name",
   "date-of-birth",
   "address",
-  "court",
   "seal-record",
   "supporting-documents",
 ];
@@ -52,6 +50,13 @@ describe("New York question flow", () => {
       expect(visibleStepIds.includes(id)).toBe(name);
     }
     expect(visibleStepIds.includes("sex-designation")).toBe(sex);
+  });
+
+  it("asks which court to file in only for New York City residents", () => {
+    const stepsFor = (residenceCounty: string) =>
+      resolve({ nyCourtOrderRequest: "Both", residenceCounty }).visibleStepIds;
+    expect(stepsFor("Kings")).toContain("court");
+    expect(stepsFor("Albany")).not.toContain("court");
   });
 
   it("excludes stale name-change answers when switching to sex designation only", () => {

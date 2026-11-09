@@ -27,6 +27,7 @@ export const supportingDocumentsStep = defineStep({
         <YesNoField
           name="hasAttachedSupportingDocuments"
           label="Are you attaching supporting documents or additional pages?"
+          labelHidden
         />
         <FormSubsection isVisible={detailsVisible}>
           <LongTextField

@@ -702,13 +702,6 @@ export const FIELD_DEFS = [
     type: "string",
   },
   { name: "courtType", label: "Court type", type: "string" },
-  { name: "courtCounty", label: "Court county", type: "string" },
-  {
-    name: "birthplaceStreetAddress",
-    label: "Street address of birth",
-    type: "string",
-  },
-  { name: "birthplaceZipCode", label: "Postal code of birth", type: "string" },
   {
     name: "hasBeenConvictedOfCrime",
     label: "Ever convicted of a crime?",

@@ -139,24 +139,11 @@ for (const request of [
 
     await test.step("Court", async () => {
       await expect(
-        page.getByRole("heading", { name: "Which court are you filing in?" }),
+        page.getByRole("heading", {
+          name: "Which court would you like to file in?",
+        }),
       ).toBeVisible();
-      await page
-        .getByRole("textbox", { name: "Court", exact: true })
-        .fill("Supreme");
-      await expect(
-        page.getByRole("link", { name: "New York Courts court locator" }),
-      ).toHaveAttribute("href", "https://www.nycourts.gov/court-locator");
-      const county = page.getByRole("combobox", {
-        name: "County",
-        exact: true,
-      });
-      await county.click();
-      await county.pressSequentially("Brooklyn");
-      await page
-        .getByRole("option", { name: "Kings (Brooklyn)", exact: true })
-        .click();
-      await expect(county).toHaveValue("Kings (Brooklyn)");
+      await page.getByText("Civil Court", { exact: true }).click();
       await next();
     });
 
@@ -172,6 +159,11 @@ for (const request of [
         await expect(
           page.getByRole("heading", {
             name: "Have you ever been convicted of a crime?",
+          }),
+        ).toBeVisible();
+        await expect(
+          page.getByText("A crime is a misdemeanor or felony.", {
+            exact: false,
           }),
         ).toBeVisible();
         await page.getByText("Yes", { exact: true }).click();
@@ -203,18 +195,14 @@ for (const request of [
         await next();
       });
 
-      await test.step("Child support", async () => {
+      await test.step("Child and spousal support", async () => {
         await expect(
           page.getByRole("heading", {
-            name: "Do you have to pay child support?",
+            name: "Do you have to pay child or spousal support?",
           }),
         ).toBeVisible();
-        await next();
-      });
-
-      await test.step("Spousal support", async () => {
         await expect(
-          page.getByRole("heading", {
+          page.getByRole("radiogroup", {
             name: "Do you have to pay spousal support?",
           }),
         ).toBeVisible();
@@ -233,7 +221,7 @@ for (const request of [
       await test.step("Reason for name change", async () => {
         await expect(
           page.getByRole("heading", {
-            name: "What are your reasons for changing your name?",
+            name: "Why are you changing your name?",
           }),
         ).toBeVisible();
         await expect(
@@ -253,20 +241,14 @@ for (const request of [
             name: "What is your new sex designation?",
           }),
         ).toBeVisible();
-        await page
-          .getByRole("button", { name: "Show suggestions New sex designation" })
-          .click();
-        await expect(page.getByRole("option")).toHaveText(["M", "F", "X"]);
-        await page.getByRole("option", { name: "X", exact: true }).click();
-        await expect(
-          page.getByRole("combobox", {
-            name: "New sex designation",
-            exact: true,
-          }),
-        ).toHaveValue("X");
+        const sexDesignation = page.getByRole("radiogroup", {
+          name: "New sex designation",
+        });
+        await expect(sexDesignation.getByRole("radio")).toHaveCount(3);
+        await sexDesignation.getByText("X", { exact: true }).click();
         await page
           .getByRole("radiogroup", {
-            name: "Would you like to include your reasons?",
+            name: "Would you like to include your reasons for changing your sex designation?",
           })
           .getByText("No", { exact: true })
           .click();
@@ -282,16 +264,20 @@ for (const request of [
     await test.step("Seal court record", async () => {
       await expect(
         page.getByRole("heading", {
-          name: "Would you like the court record sealed for your personal safety?",
+          name: "Would you like your court record sealed?",
         }),
       ).toBeVisible();
       await expect(
         page.getByText(
-          "The clerk will temporarily keep your name and case information private",
+          "Your case is automatically kept private until the judge makes a decision.",
           { exact: false },
         ),
       ).toBeVisible();
-      await page.getByText("Yes", { exact: true }).click();
+      await page
+        .getByText("Yes, ask the court to keep my record sealed", {
+          exact: true,
+        })
+        .click();
       await expect(
         page.getByText("What do I write?", { exact: true }),
       ).toBeVisible();
@@ -331,7 +317,7 @@ for (const request of [
         page.getByText("Residence county: Kings", { exact: true }),
       ).toBeVisible();
       await expect(
-        page.getByText("Court county: Kings", { exact: true }),
+        page.getByText("Court type: Civil", { exact: true }),
       ).toBeVisible();
       // Reopening the draft resumes at review with saved answers.
       await page.reload();

@@ -1,38 +1,26 @@
-import { Banner } from "#components/common/Banner";
-import { ComboBoxField } from "#components/forms/ComboBoxField";
 import { FormStep } from "#components/forms/FormStep";
-import { ShortTextField } from "#components/forms/ShortTextField";
-import { NEW_YORK_COUNTY_OPTIONS } from "#constants/newYorkCounties";
+import { RadioGroupField } from "#components/forms/RadioGroupField";
 import { defineStep } from "#lib/forms/defineStep";
+import { livesInNewYorkCity } from "../conditions";
 
 export const courtStep = defineStep({
   id: "court",
-  title: "Which court are you filing in?",
-  fields: ["courtType", "courtCounty"],
+  title: "Which court would you like to file in?",
+  description:
+    "Because you live in New York City, you can file your petition in Civil Court or Supreme Court in your borough. We recommend Civil Court, which has a lower filing fee.",
+  when: livesInNewYorkCity,
+  fields: ["courtType"],
   component: ({ stepConfig }) => {
     return (
       <FormStep stepConfig={stepConfig}>
-        <Banner>
-          <p>
-            You can file your name change petition with the Supreme Court county
-            clerk in the county where you live. If you live in New York City,
-            you can also file in any NYC Civil Court, which has a lower filing
-            fee.
-          </p>
-          <p>
-            Use the{" "}
-            <a href="https://www.nycourts.gov/court-locator">
-              New York Courts court locator
-            </a>{" "}
-            to find a court near you.
-          </p>
-        </Banner>
-        <ShortTextField name="courtType" label="Court" />
-        <ComboBoxField
-          name="courtCounty"
-          label="County"
-          placeholder="Select a county"
-          options={NEW_YORK_COUNTY_OPTIONS}
+        <RadioGroupField
+          name="courtType"
+          label="Court"
+          labelHidden
+          options={[
+            { value: "Civil", label: "Civil Court" },
+            { value: "Supreme", label: "Supreme Court" },
+          ]}
         />
       </FormStep>
     );

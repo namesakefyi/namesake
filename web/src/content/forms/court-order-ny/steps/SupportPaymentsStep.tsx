@@ -9,9 +9,9 @@ import { YesNoField } from "#components/forms/YesNoField";
 import { defineStep } from "#lib/forms/defineStep";
 import { requestsNameChange } from "../conditions";
 
-export const childSupportStep = defineStep({
-  id: "child-support",
-  title: "Do you have to pay child support?",
+export const supportPaymentsStep = defineStep({
+  id: "support-payments",
+  title: "Do you have to pay child or spousal support?",
   when: requestsNameChange,
   fields: [
     "paysChildSupport",
@@ -29,15 +29,37 @@ export const childSupportStep = defineStep({
         data.paysChildSupport === true &&
         data.areChildSupportPaymentsUpToDate === false,
     },
+    "paysSpousalSupport",
+    {
+      ids: [
+        "areSpousalSupportPaymentsUpToDate",
+        "courtIssuingSpousalSupportOrder",
+      ],
+      when: (data) => data.paysSpousalSupport === true,
+    },
+    {
+      id: "spousalSupportArrearsAmount",
+      when: (data) =>
+        data.paysSpousalSupport === true &&
+        data.areSpousalSupportPaymentsUpToDate === false,
+    },
   ],
   component: ({ stepConfig }) => {
-    const detailsVisible = useFieldVisible(
+    const childDetailsVisible = useFieldVisible(
       stepConfig,
       "areChildSupportPaymentsUpToDate",
     );
-    const arrearsVisible = useFieldVisible(
+    const childArrearsVisible = useFieldVisible(
       stepConfig,
       "childSupportArrearsAmount",
+    );
+    const spousalDetailsVisible = useFieldVisible(
+      stepConfig,
+      "areSpousalSupportPaymentsUpToDate",
+    );
+    const spousalArrearsVisible = useFieldVisible(
+      stepConfig,
+      "spousalSupportArrearsAmount",
     );
     return (
       <FormStep stepConfig={stepConfig}>
@@ -45,15 +67,15 @@ export const childSupportStep = defineStep({
           name="paysChildSupport"
           label="Do you have to pay child support?"
         />
-        <FormSubsection isVisible={detailsVisible}>
+        <FormSubsection isVisible={childDetailsVisible}>
           <YesNoField
             name="areChildSupportPaymentsUpToDate"
             label="Are your child support payments up to date?"
           />
-          <FormSubsection isVisible={arrearsVisible}>
+          <FormSubsection isVisible={childArrearsVisible}>
             <NumberField
               name="childSupportArrearsAmount"
-              label="Amount owed"
+              label="Child support owed"
               minValue={0}
               formatOptions={{ style: "currency", currency: "USD" }}
             />
@@ -65,6 +87,28 @@ export const childSupportStep = defineStep({
           <ShortTextField
             name="supportCollectionsUnit"
             label="Child Support Collections Unit"
+          />
+        </FormSubsection>
+        <YesNoField
+          name="paysSpousalSupport"
+          label="Do you have to pay spousal support?"
+        />
+        <FormSubsection isVisible={spousalDetailsVisible}>
+          <YesNoField
+            name="areSpousalSupportPaymentsUpToDate"
+            label="Are your spousal support payments up to date?"
+          />
+          <FormSubsection isVisible={spousalArrearsVisible}>
+            <NumberField
+              name="spousalSupportArrearsAmount"
+              label="Spousal support owed"
+              minValue={0}
+              formatOptions={{ style: "currency", currency: "USD" }}
+            />
+          </FormSubsection>
+          <ShortTextField
+            name="courtIssuingSpousalSupportOrder"
+            label="Court that issued the spousal support order"
           />
         </FormSubsection>
       </FormStep>

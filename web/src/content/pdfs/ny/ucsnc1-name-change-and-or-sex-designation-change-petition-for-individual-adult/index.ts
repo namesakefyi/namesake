@@ -1,5 +1,4 @@
 import { COUNTRIES } from "#constants/countries";
-import type { FormData } from "#constants/fields";
 import {
   requestsNameChange,
   requestsSexDesignationChange,
@@ -12,10 +11,6 @@ import { joinNames } from "#lib/utils/joinNames";
 import type { PdfFieldName } from "./schema";
 import pdf from "./ucsnc1-name-change-and-or-sex-designation-change-petition-for-individual-adult.pdf";
 
-// An unanswered question must not become a "No" answer.
-const yesNo = (answer?: FormData["shouldSealCourtRecord"]) =>
-  answer === true ? "Yes" : answer === false ? "No" : undefined;
-
 export default definePdf<PdfFieldName>({
   id: "ucsnc1-name-change-and-or-sex-designation-change-petition-for-individual-adult",
   title:
@@ -27,17 +22,17 @@ export default definePdf<PdfFieldName>({
   resolver: (data) => {
     const age = deriveCurrentAge(data.dateOfBirth);
     const residence = formatAddress({
-      street: [data.residenceStreetAddress, data.residenceStreetAddress2]
-        .filter(Boolean)
-        .join(", "),
+      street: data.residenceStreetAddress,
+      street2: data.residenceStreetAddress2,
       city: data.residenceCity,
-      state: data.residenceState?.toUpperCase(),
+      state: data.residenceState,
       zip: data.residenceZipCode,
     });
 
     return {
-      courtType: data.courtType,
-      county: data.courtCounty,
+      // Only New York City residents are asked; everyone else files in Supreme Court.
+      courtType: data.courtType ?? "Supreme",
+      county: data.residenceCounty,
       currentLegalName: joinNames(
         data.oldFirstName,
         data.oldMiddleName,
@@ -52,36 +47,29 @@ export default definePdf<PdfFieldName>({
         data.newMiddleName,
         data.newLastName,
       ),
-      placeOfBirth: [
-        data.birthplaceStreetAddress,
-        data.birthplaceCity,
-        data.birthplaceState?.toUpperCase() ?? data.birthplaceRegion,
-        data.birthplaceZipCode,
-        data.birthplaceCountry ? COUNTRIES[data.birthplaceCountry] : undefined,
-      ]
-        .filter(Boolean)
-        .join(", "),
-      hasBeenConvictedOfCrime: yesNo(data.hasBeenConvictedOfCrime),
+      placeOfBirth: formatAddress({
+        city: data.birthplaceCity,
+        state: data.birthplaceState,
+        region: data.birthplaceRegion,
+        country: data.birthplaceCountry && COUNTRIES[data.birthplaceCountry],
+      }),
+      hasBeenConvictedOfCrime: data.hasBeenConvictedOfCrime,
       courtOfConviction: data.courtOfConviction,
       crime: data.crime,
-      hasFiledForBankruptcy: yesNo(data.hasFiledForBankruptcy),
-      hasJudgmentsOrLiens: yesNo(data.hasJudgmentsOrLiens),
-      isPartyToLawsuitOrCourtCase: yesNo(data.isPartyToLawsuitOrCourtCase),
+      hasFiledForBankruptcy: data.hasFiledForBankruptcy,
+      hasJudgmentsOrLiens: data.hasJudgmentsOrLiens,
+      isPartyToLawsuitOrCourtCase: data.isPartyToLawsuitOrCourtCase,
       bankruptcyJudgmentsLiensDetails: data.bankruptcyJudgmentsLiensDetails,
-      isCurrentlyMarried: yesNo(data.isCurrentlyMarried),
-      wasPreviouslyMarried: yesNo(data.wasPreviouslyMarried),
-      hasChildrenUnder21: yesNo(data.hasChildrenUnder21),
-      paysChildSupport: yesNo(data.paysChildSupport),
-      areChildSupportPaymentsUpToDate: yesNo(
-        data.areChildSupportPaymentsUpToDate,
-      ),
+      isCurrentlyMarried: data.isCurrentlyMarried,
+      wasPreviouslyMarried: data.wasPreviouslyMarried,
+      hasChildrenUnder21: data.hasChildrenUnder21,
+      paysChildSupport: data.paysChildSupport,
+      areChildSupportPaymentsUpToDate: data.areChildSupportPaymentsUpToDate,
       childSupportArrearsAmount: data.childSupportArrearsAmount,
       courtIssuingChildSupportOrder: data.courtIssuingChildSupportOrder,
       supportCollectionsUnit: data.supportCollectionsUnit,
-      paysSpousalSupport: yesNo(data.paysSpousalSupport),
-      areSpousalSupportPaymentsUpToDate: yesNo(
-        data.areSpousalSupportPaymentsUpToDate,
-      ),
+      paysSpousalSupport: data.paysSpousalSupport,
+      areSpousalSupportPaymentsUpToDate: data.areSpousalSupportPaymentsUpToDate,
       spousalSupportArrearsAmount: data.spousalSupportArrearsAmount,
       courtIssuingSpousalSupportOrder: data.courtIssuingSpousalSupportOrder,
       hasPreviousNameChangeTrue: data.hasPreviouslyFiledNameChange === true,
@@ -90,25 +78,20 @@ export default definePdf<PdfFieldName>({
       reasonForChangingName: data.reasonForChangingName,
 
       newGender: data.newGender,
-      hasPreviouslyFiledSexDesignationChange: yesNo(
+      hasPreviouslyFiledSexDesignationChange:
         data.hasPreviouslyFiledSexDesignationChange,
-      ),
       previouslyFiledSexDesignationChangeDetails:
         data.previouslyFiledSexDesignationChangeDetails,
-      isProvidingReasonForGenderChange: yesNo(
-        data.isProvidingReasonForGenderChange,
-      ),
+      isProvidingReasonForGenderChange: data.isProvidingReasonForGenderChange,
       reasonForGenderChange: data.reasonForGenderChange,
 
       // Section C: all applicants. The address step collects US addresses.
       currentAge: age >= 0 ? String(age) : undefined,
       dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
       residenceAddress: residence ? `${residence}, United States` : undefined,
-      shouldSealCourtRecord: yesNo(data.shouldSealCourtRecord),
+      shouldSealCourtRecord: data.shouldSealCourtRecord,
       reasonToSealCourtRecord: data.reasonToSealCourtRecord,
-      hasAttachedSupportingDocuments: yesNo(
-        data.hasAttachedSupportingDocuments,
-      ),
+      hasAttachedSupportingDocuments: data.hasAttachedSupportingDocuments,
       supportingDocumentsDetails: data.supportingDocumentsDetails,
 
       // Completed by the court or by the petitioner when signing.

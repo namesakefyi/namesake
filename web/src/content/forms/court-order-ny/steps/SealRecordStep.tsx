@@ -10,9 +10,9 @@ import { defineStep } from "#lib/forms/defineStep";
 
 export const sealRecordStep = defineStep({
   id: "seal-record",
-  title: "Would you like the court record sealed for your personal safety?",
+  title: "Would you like your court record sealed?",
   description:
-    "The clerk will temporarily keep your name and case information private until the judge makes a final decision. You can also ask the court to seal the record for your personal safety.",
+    "Your case is automatically kept private until the judge makes a decision. If public access to your record could put your safety at risk, you can ask the court to keep it sealed after that, too.",
   fields: [
     "shouldSealCourtRecord",
     {
@@ -30,6 +30,9 @@ export const sealRecordStep = defineStep({
         <YesNoField
           name="shouldSealCourtRecord"
           label="Should this court record be sealed for your personal safety?"
+          labelHidden
+          yesLabel="Yes, ask the court to keep my record sealed"
+          noLabel="No, it’s okay for my record to be public after the decision"
         />
         <FormSubsection isVisible={reasonVisible}>
           <LongTextField

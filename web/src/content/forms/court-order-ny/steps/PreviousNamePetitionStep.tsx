@@ -29,6 +29,7 @@ export const previousNamePetitionStep = defineStep({
         <YesNoField
           name="hasPreviouslyFiledNameChange"
           label="Have you ever filed a name change petition before?"
+          labelHidden
         />
         <FormSubsection isVisible={detailsVisible}>
           <LongTextField

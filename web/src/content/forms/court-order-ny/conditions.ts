@@ -7,3 +7,15 @@ export const requestsNameChange = (data: Partial<FormData>) =>
 export const requestsSexDesignationChange = (data: Partial<FormData>) =>
   data.nyCourtOrderRequest === "Sex designation change" ||
   data.nyCourtOrderRequest === "Both";
+
+/** Counties that make up New York City's five boroughs. */
+const NEW_YORK_CITY_COUNTIES = [
+  "Bronx",
+  "Kings",
+  "New York",
+  "Queens",
+  "Richmond",
+];
+
+export const livesInNewYorkCity = (data: Partial<FormData>) =>
+  NEW_YORK_CITY_COUNTIES.includes(data.residenceCounty ?? "");

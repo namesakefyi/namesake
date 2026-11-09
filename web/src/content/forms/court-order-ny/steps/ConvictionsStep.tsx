@@ -12,6 +12,8 @@ import { requestsNameChange } from "../conditions";
 export const convictionsStep = defineStep({
   id: "convictions",
   title: "Have you ever been convicted of a crime?",
+  description:
+    "A crime is a misdemeanor or felony. Traffic tickets and violations, like disorderly conduct, aren’t crimes.",
   when: requestsNameChange,
   fields: [
     "hasBeenConvictedOfCrime",
@@ -27,6 +29,7 @@ export const convictionsStep = defineStep({
         <YesNoField
           name="hasBeenConvictedOfCrime"
           label="Have you ever been convicted of a crime?"
+          labelHidden
         />
         <FormSubsection isVisible={detailsVisible}>
           <ShortTextField
