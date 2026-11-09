@@ -167,7 +167,7 @@ export default definePdf<PdfFieldName>({
     newMiddleName: data.newMiddleName,
     newLastName: data.newLastName,
 
-    // 14. Reason for changing name
+    // 14. Reason for name change
     reasonForChangingName: data.reasonForChangingName,
 
     // 15. Text-only

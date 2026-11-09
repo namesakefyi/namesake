@@ -46,11 +46,10 @@ export function FormReviewTable({ steps }: FormReviewTableProps) {
           return {
             fieldName,
             label: smartquotes(resolveText(modelField.reviewLabel, formData)),
-            value: formatFieldValue(
-              fieldName,
-              formData[fieldName],
-              modelField.options,
-            ),
+            value: formatFieldValue(fieldName, formData[fieldName], {
+              options: modelField.options,
+              currency: modelField.currency,
+            }),
           };
         }),
       };

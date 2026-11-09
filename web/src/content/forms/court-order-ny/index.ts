@@ -1,6 +1,6 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineForm } from "#lib/forms/defineForm";
-import { block, field, is, isFalse, isTrue } from "#lib/forms/steps";
+import { anyTrue, block, field, is, isFalse, isTrue } from "#lib/forms/steps";
 import {
   livesInNewYorkCity,
   requestsNameChange,
@@ -150,10 +150,11 @@ export default defineForm({
             }),
           ],
           {
-            when: (data) =>
-              data.hasFiledForBankruptcy === true ||
-              data.hasJudgmentsOrLiens === true ||
-              data.isPartyToLawsuitOrCourtCase === true,
+            when: anyTrue(
+              "hasFiledForBankruptcy",
+              "hasJudgmentsOrLiens",
+              "isPartyToLawsuitOrCourtCase",
+            ),
           },
         ),
       ],
@@ -198,7 +199,7 @@ export default defineForm({
                   label: "Child support owed",
                   reviewLabel: "Child support amount owed",
                   min: 0,
-                  currency: "cents",
+                  currency: true,
                 }),
               ],
               { when: isFalse("areChildSupportPaymentsUpToDate") },
@@ -229,7 +230,7 @@ export default defineForm({
                   label: "Spousal support owed",
                   reviewLabel: "Spousal support amount owed",
                   min: 0,
-                  currency: "cents",
+                  currency: true,
                 }),
               ],
               { when: isFalse("areSpousalSupportPaymentsUpToDate") },
@@ -270,7 +271,6 @@ export default defineForm({
       body: [
         field.longText("reasonForChangingName", {
           label: "Reason for name change",
-          reviewLabel: "Reason for changing name",
         }),
         block.display(NameChangeReasonBanner),
       ],

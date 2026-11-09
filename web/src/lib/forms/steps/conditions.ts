@@ -22,6 +22,19 @@ export function isFalse(field: BooleanFieldName): Condition {
   return withDeps((data) => data[field] === false, [field]);
 }
 
+/** True unless the field is `true`, so unanswered counts too. */
+export function isNotTrue(field: BooleanFieldName): Condition {
+  return withDeps((data) => data[field] !== true, [field]);
+}
+
+/** True when any of the fields is `true`. */
+export function anyTrue(...fields: readonly BooleanFieldName[]): Condition {
+  return withDeps(
+    (data) => fields.some((field) => data[field] === true),
+    fields,
+  );
+}
+
 /**
  * Declares fields a predicate reads that tracing can miss, such as a field
  * read only after `&&` or `||` short-circuits.

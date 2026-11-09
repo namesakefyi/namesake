@@ -1,8 +1,23 @@
 export { block, field } from "./builders";
-export { is, isFalse, isTrue, withDeps } from "./conditions";
+export {
+  allOf,
+  anyTrue,
+  is,
+  isFalse,
+  isNotTrue,
+  isTrue,
+  withDeps,
+} from "./conditions";
 export {
   type ModelField,
   normalizeStep,
   type StepModel,
 } from "./normalize";
-export type { Condition, StepNode } from "./types";
+export type {
+  BooleanFieldName,
+  Condition,
+  StepNode,
+  StringFieldName,
+  Text,
+  TextFieldName,
+} from "./types";

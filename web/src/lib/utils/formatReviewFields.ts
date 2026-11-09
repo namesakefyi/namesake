@@ -13,12 +13,13 @@ import { formatCurrency } from "./formatCurrency";
  * formatFieldValue("dateOfBirth", "1990-06-15")
  * // "June 15, 1990"
  *
- * Pass `options` to label stored values with the step's own option labels.
+ * Pass the step's `options` to label stored values, and `currency` to show
+ * amounts as dollars.
  */
 export function formatFieldValue(
   fieldName: FieldName,
   value: any,
-  options?: OptionLabels,
+  { options, currency }: { options?: OptionLabels; currency?: boolean } = {},
 ): string | undefined {
   // Get the field definition to determine the type
   const fieldDef = FIELD_DEFS.find((def) => def.name === fieldName);
@@ -35,6 +36,14 @@ export function formatFieldValue(
     return undefined;
   }
 
+  // Fields with labeled options show the label of each stored value
+  const labels: OptionLabels | undefined =
+    options ?? ("options" in fieldDef ? fieldDef.options : undefined);
+  const labelOf = (item: unknown) => {
+    const option = labels?.[String(item)];
+    return option === undefined ? String(item) : getOptionLabel(option);
+  };
+
   // Format based on type
   switch (fieldDef.type) {
     case "boolean":
@@ -43,27 +52,18 @@ export function formatFieldValue(
 
     case "string[]":
       if (Array.isArray(value)) {
-        const nonEmpty = value
-          .filter(Boolean)
-          .map((item) =>
-            options?.[item] === undefined
-              ? item
-              : getOptionLabel(options[item]),
-          );
+        const nonEmpty = value.filter(Boolean).map(labelOf);
         return nonEmpty.length > 0 ? nonEmpty.join(", ") : undefined;
       }
       return undefined;
     default: {
-      // Fields with labeled options: map stored values to their labels
-      const labels: OptionLabels | undefined =
-        options ?? ("options" in fieldDef ? fieldDef.options : undefined);
-      if (labels) {
-        const option = labels[value];
-        return option === undefined ? String(value) : getOptionLabel(option);
-      }
+      if (labels) return labelOf(value);
 
-      // Currency fields: format as whole-dollar USD
-      if ("format" in fieldDef && fieldDef.format === "currency") {
+      // Currency fields: format as USD
+      if (
+        currency ||
+        ("format" in fieldDef && fieldDef.format === "currency")
+      ) {
         return formatCurrency(value);
       }
 

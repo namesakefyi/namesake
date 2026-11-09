@@ -25,6 +25,7 @@ import type {
   FieldPropsByKind,
   ListFieldName,
   NoteNode,
+  OptionalText,
   OptionLabels,
   Options,
   StepNode,
@@ -167,15 +168,11 @@ export const field = {
     });
   },
 
-  /**
-   * `EmailField`: labeled "Email address" unless `label` is given, and
-   * "Email" in the review table.
-   */
+  /** `EmailField`: labeled "Email address" unless `label` is given. */
   email<W extends StringFieldName>(name: W, options: LabelOptions = {}) {
     return singleField("field.email", name, {
       ...options,
       label: options.label ?? "Email address",
-      reviewLabel: options.reviewLabel ?? (options.label ? undefined : "Email"),
     });
   },
 
@@ -278,6 +275,17 @@ export type AddressWrites<T extends AddressType, O> =
   | (O extends { address2: true } ? AddressPartField<T, "street2"> : never)
   | (O extends { county: true } ? AddressPartField<T, "county"> : never);
 
+interface DisplayOptions<P> {
+  reads?: readonly FieldName[];
+  props?: P;
+}
+
+/** `props` is required when the component has required props. */
+type DisplayArguments<P> =
+  Record<never, never> extends P
+    ? [options?: DisplayOptions<P>]
+    : [options: DisplayOptions<P> & { props: P }];
+
 /** Builders for nodes that write no data. */
 export const block = {
   /** `Banner`: a callout. `content` is markdown. */
@@ -291,7 +299,7 @@ export const block = {
   /** `FormSubsection`: a group of nodes with an optional title. */
   subsection(
     children: readonly StepNode[],
-    options?: { title?: Text; when?: Condition },
+    options?: { title?: OptionalText; when?: Condition },
   ): SubsectionNode {
     return { type: "block", kind: "block.subsection", children, ...options };
   },
@@ -307,8 +315,9 @@ export const block = {
    */
   display<P extends object>(
     component: ComponentType<P>,
-    { reads = [], props }: { reads?: readonly FieldName[]; props?: P } = {},
+    ...[options]: DisplayArguments<P>
   ): DisplayNode {
+    const { reads = [], props } = (options ?? {}) as DisplayOptions<P>;
     return { type: "block", kind: "block.display", component, props, reads };
   },
 

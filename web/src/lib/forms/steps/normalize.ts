@@ -1,5 +1,6 @@
 import { FIELD_DEFS, type FieldName } from "#constants/fields";
 import { getFieldLabel } from "#lib/utils/formatReviewFields";
+import { resolveText } from "../resolveStepContent";
 import type { Field, Step } from "../types";
 import { allOf, traceReads } from "./conditions";
 import type {
@@ -17,6 +18,8 @@ export interface ModelField {
   /** Step, enclosing subsection and node conditions combined. */
   when?: Condition;
   options?: OptionLabels;
+  /** Shown as US dollars in the review table. */
+  currency?: boolean;
   reviewLabel: Text;
 }
 
@@ -48,16 +51,25 @@ export interface NodeContext {
   title: Text;
 }
 
+/** The context a step's top-level nodes sit in. */
+export function getRootContext(step: Step): NodeContext {
+  return { conditions: [], title: step.title };
+}
+
 /** The context a subsection's children sit in. */
 export function getChildContext(
   node: SubsectionNode,
   context: NodeContext,
 ): NodeContext {
+  const { title } = node;
   return {
     conditions: node.when
       ? [...context.conditions, node.when]
       : context.conditions,
-    title: node.title ?? context.title,
+    title:
+      typeof title === "function"
+        ? (data) => title(data) ?? resolveText(context.title, data)
+        : (title ?? context.title),
   };
 }
 
@@ -145,6 +157,7 @@ function normalizeBody(step: Step & { body: readonly StepNode[] }) {
             id: written.id,
             when: allOf([step.when, ...enclosing, node.when, written.when]),
             options: written.options,
+            currency: node.kind === "field.number" && !!node.props.currency,
             reviewLabel: written.reviewLabel ?? node.reviewLabel ?? label,
           });
         }

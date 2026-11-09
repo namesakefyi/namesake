@@ -1,14 +1,16 @@
 import { FormCostsTable } from "#components/forms/CostsTable";
 import { defineForm } from "#lib/forms/defineForm";
-import { block, field, is, isTrue, type StepNode } from "#lib/forms/steps";
-import type {
-  BooleanFieldName,
-  StringFieldName,
-  TextFieldName,
-} from "#lib/forms/steps/types";
-import { PovertyResult } from "./PovertyResult";
-
-const MTPC_ASSISTANCE_URL = "https://www.masstpc.org/what-we-do/ida-network/";
+import {
+  type BooleanFieldName,
+  block,
+  field,
+  is,
+  isNotTrue,
+  isTrue,
+  type StepNode,
+  type StringFieldName,
+} from "#lib/forms/steps";
+import { MTPC_ASSISTANCE_URL, PovertyResult } from "./PovertyResult";
 
 /** An optional dollar amount for a fee. */
 const amount = (name: StringFieldName, reviewLabel: string) =>
@@ -16,19 +18,17 @@ const amount = (name: StringFieldName, reviewLabel: string) =>
     label: "Amount (if known)",
     reviewLabel,
     min: 0,
-    currency: "dollars",
+    currency: true,
   });
-
-/** A short description of what a fee is for. */
-const details = (name: TextFieldName, label: string, reviewLabel: string) =>
-  field.shortText(name, { label, reviewLabel });
 
 /** A fee to waive, with follow-up questions shown once it's checked. */
 const waiver = (
   name: BooleanFieldName,
-  label: string,
-  reviewLabel: string,
-  followUps: readonly StepNode[] = [],
+  {
+    label,
+    reviewLabel,
+    followUps = [],
+  }: { label: string; reviewLabel: string; followUps?: readonly StepNode[] },
 ): StepNode[] => [
   field.checkbox(name, { label, reviewLabel }),
   ...(followUps.length > 0
@@ -58,7 +58,7 @@ export default defineForm({
           { when: isTrue("isCurrentlyUnhoused") },
         ),
         field.address("residence", {
-          when: (data) => data.isCurrentlyUnhoused !== true,
+          when: isNotTrue("isCurrentlyUnhoused"),
         }),
       ],
     },
@@ -121,7 +121,7 @@ export default defineForm({
         field.number("incomeAmount", {
           label: "Income amount",
           min: 0,
-          currency: "dollars",
+          currency: true,
         }),
         field.radioGroup("incomePeriod", {
           label: "How often do you receive this income?",
@@ -152,7 +152,7 @@ export default defineForm({
             "Any other income available to your household for the same period you entered above",
           min: 0,
           defaultValue: 0,
-          currency: "dollars",
+          currency: true,
         }),
       ],
     },
@@ -162,54 +162,53 @@ export default defineForm({
       description: "Check all that apply. Enter the amount if you know it.",
       body: [
         block.display(FormCostsTable),
-        ...waiver(
-          "shouldWaiveFilingFeeAndSurcharge",
-          "Filing fee and any surcharge",
-          "Waive filing fee and surcharge?",
-          [amount("filingFeeAndSurcharge", "Filing fee and surcharge amount")],
-        ),
-        ...waiver(
-          "shouldWaiveFilingFeeAndSurchargeForAppeal",
-          "Filing fee and any surcharge for appeal (uncommon)",
-          "Waive filing fee and surcharge for appeal?",
-          [
+        ...waiver("shouldWaiveFilingFeeAndSurcharge", {
+          label: "Filing fee and any surcharge",
+          reviewLabel: "Waive filing fee and surcharge?",
+          followUps: [
+            amount("filingFeeAndSurcharge", "Filing fee and surcharge amount"),
+          ],
+        }),
+        ...waiver("shouldWaiveFilingFeeAndSurchargeForAppeal", {
+          label: "Filing fee and any surcharge for appeal (uncommon)",
+          reviewLabel: "Waive filing fee and surcharge for appeal?",
+          followUps: [
             amount(
               "filingFeeAndSurchargeForAppeal",
               "Filing fee and surcharge for appeal amount",
             ),
           ],
-        ),
-        ...waiver(
-          "shouldWaiveFeesForCourtSummons",
-          "Fees or costs for serving court summons, witness subpoenas, or other court papers",
-          "Waive fees for court summons?",
-          [amount("feesForCourtSummons", "Fees for court summons amount")],
-        ),
-        ...waiver(
-          "shouldWaiveOtherFeesSection2",
-          "Other fees or costs",
-          "Waive other fees (Section 2)?",
-          [
+        }),
+        ...waiver("shouldWaiveFeesForCourtSummons", {
+          label:
+            "Fees or costs for serving court summons, witness subpoenas, or other court papers",
+          reviewLabel: "Waive fees for court summons?",
+          followUps: [
+            amount("feesForCourtSummons", "Fees for court summons amount"),
+          ],
+        }),
+        ...waiver("shouldWaiveOtherFeesSection2", {
+          label: "Other fees or costs",
+          reviewLabel: "Waive other fees (Section 2)?",
+          followUps: [
             amount("otherFeesSection2", "Other fees amount (Section 2)"),
-            details(
-              "otherFeesSection2Details",
-              "What are these fees for?",
-              "Other fees details (Section 2)",
-            ),
+            field.shortText("otherFeesSection2Details", {
+              label: "What are these fees for?",
+              reviewLabel: "Other fees details (Section 2)",
+            }),
           ],
-        ),
-        ...waiver(
-          "applySubstitutionSection2",
-          "Ask the court to substitute a required service with a free or lower-cost alternative (uncommon)",
-          "Apply substitution (Section 2)?",
-          [
-            details(
-              "substitutionDetailsSection2",
-              "Describe the substitution",
-              "Substitution details (Section 2)",
-            ),
+        }),
+        ...waiver("applySubstitutionSection2", {
+          label:
+            "Ask the court to substitute a required service with a free or lower-cost alternative (uncommon)",
+          reviewLabel: "Apply substitution (Section 2)?",
+          followUps: [
+            field.shortText("substitutionDetailsSection2", {
+              label: "Describe the substitution",
+              reviewLabel: "Substitution details (Section 2)",
+            }),
           ],
-        ),
+        }),
       ],
     },
     {
@@ -218,67 +217,64 @@ export default defineForm({
       description:
         "These are rare for name changes. If none apply, you can skip this step.",
       body: [
-        ...waiver(
-          "shouldWaiveExpertServices",
-          "Expert services for testing, examination, testimony, or other assistance",
-          "Waive expert services?",
-          [
+        ...waiver("shouldWaiveExpertServices", {
+          label:
+            "Expert services for testing, examination, testimony, or other assistance",
+          reviewLabel: "Waive expert services?",
+          followUps: [
             amount("costOfExpertServices", "Expert services cost"),
-            details(
-              "expertServicesDetails",
-              "Describe the expert services needed",
-              "Expert services details",
-            ),
+            field.shortText("expertServicesDetails", {
+              label: "Describe the expert services needed",
+              reviewLabel: "Expert services details",
+            }),
           ],
-        ),
-        ...waiver(
-          "shouldWaiveCostOfTranscription",
-          "Taking and/or transcribing a deposition",
-          "Waive cost of transcription?",
-          [amount("costOfTranscription", "Transcription cost")],
-        ),
-        ...waiver(
-          "shouldWaiveRecordingOfTrialForAppeal",
-          "Recording of trial for appeal (if you don't have a public defender)",
-          "Waive recording of trial for appeal?",
-        ),
-        ...waiver("shouldWaiveAppealBond", "Appeal bond", "Waive appeal bond?"),
-        ...waiver(
-          "shouldWaiveCostOfWrittenTranscriptPreparation",
-          "Preparing a written transcript of trial or other proceeding",
-          "Waive cost of written transcript preparation?",
-          [
+        }),
+        ...waiver("shouldWaiveCostOfTranscription", {
+          label: "Taking and/or transcribing a deposition",
+          reviewLabel: "Waive cost of transcription?",
+          followUps: [amount("costOfTranscription", "Transcription cost")],
+        }),
+        ...waiver("shouldWaiveRecordingOfTrialForAppeal", {
+          label:
+            "Recording of trial for appeal (if you don't have a public defender)",
+          reviewLabel: "Waive recording of trial for appeal?",
+        }),
+        ...waiver("shouldWaiveAppealBond", {
+          label: "Appeal bond",
+          reviewLabel: "Waive appeal bond?",
+        }),
+        ...waiver("shouldWaiveCostOfWrittenTranscriptPreparation", {
+          label: "Preparing a written transcript of trial or other proceeding",
+          reviewLabel: "Waive cost of written transcript preparation?",
+          followUps: [
             amount(
               "costOfWrittenTranscriptPreparation",
               "Written transcript preparation cost",
             ),
           ],
-        ),
-        ...waiver(
-          "shouldWaiveOtherFeesSection3",
-          "Other extra fees or costs",
-          "Waive other fees (Section 3)?",
-          [
+        }),
+        ...waiver("shouldWaiveOtherFeesSection3", {
+          label: "Other extra fees or costs",
+          reviewLabel: "Waive other fees (Section 3)?",
+          followUps: [
             amount("otherFeesSection3", "Other fees amount (Section 3)"),
-            details(
-              "otherFeesSection3Details",
-              "What are these fees for?",
-              "Other fees details (Section 3)",
-            ),
+            field.shortText("otherFeesSection3Details", {
+              label: "What are these fees for?",
+              reviewLabel: "Other fees details (Section 3)",
+            }),
           ],
-        ),
-        ...waiver(
-          "applySubstitutionSection3",
-          "Ask the court to substitute one of these costs with a free or lower-cost alternative",
-          "Apply substitution (Section 3)?",
-          [
-            details(
-              "substitutionDetailsSection3",
-              "Describe the substitution",
-              "Substitution details (Section 3)",
-            ),
+        }),
+        ...waiver("applySubstitutionSection3", {
+          label:
+            "Ask the court to substitute one of these costs with a free or lower-cost alternative",
+          reviewLabel: "Apply substitution (Section 3)?",
+          followUps: [
+            field.shortText("substitutionDetailsSection3", {
+              label: "Describe the substitution",
+              reviewLabel: "Substitution details (Section 3)",
+            }),
           ],
-        ),
+        }),
       ],
     },
   ],

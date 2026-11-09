@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from "react";
+import { type ComponentType, memo, type ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
 import Markdown from "react-markdown";
 import { Banner } from "#components/common/Banner";
@@ -20,12 +20,7 @@ import { RadioGroupField } from "#components/forms/RadioGroupField";
 import { RepeatingEntry } from "#components/forms/RepeatingEntry";
 import { ShortTextField } from "#components/forms/ShortTextField";
 import { YesNoField } from "#components/forms/YesNoField";
-import {
-  DONT_KNOW,
-  type FieldName,
-  type FormData,
-  PREFER_NOT_TO_ANSWER,
-} from "#constants/fields";
+import type { FieldName, FormData } from "#constants/fields";
 import { resolveText } from "../resolveStepContent";
 import { COMBO_BOX_SOURCES } from "./comboBoxSources";
 import { toChoices } from "./options";
@@ -59,6 +54,18 @@ export type RendererProps<K extends NodeKind> = K extends FieldKind
     ? BlockRendererProps<K>
     : never;
 
+/** The number format for currency fields: US dollars, with cents only when entered. */
+const CURRENCY_FORMAT: Intl.NumberFormatOptions = {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 0,
+};
+
+/** Banner markdown, parsed again only when its text changes. */
+const MarkdownText = memo(({ text }: { text: string }) => (
+  <Markdown>{text}</Markdown>
+));
+
 /** The props every single-field component takes from its node. */
 function fieldProps({
   node,
@@ -82,9 +89,7 @@ function choiceGroup<K extends "field.radioGroup" | "field.checkboxGroup">(
     <Group
       {...fieldProps(props)}
       options={toChoices(props.node.props.options)}
-      includePreferNotToAnswer={props.node.props.allow?.includes(
-        PREFER_NOT_TO_ANSWER,
-      )}
+      extraChoices={props.node.props.extraChoices}
     />
   );
 }
@@ -108,13 +113,7 @@ export const renderers: {
         {...fieldProps(props)}
         minValue={min}
         defaultValue={defaultValue}
-        formatOptions={
-          currency && {
-            style: "currency",
-            currency: "USD",
-            ...(currency === "dollars" && { maximumFractionDigits: 0 }),
-          }
-        }
+        formatOptions={currency ? CURRENCY_FORMAT : undefined}
       />
     );
   },
@@ -130,10 +129,7 @@ export const renderers: {
       {...fieldProps(props)}
       yesLabel={props.node.props.yesLabel}
       noLabel={props.node.props.noLabel}
-      includePreferNotToAnswer={props.node.props.allow?.includes(
-        PREFER_NOT_TO_ANSWER,
-      )}
-      includeDontKnow={props.node.props.allow?.includes(DONT_KNOW)}
+      extraChoices={props.node.props.extraChoices}
     />
   ),
   "field.radioGroup": choiceGroup(RadioGroupField),
@@ -146,12 +142,12 @@ export const renderers: {
     />
   ),
   "field.phone": (props) => {
-    const { name, label } = fieldProps(props);
-    return <PhoneField name={name} label={label} />;
+    const { name, label, description } = fieldProps(props);
+    return <PhoneField name={name} label={label} description={description} />;
   },
   "field.email": (props) => {
-    const { name, label } = fieldProps(props);
-    return <EmailField name={name} label={label} />;
+    const { name, label, description } = fieldProps(props);
+    return <EmailField name={name} label={label} description={description} />;
   },
   "field.languageSelect": (props) => (
     <LanguageSelectField name={fieldProps(props).name} />
@@ -187,12 +183,12 @@ export const renderers: {
   },
   "block.banner": ({ node, data }) => (
     <Banner variant={node.variant}>
-      <Markdown>{resolveText(node.content, data)}</Markdown>
+      <MarkdownText text={resolveText(node.content, data)} />
     </Banner>
   ),
   "block.subsection": ({ node, data, children }) => (
     <FormSubsection
-      title={node.title ? resolveText(node.title, data) : undefined}
+      title={typeof node.title === "function" ? node.title(data) : node.title}
     >
       {children}
     </FormSubsection>

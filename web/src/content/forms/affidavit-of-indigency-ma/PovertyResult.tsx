@@ -3,7 +3,12 @@ import { useWatch } from "react-hook-form";
 import { Banner } from "#components/common/Banner";
 import type { PovertyGuideline } from "#lib/utils/fetchPovertyGuideline";
 import { fetchPovertyGuideline } from "#lib/utils/fetchPovertyGuideline";
+import { formatCurrency } from "#lib/utils/formatCurrency";
 import "./PovertyResult.css";
+
+/** Where to ask the Massachusetts Transgender Political Coalition for help. */
+export const MTPC_ASSISTANCE_URL =
+  "https://www.masstpc.org/what-we-do/ida-network/";
 
 export const INCOME_MULTIPLIERS: Record<string, number> = {
   weekly: 52,
@@ -21,19 +26,12 @@ export function derivePovertyComparison(
   return "above";
 }
 
-const formatCurrency = (n: number) =>
-  new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(n);
-
 /**
  * Compares the income entered so far with the federal poverty guideline for
  * the household size.
  */
 export function PovertyResult() {
-  const [incomeAmount, rawIncomePeriod, rawHouseholdSize] = useWatch({
+  const [incomeAmount, incomePeriod, rawHouseholdSize] = useWatch({
     name: ["incomeAmount", "incomePeriod", "householdSize"],
   });
   const householdSize = Number(rawHouseholdSize) || 0;
@@ -41,7 +39,6 @@ export function PovertyResult() {
     incomeAmount != null && incomeAmount !== ""
       ? Number(incomeAmount)
       : undefined;
-  const incomePeriod: string | undefined = rawIncomePeriod || undefined;
   const [guideline, setGuideline] = useState<PovertyGuideline | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -110,14 +107,14 @@ export function PovertyResult() {
           <strong
             className={loading ? "poverty-result-dynamic-loading" : undefined}
           >
-            {formatCurrency(threshold)}/year
+            {formatCurrency(Math.round(threshold))}/year
           </strong>
           .
         </p>
         {annualIncome != null && (
           <p className={qualifies ? undefined : "poverty-result-above"}>
             Your annualized income of{" "}
-            <strong>{formatCurrency(annualIncome)}</strong> is{" "}
+            <strong>{formatCurrency(Math.round(annualIncome))}</strong> is{" "}
             <strong>
               {comparison === "equal"
                 ? "at or below"
@@ -143,13 +140,13 @@ export function PovertyResult() {
           You may still qualify for a fee waiver if paying court fees would mean
           going without food, shelter, or clothing. Go back and select{" "}
           <strong>
-            "I cannot pay without depriving myself or my dependents of
-            necessities"
+            "I cannot pay without depriving myself or my dependents of food,
+            shelter, or clothing"
           </strong>{" "}
           instead. Alternatively, you can request assistance from the
           Massachusetts Transgender Political Coalition's{" "}
           <a
-            href="https://www.masstpc.org/what-we-do/ida-network/"
+            href={MTPC_ASSISTANCE_URL}
             target="_blank"
             rel="noopener noreferrer"
           >

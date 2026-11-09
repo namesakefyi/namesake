@@ -1,9 +1,8 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineForm } from "#lib/forms/defineForm";
-import { block, field, is, isTrue } from "#lib/forms/steps";
-import type { Condition } from "#lib/forms/steps/types";
+import { allOf, block, field, is, isNotTrue, isTrue } from "#lib/forms/steps";
 
-const isHoused: Condition = (data) => data.isCurrentlyUnhoused !== true;
+const isHoused = isNotTrue("isCurrentlyUnhoused");
 
 export default defineForm({
   steps: [
@@ -27,7 +26,6 @@ export default defineForm({
       body: [
         field.longText("reasonForChangingName", {
           label: "Reason for name change",
-          reviewLabel: "Reason for changing name",
         }),
         block.display(NameChangeReasonBanner),
       ],
@@ -37,7 +35,10 @@ export default defineForm({
       title: "What is your contact information?",
       description:
         "The court uses this to communicate with you about your filing status.",
-      body: [field.phone("phoneNumber"), field.email("email")],
+      body: [
+        field.phone("phoneNumber"),
+        field.email("email", { reviewLabel: "Email" }),
+      ],
     },
     {
       id: "address",
@@ -61,9 +62,10 @@ export default defineForm({
         }),
         block.subsection([field.address("mailing")], {
           title: "What is your mailing address?",
-          when: (data) =>
-            data.isCurrentlyUnhoused !== true &&
-            data.isMailingAddressDifferentFromResidence === true,
+          when: allOf([
+            isHoused,
+            isTrue("isMailingAddressDifferentFromResidence"),
+          ]),
         }),
       ],
     },
@@ -113,8 +115,7 @@ export default defineForm({
     {
       id: "birth-certificate",
       title: "Do you want to update your Rhode Island birth certificate?",
-      when: (data) =>
-        data.birthplaceCountry === "US" && data.birthplaceState === "RI",
+      when: allOf([is("birthplaceCountry", "US"), is("birthplaceState", "RI")]),
       body: [
         field.yesNo("shouldChangeBirthCertificate", {
           reviewLabel: "Update birth certificate?",
@@ -176,7 +177,7 @@ export default defineForm({
     "Remember to bring a certified copy of your original birth certificate and a BCI (criminal background) report.",
     {
       text: "Attach a copy of each prior court order or marriage license to your petition.",
-      when: (data) => data.hasPreviousNameChange === true,
+      when: isTrue("hasPreviousNameChange"),
     },
   ],
 });

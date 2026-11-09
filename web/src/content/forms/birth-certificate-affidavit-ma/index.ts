@@ -84,7 +84,10 @@ export default defineForm({
       title: "What is your contact information?",
       description:
         "The government uses this to communicate with you about your filing status.",
-      body: [field.phone("phoneNumber"), field.email("email")],
+      body: [
+        field.phone("phoneNumber"),
+        field.email("email", { reviewLabel: "Email" }),
+      ],
     },
     {
       id: "waive-costs",

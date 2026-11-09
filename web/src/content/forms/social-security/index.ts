@@ -36,7 +36,6 @@ export default defineForm({
       body: [
         field.yesNo("hasOtherLegalNames", {
           reviewLabel: "Has other legal names?",
-          yesLabel: "Yes",
           noLabel: "No, I've never changed my name before",
         }),
         block.subsection(
@@ -105,7 +104,7 @@ export default defineForm({
           reviewLabel: "Hispanic or Latino?",
           yesLabel: "I am Hispanic or Latino",
           noLabel: "I am not Hispanic or Latino",
-          allow: ["preferNotToAnswer"],
+          extraChoices: ["preferNotToAnswer"],
         }),
         block.banner(copy.researchPurposes),
       ],
@@ -117,7 +116,7 @@ export default defineForm({
       body: [
         field.checkboxGroup("race", {
           label: "Race",
-          allow: ["preferNotToAnswer"],
+          extraChoices: ["preferNotToAnswer"],
           options: {
             nativeHawaiian: "Native Hawaiian",
             alaskaNative: "Alaska Native",
@@ -174,7 +173,7 @@ As of January 20, 2025, the Trump administration has directed the Social Securit
             "Yes, I have a previous Social Security card or have applied for one",
           noLabel:
             "No, I have never filed for or received a Social Security card before",
-          allow: ["dontKnow"],
+          extraChoices: ["dontKnow"],
         }),
         block.subsection([field.name("previousSocialSecurityCardName")], {
           title:

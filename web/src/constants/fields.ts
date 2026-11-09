@@ -9,7 +9,7 @@ export const FIELD_DEFS = [
   { name: "newLastName", label: "New last name", type: "string" },
   {
     name: "reasonForChangingName",
-    label: "Reason for changing name",
+    label: "Reason for name change",
     type: "string",
   },
   { name: "phoneNumber", label: "Phone number", type: "string" },
@@ -869,3 +869,6 @@ export function shouldShowOtherPronouns(pronouns: unknown): boolean {
 
 export const PREFER_NOT_TO_ANSWER = "preferNotToAnswer";
 export const DONT_KNOW = "dontKnow";
+
+/** Answers a question can offer beyond its own options. */
+export type ExtraChoice = typeof PREFER_NOT_TO_ANSWER | typeof DONT_KNOW;

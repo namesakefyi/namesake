@@ -5,7 +5,7 @@ import type {
   UseFormReturn,
 } from "react-hook-form";
 import type {
-  DONT_KNOW,
+  ExtraChoice,
   FIELD_DEFS,
   FieldName,
   FormData,
@@ -27,6 +27,9 @@ export interface Condition {
 
 /** Text that is either fixed or computed from the answers so far. */
 export type Text = string | ((data: Data) => string);
+
+/** Text that may be absent, such as a title shown only sometimes. */
+export type OptionalText = string | ((data: Data) => string | undefined);
 
 type FieldDef = (typeof FIELD_DEFS)[number];
 
@@ -56,9 +59,6 @@ export type Options<K extends FieldName> = {
 /** Labels keyed by stored value, as readers see them. */
 export type OptionLabels = Readonly<Record<string, OptionLabel>>;
 
-/** Extra answers a question can offer beyond its own options. */
-export type Allowance = typeof PREFER_NOT_TO_ANSWER | typeof DONT_KNOW;
-
 /** A field a node writes, with what readers need to know about it. */
 export interface WrittenField<W extends FieldName = FieldName> {
   id: W;
@@ -75,8 +75,8 @@ export interface FieldPropsByKind {
   "field.longText": Record<never, never>;
   "field.number": {
     min?: number;
-    /** Format as US dollars: whole dollars only, or with cents. */
-    currency?: "dollars" | "cents";
+    /** Format as US dollars, with cents only when entered. */
+    currency?: boolean;
     /** The answer before someone changes it. */
     defaultValue?: number;
   };
@@ -85,15 +85,15 @@ export interface FieldPropsByKind {
   "field.yesNo": {
     yesLabel?: string;
     noLabel?: string;
-    allow?: readonly Allowance[];
+    extraChoices?: readonly ExtraChoice[];
   };
   "field.radioGroup": {
     options: OptionLabels;
-    allow?: readonly (typeof PREFER_NOT_TO_ANSWER)[];
+    extraChoices?: readonly (typeof PREFER_NOT_TO_ANSWER)[];
   };
   "field.checkboxGroup": {
     options: OptionLabels;
-    allow?: readonly (typeof PREFER_NOT_TO_ANSWER)[];
+    extraChoices?: readonly (typeof PREFER_NOT_TO_ANSWER)[];
   };
   "field.comboBox": { source: ComboBoxSource; placeholder?: string };
   "field.phone": Record<never, never>;
@@ -166,7 +166,7 @@ export interface SubsectionNode {
   type: "block";
   kind: "block.subsection";
   children: readonly StepNode[];
-  title?: Text;
+  title?: OptionalText;
   when?: Condition;
 }
 

@@ -8,13 +8,15 @@
  * formatCurrency(29.95)
  * // "$29.95"
  */
-export const formatCurrency = (cost?: number | null) => {
-  const fractionDigits = Number.isInteger(cost) ? 0 : 2;
+const formatters = [0, 2].map(
+  (fractionDigits) =>
+    new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+    }),
+);
 
-  return Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
-  }).format(cost ?? 0);
-};
+export const formatCurrency = (cost?: number | null) =>
+  formatters[Number.isInteger(cost) ? 0 : 1].format(cost ?? 0);

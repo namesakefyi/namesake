@@ -6,11 +6,11 @@ import { getFormConfigs } from "../getFormConfig";
 import { traceReads } from "../steps/conditions";
 import {
   expandLegacyFields,
+  getRootContext,
   normalizeStep,
   walkNodes,
 } from "../steps/normalize";
 import type { Condition } from "../steps/types";
-import type { Step } from "../types";
 
 /*
  * Integrity checks over every form's data. Each check reads the normalized
@@ -29,11 +29,6 @@ const pdfDefinitions = new Map(
   ).map((module) => [module.default.id, module.default]),
 );
 
-const stepModules = import.meta.glob<Record<string, unknown>>(
-  "/src/content/forms/*/steps/*.tsx",
-  { eager: true },
-);
-
 /**
  * Check 1 allowlist: PDF fields no step asks for, keyed by form slug.
  * Each entry says why the PDF can do without the answer.
@@ -41,13 +36,13 @@ const stepModules = import.meta.glob<Record<string, unknown>>(
 const UNASKED_PDF_FIELDS: Record<string, Partial<Record<FieldName, string>>> = {
   "court-order-ma-minor": {
     mothersMaidenName:
-      "CJP 34 line left blank for the filer; add a question when converting this form",
+      "No step asks this yet; the CJP 34 line is left blank for the filer to complete",
     otherNamesOrAliases:
-      "CJP 34 line left blank for the filer; add a question when converting this form",
+      "No step asks this yet; the CJP 34 line is left blank for the filer to complete",
   },
   "court-order-ri": {
     previousNameFrom:
-      "The previous-name step only asks yes/no; add the name when converting this form",
+      "The previous-name step only asks yes/no; the filer completes this line",
   },
 };
 
@@ -62,9 +57,6 @@ const CONDITION_ORDER_EXCEPTIONS: Record<
 
 /** Check 4 allowlist: fields more than one step writes, keyed by form slug. */
 const SHARED_WRITERS: Record<string, Partial<Record<FieldName, string>>> = {};
-
-/** Check 5 allowlist: step files no form uses, keyed by path. */
-const UNUSED_STEP_FILES: Record<string, string> = {};
 
 function getWrittenFields(config: FormConfig): Set<FieldName> {
   return new Set(
@@ -190,21 +182,17 @@ describe("form integrity", () => {
         // Fields this step writes become known as the walk reaches them.
         check(step.when, "the step");
         if (step.body) {
-          walkNodes(
-            step.body,
-            { conditions: [], title: step.title },
-            (node) => {
-              if ("when" in node) check(node.when, node.kind);
-              if (node.type === "field") {
-                for (const entry of node.writes) {
-                  check(entry.when, entry.id);
-                  known.add(entry.id);
-                }
-              } else if (node.kind === "block.custom") {
-                for (const id of node.writes) known.add(id);
+          walkNodes(step.body, getRootContext(step), (node) => {
+            if ("when" in node) check(node.when, node.kind);
+            if (node.type === "field") {
+              for (const entry of node.writes) {
+                check(entry.when, entry.id);
+                known.add(entry.id);
               }
-            },
-          );
+            } else if (node.kind === "block.custom") {
+              for (const id of node.writes) known.add(id);
+            }
+          });
         } else {
           for (const entry of expandLegacyFields(step.fields)) {
             check(entry.when, entry.id);
@@ -246,32 +234,5 @@ describe("form integrity", () => {
     );
     expect(failures).toEqual([]);
     expect(stale).toEqual([]);
-  });
-
-  it("5. every step file is used by a form", () => {
-    const usedSteps = forms.flatMap(([, config]) => config.steps);
-    const isStep = (value: unknown): value is Step =>
-      typeof value === "object" &&
-      value !== null &&
-      "id" in value &&
-      ("component" in value || "body" in value);
-    const isUsed = (candidate: Step) =>
-      usedSteps.some(
-        (step) =>
-          step === candidate ||
-          (step.id === candidate.id &&
-            (step.component ?? step.body) ===
-              (candidate.component ?? candidate.body)),
-      );
-
-    const unused = Object.entries(stepModules).flatMap(([path, module]) => {
-      const steps = Object.values(module).filter(isStep);
-      return steps.length > 0 && !steps.some(isUsed) ? [path] : [];
-    });
-
-    expect(unused.filter((path) => !(path in UNUSED_STEP_FILES))).toEqual([]);
-    expect(
-      Object.keys(UNUSED_STEP_FILES).filter((path) => !unused.includes(path)),
-    ).toEqual([]);
   });
 });

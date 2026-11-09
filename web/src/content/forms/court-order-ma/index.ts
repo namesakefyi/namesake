@@ -1,9 +1,8 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineForm } from "#lib/forms/defineForm";
-import { block, field, is, isTrue } from "#lib/forms/steps";
-import type { Condition } from "#lib/forms/steps/types";
+import { allOf, block, field, is, isNotTrue, isTrue } from "#lib/forms/steps";
 
-const isHoused: Condition = (data) => data.isCurrentlyUnhoused !== true;
+const isHoused = isNotTrue("isCurrentlyUnhoused");
 
 export default defineForm({
   steps: [
@@ -27,7 +26,6 @@ export default defineForm({
       body: [
         field.longText("reasonForChangingName", {
           label: "Reason for name change",
-          reviewLabel: "Reason for changing name",
         }),
         block.display(NameChangeReasonBanner),
         field.checkbox("hasNoRecordOfOtherStateConvictionsProbationParole", {
@@ -43,7 +41,10 @@ export default defineForm({
       title: "What is your contact information?",
       description:
         "The court uses this to communicate with you about your filing status.",
-      body: [field.phone("phoneNumber"), field.email("email")],
+      body: [
+        field.phone("phoneNumber"),
+        field.email("email", { reviewLabel: "Email" }),
+      ],
     },
     {
       id: "birthplace",
@@ -99,9 +100,10 @@ export default defineForm({
         }),
         block.subsection([field.address("mailing", { address2: true })], {
           title: "What is your mailing address?",
-          when: (data) =>
-            data.isCurrentlyUnhoused !== true &&
-            data.isMailingAddressDifferentFromResidence === true,
+          when: allOf([
+            isHoused,
+            isTrue("isMailingAddressDifferentFromResidence"),
+          ]),
         }),
       ],
     },

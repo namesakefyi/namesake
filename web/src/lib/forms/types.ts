@@ -1,5 +1,5 @@
 import type { FieldName, FormData } from "#constants/fields";
-import type { StepNode } from "./steps/types";
+import type { Condition, StepNode, Text } from "./steps/types";
 
 /** A single conditional field, visible when `when` returns true. */
 type ConditionalField = {
@@ -24,19 +24,19 @@ interface StepBase {
   id: string;
 
   /** Displayed in the navigation bar and review table. */
-  title: string | ((data: Partial<FormData>) => string);
+  title: Text;
 
   /** Optional subtitle shown beneath the title on the step. */
-  description?: string | ((data: Partial<FormData>) => string);
+  description?: Text;
 
   /**
    * When provided, the step is only included in the flow if this returns
    * true. Evaluated with live form data on every navigation.
    *
    * @example
-   * when: (data) => data.isFilingForSomeoneElse === true,
+   * when: isTrue("isFilingForSomeoneElse"),
    */
-  when?: (data: Partial<FormData>) => boolean;
+  when?: Condition;
 }
 
 /**

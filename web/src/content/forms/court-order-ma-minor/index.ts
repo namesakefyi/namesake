@@ -1,8 +1,20 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
+import type { FormData } from "#constants/fields";
 import { defineForm } from "#lib/forms/defineForm";
 import { nameOrFallback } from "#lib/forms/resolveStepContent";
-import { block, field, is, isFalse, isTrue } from "#lib/forms/steps";
+import {
+  anyTrue,
+  block,
+  field,
+  is,
+  isFalse,
+  isNotTrue,
+  isTrue,
+} from "#lib/forms/steps";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
+
+/** The minor's first name, or "the minor" until it's known. */
+const minor = (data: Partial<FormData>) => nameOrFallback(data, "the minor");
 
 export default defineForm({
   steps: [
@@ -14,20 +26,17 @@ export default defineForm({
     },
     {
       id: "current-name",
-      title: (data) =>
-        `What is ${nameOrFallback(data, "the minor")}'s current legal name?`,
+      title: (data) => `What is ${minor(data)}'s current legal name?`,
       description:
         "This is the name being left behind. Type it exactly as it appears on the minor's ID.",
       body: [field.name("oldName")],
     },
     {
       id: "reason",
-      title: (data) =>
-        `What is the reason ${nameOrFallback(data, "the minor")} is changing names?`,
+      title: (data) => `What is the reason ${minor(data)} is changing names?`,
       body: [
         field.longText("reasonForChangingName", {
           label: "Reason for name change",
-          reviewLabel: "Reason for changing name",
         }),
         block.display(NameChangeReasonBanner, { props: { for: "child" } }),
       ],
@@ -53,8 +62,7 @@ export default defineForm({
     },
     {
       id: "date-of-birth",
-      title: (data) =>
-        `What is ${nameOrFallback(data, "the minor")}'s date of birth?`,
+      title: (data) => `What is ${minor(data)}'s date of birth?`,
       body: [
         field.memorableDate("dateOfBirth", { label: "Date of birth" }),
         block.banner(
@@ -77,7 +85,7 @@ export default defineForm({
     },
     {
       id: "birthplace",
-      title: (data) => `Where was ${nameOrFallback(data, "the minor")} born?`,
+      title: (data) => `Where was ${minor(data)} born?`,
       body: [
         field.shortText("birthplaceCity", {
           label: "City",
@@ -100,17 +108,16 @@ export default defineForm({
     },
     {
       id: "address",
-      title: (data) =>
-        `What is ${nameOrFallback(data, "the minor")}'s address?`,
+      title: (data) => `What is ${minor(data)}'s address?`,
       description: (data) =>
-        `You must file in the county where ${nameOrFallback(data, "the minor")} lives. We'll help you find where to file.`,
+        `You must file in the county where ${minor(data)} lives. We'll help you find where to file.`,
       body: [field.address("residence", { county: true })],
     },
     {
       id: "parent-info",
       title: "What are both parents' information?",
       description: (data) =>
-        `List ${nameOrFallback(data, "the minor")}'s legal parents and contact information.`,
+        `List ${minor(data)}'s legal parents and contact information.`,
       body: [
         block.subsection(
           [
@@ -138,8 +145,7 @@ export default defineForm({
     },
     {
       id: "parent-address",
-      title: (data) =>
-        `Where do ${nameOrFallback(data, "the minor")}'s parents live?`,
+      title: (data) => `Where do ${minor(data)}'s parents live?`,
       body: [
         field.checkbox("parentsHaveUnknownAddresses", {
           label: "The addresses of the parents are unknown",
@@ -159,21 +165,21 @@ export default defineForm({
               title: (data) =>
                 data.parentsHaveDifferentAddresses === true
                   ? "First parent's address"
-                  : "",
+                  : undefined,
             }),
             block.subsection([field.address("parent2")], {
               title: "Second parent's address",
               when: isTrue("parentsHaveDifferentAddresses"),
             }),
           ],
-          { when: (data) => data.parentsHaveUnknownAddresses !== true },
+          { when: isNotTrue("parentsHaveUnknownAddresses") },
         ),
       ],
     },
     {
       id: "birth-certificate-parents",
       title: (data) =>
-        `Are both parents listed on ${nameOrFallback(data, "the minor")}'s birth certificate?`,
+        `Are both parents listed on ${minor(data)}'s birth certificate?`,
       body: [
         field.yesNo("areBothParentsListedOnBirthCertificate", {
           reviewLabel: "Both parents listed on the minor's birth certificate?",
@@ -184,8 +190,7 @@ export default defineForm({
     },
     {
       id: "parent-deceased",
-      title: (data) =>
-        `Are any of ${nameOrFallback(data, "the minor")}'s legal parents deceased?`,
+      title: (data) => `Are any of ${minor(data)}'s legal parents deceased?`,
       body: [
         field.yesNo("isALegalParentDeceased", {
           reviewLabel: "Is a legal parent deceased?",
@@ -204,8 +209,6 @@ export default defineForm({
       body: [
         field.yesNo("hasLegalParentHadParentalRightsTerminated", {
           reviewLabel: "Has legal parent had parental rights terminated?",
-          yesLabel: "Yes",
-          noLabel: "No",
         }),
         block.banner(
           "When filing, attach proof from the prior court proceeding.",
@@ -215,13 +218,10 @@ export default defineForm({
     },
     {
       id: "guardian",
-      title: (data) =>
-        `Does ${nameOrFallback(data, "the minor")} have a court-appointed guardian?`,
+      title: (data) => `Does ${minor(data)} have a court-appointed guardian?`,
       body: [
         field.yesNo("hasCourtAppointedGuardian", {
           reviewLabel: "Court-appointed guardian?",
-          yesLabel: "Yes",
-          noLabel: "No",
         }),
         block.subsection(
           [
@@ -259,13 +259,11 @@ export default defineForm({
     {
       id: "co-guardian",
       title: (data) =>
-        `Does ${nameOrFallback(data, "the minor")} have a court-appointed co-guardian?`,
+        `Does ${minor(data)} have a court-appointed co-guardian?`,
       when: isTrue("hasCourtAppointedGuardian"),
       body: [
         field.yesNo("hasCourtAppointedCoGuardian", {
           reviewLabel: "Court-appointed co-guardian?",
-          yesLabel: "Yes",
-          noLabel: "No",
         }),
         block.subsection(
           [
@@ -358,7 +356,7 @@ export default defineForm({
     {
       id: "previous-name-change",
       title: (data) =>
-        `Has ${nameOrFallback(data, "the minor")} ever changed their legal name before?`,
+        `Has ${minor(data)} ever changed their legal name before?`,
       body: [
         field.yesNo("hasPreviousNameChange", {
           reviewLabel: "Has previous name change?",
@@ -388,12 +386,10 @@ export default defineForm({
     {
       id: "youth-services",
       title: (data) =>
-        `Is ${nameOrFallback(data, "the minor")} under the supervision of the Massachusetts Department of Youth Services?`,
+        `Is ${minor(data)} under the supervision of the Massachusetts Department of Youth Services?`,
       body: [
         field.yesNo("isUnderSupervisionOfMassDeptOfYouthServices", {
           reviewLabel: "Under supervision of Mass. Dept. of Youth Services?",
-          yesLabel: "Yes",
-          noLabel: "No",
         }),
       ],
     },
@@ -419,18 +415,19 @@ export default defineForm({
           reviewLabel: "Interpreter needed for guardian?",
         }),
         block.subsection([field.languageSelect("language")], {
-          when: (data) =>
-            data.isInterpreterNeededForChild === true ||
-            data.isInterpreterNeededForParent1 === true ||
-            data.isInterpreterNeededForParent2 === true ||
-            data.isInterpreterNeededForGuardian === true,
+          when: anyTrue(
+            "isInterpreterNeededForChild",
+            "isInterpreterNeededForParent1",
+            "isInterpreterNeededForParent2",
+            "isInterpreterNeededForGuardian",
+          ),
         }),
       ],
     },
     {
       id: "pronouns",
       title: (data) =>
-        `Do you want to share ${nameOrFallback(data, "the minor")}'s pronouns with the court staff?`,
+        `Do you want to share ${minor(data)}'s pronouns with the court staff?`,
       body: [
         field.yesNo("isOkayToSharePronouns", {
           reviewLabel: "Okay to share pronouns?",
@@ -456,15 +453,15 @@ export default defineForm({
     "File with the Probate and Family Court in your county.",
     {
       text: "Since the address or whereabouts of legal parent(s) is unknown, you must file a Motion for Service by Alternate Means and Affidavit of Diligent Search (CJP 31) with a Military Affidavit (TC0002).",
-      when: (data) => data.parentsHaveUnknownAddresses === true,
+      when: isTrue("parentsHaveUnknownAddresses"),
     },
     {
       text: "Attach a copy of the parental death certificate.",
-      when: (data) => data.isALegalParentDeceased === true,
+      when: isTrue("isALegalParentDeceased"),
     },
     {
       text: "Attach court proof of parental termination of rights.",
-      when: (data) => data.hasLegalParentHadParentalRightsTerminated === true,
+      when: isTrue("hasLegalParentHadParentalRightsTerminated"),
     },
     "Remember to bring all supporting documents to the court.",
   ],

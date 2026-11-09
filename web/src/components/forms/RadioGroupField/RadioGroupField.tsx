@@ -20,7 +20,8 @@ export interface RadioGroupFieldProps extends RadioGroupProps {
   label: string;
   labelHidden?: boolean;
   options: readonly RadioOption[];
-  includePreferNotToAnswer?: boolean;
+  /** Answers offered after the options. */
+  extraChoices?: readonly (typeof PREFER_NOT_TO_ANSWER)[];
 }
 
 export function RadioGroupField({
@@ -29,7 +30,7 @@ export function RadioGroupField({
   labelHidden,
   options,
   children,
-  includePreferNotToAnswer,
+  extraChoices = [],
   ...props
 }: RadioGroupFieldProps) {
   const { control } = useFormContext();
@@ -55,7 +56,7 @@ export function RadioGroupField({
                 {label}
               </Radio>
             ))}
-            {includePreferNotToAnswer && (
+            {extraChoices.includes(PREFER_NOT_TO_ANSWER) && (
               <Radio value={PREFER_NOT_TO_ANSWER}>Prefer not to answer</Radio>
             )}
           </RadioGroup>

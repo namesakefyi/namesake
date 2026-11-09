@@ -1,5 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
+import { PREFER_NOT_TO_ANSWER } from "#constants/fields";
 import { renderWithFormProvider, screen } from "../test-utils";
 import { RadioGroupField } from "./RadioGroupField";
 
@@ -100,13 +101,13 @@ describe("RadioGroupField", () => {
     expect(childComponent).toBeInTheDocument();
   });
 
-  it("renders prefer not to answer option when includePreferNotToAnswer is true", () => {
+  it("renders prefer not to answer option when extraChoices includes it", () => {
     renderWithFormProvider(
       <RadioGroupField
         name="pronouns"
         label="Test Label"
         options={mockOptions}
-        includePreferNotToAnswer
+        extraChoices={[PREFER_NOT_TO_ANSWER]}
       />,
     );
 
@@ -114,7 +115,7 @@ describe("RadioGroupField", () => {
     expect(preferNotToAnswerOption).toBeInTheDocument();
   });
 
-  it("does not render prefer not to answer option when includePreferNotToAnswer is false", () => {
+  it("does not render prefer not to answer option when extraChoices omits it", () => {
     renderWithFormProvider(
       <RadioGroupField
         name="pronouns"
@@ -133,7 +134,7 @@ describe("RadioGroupField", () => {
         name="pronouns"
         label="Test Label"
         options={mockOptions}
-        includePreferNotToAnswer={true}
+        extraChoices={[PREFER_NOT_TO_ANSWER]}
       />,
     );
 
