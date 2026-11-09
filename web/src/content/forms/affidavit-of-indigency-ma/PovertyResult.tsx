@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useWatch } from "react-hook-form";
 import { Banner } from "#components/common/Banner";
-import { FormStep } from "#components/forms/FormStep";
-import { NumberField } from "#components/forms/NumberField";
-import { RadioGroupField } from "#components/forms/RadioGroupField";
-import { defineStep } from "#lib/forms/defineStep";
 import type { PovertyGuideline } from "#lib/utils/fetchPovertyGuideline";
 import { fetchPovertyGuideline } from "#lib/utils/fetchPovertyGuideline";
-import "./IncomePovertyStep.css";
+import "./PovertyResult.css";
 
 export const INCOME_MULTIPLIERS: Record<string, number> = {
   weekly: 52,
@@ -32,19 +28,24 @@ const formatCurrency = (n: number) =>
     maximumFractionDigits: 0,
   }).format(n);
 
-function PovertyResult({
-  householdSize,
-  income,
-  incomePeriod,
-}: {
-  householdSize: number;
-  income: number | undefined;
-  incomePeriod: string | undefined;
-}) {
+/**
+ * Compares the income entered so far with the federal poverty guideline for
+ * the household size.
+ */
+export function PovertyResult() {
+  const [incomeAmount, rawIncomePeriod, rawHouseholdSize] = useWatch({
+    name: ["incomeAmount", "incomePeriod", "householdSize"],
+  });
+  const householdSize = Number(rawHouseholdSize) || 0;
+  const income =
+    incomeAmount != null && incomeAmount !== ""
+      ? Number(incomeAmount)
+      : undefined;
+  const incomePeriod: string | undefined = rawIncomePeriod || undefined;
   const [guideline, setGuideline] = useState<PovertyGuideline | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const effectiveSize = householdSize > 8 ? 8 : householdSize;
+  const effectiveSize = Math.min(householdSize, 8);
 
   useEffect(() => {
     if (!effectiveSize || effectiveSize < 1) return;
@@ -160,76 +161,3 @@ function PovertyResult({
     </>
   );
 }
-
-export const incomePovertyStep = defineStep({
-  id: "income-poverty",
-  title: "What is your income after taxes?",
-  description:
-    "We'll check whether your income qualifies you for a fee waiver based on the federal poverty level.",
-  when: (data) => data.indigencyBasis === "income",
-  fields: [
-    "incomeAmount",
-    "incomePeriod",
-    "householdSize",
-    "numberOfDependents",
-    "otherHouseholdIncome",
-  ],
-  component: ({ stepConfig }) => {
-    const form = useFormContext();
-    const incomeAmount = form.watch("incomeAmount");
-    const incomePeriod = form.watch("incomePeriod");
-    const householdSize = form.watch("householdSize");
-
-    return (
-      <FormStep stepConfig={stepConfig}>
-        <NumberField
-          name="incomeAmount"
-          label="Income amount"
-          minValue={0}
-          formatOptions={{
-            style: "currency",
-            currency: "USD",
-            maximumFractionDigits: 0,
-          }}
-        />
-        <RadioGroupField
-          name="incomePeriod"
-          label="How often do you receive this income?"
-          options={[
-            { label: "Weekly", value: "weekly" },
-            { label: "Biweekly (every two weeks)", value: "biweekly" },
-            { label: "Monthly", value: "monthly" },
-            { label: "Yearly", value: "yearly" },
-          ]}
-        />
-        <NumberField
-          name="householdSize"
-          label="Total number of people in your household"
-          minValue={1}
-        />
-        <PovertyResult
-          householdSize={Number(householdSize) || 0}
-          income={incomeAmount !== "" ? Number(incomeAmount) : undefined}
-          incomePeriod={incomePeriod || undefined}
-        />
-        <NumberField
-          name="numberOfDependents"
-          label="Number of dependents"
-          minValue={0}
-        />
-        <NumberField
-          name="otherHouseholdIncome"
-          label="Other household income (optional)"
-          description="Any other income available to your household for the same period you entered above"
-          minValue={0}
-          defaultValue={0}
-          formatOptions={{
-            style: "currency",
-            currency: "USD",
-            maximumFractionDigits: 0,
-          }}
-        />
-      </FormStep>
-    );
-  },
-});

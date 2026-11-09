@@ -7,6 +7,7 @@ import type {
   Condition,
   OptionLabels,
   StepNode,
+  SubsectionNode,
   Text,
 } from "./types";
 
@@ -32,32 +33,44 @@ export interface StepModel {
 }
 
 /**
- * Whether a field node takes the step title as its hidden label. Composite
- * nodes (no single `name`) label each of their own inputs.
+ * Whether a field node takes its container's title as a hidden label: the
+ * single question of a step or titled subsection. Composite nodes (no
+ * single `name`) label each of their own inputs.
  */
-export function usesStepTitleAsLabel(node: AnyFieldNode): boolean {
+export function usesTitleAsLabel(node: AnyFieldNode): boolean {
   return node.label === undefined && node.name !== undefined;
 }
 
-/** The label shown on a field node's input, before resolving any function. */
-export function getNodeLabel(node: AnyFieldNode, step: Step): Text {
-  return node.label ?? step.title;
+/** Where a node sits: its enclosing conditions and nearest title. */
+export interface NodeContext {
+  conditions: readonly Condition[];
+  /** The nearest titled subsection's title, or the step title. */
+  title: Text;
 }
 
-/** Calls `visit` for every node in order, with its enclosing conditions. */
+/** The context a subsection's children sit in. */
+export function getChildContext(
+  node: SubsectionNode,
+  context: NodeContext,
+): NodeContext {
+  return {
+    conditions: node.when
+      ? [...context.conditions, node.when]
+      : context.conditions,
+    title: node.title ?? context.title,
+  };
+}
+
+/** Calls `visit` for every node in order, with where it sits. */
 export function walkNodes(
   nodes: readonly StepNode[],
-  visit: (node: StepNode, enclosing: readonly Condition[]) => void,
-  enclosing: readonly Condition[] = [],
+  context: NodeContext,
+  visit: (node: StepNode, context: NodeContext) => void,
 ): void {
   for (const node of nodes) {
-    visit(node, enclosing);
+    visit(node, context);
     if (node.kind === "block.subsection") {
-      walkNodes(
-        node.children,
-        visit,
-        node.when ? [...enclosing, node.when] : enclosing,
-      );
+      walkNodes(node.children, getChildContext(node, context), visit);
     }
   }
 }
@@ -106,51 +119,57 @@ function normalizeBody(step: Step & { body: readonly StepNode[] }) {
   const conditions: (Condition | undefined)[] = [step.when];
   const displayReads: FieldName[] = [];
   let fallbacks = 0;
-  const unlabeled: string[] = [];
+  const unlabeledTitles = new Set<Text>();
 
-  walkNodes(step.body, (node, enclosing) => {
-    if ("when" in node) conditions.push(node.when);
+  walkNodes(
+    step.body,
+    { conditions: [], title: step.title },
+    (node, context) => {
+      const enclosing = context.conditions;
+      if ("when" in node) conditions.push(node.when);
 
-    if (node.type === "field") {
-      if (node.render) fallbacks++;
-      if (usesStepTitleAsLabel(node)) unlabeled.push(node.kind);
-      const label = getNodeLabel(node, step);
-      for (const written of node.writes) {
-        conditions.push(written.when);
-        fields.push({
-          id: written.id,
-          when: allOf([step.when, ...enclosing, node.when, written.when]),
-          options: written.options,
-          reviewLabel: written.reviewLabel ?? node.reviewLabel ?? label,
-        });
-      }
-      return;
-    }
-
-    switch (node.kind) {
-      case "block.custom":
-        fallbacks++;
-        for (const id of node.writes) {
+      if (node.type === "field") {
+        if (node.render) fallbacks++;
+        if (usesTitleAsLabel(node)) {
+          if (unlabeledTitles.has(context.title)) {
+            throw new Error(
+              `Step "${step.id}" has more than one unlabeled field under the same title. Only the single question of a step or titled subsection may omit its label.`,
+            );
+          }
+          unlabeledTitles.add(context.title);
+        }
+        const label = node.label ?? context.title;
+        for (const written of node.writes) {
+          conditions.push(written.when);
           fields.push({
-            id,
-            when: allOf([step.when, ...enclosing]),
-            // Custom nodes carry no labels; FIELD_DEFS supplies them until
-            // its labels are removed.
-            reviewLabel: getFieldLabel(id),
+            id: written.id,
+            when: allOf([step.when, ...enclosing, node.when, written.when]),
+            options: written.options,
+            reviewLabel: written.reviewLabel ?? node.reviewLabel ?? label,
           });
         }
-        break;
-      case "block.display":
-        displayReads.push(...node.reads);
-        break;
-    }
-  });
+        return;
+      }
 
-  if (unlabeled.length > 1) {
-    throw new Error(
-      `Step "${step.id}" has ${unlabeled.length} unlabeled fields (${unlabeled.join(", ")}). Only a step's single question may omit its label.`,
-    );
-  }
+      switch (node.kind) {
+        case "block.custom":
+          fallbacks++;
+          for (const id of node.writes) {
+            fields.push({
+              id,
+              when: allOf([step.when, ...enclosing]),
+              // Custom nodes carry no labels; FIELD_DEFS supplies them until
+              // its labels are removed.
+              reviewLabel: getFieldLabel(id),
+            });
+          }
+          break;
+        case "block.display":
+          displayReads.push(...node.reads);
+          break;
+      }
+    },
+  );
 
   return { fields, conditions, displayReads, fallbacks };
 }

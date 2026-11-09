@@ -9,7 +9,11 @@ import {
 import type { FieldName, FormData } from "#constants/fields";
 import { resolveText } from "../resolveStepContent";
 import type { BodyStep } from "../types";
-import { getNodeLabel, usesStepTitleAsLabel } from "./normalize";
+import {
+  getChildContext,
+  type NodeContext,
+  usesTitleAsLabel,
+} from "./normalize";
 import { toChoices } from "./options";
 import { renderers } from "./renderers";
 import type {
@@ -30,31 +34,31 @@ export interface StepBodyProps {
  */
 export function StepBody({ step }: StepBodyProps) {
   const data = useWatch() as Data;
-  return <Nodes nodes={step.body} step={step} data={data} />;
+  const context: NodeContext = { conditions: [], title: step.title };
+  return <Nodes nodes={step.body} step={step} data={data} context={context} />;
 }
 
 interface NodesProps {
   nodes: readonly StepNode[];
   step: BodyStep;
   data: Data;
+  context: NodeContext;
 }
 
-function Nodes({ nodes, step, data }: NodesProps) {
+type NodeProps<N> = { node: N } & Omit<NodesProps, "nodes">;
+
+function Nodes({ nodes, ...props }: NodesProps) {
   return nodes.map((node, index) => {
-    if ("when" in node && node.when && !node.when(data)) return null;
+    if ("when" in node && node.when && !node.when(props.data)) return null;
     // Nodes never reorder, so their position is a stable key.
     const key = `${node.kind}-${index}`;
-    return <NodeView key={key} node={node} step={step} data={data} />;
+    return <NodeView key={key} node={node} {...props} />;
   });
 }
 
-function NodeView({
-  node,
-  step,
-  data,
-}: { node: StepNode } & Omit<NodesProps, "nodes">) {
+function NodeView({ node, step, data, context }: NodeProps<StepNode>) {
   if (node.type === "field") {
-    return <FieldView node={node} step={step} data={data} />;
+    return <FieldView node={node} step={step} data={data} context={context} />;
   }
 
   switch (node.kind) {
@@ -62,7 +66,14 @@ function NodeView({
       return renderNode({
         node,
         data,
-        children: <Nodes nodes={node.children} step={step} data={data} />,
+        children: (
+          <Nodes
+            nodes={node.children}
+            step={step}
+            data={data}
+            context={getChildContext(node, context)}
+          />
+        ),
       });
     case "block.custom":
       return (
@@ -87,13 +98,9 @@ function renderNode(props: { node: StepNode } & Record<string, unknown>) {
   return <Renderer {...props} />;
 }
 
-function FieldView({
-  node,
-  step,
-  data,
-}: { node: AnyFieldNode } & Omit<NodesProps, "nodes">) {
-  const label = resolveText(getNodeLabel(node, step), data);
-  const labelHidden = usesStepTitleAsLabel(node);
+function FieldView({ node, step, data, context }: NodeProps<AnyFieldNode>) {
+  const label = resolveText(node.label ?? context.title, data);
+  const labelHidden = usesTitleAsLabel(node);
 
   if (!node.render) {
     return renderNode({ node, label, labelHidden });
@@ -104,8 +111,7 @@ function FieldView({
     name: node.name,
     label,
     labelHidden,
-    description:
-      "description" in node.props ? node.props.description : undefined,
+    description: node.description,
     choices:
       "options" in node.props ? toChoices(node.props.options) : undefined,
   };

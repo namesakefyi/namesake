@@ -9,12 +9,10 @@ Old last name: oldLastName value
 Currently unhoused? No
 Residence street address: residenceStreetAddress value
 Residence city: residenceCity value
-Residence county: residenceCounty value
 Residence state: residenceState value
 Residence zip code: residenceZipCode value
-Mailing address different from residence? No
 ---
-Reason for indigency: Public assistance
+Reason for indigency: I receive public assistance (TAFDC, EAEDC, Veterans Benefits, Medicaid, or SSI)
 ---
 Receiving TAFDC? No
 Receiving EAEDC? No
@@ -45,7 +43,7 @@ Old last name: oldLastName value
 ---
 Currently unhoused? Yes
 ---
-Reason for indigency: Public assistance
+Reason for indigency: I receive public assistance (TAFDC, EAEDC, Veterans Benefits, Medicaid, or SSI)
 ---
 Receiving TAFDC? Yes
 Receiving EAEDC? Yes
@@ -90,10 +88,8 @@ Old last name: Missing!
 Currently unhoused? No
 Residence street address: Missing!
 Residence city: Missing!
-Residence county: Missing!
 Residence state: Missing!
 Residence zip code: Missing!
-Mailing address different from residence? No
 ---
 Reason for indigency: Missing!
 ---
@@ -389,8 +385,6 @@ Parent 1 assenting? No
 Parent 1 dissent reason: parent1DissentReason value
 Parent 2 assenting? No
 Parent 2 dissent reason: parent2DissentReason value
-All guardians assenting? No
-Guardian dissent reason: guardianDissentReason value
 ---
 Has previous name change? No
 ---
@@ -466,7 +460,6 @@ Co-guardian email: coGuardianEmail value
 ---
 Parent 1 assenting? Yes
 Parent 2 assenting? Yes
-Court-appointed guardian? Yes
 All guardians assenting? Yes
 ---
 Has previous name change? Yes
@@ -521,6 +514,11 @@ Parent 2 phone: Missing!
 Parent 2 email: Missing!
 ---
 Parents’ addresses are unknown? No
+Parents have different addresses? No
+Parent 1 street address: Missing!
+Parent 1 city: Missing!
+Parent 1 state: Missing!
+Parent 1 zip code: Missing!
 ---
 Both parents listed on the minor’s birth certificate? No
 ---
@@ -532,7 +530,6 @@ Court-appointed guardian? No
 ---
 Parent 1 assenting? No
 Parent 2 assenting? No
-All guardians assenting? No
 ---
 Has previous name change? No
 ---
@@ -559,9 +556,9 @@ Date of birth: June 15, 1990
 Residence street address: residenceStreetAddress value
 Apartment, suite, unit, etc.: residenceStreetAddress2 value
 Residence city: residenceCity value
+Residence county: residenceCounty value
 Residence state: residenceState value
 Residence zip code: residenceZipCode value
-Residence county: residenceCounty value
 ---
 Request sealing for personal safety? No
 ---
@@ -581,9 +578,9 @@ Date of birth: June 15, 1990
 Residence street address: residenceStreetAddress value
 Apartment, suite, unit, etc.: residenceStreetAddress2 value
 Residence city: residenceCity value
+Residence county: residenceCounty value
 Residence state: residenceState value
 Residence zip code: residenceZipCode value
-Residence county: residenceCounty value
 ---
 Request sealing for personal safety? Yes
 Reason to seal court record: reasonToSealCourtRecord value
@@ -605,9 +602,9 @@ Date of birth: Missing!
 Residence street address: Missing!
 Apartment, suite, unit, etc.: Missing!
 Residence city: Missing!
+Residence county: Missing!
 Residence state: Missing!
 Residence zip code: Missing!
-Residence county: Missing!
 ---
 Request sealing for personal safety? No
 ---
@@ -715,6 +712,8 @@ Residence state: Missing!
 Residence zip code: Missing!
 Mailing address different from residence? No
 ---
+Previous addresses: Missing!
+---
 Date of birth: Missing!
 ---
 City of birth: Missing!
@@ -770,7 +769,6 @@ Previous Social Security card? No
 ---
 Phone number: phoneNumber value
 ---
-Currently unhoused? No
 Mailing street address: mailingStreetAddress value
 Mailing city: mailingCity value
 Mailing state: mailingState value
@@ -820,7 +818,6 @@ Last name on previous Social Security card: previousSocialSecurityCardLastName v
 ---
 Phone number: phoneNumber value
 ---
-Currently unhoused? Yes
 Mailing street address: mailingStreetAddress value
 Mailing city: mailingCity value
 Mailing state: mailingState value
@@ -867,7 +864,6 @@ Previous Social Security card? No
 ---
 Phone number: Missing!
 ---
-Currently unhoused? No
 Mailing street address: Missing!
 Mailing city: Missing!
 Mailing state: Missing!

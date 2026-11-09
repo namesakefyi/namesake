@@ -317,7 +317,7 @@ for (const request of [
         page.getByText("Residence county: Kings", { exact: true }),
       ).toBeVisible();
       await expect(
-        page.getByText("Court type: Civil", { exact: true }),
+        page.getByText("Court type: Civil Court", { exact: true }),
       ).toBeVisible();
       // Reopening the draft resumes at review with saved answers.
       await page.reload();

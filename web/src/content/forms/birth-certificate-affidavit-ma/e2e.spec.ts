@@ -95,7 +95,9 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
     ).toBeVisible();
     await page.getByRole("textbox", { name: "First name" }).fill("Marsha");
     await page.getByRole("textbox", { name: "Middle name" }).fill("P");
-    await page.getByRole("textbox", { name: "Last name" }).fill("Johnson");
+    await page
+      .getByRole("textbox", { name: "Last or family name" })
+      .fill("Johnson");
     await page.getByRole("button", { name: "Continue" }).click();
   });
 

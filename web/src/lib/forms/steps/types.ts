@@ -72,8 +72,14 @@ export interface WrittenField<W extends FieldName = FieldName> {
 /** Builder-specific settings, keyed by node kind. */
 export interface FieldPropsByKind {
   "field.shortText": { size?: number };
-  "field.longText": { description?: string };
-  "field.number": { min?: number; currency?: boolean };
+  "field.longText": Record<never, never>;
+  "field.number": {
+    min?: number;
+    /** Format as US dollars: whole dollars only, or with cents. */
+    currency?: "dollars" | "cents";
+    /** The answer before someone changes it. */
+    defaultValue?: number;
+  };
   "field.memorableDate": Record<never, never>;
   "field.checkbox": Record<never, never>;
   "field.yesNo": {
@@ -138,6 +144,8 @@ export interface FieldNode<
   name?: W;
   /** Undefined when the step title stands in as a hidden label. */
   label?: Text;
+  /** Help text shown with the input. */
+  description?: string;
   writes: readonly WrittenField<W>[];
   props: FieldPropsByKind[K];
 }
@@ -171,7 +179,9 @@ export interface NoteNode {
 export interface DisplayNode {
   type: "block";
   kind: "block.display";
-  component: ComponentType;
+  component: ComponentType<any>;
+  props?: object;
+  /** Fields the component reads; empty for static content. */
   reads: readonly FieldName[];
 }
 

@@ -38,6 +38,8 @@ import type {
 interface LabelOptions extends CommonFieldOptions {
   /** Omit for a step's single question: the step title becomes the label. */
   label?: Text;
+  /** Help text shown with the input. */
+  description?: string;
 }
 
 /** A builder's settings: the shared ones plus its kind's own props. */
@@ -47,7 +49,14 @@ type SingleFieldOptions<K extends FieldKind> = LabelOptions &
 function singleField<K extends FieldKind, W extends FieldName>(
   kind: K,
   name: W,
-  { label, when, reviewLabel, render, ...props }: SingleFieldOptions<K>,
+  {
+    label,
+    description,
+    when,
+    reviewLabel,
+    render,
+    ...props
+  }: SingleFieldOptions<K>,
 ): FieldNode<K, W> {
   const options =
     "options" in props ? (props.options as OptionLabels) : undefined;
@@ -56,6 +65,7 @@ function singleField<K extends FieldKind, W extends FieldName>(
     kind,
     name,
     label,
+    description,
     when,
     reviewLabel,
     render,
@@ -157,11 +167,15 @@ export const field = {
     });
   },
 
-  /** `EmailField`: labeled "Email address" unless `label` is given. */
+  /**
+   * `EmailField`: labeled "Email address" unless `label` is given, and
+   * "Email" in the review table.
+   */
   email<W extends StringFieldName>(name: W, options: LabelOptions = {}) {
     return singleField("field.email", name, {
       ...options,
       label: options.label ?? "Email address",
+      reviewLabel: options.reviewLabel ?? (options.label ? undefined : "Email"),
     });
   },
 
@@ -190,7 +204,7 @@ export const field = {
   address<
     T extends AddressType,
     const O extends AddressOptions<T> = Record<never, never>,
-  >(type: T, options?: O) {
+  >(type: T, options?: O & AddressOptions<T>) {
     const {
       address2 = false,
       county = false,
@@ -287,12 +301,15 @@ export const block = {
     return { type: "block", kind: "block.note", content };
   },
 
-  /** A read-only computed view; `reads` lists the fields it depends on. */
-  display(
-    component: ComponentType,
-    options: { reads: readonly FieldName[] },
+  /**
+   * A component that writes no data: a shared banner, or a computed view.
+   * `reads` lists the fields it depends on.
+   */
+  display<P extends object>(
+    component: ComponentType<P>,
+    { reads = [], props }: { reads?: readonly FieldName[]; props?: P } = {},
   ): DisplayNode {
-    return { type: "block", kind: "block.display", component, ...options };
+    return { type: "block", kind: "block.display", component, props, reads };
   },
 
   /** Any component, as long as it declares every field it writes. */

@@ -58,26 +58,13 @@ const UNASKED_PDF_FIELDS: Record<string, Partial<Record<FieldName, string>>> = {
 const CONDITION_ORDER_EXCEPTIONS: Record<
   string,
   Partial<Record<FieldName, string>>
-> = {
-  "court-order-ri › previous-addresses": {
-    previousAddresses:
-      "Hides an empty list from review; becomes the repeating entry's own concern when converted",
-  },
-};
+> = {};
 
 /** Check 4 allowlist: fields more than one step writes, keyed by form slug. */
-const SHARED_WRITERS: Record<string, Partial<Record<FieldName, string>>> = {
-  "court-order-ma-minor": {
-    hasCourtAppointedGuardian:
-      "ConsentStep lists it only to drive useFieldVisible; becomes a subsection condition when converted",
-  },
-};
+const SHARED_WRITERS: Record<string, Partial<Record<FieldName, string>>> = {};
 
 /** Check 5 allowlist: step files no form uses, keyed by path. */
-const UNUSED_STEP_FILES: Record<string, string> = {
-  "/src/content/forms/court-order-ma/steps/ImpoundCaseStep.tsx":
-    "Not in the MA flow; delete it or add it back when converting this form",
-};
+const UNUSED_STEP_FILES: Record<string, string> = {};
 
 function getWrittenFields(config: FormConfig): Set<FieldName> {
   return new Set(
@@ -203,17 +190,21 @@ describe("form integrity", () => {
         // Fields this step writes become known as the walk reaches them.
         check(step.when, "the step");
         if (step.body) {
-          walkNodes(step.body, (node) => {
-            if ("when" in node) check(node.when, node.kind);
-            if (node.type === "field") {
-              for (const entry of node.writes) {
-                check(entry.when, entry.id);
-                known.add(entry.id);
+          walkNodes(
+            step.body,
+            { conditions: [], title: step.title },
+            (node) => {
+              if ("when" in node) check(node.when, node.kind);
+              if (node.type === "field") {
+                for (const entry of node.writes) {
+                  check(entry.when, entry.id);
+                  known.add(entry.id);
+                }
+              } else if (node.kind === "block.custom") {
+                for (const id of node.writes) known.add(id);
               }
-            } else if (node.kind === "block.custom") {
-              for (const id of node.writes) known.add(id);
-            }
-          });
+            },
+          );
         } else {
           for (const entry of expandLegacyFields(step.fields)) {
             check(entry.when, entry.id);

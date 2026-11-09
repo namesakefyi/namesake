@@ -66,7 +66,12 @@ function fieldProps({
   labelHidden,
 }: FieldRendererProps<FieldKind>) {
   if (!node.name) throw new Error(`${node.kind} writes no single field`);
-  return { name: node.name as FieldName, label, labelHidden };
+  return {
+    name: node.name as FieldName,
+    label,
+    labelHidden,
+    description: node.description,
+  };
 }
 
 /** Radio and checkbox groups render the same way with different components. */
@@ -95,23 +100,24 @@ export const renderers: {
   "field.shortText": (props) => (
     <ShortTextField {...fieldProps(props)} size={props.node.props.size} />
   ),
-  "field.longText": (props) => (
-    <LongTextField
-      {...fieldProps(props)}
-      description={props.node.props.description}
-    />
-  ),
-  "field.number": (props) => (
-    <NumberField
-      {...fieldProps(props)}
-      minValue={props.node.props.min}
-      formatOptions={
-        props.node.props.currency
-          ? { style: "currency", currency: "USD" }
-          : undefined
-      }
-    />
-  ),
+  "field.longText": (props) => <LongTextField {...fieldProps(props)} />,
+  "field.number": (props) => {
+    const { min, currency, defaultValue } = props.node.props;
+    return (
+      <NumberField
+        {...fieldProps(props)}
+        minValue={min}
+        defaultValue={defaultValue}
+        formatOptions={
+          currency && {
+            style: "currency",
+            currency: "USD",
+            ...(currency === "dollars" && { maximumFractionDigits: 0 }),
+          }
+        }
+      />
+    );
+  },
   "field.memorableDate": (props) => (
     <MemorableDateField {...fieldProps(props)} />
   ),
@@ -196,7 +202,7 @@ export const renderers: {
   ),
   "block.display": ({ node }) => {
     const Display = node.component;
-    return <Display />;
+    return <Display {...node.props} />;
   },
   "block.custom": ({ node }) => {
     const form = useFormContext<FormData>();

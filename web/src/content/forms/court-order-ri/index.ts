@@ -1,35 +1,168 @@
+import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineForm } from "#lib/forms/defineForm";
-import { addressStep } from "./steps/AddressStep";
-import { birthCertificateStep } from "./steps/BirthCertificateStep";
-import { birthplaceStep } from "./steps/BirthplaceStep";
-import { contactInfoStep } from "./steps/ContactInfoStep";
-import { currentNameStep } from "./steps/CurrentNameStep";
-import { dateOfBirthStep } from "./steps/DateOfBirthStep";
-import { familyInfoStep } from "./steps/FamilyInfoStep";
-import { newNameStep } from "./steps/NewNameStep";
-import { personalInfoStep } from "./steps/PersonalInfoStep";
-import { previousAddressesStep } from "./steps/PreviousAddressesStep";
-import { previousNameChangeStep } from "./steps/PreviousNameChangeStep";
-import { reasonStep } from "./steps/ReasonStep";
+import { block, field, is, isTrue } from "#lib/forms/steps";
+import type { Condition } from "#lib/forms/steps/types";
+
+const isHoused: Condition = (data) => data.isCurrentlyUnhoused !== true;
 
 export default defineForm({
   steps: [
-    newNameStep,
-    currentNameStep,
-    reasonStep,
-    contactInfoStep,
-    addressStep,
-    previousAddressesStep,
-    dateOfBirthStep,
-    birthplaceStep,
     {
-      ...birthCertificateStep,
+      id: "new-name",
+      title: "What is your new name?",
+      description:
+        "This is the name you're making official! Type it exactly as you want it to appear.",
+      body: [field.name("newName")],
+    },
+    {
+      id: "current-name",
+      title: "What is your current legal name?",
+      description:
+        "This is the name you're leaving behind. Type it exactly as it appears on your ID.",
+      body: [field.name("oldName")],
+    },
+    {
+      id: "reason",
+      title: "What is the reason you're changing your name?",
+      body: [
+        field.longText("reasonForChangingName", {
+          label: "Reason for name change",
+          reviewLabel: "Reason for changing name",
+        }),
+        block.display(NameChangeReasonBanner),
+      ],
+    },
+    {
+      id: "contact-info",
+      title: "What is your contact information?",
+      description:
+        "The court uses this to communicate with you about your filing status.",
+      body: [field.phone("phoneNumber"), field.email("email")],
+    },
+    {
+      id: "address",
+      title: "What is your residential address?",
+      description:
+        "You must file your name change with the Probate Court in the city or town where you live.",
+      body: [
+        field.checkbox("isCurrentlyUnhoused", {
+          label: "I am currently unhoused or without permanent housing",
+          reviewLabel: "Currently unhoused?",
+        }),
+        block.banner(
+          "We recommend reaching out to [Thundermist Health Center](https://www.thundermisthealth.org/services/social-services/), which has locations in Woonsocket, West Warwick, and Wakefield. Thundermist can help connect you with social services and may be able to provide an address to use for your name change application.",
+          { when: isTrue("isCurrentlyUnhoused") },
+        ),
+        field.address("residence", { when: isHoused }),
+        field.checkbox("isMailingAddressDifferentFromResidence", {
+          label: "I use a different mailing address",
+          reviewLabel: "Mailing address different from residence?",
+          when: isHoused,
+        }),
+        block.subsection([field.address("mailing")], {
+          title: "What is your mailing address?",
+          when: (data) =>
+            data.isCurrentlyUnhoused !== true &&
+            data.isMailingAddressDifferentFromResidence === true,
+        }),
+      ],
+    },
+    {
+      id: "previous-addresses",
+      title: "What are your most recent addresses?",
+      description:
+        "List up to three addresses where you have resided prior to your current address.",
+      body: [
+        field.repeatingEntry("previousAddresses", {
+          reviewLabel: "Previous addresses",
+          min: 0,
+          max: 3,
+          itemLabel: "Address",
+          size: 40,
+        }),
+      ],
+    },
+    {
+      id: "date-of-birth",
+      title: "What is your date of birth?",
+      body: [field.memorableDate("dateOfBirth", { label: "Date of birth" })],
+    },
+    {
+      id: "birthplace",
+      title: "Where were you born?",
+      body: [
+        field.shortText("birthplaceCity", {
+          label: "City",
+          reviewLabel: "City of birth",
+        }),
+        field.comboBox("birthplaceCountry", {
+          label: "Country",
+          reviewLabel: "Country of birth",
+          placeholder: "Select a country",
+          source: "countries",
+        }),
+        field.comboBox("birthplaceState", {
+          label: "State",
+          reviewLabel: "State of birth",
+          placeholder: "Select a state",
+          source: "jurisdictions",
+          when: is("birthplaceCountry", "US"),
+        }),
+      ],
+    },
+    {
+      id: "birth-certificate",
+      title: "Do you want to update your Rhode Island birth certificate?",
       when: (data) =>
         data.birthplaceCountry === "US" && data.birthplaceState === "RI",
+      body: [
+        field.yesNo("shouldChangeBirthCertificate", {
+          reviewLabel: "Update birth certificate?",
+          yesLabel: "Yes, update my birth certificate to my new name",
+          noLabel: "No, don't change my birth certificate",
+        }),
+      ],
     },
-    previousNameChangeStep,
-    familyInfoStep,
-    personalInfoStep,
+    {
+      id: "previous-name-change",
+      title: "Have you ever changed your name before?",
+      body: [
+        field.yesNo("hasPreviousNameChange", {
+          reviewLabel: "Has previous name change?",
+          yesLabel: "Yes, I've changed my name before",
+          noLabel: "No, I've never changed my name",
+        }),
+        block.banner(
+          "Attach a copy of each prior court order or marriage license to your petition.",
+          { when: isTrue("hasPreviousNameChange") },
+        ),
+      ],
+    },
+    {
+      id: "family-info",
+      title: "What are your parents' names?",
+      body: [
+        block.subsection([field.name("mothersName")], {
+          title: "Mother's maiden name",
+        }),
+        block.subsection([field.name("fathersName")], {
+          title: "Father's name",
+        }),
+      ],
+    },
+    {
+      id: "personal-info",
+      title: "What is your occupation and marital status?",
+      body: [
+        field.shortText("occupation", { label: "Occupation" }),
+        field.comboBox("maritalStatus", {
+          label: "Marital status (optional)",
+          reviewLabel: "Marital status",
+          placeholder: "Select marital status",
+          source: "maritalStatus",
+        }),
+      ],
+    },
   ],
   pdfs: [
     { pdfId: "background-check-authorization-of-release" },

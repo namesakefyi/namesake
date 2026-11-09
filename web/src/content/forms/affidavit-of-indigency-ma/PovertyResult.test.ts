@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  derivePovertyComparison,
-  INCOME_MULTIPLIERS,
-} from "./IncomePovertyStep";
+import { derivePovertyComparison, INCOME_MULTIPLIERS } from "./PovertyResult";
 
 describe("INCOME_MULTIPLIERS", () => {
   it("annualizes weekly income by 52", () => {

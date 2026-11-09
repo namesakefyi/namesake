@@ -1,40 +1,368 @@
+import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineForm } from "#lib/forms/defineForm";
-import { requestsNameChange } from "./conditions";
-import { addressStep } from "./steps/AddressStep";
-import { birthplaceStep } from "./steps/BirthplaceStep";
-import { convictionsStep } from "./steps/ConvictionsStep";
-import { courtCasesStep } from "./steps/CourtCasesStep";
-import { courtStep } from "./steps/CourtStep";
-import { currentNameStep } from "./steps/CurrentNameStep";
-import { dateOfBirthStep } from "./steps/DateOfBirthStep";
-import { familyStep } from "./steps/FamilyStep";
-import { nameReasonStep } from "./steps/NameReasonStep";
-import { newNameStep } from "./steps/NewNameStep";
-import { previousNamePetitionStep } from "./steps/PreviousNamePetitionStep";
-import { requestTypeStep } from "./steps/RequestTypeStep";
-import { sealRecordStep } from "./steps/SealRecordStep";
-import { sexDesignationStep } from "./steps/SexDesignationStep";
-import { supportingDocumentsStep } from "./steps/SupportingDocumentsStep";
-import { supportPaymentsStep } from "./steps/SupportPaymentsStep";
+import { block, field, is, isFalse, isTrue } from "#lib/forms/steps";
+import {
+  livesInNewYorkCity,
+  requestsNameChange,
+  requestsSexDesignationChange,
+} from "./conditions";
+
+const PREVIOUS_PETITION_DESCRIPTION =
+  "Include the court, filing date, case number if known, and result.";
 
 export default defineForm({
   steps: [
-    requestTypeStep,
-    currentNameStep,
-    { ...newNameStep, when: requestsNameChange },
-    dateOfBirthStep,
-    addressStep,
-    courtStep,
-    birthplaceStep,
-    convictionsStep,
-    courtCasesStep,
-    familyStep,
-    supportPaymentsStep,
-    previousNamePetitionStep,
-    nameReasonStep,
-    sexDesignationStep,
-    sealRecordStep,
-    supportingDocumentsStep,
+    {
+      id: "request-type",
+      title: "What would you like to change?",
+      body: [
+        field.radioGroup("nyCourtOrderRequest", {
+          reviewLabel: "Requested New York court order",
+          options: {
+            "Name change": "My name",
+            "Sex designation change": "My sex designation",
+            Both: "Both my name and sex designation",
+          },
+        }),
+      ],
+    },
+    {
+      id: "current-name",
+      title: "What is your current legal name?",
+      description: (data) =>
+        requestsNameChange(data)
+          ? "This is the name you're leaving behind. Type it exactly as it appears on your ID."
+          : "Type it exactly as it appears on your ID.",
+      body: [field.name("oldName")],
+    },
+    {
+      id: "new-name",
+      title: "What is your new name?",
+      description:
+        "This is the name you're making official! Type it exactly as you want it to appear.",
+      when: requestsNameChange,
+      body: [field.name("newName")],
+    },
+    {
+      id: "date-of-birth",
+      title: "What is your date of birth?",
+      body: [field.memorableDate("dateOfBirth", { label: "Date of birth" })],
+    },
+    {
+      id: "address",
+      title: "What is your current address?",
+      body: [field.address("residence", { address2: true, county: true })],
+    },
+    {
+      id: "court",
+      title: "Which court would you like to file in?",
+      description:
+        "Because you live in New York City, you can file your petition in Civil Court or Supreme Court in your borough. We recommend Civil Court, which has a lower filing fee.",
+      when: livesInNewYorkCity,
+      body: [
+        field.radioGroup("courtType", {
+          reviewLabel: "Court type",
+          options: { Civil: "Civil Court", Supreme: "Supreme Court" },
+        }),
+      ],
+    },
+    {
+      id: "birthplace",
+      title: "Where were you born?",
+      when: requestsNameChange,
+      body: [
+        field.shortText("birthplaceCity", {
+          label: "City, town, or village",
+          reviewLabel: "City of birth",
+        }),
+        field.comboBox("birthplaceCountry", {
+          label: "Country",
+          reviewLabel: "Country of birth",
+          placeholder: "Select a country",
+          source: "countries",
+        }),
+        field.comboBox("birthplaceState", {
+          label: "State",
+          reviewLabel: "State of birth",
+          placeholder: "Select a state",
+          source: "jurisdictions",
+          when: is("birthplaceCountry", "US"),
+        }),
+        field.shortText("birthplaceRegion", {
+          label: "Province or region",
+          reviewLabel: "Province or region of birth",
+          when: (data) =>
+            !!data.birthplaceCountry && data.birthplaceCountry !== "US",
+        }),
+      ],
+    },
+    {
+      id: "convictions",
+      title: "Have you ever been convicted of a crime?",
+      description:
+        "A crime is a misdemeanor or felony. Traffic tickets and violations, like disorderly conduct, aren't crimes.",
+      when: requestsNameChange,
+      body: [
+        field.yesNo("hasBeenConvictedOfCrime", {
+          reviewLabel: "Ever convicted of a crime?",
+        }),
+        block.subsection(
+          [
+            field.shortText("courtOfConviction", {
+              label: "Court where you were convicted",
+              reviewLabel: "Court of conviction",
+            }),
+            field.longText("crime", {
+              label: "Crime for which you were convicted",
+              reviewLabel: "Crime of conviction",
+            }),
+          ],
+          { when: isTrue("hasBeenConvictedOfCrime") },
+        ),
+      ],
+    },
+    {
+      id: "court-cases",
+      title:
+        "Do you have any bankruptcy filings, judgments, liens, or court cases?",
+      when: requestsNameChange,
+      body: [
+        field.yesNo("hasFiledForBankruptcy", {
+          label: "Have you ever filed for bankruptcy?",
+          reviewLabel: "Ever filed for bankruptcy?",
+        }),
+        field.yesNo("hasJudgmentsOrLiens", {
+          label: "Are there any judgments or liens against you?",
+          reviewLabel: "Judgments or liens?",
+        }),
+        field.yesNo("isPartyToLawsuitOrCourtCase", {
+          label: "Are you a party in a lawsuit or other court case?",
+          reviewLabel: "Party to a lawsuit or court case?",
+        }),
+        block.subsection(
+          [
+            field.longText("bankruptcyJudgmentsLiensDetails", {
+              label: "Case details",
+              reviewLabel:
+                "Bankruptcy, judgments, liens, or court case details",
+              description:
+                "Include the court, filing date, and case number, if known.",
+            }),
+          ],
+          {
+            when: (data) =>
+              data.hasFiledForBankruptcy === true ||
+              data.hasJudgmentsOrLiens === true ||
+              data.isPartyToLawsuitOrCourtCase === true,
+          },
+        ),
+      ],
+    },
+    {
+      id: "family",
+      title: "What is your family situation?",
+      when: requestsNameChange,
+      body: [
+        field.yesNo("isCurrentlyMarried", {
+          label: "Are you currently married?",
+          reviewLabel: "Currently married?",
+        }),
+        field.yesNo("wasPreviouslyMarried", {
+          label: "Were you previously married?",
+          reviewLabel: "Previously married?",
+        }),
+        field.yesNo("hasChildrenUnder21", {
+          label: "Do you have any children under 21?",
+          reviewLabel: "Children under 21?",
+        }),
+      ],
+    },
+    {
+      id: "support-payments",
+      title: "Do you have to pay child or spousal support?",
+      when: requestsNameChange,
+      body: [
+        field.yesNo("paysChildSupport", {
+          label: "Do you have to pay child support?",
+          reviewLabel: "Required to pay child support?",
+        }),
+        block.subsection(
+          [
+            field.yesNo("areChildSupportPaymentsUpToDate", {
+              label: "Are your child support payments up to date?",
+              reviewLabel: "Child support payments up to date?",
+            }),
+            block.subsection(
+              [
+                field.number("childSupportArrearsAmount", {
+                  label: "Child support owed",
+                  reviewLabel: "Child support amount owed",
+                  min: 0,
+                  currency: "cents",
+                }),
+              ],
+              { when: isFalse("areChildSupportPaymentsUpToDate") },
+            ),
+            field.shortText("courtIssuingChildSupportOrder", {
+              label: "Court that issued the child support order",
+              reviewLabel: "Court issuing child support order",
+            }),
+            field.shortText("supportCollectionsUnit", {
+              label: "Child Support Collections Unit",
+            }),
+          ],
+          { when: isTrue("paysChildSupport") },
+        ),
+        field.yesNo("paysSpousalSupport", {
+          label: "Do you have to pay spousal support?",
+          reviewLabel: "Required to pay spousal support?",
+        }),
+        block.subsection(
+          [
+            field.yesNo("areSpousalSupportPaymentsUpToDate", {
+              label: "Are your spousal support payments up to date?",
+              reviewLabel: "Spousal support payments up to date?",
+            }),
+            block.subsection(
+              [
+                field.number("spousalSupportArrearsAmount", {
+                  label: "Spousal support owed",
+                  reviewLabel: "Spousal support amount owed",
+                  min: 0,
+                  currency: "cents",
+                }),
+              ],
+              { when: isFalse("areSpousalSupportPaymentsUpToDate") },
+            ),
+            field.shortText("courtIssuingSpousalSupportOrder", {
+              label: "Court that issued the spousal support order",
+              reviewLabel: "Court issuing spousal support order",
+            }),
+          ],
+          { when: isTrue("paysSpousalSupport") },
+        ),
+      ],
+    },
+    {
+      id: "previous-name-petition",
+      title: "Have you ever filed a name change petition before?",
+      when: requestsNameChange,
+      body: [
+        field.yesNo("hasPreviouslyFiledNameChange", {
+          reviewLabel: "Ever filed a name change petition?",
+        }),
+        block.subsection(
+          [
+            field.longText("previousNameChangePetitionDetails", {
+              label: "Previous petition details",
+              reviewLabel: "Previous name change petition details",
+              description: PREVIOUS_PETITION_DESCRIPTION,
+            }),
+          ],
+          { when: isTrue("hasPreviouslyFiledNameChange") },
+        ),
+      ],
+    },
+    {
+      id: "name-reason",
+      title: "Why are you changing your name?",
+      when: requestsNameChange,
+      body: [
+        field.longText("reasonForChangingName", {
+          label: "Reason for name change",
+          reviewLabel: "Reason for changing name",
+        }),
+        block.display(NameChangeReasonBanner),
+      ],
+    },
+    {
+      id: "sex-designation",
+      title: "What is your new sex designation?",
+      when: requestsSexDesignationChange,
+      body: [
+        field.radioGroup("newGender", {
+          reviewLabel: "Desired gender marker",
+          options: { Female: "Female", Male: "Male", X: "X" },
+        }),
+        field.yesNo("hasPreviouslyFiledSexDesignationChange", {
+          label:
+            "Have you ever filed a sex designation change petition before?",
+          reviewLabel: "Ever filed a sex designation change petition?",
+        }),
+        block.subsection(
+          [
+            field.longText("previouslyFiledSexDesignationChangeDetails", {
+              label: "Previous petition details",
+              reviewLabel: "Previous sex designation change petition details",
+              description: PREVIOUS_PETITION_DESCRIPTION,
+            }),
+          ],
+          { when: isTrue("hasPreviouslyFiledSexDesignationChange") },
+        ),
+        field.yesNo("isProvidingReasonForGenderChange", {
+          label:
+            "Would you like to include your reasons for changing your sex designation?",
+          reviewLabel: "Include reasons for sex designation change?",
+        }),
+        block.subsection(
+          [
+            field.longText("reasonForGenderChange", {
+              label: "Reason for sex designation change",
+            }),
+          ],
+          { when: isTrue("isProvidingReasonForGenderChange") },
+        ),
+      ],
+    },
+    {
+      id: "seal-record",
+      title: "Would you like your court record sealed?",
+      description:
+        "Your case is automatically kept private until the judge makes a decision. If public access to your record could put your safety at risk, you can ask the court to keep it sealed after that, too.",
+      body: [
+        field.yesNo("shouldSealCourtRecord", {
+          reviewLabel: "Request sealing for personal safety?",
+          yesLabel: "Yes, ask the court to keep my record sealed",
+          noLabel:
+            "No, it's okay for my record to be public after the decision",
+        }),
+        block.subsection(
+          [
+            field.longText("reasonToSealCourtRecord", {
+              label: "Reason to seal the court record",
+              reviewLabel: "Reason to seal court record",
+              description: "Explain why you want to keep your case private.",
+            }),
+            block.banner(
+              `**What do I write?** Explain how public access to your court record could affect your personal safety.
+
+- Describe the privacy or safety concerns that apply to you.
+- Be as specific to your personal situation as possible.`,
+            ),
+          ],
+          { when: isTrue("shouldSealCourtRecord") },
+        ),
+      ],
+    },
+    {
+      id: "supporting-documents",
+      title: "Are you attaching supporting documents or additional pages?",
+      body: [
+        field.yesNo("hasAttachedSupportingDocuments", {
+          reviewLabel: "Attaching supporting documents or pages?",
+        }),
+        block.subsection(
+          [
+            field.longText("supportingDocumentsDetails", {
+              label: "Documents or additional pages",
+              reviewLabel: "Supporting documents or additional pages",
+              description: "List the name or a description of each document.",
+            }),
+          ],
+          { when: isTrue("hasAttachedSupportingDocuments") },
+        ),
+      ],
+    },
   ],
   pdfs: [
     {

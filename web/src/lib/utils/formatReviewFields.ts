@@ -43,7 +43,13 @@ export function formatFieldValue(
 
     case "string[]":
       if (Array.isArray(value)) {
-        const nonEmpty = value.filter(Boolean);
+        const nonEmpty = value
+          .filter(Boolean)
+          .map((item) =>
+            options?.[item] === undefined
+              ? item
+              : getOptionLabel(options[item]),
+          );
         return nonEmpty.length > 0 ? nonEmpty.join(", ") : undefined;
       }
       return undefined;

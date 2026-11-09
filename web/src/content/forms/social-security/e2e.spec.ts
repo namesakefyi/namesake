@@ -352,10 +352,14 @@ test("Social Security", async ({ page }, testInfo) => {
     await expect(
       page.getByText("Previous legal names: Jane Marie Smith"),
     ).toBeVisible();
-    await expect(page.getByText("Citizenship status: usCitizen")).toBeVisible();
+    await expect(
+      page.getByText("Citizenship status: U.S. Citizen"),
+    ).toBeVisible();
     await expect(page.getByText("Hispanic or Latino? No")).toBeVisible();
-    await expect(page.getByText("Race: asian, black")).toBeVisible();
-    await expect(page.getByText("Sex assigned at birth: female")).toBeVisible();
+    await expect(
+      page.getByText("Race: Asian, Black or African American"),
+    ).toBeVisible();
+    await expect(page.getByText("Sex assigned at birth: Female")).toBeVisible();
     await expect(page.getByText("Mother’s last name: Maiden")).toBeVisible();
     await expect(page.getByText("Father’s last name: Father")).toBeVisible();
     await expect(

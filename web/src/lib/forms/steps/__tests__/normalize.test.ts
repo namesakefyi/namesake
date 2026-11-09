@@ -163,6 +163,25 @@ describe("normalizeStep", () => {
     );
   });
 
+  it("uses a titled subsection's title for its single unlabeled question", () => {
+    const step: Step = {
+      id: "subsection",
+      title: "Have you changed your name before?",
+      body: [
+        field.yesNo("hasPreviousNameChange"),
+        block.subsection([field.shortText("previousNameFrom")], {
+          title: "What was your previous name?",
+        }),
+      ],
+    };
+    expect(
+      normalizeStep(step).fields.map((entry) => entry.reviewLabel),
+    ).toEqual([
+      "Have you changed your name before?",
+      "What was your previous name?",
+    ]);
+  });
+
   it("rejects more than one unlabeled question", () => {
     const step: Step = {
       id: "two",
@@ -172,7 +191,7 @@ describe("normalizeStep", () => {
         field.shortText("previousNameFrom"),
       ],
     };
-    expect(() => normalizeStep(step)).toThrow(/2 unlabeled fields/);
+    expect(() => normalizeStep(step)).toThrow(/more than one unlabeled field/);
   });
 
   it("prefers review labels, then labels, for the review table", () => {
