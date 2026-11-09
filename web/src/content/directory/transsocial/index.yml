@@ -1,0 +1,14 @@
+name: TransSOCIAL
+description: TransSOCIAL expands safe and affirming resources for the trans, gender expansive, and intersex community, providing personalized help with name changes and identity document updates, and covering costs like fingerprinting for Florida residents who qualify.
+jurisdictions:
+  - fl
+url: https://transsocial.org/name-changes/
+services:
+  - financialAid
+  - formFilling
+languages:
+  - en
+officialPartner: false
+email: info@transsocial.org
+phone: 305-747-3156
+logo: logo.png
