@@ -6,7 +6,6 @@ interface ComboBoxOption {
   value: string;
 }
 
-/** Named option lists that `field.comboBox` can draw from. */
 export const COMBO_BOX_SOURCES = {
   countries: COUNTRY_OPTIONS,
   jurisdictions: JURISDICTION_OPTIONS,

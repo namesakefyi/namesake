@@ -1,6 +1,5 @@
 import type { FieldName } from "#constants/fields";
 
-/** The three fields written by each `NameField` type. */
 export const NAME_FIELDS = {
   newName: {
     first: "newFirstName",
@@ -41,7 +40,6 @@ const NAME_PART_LABELS: Record<NamePart, string> = {
   last: "last name",
 };
 
-/** How each name type is labeled in the review table. */
 export const NAME_REVIEW_LABELS: Record<NameType, (part: NamePart) => string> =
   {
     newName: (part) => `New ${NAME_PART_LABELS[part]}`,
@@ -52,7 +50,6 @@ export const NAME_REVIEW_LABELS: Record<NameType, (part: NamePart) => string> =
       `${NAME_PART_LABELS[part].replace(/^./, (letter) => letter.toUpperCase())} on previous Social Security card`,
   };
 
-/** The fields one address writes; `street2` and `county` are optional. */
 export interface AddressNames {
   street: FieldName;
   street2?: FieldName;
@@ -62,7 +59,6 @@ export interface AddressNames {
   county?: FieldName;
 }
 
-/** The fields written by each `AddressField` type. */
 export const ADDRESS_FIELDS = {
   residence: {
     street: "residenceStreetAddress",
@@ -119,7 +115,6 @@ const ADDRESS_PART_LABELS: Record<Exclude<AddressPart, "street2">, string> = {
   county: "county",
 };
 
-/** How an address field is labeled in the review table. */
 export function getAddressReviewLabel(
   type: AddressType,
   part: AddressPart,

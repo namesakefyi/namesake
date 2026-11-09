@@ -11,7 +11,6 @@ import {
   type NameType,
 } from "#constants/fieldGroups";
 import { type FieldName, shouldShowOtherPronouns } from "#constants/fields";
-import { withDeps } from "./conditions";
 import type {
   BannerNode,
   BooleanFieldName,
@@ -22,7 +21,6 @@ import type {
   FieldNode,
   FieldPropsByKind,
   ListFieldName,
-  NoteNode,
   OptionalText,
   OptionLabels,
   Options,
@@ -35,15 +33,24 @@ import type {
 } from "./types";
 
 interface LabelOptions extends CommonFieldOptions {
-  /** Omit for a step's single question: the step title becomes the label. */
+  /** Omit for the single question under a title, which becomes its label. */
   label?: Text;
-  /** Help text shown with the input. */
   description?: string;
 }
 
-/** A builder's settings: the shared ones plus its kind's own props. */
 type SingleFieldOptions<K extends FieldKind> = LabelOptions &
   FieldPropsByKind[K];
+
+type AddressOptions<T extends AddressType> = CommonFieldOptions &
+  (T extends ExtendedAddressType
+    ? { address2?: boolean; county?: boolean }
+    : { address2?: never; county?: never });
+
+/** `props` is required when the component has required props. */
+type DisplayArguments<P> =
+  Record<never, never> extends P
+    ? [options?: { props?: P }]
+    : [options: { props: P }];
 
 function singleField<K extends FieldKind, W extends FieldName>(
   kind: K,
@@ -65,18 +72,21 @@ function singleField<K extends FieldKind, W extends FieldName>(
   };
 }
 
-function composite<K extends FieldKind, W extends FieldName>(
+function composite<K extends FieldKind>(
   kind: K,
-  writes: readonly WrittenField<W>[],
+  writes: readonly WrittenField[],
   { when, reviewLabel }: CommonFieldOptions,
   props: FieldPropsByKind[K],
-): FieldNode<K, W> {
+): FieldNode<K> {
   return { type: "field", kind, when, reviewLabel, writes, props };
 }
 
-/** Questions: nodes that write data, one per form field component. */
-const questions = {
-  /** `ShortTextField`: a single line of text. */
+/**
+ * Builders for everything in a step's `body`. Each is named after its
+ * component with the `Field` or `Form` affix dropped: `YesNoField` →
+ * `node.yesNo`, `FormSubsection` → `node.subsection`.
+ */
+export const node = {
   shortText<W extends TextFieldName>(
     name: W,
     options: SingleFieldOptions<"shortText"> = {},
@@ -84,7 +94,6 @@ const questions = {
     return singleField("shortText", name, options);
   },
 
-  /** `LongTextField`: a paragraph of text. */
   longText<W extends TextFieldName>(
     name: W,
     options: SingleFieldOptions<"longText"> = {},
@@ -92,7 +101,7 @@ const questions = {
     return singleField("longText", name, options);
   },
 
-  /** `NumberField`: a number, stored as a string. */
+  /** Stored as a string. */
   number<W extends StringFieldName>(
     name: W,
     options: SingleFieldOptions<"number"> = {},
@@ -100,7 +109,6 @@ const questions = {
     return singleField("number", name, options);
   },
 
-  /** `MemorableDateField`: a date someone knows by heart. */
   memorableDate<W extends StringFieldName>(
     name: W,
     options: SingleFieldOptions<"memorableDate"> = {},
@@ -108,7 +116,6 @@ const questions = {
     return singleField("memorableDate", name, options);
   },
 
-  /** `CheckboxField`: a single checkbox. */
   checkbox<W extends BooleanFieldName>(
     name: W,
     options: CommonFieldOptions & { label: Text },
@@ -116,7 +123,6 @@ const questions = {
     return singleField("checkbox", name, options);
   },
 
-  /** `YesNoField`: a yes or no question. */
   yesNo<W extends BooleanFieldName>(
     name: W,
     options: SingleFieldOptions<"yesNo"> = {},
@@ -124,7 +130,6 @@ const questions = {
     return singleField("yesNo", name, options);
   },
 
-  /** `RadioGroupField`: one choice from a list. */
   radioGroup<W extends StringFieldName>(
     name: W,
     options: Omit<SingleFieldOptions<"radioGroup">, "options"> & {
@@ -134,7 +139,6 @@ const questions = {
     return singleField("radioGroup", name, options);
   },
 
-  /** `CheckboxGroupField`: any number of choices from a list. */
   checkboxGroup<W extends ListFieldName>(
     name: W,
     options: SingleFieldOptions<"checkboxGroup">,
@@ -142,7 +146,6 @@ const questions = {
     return singleField("checkboxGroup", name, options);
   },
 
-  /** `ComboBoxField`: one choice from a long, searchable list. */
   comboBox<W extends StringFieldName>(
     name: W,
     options: SingleFieldOptions<"comboBox">,
@@ -150,7 +153,6 @@ const questions = {
     return singleField("comboBox", name, options);
   },
 
-  /** `PhoneField`: labeled "Phone number" unless `label` is given. */
   phone<W extends StringFieldName>(name: W, options: LabelOptions = {}) {
     return singleField("phone", name, {
       ...options,
@@ -158,7 +160,6 @@ const questions = {
     });
   },
 
-  /** `EmailField`: labeled "Email address" unless `label` is given. */
   email<W extends StringFieldName>(name: W, options: LabelOptions = {}) {
     return singleField("email", name, {
       ...options,
@@ -166,7 +167,6 @@ const questions = {
     });
   },
 
-  /** `LanguageSelectField`: labeled "Language". */
   languageSelect<W extends StringFieldName>(
     name: W,
     options: CommonFieldOptions = {},
@@ -177,21 +177,16 @@ const questions = {
     });
   },
 
-  /** `NameField`: first, middle and last name. */
-  name<T extends NameType>(type: T, options: CommonFieldOptions = {}) {
+  name(type: NameType, options: CommonFieldOptions = {}) {
     const names = NAME_FIELDS[type];
     const writes = (Object.keys(names) as NamePart[]).map((part) => ({
-      id: names[part] as (typeof NAME_FIELDS)[T][NamePart],
+      id: names[part],
       reviewLabel: NAME_REVIEW_LABELS[type](part),
     }));
     return composite("name", writes, options, { type });
   },
 
-  /** `AddressField`: street, city, state and ZIP, plus optional parts. */
-  address<
-    T extends AddressType,
-    const O extends AddressOptions<T> = Record<never, never>,
-  >(type: T, options?: O & AddressOptions<T>) {
+  address<T extends AddressType>(type: T, options?: AddressOptions<T>) {
     const {
       address2 = false,
       county = false,
@@ -207,78 +202,37 @@ const questions = {
       "zip",
     ];
     const writes = parts.flatMap((part) => {
-      const id = names[part] as
-        | Extract<AddressWrites<T, O>, FieldName>
-        | undefined;
+      const id = names[part];
       return id ? [{ id, reviewLabel: getAddressReviewLabel(type, part) }] : [];
     });
-    return composite("address", writes, common, {
-      type,
-      address2,
-      county,
-    });
+    return composite("address", writes, common, { type, address2, county });
   },
 
-  /** `PronounSelectField`: pronouns, plus free text for "other". */
   pronounSelect(options: CommonFieldOptions = {}) {
-    const writes: WrittenField<"pronouns" | "otherPronouns">[] = [
-      { id: "pronouns", reviewLabel: "Pronouns" },
-      {
-        id: "otherPronouns",
-        reviewLabel: "Other pronouns",
-        when: withDeps(
-          (data) => shouldShowOtherPronouns(data.pronouns),
-          ["pronouns"],
-        ),
-      },
-    ];
-    return composite("pronounSelect", writes, options, {});
+    return composite(
+      "pronounSelect",
+      [
+        { id: "pronouns", reviewLabel: "Pronouns" },
+        {
+          id: "otherPronouns",
+          reviewLabel: "Other pronouns",
+          when: (data) => shouldShowOtherPronouns(data.pronouns),
+        },
+      ],
+      options,
+      {},
+    );
   },
 
-  /**
-   * `RepeatingEntry`: a list of short answers. Each entry is labeled with
-   * `itemLabel` and its position, like "Address 2".
-   */
+  /** Each entry is labeled `itemLabel` and its position, like "Address 2". */
   repeatingEntry<W extends ListFieldName>(
     name: W,
     options: SingleFieldOptions<"repeatingEntry">,
   ) {
     return singleField("repeatingEntry", name, options);
   },
-};
 
-/** Settings for `field.address`; only residence and mailing take flags. */
-export type AddressOptions<T extends AddressType> = CommonFieldOptions &
-  (T extends ExtendedAddressType
-    ? { address2?: boolean; county?: boolean }
-    : { address2?: never; county?: never });
-
-/** The field an address type writes for `part`, if it has one. */
-type AddressPartField<
-  T extends AddressType,
-  P extends AddressPart,
-> = (typeof ADDRESS_FIELDS)[T][Extract<keyof (typeof ADDRESS_FIELDS)[T], P>];
-
-/** Fields written by `field.address(type, options)`. */
-export type AddressWrites<T extends AddressType, O> =
-  | AddressPartField<T, "street" | "city" | "state" | "zip">
-  | (O extends { address2: true } ? AddressPartField<T, "street2"> : never)
-  | (O extends { county: true } ? AddressPartField<T, "county"> : never);
-
-interface DisplayOptions<P> {
-  reads?: readonly FieldName[];
-  props?: P;
-}
-
-/** `props` is required when the component has required props. */
-type DisplayArguments<P> =
-  Record<never, never> extends P
-    ? [options?: DisplayOptions<P>]
-    : [options: DisplayOptions<P> & { props: P }];
-
-/** Blocks: nodes that write no data. */
-const blocks = {
-  /** `Banner`: a callout. `content` is markdown. */
+  /** `content` is markdown. */
   banner(
     content: Text,
     options?: { variant?: BannerNode["variant"]; when?: Condition },
@@ -286,7 +240,6 @@ const blocks = {
     return { type: "block", kind: "banner", content, ...options };
   },
 
-  /** `FormSubsection`: a group of nodes with an optional title. */
   subsection(
     children: readonly StepNode[],
     options?: { title?: OptionalText; when?: Condition },
@@ -294,27 +247,11 @@ const blocks = {
     return { type: "block", kind: "subsection", children, ...options };
   },
 
-  /** A plain paragraph. */
-  note(content: Text): NoteNode {
-    return { type: "block", kind: "note", content };
-  },
-
-  /**
-   * A component that writes no data: a shared banner, or a computed view.
-   * `reads` lists the fields it depends on.
-   */
+  /** A component that writes no data. */
   display<P extends object>(
     component: ComponentType<P>,
     ...[options]: DisplayArguments<P>
   ): DisplayNode {
-    const { reads = [], props } = (options ?? {}) as DisplayOptions<P>;
-    return { type: "block", kind: "display", component, props, reads };
+    return { type: "block", kind: "display", component, props: options?.props };
   },
 };
-
-/**
- * Builders for everything in a step's `body`. Each is named after its
- * component with the `Field` or `Form` affix dropped: `YesNoField` →
- * `node.yesNo`, `FormSubsection` → `node.subsection`.
- */
-export const node = { ...questions, ...blocks };

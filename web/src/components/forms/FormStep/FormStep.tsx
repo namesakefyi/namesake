@@ -16,7 +16,6 @@ import clsx from "clsx";
 import { useId } from "react";
 
 export interface FormStepProps {
-  /** The step to show: its title, description and body. */
   stepConfig: Step;
 
   /**
@@ -25,11 +24,6 @@ export interface FormStepProps {
   className?: string;
 }
 
-/**
- * One step of a form: its title and description, its body of questions,
- * and the button that moves on. Watches the answers once for everything
- * the step shows.
- */
 export function FormStep({ stepConfig, className }: FormStepProps) {
   const data = useWatch() as Data;
   const title = resolveTitle(stepConfig, data);

@@ -19,7 +19,6 @@ import { ShortTextField } from "#components/forms/ShortTextField";
 import { YesNoField } from "#components/forms/YesNoField";
 import { COMBO_BOX_SOURCES } from "#constants/comboBoxSources";
 import type { FieldName } from "#constants/fields";
-import { toChoices } from "#lib/forms/optionLabels";
 import { resolveText } from "#lib/forms/resolveStepContent";
 import type {
   BlockKind,
@@ -29,18 +28,17 @@ import type {
   FieldNode,
   ListFieldName,
   NodeKind,
+  OptionLabels,
 } from "#lib/forms/types";
 import { FormSubsection } from "./FormSubsection";
 import { MarkdownText } from "./MarkdownText";
 
-/** What a field renderer receives: its node and the resolved label. */
 export interface FieldRendererProps<K extends FieldKind> {
   node: FieldNode<K>;
   label: string;
   labelHidden: boolean;
 }
 
-/** What a block renderer receives: its node, the live answers, children. */
 export interface BlockRendererProps<K extends BlockKind> {
   node: Extract<BlockNode, { kind: K }>;
   data: Data;
@@ -53,14 +51,13 @@ export type RendererProps<K extends NodeKind> = K extends FieldKind
     ? BlockRendererProps<K>
     : never;
 
-/** The number format for currency fields: US dollars, with cents only when entered. */
+/** US dollars, with cents only when entered. */
 const CURRENCY_FORMAT: Intl.NumberFormatOptions = {
   style: "currency",
   currency: "USD",
   minimumFractionDigits: 0,
 };
 
-/** The props every single-field component takes from its node. */
 function fieldProps({
   node,
   label,
@@ -75,7 +72,14 @@ function fieldProps({
   };
 }
 
-/** Radio and checkbox groups render the same way with different components. */
+function toChoices(options: OptionLabels) {
+  return Object.entries(options).map(([value, option]) =>
+    typeof option === "string"
+      ? { value, label: option }
+      : { value, label: option.label, description: option.description },
+  );
+}
+
 function choiceGroup<K extends "radioGroup" | "checkboxGroup">(
   Group: typeof RadioGroupField | typeof CheckboxGroupField,
 ) {
@@ -88,11 +92,6 @@ function choiceGroup<K extends "radioGroup" | "checkboxGroup">(
   );
 }
 
-/**
- * The component each node kind renders with, keyed by builder name. Each
- * renderer's `displayName` is its builder, like `node.yesNo`. Changing an entry changes that node
- * kind in every form.
- */
 export const renderers: {
   [K in NodeKind]: ComponentType<RendererProps<K>>;
 } = {
@@ -184,9 +183,6 @@ export const renderers: {
     >
       {children}
     </FormSubsection>
-  ),
-  note: ({ node, data }) => (
-    <p className="form-step-note">{resolveText(node.content, data)}</p>
   ),
   display: ({ node }) => {
     const Display = node.component;

@@ -4,7 +4,6 @@ import type { PDFId } from "#constants/pdf";
 import { getStepFields } from "./getStepFields";
 import type { Step } from "./types";
 
-/** Extracts all field names written by form steps. */
 export function getFormFields(steps: readonly Step[]): FieldName[] {
   return steps.flatMap((step) => getStepFields(step).map((field) => field.id));
 }

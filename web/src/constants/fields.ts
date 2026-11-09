@@ -686,7 +686,6 @@ export type FormData = {
 
 export const COMMON_PRONOUNS = ["they/them", "she/her", "he/him"];
 
-/** Whether the pronoun selection calls for a free-text "other" answer. */
 export function shouldShowOtherPronouns(pronouns: unknown): boolean {
   return (
     pronouns === ALL || (Array.isArray(pronouns) && pronouns.includes("other"))
@@ -696,5 +695,4 @@ export function shouldShowOtherPronouns(pronouns: unknown): boolean {
 export const PREFER_NOT_TO_ANSWER = "preferNotToAnswer";
 export const DONT_KNOW = "dontKnow";
 
-/** Answers a question can offer beyond its own options. */
 export type ExtraChoice = typeof PREFER_NOT_TO_ANSWER | typeof DONT_KNOW;

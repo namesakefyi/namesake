@@ -44,7 +44,6 @@ export function CostsTable({ costs }: CostsTableProps) {
   );
 }
 
-/** The current form's costs, for use as a `block.display` in a step body. */
 export function FormCostsTable() {
   const { costs } = useFormStep();
   return <CostsTable costs={costs} />;

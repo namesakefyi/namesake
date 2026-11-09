@@ -5,7 +5,6 @@ import { nameOrFallback } from "#lib/forms/resolveStepContent";
 import { node } from "#lib/forms/steps";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
 
-/** The minor's first name, or "the minor" until it's known. */
 const minor = (data: Partial<FormData>) => nameOrFallback(data, "the minor");
 
 export default defineForm({

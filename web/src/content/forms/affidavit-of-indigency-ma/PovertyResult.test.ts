@@ -1,23 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { derivePovertyComparison, INCOME_MULTIPLIERS } from "./PovertyResult";
-
-describe("INCOME_MULTIPLIERS", () => {
-  it("annualizes weekly income by 52", () => {
-    expect(1000 * INCOME_MULTIPLIERS.weekly).toBe(52000);
-  });
-
-  it("annualizes biweekly income by 26", () => {
-    expect(1000 * INCOME_MULTIPLIERS.biweekly).toBe(26000);
-  });
-
-  it("annualizes monthly income by 12", () => {
-    expect(1000 * INCOME_MULTIPLIERS.monthly).toBe(12000);
-  });
-
-  it("leaves yearly income unchanged", () => {
-    expect(1000 * INCOME_MULTIPLIERS.yearly).toBe(1000);
-  });
-});
+import { derivePovertyComparison } from "./PovertyResult";
 
 describe("derivePovertyComparison", () => {
   it("returns 'equal' when income exactly matches the threshold", () => {

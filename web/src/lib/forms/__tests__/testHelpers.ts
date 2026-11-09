@@ -6,7 +6,6 @@ type TestField =
   | { id: string; when: Condition }
   | { ids: readonly string[]; when: Condition };
 
-/** A labeled text field for a test step, named after its field. */
 function textField(id: string, when?: Condition) {
   return node.shortText(id as TextFieldName, { label: id, when });
 }

@@ -1,6 +1,5 @@
 import { parseDate } from "@internationalized/date";
 import { FIELD_DEFS, type FieldName } from "#constants/fields";
-import { getOptionLabel } from "#lib/forms/optionLabels";
 import type { OptionLabels } from "#lib/forms/types";
 import { formatCurrency } from "./formatCurrency";
 
@@ -38,10 +37,10 @@ export function formatFieldValue(
     return undefined;
   }
 
-  // Fields with labeled options show the label of each stored value
   const labelOf = (item: unknown) => {
     const option = options?.[String(item)];
-    return option === undefined ? String(item) : getOptionLabel(option);
+    if (option === undefined) return String(item);
+    return typeof option === "string" ? option : option.label;
   };
 
   // Format based on type
@@ -59,7 +58,6 @@ export function formatFieldValue(
     default: {
       if (options) return labelOf(value);
 
-      // Currency fields: format as USD
       if (currency) return formatCurrency(value);
 
       // Phone number formatting

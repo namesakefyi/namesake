@@ -9,9 +9,8 @@ const HTML_ESCAPES: Record<string, string> = {
 };
 
 /**
- * Converts banner markdown to HTML with snarkdown. The text is escaped
- * first, so an answer quoted into a banner can't add markup, and each
- * blank-line-separated block becomes its own paragraph or list.
+ * Escapes the text first, so an answer quoted into a banner can't add
+ * markup, and turns each blank-line-separated block into a paragraph or list.
  */
 export function markdownToHtml(markdown: string): string {
   const escaped = markdown.replace(/[&<>"]/g, (match) => HTML_ESCAPES[match]);
@@ -25,7 +24,6 @@ export function markdownToHtml(markdown: string): string {
     .join("");
 }
 
-/** Banner markdown, converted again only when its text changes. */
 export const MarkdownText = memo(({ text }: { text: string }) => (
   // biome-ignore lint/security/noDangerouslySetInnerHtml: markdownToHtml escapes the text before converting it
   <div dangerouslySetInnerHTML={{ __html: markdownToHtml(text) }} />

@@ -13,7 +13,6 @@ export function getFormConfig(slug: string): FormConfig | undefined {
   return modules[key].default;
 }
 
-/** Every form's config, keyed by slug. */
 export function getFormConfigs(): Record<string, FormConfig> {
   return Object.fromEntries(
     Object.entries(modules).map(([path, module]) => [

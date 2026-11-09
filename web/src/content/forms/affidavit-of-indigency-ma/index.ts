@@ -8,7 +8,6 @@ import {
 } from "#lib/forms/steps";
 import { MTPC_ASSISTANCE_URL, PovertyResult } from "./PovertyResult";
 
-/** An optional dollar amount for a fee. */
 const amount = (name: StringFieldName, reviewLabel: string) =>
   node.number(name, {
     label: "Amount (if known)",
@@ -134,9 +133,7 @@ export default defineForm({
           reviewLabel: "Household size",
           min: 1,
         }),
-        node.display(PovertyResult, {
-          reads: ["incomeAmount", "incomePeriod", "householdSize"],
-        }),
+        node.display(PovertyResult),
         node.number("numberOfDependents", {
           label: "Number of dependents",
           min: 0,

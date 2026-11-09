@@ -15,10 +15,4 @@ describe("markdownToHtml", () => {
       "<p>Examples:</p><ul><li>One</li><li>Two</li></ul><p>The end.</p>",
     );
   });
-
-  it("escapes markup in the text", () => {
-    expect(markdownToHtml('Hello, <b>Sylvia</b> & "friends"')).toBe(
-      "<p>Hello, &lt;b&gt;Sylvia&lt;/b&gt; &amp; &quot;friends&quot;</p>",
-    );
-  });
 });

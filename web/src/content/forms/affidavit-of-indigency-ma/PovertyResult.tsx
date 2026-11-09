@@ -6,7 +6,6 @@ import { fetchPovertyGuideline } from "#lib/utils/fetchPovertyGuideline";
 import { formatCurrency } from "#lib/utils/formatCurrency";
 import "./PovertyResult.css";
 
-/** Where to ask the Massachusetts Transgender Political Coalition for help. */
 export const MTPC_ASSISTANCE_URL =
   "https://www.masstpc.org/what-we-do/ida-network/";
 
@@ -26,10 +25,6 @@ export function derivePovertyComparison(
   return "above";
 }
 
-/**
- * Compares the income entered so far with the federal poverty guideline for
- * the household size.
- */
 export function PovertyResult() {
   const [incomeAmount, incomePeriod, rawHouseholdSize] = useWatch({
     name: ["incomeAmount", "incomePeriod", "householdSize"],

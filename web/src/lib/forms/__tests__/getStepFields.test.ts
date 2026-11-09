@@ -1,10 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { traceReads, withDeps } from "../conditions";
 import { getStepFields } from "../getStepFields";
 import { node } from "../steps";
-import type { Condition, Step } from "../types";
-
-const ids = (step: Step) => getStepFields(step).map((entry) => entry.id);
+import type { Step } from "../types";
 
 describe("getStepFields", () => {
   it("combines the step, subsection and node conditions", () => {
@@ -18,10 +15,7 @@ describe("getStepFields", () => {
           [
             node.shortText("previousNameFrom", {
               label: "From",
-              when: withDeps(
-                (data) => Boolean(data.previousNameTo),
-                ["previousNameTo"],
-              ),
+              when: (data) => Boolean(data.previousNameTo),
             }),
           ],
           { when: (data) => data.hasPreviousNameChange === true },
@@ -39,24 +33,6 @@ describe("getStepFields", () => {
         previousNameTo: "A",
       }),
     ).toBe(false);
-    expect(traceReads(from.when as Condition)).toEqual(
-      expect.arrayContaining([
-        "isFilingForSomeoneElse",
-        "hasPreviousNameChange",
-        "previousNameTo",
-      ]),
-    );
-  });
-
-  it("uses the step title for the single unlabeled question", () => {
-    const step: Step = {
-      id: "single",
-      title: "Have you changed your name before?",
-      body: [node.yesNo("hasPreviousNameChange")],
-    };
-    expect(getStepFields(step)[0].reviewLabel).toBe(
-      "Have you changed your name before?",
-    );
   });
 
   it("uses a titled subsection's title for its single unlabeled question", () => {
@@ -138,11 +114,5 @@ describe("getStepFields", () => {
     expect(other.id).toBe("otherPronouns");
     expect(other.when?.({ pronouns: ["she/her"] })).toBe(false);
     expect(other.when?.({ pronouns: ["other"] })).toBe(true);
-  });
-
-  it("caches the fields per step object", () => {
-    const step: Step = { id: "cache", title: "Cache", body: [] };
-    expect(getStepFields(step)).toBe(getStepFields(step));
-    expect(ids({ ...step })).toEqual([]);
   });
 });

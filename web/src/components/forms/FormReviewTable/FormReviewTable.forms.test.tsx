@@ -19,7 +19,6 @@ const contextValue = {
   submitError: null,
 };
 
-/** A deterministic answer for every field a form writes. */
 function makeFixture(
   fields: readonly StepField[],
   booleanAnswer: boolean,
@@ -47,7 +46,6 @@ function makeFixture(
   return fixture as Partial<FormData>;
 }
 
-/** Renders the review table and reads it back as one line per row. */
 function renderReview(config: FormConfig, data: Partial<FormData>): string {
   const { container, unmount } = renderWithFormProvider(
     <FormStepContext.Provider value={contextValue}>

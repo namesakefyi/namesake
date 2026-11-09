@@ -6,7 +6,6 @@ interface FormSubsectionProps {
   children?: React.ReactNode;
 }
 
-/** A titled group of questions within a step. */
 export function FormSubsection({ title, children }: FormSubsectionProps) {
   return (
     <fieldset className="form-subsection">

@@ -8,7 +8,6 @@ import type { FormPhase, Step } from "#lib/forms/types";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormStep } from "./FormStep";
 import { FormSubsection } from "./FormSubsection";
-import { renderers } from "./renderers";
 
 const defaultContextValue = {
   onNext: vi.fn(),
@@ -247,7 +246,6 @@ describe("FormSubsection", () => {
   });
 });
 
-/** Renders a step inside a form, with answers already given. */
 function renderStep(step: Step, defaultValues: Record<string, unknown> = {}) {
   return render(<FormStep stepConfig={step} />, {
     wrapper: makeWrapper({}, defaultValues),
@@ -302,11 +300,5 @@ describe("FormStep body", () => {
     };
     renderStep(step, { newFirstName: "<b>Sylvia</b>" });
     expect(screen.getByText("Hello, <b>Sylvia</b>")).toBeInTheDocument();
-  });
-
-  it("names every renderer after its builder", () => {
-    for (const [kind, renderer] of Object.entries(renderers)) {
-      expect(renderer.displayName).toBe(`node.${kind}`);
-    }
   });
 });

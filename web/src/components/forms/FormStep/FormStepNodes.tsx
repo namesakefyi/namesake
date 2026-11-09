@@ -11,11 +11,9 @@ import { renderers } from "./renderers";
 
 export interface FormStepNodesProps {
   step: Step;
-  /** The live answers, watched once by `FormStep`. */
   data: Data;
 }
 
-/** Renders a step's body, leaving nodes whose condition fails unmounted. */
 export function FormStepNodes({ step, data }: FormStepNodesProps) {
   return <Nodes nodes={step.body} data={data} context={getRootContext(step)} />;
 }
@@ -29,7 +27,6 @@ interface NodesProps {
 function Nodes({ nodes, data, context }: NodesProps) {
   return nodes.map((node, index) => {
     if ("when" in node && node.when && !node.when(data)) return null;
-    // Nodes never reorder, so their position is a stable key.
     const key = `${node.kind}-${index}`;
     return <NodeView key={key} node={node} data={data} context={context} />;
   });

@@ -24,7 +24,7 @@ import { getFormConfig } from "#lib/forms/getFormConfig";
 const plainStep: Step = {
   id: "plain",
   title: "Plain Step",
-  body: [node.note("Step content")],
+  body: [node.banner("Step content")],
 };
 
 const formStepStep: Step = {

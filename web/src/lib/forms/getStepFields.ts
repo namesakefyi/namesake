@@ -1,17 +1,20 @@
 import type { FieldName } from "#constants/fields";
-import { combineConditions } from "./conditions";
 import type { Condition, OptionLabels, Step, Text } from "./types";
 import { getRootContext, usesTitleAsLabel, walkNodes } from "./walkNodes";
 
-/** One field a step writes, as every reader sees it. */
 export interface StepField {
   id: FieldName;
-  /** Step, enclosing subsection and node conditions combined. */
+  /** The step's, enclosing subsections' and the field's own conditions. */
   when?: Condition;
   options?: OptionLabels;
-  /** Shown as US dollars in the review table. */
   currency?: boolean;
   reviewLabel: Text;
+}
+
+function allOf(conditions: (Condition | undefined)[]): Condition | undefined {
+  const present = conditions.filter((condition) => condition !== undefined);
+  if (present.length <= 1) return present[0];
+  return (data) => present.every((condition) => condition(data));
 }
 
 function collectStepFields(step: Step): StepField[] {
@@ -19,8 +22,6 @@ function collectStepFields(step: Step): StepField[] {
   const unlabeledTitles = new Set<Text>();
 
   walkNodes(step.body, getRootContext(step), (node, context) => {
-    const enclosing = context.conditions;
-
     if (node.type === "field") {
       if (usesTitleAsLabel(node)) {
         if (unlabeledTitles.has(context.title)) {
@@ -34,9 +35,9 @@ function collectStepFields(step: Step): StepField[] {
       for (const written of node.writes) {
         fields.push({
           id: written.id,
-          when: combineConditions([
+          when: allOf([
             step.when,
-            ...enclosing,
+            ...context.conditions,
             node.when,
             written.when,
           ]),
@@ -53,10 +54,7 @@ function collectStepFields(step: Step): StepField[] {
 
 const cache = new WeakMap<Step, readonly StepField[]>();
 
-/**
- * Every field a step writes, in the order they are asked, with what
- * visibility, review and persistence need to know. Cached per step object.
- */
+/** Every field a step writes, in the order they are asked. */
 export function getStepFields(step: Step): readonly StepField[] {
   let fields = cache.get(step);
   if (!fields) {

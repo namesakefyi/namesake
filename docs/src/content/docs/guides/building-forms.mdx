@@ -69,8 +69,6 @@ export default defineForm({
 });
 ```
 
-Everything a step asks is saved as the person types, restored when they come back, shown on the review page, and passed to the PDFs.
-
 ### Choose a question type
 
 Every question and block comes from `node`, and each matches a component. Options marked `?` are optional.
@@ -170,8 +168,7 @@ Some nodes add content that saves nothing:
 |---|---|
 | `node.banner(content, { variant?, when? })` | A callout. `content` is markdown, so it can include links, **bold** text, and lists (but not a link inside bold text). `variant` is `"info"`, `"success"`, `"warning"`, or `"error"` |
 | `node.subsection(children, { title?, when? })` | A group of questions and content, with an optional title |
-| `node.note(content)` | A plain paragraph |
-| `node.display(Component, { reads?, props? })` | A component, such as the shared `NameChangeReasonBanner`. List the fields it reads in `reads` |
+| `node.display(Component, { props? })` | A component, such as the shared `NameChangeReasonBanner` |
 
 ```ts
 node.banner(

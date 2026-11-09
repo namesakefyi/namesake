@@ -27,18 +27,6 @@ describe("node builders", () => {
     ]);
   });
 
-  it("types what composite nodes write", () => {
-    const withCounty = node.address("residence", { county: true });
-    const plain = node.address("residence");
-    const county: (typeof withCounty.writes)[number]["id"] = "residenceCounty";
-    // @ts-expect-error the county isn't written unless requested
-    const missing: (typeof plain.writes)[number]["id"] = "residenceCounty";
-    const first: ReturnType<
-      typeof node.name<"oldName">
-    >["writes"][number]["id"] = "oldFirstName";
-    expect([county, missing, first]).toHaveLength(3);
-  });
-
   it("rejects mismatched fields and options at compile time", () => {
     // @ts-expect-error yesNo only accepts boolean fields
     node.yesNo("oldFirstName");

@@ -8,28 +8,21 @@ import type {
   Text,
 } from "./types";
 
-/**
- * Whether a field node takes its container's title as a hidden label: the
- * single question of a step or titled subsection. Composite nodes (no
- * single `name`) label each of their own inputs.
- */
+/** Composite nodes (no single `name`) label each of their own inputs. */
 export function usesTitleAsLabel(node: AnyFieldNode): boolean {
   return node.label === undefined && node.name !== undefined;
 }
 
-/** Where a node sits: its enclosing conditions and nearest title. */
 export interface NodeContext {
   conditions: readonly Condition[];
   /** The nearest titled subsection's title, or the step title. */
   title: Text;
 }
 
-/** The context a step's top-level nodes sit in. */
 export function getRootContext(step: Step): NodeContext {
   return { conditions: [], title: step.title };
 }
 
-/** The context a subsection's children sit in. */
 export function getChildContext(
   node: SubsectionNode,
   context: NodeContext,
@@ -46,7 +39,6 @@ export function getChildContext(
   };
 }
 
-/** Calls `visit` for every node in order, with where it sits. */
 export function walkNodes(
   nodes: readonly StepNode[],
   context: NodeContext,

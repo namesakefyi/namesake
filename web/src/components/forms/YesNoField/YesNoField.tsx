@@ -36,7 +36,6 @@ export interface YesNoFieldProps extends RadioGroupProps {
   labelHidden?: boolean;
   yesLabel?: string;
   noLabel?: string;
-  /** Answers offered after yes and no. */
   extraChoices?: readonly ExtraChoice[];
 }
 

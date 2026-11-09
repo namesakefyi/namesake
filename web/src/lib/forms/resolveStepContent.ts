@@ -13,7 +13,6 @@ export function nameOrFallback(
   return (typeof name === "string" && name.trim()) || fallback;
 }
 
-/** Resolves text that is either fixed or computed from the answers so far. */
 export function resolveText(
   text: string | ((data: Partial<FormData>) => string),
   data: Partial<FormData>,

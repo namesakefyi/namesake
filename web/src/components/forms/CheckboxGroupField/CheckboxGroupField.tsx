@@ -19,7 +19,6 @@ export interface CheckboxGroupFieldProps extends CheckboxGroupProps {
   label: string;
   labelHidden?: boolean;
   options: readonly CheckboxOption[];
-  /** Answers offered after the options. */
   extraChoices?: readonly (typeof PREFER_NOT_TO_ANSWER)[];
 }
 
