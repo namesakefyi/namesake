@@ -41,7 +41,7 @@ function collectStepFields(step: Step): StepField[] {
             written.when,
           ]),
           options: written.options,
-          currency: node.kind === "field.number" && !!node.props.currency,
+          currency: node.kind === "number" && !!node.props.currency,
           reviewLabel: written.reviewLabel ?? node.reviewLabel ?? label,
         });
       }

@@ -47,7 +47,7 @@ function NodeView({
       labelHidden: usesTitleAsLabel(node),
     });
   }
-  if (node.kind === "block.subsection") {
+  if (node.kind === "subsection") {
     return renderNode({
       node,
       data,

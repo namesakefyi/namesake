@@ -82,7 +82,7 @@ function getStepReads(step: Step): Set<FieldName> {
     if ("when" in node) trace(node.when);
     if (node.type === "field") {
       for (const written of node.writes) trace(written.when);
-    } else if (node.kind === "block.display") {
+    } else if (node.kind === "display") {
       for (const field of node.reads) reads.add(field);
     }
   });

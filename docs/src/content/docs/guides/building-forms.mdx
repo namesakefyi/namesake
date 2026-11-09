@@ -46,7 +46,7 @@ Inside `index.ts`, import `defineForm` and list the steps in the order people se
 ```ts
 // index.ts
 import { defineForm } from "#lib/forms/defineForm";
-import { block, field } from "#lib/forms/steps";
+import { node } from "#lib/forms/steps";
 
 export default defineForm({
   steps: [
@@ -54,14 +54,14 @@ export default defineForm({
       id: "new-name",
       title: "What is your new name?",
       description: "Type it exactly as you want it to appear.",
-      body: [field.name("newName")],
+      body: [node.name("newName")],
     },
     {
       id: "contact-info",
       title: "What is your contact information?",
       body: [
-        field.phone("phoneNumber"),
-        field.email("email"),
+        node.phone("phoneNumber"),
+        node.email("email"),
       ],
     },
   ],
@@ -73,26 +73,26 @@ Everything a step asks is saved as the person types, restored when they come bac
 
 ### Choose a question type
 
-Each question type matches a form component. Options marked `?` are optional.
+Every question and block comes from `node`, and each matches a component. Options marked `?` are optional.
 
 | Builder | Component | Saves |
 |---|---|---|
-| `field.shortText(name, { label?, size? })` | `ShortTextField` | A line of text |
-| `field.longText(name, { label? })` | `LongTextField` | A paragraph of text |
-| `field.number(name, { label?, min?, currency?, defaultValue? })` | `NumberField` | A number; `currency: true` shows dollars |
-| `field.memorableDate(name, { label? })` | `MemorableDateField` | A date, such as a date of birth |
-| `field.checkbox(name, { label })` | `CheckboxField` | `true` or `false` |
-| `field.yesNo(name, { label?, yesLabel?, noLabel?, extraChoices? })` | `YesNoField` | `true` or `false`, or an extra choice |
-| `field.radioGroup(name, { label?, options, extraChoices? })` | `RadioGroupField` | One option's key |
-| `field.checkboxGroup(name, { label?, options, extraChoices? })` | `CheckboxGroupField` | A list of option keys |
-| `field.comboBox(name, { label?, source, placeholder? })` | `ComboBoxField` | One value from `source`: `"countries"`, `"jurisdictions"`, or `"maritalStatus"` |
-| `field.phone(name, { label? })` | `PhoneField` | A phone number |
-| `field.email(name, { label? })` | `EmailField` | An email address |
-| `field.languageSelect(name)` | `LanguageSelectField` | A language |
-| `field.name(type)` | `NameField` | First, middle, and last name for `type`: `"newName"`, `"oldName"`, `"mothersName"`, `"fathersName"`, or `"previousSocialSecurityCardName"` |
-| `field.address(type, { address2?, county? })` | `AddressField` | An address for `type`: `"residence"`, `"mailing"`, `"parent1"`, or `"parent2"`; only residence and mailing take `address2` and `county` |
-| `field.pronounSelect()` | `PronounSelectField` | Pronouns, plus other pronouns when "other" is picked |
-| `field.repeatingEntry(name, { label?, min, max?, itemLabel, size? })` | `RepeatingEntry` | A list of short answers, each labeled `itemLabel` and its number |
+| `node.shortText(name, { label?, size? })` | `ShortTextField` | A line of text |
+| `node.longText(name, { label? })` | `LongTextField` | A paragraph of text |
+| `node.number(name, { label?, min?, currency?, defaultValue? })` | `NumberField` | A number; `currency: true` shows dollars |
+| `node.memorableDate(name, { label? })` | `MemorableDateField` | A date, such as a date of birth |
+| `node.checkbox(name, { label })` | `CheckboxField` | `true` or `false` |
+| `node.yesNo(name, { label?, yesLabel?, noLabel?, extraChoices? })` | `YesNoField` | `true` or `false`, or an extra choice |
+| `node.radioGroup(name, { label?, options, extraChoices? })` | `RadioGroupField` | One option's key |
+| `node.checkboxGroup(name, { label?, options, extraChoices? })` | `CheckboxGroupField` | A list of option keys |
+| `node.comboBox(name, { label?, source, placeholder? })` | `ComboBoxField` | One value from `source`: `"countries"`, `"jurisdictions"`, or `"maritalStatus"` |
+| `node.phone(name, { label? })` | `PhoneField` | A phone number |
+| `node.email(name, { label? })` | `EmailField` | An email address |
+| `node.languageSelect(name)` | `LanguageSelectField` | A language |
+| `node.name(type)` | `NameField` | First, middle, and last name for `type`: `"newName"`, `"oldName"`, `"mothersName"`, `"fathersName"`, or `"previousSocialSecurityCardName"` |
+| `node.address(type, { address2?, county? })` | `AddressField` | An address for `type`: `"residence"`, `"mailing"`, `"parent1"`, or `"parent2"`; only residence and mailing take `address2` and `county` |
+| `node.pronounSelect()` | `PronounSelectField` | Pronouns, plus other pronouns when "other" is picked |
+| `node.repeatingEntry(name, { label?, min, max?, itemLabel, size? })` | `RepeatingEntry` | A list of short answers, each labeled `itemLabel` and its number |
 
 Every question also takes these options:
 
@@ -100,16 +100,16 @@ Every question also takes these options:
 |---|---|
 | `when` | Shows the question only while the condition is true |
 | `reviewLabel` | Labels the answer on the review page |
-| `description` | Adds help text under the question (not on `field.checkbox`, `field.languageSelect`, `field.name`, `field.address`, or `field.pronounSelect`) |
+| `description` | Adds help text under the question (not on `node.checkbox`, `node.languageSelect`, `node.name`, `node.address`, or `node.pronounSelect`) |
 
-`extraChoices` adds "Prefer not to answer" (`"preferNotToAnswer"`) and, on `field.yesNo`, "I don't know" (`"dontKnow"`).
+`extraChoices` adds "Prefer not to answer" (`"preferNotToAnswer"`) and, on `node.yesNo`, "I don't know" (`"dontKnow"`).
 
 Give each question a `label`. If a step or a titled subsection asks a single question, leave out its label and the title is used instead.
 
 For choices, label every option. The keys are what gets saved; the labels are what people see:
 
 ```ts
-field.radioGroup("courtType", {
+node.radioGroup("courtType", {
   options: { Civil: "Civil Court", Supreme: "Supreme Court" },
 }),
 ```
@@ -119,7 +119,7 @@ field.radioGroup("courtType", {
 The review page lists each answer under its label. When a label only makes sense next to its question, add a `reviewLabel`:
 
 ```ts
-field.shortText("birthplaceCity", {
+node.shortText("birthplaceCity", {
   label: "City",
   reviewLabel: "City of birth",
 }),
@@ -130,32 +130,31 @@ field.shortText("birthplaceCity", {
 Add `when` to a step to include it only for some answers:
 
 ```ts
-import { is } from "#lib/forms/steps";
-
 {
-  id: "court",
-  title: "Which court would you like to file in?",
-  when: is("residenceCounty", "Bronx", "Kings", "New York", "Queens", "Richmond"),
+  id: "birth-certificate",
+  title: "Do you want to update your Rhode Island birth certificate?",
+  when: (data) =>
+    data.birthplaceCountry === "US" && data.birthplaceState === "RI",
   body: [/* ... */],
 },
 ```
 
-Build conditions from `is`, `isTrue`, and `isFalse`, and combine them with `allOf`, `anyOf`, and `not`. For example, `not(isTrue("isCurrentlyUnhoused"))` also includes people who haven't answered yet, while `isFalse("isCurrentlyUnhoused")` only includes people who answered no. For anything else, write a function of the answers, such as `(data) => deriveCurrentAge(data.dateOfBirth) >= 18`.
+A condition is a function of the answers so far. Check for `true` or `false` explicitly: `data.isCurrentlyUnhoused !== true` also includes people who haven't answered yet, while `data.isCurrentlyUnhoused === false` only includes people who answered no.
 
 ### Ask follow-up questions
 
-Put follow-up questions in a `block.subsection` with a `when`. They appear only once the earlier answer calls for them, and are left off the review page and PDFs otherwise:
+Put follow-up questions in a `node.subsection` with a `when`. They appear only once the earlier answer calls for them, and are left off the review page and PDFs otherwise:
 
 ```ts
-import { block, field, isTrue } from "#lib/forms/steps";
+import { node } from "#lib/forms/steps";
 
 body: [
-  field.yesNo("hasUsedOtherNameOrAlias"),
-  block.subsection(
-    [field.longText("otherNamesOrAliases", { label: "Other names or aliases" })],
+  node.yesNo("hasUsedOtherNameOrAlias"),
+  node.subsection(
+    [node.longText("otherNamesOrAliases", { label: "Other names or aliases" })],
     {
       title: "Please list all names you haven't previously listed.",
-      when: isTrue("hasUsedOtherNameOrAlias"),
+      when: (data) => data.hasUsedOtherNameOrAlias === true,
     },
   ),
 ],
@@ -165,19 +164,19 @@ A single question can also take its own `when`.
 
 ### Add guidance
 
-Blocks add content that saves nothing:
+Some nodes add content that saves nothing:
 
 | Builder | Shows |
 |---|---|
-| `block.banner(content, { variant?, when? })` | A callout. `content` is markdown, so it can include links, **bold** text, and lists. `variant` is `"info"`, `"success"`, `"warning"`, or `"error"` |
-| `block.subsection(children, { title?, when? })` | A group of questions and content, with an optional title |
-| `block.note(content)` | A plain paragraph |
-| `block.display(Component, { reads?, props? })` | A component, such as the shared `NameChangeReasonBanner`. List the fields it reads in `reads` |
+| `node.banner(content, { variant?, when? })` | A callout. `content` is markdown, so it can include links, **bold** text, and lists (but not a link inside bold text). `variant` is `"info"`, `"success"`, `"warning"`, or `"error"` |
+| `node.subsection(children, { title?, when? })` | A group of questions and content, with an optional title |
+| `node.note(content)` | A plain paragraph |
+| `node.display(Component, { reads?, props? })` | A component, such as the shared `NameChangeReasonBanner`. List the fields it reads in `reads` |
 
 ```ts
-block.banner(
+node.banner(
   "Attach a copy of each prior court order or marriage license to your petition.",
-  { when: isTrue("hasPreviousNameChange") },
+  { when: (data) => data.hasPreviousNameChange === true },
 ),
 ```
 
@@ -211,7 +210,7 @@ export default defineForm({
     "Review all documents carefully.",
     {
       text: "Attach a copy of each prior court order or marriage license to your petition.",
-      when: isTrue("hasPreviousNameChange"),
+      when: (data) => data.hasPreviousNameChange === true,
     },
   ],
 });

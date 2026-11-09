@@ -1,8 +1,8 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineForm } from "#lib/forms/defineForm";
-import { allOf, block, field, is, isTrue, not } from "#lib/forms/steps";
+import { type Condition, node } from "#lib/forms/steps";
 
-const isHoused = not(isTrue("isCurrentlyUnhoused"));
+const isHoused: Condition = (data) => data.isCurrentlyUnhoused !== true;
 
 export default defineForm({
   steps: [
@@ -11,23 +11,23 @@ export default defineForm({
       title: "What is your new name?",
       description:
         "This is the name you're making official! Type it exactly as you want it to appear.",
-      body: [field.name("newName")],
+      body: [node.name("newName")],
     },
     {
       id: "current-name",
       title: "What is your current legal name?",
       description:
         "This is the name you're leaving behind. Type it exactly as it appears on your ID.",
-      body: [field.name("oldName")],
+      body: [node.name("oldName")],
     },
     {
       id: "reason",
       title: "What is the reason you're changing your name?",
       body: [
-        field.longText("reasonForChangingName", {
+        node.longText("reasonForChangingName", {
           label: "Reason for name change",
         }),
-        block.display(NameChangeReasonBanner),
+        node.display(NameChangeReasonBanner),
       ],
     },
     {
@@ -36,8 +36,8 @@ export default defineForm({
       description:
         "The court uses this to communicate with you about your filing status.",
       body: [
-        field.phone("phoneNumber"),
-        field.email("email", { reviewLabel: "Email" }),
+        node.phone("phoneNumber"),
+        node.email("email", { reviewLabel: "Email" }),
       ],
     },
     {
@@ -46,26 +46,25 @@ export default defineForm({
       description:
         "You must file your name change with the Probate Court in the city or town where you live.",
       body: [
-        field.checkbox("isCurrentlyUnhoused", {
+        node.checkbox("isCurrentlyUnhoused", {
           label: "I am currently unhoused or without permanent housing",
           reviewLabel: "Currently unhoused?",
         }),
-        block.banner(
+        node.banner(
           "We recommend reaching out to [Thundermist Health Center](https://www.thundermisthealth.org/services/social-services/), which has locations in Woonsocket, West Warwick, and Wakefield. Thundermist can help connect you with social services and may be able to provide an address to use for your name change application.",
-          { when: isTrue("isCurrentlyUnhoused") },
+          { when: (data) => data.isCurrentlyUnhoused === true },
         ),
-        field.address("residence", { when: isHoused }),
-        field.checkbox("isMailingAddressDifferentFromResidence", {
+        node.address("residence", { when: isHoused }),
+        node.checkbox("isMailingAddressDifferentFromResidence", {
           label: "I use a different mailing address",
           reviewLabel: "Mailing address different from residence?",
           when: isHoused,
         }),
-        block.subsection([field.address("mailing")], {
+        node.subsection([node.address("mailing")], {
           title: "What is your mailing address?",
-          when: allOf(
-            isHoused,
-            isTrue("isMailingAddressDifferentFromResidence"),
-          ),
+          when: (data) =>
+            isHoused(data) &&
+            data.isMailingAddressDifferentFromResidence === true,
         }),
       ],
     },
@@ -75,7 +74,7 @@ export default defineForm({
       description:
         "List up to three addresses where you have resided prior to your current address.",
       body: [
-        field.repeatingEntry("previousAddresses", {
+        node.repeatingEntry("previousAddresses", {
           reviewLabel: "Previous addresses",
           min: 0,
           max: 3,
@@ -87,37 +86,38 @@ export default defineForm({
     {
       id: "date-of-birth",
       title: "What is your date of birth?",
-      body: [field.memorableDate("dateOfBirth", { label: "Date of birth" })],
+      body: [node.memorableDate("dateOfBirth", { label: "Date of birth" })],
     },
     {
       id: "birthplace",
       title: "Where were you born?",
       body: [
-        field.shortText("birthplaceCity", {
+        node.shortText("birthplaceCity", {
           label: "City",
           reviewLabel: "City of birth",
         }),
-        field.comboBox("birthplaceCountry", {
+        node.comboBox("birthplaceCountry", {
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
           source: "countries",
         }),
-        field.comboBox("birthplaceState", {
+        node.comboBox("birthplaceState", {
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
           source: "jurisdictions",
-          when: is("birthplaceCountry", "US"),
+          when: (data) => data.birthplaceCountry === "US",
         }),
       ],
     },
     {
       id: "birth-certificate",
       title: "Do you want to update your Rhode Island birth certificate?",
-      when: allOf(is("birthplaceCountry", "US"), is("birthplaceState", "RI")),
+      when: (data) =>
+        data.birthplaceCountry === "US" && data.birthplaceState === "RI",
       body: [
-        field.yesNo("shouldChangeBirthCertificate", {
+        node.yesNo("shouldChangeBirthCertificate", {
           reviewLabel: "Update birth certificate?",
           yesLabel: "Yes, update my birth certificate to my new name",
           noLabel: "No, don't change my birth certificate",
@@ -128,14 +128,14 @@ export default defineForm({
       id: "previous-name-change",
       title: "Have you ever changed your name before?",
       body: [
-        field.yesNo("hasPreviousNameChange", {
+        node.yesNo("hasPreviousNameChange", {
           reviewLabel: "Has previous name change?",
           yesLabel: "Yes, I've changed my name before",
           noLabel: "No, I've never changed my name",
         }),
-        block.banner(
+        node.banner(
           "Attach a copy of each prior court order or marriage license to your petition.",
-          { when: isTrue("hasPreviousNameChange") },
+          { when: (data) => data.hasPreviousNameChange === true },
         ),
       ],
     },
@@ -143,10 +143,10 @@ export default defineForm({
       id: "family-info",
       title: "What are your parents' names?",
       body: [
-        block.subsection([field.name("mothersName")], {
+        node.subsection([node.name("mothersName")], {
           title: "Mother's maiden name",
         }),
-        block.subsection([field.name("fathersName")], {
+        node.subsection([node.name("fathersName")], {
           title: "Father's name",
         }),
       ],
@@ -155,8 +155,8 @@ export default defineForm({
       id: "personal-info",
       title: "What is your occupation and marital status?",
       body: [
-        field.shortText("occupation", { label: "Occupation" }),
-        field.comboBox("maritalStatus", {
+        node.shortText("occupation", { label: "Occupation" }),
+        node.comboBox("maritalStatus", {
           label: "Marital status (optional)",
           reviewLabel: "Marital status",
           placeholder: "Select marital status",
@@ -177,7 +177,7 @@ export default defineForm({
     "Remember to bring a certified copy of your original birth certificate and a BCI (criminal background) report.",
     {
       text: "Attach a copy of each prior court order or marriage license to your petition.",
-      when: isTrue("hasPreviousNameChange"),
+      when: (data) => data.hasPreviousNameChange === true,
     },
   ],
 });

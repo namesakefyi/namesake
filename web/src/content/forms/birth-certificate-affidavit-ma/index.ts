@@ -1,5 +1,5 @@
 import { defineForm } from "#lib/forms/defineForm";
-import { block, field } from "#lib/forms/steps";
+import { node } from "#lib/forms/steps";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
 import { joinNames } from "#lib/utils/joinNames";
 
@@ -11,7 +11,7 @@ export default defineForm({
       id: "birth-gender",
       title: "Which gender marker appears on your birth certificate?",
       body: [
-        field.radioGroup("oldGender", {
+        node.radioGroup("oldGender", {
           options: genderOptions,
           reviewLabel: "Existing gender marker",
         }),
@@ -23,11 +23,11 @@ export default defineForm({
       description:
         "This is the gender marker that will display on your amended birth certificate.",
       body: [
-        field.radioGroup("newGender", {
+        node.radioGroup("newGender", {
           options: genderOptions,
           reviewLabel: "Desired gender marker",
         }),
-        block.banner(
+        node.banner(
           "Your birth and new gender markers are identical. Massachusetts doesn't allow people to amend their birth certificate if their gender markers are unchanged.",
           {
             variant: "warning",
@@ -40,25 +40,25 @@ export default defineForm({
     {
       id: "birth-name",
       title: "What is the name on your current birth certificate?",
-      body: [field.name("oldName")],
+      body: [node.name("oldName")],
     },
     {
       id: "new-name",
       title: "What is your new name?",
       description:
         "This is the name that will appear on your amended birth certificate.",
-      body: [field.name("newName")],
+      body: [node.name("newName")],
     },
     {
       id: "date-of-birth",
       title: "What is your date of birth?",
-      body: [field.memorableDate("dateOfBirth", { label: "Date of birth" })],
+      body: [node.memorableDate("dateOfBirth", { label: "Date of birth" })],
     },
     {
       id: "birthplace",
       title: "Where were you born?",
       body: [
-        field.shortText("birthplaceCity", {
+        node.shortText("birthplaceCity", {
           label: "City/town",
           reviewLabel: "City of birth",
         }),
@@ -70,14 +70,14 @@ export default defineForm({
       description:
         "Provide the names of the parents as listed on your birth certificate.",
       body: [
-        field.shortText("parent1FullName", { label: "Parent 1 full name" }),
-        field.shortText("parent2FullName", { label: "Parent 2 full name" }),
+        node.shortText("parent1FullName", { label: "Parent 1 full name" }),
+        node.shortText("parent2FullName", { label: "Parent 2 full name" }),
       ],
     },
     {
       id: "address",
       title: "What is your mailing address?",
-      body: [field.address("mailing", { address2: true })],
+      body: [node.address("mailing", { address2: true })],
     },
     {
       id: "contact-info",
@@ -85,8 +85,8 @@ export default defineForm({
       description:
         "The government uses this to communicate with you about your filing status.",
       body: [
-        field.phone("phoneNumber"),
-        field.email("email", { reviewLabel: "Email" }),
+        node.phone("phoneNumber"),
+        node.email("email", { reviewLabel: "Email" }),
       ],
     },
     {
@@ -95,7 +95,7 @@ export default defineForm({
       description:
         "To waive the fees, you'll need to file the Affidavit of Indigency. We can help you with that.",
       body: [
-        field.checkbox("waiveDocumentFees", {
+        node.checkbox("waiveDocumentFees", {
           label: "Waive the fees",
           reviewLabel: "Waive fees?",
         }),
@@ -108,12 +108,12 @@ export default defineForm({
         "Since you are under 18 years old, at least one parent or guardian must authorize this change.",
       when: (data) => deriveCurrentAge(data.dateOfBirth) < 18,
       body: [
-        field.shortText("guardianOneFullName", {
+        node.shortText("guardianOneFullName", {
           label: "Parent or guardian 1's full name",
           reviewLabel: "Guardian/parent 1's full name",
           size: 24,
         }),
-        field.shortText("guardianTwoFullName", {
+        node.shortText("guardianTwoFullName", {
           label: "Parent or guardian 2's full name",
           reviewLabel: "Guardian/parent 2's full name",
           size: 24,

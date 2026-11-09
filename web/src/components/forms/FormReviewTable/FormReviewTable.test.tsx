@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
-import { field } from "#lib/forms/steps";
+import { node } from "#lib/forms/steps";
 import type { Step } from "#lib/forms/types";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormReviewTable } from "./FormReviewTable";
@@ -48,14 +48,14 @@ function renderWithValues(
 const hidden = () => false;
 
 const oldFirstName = (when?: () => boolean) =>
-  field.shortText("oldFirstName", {
+  node.shortText("oldFirstName", {
     label: "First name",
     reviewLabel: "Old first name",
     when,
   });
 
 const oldLastName = (when?: () => boolean) =>
-  field.shortText("oldLastName", {
+  node.shortText("oldLastName", {
     label: "Last name",
     reviewLabel: "Old last name",
     when,
@@ -70,7 +70,7 @@ const nameStep: Step = {
 const contactStep: Step = {
   id: "contact",
   title: "Contact",
-  body: [field.phone("phoneNumber")],
+  body: [node.phone("phoneNumber")],
 };
 
 describe("FormReviewTable", () => {
@@ -139,7 +139,7 @@ describe("FormReviewTable", () => {
       id: "yes-no-step",
       title: "Yes/No",
       body: [
-        field.yesNo("hasCourtAppointedGuardian", {
+        node.yesNo("hasCourtAppointedGuardian", {
           reviewLabel: "Court-appointed guardian?",
         }),
       ],

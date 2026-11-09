@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { isTrue, traceReads, withDeps } from "../conditions";
+import { traceReads, withDeps } from "../conditions";
 import { getStepFields } from "../getStepFields";
-import { block, field } from "../steps";
+import { node } from "../steps";
 import type { Condition, Step } from "../types";
 
 const ids = (step: Step) => getStepFields(step).map((entry) => entry.id);
@@ -11,12 +11,12 @@ describe("getStepFields", () => {
     const step: Step = {
       id: "body",
       title: "Body",
-      when: isTrue("isFilingForSomeoneElse"),
+      when: (data) => data.isFilingForSomeoneElse === true,
       body: [
-        field.yesNo("hasPreviousNameChange", { label: "Changed before?" }),
-        block.subsection(
+        node.yesNo("hasPreviousNameChange", { label: "Changed before?" }),
+        node.subsection(
           [
-            field.shortText("previousNameFrom", {
+            node.shortText("previousNameFrom", {
               label: "From",
               when: withDeps(
                 (data) => Boolean(data.previousNameTo),
@@ -24,7 +24,7 @@ describe("getStepFields", () => {
               ),
             }),
           ],
-          { when: isTrue("hasPreviousNameChange") },
+          { when: (data) => data.hasPreviousNameChange === true },
         ),
       ],
     };
@@ -52,7 +52,7 @@ describe("getStepFields", () => {
     const step: Step = {
       id: "single",
       title: "Have you changed your name before?",
-      body: [field.yesNo("hasPreviousNameChange")],
+      body: [node.yesNo("hasPreviousNameChange")],
     };
     expect(getStepFields(step)[0].reviewLabel).toBe(
       "Have you changed your name before?",
@@ -64,8 +64,8 @@ describe("getStepFields", () => {
       id: "subsection",
       title: "Have you changed your name before?",
       body: [
-        field.yesNo("hasPreviousNameChange"),
-        block.subsection([field.shortText("previousNameFrom")], {
+        node.yesNo("hasPreviousNameChange"),
+        node.subsection([node.shortText("previousNameFrom")], {
           title: "What was your previous name?",
         }),
       ],
@@ -81,8 +81,8 @@ describe("getStepFields", () => {
       id: "two",
       title: "Two",
       body: [
-        field.yesNo("hasPreviousNameChange"),
-        field.shortText("previousNameFrom"),
+        node.yesNo("hasPreviousNameChange"),
+        node.shortText("previousNameFrom"),
       ],
     };
     expect(() => getStepFields(step)).toThrow(/more than one unlabeled field/);
@@ -93,13 +93,13 @@ describe("getStepFields", () => {
       id: "labels",
       title: "Labels",
       body: [
-        field.shortText("occupation", {
+        node.shortText("occupation", {
           label: "Job",
           reviewLabel: "Occupation",
         }),
-        field.phone("phoneNumber"),
-        field.name("newName"),
-        field.radioGroup("incomePeriod", {
+        node.phone("phoneNumber"),
+        node.name("newName"),
+        node.radioGroup("incomePeriod", {
           label: "How often?",
           options: {
             weekly: "Every week",
@@ -132,7 +132,7 @@ describe("getStepFields", () => {
     const step: Step = {
       id: "pronouns",
       title: "Pronouns",
-      body: [field.pronounSelect()],
+      body: [node.pronounSelect()],
     };
     const other = getStepFields(step)[1];
     expect(other.id).toBe("otherPronouns");

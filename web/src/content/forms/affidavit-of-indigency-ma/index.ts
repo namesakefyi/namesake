@@ -2,11 +2,7 @@ import { FormCostsTable } from "#components/forms/CostsTable";
 import { defineForm } from "#lib/forms/defineForm";
 import {
   type BooleanFieldName,
-  block,
-  field,
-  is,
-  isTrue,
-  not,
+  node,
   type StepNode,
   type StringFieldName,
 } from "#lib/forms/steps";
@@ -14,7 +10,7 @@ import { MTPC_ASSISTANCE_URL, PovertyResult } from "./PovertyResult";
 
 /** An optional dollar amount for a fee. */
 const amount = (name: StringFieldName, reviewLabel: string) =>
-  field.number(name, {
+  node.number(name, {
     label: "Amount (if known)",
     reviewLabel,
     min: 0,
@@ -30,9 +26,9 @@ const waiver = (
     followUps = [],
   }: { label: string; reviewLabel: string; followUps?: readonly StepNode[] },
 ): StepNode[] => [
-  field.checkbox(name, { label, reviewLabel }),
+  node.checkbox(name, { label, reviewLabel }),
   ...(followUps.length > 0
-    ? [block.subsection(followUps, { when: isTrue(name) })]
+    ? [node.subsection(followUps, { when: (data) => data[name] === true })]
     : []),
 ];
 
@@ -43,22 +39,22 @@ export default defineForm({
       title: "What is your current legal name?",
       description:
         "This name will attach the fee waiver to your name change application.",
-      body: [field.name("oldName")],
+      body: [node.name("oldName")],
     },
     {
       id: "address",
       title: "What is your residential address?",
       body: [
-        field.checkbox("isCurrentlyUnhoused", {
+        node.checkbox("isCurrentlyUnhoused", {
           label: "I am currently unhoused or without permanent housing",
           reviewLabel: "Currently unhoused?",
         }),
-        block.banner(
+        node.banner(
           "We recommend reaching out to the [Massachusetts Transgender Political Coalition](https://www.masstpc.org/homelessness/). MTPC can provide an address to use for your name change application and connect you with housing resources.",
-          { when: isTrue("isCurrentlyUnhoused") },
+          { when: (data) => data.isCurrentlyUnhoused === true },
         ),
-        field.address("residence", {
-          when: not(isTrue("isCurrentlyUnhoused")),
+        node.address("residence", {
+          when: (data) => data.isCurrentlyUnhoused !== true,
         }),
       ],
     },
@@ -66,7 +62,7 @@ export default defineForm({
       id: "indigency-basis",
       title: "Why are you requesting a fee waiver?",
       body: [
-        field.radioGroup("indigencyBasis", {
+        node.radioGroup("indigencyBasis", {
           reviewLabel: "Reason for indigency",
           options: {
             "public-assistance":
@@ -77,9 +73,9 @@ export default defineForm({
             none: "None of the above",
           },
         }),
-        block.banner(
+        node.banner(
           `You may be able to get help covering filing fees through the [Massachusetts Transgender Political Coalition's Identity Document Assistance network](${MTPC_ASSISTANCE_URL}).`,
-          { when: is("indigencyBasis", "none") },
+          { when: (data) => data.indigencyBasis === "none" },
         ),
       ],
     },
@@ -87,25 +83,25 @@ export default defineForm({
       id: "public-assistance",
       title: "Which type of public assistance do you receive?",
       description: "Check all that apply.",
-      when: is("indigencyBasis", "public-assistance"),
+      when: (data) => data.indigencyBasis === "public-assistance",
       body: [
-        field.checkbox("isReceivingTAFDC", {
+        node.checkbox("isReceivingTAFDC", {
           label: "Transitional Aid to Families with Dependent Children (TAFDC)",
           reviewLabel: "Receiving TAFDC?",
         }),
-        field.checkbox("isReceivingEAEDC", {
+        node.checkbox("isReceivingEAEDC", {
           label: "Emergency Aid to Elderly, Disabled or Children (EAEDC)",
           reviewLabel: "Receiving EAEDC?",
         }),
-        field.checkbox("isReceivingVeteransBenefits", {
+        node.checkbox("isReceivingVeteransBenefits", {
           label: "Massachusetts Veterans Benefits Programs",
           reviewLabel: "Receiving veterans benefits?",
         }),
-        field.checkbox("isReceivingMedicaid", {
+        node.checkbox("isReceivingMedicaid", {
           label: "Medicaid (MassHealth)",
           reviewLabel: "Receiving Medicaid?",
         }),
-        field.checkbox("isReceivingSSI", {
+        node.checkbox("isReceivingSSI", {
           label: "Supplemental Security Income (SSI)",
           reviewLabel: "Receiving SSI?",
         }),
@@ -116,14 +112,14 @@ export default defineForm({
       title: "What is your income after taxes?",
       description:
         "We'll check whether your income qualifies you for a fee waiver based on the federal poverty level.",
-      when: is("indigencyBasis", "income"),
+      when: (data) => data.indigencyBasis === "income",
       body: [
-        field.number("incomeAmount", {
+        node.number("incomeAmount", {
           label: "Income amount",
           min: 0,
           currency: true,
         }),
-        field.radioGroup("incomePeriod", {
+        node.radioGroup("incomePeriod", {
           label: "How often do you receive this income?",
           reviewLabel: "Income period",
           options: {
@@ -133,19 +129,19 @@ export default defineForm({
             yearly: "Yearly",
           },
         }),
-        field.number("householdSize", {
+        node.number("householdSize", {
           label: "Total number of people in your household",
           reviewLabel: "Household size",
           min: 1,
         }),
-        block.display(PovertyResult, {
+        node.display(PovertyResult, {
           reads: ["incomeAmount", "incomePeriod", "householdSize"],
         }),
-        field.number("numberOfDependents", {
+        node.number("numberOfDependents", {
           label: "Number of dependents",
           min: 0,
         }),
-        field.number("otherHouseholdIncome", {
+        node.number("otherHouseholdIncome", {
           label: "Other household income (optional)",
           reviewLabel: "Other household income",
           description:
@@ -161,7 +157,7 @@ export default defineForm({
       title: "Which court fees would you like waived?",
       description: "Check all that apply. Enter the amount if you know it.",
       body: [
-        block.display(FormCostsTable),
+        node.display(FormCostsTable),
         ...waiver("shouldWaiveFilingFeeAndSurcharge", {
           label: "Filing fee and any surcharge",
           reviewLabel: "Waive filing fee and surcharge?",
@@ -192,7 +188,7 @@ export default defineForm({
           reviewLabel: "Waive other fees (Section 2)?",
           followUps: [
             amount("otherFeesSection2", "Other fees amount (Section 2)"),
-            field.shortText("otherFeesSection2Details", {
+            node.shortText("otherFeesSection2Details", {
               label: "What are these fees for?",
               reviewLabel: "Other fees details (Section 2)",
             }),
@@ -203,7 +199,7 @@ export default defineForm({
             "Ask the court to substitute a required service with a free or lower-cost alternative (uncommon)",
           reviewLabel: "Apply substitution (Section 2)?",
           followUps: [
-            field.shortText("substitutionDetailsSection2", {
+            node.shortText("substitutionDetailsSection2", {
               label: "Describe the substitution",
               reviewLabel: "Substitution details (Section 2)",
             }),
@@ -223,7 +219,7 @@ export default defineForm({
           reviewLabel: "Waive expert services?",
           followUps: [
             amount("costOfExpertServices", "Expert services cost"),
-            field.shortText("expertServicesDetails", {
+            node.shortText("expertServicesDetails", {
               label: "Describe the expert services needed",
               reviewLabel: "Expert services details",
             }),
@@ -258,7 +254,7 @@ export default defineForm({
           reviewLabel: "Waive other fees (Section 3)?",
           followUps: [
             amount("otherFeesSection3", "Other fees amount (Section 3)"),
-            field.shortText("otherFeesSection3Details", {
+            node.shortText("otherFeesSection3Details", {
               label: "What are these fees for?",
               reviewLabel: "Other fees details (Section 3)",
             }),
@@ -269,7 +265,7 @@ export default defineForm({
             "Ask the court to substitute one of these costs with a free or lower-cost alternative",
           reviewLabel: "Apply substitution (Section 3)?",
           followUps: [
-            field.shortText("substitutionDetailsSection3", {
+            node.shortText("substitutionDetailsSection3", {
               label: "Describe the substitution",
               reviewLabel: "Substitution details (Section 3)",
             }),

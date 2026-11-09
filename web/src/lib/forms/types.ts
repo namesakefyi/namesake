@@ -66,38 +66,38 @@ export interface WrittenField<W extends FieldName = FieldName> {
 
 /** Builder-specific settings, keyed by node kind. */
 export interface FieldPropsByKind {
-  "field.shortText": { size?: number };
-  "field.longText": Record<never, never>;
-  "field.number": {
+  shortText: { size?: number };
+  longText: Record<never, never>;
+  number: {
     min?: number;
     /** Format as US dollars, with cents only when entered. */
     currency?: boolean;
     /** The answer before someone changes it. */
     defaultValue?: number;
   };
-  "field.memorableDate": Record<never, never>;
-  "field.checkbox": Record<never, never>;
-  "field.yesNo": {
+  memorableDate: Record<never, never>;
+  checkbox: Record<never, never>;
+  yesNo: {
     yesLabel?: string;
     noLabel?: string;
     extraChoices?: readonly ExtraChoice[];
   };
-  "field.radioGroup": {
+  radioGroup: {
     options: OptionLabels;
     extraChoices?: readonly (typeof PREFER_NOT_TO_ANSWER)[];
   };
-  "field.checkboxGroup": {
+  checkboxGroup: {
     options: OptionLabels;
     extraChoices?: readonly (typeof PREFER_NOT_TO_ANSWER)[];
   };
-  "field.comboBox": { source: ComboBoxSource; placeholder?: string };
-  "field.phone": Record<never, never>;
-  "field.email": Record<never, never>;
-  "field.languageSelect": Record<never, never>;
-  "field.name": { type: NameType };
-  "field.address": { type: AddressType; address2: boolean; county: boolean };
-  "field.pronounSelect": Record<never, never>;
-  "field.repeatingEntry": {
+  comboBox: { source: ComboBoxSource; placeholder?: string };
+  phone: Record<never, never>;
+  email: Record<never, never>;
+  languageSelect: Record<never, never>;
+  name: { type: NameType };
+  address: { type: AddressType; address2: boolean; county: boolean };
+  pronounSelect: Record<never, never>;
+  repeatingEntry: {
     min: number;
     max?: number;
     itemLabel: string;
@@ -136,7 +136,7 @@ export type AnyFieldNode = { [K in FieldKind]: FieldNode<K> }[FieldKind];
 
 export interface BannerNode {
   type: "block";
-  kind: "block.banner";
+  kind: "banner";
   /** Markdown, rendered with react-markdown. */
   content: Text;
   variant?: "info" | "success" | "warning" | "error";
@@ -145,7 +145,7 @@ export interface BannerNode {
 
 export interface SubsectionNode {
   type: "block";
-  kind: "block.subsection";
+  kind: "subsection";
   children: readonly StepNode[];
   title?: OptionalText;
   when?: Condition;
@@ -153,13 +153,13 @@ export interface SubsectionNode {
 
 export interface NoteNode {
   type: "block";
-  kind: "block.note";
+  kind: "note";
   content: Text;
 }
 
 export interface DisplayNode {
   type: "block";
-  kind: "block.display";
+  kind: "display";
   component: ComponentType<any>;
   props?: object;
   /** Fields the component reads; empty for static content. */

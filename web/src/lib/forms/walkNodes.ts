@@ -54,7 +54,7 @@ export function walkNodes(
 ): void {
   for (const node of nodes) {
     visit(node, context);
-    if (node.kind === "block.subsection") {
+    if (node.kind === "subsection") {
       walkNodes(node.children, getChildContext(node, context), visit);
     }
   }

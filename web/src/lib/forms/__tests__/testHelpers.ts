@@ -1,4 +1,4 @@
-import { block, field, type StepNode } from "../steps";
+import { node, type StepNode } from "../steps";
 import type { Condition, Step, TextFieldName } from "../types";
 
 type TestField =
@@ -8,7 +8,7 @@ type TestField =
 
 /** A labeled text field for a test step, named after its field. */
 function textField(id: string, when?: Condition) {
-  return field.shortText(id as TextFieldName, { label: id, when });
+  return node.shortText(id as TextFieldName, { label: id, when });
 }
 
 /**
@@ -24,7 +24,7 @@ export function makeStep(
   const body: StepNode[] = fields.map((entry) => {
     if (typeof entry === "string") return textField(entry);
     if ("id" in entry) return textField(entry.id, entry.when);
-    return block.subsection(
+    return node.subsection(
       entry.ids.map((fieldId) => textField(fieldId)),
       {
         when: entry.when,

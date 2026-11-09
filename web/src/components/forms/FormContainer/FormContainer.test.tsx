@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FormConfig } from "#constants/forms";
 import * as db from "#db/database";
-import { block } from "#lib/forms/steps";
+import { node } from "#lib/forms/steps";
 import type { Step } from "#lib/forms/types";
 import { FormContainer } from "./FormContainer";
 
@@ -24,7 +24,7 @@ import { getFormConfig } from "#lib/forms/getFormConfig";
 const plainStep: Step = {
   id: "plain",
   title: "Plain Step",
-  body: [block.note("Step content")],
+  body: [node.note("Step content")],
 };
 
 const formStepStep: Step = {

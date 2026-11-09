@@ -1,26 +1,5 @@
-import { FIELD_DEFS, type FieldName, type FormData } from "#constants/fields";
-import type { BooleanFieldName, Condition, Data } from "./types";
-
-/** True when the field holds one of `values`. */
-export function is<K extends FieldName>(
-  field: K,
-  ...values: readonly NonNullable<FormData[K]>[]
-): Condition {
-  return withDeps(
-    (data) => (values as readonly unknown[]).includes(data[field]),
-    [field],
-  );
-}
-
-/** True when the field is `true`. */
-export function isTrue(field: BooleanFieldName): Condition {
-  return withDeps((data) => data[field] === true, [field]);
-}
-
-/** True when the field is `false` (not merely unanswered). */
-export function isFalse(field: BooleanFieldName): Condition {
-  return withDeps((data) => data[field] === false, [field]);
-}
+import { FIELD_DEFS, type FieldName } from "#constants/fields";
+import type { Condition, Data } from "./types";
 
 /**
  * Declares fields a predicate reads that tracing can miss, such as a field
@@ -35,27 +14,6 @@ export function withDeps(
   return condition;
 }
 
-/** True when the condition is false. */
-export function not(condition: Condition): Condition {
-  return withDeps((data) => !condition(data), condition.deps ?? []);
-}
-
-/** True when every condition holds. */
-export function allOf(...conditions: readonly Condition[]): Condition {
-  return withDeps(
-    (data) => conditions.every((condition) => condition(data)),
-    conditions.flatMap((condition) => condition.deps ?? []),
-  );
-}
-
-/** True when at least one condition holds. */
-export function anyOf(...conditions: readonly Condition[]): Condition {
-  return withDeps(
-    (data) => conditions.some((condition) => condition(data)),
-    conditions.flatMap((condition) => condition.deps ?? []),
-  );
-}
-
 /**
  * Combines the conditions that are present so all must hold, or returns
  * undefined when there are none.
@@ -67,7 +25,10 @@ export function combineConditions(
     (condition): condition is Condition => condition !== undefined,
   );
   if (present.length <= 1) return present[0];
-  return allOf(...present);
+  return withDeps(
+    (data) => present.every((condition) => condition(data)),
+    present.flatMap((condition) => condition.deps ?? []),
+  );
 }
 
 const FIELD_TYPES = new Map<string, string>(

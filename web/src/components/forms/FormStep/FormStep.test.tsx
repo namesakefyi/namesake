@@ -3,8 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
-import { isTrue } from "#lib/forms/conditions";
-import { block, field } from "#lib/forms/steps";
+import { node } from "#lib/forms/steps";
 import type { FormPhase, Step } from "#lib/forms/types";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormStep } from "./FormStep";
@@ -261,13 +260,16 @@ describe("FormStep body", () => {
       id: "previous-name",
       title: "Have you changed your name before?",
       body: [
-        field.yesNo("hasPreviousNameChange"),
-        block.subsection(
-          [field.shortText("previousNameFrom", { label: "Previous name" })],
-          { title: "Details", when: isTrue("hasPreviousNameChange") },
+        node.yesNo("hasPreviousNameChange"),
+        node.subsection(
+          [node.shortText("previousNameFrom", { label: "Previous name" })],
+          {
+            title: "Details",
+            when: (data) => data.hasPreviousNameChange === true,
+          },
         ),
-        block.banner("Read the [guide](https://example.com/guide).", {
-          when: isTrue("hasPreviousNameChange"),
+        node.banner("Read the [guide](https://example.com/guide).", {
+          when: (data) => data.hasPreviousNameChange === true,
         }),
       ],
     };
@@ -296,7 +298,7 @@ describe("FormStep body", () => {
     const step: Step = {
       id: "banner",
       title: "Banner",
-      body: [block.banner((data) => `Hello, ${data.newFirstName}`)],
+      body: [node.banner((data) => `Hello, ${data.newFirstName}`)],
     };
     renderStep(step, { newFirstName: "<b>Sylvia</b>" });
     expect(screen.getByText("Hello, <b>Sylvia</b>")).toBeInTheDocument();
@@ -304,7 +306,7 @@ describe("FormStep body", () => {
 
   it("names every renderer after its builder", () => {
     for (const [kind, renderer] of Object.entries(renderers)) {
-      expect(renderer.displayName).toBe(kind);
+      expect(renderer.displayName).toBe(`node.${kind}`);
     }
   });
 });

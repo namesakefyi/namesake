@@ -1,3 +1,4 @@
+import type { ComponentType } from "react";
 import {
   ADDRESS_FIELDS,
   type AddressPart,
@@ -12,15 +13,22 @@ import {
 import { type FieldName, shouldShowOtherPronouns } from "#constants/fields";
 import { withDeps } from "./conditions";
 import type {
+  BannerNode,
   BooleanFieldName,
   CommonFieldOptions,
+  Condition,
+  DisplayNode,
   FieldKind,
   FieldNode,
   FieldPropsByKind,
   ListFieldName,
+  NoteNode,
+  OptionalText,
   OptionLabels,
   Options,
+  StepNode,
   StringFieldName,
+  SubsectionNode,
   Text,
   TextFieldName,
   WrittenField,
@@ -66,38 +74,38 @@ function composite<K extends FieldKind, W extends FieldName>(
   return { type: "field", kind, when, reviewLabel, writes, props };
 }
 
-/** Builders for nodes that write data, one per form field component. */
-export const field = {
+/** Questions: nodes that write data, one per form field component. */
+const questions = {
   /** `ShortTextField`: a single line of text. */
   shortText<W extends TextFieldName>(
     name: W,
-    options: SingleFieldOptions<"field.shortText"> = {},
+    options: SingleFieldOptions<"shortText"> = {},
   ) {
-    return singleField("field.shortText", name, options);
+    return singleField("shortText", name, options);
   },
 
   /** `LongTextField`: a paragraph of text. */
   longText<W extends TextFieldName>(
     name: W,
-    options: SingleFieldOptions<"field.longText"> = {},
+    options: SingleFieldOptions<"longText"> = {},
   ) {
-    return singleField("field.longText", name, options);
+    return singleField("longText", name, options);
   },
 
   /** `NumberField`: a number, stored as a string. */
   number<W extends StringFieldName>(
     name: W,
-    options: SingleFieldOptions<"field.number"> = {},
+    options: SingleFieldOptions<"number"> = {},
   ) {
-    return singleField("field.number", name, options);
+    return singleField("number", name, options);
   },
 
   /** `MemorableDateField`: a date someone knows by heart. */
   memorableDate<W extends StringFieldName>(
     name: W,
-    options: SingleFieldOptions<"field.memorableDate"> = {},
+    options: SingleFieldOptions<"memorableDate"> = {},
   ) {
-    return singleField("field.memorableDate", name, options);
+    return singleField("memorableDate", name, options);
   },
 
   /** `CheckboxField`: a single checkbox. */
@@ -105,46 +113,46 @@ export const field = {
     name: W,
     options: CommonFieldOptions & { label: Text },
   ) {
-    return singleField("field.checkbox", name, options);
+    return singleField("checkbox", name, options);
   },
 
   /** `YesNoField`: a yes or no question. */
   yesNo<W extends BooleanFieldName>(
     name: W,
-    options: SingleFieldOptions<"field.yesNo"> = {},
+    options: SingleFieldOptions<"yesNo"> = {},
   ) {
-    return singleField("field.yesNo", name, options);
+    return singleField("yesNo", name, options);
   },
 
   /** `RadioGroupField`: one choice from a list. */
   radioGroup<W extends StringFieldName>(
     name: W,
-    options: Omit<SingleFieldOptions<"field.radioGroup">, "options"> & {
+    options: Omit<SingleFieldOptions<"radioGroup">, "options"> & {
       options: Options<W>;
     },
   ) {
-    return singleField("field.radioGroup", name, options);
+    return singleField("radioGroup", name, options);
   },
 
   /** `CheckboxGroupField`: any number of choices from a list. */
   checkboxGroup<W extends ListFieldName>(
     name: W,
-    options: SingleFieldOptions<"field.checkboxGroup">,
+    options: SingleFieldOptions<"checkboxGroup">,
   ) {
-    return singleField("field.checkboxGroup", name, options);
+    return singleField("checkboxGroup", name, options);
   },
 
   /** `ComboBoxField`: one choice from a long, searchable list. */
   comboBox<W extends StringFieldName>(
     name: W,
-    options: SingleFieldOptions<"field.comboBox">,
+    options: SingleFieldOptions<"comboBox">,
   ) {
-    return singleField("field.comboBox", name, options);
+    return singleField("comboBox", name, options);
   },
 
   /** `PhoneField`: labeled "Phone number" unless `label` is given. */
   phone<W extends StringFieldName>(name: W, options: LabelOptions = {}) {
-    return singleField("field.phone", name, {
+    return singleField("phone", name, {
       ...options,
       label: options.label ?? "Phone number",
     });
@@ -152,7 +160,7 @@ export const field = {
 
   /** `EmailField`: labeled "Email address" unless `label` is given. */
   email<W extends StringFieldName>(name: W, options: LabelOptions = {}) {
-    return singleField("field.email", name, {
+    return singleField("email", name, {
       ...options,
       label: options.label ?? "Email address",
     });
@@ -163,7 +171,7 @@ export const field = {
     name: W,
     options: CommonFieldOptions = {},
   ) {
-    return singleField("field.languageSelect", name, {
+    return singleField("languageSelect", name, {
       ...options,
       label: "Language",
     });
@@ -176,7 +184,7 @@ export const field = {
       id: names[part] as (typeof NAME_FIELDS)[T][NamePart],
       reviewLabel: NAME_REVIEW_LABELS[type](part),
     }));
-    return composite("field.name", writes, options, { type });
+    return composite("name", writes, options, { type });
   },
 
   /** `AddressField`: street, city, state and ZIP, plus optional parts. */
@@ -204,7 +212,7 @@ export const field = {
         | undefined;
       return id ? [{ id, reviewLabel: getAddressReviewLabel(type, part) }] : [];
     });
-    return composite("field.address", writes, common, {
+    return composite("address", writes, common, {
       type,
       address2,
       county,
@@ -224,7 +232,7 @@ export const field = {
         ),
       },
     ];
-    return composite("field.pronounSelect", writes, options, {});
+    return composite("pronounSelect", writes, options, {});
   },
 
   /**
@@ -233,9 +241,9 @@ export const field = {
    */
   repeatingEntry<W extends ListFieldName>(
     name: W,
-    options: SingleFieldOptions<"field.repeatingEntry">,
+    options: SingleFieldOptions<"repeatingEntry">,
   ) {
-    return singleField("field.repeatingEntry", name, options);
+    return singleField("repeatingEntry", name, options);
   },
 };
 
@@ -256,3 +264,57 @@ export type AddressWrites<T extends AddressType, O> =
   | AddressPartField<T, "street" | "city" | "state" | "zip">
   | (O extends { address2: true } ? AddressPartField<T, "street2"> : never)
   | (O extends { county: true } ? AddressPartField<T, "county"> : never);
+
+interface DisplayOptions<P> {
+  reads?: readonly FieldName[];
+  props?: P;
+}
+
+/** `props` is required when the component has required props. */
+type DisplayArguments<P> =
+  Record<never, never> extends P
+    ? [options?: DisplayOptions<P>]
+    : [options: DisplayOptions<P> & { props: P }];
+
+/** Blocks: nodes that write no data. */
+const blocks = {
+  /** `Banner`: a callout. `content` is markdown. */
+  banner(
+    content: Text,
+    options?: { variant?: BannerNode["variant"]; when?: Condition },
+  ): BannerNode {
+    return { type: "block", kind: "banner", content, ...options };
+  },
+
+  /** `FormSubsection`: a group of nodes with an optional title. */
+  subsection(
+    children: readonly StepNode[],
+    options?: { title?: OptionalText; when?: Condition },
+  ): SubsectionNode {
+    return { type: "block", kind: "subsection", children, ...options };
+  },
+
+  /** A plain paragraph. */
+  note(content: Text): NoteNode {
+    return { type: "block", kind: "note", content };
+  },
+
+  /**
+   * A component that writes no data: a shared banner, or a computed view.
+   * `reads` lists the fields it depends on.
+   */
+  display<P extends object>(
+    component: ComponentType<P>,
+    ...[options]: DisplayArguments<P>
+  ): DisplayNode {
+    const { reads = [], props } = (options ?? {}) as DisplayOptions<P>;
+    return { type: "block", kind: "display", component, props, reads };
+  },
+};
+
+/**
+ * Builders for everything in a step's `body`. Each is named after its
+ * component with the `Field` or `Form` affix dropped: `YesNoField` →
+ * `node.yesNo`, `FormSubsection` → `node.subsection`.
+ */
+export const node = { ...questions, ...blocks };

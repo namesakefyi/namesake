@@ -1,5 +1,5 @@
 import { defineForm } from "#lib/forms/defineForm";
-import { block, field, is, isTrue } from "#lib/forms/steps";
+import { type Condition, node } from "#lib/forms/steps";
 
 const copy = {
   governmentDocument:
@@ -9,11 +9,9 @@ const copy = {
     "The Social Security Administration requests this information for research and statistical purposes.",
 };
 
-const needsGovernmentDocument = is(
-  "citizenshipStatus",
-  "legalAlienNotAllowedToWork",
-  "other",
-);
+const needsGovernmentDocument: Condition = (data) =>
+  data.citizenshipStatus === "legalAlienNotAllowedToWork" ||
+  data.citizenshipStatus === "other";
 
 export default defineForm({
   steps: [
@@ -21,31 +19,31 @@ export default defineForm({
       id: "new-name",
       title: "What is your new name?",
       description: "This is the name that will show on your new card.",
-      body: [field.name("newName")],
+      body: [node.name("newName")],
     },
     {
       id: "old-name",
       title: "What was your name at birth?",
       description:
         "This is the name that appears on your original birth certificate.",
-      body: [field.name("oldName")],
+      body: [node.name("oldName")],
     },
     {
       id: "previous-names",
       title: "Have you used any other legal names?",
       body: [
-        field.yesNo("hasOtherLegalNames", {
+        node.yesNo("hasOtherLegalNames", {
           reviewLabel: "Has other legal names?",
           noLabel: "No, I've never changed my name before",
         }),
-        block.subsection(
+        node.subsection(
           [
-            field.longText("previousLegalNames", {
+            node.longText("previousLegalNames", {
               label: "Other names used",
               reviewLabel: "Previous legal names",
             }),
           ],
-          { when: isTrue("hasOtherLegalNames") },
+          { when: (data) => data.hasOtherLegalNames === true },
         ),
       ],
     },
@@ -53,32 +51,32 @@ export default defineForm({
       id: "birthplace",
       title: "Where were you born?",
       body: [
-        field.shortText("birthplaceCity", { label: "City of birth" }),
-        field.comboBox("birthplaceCountry", {
+        node.shortText("birthplaceCity", { label: "City of birth" }),
+        node.comboBox("birthplaceCountry", {
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
           source: "countries",
         }),
-        field.comboBox("birthplaceState", {
+        node.comboBox("birthplaceState", {
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
           source: "jurisdictions",
-          when: is("birthplaceCountry", "US"),
+          when: (data) => data.birthplaceCountry === "US",
         }),
       ],
     },
     {
       id: "date-of-birth",
       title: "What is your date of birth?",
-      body: [field.memorableDate("dateOfBirth", { label: "Date of birth" })],
+      body: [node.memorableDate("dateOfBirth", { label: "Date of birth" })],
     },
     {
       id: "citizenship",
       title: "What is your citizenship status?",
       body: [
-        field.radioGroup("citizenshipStatus", {
+        node.radioGroup("citizenshipStatus", {
           label: "Citizenship status",
           options: {
             usCitizen: "U.S. Citizen",
@@ -87,7 +85,7 @@ export default defineForm({
             other: "Other",
           },
         }),
-        block.banner(copy.governmentDocument, {
+        node.banner(copy.governmentDocument, {
           variant: "warning",
           when: needsGovernmentDocument,
         }),
@@ -99,14 +97,14 @@ export default defineForm({
       description:
         "This response is optional and does not affect your application. The Social Security Administration requests this information for research and statistical purposes.",
       body: [
-        field.yesNo("isHispanicOrLatino", {
+        node.yesNo("isHispanicOrLatino", {
           label: "Ethnicity",
           reviewLabel: "Hispanic or Latino?",
           yesLabel: "I am Hispanic or Latino",
           noLabel: "I am not Hispanic or Latino",
           extraChoices: ["preferNotToAnswer"],
         }),
-        block.banner(copy.researchPurposes),
+        node.banner(copy.researchPurposes),
       ],
     },
     {
@@ -114,7 +112,7 @@ export default defineForm({
       title: "What is your race?",
       description: "This response is optional.",
       body: [
-        field.checkboxGroup("race", {
+        node.checkboxGroup("race", {
           label: "Race",
           extraChoices: ["preferNotToAnswer"],
           options: {
@@ -127,7 +125,7 @@ export default defineForm({
             white: "White",
           },
         }),
-        block.banner(copy.researchPurposes),
+        node.banner(copy.researchPurposes),
       ],
     },
     {
@@ -136,12 +134,12 @@ export default defineForm({
       description:
         "The Social Security Administration accepts only two options: male or female.",
       body: [
-        field.radioGroup("sexAssignedAtBirth", {
+        node.radioGroup("sexAssignedAtBirth", {
           label: "Sex",
           reviewLabel: "Sex assigned at birth",
           options: { male: "Male", female: "Female" },
         }),
-        block.banner(
+        node.banner(
           `**Namesake recommends selecting the same gender marker that the Social Security Administration already has on file.** The gender marker is not shown on your Social Security card.
 
 As of January 20, 2025, the Trump administration has directed the Social Security Administration to [stop processing gender marker updates](https://www.whitehouse.gov/presidential-actions/2025/01/defending-women-from-gender-ideology-extremism-and-restoring-biological-truth-to-the-federal-government/) associated with social security records. Per [Lambda Legal](https://lambdalegal.org/tgnc-checklist-under-trump/#:~:text=If%20you%20apply%20for%20a%20gender%20marker%20change%20with%20Social%20Security%20now%2C%20you%20will%20likely%20be%20told%20that%20they%20cannot%20process%20your%20request.), if you apply for a gender marker change with Social Security now, you will likely be told that they cannot process your request.`,
@@ -154,12 +152,12 @@ As of January 20, 2025, the Trump administration has directed the Social Securit
       title: "What is your mother's (or first parent's) name?",
       description:
         "Use your parent's name at their birth, before marriage. This is also known as a maiden name.",
-      body: [field.name("mothersName")],
+      body: [node.name("mothersName")],
     },
     {
       id: "parent-two",
       title: "What is your father's (or second parent's) name?",
-      body: [field.name("fathersName")],
+      body: [node.name("fathersName")],
     },
     {
       id: "previous-social-security-card",
@@ -167,7 +165,7 @@ As of January 20, 2025, the Trump administration has directed the Social Securit
       description:
         "Or, have you ever filed for a Social Security number in the past?",
       body: [
-        field.yesNo("hasPreviousSocialSecurityCard", {
+        node.yesNo("hasPreviousSocialSecurityCard", {
           reviewLabel: "Previous Social Security card?",
           yesLabel:
             "Yes, I have a previous Social Security card or have applied for one",
@@ -175,34 +173,34 @@ As of January 20, 2025, the Trump administration has directed the Social Securit
             "No, I have never filed for or received a Social Security card before",
           extraChoices: ["dontKnow"],
         }),
-        block.subsection([field.name("previousSocialSecurityCardName")], {
+        node.subsection([node.name("previousSocialSecurityCardName")], {
           title:
             "What is the name shown on your most recent Social Security card?",
-          when: isTrue("hasPreviousSocialSecurityCard"),
+          when: (data) => data.hasPreviousSocialSecurityCard === true,
         }),
       ],
     },
     {
       id: "phone-number",
       title: "What is your phone number?",
-      body: [field.phone("phoneNumber")],
+      body: [node.phone("phoneNumber")],
     },
     {
       id: "address",
       title: "What is your mailing address?",
-      body: [field.address("mailing")],
+      body: [node.address("mailing")],
     },
     {
       id: "filing-for-someone-else",
       title: "Are you filing this form for someone else?",
       body: [
-        field.yesNo("isFilingForSomeoneElse", {
+        node.yesNo("isFilingForSomeoneElse", {
           yesLabel: "Yes, I am filing this for someone else",
           noLabel: "No, I am filing this for myself",
         }),
-        block.subsection(
+        node.subsection(
           [
-            field.radioGroup("relationshipToFilingFor", {
+            node.radioGroup("relationshipToFilingFor", {
               reviewLabel: "Relationship to the person you are filing for",
               options: {
                 parent: "Natural or Adoptive Parent",
@@ -210,18 +208,18 @@ As of January 20, 2025, the Trump administration has directed the Social Securit
                 other: "Other",
               },
             }),
-            field.shortText("relationshipToFilingForOther", {
+            node.shortText("relationshipToFilingForOther", {
               label: "Specify relationship",
               reviewLabel:
                 "Relationship to the person you are filing for (other)",
               size: 34,
-              when: is("relationshipToFilingFor", "other"),
+              when: (data) => data.relationshipToFilingFor === "other",
             }),
           ],
           {
             title:
               "What is your relationship to the person you are filing for?",
-            when: isTrue("isFilingForSomeoneElse"),
+            when: (data) => data.isFilingForSomeoneElse === true,
           },
         ),
       ],

@@ -1,6 +1,6 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineForm } from "#lib/forms/defineForm";
-import { anyOf, block, field, is, isFalse, isTrue } from "#lib/forms/steps";
+import { node } from "#lib/forms/steps";
 import {
   livesInNewYorkCity,
   requestsNameChange,
@@ -16,7 +16,7 @@ export default defineForm({
       id: "request-type",
       title: "What would you like to change?",
       body: [
-        field.radioGroup("nyCourtOrderRequest", {
+        node.radioGroup("nyCourtOrderRequest", {
           reviewLabel: "Requested New York court order",
           options: {
             "Name change": "My name",
@@ -33,7 +33,7 @@ export default defineForm({
         requestsNameChange(data)
           ? "This is the name you're leaving behind. Type it exactly as it appears on your ID."
           : "Type it exactly as it appears on your ID.",
-      body: [field.name("oldName")],
+      body: [node.name("oldName")],
     },
     {
       id: "new-name",
@@ -41,17 +41,17 @@ export default defineForm({
       description:
         "This is the name you're making official! Type it exactly as you want it to appear.",
       when: requestsNameChange,
-      body: [field.name("newName")],
+      body: [node.name("newName")],
     },
     {
       id: "date-of-birth",
       title: "What is your date of birth?",
-      body: [field.memorableDate("dateOfBirth", { label: "Date of birth" })],
+      body: [node.memorableDate("dateOfBirth", { label: "Date of birth" })],
     },
     {
       id: "address",
       title: "What is your current address?",
-      body: [field.address("residence", { address2: true, county: true })],
+      body: [node.address("residence", { address2: true, county: true })],
     },
     {
       id: "court",
@@ -60,7 +60,7 @@ export default defineForm({
         "Because you live in New York City, you can file your petition in Civil Court or Supreme Court in your borough. We recommend Civil Court, which has a lower filing fee.",
       when: livesInNewYorkCity,
       body: [
-        field.radioGroup("courtType", {
+        node.radioGroup("courtType", {
           reviewLabel: "Court type",
           options: { Civil: "Civil Court", Supreme: "Supreme Court" },
         }),
@@ -71,24 +71,24 @@ export default defineForm({
       title: "Where were you born?",
       when: requestsNameChange,
       body: [
-        field.shortText("birthplaceCity", {
+        node.shortText("birthplaceCity", {
           label: "City, town, or village",
           reviewLabel: "City of birth",
         }),
-        field.comboBox("birthplaceCountry", {
+        node.comboBox("birthplaceCountry", {
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
           source: "countries",
         }),
-        field.comboBox("birthplaceState", {
+        node.comboBox("birthplaceState", {
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
           source: "jurisdictions",
-          when: is("birthplaceCountry", "US"),
+          when: (data) => data.birthplaceCountry === "US",
         }),
-        field.shortText("birthplaceRegion", {
+        node.shortText("birthplaceRegion", {
           label: "Province or region",
           reviewLabel: "Province or region of birth",
           when: (data) =>
@@ -103,21 +103,21 @@ export default defineForm({
         "A crime is a misdemeanor or felony. Traffic tickets and violations, like disorderly conduct, aren't crimes.",
       when: requestsNameChange,
       body: [
-        field.yesNo("hasBeenConvictedOfCrime", {
+        node.yesNo("hasBeenConvictedOfCrime", {
           reviewLabel: "Ever convicted of a crime?",
         }),
-        block.subsection(
+        node.subsection(
           [
-            field.shortText("courtOfConviction", {
+            node.shortText("courtOfConviction", {
               label: "Court where you were convicted",
               reviewLabel: "Court of conviction",
             }),
-            field.longText("crime", {
+            node.longText("crime", {
               label: "Crime for which you were convicted",
               reviewLabel: "Crime of conviction",
             }),
           ],
-          { when: isTrue("hasBeenConvictedOfCrime") },
+          { when: (data) => data.hasBeenConvictedOfCrime === true },
         ),
       ],
     },
@@ -127,21 +127,21 @@ export default defineForm({
         "Do you have any bankruptcy filings, judgments, liens, or court cases?",
       when: requestsNameChange,
       body: [
-        field.yesNo("hasFiledForBankruptcy", {
+        node.yesNo("hasFiledForBankruptcy", {
           label: "Have you ever filed for bankruptcy?",
           reviewLabel: "Ever filed for bankruptcy?",
         }),
-        field.yesNo("hasJudgmentsOrLiens", {
+        node.yesNo("hasJudgmentsOrLiens", {
           label: "Are there any judgments or liens against you?",
           reviewLabel: "Judgments or liens?",
         }),
-        field.yesNo("isPartyToLawsuitOrCourtCase", {
+        node.yesNo("isPartyToLawsuitOrCourtCase", {
           label: "Are you a party in a lawsuit or other court case?",
           reviewLabel: "Party to a lawsuit or court case?",
         }),
-        block.subsection(
+        node.subsection(
           [
-            field.longText("bankruptcyJudgmentsLiensDetails", {
+            node.longText("bankruptcyJudgmentsLiensDetails", {
               label: "Case details",
               reviewLabel:
                 "Bankruptcy, judgments, liens, or court case details",
@@ -150,11 +150,10 @@ export default defineForm({
             }),
           ],
           {
-            when: anyOf(
-              isTrue("hasFiledForBankruptcy"),
-              isTrue("hasJudgmentsOrLiens"),
-              isTrue("isPartyToLawsuitOrCourtCase"),
-            ),
+            when: (data) =>
+              data.hasFiledForBankruptcy === true ||
+              data.hasJudgmentsOrLiens === true ||
+              data.isPartyToLawsuitOrCourtCase === true,
           },
         ),
       ],
@@ -164,15 +163,15 @@ export default defineForm({
       title: "What is your family situation?",
       when: requestsNameChange,
       body: [
-        field.yesNo("isCurrentlyMarried", {
+        node.yesNo("isCurrentlyMarried", {
           label: "Are you currently married?",
           reviewLabel: "Currently married?",
         }),
-        field.yesNo("wasPreviouslyMarried", {
+        node.yesNo("wasPreviouslyMarried", {
           label: "Were you previously married?",
           reviewLabel: "Previously married?",
         }),
-        field.yesNo("hasChildrenUnder21", {
+        node.yesNo("hasChildrenUnder21", {
           label: "Do you have any children under 21?",
           reviewLabel: "Children under 21?",
         }),
@@ -183,64 +182,69 @@ export default defineForm({
       title: "Do you have to pay child or spousal support?",
       when: requestsNameChange,
       body: [
-        field.yesNo("paysChildSupport", {
+        node.yesNo("paysChildSupport", {
           label: "Do you have to pay child support?",
           reviewLabel: "Required to pay child support?",
         }),
-        block.subsection(
+        node.subsection(
           [
-            field.yesNo("areChildSupportPaymentsUpToDate", {
+            node.yesNo("areChildSupportPaymentsUpToDate", {
               label: "Are your child support payments up to date?",
               reviewLabel: "Child support payments up to date?",
             }),
-            block.subsection(
+            node.subsection(
               [
-                field.number("childSupportArrearsAmount", {
+                node.number("childSupportArrearsAmount", {
                   label: "Child support owed",
                   reviewLabel: "Child support amount owed",
                   min: 0,
                   currency: true,
                 }),
               ],
-              { when: isFalse("areChildSupportPaymentsUpToDate") },
+              {
+                when: (data) => data.areChildSupportPaymentsUpToDate === false,
+              },
             ),
-            field.shortText("courtIssuingChildSupportOrder", {
+            node.shortText("courtIssuingChildSupportOrder", {
               label: "Court that issued the child support order",
               reviewLabel: "Court issuing child support order",
             }),
-            field.shortText("supportCollectionsUnit", {
+            node.shortText("supportCollectionsUnit", {
               label: "Child Support Collections Unit",
             }),
           ],
-          { when: isTrue("paysChildSupport") },
+          { when: (data) => data.paysChildSupport === true },
         ),
-        field.yesNo("paysSpousalSupport", {
+        node.yesNo("paysSpousalSupport", {
           label: "Do you have to pay spousal support?",
           reviewLabel: "Required to pay spousal support?",
         }),
-        block.subsection(
+        node.subsection(
           [
-            field.yesNo("areSpousalSupportPaymentsUpToDate", {
+            node.yesNo("areSpousalSupportPaymentsUpToDate", {
               label: "Are your spousal support payments up to date?",
               reviewLabel: "Spousal support payments up to date?",
             }),
-            block.subsection(
+            node.subsection(
               [
-                field.number("spousalSupportArrearsAmount", {
+                node.number("spousalSupportArrearsAmount", {
                   label: "Spousal support owed",
                   reviewLabel: "Spousal support amount owed",
                   min: 0,
                   currency: true,
                 }),
               ],
-              { when: isFalse("areSpousalSupportPaymentsUpToDate") },
+              {
+                when: (data) =>
+                  data.areSpousalSupportPaymentsUpToDate === false,
+              },
             ),
-            field.shortText("courtIssuingSpousalSupportOrder", {
+            node.shortText("courtIssuingSpousalSupportOrder", {
               label: "Court that issued the spousal support order",
               reviewLabel: "Court issuing spousal support order",
             }),
           ],
-          { when: isTrue("paysSpousalSupport") },
+          { when: (data) => data.paysSpousalSupport === true },
         ),
       ],
     },
@@ -249,18 +253,18 @@ export default defineForm({
       title: "Have you ever filed a name change petition before?",
       when: requestsNameChange,
       body: [
-        field.yesNo("hasPreviouslyFiledNameChange", {
+        node.yesNo("hasPreviouslyFiledNameChange", {
           reviewLabel: "Ever filed a name change petition?",
         }),
-        block.subsection(
+        node.subsection(
           [
-            field.longText("previousNameChangePetitionDetails", {
+            node.longText("previousNameChangePetitionDetails", {
               label: "Previous petition details",
               reviewLabel: "Previous name change petition details",
               description: PREVIOUS_PETITION_DESCRIPTION,
             }),
           ],
-          { when: isTrue("hasPreviouslyFiledNameChange") },
+          { when: (data) => data.hasPreviouslyFiledNameChange === true },
         ),
       ],
     },
@@ -269,10 +273,10 @@ export default defineForm({
       title: "Why are you changing your name?",
       when: requestsNameChange,
       body: [
-        field.longText("reasonForChangingName", {
+        node.longText("reasonForChangingName", {
           label: "Reason for name change",
         }),
-        block.display(NameChangeReasonBanner),
+        node.display(NameChangeReasonBanner),
       ],
     },
     {
@@ -280,37 +284,40 @@ export default defineForm({
       title: "What is your new sex designation?",
       when: requestsSexDesignationChange,
       body: [
-        field.radioGroup("newGender", {
+        node.radioGroup("newGender", {
           reviewLabel: "Desired gender marker",
           options: { Female: "Female", Male: "Male", X: "X" },
         }),
-        field.yesNo("hasPreviouslyFiledSexDesignationChange", {
+        node.yesNo("hasPreviouslyFiledSexDesignationChange", {
           label:
             "Have you ever filed a sex designation change petition before?",
           reviewLabel: "Ever filed a sex designation change petition?",
         }),
-        block.subsection(
+        node.subsection(
           [
-            field.longText("previouslyFiledSexDesignationChangeDetails", {
+            node.longText("previouslyFiledSexDesignationChangeDetails", {
               label: "Previous petition details",
               reviewLabel: "Previous sex designation change petition details",
               description: PREVIOUS_PETITION_DESCRIPTION,
             }),
           ],
-          { when: isTrue("hasPreviouslyFiledSexDesignationChange") },
+          {
+            when: (data) =>
+              data.hasPreviouslyFiledSexDesignationChange === true,
+          },
         ),
-        field.yesNo("isProvidingReasonForGenderChange", {
+        node.yesNo("isProvidingReasonForGenderChange", {
           label:
             "Would you like to include your reasons for changing your sex designation?",
           reviewLabel: "Include reasons for sex designation change?",
         }),
-        block.subsection(
+        node.subsection(
           [
-            field.longText("reasonForGenderChange", {
+            node.longText("reasonForGenderChange", {
               label: "Reason for sex designation change",
             }),
           ],
-          { when: isTrue("isProvidingReasonForGenderChange") },
+          { when: (data) => data.isProvidingReasonForGenderChange === true },
         ),
       ],
     },
@@ -320,27 +327,27 @@ export default defineForm({
       description:
         "Your case is automatically kept private until the judge makes a decision. If public access to your record could put your safety at risk, you can ask the court to keep it sealed after that, too.",
       body: [
-        field.yesNo("shouldSealCourtRecord", {
+        node.yesNo("shouldSealCourtRecord", {
           reviewLabel: "Request sealing for personal safety?",
           yesLabel: "Yes, ask the court to keep my record sealed",
           noLabel:
             "No, it's okay for my record to be public after the decision",
         }),
-        block.subsection(
+        node.subsection(
           [
-            field.longText("reasonToSealCourtRecord", {
+            node.longText("reasonToSealCourtRecord", {
               label: "Reason to seal the court record",
               reviewLabel: "Reason to seal court record",
               description: "Explain why you want to keep your case private.",
             }),
-            block.banner(
+            node.banner(
               `**What do I write?** Explain how public access to your court record could affect your personal safety.
 
 - Describe the privacy or safety concerns that apply to you.
 - Be as specific to your personal situation as possible.`,
             ),
           ],
-          { when: isTrue("shouldSealCourtRecord") },
+          { when: (data) => data.shouldSealCourtRecord === true },
         ),
       ],
     },
@@ -348,18 +355,18 @@ export default defineForm({
       id: "supporting-documents",
       title: "Are you attaching supporting documents or additional pages?",
       body: [
-        field.yesNo("hasAttachedSupportingDocuments", {
+        node.yesNo("hasAttachedSupportingDocuments", {
           reviewLabel: "Attaching supporting documents or pages?",
         }),
-        block.subsection(
+        node.subsection(
           [
-            field.longText("supportingDocumentsDetails", {
+            node.longText("supportingDocumentsDetails", {
               label: "Documents or additional pages",
               reviewLabel: "Supporting documents or additional pages",
               description: "List the name or a description of each document.",
             }),
           ],
-          { when: isTrue("hasAttachedSupportingDocuments") },
+          { when: (data) => data.hasAttachedSupportingDocuments === true },
         ),
       ],
     },
