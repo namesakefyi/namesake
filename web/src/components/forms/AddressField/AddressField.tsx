@@ -58,7 +58,6 @@ export interface AddressFieldProps {
   children?: React.ReactNode;
   type: AddressType;
   includeAddress2?: boolean;
-  /** Shows a county dropdown for states with a county list, otherwise free text. */
   includeCounty?: boolean;
 }
 

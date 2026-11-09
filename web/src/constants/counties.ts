@@ -11,14 +11,7 @@ const county = (name: string, alsoKnownAs?: string): CountyOption => ({
   value: name,
 });
 
-/**
- * Counties for states where a form needs an exact county name.
- * AddressField shows a dropdown for these states and free text elsewhere,
- * so supporting a new state only means adding its list here.
- */
 const COUNTIES: Partial<Record<JurisdictionId, readonly CountyOption[]>> = {
-  // New York State Department of Public Service county list:
-  // https://documents.dps.ny.gov/public/Common/SearchCounty.aspx
   ny: [
     county("Albany"),
     county("Allegany"),
