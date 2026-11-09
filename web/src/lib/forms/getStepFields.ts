@@ -45,14 +45,6 @@ function collectStepFields(step: Step): StepField[] {
           reviewLabel: written.reviewLabel ?? node.reviewLabel ?? label,
         });
       }
-    } else if (node.kind === "block.custom") {
-      for (const id of node.writes) {
-        fields.push({
-          id,
-          when: combineConditions([step.when, ...enclosing]),
-          reviewLabel: node.reviewLabels[id] ?? id,
-        });
-      }
     }
   });
 

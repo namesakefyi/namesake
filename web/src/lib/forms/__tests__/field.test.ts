@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { block, field } from "../steps";
+import { field } from "../steps";
 
 describe("field and block builders", () => {
   it("lists the fields composite nodes write", () => {
@@ -62,10 +62,6 @@ describe("field and block builders", () => {
         daily: "Daily",
       },
     });
-    // @ts-expect-error block.custom must declare what it writes
-    block.custom({ render: () => null });
-    // @ts-expect-error block.custom must label each field it writes
-    block.custom({ writes: ["email"], render: () => null });
     expect(true).toBe(true);
   });
 });

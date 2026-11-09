@@ -1,9 +1,4 @@
-import type { ComponentType, ReactNode } from "react";
-import type {
-  ControllerFieldState,
-  ControllerRenderProps,
-  UseFormReturn,
-} from "react-hook-form";
+import type { ComponentType } from "react";
 import type { ComboBoxSource } from "#constants/comboBoxSources";
 import type { AddressType, NameType } from "#constants/fieldGroups";
 import type {
@@ -112,26 +107,12 @@ export interface FieldPropsByKind {
 
 export type FieldKind = keyof FieldPropsByKind;
 
-/** What a `render` override receives from `<FormStep>`. */
-export interface FieldRenderProps {
-  /** The bound field, for nodes that write a single field. */
-  field?: ControllerRenderProps<FormData>;
-  fieldState?: ControllerFieldState;
-  name?: FieldName;
-  label: string;
-  labelHidden: boolean;
-  description?: string;
-  choices?: readonly { value: string; label: string; description?: string }[];
-}
-
 /** Settings every field builder accepts. */
 export interface CommonFieldOptions {
   /** Shown only while this returns true. */
   when?: Condition;
   /** Label in the review table. Defaults to the field's label. */
   reviewLabel?: Text;
-  /** Replaces the default component; `<FormStep>` computes the props. */
-  render?: (props: FieldRenderProps) => ReactNode;
 }
 
 export interface FieldNode<
@@ -185,27 +166,7 @@ export interface DisplayNode {
   reads: readonly FieldName[];
 }
 
-/** What a `block.custom` component receives. */
-export interface CustomRenderProps {
-  form: UseFormReturn<FormData>;
-  writes: readonly FieldName[];
-}
-
-export interface CustomNode<W extends FieldName = FieldName> {
-  type: "block";
-  kind: "block.custom";
-  writes: readonly W[];
-  /** How each written field is labeled in the review table. */
-  reviewLabels: Readonly<Partial<Record<W, Text>>>;
-  render: (props: CustomRenderProps) => ReactNode;
-}
-
-export type BlockNode =
-  | BannerNode
-  | SubsectionNode
-  | NoteNode
-  | DisplayNode
-  | CustomNode;
+export type BlockNode = BannerNode | SubsectionNode | NoteNode | DisplayNode;
 
 export type BlockKind = BlockNode["kind"];
 

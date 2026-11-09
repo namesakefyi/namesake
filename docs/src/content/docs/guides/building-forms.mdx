@@ -73,28 +73,38 @@ Everything a step asks is saved as the person types, restored when they come bac
 
 ### Choose a question type
 
-Start typing `field.` to see every question type. Each one matches a form component:
+Each question type matches a form component. Options marked `?` are optional.
 
-| Builder | Asks for |
+| Builder | Component | Saves |
+|---|---|---|
+| `field.shortText(name, { label?, size? })` | `ShortTextField` | A line of text |
+| `field.longText(name, { label? })` | `LongTextField` | A paragraph of text |
+| `field.number(name, { label?, min?, currency?, defaultValue? })` | `NumberField` | A number; `currency: true` shows dollars |
+| `field.memorableDate(name, { label? })` | `MemorableDateField` | A date, such as a date of birth |
+| `field.checkbox(name, { label })` | `CheckboxField` | `true` or `false` |
+| `field.yesNo(name, { label?, yesLabel?, noLabel?, extraChoices? })` | `YesNoField` | `true` or `false`, or an extra choice |
+| `field.radioGroup(name, { label?, options, extraChoices? })` | `RadioGroupField` | One option's key |
+| `field.checkboxGroup(name, { label?, options, extraChoices? })` | `CheckboxGroupField` | A list of option keys |
+| `field.comboBox(name, { label?, source, placeholder? })` | `ComboBoxField` | One value from `source`: `"countries"`, `"jurisdictions"`, or `"maritalStatus"` |
+| `field.phone(name, { label? })` | `PhoneField` | A phone number |
+| `field.email(name, { label? })` | `EmailField` | An email address |
+| `field.languageSelect(name)` | `LanguageSelectField` | A language |
+| `field.name(type)` | `NameField` | First, middle, and last name for `type`: `"newName"`, `"oldName"`, `"mothersName"`, `"fathersName"`, or `"previousSocialSecurityCardName"` |
+| `field.address(type, { address2?, county? })` | `AddressField` | An address for `type`: `"residence"`, `"mailing"`, `"parent1"`, or `"parent2"`; only residence and mailing take `address2` and `county` |
+| `field.pronounSelect()` | `PronounSelectField` | Pronouns, plus other pronouns when "other" is picked |
+| `field.repeatingEntry(name, { label?, min, max?, itemLabel, size? })` | `RepeatingEntry` | A list of short answers, each labeled `itemLabel` and its number |
+
+Every question also takes these options:
+
+| Option | Does |
 |---|---|
-| `field.shortText` | A single line of text |
-| `field.longText` | A paragraph of text |
-| `field.number` | A number; add `currency: true` for dollar amounts |
-| `field.memorableDate` | A date, such as a date of birth |
-| `field.checkbox` | A single checkbox |
-| `field.yesNo` | A yes or no question |
-| `field.radioGroup` | One choice from a short list |
-| `field.checkboxGroup` | Any number of choices from a list |
-| `field.comboBox` | One choice from a long, searchable list |
-| `field.phone` | A phone number |
-| `field.email` | An email address |
-| `field.languageSelect` | A language |
-| `field.name` | First, middle, and last name |
-| `field.address` | A street address |
-| `field.pronounSelect` | Pronouns |
-| `field.repeatingEntry` | A list of short answers |
+| `when` | Shows the question only while the condition is true |
+| `reviewLabel` | Labels the answer on the review page |
+| `description` | Adds help text under the question (not on `field.checkbox`, `field.languageSelect`, `field.name`, `field.address`, or `field.pronounSelect`) |
 
-Give each question a `label`. If a step asks a single question, leave out the label and the step title is used instead.
+`extraChoices` adds "Prefer not to answer" (`"preferNotToAnswer"`) and, on `field.yesNo`, "I don't know" (`"dontKnow"`).
+
+Give each question a `label`. If a step or a titled subsection asks a single question, leave out its label and the title is used instead.
 
 For choices, label every option. The keys are what gets saved; the labels are what people see:
 
@@ -155,7 +165,14 @@ A single question can also take its own `when`.
 
 ### Add guidance
 
-Use `block.banner` for callouts. Banner text is markdown, so it can include links and **bold** text:
+Blocks add content that saves nothing:
+
+| Builder | Shows |
+|---|---|
+| `block.banner(content, { variant?, when? })` | A callout. `content` is markdown, so it can include links, **bold** text, and lists. `variant` is `"info"`, `"success"`, `"warning"`, or `"error"` |
+| `block.subsection(children, { title?, when? })` | A group of questions and content, with an optional title |
+| `block.note(content)` | A plain paragraph |
+| `block.display(Component, { reads?, props? })` | A component, such as the shared `NameChangeReasonBanner`. List the fields it reads in `reads` |
 
 ```ts
 block.banner(
@@ -163,8 +180,6 @@ block.banner(
   { when: isTrue("hasPreviousNameChange") },
 ),
 ```
-
-Use `block.note` for a plain paragraph. To show a component that several forms share, such as `NameChangeReasonBanner`, use `block.display`.
 
 If the same copy appears more than once in a form, for example in a banner and in the instructions, define it once at the top of `index.ts`.
 

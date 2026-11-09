@@ -1,10 +1,8 @@
-import type { ComponentType, ReactNode } from "react";
+import type { ComponentType } from "react";
 import type { FieldName } from "#constants/fields";
 import type {
   BannerNode,
   Condition,
-  CustomNode,
-  CustomRenderProps,
   DisplayNode,
   NoteNode,
   OptionalText,
@@ -57,17 +55,5 @@ export const block = {
   ): DisplayNode {
     const { reads = [], props } = (options ?? {}) as DisplayOptions<P>;
     return { type: "block", kind: "block.display", component, props, reads };
-  },
-
-  /**
-   * Any component, as long as it declares every field it writes and how
-   * each is labeled in the review table.
-   */
-  custom<W extends FieldName>(options: {
-    writes: readonly W[];
-    reviewLabels: Readonly<Record<W, Text>>;
-    render: (props: CustomRenderProps) => ReactNode;
-  }): CustomNode<W> {
-    return { type: "block", kind: "block.custom", ...options };
   },
 };

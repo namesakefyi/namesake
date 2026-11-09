@@ -89,20 +89,6 @@ function getStepReads(step: Step): Set<FieldName> {
   return reads;
 }
 
-/** How many `render` overrides and `block.custom` nodes a step uses. */
-function countFallbacks(step: Step): number {
-  let count = 0;
-  walkNodes(step.body, getRootContext(step), (node) => {
-    if (
-      node.kind === "block.custom" ||
-      (node.type === "field" && node.render)
-    ) {
-      count++;
-    }
-  });
-  return count;
-}
-
 /** Removes allowlisted findings and lists allowlist entries that went unused. */
 function applyAllowlist(
   findings: readonly { key: string; field: FieldName; message: string }[],
@@ -173,15 +159,7 @@ describe("form integrity", () => {
       const unread = [...getWrittenFields(config)].filter(
         (field) => !read.has(field),
       );
-      const fallbacks = config.steps.reduce(
-        (total, step) => total + countFallbacks(step),
-        0,
-      );
-      return unread.length > 0 || fallbacks > 0
-        ? [
-            `${slug}: ${fallbacks} fallbacks; unread: ${unread.join(", ") || "none"}`,
-          ]
-        : [];
+      return unread.length > 0 ? [`${slug}: unread: ${unread.join(", ")}`] : [];
     });
     if (report.length > 0) {
       console.info(`Form integrity report:\n${report.join("\n")}`);
@@ -217,8 +195,6 @@ describe("form integrity", () => {
               check(entry.when, entry.id);
               known.add(entry.id);
             }
-          } else if (node.kind === "block.custom") {
-            for (const id of node.writes) known.add(id);
           }
         });
       }

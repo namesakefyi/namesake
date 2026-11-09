@@ -1,5 +1,4 @@
 import { type ComponentType, memo, type ReactNode } from "react";
-import { useFormContext } from "react-hook-form";
 import Markdown from "react-markdown";
 import { Banner } from "#components/common/Banner";
 import { TextField } from "#components/common/TextField";
@@ -20,7 +19,7 @@ import { RepeatingEntry } from "#components/forms/RepeatingEntry";
 import { ShortTextField } from "#components/forms/ShortTextField";
 import { YesNoField } from "#components/forms/YesNoField";
 import { COMBO_BOX_SOURCES } from "#constants/comboBoxSources";
-import type { FieldName, FormData } from "#constants/fields";
+import type { FieldName } from "#constants/fields";
 import { toChoices } from "#lib/forms/optionLabels";
 import { resolveText } from "#lib/forms/resolveStepContent";
 import type {
@@ -199,11 +198,6 @@ export const renderers: {
   "block.display": ({ node }) => {
     const Display = node.component;
     return <Display {...node.props} />;
-  },
-  "block.custom": ({ node }) => {
-    const form = useFormContext<FormData>();
-    const Render = node.render;
-    return <Render form={form} writes={node.writes} />;
   },
 };
 

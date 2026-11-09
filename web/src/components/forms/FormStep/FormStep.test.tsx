@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
 import { isTrue } from "#lib/forms/conditions";
 import { block, field } from "#lib/forms/steps";
@@ -255,12 +255,6 @@ function renderStep(step: Step, defaultValues: Record<string, unknown> = {}) {
   });
 }
 
-/** A fallback that registers a field it doesn't declare. */
-function UndeclaredWriter() {
-  useFormContext().register("email");
-  return null;
-}
-
 describe("FormStep body", () => {
   it("renders each node and leaves hidden ones unmounted", async () => {
     const step: Step = {
@@ -306,38 +300,6 @@ describe("FormStep body", () => {
     };
     renderStep(step, { newFirstName: "<b>Sylvia</b>" });
     expect(screen.getByText("Hello, <b>Sylvia</b>")).toBeInTheDocument();
-  });
-
-  it("passes computed props to render overrides", () => {
-    const render = vi.fn(({ label, field: bound }) => (
-      <span>{`${label}: ${bound?.value}`}</span>
-    ));
-    const step: Step = {
-      id: "override",
-      title: "Override",
-      body: [field.shortText("occupation", { label: "Job", render })],
-    };
-    renderStep(step, { occupation: "Baker" });
-    expect(screen.getByText("Job: Baker")).toBeInTheDocument();
-  });
-
-  it("warns in development when a fallback writes an undeclared field", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const step: Step = {
-      id: "custom",
-      title: "Custom",
-      body: [
-        block.custom({
-          writes: ["phoneNumber"],
-          reviewLabels: { phoneNumber: "Phone number" },
-          render: UndeclaredWriter,
-        }),
-      ],
-    };
-    renderStep(step);
-    expect(warn).toHaveBeenCalledWith(
-      expect.stringContaining('registers "email", which is not in its writes'),
-    );
   });
 
   it("names every renderer after its builder", () => {

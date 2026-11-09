@@ -40,14 +40,7 @@ type SingleFieldOptions<K extends FieldKind> = LabelOptions &
 function singleField<K extends FieldKind, W extends FieldName>(
   kind: K,
   name: W,
-  {
-    label,
-    description,
-    when,
-    reviewLabel,
-    render,
-    ...props
-  }: SingleFieldOptions<K>,
+  { label, description, when, reviewLabel, ...props }: SingleFieldOptions<K>,
 ): FieldNode<K, W> {
   const options =
     "options" in props ? (props.options as OptionLabels) : undefined;
@@ -59,7 +52,6 @@ function singleField<K extends FieldKind, W extends FieldName>(
     description,
     when,
     reviewLabel,
-    render,
     writes: [{ id: name, options }],
     props: props as unknown as FieldPropsByKind[K],
   };
@@ -68,10 +60,10 @@ function singleField<K extends FieldKind, W extends FieldName>(
 function composite<K extends FieldKind, W extends FieldName>(
   kind: K,
   writes: readonly WrittenField<W>[],
-  { when, reviewLabel, render }: CommonFieldOptions,
+  { when, reviewLabel }: CommonFieldOptions,
   props: FieldPropsByKind[K],
 ): FieldNode<K, W> {
-  return { type: "field", kind, when, reviewLabel, render, writes, props };
+  return { type: "field", kind, when, reviewLabel, writes, props };
 }
 
 /** Builders for nodes that write data, one per form field component. */

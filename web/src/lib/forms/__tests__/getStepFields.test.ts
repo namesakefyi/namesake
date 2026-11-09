@@ -111,11 +111,6 @@ describe("getStepFields", () => {
             yearly: "Every year",
           },
         }),
-        block.custom({
-          writes: ["email"],
-          reviewLabels: { email: "Email" },
-          render: () => null,
-        }),
       ],
     };
     const fields = getStepFields(step);
@@ -126,9 +121,8 @@ describe("getStepFields", () => {
       "New middle name",
       "New last name",
       "How often?",
-      "Email",
     ]);
-    expect(fields.at(-2)?.options?.biweekly).toEqual({
+    expect(fields.at(-1)?.options?.biweekly).toEqual({
       label: "Every two weeks",
       description: "26 times a year",
     });
