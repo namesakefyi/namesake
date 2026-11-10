@@ -10,7 +10,7 @@ import { formatTitleWithJurisdiction } from "#lib/utils/formatTitleWithJurisdict
 export async function getStaticPaths() {
   const guides = await getCollection("guides", ({ data }) => !data.unlisted);
   return guides.map((guide) => ({
-    params: { slug: guide.id },
+    params: { id: guide.id },
     props: { guide },
   }));
 }

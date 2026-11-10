@@ -19,7 +19,7 @@ import { Banner } from "../../common/Banner";
 import { Heading } from "../../common/Content";
 
 interface FormFeedbackProps {
-  slug: string;
+  formId: string;
 }
 
 const ERROR_MESSAGES: Record<number, string> = {
@@ -34,7 +34,7 @@ function isSubmitError(state: SubmitState): state is SubmitError {
   return typeof state === "object";
 }
 
-export function FormFeedback({ slug }: FormFeedbackProps) {
+export function FormFeedback({ formId }: FormFeedbackProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const [state, submitAction, isPending] = useActionState<
@@ -49,7 +49,7 @@ export function FormFeedback({ slug }: FormFeedbackProps) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          form_slug: slug,
+          form_id: formId,
           sentiment,
           comment: comment.trim() || undefined,
         }),

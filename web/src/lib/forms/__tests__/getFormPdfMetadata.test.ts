@@ -12,7 +12,7 @@ vi.mock("../../pdfs/getPdfDefinition", () => ({
 }));
 
 describe("getFormPdfMetadata", () => {
-  it("returns an empty array when the form slug has no config", async () => {
+  it("returns an empty array when the form id has no config", async () => {
     vi.mocked(forms.getFormConfig).mockReturnValue(undefined);
 
     const result = await getFormPdfMetadata("unknown-form" as never);

@@ -6,7 +6,7 @@ import ProseLayout from "../layouts/ProseLayout.astro";
 export async function getStaticPaths() {
   const pages = await getCollection("pages");
   return pages.map((page) => ({
-    params: { slug: page.id },
+    params: { id: page.id },
     props: { page },
   }));
 }

@@ -177,7 +177,7 @@ export default defineForm({
 
 ## Render the form
 
-In your guide, render `FormContainer` with your form's folder path as its `slug`:
+In your guide, render `FormContainer` with your form's `formId`, which is its folder path including the jurisdiction:
 
 ```mdx
 // court-order.mdx
@@ -186,7 +186,7 @@ import FormContainer from "#components/forms/FormContainer/FormContainer.astro"
 
 ## Fill out forms
 
-<FormContainer slug="ma/court-order" />
+<FormContainer formId="ma/court-order" />
 ```
 
 ## Connect PDF fields

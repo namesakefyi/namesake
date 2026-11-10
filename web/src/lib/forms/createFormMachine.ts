@@ -33,7 +33,7 @@ export function createFormMachine({ id, steps }: CreateFormMachineOptions) {
     id,
     initial: "title",
     context: {
-      formSlug: id,
+      formId: id,
       currentStepId: null,
       editingStepId: null,
     },

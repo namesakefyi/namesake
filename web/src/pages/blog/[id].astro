@@ -11,7 +11,7 @@ import ProseLayout from "#layouts/ProseLayout.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
 }
 
 interface Props {
@@ -19,7 +19,7 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { slug } = Astro.params;
+const { id } = Astro.params;
 
 const { Content, headings } = await render(post);
 
@@ -31,7 +31,7 @@ const authors = authorEntries.filter(
 );
 
 const previewImage = {
-  src: post.data.image ? post.data.image.src.src : `/blog/${slug}.png`,
+  src: post.data.image ? post.data.image.src.src : `/blog/${id}.png`,
   alt: post.data.image?.alt ?? post.data.title,
 };
 ---

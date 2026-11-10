@@ -5,16 +5,16 @@ import { createOgImageResponse } from "#lib/utils/createOgImageResponse";
 export const getStaticPaths: GetStaticPaths = async () => {
   const guides = await getCollection("guides");
   return guides.map((guide: CollectionEntry<"guides">) => ({
-    params: { slug: guide.id },
+    params: { id: guide.id },
   }));
 };
 
 export const GET: APIRoute = async ({ params, request }) => {
-  const { slug } = params;
-  if (!slug) return new Response("Not found", { status: 404 });
+  const { id } = params;
+  if (!id) return new Response("Not found", { status: 404 });
 
   const guides = await getCollection("guides");
-  const guide = guides.find((g: CollectionEntry<"guides">) => g.id === slug);
+  const guide = guides.find((g: CollectionEntry<"guides">) => g.id === id);
   if (!guide) return new Response("Not found", { status: 404 });
 
   return await createOgImageResponse({

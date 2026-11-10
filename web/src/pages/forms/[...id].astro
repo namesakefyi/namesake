@@ -5,7 +5,7 @@ import BaseLayout from "#layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
   const forms = await getCollection("forms");
-  return forms.map((form) => ({ params: { slug: form.id }, props: { form } }));
+  return forms.map((form) => ({ params: { id: form.id }, props: { form } }));
 }
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const { form } = Astro.props;
-const { slug } = Astro.params;
+const { id } = Astro.params;
 const { title, description } = form.data;
 ---
 
@@ -22,9 +22,9 @@ const { title, description } = form.data;
   description={description}
   color="white"
   previewImage={{
-    src: `/forms/${slug}.png`,
+    src: `/forms/${id}.png`,
     alt: title,
   }}
 >
-  <FormContainer slug={form.id} inline={false} />
+  <FormContainer formId={form.id} inline={false} />
 </BaseLayout>

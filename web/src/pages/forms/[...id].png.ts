@@ -5,15 +5,15 @@ import { createOgImageResponse } from "#lib/utils/createOgImageResponse";
 export const getStaticPaths: GetStaticPaths = async () => {
   const forms = await getCollection("forms");
   return forms.map((form: CollectionEntry<"forms">) => ({
-    params: { slug: form.id },
+    params: { id: form.id },
   }));
 };
 
 export const GET: APIRoute = async ({ params, request }) => {
-  const { slug } = params;
-  if (!slug) return new Response("Not found", { status: 404 });
+  const { id } = params;
+  if (!id) return new Response("Not found", { status: 404 });
 
-  const form = await getEntry("forms", slug);
+  const form = await getEntry("forms", id);
   if (!form) return new Response("Not found", { status: 404 });
 
   return await createOgImageResponse({

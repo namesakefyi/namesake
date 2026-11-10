@@ -21,13 +21,13 @@ export interface FormPdfMetadata {
 /**
  * Get PDF metadata for a form to display on the forms index page.
  *
- * @param formSlug - The form's id, such as `ma/court-order`
+ * @param formId - The form's id, such as `ma/court-order`
  * @returns Array of PDF metadata including title, code, and whether it's conditional
  */
 export async function getFormPdfMetadata(
-  formSlug: string,
+  formId: string,
 ): Promise<FormPdfMetadata[]> {
-  const config = getFormConfig(formSlug);
+  const config = getFormConfig(formId);
   if (!config) return [];
 
   return await Promise.all(

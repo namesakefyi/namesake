@@ -22,7 +22,7 @@ vi.mock("../FormFeedback/FormFeedback", () => ({
 describe("FormCompleteStep", () => {
   const defaultProps: FormCompleteStepProps = {
     title: "Massachusetts Court Order",
-    slug: "ma/court-order",
+    formId: "ma/court-order",
     onRedownload: vi.fn(),
   };
 

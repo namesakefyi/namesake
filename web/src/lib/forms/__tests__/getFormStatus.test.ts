@@ -72,7 +72,7 @@ describe("getFormStatus", () => {
     expect(await getFormStatus("some-form")).toBe(null);
   });
 
-  it("passes form slug to getFormProgress", async () => {
+  it("passes the form id to getFormProgress", async () => {
     vi.mocked(getFormProgress).mockResolvedValue({ value: "complete" });
     await getFormStatus("ma/court-order");
     expect(getFormProgress).toHaveBeenCalledWith("ma/court-order");

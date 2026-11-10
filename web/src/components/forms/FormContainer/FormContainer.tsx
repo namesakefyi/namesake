@@ -16,7 +16,7 @@ import { FormStepContext } from "./FormStepContext";
 import "./FormContainer.css";
 
 export interface FormContainerProps {
-  slug: string;
+  formId: string;
 
   /** The form's display title, from the `forms` content collection. */
   title: string;
@@ -38,7 +38,7 @@ export interface FormContainerProps {
 }
 
 export function FormContainer({
-  slug,
+  formId,
   title,
   description,
   costs,
@@ -46,8 +46,8 @@ export function FormContainer({
   pdfMetadata = [],
   children,
 }: FormContainerProps) {
-  const config = getFormConfig(slug);
-  if (!config) throw new Error(`No form config found for slug: ${slug}`);
+  const config = getFormConfig(formId);
+  if (!config) throw new Error(`No form config found with id: ${formId}`);
   const { steps } = config;
 
   const form = useFormData(config);
@@ -66,7 +66,7 @@ export function FormContainer({
     totalSteps,
     goNext,
     goBack,
-  } = useFormState(slug, steps, form.getValues);
+  } = useFormState(formId, steps, form.getValues);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -183,7 +183,7 @@ export function FormContainer({
         return (
           <FormCompleteStep
             title={title}
-            slug={slug}
+            formId={formId}
             onRedownload={onSubmit}
             inline={inline}
             headingLevel={inline ? 2 : 1}
@@ -200,7 +200,7 @@ export function FormContainer({
     title,
     description,
     children,
-    slug,
+    formId,
     totalSteps,
     onStart,
     onDownloadBlank,

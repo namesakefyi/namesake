@@ -5,15 +5,13 @@ import { createOgImageResponse } from "#lib/utils/createOgImageResponse";
 export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await getCollection("posts");
   return posts.map((post: CollectionEntry<"posts">) => ({
-    params: { slug: post.id },
+    params: { id: post.id },
   }));
 };
 
 export const GET: APIRoute = async ({ params, request }) => {
   const posts = await getCollection("posts");
-  const post = posts.find(
-    (p: CollectionEntry<"posts">) => p.id === params.slug,
-  );
+  const post = posts.find((p: CollectionEntry<"posts">) => p.id === params.id);
   if (!post) return new Response("Not found", { status: 404 });
 
   return await createOgImageResponse({
