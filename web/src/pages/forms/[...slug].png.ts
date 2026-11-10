@@ -1,4 +1,4 @@
-import { type CollectionEntry, getCollection } from "astro:content";
+import { type CollectionEntry, getCollection, getEntry } from "astro:content";
 import type { APIRoute, GetStaticPaths } from "astro";
 import { createOgImageResponse } from "#lib/utils/createOgImageResponse";
 
@@ -13,8 +13,7 @@ export const GET: APIRoute = async ({ params, request }) => {
   const { slug } = params;
   if (!slug) return new Response("Not found", { status: 404 });
 
-  const forms = await getCollection("forms");
-  const form = forms.find((f: CollectionEntry<"forms">) => f.id === slug);
+  const form = await getEntry("forms", slug);
   if (!form) return new Response("Not found", { status: 404 });
 
   return await createOgImageResponse({

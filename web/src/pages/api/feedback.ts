@@ -1,11 +1,11 @@
 export const prerender = false;
 
+import { getEntry } from "astro:content";
 import { env } from "cloudflare:workers";
 import type { APIRoute } from "astro";
 import { z } from "astro/zod";
 import {
   FORM_FEEDBACK_SENTIMENT,
-  FORM_SLUGS,
   type FormFeedbackSentiment,
 } from "#constants/forms";
 import { isRateLimited } from "#lib/utils/rateLimitByIp";
@@ -14,7 +14,9 @@ const PRODUCTION_ORIGIN = "https://namesake.fyi";
 const ALLOWED_ORIGINS = [PRODUCTION_ORIGIN, "http://localhost:4321"];
 
 const FeedbackSchema = z.object({
-  form_slug: z.enum(FORM_SLUGS),
+  form_slug: z.string().refine(async (id) => !!(await getEntry("forms", id)), {
+    message: "Unknown form",
+  }),
   sentiment: z.enum(
     Object.keys(FORM_FEEDBACK_SENTIMENT) as [
       FormFeedbackSentiment,
@@ -32,7 +34,7 @@ export const POST: APIRoute = async ({ request }) => {
     return Response.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const result = FeedbackSchema.safeParse(body);
+  const result = await FeedbackSchema.safeParseAsync(body);
   if (!result.success) {
     return Response.json(
       { error: result.error.issues[0]?.message ?? "Invalid request" },

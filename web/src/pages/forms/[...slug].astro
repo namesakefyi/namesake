@@ -1,7 +1,6 @@
 ---
 import { type CollectionEntry, getCollection } from "astro:content";
 import FormContainer from "#components/forms/FormContainer/FormContainer.astro";
-import type { FormSlug } from "#constants/forms";
 import BaseLayout from "#layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
@@ -27,5 +26,5 @@ const { title, description } = form.data;
     alt: title,
   }}
 >
-  <FormContainer slug={form.id as FormSlug} inline={false} />
+  <FormContainer slug={form.id} inline={false} />
 </BaseLayout>

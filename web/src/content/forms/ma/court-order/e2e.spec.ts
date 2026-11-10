@@ -24,7 +24,7 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
   );
 
   await test.step("Title", async () => {
-    await page.goto("/forms/court-order-ma");
+    await page.goto("/forms/ma/court-order");
 
     await expect(page).toHaveTitle(/Court Order: Massachusetts/);
 

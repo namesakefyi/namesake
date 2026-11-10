@@ -22,7 +22,7 @@ vi.mock("../FormFeedback/FormFeedback", () => ({
 describe("FormCompleteStep", () => {
   const defaultProps: FormCompleteStepProps = {
     title: "Massachusetts Court Order",
-    slug: "court-order-ma",
+    slug: "ma/court-order",
     onRedownload: vi.fn(),
   };
 
@@ -161,7 +161,7 @@ describe("FormCompleteStep", () => {
       await user.click(screen.getByRole("button", { name: /restart/i }));
 
       await waitFor(() => {
-        expect(clearFormProgress).toHaveBeenCalledWith("court-order-ma");
+        expect(clearFormProgress).toHaveBeenCalledWith("ma/court-order");
         expect(reloadSpy).toHaveBeenCalled();
       });
     });

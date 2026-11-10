@@ -40,6 +40,14 @@ export default defineConfig({
     "/guides/court-order-ma": "/guides/ma/court-order",
     "/guides/state-id-ma": "/guides/ma/state-id",
     "/guides/court-order-ri": "/guides/ri/court-order",
+    // Forms moved into jurisdiction folders
+    "/forms/court-order-ma": "/forms/ma/court-order",
+    "/forms/court-order-ma-minor": "/forms/ma/court-order-minor",
+    "/forms/affidavit-of-indigency-ma": "/forms/ma/affidavit-of-indigency",
+    "/forms/birth-certificate-affidavit-ma":
+      "/forms/ma/birth-certificate-affidavit",
+    "/forms/court-order-ny": "/forms/ny/court-order",
+    "/forms/court-order-ri": "/forms/ri/court-order",
   },
   fonts: [
     {

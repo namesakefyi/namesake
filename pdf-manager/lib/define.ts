@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { PDFS_DIR } from "./catalog";
+import { jurisdictionDir as getJurisdictionDir } from "./catalog";
 import { buildTestDataEntries, loadFormFields } from "./fields";
 import type { PdfFieldInfo } from "./pdf";
 import { escapeKey } from "./utils";
@@ -143,7 +143,7 @@ export function computeOutputPaths({
   jurisdiction: string;
 }): OutputPaths {
   const id = generatePdfId(code, title);
-  const jurisdictionDir = join(PDFS_DIR, jurisdiction.toLowerCase());
+  const jurisdictionDir = getJurisdictionDir(jurisdiction);
   const pdfDir = join(jurisdictionDir, id);
   return {
     id,

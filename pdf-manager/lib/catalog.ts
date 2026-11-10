@@ -43,31 +43,60 @@ function countSchemaFields(pdfDir: string): number {
   return (content.match(/:\s*"(?:text|checkbox|radio|button)"/g) ?? []).length;
 }
 
-export function listAllPdfs(): PdfEntry[] {
-  const result: PdfEntry[] = [];
+const FEDERAL = "federal";
+
+function findPdfFile(dir: string): string | undefined {
+  return readdirSync(dir).find((file) => file.endsWith(".pdf"));
+}
+
+/**
+ * Lists each PDF folder with its jurisdiction. Federal PDFs sit at the root of
+ * PDFS_DIR; state PDFs sit one folder deep, in their jurisdiction's folder.
+ */
+function listPdfDirs(): { jurisdiction: string; id: string; pdfDir: string }[] {
+  const result: { jurisdiction: string; id: string; pdfDir: string }[] = [];
   for (const entry of readdirSync(PDFS_DIR, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
-    const jurisdictionDir = join(PDFS_DIR, entry.name);
-    for (const pdfEntry of readdirSync(jurisdictionDir, {
-      withFileTypes: true,
-    })) {
+    const dir = join(PDFS_DIR, entry.name);
+    if (findPdfFile(dir)) {
+      result.push({ jurisdiction: FEDERAL, id: entry.name, pdfDir: dir });
+      continue;
+    }
+    for (const pdfEntry of readdirSync(dir, { withFileTypes: true })) {
       if (!pdfEntry.isDirectory()) continue;
-      const pdfDir = join(jurisdictionDir, pdfEntry.name);
-      const pdfFile = readdirSync(pdfDir).find((f) => f.endsWith(".pdf"));
-      if (!pdfFile) continue;
-      const meta = parsePdfMetadata(pdfDir);
-      if (!meta) continue;
       result.push({
+        jurisdiction: entry.name,
         id: pdfEntry.name,
-        jurisdiction: entry.name.toUpperCase(),
-        title: meta.title,
-        code: meta.code,
-        canonicalUrl: meta.canonicalUrl,
-        fieldCount: countSchemaFields(pdfDir),
-        pdfPath: join(pdfDir, pdfFile),
-        pdfDir,
+        pdfDir: join(dir, pdfEntry.name),
       });
     }
+  }
+  return result;
+}
+
+/** Returns the folder a PDF in this jurisdiction belongs in. */
+export function jurisdictionDir(jurisdiction: string): string {
+  const id = jurisdiction.toLowerCase();
+  return id === FEDERAL ? PDFS_DIR : join(PDFS_DIR, id);
+}
+
+export function listAllPdfs(): PdfEntry[] {
+  const result: PdfEntry[] = [];
+  for (const { jurisdiction, id, pdfDir } of listPdfDirs()) {
+    const pdfFile = findPdfFile(pdfDir);
+    if (!pdfFile) continue;
+    const meta = parsePdfMetadata(pdfDir);
+    if (!meta) continue;
+    result.push({
+      id,
+      jurisdiction: jurisdiction.toUpperCase(),
+      title: meta.title,
+      code: meta.code,
+      canonicalUrl: meta.canonicalUrl,
+      fieldCount: countSchemaFields(pdfDir),
+      pdfPath: join(pdfDir, pdfFile),
+      pdfDir,
+    });
   }
   return result;
 }
@@ -76,12 +105,10 @@ export function findPdfById(
   id: string | undefined,
 ): { pdfDir: string; pdfPath: string } | null {
   if (!id || id.includes("..")) return null;
-  for (const entry of readdirSync(PDFS_DIR, { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue;
-    const pdfDir = join(PDFS_DIR, entry.name, id);
-    if (!existsSync(pdfDir)) continue;
-    const pdfFile = readdirSync(pdfDir).find((f) => f.endsWith(".pdf"));
-    if (pdfFile) return { pdfDir, pdfPath: join(pdfDir, pdfFile) };
-  }
-  return null;
+  const match = listPdfDirs().find((entry) => entry.id === id);
+  if (!match) return null;
+  const pdfFile = findPdfFile(match.pdfDir);
+  return pdfFile
+    ? { pdfDir: match.pdfDir, pdfPath: join(match.pdfDir, pdfFile) }
+    : null;
 }

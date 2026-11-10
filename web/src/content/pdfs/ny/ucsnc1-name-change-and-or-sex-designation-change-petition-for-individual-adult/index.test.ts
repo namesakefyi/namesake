@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type { FormData } from "#constants/fields";
-import formConfig from "#content/forms/court-order-ny";
+import formConfig from "#content/forms/ny/court-order";
 import { resolveFormVisibility } from "#lib/forms/formVisibility";
 import { getPdfForm } from "#lib/pdfs/getPdfForm";
 import pdf from ".";

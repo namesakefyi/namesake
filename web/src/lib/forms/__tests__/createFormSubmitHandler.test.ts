@@ -34,7 +34,7 @@ function makeEvent() {
 
 function makeConfig(overrides: Partial<FormConfig> = {}): FormConfig {
   return {
-    slug: "court-order-ma",
+    slug: "ma/court-order",
     steps: [{ fields: ["oldFirstName"] }],
     pdfs: [{ pdfId: "cjp27-petition-to-change-name-of-adult" }],
     downloadTitle: "Court Order MA",

@@ -26,7 +26,7 @@ for (const request of [
     };
 
     await test.step("Title", async () => {
-      await page.goto("/forms/court-order-ny");
+      await page.goto("/forms/ny/court-order");
       await expect(page).toHaveTitle(/Court Order: New York/);
       await expect(
         page.getByRole("heading", { name: "Court Order: New York" }),

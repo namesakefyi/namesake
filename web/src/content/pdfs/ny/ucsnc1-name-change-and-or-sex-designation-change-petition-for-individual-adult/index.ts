@@ -2,7 +2,7 @@ import { COUNTRIES } from "#constants/countries";
 import {
   requestsNameChange,
   requestsSexDesignationChange,
-} from "#content/forms/court-order-ny/conditions";
+} from "#content/forms/ny/court-order/conditions";
 import { definePdf } from "#lib/pdfs/definePdf";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
 import { formatAddress } from "#lib/utils/formatAddress";

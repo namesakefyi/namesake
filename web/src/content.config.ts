@@ -11,7 +11,7 @@ import {
 import { DIRECTORY_LANGUAGES } from "./constants/languages";
 import type { PDFDefinition } from "./constants/pdf";
 import { SERVICES } from "./constants/services";
-import { guideLoader } from "./lib/loaders/guideLoader";
+import { jurisdictionGlobLoader } from "./lib/loaders/jurisdictionGlobLoader";
 import { pdfLoader } from "./lib/loaders/pdfLoader";
 
 const authors = defineCollection({
@@ -67,7 +67,11 @@ const directory = defineCollection({
 });
 
 const forms = defineCollection({
-  loader: glob({ base: "./src/content/forms", pattern: "*/index.yml" }),
+  loader: jurisdictionGlobLoader({
+    collection: "forms",
+    base: "./src/content/forms",
+    pattern: "**/index.yml",
+  }),
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
@@ -87,7 +91,11 @@ const forms = defineCollection({
 });
 
 const guides = defineCollection({
-  loader: guideLoader({ base: "./src/content/guides", pattern: "**/*.mdx" }),
+  loader: jurisdictionGlobLoader({
+    collection: "guides",
+    base: "./src/content/guides",
+    pattern: "**/*.mdx",
+  }),
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
@@ -125,8 +133,9 @@ const pages = defineCollection({
 
 const pdfs = defineCollection({
   loader: pdfLoader({
+    base: "./content/pdfs/",
     modules: import.meta.glob<{ default: PDFDefinition }>(
-      "./content/pdfs/*/*/index.ts",
+      "./content/pdfs/**/index.ts",
       { eager: true },
     ),
   }),

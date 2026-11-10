@@ -1,7 +1,7 @@
 import type { LoaderContext } from "astro/loaders";
 import { describe, expect, it, vi } from "vitest";
 import type { PDFDefinition } from "#constants/pdf";
-import { type PdfModules, parsePdfPath, pdfLoader } from "../pdfLoader";
+import { type PdfModules, pdfLoader } from "../pdfLoader";
 
 function definition(overrides: Record<string, unknown> = {}) {
   return {
@@ -21,37 +21,15 @@ async function loadModules(modules: PdfModules) {
     parseData: vi.fn(async ({ data }) => data),
     generateDigest: () => "",
   } as unknown as LoaderContext;
-  await pdfLoader({ modules }).load(context);
+  await pdfLoader({ base: "./content/pdfs/", modules }).load(context);
   return store;
 }
 
-describe("parsePdfPath", () => {
-  const jurisdictions = ["ma", "ri"];
-
-  it("returns no jurisdiction for federal PDFs", () => {
-    expect(
-      parsePdfPath("./content/pdfs/federal/ds11/index.ts", jurisdictions),
-    ).toEqual({ id: "ds11", jurisdiction: undefined });
-  });
-
-  it("returns the folder name for PDFs in a jurisdiction folder", () => {
-    expect(
-      parsePdfPath("./content/pdfs/ma/cjp25/index.ts", jurisdictions),
-    ).toEqual({ id: "cjp25", jurisdiction: "ma" });
-  });
-
-  it("throws for unknown jurisdiction folders", () => {
-    expect(() =>
-      parsePdfPath("./content/pdfs/zz/cjp25/index.ts", jurisdictions),
-    ).toThrow(/unknown jurisdiction folder "zz"/);
-  });
-});
-
 describe("pdfLoader", () => {
-  it("stores each PDF with the jurisdiction from its folder", async () => {
+  it("stores each PDF under its folder name with the jurisdiction from its path", async () => {
     const store = await loadModules({
       "./content/pdfs/ny/ucsnc1/index.ts": definition(),
-      "./content/pdfs/federal/ds11/index.ts": definition(),
+      "./content/pdfs/ds11/index.ts": definition(),
     });
 
     expect(store.set).toHaveBeenCalledWith(
@@ -68,11 +46,17 @@ describe("pdfLoader", () => {
     );
   });
 
+  it("rejects PDFs in an unknown jurisdiction folder", async () => {
+    await expect(
+      loadModules({ "./content/pdfs/federal/ds11/index.ts": definition() }),
+    ).rejects.toThrow(/unknown jurisdiction folder "federal"/);
+  });
+
   it("rejects definitions that set jurisdiction", async () => {
     await expect(
       loadModules({
         "./content/pdfs/ma/cjp25/index.ts": definition({ jurisdiction: "ri" }),
       }),
-    ).rejects.toThrow("sets `jurisdiction` in its definition");
+    ).rejects.toThrow("sets `jurisdiction`");
   });
 });

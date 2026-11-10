@@ -6,10 +6,9 @@ import { Heading } from "../../common/Content/Content";
 import { DeleteFormDataModal } from "../DeleteFormDataModal";
 import { FormFeedback } from "../FormFeedback/FormFeedback";
 import "./FormCompleteStep.css";
-import type { FormSlug } from "#constants/forms";
 
 export interface FormCompleteStepProps {
-  slug: FormSlug;
+  slug: string;
   title: string;
   onRedownload: (e: React.SubmitEvent<HTMLFormElement>) => void | Promise<void>;
   inline?: boolean;

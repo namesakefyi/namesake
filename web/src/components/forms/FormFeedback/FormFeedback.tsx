@@ -9,7 +9,7 @@ import {
   RiThumbUpLine,
 } from "@remixicon/react";
 import { useActionState, useRef } from "react";
-import type { FormFeedbackSentiment, FormSlug } from "#constants/forms";
+import type { FormFeedbackSentiment } from "#constants/forms";
 import { Button } from "../../common/Button";
 import { Form } from "../../common/Form";
 import { Radio, RadioGroup } from "../../common/RadioGroup";
@@ -19,7 +19,7 @@ import { Banner } from "../../common/Banner";
 import { Heading } from "../../common/Content";
 
 interface FormFeedbackProps {
-  slug: FormSlug;
+  slug: string;
 }
 
 const ERROR_MESSAGES: Record<number, string> = {

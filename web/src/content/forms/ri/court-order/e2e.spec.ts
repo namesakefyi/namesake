@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 
 test("Rhode Island Court Order", async ({ page }, testInfo) => {
   await test.step("Title", async () => {
-    await page.goto("/forms/court-order-ri");
+    await page.goto("/forms/ri/court-order");
 
     await expect(page).toHaveTitle(/Court Order: Rhode Island/);
 

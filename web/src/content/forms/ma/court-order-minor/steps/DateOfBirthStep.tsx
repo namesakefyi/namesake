@@ -23,7 +23,7 @@ export const dateOfBirthStep = defineStep({
         {isOver18 && (
           <Banner variant="warning">
             The petitioner is over 18 years of age. Submit the{" "}
-            <a href="/forms/court-order-ma">adult court order</a> instead.
+            <a href="/forms/ma/court-order">adult court order</a> instead.
           </Banner>
         )}
         {isAtLeast12 && !isOver18 && (

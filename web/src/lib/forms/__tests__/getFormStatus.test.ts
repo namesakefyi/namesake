@@ -74,7 +74,7 @@ describe("getFormStatus", () => {
 
   it("passes form slug to getFormProgress", async () => {
     vi.mocked(getFormProgress).mockResolvedValue({ value: "complete" });
-    await getFormStatus("court-order-ma");
-    expect(getFormProgress).toHaveBeenCalledWith("court-order-ma");
+    await getFormStatus("ma/court-order");
+    expect(getFormProgress).toHaveBeenCalledWith("ma/court-order");
   });
 });

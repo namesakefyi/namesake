@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { FormProvider } from "react-hook-form";
-import type { FormCost, FormSlug } from "#constants/forms";
+import type { FormCost } from "#constants/forms";
 import { createFormSubmitHandler } from "#lib/forms/createFormSubmitHandler";
 import { downloadBlankPdfPacket } from "#lib/forms/downloadBlankPdfPacket";
 import { getFormConfig } from "#lib/forms/getFormConfig";
@@ -16,7 +16,7 @@ import { FormStepContext } from "./FormStepContext";
 import "./FormContainer.css";
 
 export interface FormContainerProps {
-  slug: FormSlug;
+  slug: string;
 
   /** The form's display title, from the `forms` content collection. */
   title: string;
