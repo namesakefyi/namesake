@@ -114,7 +114,6 @@ export function RepeatingEntry({
   );
 }
 
-/** A list of short answers, each labeled `itemLabel` and its position. */
 export function RepeatingEntryField({
   name,
   min,

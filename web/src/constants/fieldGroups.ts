@@ -1,6 +1,5 @@
 import type { FieldName } from "#constants/fields";
 
-/** A name stored as `${prefix}FirstName`, `${prefix}MiddleName` and so on. */
 const nameFields = <P extends string>(prefix: P) =>
   ({
     first: `${prefix}FirstName`,

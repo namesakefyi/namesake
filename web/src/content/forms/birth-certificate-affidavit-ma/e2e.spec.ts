@@ -261,9 +261,7 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
     await expect(
       page.getByText("Mailing street address: 100 Main St"),
     ).toBeVisible();
-    await expect(
-      page.getByText("Apartment, suite, unit, etc.: Missing!"),
-    ).toBeVisible();
+    await expect(page.getByText("Apartment, suite, unit, etc.")).toHaveCount(0);
     await expect(page.getByText("Mailing city: Boston")).toBeVisible();
     await expect(page.getByText("Mailing state: MA")).toBeVisible();
     await expect(page.getByText("Mailing zip code: 02108")).toBeVisible();

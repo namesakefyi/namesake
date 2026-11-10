@@ -6,7 +6,6 @@ export interface Step {
   id: string;
   title: Text;
   description?: Text;
-  /** Leaves the step out of the flow while this returns false. */
   when?: Condition;
   questions: readonly Question[];
 }
