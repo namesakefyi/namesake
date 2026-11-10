@@ -2,7 +2,7 @@ import { COUNTRIES } from "#constants/countries";
 import {
   requestsNameChange,
   requestsSexDesignationChange,
-} from "#content/forms/court-order-ny/conditions";
+} from "#content/forms/ny/court-order/conditions";
 import { definePdf } from "#lib/pdfs/definePdf";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
 import { formatAddress } from "#lib/utils/formatAddress";
@@ -16,7 +16,6 @@ export default definePdf<PdfFieldName>({
   title:
     "Name Change and/or Sex Designation Change Petition for Individual Adult",
   code: "UCS-NC1",
-  jurisdiction: "ny",
   canonicalUrl: "https://www.nycourts.gov/media/32631",
   pdfPath: pdf,
   resolver: (data) => {

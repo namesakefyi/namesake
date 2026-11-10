@@ -11,7 +11,7 @@ export interface FormFieldRecord {
 }
 
 export interface FormProgressRecord {
-  formSlug: string;
+  formId: string;
   machineState: unknown;
   updatedAt: number;
 }

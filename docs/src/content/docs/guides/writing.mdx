@@ -210,14 +210,14 @@ Namesake uses guided [forms](https://namesake.fyi/forms) to help users fill out 
 import FormContainer from "#components/forms/FormContainer/FormContainer.astro"
 ```
 
-`FormContainer` accepts a `slug` and renders inline within guides by default:
+`FormContainer` accepts a `formId`, such as `ma/court-order`, and renders inline within guides by default:
 
 ```mdx wrap
 # court-order.mdx
 
 ## Fill out forms
 
-<FormContainer slug="court-order-ma" />
+<FormContainer formId="ma/court-order" />
 ```
 
 ### Display maps beside addresses

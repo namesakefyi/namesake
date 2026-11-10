@@ -2,6 +2,7 @@ import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { jurisdictionDir as getJurisdictionDir } from "./catalog";
 import { buildTestDataEntries, loadFormFields } from "./fields";
 import type { PdfFieldInfo } from "./pdf";
 import { escapeKey } from "./utils";
@@ -25,7 +26,6 @@ interface DefinitionParams {
   id: string;
   title: string;
   code: string;
-  jurisdiction: string;
   canonicalUrl: string;
   pdfFields: PdfFieldInfo[];
 }
@@ -35,7 +35,6 @@ function generateDefinition({
   id,
   title,
   code,
-  jurisdiction,
   canonicalUrl,
   pdfFields,
 }: DefinitionParams): string {
@@ -43,9 +42,6 @@ function generateDefinition({
     `id: "${id}",`,
     `title: "${title}",`,
     ...(code ? [`code: "${code}",`] : []),
-    ...(jurisdiction && jurisdiction !== "federal"
-      ? [`jurisdiction: "${jurisdiction}",`]
-      : []),
     `canonicalUrl: "${canonicalUrl}",`,
     "pdfPath: pdf,",
   ];
@@ -147,10 +143,7 @@ export function computeOutputPaths({
   jurisdiction: string;
 }): OutputPaths {
   const id = generatePdfId(code, title);
-  const jurisdictionDir =
-    jurisdiction.toLowerCase() === "federal"
-      ? join(ROOT, "web/src/content/pdfs/federal")
-      : join(ROOT, "web/src/content/pdfs", jurisdiction.toLowerCase());
+  const jurisdictionDir = getJurisdictionDir(jurisdiction);
   const pdfDir = join(jurisdictionDir, id);
   return {
     id,
@@ -166,7 +159,6 @@ export interface WriteDefinitionFilesParams {
   id: string;
   title: string;
   code: string;
-  jurisdiction: string;
   canonicalUrl: string;
   pdfDir: string;
   pdfDestPath: string;
@@ -181,7 +173,6 @@ export function writeDefinitionFiles({
   id,
   title,
   code,
-  jurisdiction,
   canonicalUrl,
   pdfDir,
   pdfDestPath,
@@ -197,7 +188,6 @@ export function writeDefinitionFiles({
     id,
     title,
     code,
-    jurisdiction,
     canonicalUrl,
     pdfFields,
   });

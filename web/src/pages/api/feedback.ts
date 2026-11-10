@@ -1,11 +1,11 @@
 export const prerender = false;
 
+import { getEntry } from "astro:content";
 import { env } from "cloudflare:workers";
 import type { APIRoute } from "astro";
 import { z } from "astro/zod";
 import {
   FORM_FEEDBACK_SENTIMENT,
-  FORM_SLUGS,
   type FormFeedbackSentiment,
 } from "#constants/forms";
 import { isRateLimited } from "#lib/utils/rateLimitByIp";
@@ -14,7 +14,9 @@ const PRODUCTION_ORIGIN = "https://namesake.fyi";
 const ALLOWED_ORIGINS = [PRODUCTION_ORIGIN, "http://localhost:4321"];
 
 const FeedbackSchema = z.object({
-  form_slug: z.enum(FORM_SLUGS),
+  form_id: z.string().refine(async (id) => !!(await getEntry("forms", id)), {
+    message: "Unknown form",
+  }),
   sentiment: z.enum(
     Object.keys(FORM_FEEDBACK_SENTIMENT) as [
       FormFeedbackSentiment,
@@ -32,7 +34,7 @@ export const POST: APIRoute = async ({ request }) => {
     return Response.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const result = FeedbackSchema.safeParse(body);
+  const result = await FeedbackSchema.safeParseAsync(body);
   if (!result.success) {
     return Response.json(
       { error: result.error.issues[0]?.message ?? "Invalid request" },
@@ -40,7 +42,7 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
-  const { form_slug, sentiment, comment } = result.data;
+  const { form_id, sentiment, comment } = result.data;
   const commentValue = comment || null;
 
   const ip =
@@ -75,10 +77,10 @@ export const POST: APIRoute = async ({ request }) => {
 
   await db
     .prepare(
-      "INSERT INTO form_feedback (form_slug, sentiment, comment, ip, user_agent, country, region, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO form_feedback (form_id, sentiment, comment, ip, user_agent, country, region, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
     )
     .bind(
-      form_slug,
+      form_id,
       sentiment,
       commentValue,
       ip,
@@ -111,8 +113,8 @@ export const POST: APIRoute = async ({ request }) => {
         body: JSON.stringify({
           from: "noreply@namesake.fyi",
           to: "hey@namesake.fyi",
-          subject: `${sentimentLabel} feedback on ${form_slug}`,
-          html: `<p>A user ${location ? `in <strong>${location}</strong>` : ""} submitted <strong>${sentimentLabel}</strong> feedback on <a href="https://namesake.fyi/forms/${form_slug}">${form_slug}</a>.</p><p>${commentValue ? escapeHtml(commentValue) : "<em>No comment</em>"}</p>`,
+          subject: `${sentimentLabel} feedback on ${form_id}`,
+          html: `<p>A user ${location ? `in <strong>${location}</strong>` : ""} submitted <strong>${sentimentLabel}</strong> feedback on <a href="https://namesake.fyi/forms/${form_id}">${form_id}</a>.</p><p>${commentValue ? escapeHtml(commentValue) : "<em>No comment</em>"}</p>`,
         }),
       });
       if (!emailRes.ok) {

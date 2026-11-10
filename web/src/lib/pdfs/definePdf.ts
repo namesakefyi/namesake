@@ -8,7 +8,6 @@ import type { PDFDefinition } from "#constants/pdf";
  * definePdf<PdfFieldName>({
  *   id: "cjp25-petition-to-change-name-of-minor",
  *   title: "Petition to Change Name of Minor",
- *   jurisdiction: "ma",
  *   pdfPath: pdf,
  *   resolver: {
  *     division: (data) => data.residenceCounty,

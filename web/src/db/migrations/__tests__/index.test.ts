@@ -38,6 +38,31 @@ describe("migration invariant", () => {
   });
 });
 
+describe("running migrations", () => {
+  it("logs a failed migration and leaves the database unopened", async () => {
+    const error = new Error("boom");
+    vi.doMock("..", () => ({
+      migrations: [
+        async () => {
+          throw error;
+        },
+      ],
+    }));
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    const { getDB } = await import("../../init");
+
+    await expect(getDB()).rejects.toThrow();
+    expect(consoleError).toHaveBeenCalledWith(
+      expect.stringContaining("migration"),
+      error,
+    );
+    consoleError.mockRestore();
+    vi.doUnmock("..");
+  });
+});
+
 describe("upgrade paths", () => {
   it("fresh install (v0 → current): formData and formProgress exist, no formFields", async () => {
     const { getDB } = await import("../../init");
