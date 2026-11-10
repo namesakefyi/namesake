@@ -235,6 +235,24 @@ describe("FormFeedback", () => {
       },
     );
 
+    it("keeps the share choice when retrying after a failed submission", async () => {
+      const user = userEvent.setup();
+      vi.mocked(fetch).mockRejectedValueOnce(new Error("Network error"));
+      render(<FormFeedback slug="court-order-ma" />);
+
+      await fillPositiveWithComment(user);
+      const dialog = await screen.findByRole("dialog");
+      await user.click(within(dialog).getByRole("radio", { name: /^no$/i }));
+      await submitConsentDialog(user);
+      await screen.findByText(/something went wrong/i);
+
+      await user.click(screen.getByRole("button", { name: /submit/i }));
+      const retryDialog = await screen.findByRole("dialog");
+      expect(
+        within(retryDialog).getByRole("radio", { name: /^no$/i }),
+      ).toBeChecked();
+    });
+
     it("returns to the form without submitting when the dialog is dismissed", async () => {
       const user = userEvent.setup();
       render(<FormFeedback slug="court-order-ma" />);

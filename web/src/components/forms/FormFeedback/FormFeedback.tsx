@@ -34,7 +34,12 @@ const ERROR_MESSAGES: Record<number, string> = {
   429: "You've submitted feedback too many times. Try again in an hour.",
 };
 
-type SubmitError = { error: string; sentiment: string; comment: string };
+type SubmitError = {
+  error: string;
+  sentiment: string;
+  comment: string;
+  shareConsent?: boolean;
+};
 type SubmitState = "idle" | "success" | SubmitError;
 
 function isSubmitError(state: SubmitState): state is SubmitError {
@@ -53,6 +58,8 @@ export function FormFeedback({ slug }: FormFeedbackProps) {
     const sentiment = formData.get("sentiment") as FormFeedbackSentiment;
     const comment = (formData.get("comment") as string) ?? "";
     const shareConsentValue = formData.get("share_consent");
+    const shareConsent =
+      shareConsentValue === null ? undefined : shareConsentValue === "true";
 
     try {
       const response = await fetch("/api/feedback", {
@@ -62,10 +69,7 @@ export function FormFeedback({ slug }: FormFeedbackProps) {
           form_slug: slug,
           sentiment,
           comment: comment.trim() || undefined,
-          share_consent:
-            shareConsentValue === null
-              ? undefined
-              : shareConsentValue === "true",
+          share_consent: shareConsent,
         }),
       });
 
@@ -73,7 +77,7 @@ export function FormFeedback({ slug }: FormFeedbackProps) {
         const message =
           ERROR_MESSAGES[response.status] ??
           "Something went wrong. Please try again.";
-        return { error: message, sentiment, comment };
+        return { error: message, sentiment, comment, shareConsent };
       }
 
       wrapperRef.current?.scrollIntoView({
@@ -86,6 +90,7 @@ export function FormFeedback({ slug }: FormFeedbackProps) {
         error: "Something went wrong. Please try again.",
         sentiment,
         comment,
+        shareConsent,
       };
     }
   }, "idle");
@@ -195,7 +200,12 @@ export function FormFeedback({ slug }: FormFeedbackProps) {
             isOpen={pendingFormData !== null}
             onOpenChange={(isOpen) => !isOpen && setPendingFormData(null)}
           >
-            <ShareConsentDialog onSubmit={handleConsentSubmit} />
+            <ShareConsentDialog
+              defaultShareConsent={
+                isSubmitError(state) ? state.shareConsent : undefined
+              }
+              onSubmit={handleConsentSubmit}
+            />
           </Modal>
         </Form>
       )}
@@ -204,18 +214,20 @@ export function FormFeedback({ slug }: FormFeedbackProps) {
 }
 
 function ShareConsentDialog({
+  defaultShareConsent = true,
   onSubmit,
 }: {
+  defaultShareConsent?: boolean;
   onSubmit: (shareConsent: boolean) => void;
 }) {
-  const [shareConsent, setShareConsent] = useState(true);
+  const [shareConsent, setShareConsent] = useState(defaultShareConsent);
 
   return (
     <Dialog className="form-feedback-consent">
       <Heading slot="title">Can we publicly share your feedback?</Heading>
       <p className="form-feedback-consent-description">
-        It won’t be linked to your name or identity. Sharing positive feedback helps
-        us fundraise and expand support.
+        It won’t be linked to your name or identity. Sharing positive feedback
+        helps us fundraise and expand support.
       </p>
       <RadioGroup
         aria-label="Share feedback publicly"
