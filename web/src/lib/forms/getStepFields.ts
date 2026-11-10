@@ -50,7 +50,9 @@ function collectStepFields(step: Step): StepField[] {
           ]),
           options: written.options,
           optional: !!written.optional,
-          currency: question.kind === "number" && !!question.props.currency,
+          currency:
+            question.kind === "number" &&
+            question.props.formatOptions?.style === "currency",
           reviewLabel: written.reviewLabel ?? question.reviewLabel ?? label,
         });
       }

@@ -14,7 +14,7 @@ async function waitForAsyncList() {
 
 describe("AddressField", () => {
   it("restores a saved county and allows choosing another county from the dropdown", async () => {
-    renderWithFormProvider(<AddressField type="residence" includeCounty />, {
+    renderWithFormProvider(<AddressField type="residence" county />, {
       defaultValues: { residenceState: "NY", residenceCounty: "Kings" },
     });
     await waitForAsyncList();
@@ -153,8 +153,8 @@ describe("AddressField", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("shows toggle instead of address2 field when includeAddress2 is true", async () => {
-    renderWithFormProvider(<AddressField type="residence" includeAddress2 />);
+  it("shows toggle instead of address2 field when address2 is true", async () => {
+    renderWithFormProvider(<AddressField type="residence" address2 />);
     await waitForAsyncList();
 
     expect(
@@ -166,7 +166,7 @@ describe("AddressField", () => {
   });
 
   it("reveals address2 field when toggle is clicked", async () => {
-    renderWithFormProvider(<AddressField type="residence" includeAddress2 />);
+    renderWithFormProvider(<AddressField type="residence" address2 />);
     await waitForAsyncList();
 
     await userEvent.click(
@@ -184,7 +184,7 @@ describe("AddressField", () => {
   });
 
   it("shows address2 field immediately when field has a pre-existing value", async () => {
-    renderWithFormProvider(<AddressField type="residence" includeAddress2 />, {
+    renderWithFormProvider(<AddressField type="residence" address2 />, {
       defaultValues: { residenceStreetAddress2: "Apt 4B" },
     });
     await waitForAsyncList();
@@ -200,7 +200,7 @@ describe("AddressField", () => {
   });
 
   it("uses correct field name and autocomplete for address2", async () => {
-    renderWithFormProvider(<AddressField type="residence" includeAddress2 />);
+    renderWithFormProvider(<AddressField type="residence" address2 />);
     await waitForAsyncList();
 
     await userEvent.click(
@@ -213,7 +213,7 @@ describe("AddressField", () => {
   });
 
   it("uses correct field name for mailing address2", async () => {
-    renderWithFormProvider(<AddressField type="mailing" includeAddress2 />);
+    renderWithFormProvider(<AddressField type="mailing" address2 />);
     await waitForAsyncList();
 
     await userEvent.click(
@@ -232,8 +232,8 @@ describe("AddressField", () => {
     expect(screen.queryByLabelText("County")).not.toBeInTheDocument();
   });
 
-  it("shows county selection when includeCounty is true", async () => {
-    renderWithFormProvider(<AddressField type="residence" includeCounty />);
+  it("shows county selection when county is true", async () => {
+    renderWithFormProvider(<AddressField type="residence" county />);
     await waitForAsyncList();
 
     const countyInput = screen.getByLabelText("County");
@@ -241,7 +241,7 @@ describe("AddressField", () => {
   });
 
   it("uses free text for the county in states without a county list", async () => {
-    renderWithFormProvider(<AddressField type="residence" includeCounty />, {
+    renderWithFormProvider(<AddressField type="residence" county />, {
       defaultValues: { residenceState: "MA" },
     });
     await waitForAsyncList();
@@ -253,7 +253,7 @@ describe("AddressField", () => {
   });
 
   it("renders the correct name for county field based on address type", async () => {
-    renderWithFormProvider(<AddressField type="residence" includeCounty />);
+    renderWithFormProvider(<AddressField type="residence" county />);
     await waitForAsyncList();
 
     // Select New York to show county field

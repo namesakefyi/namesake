@@ -51,15 +51,15 @@ export function mapPlaceToFields(
 export interface AddressFieldProps {
   children?: React.ReactNode;
   type: AddressType;
-  includeAddress2?: boolean;
-  includeCounty?: boolean;
+  address2?: boolean;
+  county?: boolean;
 }
 
 export function AddressField({
   children,
   type,
-  includeAddress2 = false,
-  includeCounty = false,
+  address2 = false,
+  county = false,
 }: AddressFieldProps) {
   const { control, getValues, setValue } = useFormContext();
 
@@ -69,7 +69,7 @@ export function AddressField({
   const countyOptions = getCountyOptions(state);
 
   const street2Name = names.street2;
-  const canAddAddress2 = includeAddress2 && !!street2Name;
+  const canAddAddress2 = address2 && !!street2Name;
   const [address2Expanded, setAddress2Expanded] = useState(
     () => !!street2Name && !!getValues(street2Name),
   );
@@ -187,7 +187,7 @@ export function AddressField({
           </ComboBox>
         )}
       />
-      {includeCounty && names.county && (
+      {county && names.county && (
         <Controller
           control={control}
           name={names.county}

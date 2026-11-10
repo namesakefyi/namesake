@@ -18,5 +18,12 @@ const formatters = [0, 2].map(
     }),
 );
 
+/** For number inputs: US dollars, with cents only when entered. */
+export const USD_FORMAT: Intl.NumberFormatOptions = {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 0,
+};
+
 export const formatCurrency = (cost?: number | null) =>
   formatters[Number.isInteger(cost) ? 0 : 1].format(cost ?? 0);

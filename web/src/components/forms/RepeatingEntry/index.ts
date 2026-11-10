@@ -1,2 +1,2 @@
 export type { RepeatingEntryProps } from "./RepeatingEntry";
-export { RepeatingEntry } from "./RepeatingEntry";
+export { RepeatingEntry, RepeatingEntryField } from "./RepeatingEntry";

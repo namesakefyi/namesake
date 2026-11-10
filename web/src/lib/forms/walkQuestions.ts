@@ -27,7 +27,7 @@ export function getChildContext(
   question: SubsectionQuestion,
   context: QuestionContext,
 ): QuestionContext {
-  const { title } = question;
+  const { title } = question.props;
   return {
     conditions: question.when
       ? [...context.conditions, question.when]

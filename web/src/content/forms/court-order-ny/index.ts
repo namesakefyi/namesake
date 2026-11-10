@@ -3,6 +3,7 @@ import { COUNTRY_OPTIONS } from "#constants/countries";
 import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 import { defineForm } from "#lib/forms/defineForm";
 import { q } from "#lib/forms/questions";
+import { USD_FORMAT } from "#lib/utils/formatCurrency";
 import {
   livesInNewYorkCity,
   requestsNameChange,
@@ -199,8 +200,8 @@ export default defineForm({
                 q.number("childSupportArrearsAmount", {
                   label: "Child support owed",
                   reviewLabel: "Child support amount owed",
-                  min: 0,
-                  currency: true,
+                  minValue: 0,
+                  formatOptions: USD_FORMAT,
                 }),
               ],
               {
@@ -232,8 +233,8 @@ export default defineForm({
                 q.number("spousalSupportArrearsAmount", {
                   label: "Spousal support owed",
                   reviewLabel: "Spousal support amount owed",
-                  min: 0,
-                  currency: true,
+                  minValue: 0,
+                  formatOptions: USD_FORMAT,
                 }),
               ],
               {

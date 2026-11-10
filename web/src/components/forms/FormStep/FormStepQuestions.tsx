@@ -1,6 +1,5 @@
-import type { ComponentType } from "react";
 import type { Step } from "#constants/forms";
-import type { Data, Question, QuestionKind } from "#lib/forms/questions";
+import type { Data, Question } from "#lib/forms/questions";
 import { resolveText } from "#lib/forms/resolveStepContent";
 import {
   getChildContext,
@@ -8,11 +7,7 @@ import {
   type QuestionContext,
   usesTitleAsLabel,
 } from "#lib/forms/walkQuestions";
-import {
-  type QuestionOfKind,
-  type RendererProps,
-  renderers,
-} from "./renderers";
+import { renderBlock, renderField } from "./renderers";
 
 export interface FormStepQuestionsProps {
   step: Step;
@@ -55,27 +50,20 @@ function QuestionView({
   data,
   context,
 }: { question: Question } & Omit<QuestionsProps, "questions">) {
-  const isField = question.type === "field";
-  return renderQuestion(question, {
+  if (question.type === "field") {
+    return renderField(question, {
+      label: resolveText(question.label ?? context.title, data),
+      labelHidden: usesTitleAsLabel(question),
+    });
+  }
+  return renderBlock(question, {
     data,
-    label: isField ? resolveText(question.label ?? context.title, data) : "",
-    labelHidden: isField && usesTitleAsLabel(question),
-    children:
-      question.kind === "subsection" ? (
-        <Questions
-          questions={question.children}
-          data={data}
-          context={getChildContext(question, context)}
-        />
-      ) : undefined,
+    children: question.kind === "subsection" && (
+      <Questions
+        questions={question.children}
+        data={data}
+        context={getChildContext(question, context)}
+      />
+    ),
   });
-}
-
-/** Renders a question with the renderer for its kind. */
-function renderQuestion<K extends QuestionKind>(
-  question: QuestionOfKind<K> & { kind: K },
-  props: Omit<RendererProps<K>, "question">,
-) {
-  const Renderer: ComponentType<RendererProps<K>> = renderers[question.kind];
-  return <Renderer {...props} question={question} />;
 }

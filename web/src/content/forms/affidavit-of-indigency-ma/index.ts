@@ -1,14 +1,15 @@
 import type { BooleanFieldName, StringFieldName } from "#constants/fields";
 import { defineForm } from "#lib/forms/defineForm";
 import { type Question, q } from "#lib/forms/questions";
+import { USD_FORMAT } from "#lib/utils/formatCurrency";
 import { MTPC_ASSISTANCE_URL, PovertyResult } from "./PovertyResult";
 
 const amount = (name: StringFieldName, reviewLabel: string) =>
   q.number(name, {
     label: "Amount (if known)",
     reviewLabel,
-    min: 0,
-    currency: true,
+    minValue: 0,
+    formatOptions: USD_FORMAT,
   });
 
 /** A fee to waive, with follow-up questions shown once it's checked. */
@@ -110,8 +111,8 @@ export default defineForm({
       questions: [
         q.number("incomeAmount", {
           label: "Income amount",
-          min: 0,
-          currency: true,
+          minValue: 0,
+          formatOptions: USD_FORMAT,
         }),
         q.radioGroup("incomePeriod", {
           label: "How often do you receive this income?",
@@ -126,21 +127,21 @@ export default defineForm({
         q.number("householdSize", {
           label: "Total number of people in your household",
           reviewLabel: "Household size",
-          min: 1,
+          minValue: 1,
         }),
         q.display(PovertyResult),
         q.number("numberOfDependents", {
           label: "Number of dependents",
-          min: 0,
+          minValue: 0,
         }),
         q.number("otherHouseholdIncome", {
           label: "Other household income (optional)",
           reviewLabel: "Other household income",
           description:
             "Any other income available to your household for the same period you entered above",
-          min: 0,
+          minValue: 0,
           defaultValue: 0,
-          currency: true,
+          formatOptions: USD_FORMAT,
         }),
       ],
     },

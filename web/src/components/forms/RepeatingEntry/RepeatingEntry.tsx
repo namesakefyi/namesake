@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import type { FieldName, FormData } from "#constants/fields";
 import { Button } from "../../common/Button";
+import { TextField } from "../../common/TextField";
 import "./RepeatingEntry.css";
 
 type ArrayFieldName = {
@@ -110,5 +111,38 @@ export function RepeatingEntry({
         </Button>
       )}
     </div>
+  );
+}
+
+/** A list of short answers, each labeled `itemLabel` and its position. */
+export function RepeatingEntryField({
+  name,
+  min,
+  max,
+  itemLabel,
+  size,
+}: {
+  name: ArrayFieldName;
+  min: number;
+  max?: number;
+  itemLabel: string;
+  size?: number;
+}) {
+  return (
+    <RepeatingEntry
+      name={name}
+      min={min}
+      max={max}
+      defaultCount={Math.max(min, 1)}
+    >
+      {(value, onChange, index) => (
+        <TextField
+          value={value}
+          onChange={onChange}
+          label={`${itemLabel} ${index + 1}`}
+          size={size}
+        />
+      )}
+    </RepeatingEntry>
   );
 }

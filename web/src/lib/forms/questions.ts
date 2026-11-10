@@ -39,6 +39,14 @@ export type Options<K extends FieldName> = {
 
 export type OptionLabels = Readonly<Record<string, OptionLabel>>;
 
+export function toChoices(options: OptionLabels) {
+  return Object.entries(options).map(([value, option]) =>
+    typeof option === "string"
+      ? { value, label: option }
+      : { value, label: option.label, description: option.description },
+  );
+}
+
 export interface WrittenField<W extends FieldName = FieldName> {
   id: W;
   when?: Condition;
@@ -48,12 +56,13 @@ export interface WrittenField<W extends FieldName = FieldName> {
   options?: OptionLabels;
 }
 
-export interface FieldPropsByKind {
+/** Props of questions that write a single field, beyond its name. */
+interface SingleFieldPropsByKind {
   shortText: { size?: number };
   longText: Record<never, never>;
   number: {
-    min?: number;
-    currency?: boolean;
+    minValue?: number;
+    formatOptions?: Intl.NumberFormatOptions;
     defaultValue?: number;
   };
   memorableDate: Record<never, never>;
@@ -63,12 +72,8 @@ export interface FieldPropsByKind {
     noLabel?: string;
     extraChoices?: readonly ExtraChoice[];
   };
-  radioGroup: {
-    options: OptionLabels;
-  };
-  checkboxGroup: {
-    options: OptionLabels;
-  };
+  radioGroup: { options: OptionLabels };
+  checkboxGroup: { options: OptionLabels };
   comboBox: {
     options: readonly { label: string; value: string }[];
     placeholder?: string;
@@ -76,9 +81,6 @@ export interface FieldPropsByKind {
   phone: Record<never, never>;
   email: Record<never, never>;
   languageSelect: Record<never, never>;
-  name: { type: NameType };
-  address: { type: AddressType; address2: boolean; county: boolean };
-  pronounSelect: Record<never, never>;
   repeatingEntry: {
     min: number;
     max?: number;
@@ -87,7 +89,30 @@ export interface FieldPropsByKind {
   };
 }
 
+/** Each question's props, which its component receives as-is. */
+export type FieldPropsByKind = {
+  [K in keyof SingleFieldPropsByKind]: SingleFieldPropsByKind[K] & {
+    name: K extends "checkboxGroup" | "repeatingEntry"
+      ? ListFieldName
+      : FieldName;
+    description?: string;
+  };
+} & {
+  name: { type: NameType };
+  address: { type: AddressType; address2: boolean; county: boolean };
+  pronounSelect: Record<never, never>;
+};
+
+export interface BlockPropsByKind {
+  /** `content` is markdown. */
+  banner: { content: Text; variant?: "info" | "success" | "warning" | "error" };
+  subsection: { title?: OptionalText };
+  costsTable: Record<never, never>;
+  display: { component: ComponentType<any>; props?: object };
+}
+
 export type FieldKind = keyof FieldPropsByKind;
+export type BlockKind = keyof BlockPropsByKind;
 
 export interface CommonFieldOptions {
   when?: Condition;
@@ -105,7 +130,6 @@ export interface FieldQuestion<
   name?: W;
   /** Undefined when the nearest title stands in as a hidden label. */
   label?: Text;
-  description?: string;
   writes: readonly WrittenField<W>[];
   props: FieldPropsByKind[K];
 }
@@ -114,47 +138,23 @@ export type AnyFieldQuestion = {
   [K in FieldKind]: FieldQuestion<K>;
 }[FieldKind];
 
-export interface BannerQuestion {
+export interface BlockQuestion<K extends BlockKind = BlockKind> {
   type: "block";
-  kind: "banner";
-  /** Markdown */
-  content: Text;
-  variant?: "info" | "success" | "warning" | "error";
+  kind: K;
+  props: BlockPropsByKind[K];
   when?: Condition;
 }
 
-export interface SubsectionQuestion {
-  type: "block";
-  kind: "subsection";
+export interface SubsectionQuestion extends BlockQuestion<"subsection"> {
   children: readonly Question[];
-  title?: OptionalText;
-  when?: Condition;
 }
 
-export interface DisplayQuestion {
-  type: "block";
-  kind: "display";
-  component: ComponentType<any>;
-  props?: object;
-  when?: Condition;
-}
-
-/** The form's costs, with a total. */
-export interface CostsTableQuestion {
-  type: "block";
-  kind: "costsTable";
-  when?: Condition;
-}
-
-export type BlockQuestion =
-  | BannerQuestion
-  | CostsTableQuestion
-  | SubsectionQuestion
-  | DisplayQuestion;
-
-export type BlockKind = BlockQuestion["kind"];
-
-export type Question = AnyFieldQuestion | BlockQuestion;
+export type Question =
+  | AnyFieldQuestion
+  | {
+      [K in Exclude<BlockKind, "subsection">]: BlockQuestion<K>;
+    }[Exclude<BlockKind, "subsection">]
+  | SubsectionQuestion;
 
 export type QuestionKind = FieldKind | BlockKind;
 
@@ -164,8 +164,8 @@ interface LabelOptions extends CommonFieldOptions {
   description?: string;
 }
 
-type SingleFieldOptions<K extends FieldKind> = LabelOptions &
-  FieldPropsByKind[K];
+type SingleFieldOptions<K extends keyof SingleFieldPropsByKind> = LabelOptions &
+  SingleFieldPropsByKind[K];
 
 type AddressOptions<T extends AddressType> = CommonFieldOptions &
   (T extends ExtendedAddressType
@@ -179,7 +179,10 @@ type DisplayArguments<P> =
     : [options: { props: P }];
 
 /** `options` labels the stored values on the review page. */
-function singleField<K extends FieldKind, W extends FieldName>(
+function singleField<
+  K extends keyof SingleFieldPropsByKind,
+  W extends FieldName,
+>(
   kind: K,
   name: W,
   { label, description, when, reviewLabel, ...props }: SingleFieldOptions<K>,
@@ -190,11 +193,10 @@ function singleField<K extends FieldKind, W extends FieldName>(
     kind,
     name,
     label,
-    description,
     when,
     reviewLabel,
     writes: [{ id: name, options }],
-    props: props as unknown as FieldPropsByKind[K],
+    props: { ...props, name, description } as FieldPropsByKind[K],
   };
 }
 
@@ -372,27 +374,45 @@ export const q = {
   /** `content` is markdown. */
   banner(
     content: Text,
-    options?: { variant?: BannerQuestion["variant"]; when?: Condition },
-  ): BannerQuestion {
-    return { type: "block", kind: "banner", content, ...options };
+    {
+      when,
+      ...props
+    }: Omit<BlockPropsByKind["banner"], "content"> & { when?: Condition } = {},
+  ): BlockQuestion<"banner"> {
+    return {
+      type: "block",
+      kind: "banner",
+      when,
+      props: { content, ...props },
+    };
   },
 
-  costsTable(options?: { when?: Condition }): CostsTableQuestion {
-    return { type: "block", kind: "costsTable", ...options };
+  costsTable(options?: { when?: Condition }): BlockQuestion<"costsTable"> {
+    return { type: "block", kind: "costsTable", props: {}, ...options };
   },
 
   subsection(
     children: readonly Question[],
-    options?: { title?: OptionalText; when?: Condition },
+    { when, title }: { title?: OptionalText; when?: Condition } = {},
   ): SubsectionQuestion {
-    return { type: "block", kind: "subsection", children, ...options };
+    return {
+      type: "block",
+      kind: "subsection",
+      children,
+      when,
+      props: { title },
+    };
   },
 
   /** A component that writes no data. */
   display<P extends object>(
     component: ComponentType<P>,
     ...[options]: DisplayArguments<P>
-  ): DisplayQuestion {
-    return { type: "block", kind: "display", component, props: options?.props };
+  ): BlockQuestion<"display"> {
+    return {
+      type: "block",
+      kind: "display",
+      props: { component, props: options?.props },
+    };
   },
 };
