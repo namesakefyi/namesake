@@ -10,27 +10,153 @@ import {
   type NamePart,
   type NameType,
 } from "#constants/fieldGroups";
-import { type FieldName, shouldShowOtherPronouns } from "#constants/fields";
-import type {
-  BannerQuestion,
-  BooleanFieldName,
-  CommonFieldOptions,
-  Condition,
-  DisplayQuestion,
-  FieldKind,
-  FieldPropsByKind,
-  FieldQuestion,
-  ListFieldName,
-  OptionalText,
-  OptionLabels,
-  Options,
-  Question,
-  StringFieldName,
-  SubsectionQuestion,
-  Text,
-  TextFieldName,
-  WrittenField,
-} from "./types";
+import {
+  type BooleanFieldName,
+  type ExtraChoice,
+  type FieldExtraChoice,
+  type FieldName,
+  type FieldValue,
+  type FormData,
+  type ListFieldName,
+  type StringFieldName,
+  shouldShowOtherPronouns,
+  type TextFieldName,
+} from "#constants/fields";
+
+export type Data = Partial<FormData>;
+
+export type Condition = (data: Data) => boolean;
+
+export type Text = string | ((data: Data) => string);
+export type OptionalText = string | ((data: Data) => string | undefined);
+
+export type OptionLabel = string | { label: string; description?: string };
+
+/** Labels for every allowed value of a field, each exactly once. */
+export type Options<K extends FieldName> = {
+  [V in FieldValue<K>]: OptionLabel;
+};
+
+export type OptionLabels = Readonly<Record<string, OptionLabel>>;
+
+export interface WrittenField<W extends FieldName = FieldName> {
+  id: W;
+  when?: Condition;
+  /** Left off the review page while it has no answer. */
+  optional?: boolean;
+  reviewLabel?: Text;
+  options?: OptionLabels;
+}
+
+export interface FieldPropsByKind {
+  shortText: { size?: number };
+  longText: Record<never, never>;
+  number: {
+    min?: number;
+    currency?: boolean;
+    defaultValue?: number;
+  };
+  memorableDate: Record<never, never>;
+  checkbox: Record<never, never>;
+  yesNo: {
+    yesLabel?: string;
+    noLabel?: string;
+    extraChoices?: readonly ExtraChoice[];
+  };
+  radioGroup: {
+    options: OptionLabels;
+  };
+  checkboxGroup: {
+    options: OptionLabels;
+  };
+  comboBox: {
+    options: readonly { label: string; value: string }[];
+    placeholder?: string;
+  };
+  phone: Record<never, never>;
+  email: Record<never, never>;
+  languageSelect: Record<never, never>;
+  name: { type: NameType };
+  address: { type: AddressType; address2: boolean; county: boolean };
+  pronounSelect: Record<never, never>;
+  repeatingEntry: {
+    min: number;
+    max?: number;
+    itemLabel: string;
+    size?: number;
+  };
+}
+
+export type FieldKind = keyof FieldPropsByKind;
+
+export interface CommonFieldOptions {
+  when?: Condition;
+  /** Defaults to the field's label. */
+  reviewLabel?: Text;
+}
+
+export interface FieldQuestion<
+  K extends FieldKind = FieldKind,
+  W extends FieldName = FieldName,
+> extends CommonFieldOptions {
+  type: "field";
+  kind: K;
+  /** Set for nodes that write a single field. */
+  name?: W;
+  /** Undefined when the nearest title stands in as a hidden label. */
+  label?: Text;
+  description?: string;
+  writes: readonly WrittenField<W>[];
+  props: FieldPropsByKind[K];
+}
+
+export type AnyFieldQuestion = {
+  [K in FieldKind]: FieldQuestion<K>;
+}[FieldKind];
+
+export interface BannerQuestion {
+  type: "block";
+  kind: "banner";
+  /** Markdown */
+  content: Text;
+  variant?: "info" | "success" | "warning" | "error";
+  when?: Condition;
+}
+
+export interface SubsectionQuestion {
+  type: "block";
+  kind: "subsection";
+  children: readonly Question[];
+  title?: OptionalText;
+  when?: Condition;
+}
+
+export interface DisplayQuestion {
+  type: "block";
+  kind: "display";
+  component: ComponentType<any>;
+  props?: object;
+  when?: Condition;
+}
+
+/** The form's costs, with a total. */
+export interface CostsTableQuestion {
+  type: "block";
+  kind: "costsTable";
+  when?: Condition;
+}
+
+export type BlockQuestion =
+  | BannerQuestion
+  | CostsTableQuestion
+  | SubsectionQuestion
+  | DisplayQuestion;
+
+export type BlockKind = BlockQuestion["kind"];
+
+export type Question = AnyFieldQuestion | BlockQuestion;
+
+export type QuestionKind = FieldKind | BlockKind;
 
 interface LabelOptions extends CommonFieldOptions {
   /** Omit for the single question under a title, which becomes its label. */
@@ -52,13 +178,13 @@ type DisplayArguments<P> =
     ? [options?: { props?: P }]
     : [options: { props: P }];
 
+/** `options` labels the stored values on the review page. */
 function singleField<K extends FieldKind, W extends FieldName>(
   kind: K,
   name: W,
   { label, description, when, reviewLabel, ...props }: SingleFieldOptions<K>,
+  options?: OptionLabels,
 ): FieldQuestion<K, W> {
-  const options =
-    "options" in props ? (props.options as OptionLabels) : undefined;
   return {
     type: "field",
     kind,
@@ -123,9 +249,12 @@ export const q = {
     return singleField("checkbox", name, options);
   },
 
+  /** `extraChoices` must be declared on the field in `FIELD_DEFS`. */
   yesNo<W extends BooleanFieldName>(
     name: W,
-    options: SingleFieldOptions<"yesNo"> = {},
+    options: Omit<SingleFieldOptions<"yesNo">, "extraChoices"> & {
+      extraChoices?: readonly FieldExtraChoice<W>[];
+    } = {},
   ) {
     return singleField("yesNo", name, options);
   },
@@ -136,14 +265,14 @@ export const q = {
       options: Options<W>;
     },
   ) {
-    return singleField("radioGroup", name, options);
+    return singleField("radioGroup", name, options, options.options);
   },
 
   checkboxGroup<W extends ListFieldName>(
     name: W,
     options: SingleFieldOptions<"checkboxGroup">,
   ) {
-    return singleField("checkboxGroup", name, options);
+    return singleField("checkboxGroup", name, options, options.options);
   },
 
   comboBox<W extends StringFieldName>(
@@ -203,7 +332,15 @@ export const q = {
     ];
     const writes = parts.flatMap((part) => {
       const id = names[part];
-      return id ? [{ id, reviewLabel: getAddressReviewLabel(type, part) }] : [];
+      return id
+        ? [
+            {
+              id,
+              reviewLabel: getAddressReviewLabel(type, part),
+              optional: part === "street2",
+            },
+          ]
+        : [];
     });
     return composite("address", writes, common, { type, address2, county });
   },
@@ -238,6 +375,10 @@ export const q = {
     options?: { variant?: BannerQuestion["variant"]; when?: Condition },
   ): BannerQuestion {
     return { type: "block", kind: "banner", content, ...options };
+  },
+
+  costsTable(options?: { when?: Condition }): CostsTableQuestion {
+    return { type: "block", kind: "costsTable", ...options };
   },
 
   subsection(

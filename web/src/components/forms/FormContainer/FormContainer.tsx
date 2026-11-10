@@ -174,7 +174,7 @@ export function FormContainer({
       case "filling":
       case "editing": {
         if (!activeStep) return null;
-        return <FormStep stepConfig={activeStep} />;
+        return <FormStep key={activeStep.id} stepConfig={activeStep} />;
       }
       case "review":
       case "submitting":

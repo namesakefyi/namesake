@@ -1,5 +1,5 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { type FieldName, PREFER_NOT_TO_ANSWER } from "#constants/fields";
+import type { FieldName } from "#constants/fields";
 import { smartquotes } from "#lib/utils/smartquotes";
 import {
   Radio,
@@ -20,7 +20,6 @@ export interface RadioGroupFieldProps extends RadioGroupProps {
   label: string;
   labelHidden?: boolean;
   options: readonly RadioOption[];
-  extraChoices?: readonly (typeof PREFER_NOT_TO_ANSWER)[];
 }
 
 export function RadioGroupField({
@@ -29,7 +28,6 @@ export function RadioGroupField({
   labelHidden,
   options,
   children,
-  extraChoices = [],
   ...props
 }: RadioGroupFieldProps) {
   const { control } = useFormContext();
@@ -55,9 +53,6 @@ export function RadioGroupField({
                 {label}
               </Radio>
             ))}
-            {extraChoices.includes(PREFER_NOT_TO_ANSWER) && (
-              <Radio value={PREFER_NOT_TO_ANSWER}>Prefer not to answer</Radio>
-            )}
           </RadioGroup>
         )}
       />

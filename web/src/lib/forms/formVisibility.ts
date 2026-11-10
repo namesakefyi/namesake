@@ -1,16 +1,15 @@
 import type { FieldName, FormData } from "#constants/fields";
-import type { FormPdfConfig } from "#constants/forms";
+import type { FormPdfConfig, Step } from "#constants/forms";
 import type { PDFId } from "#constants/pdf";
-import { getStepFields } from "./getStepFields";
-import type { Step } from "./types";
+import { getStepFields, type StepField } from "./getStepFields";
 
 export function getFormFields(steps: readonly Step[]): FieldName[] {
   return steps.flatMap((step) => getStepFields(step).map((field) => field.id));
 }
 
 export interface VisibilitySection {
-  stepId: string;
-  fields: readonly FieldName[];
+  step: Step;
+  fields: readonly StepField[];
 }
 
 export interface FormVisibility {
@@ -50,14 +49,13 @@ export function resolveFormVisibility(
 
     visibleStepIds.push(step.id);
 
-    const visibleFieldNames: FieldName[] = [];
-    for (const { id: fieldId, when } of getStepFields(step)) {
-      if (!when || when(formData)) {
-        (visibleFields as Record<string, unknown>)[fieldId] = formData[fieldId];
-        visibleFieldNames.push(fieldId);
-      }
+    const fields = getStepFields(step).filter(
+      ({ when }) => !when || when(formData),
+    );
+    for (const { id } of fields) {
+      (visibleFields as Record<string, unknown>)[id] = formData[id];
     }
-    sections.push({ stepId: step.id, fields: visibleFieldNames });
+    sections.push({ step, fields });
   }
 
   const pdfsToInclude = pdfs.map((pdf) => ({

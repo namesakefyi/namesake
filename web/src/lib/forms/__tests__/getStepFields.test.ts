@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
+import type { Step } from "#constants/forms";
+import { q } from "#lib/forms/questions";
 import { getStepFields } from "../getStepFields";
-import { q } from "../steps";
-import type { Step } from "../types";
 
 describe("getStepFields", () => {
   it("combines the step, subsection and question conditions", () => {

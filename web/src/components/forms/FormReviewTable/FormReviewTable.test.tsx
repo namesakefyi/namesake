@@ -2,8 +2,8 @@ import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
-import { q } from "#lib/forms/steps";
-import type { Step } from "#lib/forms/types";
+import type { Step } from "#constants/forms";
+import { q } from "#lib/forms/questions";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormReviewTable } from "./FormReviewTable";
 
@@ -201,5 +201,34 @@ describe("FormReviewTable", () => {
     expect(terms).toHaveLength(1);
     expect(terms[0]).toHaveTextContent("Old first name:");
     expect(definitions[0]).toHaveTextContent("Sylvia");
+  });
+
+  it("leaves out the optional address line until it's filled in", () => {
+    const step: Step = {
+      id: "address",
+      title: "Address",
+      questions: [q.address("mailing", { address2: true })],
+    };
+    const address = {
+      mailingStreetAddress: "1 Main St",
+      mailingCity: "Boston",
+      mailingState: "MA",
+      mailingZipCode: "02110",
+    };
+    const { unmount } = renderWithValues(
+      <FormReviewTable steps={[step]} />,
+      address,
+    );
+    expect(
+      screen.queryByText(/Apartment, suite, unit/),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText("Missing!")).not.toBeInTheDocument();
+
+    unmount();
+    renderWithValues(<FormReviewTable steps={[step]} />, {
+      ...address,
+      mailingStreetAddress2: "Apt 4",
+    });
+    expect(screen.getByText("Apt 4")).toBeInTheDocument();
   });
 });

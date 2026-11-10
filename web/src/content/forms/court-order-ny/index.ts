@@ -1,6 +1,8 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
+import { COUNTRY_OPTIONS } from "#constants/countries";
+import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 import { defineForm } from "#lib/forms/defineForm";
-import { q } from "#lib/forms/steps";
+import { q } from "#lib/forms/questions";
 import {
   livesInNewYorkCity,
   requestsNameChange,
@@ -79,13 +81,13 @@ export default defineForm({
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
-          source: "countries",
+          options: COUNTRY_OPTIONS,
         }),
         q.comboBox("birthplaceState", {
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
-          source: "jurisdictions",
+          options: JURISDICTION_OPTIONS,
           when: (data) => data.birthplaceCountry === "US",
         }),
         q.shortText("birthplaceRegion", {

@@ -1,6 +1,10 @@
 import { parseDate } from "@internationalized/date";
-import { FIELD_DEFS, type FieldName } from "#constants/fields";
-import type { OptionLabels } from "#lib/forms/types";
+import {
+  EXTRA_CHOICE_LABELS,
+  FIELD_DEFS,
+  type FieldName,
+} from "#constants/fields";
+import type { OptionLabels } from "#lib/forms/questions";
 import { formatCurrency } from "./formatCurrency";
 
 /**
@@ -38,7 +42,7 @@ export function formatFieldValue(
   }
 
   const labelOf = (item: unknown) => {
-    const option = options?.[String(item)];
+    const option = options?.[String(item)] ?? EXTRA_CHOICE_LABELS[String(item)];
     if (option === undefined) return String(item);
     return typeof option === "string" ? option : option.label;
   };
@@ -47,6 +51,7 @@ export function formatFieldValue(
   switch (fieldDef.type) {
     case "boolean":
       // Treat undefined/null as false for boolean fields (single checkboxes default to unchecked)
+      if (typeof value === "string") return labelOf(value); // An extra choice
       return value === true ? "Yes" : "No";
 
     case "string[]":

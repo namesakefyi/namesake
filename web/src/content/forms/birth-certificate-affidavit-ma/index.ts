@@ -1,5 +1,5 @@
 import { defineForm } from "#lib/forms/defineForm";
-import { q } from "#lib/forms/steps";
+import { q } from "#lib/forms/questions";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
 import { joinNames } from "#lib/utils/joinNames";
 

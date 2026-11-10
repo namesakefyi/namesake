@@ -1,5 +1,6 @@
-import { type Question, q } from "../steps";
-import type { Condition, Step, TextFieldName } from "../types";
+import type { TextFieldName } from "#constants/fields";
+import type { Step } from "#constants/forms";
+import { type Condition, type Question, q } from "#lib/forms/questions";
 
 type TestField =
   | string

@@ -1,6 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import { FormProvider, useForm } from "react-hook-form";
-import { q } from "#lib/forms/steps";
+import { q } from "#lib/forms/questions";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormStep, type FormStepProps } from "./FormStep";
 

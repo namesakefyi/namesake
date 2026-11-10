@@ -1,11 +1,6 @@
-import { FormCostsTable } from "#components/forms/CostsTable";
+import type { BooleanFieldName, StringFieldName } from "#constants/fields";
 import { defineForm } from "#lib/forms/defineForm";
-import {
-  type BooleanFieldName,
-  type Question,
-  q,
-  type StringFieldName,
-} from "#lib/forms/steps";
+import { type Question, q } from "#lib/forms/questions";
 import { MTPC_ASSISTANCE_URL, PovertyResult } from "./PovertyResult";
 
 const amount = (name: StringFieldName, reviewLabel: string) =>
@@ -154,7 +149,7 @@ export default defineForm({
       title: "Which court fees would you like waived?",
       description: "Check all that apply. Enter the amount if you know it.",
       questions: [
-        q.display(FormCostsTable),
+        q.costsTable(),
         ...waiver("shouldWaiveFilingFeeAndSurcharge", {
           label: "Filing fee and any surcharge",
           reviewLabel: "Waive filing fee and surcharge?",

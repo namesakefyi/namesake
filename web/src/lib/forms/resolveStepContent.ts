@@ -1,5 +1,5 @@
 import type { FormData } from "#constants/fields";
-import type { Step } from "./types";
+import type { Step } from "#constants/forms";
 
 /**
  * Returns the subject's first name from form data, or the fallback when empty.
@@ -13,10 +13,10 @@ export function nameOrFallback(
   return (typeof name === "string" && name.trim()) || fallback;
 }
 
-export function resolveText(
-  text: string | ((data: Partial<FormData>) => string),
+export function resolveText<T extends string | undefined>(
+  text: T | ((data: Partial<FormData>) => T),
   data: Partial<FormData>,
-): string {
+): T {
   return typeof text === "function" ? text(data) : text;
 }
 

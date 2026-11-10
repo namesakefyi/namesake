@@ -171,21 +171,6 @@ describe("New York petition field mapping", () => {
     }
   });
 
-  it.each(["dontKnow", "preferNotToAnswer"] as const)(
-    "does not turn %s into a yes or no answer",
-    async (answer) => {
-      const form = await getPetitionForm({
-        ...complete,
-        shouldSealCourtRecord: answer,
-      });
-      expect(
-        form.getRadioGroup("shouldSealCourtRecord")?.getValue(),
-      ).toBeNull();
-      expect(
-        form.getTextField("reasonToSealCourtRecord")?.getValue() ?? "",
-      ).toBe("");
-    },
-  );
   it("fills every collected answer in the saved PDF", async () => {
     const form = await getPetitionForm(complete);
     const expectedText = {

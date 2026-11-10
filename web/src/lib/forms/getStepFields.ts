@@ -1,5 +1,6 @@
 import type { FieldName } from "#constants/fields";
-import type { Condition, OptionLabels, Step, Text } from "./types";
+import type { Step } from "#constants/forms";
+import type { Condition, OptionLabels, Text } from "./questions";
 import {
   getRootContext,
   usesTitleAsLabel,
@@ -12,6 +13,8 @@ export interface StepField {
   when?: Condition;
   options?: OptionLabels;
   currency?: boolean;
+  /** Left off the review page while it has no answer. */
+  optional: boolean;
   reviewLabel: Text;
 }
 
@@ -46,6 +49,7 @@ function collectStepFields(step: Step): StepField[] {
             written.when,
           ]),
           options: written.options,
+          optional: !!written.optional,
           currency: question.kind === "number" && !!question.props.currency,
           reviewLabel: written.reviewLabel ?? question.reviewLabel ?? label,
         });

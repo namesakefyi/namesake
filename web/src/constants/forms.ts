@@ -1,6 +1,15 @@
-import type { Step } from "#lib/forms/types";
+import type { Condition, Question, Text } from "#lib/forms/questions";
 import type { FormData } from "./fields";
 import type { PDFId } from "./pdf";
+
+export interface Step {
+  id: string;
+  title: Text;
+  description?: Text;
+  /** Leaves the step out of the flow while this returns false. */
+  when?: Condition;
+  questions: readonly Question[];
+}
 
 export const FORM_SLUGS = [
   "affidavit-of-indigency-ma",

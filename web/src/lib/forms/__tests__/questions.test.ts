@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { q } from "../steps";
+import type { FormData } from "#constants/fields";
+import { q } from "#lib/forms/questions";
 
 describe("node builders", () => {
   it("lists the fields composite nodes write", () => {
@@ -30,6 +31,15 @@ describe("node builders", () => {
     q.yesNo("oldFirstName");
     // @ts-expect-error shortText doesn't accept fields with declared values
     q.shortText("incomePeriod");
+    // @ts-expect-error extra choices must be declared on the field
+    q.yesNo("isCurrentlyUnhoused", { extraChoices: ["dontKnow"] });
+    // @ts-expect-error only the declared extra choice is allowed
+    q.yesNo("isHispanicOrLatino", { extraChoices: ["dontKnow"] });
+    const stored: Partial<FormData> = {
+      isHispanicOrLatino: "preferNotToAnswer",
+      // @ts-expect-error booleans without extra choices store only yes or no
+      isCurrentlyUnhoused: "preferNotToAnswer",
+    };
     // @ts-expect-error parent addresses have no county
     q.address("parent1", { county: true });
     q.radioGroup("incomePeriod", {
@@ -48,6 +58,6 @@ describe("node builders", () => {
         daily: "Daily",
       },
     });
-    expect(true).toBe(true);
+    expect(stored.isHispanicOrLatino).toBe("preferNotToAnswer");
   });
 });

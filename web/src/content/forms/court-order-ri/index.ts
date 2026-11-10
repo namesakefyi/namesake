@@ -1,6 +1,8 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
+import { COUNTRY_OPTIONS } from "#constants/countries";
+import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 import { defineForm } from "#lib/forms/defineForm";
-import { type Condition, q } from "#lib/forms/steps";
+import { type Condition, q } from "#lib/forms/questions";
 
 const isHoused: Condition = (data) => data.isCurrentlyUnhoused !== true;
 
@@ -100,13 +102,13 @@ export default defineForm({
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
-          source: "countries",
+          options: COUNTRY_OPTIONS,
         }),
         q.comboBox("birthplaceState", {
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
-          source: "jurisdictions",
+          options: JURISDICTION_OPTIONS,
           when: (data) => data.birthplaceCountry === "US",
         }),
       ],
@@ -133,6 +135,15 @@ export default defineForm({
           yesLabel: "Yes, I've changed my name before",
           noLabel: "No, I've never changed my name",
         }),
+        q.subsection(
+          [
+            q.shortText("previousNameFrom", {
+              label: "Previous legal name",
+              description: "The name you had before your last name change.",
+            }),
+          ],
+          { when: (data) => data.hasPreviousNameChange === true },
+        ),
         q.banner(
           "Attach a copy of each prior court order or marriage license to your petition.",
           { when: (data) => data.hasPreviousNameChange === true },
@@ -160,7 +171,9 @@ export default defineForm({
           label: "Marital status (optional)",
           reviewLabel: "Marital status",
           placeholder: "Select marital status",
-          source: "maritalStatus",
+          options: ["Single", "Married", "Divorced", "Widowed"].map(
+            (status) => ({ label: status, value: status }),
+          ),
         }),
       ],
     },

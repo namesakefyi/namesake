@@ -5,6 +5,7 @@ import { AddressField } from "#components/forms/AddressField";
 import { CheckboxField } from "#components/forms/CheckboxField";
 import { CheckboxGroupField } from "#components/forms/CheckboxGroupField";
 import { ComboBoxField } from "#components/forms/ComboBoxField";
+import { CostsTable } from "#components/forms/CostsTable";
 import { EmailField } from "#components/forms/EmailField";
 import { LanguageSelectField } from "#components/forms/LanguageSelectField";
 import { LongTextField } from "#components/forms/LongTextField";
@@ -17,19 +18,18 @@ import { RadioGroupField } from "#components/forms/RadioGroupField";
 import { RepeatingEntry } from "#components/forms/RepeatingEntry";
 import { ShortTextField } from "#components/forms/ShortTextField";
 import { YesNoField } from "#components/forms/YesNoField";
-import { COMBO_BOX_SOURCES } from "#constants/comboBoxSources";
-import type { FieldName } from "#constants/fields";
-import { resolveText } from "#lib/forms/resolveStepContent";
+import type { FieldName, ListFieldName } from "#constants/fields";
 import type {
   BlockKind,
   BlockQuestion,
   Data,
   FieldKind,
   FieldQuestion,
-  ListFieldName,
   OptionLabels,
   QuestionKind,
-} from "#lib/forms/types";
+} from "#lib/forms/questions";
+import { resolveText } from "#lib/forms/resolveStepContent";
+import { useFormStep } from "../FormContainer/FormStepContext";
 import { FormSubsection } from "./FormSubsection";
 import { MarkdownText } from "./MarkdownText";
 
@@ -88,7 +88,6 @@ function choiceGroup<K extends "radioGroup" | "checkboxGroup">(
     <Group
       {...fieldProps(props)}
       options={toChoices(props.question.props.options)}
-      extraChoices={props.question.props.extraChoices}
     />
   );
 }
@@ -130,7 +129,7 @@ export const renderers: {
     <ComboBoxField
       {...fieldProps(props)}
       placeholder={props.question.props.placeholder}
-      options={COMBO_BOX_SOURCES[props.question.props.source]}
+      options={props.question.props.options}
     />
   ),
   phone: (props) => {
@@ -178,14 +177,9 @@ export const renderers: {
       <MarkdownText text={resolveText(question.content, data)} />
     </Banner>
   ),
+  costsTable: () => <CostsTable costs={useFormStep().costs} />,
   subsection: ({ question, data, children }) => (
-    <FormSubsection
-      title={
-        typeof question.title === "function"
-          ? question.title(data)
-          : question.title
-      }
-    >
+    <FormSubsection title={resolveText(question.title, data)}>
       {children}
     </FormSubsection>
   ),

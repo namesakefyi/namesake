@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { FIELD_DEFS, type FieldName } from "#constants/fields";
 import type { FormConfig } from "#constants/forms";
 import type { PDFDefinition } from "#constants/pdf";
+import type { Condition, Data } from "#lib/forms/questions";
 import { getFormConfigs } from "../getFormConfig";
 import { getStepFields } from "../getStepFields";
-import type { Condition, Data } from "../types";
 import { getRootContext, walkQuestions } from "../walkQuestions";
 
 const forms = Object.entries(getFormConfigs());
@@ -18,26 +18,15 @@ const pdfDefinitions = new Map(
   ).map((module) => [module.default.id, module.default]),
 );
 
-/** PDF fields no step asks for, keyed by form slug, with why that's fine. */
-const UNASKED_PDF_FIELDS: Record<string, Partial<Record<FieldName, string>>> = {
-  "court-order-ma-minor": {
-    mothersMaidenName: "The CJP 34 line is left blank for the filer",
-    otherNamesOrAliases: "The CJP 34 line is left blank for the filer",
-  },
-  "court-order-ri": {
-    previousNameFrom: "The previous-name step only asks yes/no",
-  },
-};
-
-const FIELD_TYPES = new Map<string, string>(
-  FIELD_DEFS.map((definition) => [definition.name, definition.type]),
+const DEFINITIONS = new Map<string, (typeof FIELD_DEFS)[number]>(
+  FIELD_DEFS.map((definition) => [definition.name, definition]),
 );
 
 /** Answer sets to trace with, so more branches of each function run. */
 const SAMPLES: readonly ((fieldName: string) => unknown)[] = [
   () => undefined,
   (fieldName) => {
-    const definition = FIELD_DEFS.find(({ name }) => name === fieldName);
+    const definition = DEFINITIONS.get(fieldName);
     if (definition?.type === "boolean") return true;
     if (definition?.type === "string[]") return ["other"];
     return definition && "values" in definition
@@ -45,7 +34,7 @@ const SAMPLES: readonly ((fieldName: string) => unknown)[] = [
       : "1990-01-01";
   },
   (fieldName) => {
-    const type = FIELD_TYPES.get(fieldName);
+    const type = DEFINITIONS.get(fieldName)?.type;
     return type === "boolean" ? false : type === "string[]" ? [] : "";
   },
 ];
@@ -56,7 +45,7 @@ function traceReads(read: (data: Data) => unknown): FieldName[] {
   for (const sample of SAMPLES) {
     const data = new Proxy({} as Data, {
       get(_target, property) {
-        if (typeof property !== "string" || !FIELD_TYPES.has(property)) {
+        if (typeof property !== "string" || !DEFINITIONS.has(property)) {
           return undefined;
         }
         fields.add(property as FieldName);
@@ -82,31 +71,17 @@ function getWrittenFields(config: FormConfig): Set<FieldName> {
 
 describe("form integrity", () => {
   it("asks for every field an included PDF reads", () => {
-    const unasked = forms.flatMap(([slug, config]) => {
+    const failures = forms.flatMap(([slug, config]) => {
       const written = getWrittenFields(config);
       return config.pdfs.flatMap(({ pdfId }) => {
         const pdf = pdfDefinitions.get(pdfId);
         if (!pdf) throw new Error(`No PDF definition for ${pdfId}`);
         return traceReads(pdf.resolver)
           .filter((field) => !written.has(field))
-          .map((field) => ({ slug, field, pdfId }));
+          .map((field) => `${slug}: ${pdfId} reads ${field}`);
       });
     });
-    const failures = unasked
-      .filter(({ slug, field }) => !UNASKED_PDF_FIELDS[slug]?.[field])
-      .map(({ slug, field, pdfId }) => `${slug}: ${pdfId} reads ${field}`);
-    const stale = Object.entries(UNASKED_PDF_FIELDS).flatMap(([slug, fields]) =>
-      Object.keys(fields)
-        .filter(
-          (field) =>
-            !unasked.some(
-              (entry) => entry.slug === slug && entry.field === field,
-            ),
-        )
-        .map((field) => `${slug}: ${field} no longer needs an exception`),
-    );
     expect(failures).toEqual([]);
-    expect(stale).toEqual([]);
   });
 
   it("only bases conditions on fields asked earlier", () => {
@@ -133,6 +108,16 @@ describe("form integrity", () => {
         });
       }
     }
+    expect(failures).toEqual([]);
+  });
+
+  it("gives each step in a form a unique ID", () => {
+    const failures = forms.flatMap(([slug, config]) => {
+      const ids = config.steps.map((step) => step.id);
+      return ids
+        .filter((id, index) => ids.indexOf(id) !== index)
+        .map((id) => `${slug}: step "${id}" is used more than once`);
+    });
     expect(failures).toEqual([]);
   });
 

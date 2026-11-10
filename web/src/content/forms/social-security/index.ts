@@ -1,5 +1,7 @@
+import { COUNTRY_OPTIONS } from "#constants/countries";
+import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 import { defineForm } from "#lib/forms/defineForm";
-import { type Condition, q } from "#lib/forms/steps";
+import { type Condition, q } from "#lib/forms/questions";
 
 const copy = {
   governmentDocument:
@@ -56,13 +58,13 @@ export default defineForm({
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
-          source: "countries",
+          options: COUNTRY_OPTIONS,
         }),
         q.comboBox("birthplaceState", {
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
-          source: "jurisdictions",
+          options: JURISDICTION_OPTIONS,
           when: (data) => data.birthplaceCountry === "US",
         }),
       ],
@@ -95,7 +97,7 @@ export default defineForm({
       id: "ethnicity",
       title: "What is your ethnicity?",
       description:
-        "This response is optional and does not affect your application. The Social Security Administration requests this information for research and statistical purposes.",
+        "This response is optional and does not affect your application.",
       questions: [
         q.yesNo("isHispanicOrLatino", {
           label: "Ethnicity",
@@ -114,7 +116,6 @@ export default defineForm({
       questions: [
         q.checkboxGroup("race", {
           label: "Race",
-          extraChoices: ["preferNotToAnswer"],
           options: {
             nativeHawaiian: "Native Hawaiian",
             alaskaNative: "Alaska Native",
@@ -123,6 +124,7 @@ export default defineForm({
             black: "Black or African American",
             otherPacificIslander: "Other Pacific Islander",
             white: "White",
+            preferNotToAnswer: "Prefer not to answer",
           },
         }),
         q.banner(copy.researchPurposes),

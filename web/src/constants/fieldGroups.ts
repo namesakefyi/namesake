@@ -1,32 +1,24 @@
 import type { FieldName } from "#constants/fields";
 
+/** A name stored as `${prefix}FirstName`, `${prefix}MiddleName` and so on. */
+const nameFields = <P extends string>(prefix: P) =>
+  ({
+    first: `${prefix}FirstName`,
+    middle: `${prefix}MiddleName`,
+    last: `${prefix}LastName`,
+  }) as const;
+
 export const NAME_FIELDS = {
-  newName: {
-    first: "newFirstName",
-    middle: "newMiddleName",
-    last: "newLastName",
-  },
-  oldName: {
-    first: "oldFirstName",
-    middle: "oldMiddleName",
-    last: "oldLastName",
-  },
-  mothersName: {
-    first: "mothersFirstName",
-    middle: "mothersMiddleName",
-    last: "mothersLastName",
-  },
-  fathersName: {
-    first: "fathersFirstName",
-    middle: "fathersMiddleName",
-    last: "fathersLastName",
-  },
-  previousSocialSecurityCardName: {
-    first: "previousSocialSecurityCardFirstName",
-    middle: "previousSocialSecurityCardMiddleName",
-    last: "previousSocialSecurityCardLastName",
-  },
-} as const satisfies Record<
+  newName: nameFields("new"),
+  oldName: nameFields("old"),
+  mothersName: nameFields("mothers"),
+  fathersName: nameFields("fathers"),
+  previousSocialSecurityCardName: nameFields("previousSocialSecurityCard"),
+  parent1Name: nameFields("parent1"),
+  parent2Name: nameFields("parent2"),
+  guardianName: nameFields("guardian"),
+  coGuardianName: nameFields("coGuardian"),
+} satisfies Record<
   string,
   { first: FieldName; middle: FieldName; last: FieldName }
 >;
@@ -48,6 +40,10 @@ export const NAME_REVIEW_LABELS: Record<NameType, (part: NamePart) => string> =
     fathersName: (part) => `Father's ${NAME_PART_LABELS[part]}`,
     previousSocialSecurityCardName: (part) =>
       `${NAME_PART_LABELS[part].replace(/^./, (letter) => letter.toUpperCase())} on previous Social Security card`,
+    parent1Name: (part) => `Parent 1 ${NAME_PART_LABELS[part]}`,
+    parent2Name: (part) => `Parent 2 ${NAME_PART_LABELS[part]}`,
+    guardianName: (part) => `Guardian ${NAME_PART_LABELS[part]}`,
+    coGuardianName: (part) => `Co-guardian ${NAME_PART_LABELS[part]}`,
   };
 
 export interface AddressNames {
@@ -59,36 +55,31 @@ export interface AddressNames {
   county?: FieldName;
 }
 
+/** An address stored as `${prefix}StreetAddress`, `${prefix}City` and so on. */
+const addressFields = <P extends string>(prefix: P) =>
+  ({
+    street: `${prefix}StreetAddress`,
+    city: `${prefix}City`,
+    state: `${prefix}State`,
+    zip: `${prefix}ZipCode`,
+  }) as const;
+
+/** Adds the second address line and county. */
+const extendedAddressFields = <P extends string>(prefix: P) =>
+  ({
+    ...addressFields(prefix),
+    street2: `${prefix}StreetAddress2`,
+    county: `${prefix}County`,
+  }) as const;
+
 export const ADDRESS_FIELDS = {
-  residence: {
-    street: "residenceStreetAddress",
-    street2: "residenceStreetAddress2",
-    city: "residenceCity",
-    state: "residenceState",
-    zip: "residenceZipCode",
-    county: "residenceCounty",
-  },
-  mailing: {
-    street: "mailingStreetAddress",
-    street2: "mailingStreetAddress2",
-    city: "mailingCity",
-    state: "mailingState",
-    zip: "mailingZipCode",
-    county: "mailingCounty",
-  },
-  parent1: {
-    street: "parent1StreetAddress",
-    city: "parent1City",
-    state: "parent1State",
-    zip: "parent1ZipCode",
-  },
-  parent2: {
-    street: "parent2StreetAddress",
-    city: "parent2City",
-    state: "parent2State",
-    zip: "parent2ZipCode",
-  },
-} as const satisfies Record<string, AddressNames>;
+  residence: extendedAddressFields("residence"),
+  mailing: extendedAddressFields("mailing"),
+  parent1: addressFields("parent1"),
+  parent2: addressFields("parent2"),
+  guardian: addressFields("guardian"),
+  coGuardian: addressFields("coGuardian"),
+} satisfies Record<string, AddressNames>;
 
 export type AddressType = keyof typeof ADDRESS_FIELDS;
 export type AddressPart = keyof AddressNames;
@@ -105,6 +96,8 @@ const ADDRESS_SUBJECTS: Record<AddressType, string> = {
   mailing: "Mailing",
   parent1: "Parent 1",
   parent2: "Parent 2",
+  guardian: "Guardian",
+  coGuardian: "Co-guardian",
 };
 
 const ADDRESS_PART_LABELS: Record<Exclude<AddressPart, "street2">, string> = {

@@ -18,8 +18,8 @@ export interface CheckboxGroupFieldProps extends CheckboxGroupProps {
   name: FieldName;
   label: string;
   labelHidden?: boolean;
+  /** A `preferNotToAnswer` option clears and disables the others. */
   options: readonly CheckboxOption[];
-  extraChoices?: readonly (typeof PREFER_NOT_TO_ANSWER)[];
 }
 
 export function CheckboxGroupField({
@@ -28,7 +28,6 @@ export function CheckboxGroupField({
   labelHidden,
   options,
   children,
-  extraChoices = [],
   ...props
 }: CheckboxGroupFieldProps) {
   const { control, setValue } = useFormContext();
@@ -69,15 +68,12 @@ export function CheckboxGroupField({
                   key={option.value}
                   {...option}
                   label={label}
-                  isDisabled={isPreferNotToAnswerChecked}
+                  isDisabled={
+                    isPreferNotToAnswerChecked &&
+                    option.value !== PREFER_NOT_TO_ANSWER
+                  }
                 />
               ))}
-              {extraChoices.includes(PREFER_NOT_TO_ANSWER) && (
-                <Checkbox
-                  value={PREFER_NOT_TO_ANSWER}
-                  label="Prefer not to answer"
-                />
-              )}
             </CheckboxGroup>
           );
         }}

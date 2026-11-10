@@ -72,27 +72,15 @@ describe("CheckboxGroupField", () => {
     expect(childComponent).toBeInTheDocument();
   });
 
-  it("renders prefer not to answer option when enabled", () => {
-    renderWithFormProvider(
-      <CheckboxGroupField
-        name="reasonForChangingName"
-        label="Test Label"
-        options={mockOptions}
-        extraChoices={[PREFER_NOT_TO_ANSWER]}
-      />,
-    );
-
-    const preferNotToAnswer = screen.getByText("Prefer not to answer");
-    expect(preferNotToAnswer).toBeInTheDocument();
-  });
-
   it("disables other options when prefer not to answer is selected", async () => {
     renderWithFormProvider(
       <CheckboxGroupField
         name="reasonForChangingName"
         label="Test Label"
-        options={mockOptions}
-        extraChoices={[PREFER_NOT_TO_ANSWER]}
+        options={[
+          ...mockOptions,
+          { label: "Prefer not to answer", value: PREFER_NOT_TO_ANSWER },
+        ]}
       />,
     );
 

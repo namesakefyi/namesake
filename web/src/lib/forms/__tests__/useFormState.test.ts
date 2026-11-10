@@ -9,9 +9,9 @@ import {
   vi,
 } from "vitest";
 import { createActor } from "xstate";
+import type { Step } from "#constants/forms";
 import * as db from "#db/database";
 import { createFormMachine } from "../createFormMachine";
-import type { Step } from "../types";
 import { useFormState } from "../useFormState";
 
 vi.mock("#db/database", () => ({

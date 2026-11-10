@@ -1,13 +1,12 @@
 import { useFormContext } from "react-hook-form";
 import type { FormData } from "#constants/fields";
+import type { Step } from "#constants/forms";
 import { resolveFormVisibility } from "#lib/forms/formVisibility";
-import { getStepFields, type StepField } from "#lib/forms/getStepFields";
 import { resolveText } from "#lib/forms/resolveStepContent";
-import type { Step } from "#lib/forms/types";
 import { formatFieldValue } from "#lib/utils/formatReviewFields";
+import { smartquotes } from "#lib/utils/smartquotes";
 import { useFormStep } from "../FormContainer/FormStepContext";
 import "./FormReviewTable.css";
-import { smartquotes } from "#lib/utils/smartquotes";
 
 export interface FormReviewTableProps {
   steps: readonly Step[];
@@ -25,35 +24,29 @@ interface ReviewSection {
 }
 
 export function FormReviewTable({ steps }: FormReviewTableProps) {
-  const form = useFormContext();
+  const form = useFormContext<Partial<FormData>>();
   const { onEditStep } = useFormStep();
-  const formData = form.getValues() as FormData;
+  const formData = form.getValues();
 
-  const { sections } = resolveFormVisibility(steps, formData);
-
-  const stepsById = new Map(steps.map((step) => [step.id, step]));
-  const reviewSections: ReviewSection[] = sections
-    .filter(({ fields }) => fields.length > 0)
-    .map(({ stepId, fields }) => {
-      const step = stepsById.get(stepId) as Step;
-      const stepFields = new Map(
-        getStepFields(step).map((field) => [field.id, field]),
-      );
-      return {
-        stepId,
-        fields: fields.map((fieldName) => {
-          const stepField = stepFields.get(fieldName) as StepField;
-          return {
-            fieldName,
-            label: smartquotes(resolveText(stepField.reviewLabel, formData)),
-            value: formatFieldValue(fieldName, formData[fieldName], {
-              options: stepField.options,
-              currency: stepField.currency,
-            }),
-          };
-        }),
-      };
-    });
+  const reviewSections: ReviewSection[] = resolveFormVisibility(steps, formData)
+    .sections.map(({ step, fields }) => ({
+      stepId: step.id,
+      fields: fields.flatMap((field) => {
+        const value = formatFieldValue(field.id, formData[field.id], {
+          options: field.options,
+          currency: field.currency,
+        });
+        if (field.optional && value === undefined) return [];
+        return [
+          {
+            fieldName: field.id,
+            label: smartquotes(resolveText(field.reviewLabel, formData)),
+            value,
+          },
+        ];
+      }),
+    }))
+    .filter(({ fields }) => fields.length > 0);
 
   return (
     <div className="form-review-sections">

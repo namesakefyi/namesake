@@ -1,11 +1,15 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import type { FormData } from "#constants/fields";
 import { defineForm } from "#lib/forms/defineForm";
+import { q } from "#lib/forms/questions";
 import { nameOrFallback } from "#lib/forms/resolveStepContent";
-import { q } from "#lib/forms/steps";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
 
 const minor = (data: Partial<FormData>) => nameOrFallback(data, "the minor");
+
+/** Minors 12 and older also file a court activity record request (CJP 34). */
+const needsRecordRequest = (data: Partial<FormData>) =>
+  deriveCurrentAge(data.dateOfBirth) >= 12;
 
 export default defineForm({
   steps: [
@@ -75,29 +79,6 @@ export default defineForm({
       ],
     },
     {
-      id: "birthplace",
-      title: (data) => `Where was ${minor(data)} born?`,
-      questions: [
-        q.shortText("birthplaceCity", {
-          label: "City",
-          reviewLabel: "City of birth",
-        }),
-        q.comboBox("birthplaceCountry", {
-          label: "Country",
-          reviewLabel: "Country of birth",
-          placeholder: "Select a country",
-          source: "countries",
-        }),
-        q.comboBox("birthplaceState", {
-          label: "State",
-          reviewLabel: "State of birth",
-          placeholder: "Select a state",
-          source: "jurisdictions",
-          when: (data) => data.birthplaceCountry === "US",
-        }),
-      ],
-    },
-    {
       id: "address",
       title: (data) => `What is ${minor(data)}'s address?`,
       description: (data) =>
@@ -112,10 +93,7 @@ export default defineForm({
       questions: [
         q.subsection(
           [
-            q.shortText("parent1FullName", {
-              label: "Full name",
-              reviewLabel: "Parent 1 full name",
-            }),
+            q.name("parent1Name"),
             q.phone("parent1Phone", { reviewLabel: "Parent 1 phone" }),
             q.email("parent1Email", { reviewLabel: "Parent 1 email" }),
           ],
@@ -123,10 +101,7 @@ export default defineForm({
         ),
         q.subsection(
           [
-            q.shortText("parent2FullName", {
-              label: "Full name",
-              reviewLabel: "Parent 2 full name",
-            }),
+            q.name("parent2Name"),
             q.phone("parent2Phone", { reviewLabel: "Parent 2 phone" }),
             q.email("parent2Email", { reviewLabel: "Parent 2 email" }),
           ],
@@ -216,27 +191,8 @@ export default defineForm({
         }),
         q.subsection(
           [
-            q.shortText("guardianFullName", {
-              label: "Guardian full name",
-            }),
-            q.shortText("guardianStreetAddress", {
-              label: "Street address",
-              reviewLabel: "Guardian street address",
-            }),
-            q.shortText("guardianCity", {
-              label: "City",
-              reviewLabel: "Guardian city",
-            }),
-            q.comboBox("guardianState", {
-              label: "State",
-              reviewLabel: "Guardian state",
-              placeholder: "Select state",
-              source: "jurisdictions",
-            }),
-            q.shortText("guardianZipCode", {
-              label: "ZIP code",
-              reviewLabel: "Guardian zip code",
-            }),
+            q.name("guardianName"),
+            q.address("guardian"),
             q.phone("guardianPhone", { reviewLabel: "Guardian phone" }),
             q.email("guardianEmail", { reviewLabel: "Guardian email" }),
           ],
@@ -258,27 +214,8 @@ export default defineForm({
         }),
         q.subsection(
           [
-            q.shortText("coGuardianFullName", {
-              label: "Co-guardian full name",
-            }),
-            q.shortText("coGuardianStreetAddress", {
-              label: "Street address",
-              reviewLabel: "Co-guardian street address",
-            }),
-            q.shortText("coGuardianCity", {
-              label: "City",
-              reviewLabel: "Co-guardian city",
-            }),
-            q.comboBox("coGuardianState", {
-              label: "State",
-              reviewLabel: "Co-guardian state",
-              placeholder: "Select state",
-              source: "jurisdictions",
-            }),
-            q.shortText("coGuardianZipCode", {
-              label: "ZIP code",
-              reviewLabel: "Co-guardian zip code",
-            }),
+            q.name("coGuardianName"),
+            q.address("coGuardian"),
             q.phone("coGuardianPhone", {
               reviewLabel: "Co-guardian phone",
             }),
@@ -427,12 +364,45 @@ export default defineForm({
         }),
       ],
     },
+    {
+      id: "other-names",
+      title: (data) => `Has ${minor(data)} ever used any other name or alias?`,
+      description:
+        "This includes any names used over a long period of time that were not changed legally.",
+      when: needsRecordRequest,
+      questions: [
+        q.yesNo("hasUsedOtherNameOrAlias", {
+          reviewLabel: "Has used other name or alias?",
+        }),
+        q.subsection(
+          [
+            q.longText("otherNamesOrAliases", {
+              label: "Other names or aliases",
+            }),
+          ],
+          { when: (data) => data.hasUsedOtherNameOrAlias === true },
+        ),
+      ],
+    },
+    {
+      id: "mothers-maiden-name",
+      title: (data) => `What is ${minor(data)}'s mother's maiden name?`,
+      description:
+        "The court requests this information in order to look up past court records and verify the minor's identity.",
+      when: needsRecordRequest,
+      questions: [
+        q.shortText("mothersMaidenName", { label: "Mother's maiden name" }),
+        q.banner(
+          "The maiden name is the last name (or family name) of the minor's mother (or guardian) before marriage.",
+        ),
+      ],
+    },
   ],
   pdfs: [
     { pdfId: "cjp25-petition-to-change-name-of-minor" },
     {
       pdfId: "cjp34-cori-and-wms-release-request",
-      when: (data) => deriveCurrentAge(data.dateOfBirth) >= 12,
+      when: needsRecordRequest,
     },
     // TODO: Add CJP 31 and TC0002 PDFs
   ],

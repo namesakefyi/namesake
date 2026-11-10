@@ -2,6 +2,14 @@ import { describe, expect, it } from "vitest";
 import { getFormFields, resolveFormVisibility } from "../formVisibility";
 import { makeStep } from "./testHelpers";
 
+/** Each visible section as its step ID and the IDs of its visible fields. */
+function sectionIds({ sections }: ReturnType<typeof resolveFormVisibility>) {
+  return sections.map(({ step, fields }) => ({
+    stepId: step.id,
+    fields: fields.map((field) => field.id),
+  }));
+}
+
 describe("getFormFields", () => {
   it("flattens field names from all steps", () => {
     const steps = [makeStep("a", ["f1", "f2"]), makeStep("b", ["f3"])];
@@ -28,7 +36,7 @@ describe("resolveFormVisibility", () => {
       oldLastName: "Doe",
       phoneNumber: "555",
     });
-    expect(result.sections).toEqual([
+    expect(sectionIds(result)).toEqual([
       { stepId: "a", fields: ["oldFirstName", "oldLastName"] },
       { stepId: "b", fields: ["phoneNumber"] },
     ]);
@@ -47,7 +55,7 @@ describe("resolveFormVisibility", () => {
 
     expect(result.visibleStepIds).toEqual(["a"]);
     expect(result.visibleFields).toEqual({ oldFirstName: "Jane" });
-    expect(result.sections).toEqual([
+    expect(sectionIds(result)).toEqual([
       { stepId: "a", fields: ["oldFirstName"] },
     ]);
   });
@@ -63,7 +71,7 @@ describe("resolveFormVisibility", () => {
     } as any);
 
     expect(result.visibleFields).toEqual({ alwaysVisible: "yes" });
-    expect(result.sections).toEqual([
+    expect(sectionIds(result)).toEqual([
       { stepId: "a", fields: ["alwaysVisible"] },
     ]);
   });
@@ -97,9 +105,9 @@ describe("resolveFormVisibility", () => {
       dep1: undefined,
       dep2: undefined,
     });
-    expect(visible.sections[0].fields).toEqual(["trigger", "dep1", "dep2"]);
+    expect(sectionIds(visible)[0].fields).toEqual(["trigger", "dep1", "dep2"]);
 
     const hidden = resolveFormVisibility(steps, { trigger: false } as any);
-    expect(hidden.sections[0].fields).toEqual(["trigger"]);
+    expect(sectionIds(hidden)[0].fields).toEqual(["trigger"]);
   });
 });

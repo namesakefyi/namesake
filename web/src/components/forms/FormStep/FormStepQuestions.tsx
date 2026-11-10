@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
+import type { Step } from "#constants/forms";
+import type { Data, Question } from "#lib/forms/questions";
 import { resolveText } from "#lib/forms/resolveStepContent";
-import type { Data, Question, Step } from "#lib/forms/types";
 import {
   getChildContext,
   getRootContext,
@@ -32,8 +33,8 @@ interface QuestionsProps {
 
 function Questions({ questions, data, context }: QuestionsProps) {
   return questions.map((question, index) => {
-    if ("when" in question && question.when && !question.when(data))
-      return null;
+    if (question.when && !question.when(data)) return null;
+    // `FormContainer` keys each step, so a new step starts fresh.
     const key = `${question.kind}-${index}`;
     return (
       <QuestionView

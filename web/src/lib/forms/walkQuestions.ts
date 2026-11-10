@@ -1,12 +1,12 @@
-import { resolveText } from "./resolveStepContent";
+import type { Step } from "#constants/forms";
 import type {
   AnyFieldQuestion,
   Condition,
   Question,
-  Step,
   SubsectionQuestion,
   Text,
-} from "./types";
+} from "./questions";
+import { resolveText } from "./resolveStepContent";
 
 /** Composite questions (no single `name`) label each of their own inputs. */
 export function usesTitleAsLabel(question: AnyFieldQuestion): boolean {

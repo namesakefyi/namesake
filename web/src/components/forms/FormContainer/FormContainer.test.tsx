@@ -1,10 +1,9 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { FormConfig } from "#constants/forms";
+import type { FormConfig, Step } from "#constants/forms";
 import * as db from "#db/database";
-import { q } from "#lib/forms/steps";
-import type { Step } from "#lib/forms/types";
+import { q } from "#lib/forms/questions";
 import { FormContainer } from "./FormContainer";
 
 vi.mock("#db/database", () => ({
@@ -173,5 +172,36 @@ describe("FormContainer", () => {
         await screen.findByText("Review your information"),
       ).toBeInTheDocument();
     });
+  });
+
+  it("starts the next step's questions fresh", async () => {
+    vi.mocked(getFormConfig).mockReturnValue({
+      ...plainConfig,
+      steps: [
+        {
+          id: "residence",
+          title: "Where do you live?",
+          questions: [q.address("residence", { address2: true })],
+        },
+        {
+          id: "mailing",
+          title: "Where do you get mail?",
+          questions: [q.address("mailing", { address2: true })],
+        },
+      ],
+    });
+    render(<FormContainer slug="court-order-ma" title="Test" />);
+    await userEvent.click(await screen.findByRole("button", { name: "Start" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "Add apartment, suite, unit, etc." }),
+    );
+    await userEvent.click(screen.getByRole("button", { name: "Continue" }));
+
+    expect(
+      await screen.findByRole("heading", { name: "Where do you get mail?" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Add apartment, suite, unit, etc." }),
+    ).toBeInTheDocument();
   });
 });

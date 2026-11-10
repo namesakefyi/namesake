@@ -1,6 +1,5 @@
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { PREFER_NOT_TO_ANSWER } from "#constants/fields";
 import { renderWithFormProvider, screen } from "../test-utils";
 import { RadioGroupField } from "./RadioGroupField";
 
@@ -99,51 +98,5 @@ describe("RadioGroupField", () => {
 
     const childComponent = screen.getByTestId("child-component");
     expect(childComponent).toBeInTheDocument();
-  });
-
-  it("renders prefer not to answer option when extraChoices includes it", () => {
-    renderWithFormProvider(
-      <RadioGroupField
-        name="pronouns"
-        label="Test Label"
-        options={mockOptions}
-        extraChoices={[PREFER_NOT_TO_ANSWER]}
-      />,
-    );
-
-    const preferNotToAnswerOption = screen.getByText("Prefer not to answer");
-    expect(preferNotToAnswerOption).toBeInTheDocument();
-  });
-
-  it("does not render prefer not to answer option when extraChoices omits it", () => {
-    renderWithFormProvider(
-      <RadioGroupField
-        name="pronouns"
-        label="Test Label"
-        options={mockOptions}
-      />,
-    );
-
-    const preferNotToAnswerOption = screen.queryByText("Prefer not to answer");
-    expect(preferNotToAnswerOption).not.toBeInTheDocument();
-  });
-
-  it("allows selecting prefer not to answer option", async () => {
-    renderWithFormProvider(
-      <RadioGroupField
-        name="pronouns"
-        label="Test Label"
-        options={mockOptions}
-        extraChoices={[PREFER_NOT_TO_ANSWER]}
-      />,
-    );
-
-    const preferNotToAnswerOption = screen.getByText("Prefer not to answer");
-    await userEvent.click(preferNotToAnswerOption);
-
-    const selectedRadio = screen.getByRole("radio", {
-      name: "Prefer not to answer",
-    }) as HTMLInputElement;
-    expect(selectedRadio.checked).toBe(true);
   });
 });

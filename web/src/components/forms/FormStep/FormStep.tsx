@@ -1,11 +1,12 @@
 import { RiArrowRightLine } from "@remixicon/react";
 import { Heading } from "react-aria-components";
 import { useWatch } from "react-hook-form";
+import type { Step } from "#constants/forms";
+import type { Data } from "#lib/forms/questions";
 import {
   resolveDescription,
   resolveTitle,
 } from "#lib/forms/resolveStepContent";
-import type { Data, Step } from "#lib/forms/types";
 import { slugify } from "#lib/utils/slugify";
 import { smartquotes } from "#lib/utils/smartquotes";
 import { Button } from "../../common/Button";

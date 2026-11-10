@@ -1,5 +1,16 @@
 import { ALL } from "./all";
 
+export const PREFER_NOT_TO_ANSWER = "preferNotToAnswer";
+export const DONT_KNOW = "dontKnow";
+
+export type ExtraChoice = typeof PREFER_NOT_TO_ANSWER | typeof DONT_KNOW;
+
+/** How an extra choice reads on the review page and in its input. */
+export const EXTRA_CHOICE_LABELS: Readonly<Record<string, string>> = {
+  [PREFER_NOT_TO_ANSWER]: "Prefer not to answer",
+  [DONT_KNOW]: "I don’t know",
+} satisfies Record<ExtraChoice, string>;
+
 export const FIELD_DEFS = [
   { name: "oldFirstName", type: "string" },
   { name: "oldMiddleName", type: "string" },
@@ -137,6 +148,9 @@ export const FIELD_DEFS = [
     name: "parent1FullName",
     type: "string",
   },
+  { name: "parent1FirstName", type: "string" },
+  { name: "parent1MiddleName", type: "string" },
+  { name: "parent1LastName", type: "string" },
   {
     name: "parent1Phone",
     type: "string",
@@ -169,6 +183,9 @@ export const FIELD_DEFS = [
     name: "parent2FullName",
     type: "string",
   },
+  { name: "parent2FirstName", type: "string" },
+  { name: "parent2MiddleName", type: "string" },
+  { name: "parent2LastName", type: "string" },
   {
     name: "parent2Phone",
     type: "string",
@@ -256,10 +273,9 @@ export const FIELD_DEFS = [
     name: "coGuardianEmail",
     type: "string",
   },
-  {
-    name: "coGuardianFullName",
-    type: "string",
-  },
+  { name: "coGuardianFirstName", type: "string" },
+  { name: "coGuardianMiddleName", type: "string" },
+  { name: "coGuardianLastName", type: "string" },
   {
     name: "coGuardianPhone",
     type: "string",
@@ -283,6 +299,7 @@ export const FIELD_DEFS = [
   {
     name: "isHispanicOrLatino",
     type: "boolean",
+    extraChoices: [PREFER_NOT_TO_ANSWER],
   },
   {
     name: "race",
@@ -324,10 +341,9 @@ export const FIELD_DEFS = [
     name: "guardianEmail",
     type: "string",
   },
-  {
-    name: "guardianFullName",
-    type: "string",
-  },
+  { name: "guardianFirstName", type: "string" },
+  { name: "guardianMiddleName", type: "string" },
+  { name: "guardianLastName", type: "string" },
   {
     name: "guardianPhone",
     type: "string",
@@ -359,6 +375,7 @@ export const FIELD_DEFS = [
   {
     name: "hasPreviousSocialSecurityCard",
     type: "boolean",
+    extraChoices: [DONT_KNOW],
   },
   {
     name: "previousSocialSecurityCardFirstName",
@@ -661,23 +678,38 @@ export const FIELD_DEFS = [
   },
 ] as const;
 
-export type FieldName = (typeof FIELD_DEFS)[number]["name"];
+type FieldDef = (typeof FIELD_DEFS)[number];
 
-// Map the string type to actual TS types
-export type FieldType<K extends FieldName> = K extends any
-  ? Extract<(typeof FIELD_DEFS)[number], { name: K }>["type"] extends "string"
-    ? string
-    : Extract<
-          (typeof FIELD_DEFS)[number],
-          { name: K }
-        >["type"] extends "boolean"
-      ? boolean | typeof PREFER_NOT_TO_ANSWER | typeof DONT_KNOW
-      : Extract<
-            (typeof FIELD_DEFS)[number],
-            { name: K }
-          >["type"] extends "string[]"
-        ? string[]
-        : never
+export type FieldName = FieldDef["name"];
+
+type DefinitionOf<K extends FieldName> = Extract<FieldDef, { name: K }>;
+
+export type BooleanFieldName = Extract<FieldDef, { type: "boolean" }>["name"];
+export type StringFieldName = Extract<FieldDef, { type: "string" }>["name"];
+export type ListFieldName = Extract<FieldDef, { type: "string[]" }>["name"];
+export type ValuedFieldName = Extract<FieldDef, { values: object }>["name"];
+export type TextFieldName = Exclude<StringFieldName, ValuedFieldName>;
+
+/** The extra choices a boolean field accepts besides yes and no. */
+export type FieldExtraChoice<K extends FieldName> =
+  DefinitionOf<K> extends {
+    extraChoices: readonly (infer C extends ExtraChoice)[];
+  }
+    ? C
+    : never;
+
+/** The allowed values of a field, or `string` when none are declared. */
+export type FieldValue<K extends FieldName> =
+  DefinitionOf<K> extends { values: readonly (infer V extends string)[] }
+    ? V
+    : string;
+
+export type FieldType<K extends FieldName> = K extends FieldName
+  ? DefinitionOf<K>["type"] extends "boolean"
+    ? boolean | FieldExtraChoice<K>
+    : DefinitionOf<K>["type"] extends "string[]"
+      ? string[]
+      : string
   : never;
 
 export type FormData = {
@@ -691,8 +723,3 @@ export function shouldShowOtherPronouns(pronouns: unknown): boolean {
     pronouns === ALL || (Array.isArray(pronouns) && pronouns.includes("other"))
   );
 }
-
-export const PREFER_NOT_TO_ANSWER = "preferNotToAnswer";
-export const DONT_KNOW = "dontKnow";
-
-export type ExtraChoice = typeof PREFER_NOT_TO_ANSWER | typeof DONT_KNOW;
