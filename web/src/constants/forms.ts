@@ -10,18 +10,6 @@ export interface Step {
   questions: readonly Question[];
 }
 
-export const FORM_SLUGS = [
-  "affidavit-of-indigency-ma",
-  "court-order-ma",
-  "court-order-ma-minor",
-  "court-order-ny",
-  "court-order-ri",
-  "social-security",
-  "birth-certificate-affidavit-ma",
-] as const;
-
-export type FormSlug = (typeof FORM_SLUGS)[number];
-
 /**
  * Configuration for a PDF within a form.
  */

@@ -65,14 +65,14 @@ describe("FormContainer", () => {
 
   describe("title step", () => {
     it("renders title on title step", async () => {
-      render(<FormContainer slug="court-order-ma" title="Test" />);
+      render(<FormContainer formId="ma/court-order" title="Test" />);
       expect(await screen.findByText("Test")).toBeInTheDocument();
     });
 
     it("renders description on title step", async () => {
       render(
         <FormContainer
-          slug="court-order-ma"
+          formId="ma/court-order"
           title="Test"
           description="Test Description"
         />,
@@ -81,7 +81,7 @@ describe("FormContainer", () => {
     });
 
     it("renders start button on title step", async () => {
-      render(<FormContainer slug="court-order-ma" title="Test" />);
+      render(<FormContainer formId="ma/court-order" title="Test" />);
       expect(
         await screen.findByRole("button", { name: "Start" }),
       ).toBeInTheDocument();
@@ -90,7 +90,7 @@ describe("FormContainer", () => {
     it("renders PDF metadata provided by the Astro wrapper", async () => {
       render(
         <FormContainer
-          slug="court-order-ma"
+          formId="ma/court-order"
           title="Test"
           pdfMetadata={[
             {
@@ -111,7 +111,7 @@ describe("FormContainer", () => {
     it("renders a loading spinner while saved progress is being fetched", async () => {
       vi.mocked(db.getFormProgress).mockReturnValue(new Promise(() => {}));
 
-      render(<FormContainer slug="court-order-ma" title="Test" />);
+      render(<FormContainer formId="ma/court-order" title="Test" />);
       await act(async () => {});
 
       expect(
@@ -124,7 +124,7 @@ describe("FormContainer", () => {
   describe("filling phase", () => {
     it("renders step content and navigation after clicking Start", async () => {
       const user = userEvent.setup();
-      render(<FormContainer slug="court-order-ma" title="Test" />);
+      render(<FormContainer formId="ma/court-order" title="Test" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
 
@@ -134,7 +134,7 @@ describe("FormContainer", () => {
 
     it("returns to title after clicking Previous step", async () => {
       const user = userEvent.setup();
-      render(<FormContainer slug="court-order-ma" title="Test" />);
+      render(<FormContainer formId="ma/court-order" title="Test" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
       await user.click(screen.getByRole("button", { name: "Previous step" }));
@@ -148,7 +148,7 @@ describe("FormContainer", () => {
   describe("review phase", () => {
     it("renders review step after clicking Next step", async () => {
       const user = userEvent.setup();
-      render(<FormContainer slug="court-order-ma" title="Test" />);
+      render(<FormContainer formId="ma/court-order" title="Test" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
       await user.click(screen.getByRole("button", { name: "Next step" }));
@@ -163,7 +163,7 @@ describe("FormContainer", () => {
     it("advances to review when a filling-phase form step is submitted", async () => {
       vi.mocked(getFormConfig).mockReturnValue(formStepConfig);
       const user = userEvent.setup();
-      render(<FormContainer slug="court-order-ma" title="Test" />);
+      render(<FormContainer formId="ma/court-order" title="Test" />);
 
       await user.click(await screen.findByRole("button", { name: "Start" }));
       await user.click(screen.getByRole("button", { name: "Continue" }));
@@ -190,7 +190,7 @@ describe("FormContainer", () => {
         },
       ],
     });
-    render(<FormContainer slug="court-order-ma" title="Test" />);
+    render(<FormContainer formId="ma/court-order" title="Test" />);
     await userEvent.click(await screen.findByRole("button", { name: "Start" }));
     await userEvent.click(
       screen.getByRole("button", { name: "Add apartment, suite, unit, etc." }),

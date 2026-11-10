@@ -17,10 +17,9 @@ const stateSupport = stateEntries.reduce(
   {},
 );
 
-const stateSlug = stateEntries.reduce((acc: Record<string, string>, entry) => {
-  acc[entry.data.name] = entry.id;
-  return acc;
-}, {});
+const jurisdictionIds: Record<string, string> = Object.fromEntries(
+  stateEntries.map((entry) => [entry.data.name, entry.id]),
+);
 
 const topology = usaStates as unknown as Topology;
 const featureCollection = feature(
@@ -34,7 +33,7 @@ const stateFeatures = featureCollection.features.map((geoFeature: Feature) => ({
     ...geoFeature.properties,
     name: geoFeature.properties?.name || "",
     supportLevel: stateSupport[geoFeature.properties?.name] || "none",
-    slug: stateSlug[geoFeature.properties?.name] || "",
+    jurisdictionId: jurisdictionIds[geoFeature.properties?.name] || "",
   },
 }));
 
@@ -155,7 +154,7 @@ function getFillForSupportLevel(supportLevel: string): string {
             fill={getFillForSupportLevel(feature.properties.supportLevel)}
             data-support={feature.properties.supportLevel}
             data-name={feature.properties.name}
-            data-slug={feature.properties.slug}
+            data-jurisdiction-id={feature.properties.jurisdictionId}
           />
         ))
       }
@@ -280,8 +279,8 @@ function getFillForSupportLevel(supportLevel: string): string {
 
   states
     .on("click", function () {
-      const slug = (this as SVGPathElement).getAttribute("data-slug");
-      if (slug) window.location.href = `/guides/${slug}`;
+      const { jurisdictionId } = (this as SVGPathElement).dataset;
+      if (jurisdictionId) window.location.href = `/guides/${jurisdictionId}`;
     })
     .on("mouseenter", function (event: MouseEvent) {
       const element = this as SVGPathElement;

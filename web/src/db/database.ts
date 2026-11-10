@@ -52,26 +52,26 @@ export async function getAllFields(): Promise<FormFieldRecord[]> {
 }
 
 export async function saveFormProgress(
-  formSlug: string,
+  formId: string,
   machineState: unknown,
 ): Promise<void> {
   const db = await getDB();
   await db.put(FORM_PROGRESS_STORE, {
-    formSlug,
+    formId,
     machineState,
     updatedAt: Date.now(),
   });
 }
 
 export async function getFormProgress(
-  formSlug: string,
+  formId: string,
 ): Promise<unknown | undefined> {
   const db = await getDB();
-  const record = await db.get(FORM_PROGRESS_STORE, formSlug);
+  const record = await db.get(FORM_PROGRESS_STORE, formId);
   return record?.machineState;
 }
 
-export async function clearFormProgress(formSlug: string): Promise<void> {
+export async function clearFormProgress(formId: string): Promise<void> {
   const db = await getDB();
-  await db.delete(FORM_PROGRESS_STORE, formSlug);
+  await db.delete(FORM_PROGRESS_STORE, formId);
 }

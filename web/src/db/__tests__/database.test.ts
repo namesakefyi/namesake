@@ -204,7 +204,7 @@ describe("IndexedDB Database Operations", () => {
     it("should save and retrieve machine state", async () => {
       const machineState = {
         value: { filling: "step-a" },
-        context: { formSlug: "test-form", editingStepId: null, formData: {} },
+        context: { formId: "test-form", editingStepId: null, formData: {} },
         status: "active",
       };
 
@@ -214,7 +214,7 @@ describe("IndexedDB Database Operations", () => {
       expect(restored).toEqual(machineState);
     });
 
-    it("should overwrite previous progress for the same slug", async () => {
+    it("should overwrite previous progress for the same form id", async () => {
       const first = { value: "title", status: "active" };
       const second = { value: { filling: "step-b" }, status: "active" };
 
@@ -225,7 +225,7 @@ describe("IndexedDB Database Operations", () => {
       expect(restored).toEqual(second);
     });
 
-    it("should keep progress for different slugs separate", async () => {
+    it("should keep progress for different form ids separate", async () => {
       const stateA = { value: "review", status: "active" };
       const stateB = { value: "title", status: "active" };
 
@@ -238,14 +238,14 @@ describe("IndexedDB Database Operations", () => {
   });
 
   describe("getFormProgress", () => {
-    it("should return undefined for a slug with no saved progress", async () => {
+    it("should return undefined for a form id with no saved progress", async () => {
       const result = await getFormProgress("nonexistent");
       expect(result).toBeUndefined();
     });
   });
 
   describe("clearFormProgress", () => {
-    it("should remove saved progress for a slug", async () => {
+    it("should remove saved progress for a form id", async () => {
       await saveFormProgress("form-a", { value: "review" });
       await clearFormProgress("form-a");
 
@@ -256,7 +256,7 @@ describe("IndexedDB Database Operations", () => {
       await expect(clearFormProgress("nonexistent")).resolves.not.toThrow();
     });
 
-    it("should not affect other slugs", async () => {
+    it("should not affect other form ids", async () => {
       await saveFormProgress("form-a", { value: "review" });
       await saveFormProgress("form-b", { value: "title" });
 

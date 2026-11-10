@@ -121,7 +121,6 @@ export async function handleAddPdf(c: Context) {
     id,
     title,
     code: code ?? "",
-    jurisdiction,
     canonicalUrl,
     pdfDir,
     pdfDestPath,

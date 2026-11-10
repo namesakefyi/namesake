@@ -4,9 +4,9 @@ import { getPhase } from "./createFormMachine";
 export type FormStatus = "inProgress" | "complete";
 
 export async function getFormStatus(
-  formSlug: string,
+  formId: string,
 ): Promise<FormStatus | null> {
-  const snapshot = await getFormProgress(formSlug);
+  const snapshot = await getFormProgress(formId);
   if (!snapshot || typeof snapshot !== "object") return null;
   const value = (snapshot as { value?: unknown }).value;
   const phase = getPhase(value);

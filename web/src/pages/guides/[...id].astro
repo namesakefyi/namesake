@@ -1,0 +1,55 @@
+---
+import { getCollection, getEntry, render } from "astro:content";
+import type { BreadcrumbItem } from "#components/Breadcrumbs.astro";
+import GuideFooter from "#components/GuideFooter.astro";
+import StubBanner from "#components/StubBanner.astro";
+import TableOfContents from "#components/TableOfContents.astro";
+import ProseLayout from "#layouts/ProseLayout.astro";
+import { formatTitleWithJurisdiction } from "#lib/utils/formatTitleWithJurisdiction.ts";
+
+export async function getStaticPaths() {
+  const guides = await getCollection("guides", ({ data }) => !data.unlisted);
+  return guides.map((guide) => ({
+    params: { id: guide.id },
+    props: { guide },
+  }));
+}
+
+const { guide } = Astro.props;
+const { Content, headings, remarkPluginFrontmatter } = await render(guide);
+const jurisdiction = guide.data.jurisdiction
+  ? await getEntry(guide.data.jurisdiction)
+  : null;
+
+const title = formatTitleWithJurisdiction(
+  guide.data.title,
+  jurisdiction?.data.name,
+);
+---
+
+<ProseLayout
+  title={title}
+  description={guide.data.description}
+  annotation="box"
+  breadcrumbs={[
+    { label: "Namesake", href: "/" },
+    { label: "Guides", href: "/guides" },
+    ...(jurisdiction
+      ? [{ label: jurisdiction.data.name, href: `/guides/${jurisdiction.id}` }]
+      : []),
+  ] satisfies BreadcrumbItem[]}
+  color="white"
+  previewImage={{
+    src: `/guides/${guide.id}.png`,
+    alt: guide.data.title,
+  }}
+>
+  <TableOfContents headings={headings} slot="toc" />
+  {guide.data.stub && <StubBanner />}
+  <Content />
+  <GuideFooter
+    entryId={guide.id}
+    filePath={guide.filePath}
+    lastModified={remarkPluginFrontmatter.lastModified}
+  />
+</ProseLayout>

@@ -71,14 +71,14 @@ function getWrittenFields(config: FormConfig): Set<FieldName> {
 
 describe("form integrity", () => {
   it("asks for every field an included PDF reads", () => {
-    const failures = forms.flatMap(([slug, config]) => {
+    const failures = forms.flatMap(([formId, config]) => {
       const written = getWrittenFields(config);
       return config.pdfs.flatMap(({ pdfId }) => {
         const pdf = pdfDefinitions.get(pdfId);
         if (!pdf) throw new Error(`No PDF definition for ${pdfId}`);
         return traceReads(pdf.resolver)
           .filter((field) => !written.has(field))
-          .map((field) => `${slug}: ${pdfId} reads ${field}`);
+          .map((field) => `${formId}: ${pdfId} reads ${field}`);
       });
     });
     expect(failures).toEqual([]);
@@ -86,13 +86,13 @@ describe("form integrity", () => {
 
   it("only bases conditions on fields asked earlier", () => {
     const failures: string[] = [];
-    for (const [slug, config] of forms) {
+    for (const [formId, config] of forms) {
       const known = new Set<FieldName>();
       for (const step of config.steps) {
         const check = (condition: Condition | undefined) => {
           for (const field of condition ? traceReads(condition) : []) {
             if (!known.has(field)) {
-              failures.push(`${slug} › ${step.id}: reads ${field} too early`);
+              failures.push(`${formId} › ${step.id}: reads ${field} too early`);
             }
           }
         };
@@ -112,17 +112,17 @@ describe("form integrity", () => {
   });
 
   it("gives each step in a form a unique ID", () => {
-    const failures = forms.flatMap(([slug, config]) => {
+    const failures = forms.flatMap(([formId, config]) => {
       const ids = config.steps.map((step) => step.id);
       return ids
         .filter((id, index) => ids.indexOf(id) !== index)
-        .map((id) => `${slug}: step "${id}" is used more than once`);
+        .map((id) => `${formId}: step "${id}" is used more than once`);
     });
     expect(failures).toEqual([]);
   });
 
   it("asks for each field in only one step", () => {
-    const failures = forms.flatMap(([slug, config]) => {
+    const failures = forms.flatMap(([formId, config]) => {
       const writers = new Map<FieldName, string[]>();
       for (const step of config.steps) {
         for (const { id } of getStepFields(step)) {
@@ -132,7 +132,7 @@ describe("form integrity", () => {
       return [...writers]
         .filter(([, stepIds]) => stepIds.length > 1)
         .map(
-          ([field, stepIds]) => `${slug}: ${field} in ${stepIds.join(", ")}`,
+          ([field, stepIds]) => `${formId}: ${field} in ${stepIds.join(", ")}`,
         );
     });
     expect(failures).toEqual([]);

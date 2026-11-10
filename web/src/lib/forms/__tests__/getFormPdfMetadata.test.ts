@@ -12,7 +12,7 @@ vi.mock("../../pdfs/getPdfDefinition", () => ({
 }));
 
 describe("getFormPdfMetadata", () => {
-  it("returns an empty array when the form slug has no config", async () => {
+  it("returns an empty array when the form id has no config", async () => {
     vi.mocked(forms.getFormConfig).mockReturnValue(undefined);
 
     const result = await getFormPdfMetadata("unknown-form" as never);
@@ -32,7 +32,7 @@ describe("getFormPdfMetadata", () => {
       pdfPath: "/forms/cjp27-petition-to-change-name-of-adult.pdf",
     } as never);
 
-    const result = await getFormPdfMetadata("court-order-ma");
+    const result = await getFormPdfMetadata("ma/court-order");
 
     expect(result).toEqual([
       {
@@ -55,7 +55,7 @@ describe("getFormPdfMetadata", () => {
       title: "Affidavit of Indigency",
     } as never);
 
-    const [metadata] = await getFormPdfMetadata("court-order-ma");
+    const [metadata] = await getFormPdfMetadata("ma/court-order");
 
     expect(metadata.conditional).toBe(false);
   });
@@ -76,7 +76,7 @@ describe("getFormPdfMetadata", () => {
       code: "CJP-25",
     } as never);
 
-    const [metadata] = await getFormPdfMetadata("court-order-ma");
+    const [metadata] = await getFormPdfMetadata("ma/court-order");
 
     expect(metadata.conditional).toBe(true);
   });
@@ -115,7 +115,7 @@ describe("getFormPdfMetadata", () => {
         title: "Affidavit of Indigency",
       } as never);
 
-    const result = await getFormPdfMetadata("court-order-ma");
+    const result = await getFormPdfMetadata("ma/court-order");
 
     expect(result).toHaveLength(2);
     expect(result[0].pdfId).toBe("cjp27-petition-to-change-name-of-adult");

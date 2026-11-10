@@ -6,7 +6,6 @@ import { definePdf } from "../definePdf";
 export const testPdfDefinition = definePdf({
   id: "test-form" as any,
   title: "Test Form",
-  jurisdiction: "ma",
   canonicalUrl: "https://example.com",
   pdfPath: "public/forms/test-form.pdf",
   resolver: (data) => ({
@@ -22,7 +21,6 @@ export const testPdfDefinition = definePdf({
 export const secondTestPdfDefinition = definePdf({
   id: "test-form-2" as any,
   title: "Test Form 2",
-  jurisdiction: "ma",
   canonicalUrl: "https://example.com",
   pdfPath: "public/forms/test-form-2.pdf",
   resolver: (data) => ({ field1: data.newFirstName }),

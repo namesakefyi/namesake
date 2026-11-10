@@ -1,5 +1,4 @@
 import type { FormData } from "./fields";
-import type { JurisdictionId } from "./jurisdictions";
 
 /** Matches libpdf's FieldValue, plus undefined for omitted fields. */
 export type PDFFieldValue = string | boolean | string[] | null | undefined;
@@ -41,12 +40,6 @@ export interface PDFDefinition<TPdfFieldName extends string = string> {
    * @example "CJP-27"
    */
   code?: string;
-
-  /**
-   * The jurisdiction of the form.
-   * @example "ma"
-   */
-  jurisdiction?: JurisdictionId;
 
   /**
    * The canonical URL of the original form. This should be a link to a .gov website or other official source.

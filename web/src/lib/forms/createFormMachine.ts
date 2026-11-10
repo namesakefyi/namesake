@@ -10,7 +10,6 @@ export type FormPhase =
   | "complete";
 
 export interface FormMachineContext {
-  formSlug: string;
   currentStepId: string | null;
   editingStepId: string | null;
 }
@@ -53,7 +52,6 @@ export function createFormMachine({ id, steps }: CreateFormMachineOptions) {
     id,
     initial: "title",
     context: {
-      formSlug: id,
       currentStepId: null,
       editingStepId: null,
     },
