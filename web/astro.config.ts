@@ -8,6 +8,7 @@ import pagefind from "astro-pagefind";
 import browserslist from "browserslist";
 import { browserslistToTargets } from "lightningcss";
 import { satteriModifiedTime } from "./scripts/satteri-modified-time.mjs";
+import { RENAMED_FORM_IDS } from "./src/constants/renamedFormIds";
 
 export default defineConfig({
   site: "https://namesake.fyi",
@@ -40,14 +41,12 @@ export default defineConfig({
     "/guides/court-order-ma": "/guides/ma/court-order",
     "/guides/state-id-ma": "/guides/ma/state-id",
     "/guides/court-order-ri": "/guides/ri/court-order",
-    // Forms moved into jurisdiction folders
-    "/forms/court-order-ma": "/forms/ma/court-order",
-    "/forms/court-order-ma-minor": "/forms/ma/court-order-minor",
-    "/forms/affidavit-of-indigency-ma": "/forms/ma/affidavit-of-indigency",
-    "/forms/birth-certificate-affidavit-ma":
-      "/forms/ma/birth-certificate-affidavit",
-    "/forms/court-order-ny": "/forms/ny/court-order",
-    "/forms/court-order-ri": "/forms/ri/court-order",
+    ...Object.fromEntries(
+      Object.entries(RENAMED_FORM_IDS).map(([oldId, formId]) => [
+        `/forms/${oldId}`,
+        `/forms/${formId}`,
+      ]),
+    ),
   },
   fonts: [
     {

@@ -33,7 +33,7 @@ const formattedDate = updatedAt ? formatter.format(new Date(updatedAt)) : null;
   <ul class="form-metadata">
     <li
       class="form-status"
-      data-form-formId={formId}
+      data-form-id={formId}
       data-time-estimate={timeEstimate}
       data-status="not-started"
       data-loading
@@ -66,7 +66,7 @@ const formattedDate = updatedAt ? formatter.format(new Date(updatedAt)) : null;
   import { getFormStatus } from "#lib/forms/getFormStatus";
 
   document
-    .querySelectorAll<HTMLElement>("[data-form-formId].form-status")
+    .querySelectorAll<HTMLElement>("[data-form-id].form-status")
     .forEach((el) => {
       const formId = el.dataset.formId;
       if (!formId) return;

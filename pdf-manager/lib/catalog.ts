@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadJurisdictions } from "./fields";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
@@ -50,15 +51,17 @@ function findPdfFile(dir: string): string | undefined {
 }
 
 /**
- * Lists each PDF folder with its jurisdiction. Federal PDFs sit at the root of
- * PDFS_DIR; state PDFs sit one folder deep, in their jurisdiction's folder.
+ * Lists each PDF folder with its jurisdiction. A folder named after a
+ * jurisdiction holds that jurisdiction's PDFs; any other folder at the root of
+ * PDFS_DIR is a federal PDF.
  */
 function listPdfDirs(): { jurisdiction: string; id: string; pdfDir: string }[] {
+  const jurisdictions = new Set(loadJurisdictions().map(({ id }) => id));
   const result: { jurisdiction: string; id: string; pdfDir: string }[] = [];
   for (const entry of readdirSync(PDFS_DIR, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
     const dir = join(PDFS_DIR, entry.name);
-    if (findPdfFile(dir)) {
+    if (!jurisdictions.has(entry.name)) {
       result.push({ jurisdiction: FEDERAL, id: entry.name, pdfDir: dir });
       continue;
     }

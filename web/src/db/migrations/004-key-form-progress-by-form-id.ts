@@ -1,19 +1,7 @@
 import type { IDBPDatabase, IDBPTransaction } from "idb";
+import { RENAMED_FORM_IDS } from "#constants/renamedFormIds";
 import type { FormProgressRecord, Migration } from "../types";
 import { FORM_PROGRESS_STORE } from "../types";
-
-// Forms moved into jurisdiction folders, so their ids now include the
-// jurisdiction. Saved progress was keyed by `formSlug`; it's now keyed by
-// `formId`, and the machine snapshot's context field is renamed to match.
-// IndexedDB can't change a store's key path, so the store is recreated.
-export const RENAMED_FORM_IDS: Record<string, string> = {
-  "court-order-ma": "ma/court-order",
-  "court-order-ma-minor": "ma/court-order-minor",
-  "affidavit-of-indigency-ma": "ma/affidavit-of-indigency",
-  "birth-certificate-affidavit-ma": "ma/birth-certificate-affidavit",
-  "court-order-ny": "ny/court-order",
-  "court-order-ri": "ri/court-order",
-};
 
 interface LegacyProgressRecord {
   formSlug: string;
@@ -28,6 +16,10 @@ function migrateSnapshot(machineState: unknown, formId: string): unknown {
   return { ...snapshot, context: { ...context, formId } };
 }
 
+// Forms moved into jurisdiction folders, so their ids now include the
+// jurisdiction. Saved progress was keyed by `formSlug`; it's now keyed by
+// `formId`, and the machine snapshot's context field is renamed to match.
+// IndexedDB can't change a store's key path, so the store is recreated.
 export const migration: Migration = async (db, tx) => {
   const rawDb = db as unknown as IDBPDatabase;
   const rawTx = tx as unknown as IDBPTransaction<any, any, "versionchange">;
