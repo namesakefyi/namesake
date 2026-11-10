@@ -26,6 +26,8 @@ async function runMigrations(
       `IndexedDB migration to v${toVersion} failed; aborting upgrade:`,
       error,
     );
+    // getDB already rejects with the abort, so this copy needs no handler.
+    transaction.done.catch(() => {});
     try {
       transaction.abort();
     } catch {
