@@ -214,8 +214,8 @@ function ShareConsentDialog({
     <Dialog className="form-feedback-consent">
       <Heading slot="title">Can we publicly share your feedback?</Heading>
       <p className="form-feedback-consent-description">
-        Feedback is not tied to your name or identity. Positive feedback helps
-        Namesake fundraise and expand support.
+        It won’t be linked to your name or identity. Sharing positive feedback helps
+        us fundraise and expand support.
       </p>
       <RadioGroup
         aria-label="Share feedback publicly"
