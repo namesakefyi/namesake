@@ -17,12 +17,8 @@ const stateSupport = stateEntries.reduce(
   {},
 );
 
-const jurisdictionIds = stateEntries.reduce(
-  (acc: Record<string, string>, entry) => {
-    acc[entry.data.name] = entry.id;
-    return acc;
-  },
-  {},
+const jurisdictionIds: Record<string, string> = Object.fromEntries(
+  stateEntries.map((entry) => [entry.data.name, entry.id]),
 );
 
 const topology = usaStates as unknown as Topology;
@@ -283,9 +279,7 @@ function getFillForSupportLevel(supportLevel: string): string {
 
   states
     .on("click", function () {
-      const jurisdictionId = (this as SVGPathElement).getAttribute(
-        "data-jurisdiction-id",
-      );
+      const { jurisdictionId } = (this as SVGPathElement).dataset;
       if (jurisdictionId) window.location.href = `/guides/${jurisdictionId}`;
     })
     .on("mouseenter", function (event: MouseEvent) {

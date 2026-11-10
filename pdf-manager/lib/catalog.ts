@@ -55,7 +55,7 @@ function findPdfFile(dir: string): string | undefined {
  * jurisdiction holds that jurisdiction's PDFs; any other folder at the root of
  * PDFS_DIR is a federal PDF.
  */
-function listPdfDirs(): { jurisdiction: string; id: string; pdfDir: string }[] {
+function listPdfDirs() {
   const jurisdictions = new Set(loadJurisdictions().map(({ id }) => id));
   const result: { jurisdiction: string; id: string; pdfDir: string }[] = [];
   for (const entry of readdirSync(PDFS_DIR, { withFileTypes: true })) {
@@ -77,7 +77,6 @@ function listPdfDirs(): { jurisdiction: string; id: string; pdfDir: string }[] {
   return result;
 }
 
-/** Returns the folder a PDF in this jurisdiction belongs in. */
 export function jurisdictionDir(jurisdiction: string): string {
   const id = jurisdiction.toLowerCase();
   return id === FEDERAL ? PDFS_DIR : join(PDFS_DIR, id);

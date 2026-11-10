@@ -133,7 +133,6 @@ const pages = defineCollection({
 
 const pdfs = defineCollection({
   loader: pdfLoader({
-    base: "./content/pdfs/",
     modules: import.meta.glob<{ default: PDFDefinition }>(
       "./content/pdfs/**/index.ts",
       { eager: true },

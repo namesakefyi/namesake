@@ -1,5 +1,5 @@
 import { glob, type Loader } from "astro/loaders";
-import { parseContentPath, rejectJurisdictionKey } from "./parseContentPath";
+import { parseContentPath } from "./parseContentPath";
 
 /**
  * A glob loader that sets each entry's `jurisdiction` from its folder.
@@ -22,16 +22,14 @@ export function jurisdictionGlobLoader({
     load: (context) =>
       globLoader.load({
         ...context,
-        parseData: (props) => {
-          rejectJurisdictionKey(props.data, props.id, collection);
-          return context.parseData({
+        parseData: (props) =>
+          context.parseData({
             ...props,
             data: {
               ...props.data,
-              jurisdiction: parseContentPath(props.id, collection),
+              jurisdiction: parseContentPath(props.id, collection, props.data),
             },
-          });
-        },
+          }),
       }),
   };
 }

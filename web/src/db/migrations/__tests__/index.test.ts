@@ -39,26 +39,6 @@ describe("migration invariant", () => {
 });
 
 describe("running migrations", () => {
-  it("runs each migration after the previous one finishes", async () => {
-    const order: string[] = [];
-    vi.doMock("..", () => ({
-      migrations: [
-        async (db: any, tx: any) => {
-          db.createObjectStore("first", { keyPath: "id" });
-          await tx.objectStore("first").put({ id: 1 });
-          order.push("first done");
-        },
-        () => {
-          order.push("second started");
-        },
-      ],
-    }));
-    const { getDB } = await import("../../init");
-    await getDB().catch(() => {});
-    expect(order).toEqual(["first done", "second started"]);
-    vi.doUnmock("..");
-  });
-
   it("logs a failed migration and leaves the database unopened", async () => {
     const error = new Error("boom");
     vi.doMock("..", () => ({

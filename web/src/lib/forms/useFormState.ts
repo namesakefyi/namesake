@@ -86,30 +86,24 @@ function useFormActor(
 
     actorRef.current = actor;
 
-    const canPersist = typeof indexedDB !== "undefined";
-
-    const subscription = actor.subscribe((snapshot) => {
-      setState(snapshot);
-      if (!canPersist) return;
+    const persist = () => {
+      if (typeof indexedDB === "undefined") return;
       saveFormProgress(formId, actor.getPersistedSnapshot()).catch((error) => {
         console.error(
           `Failed to save form progress for "${formId}" to IndexedDB:`,
           error,
         );
       });
+    };
+
+    const subscription = actor.subscribe((snapshot) => {
+      setState(snapshot);
+      persist();
     });
 
     actor.start();
     setState(actor.getSnapshot());
-
-    if (canPersist) {
-      saveFormProgress(formId, actor.getPersistedSnapshot()).catch((error) => {
-        console.error(
-          `Failed to save initial form progress for "${formId}" to IndexedDB:`,
-          error,
-        );
-      });
-    }
+    persist();
 
     return () => {
       subscription.unsubscribe();

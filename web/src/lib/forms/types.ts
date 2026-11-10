@@ -68,7 +68,6 @@ export type FormPhase =
   | "complete";
 
 export interface FormMachineContext {
-  formId: string;
   currentStepId: string | null;
   editingStepId: string | null;
 }
