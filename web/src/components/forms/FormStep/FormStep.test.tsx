@@ -263,8 +263,8 @@ describe("FormStep body", () => {
         q.subsection(
           [q.shortText("previousNameFrom", { label: "Previous name" })],
           {
-            title: "Details",
             when: (data) => data.hasPreviousNameChange === true,
+            title: "Details",
           },
         ),
         q.banner("Read the [guide](https://example.com/guide).", {

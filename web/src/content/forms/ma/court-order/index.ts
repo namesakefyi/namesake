@@ -63,11 +63,11 @@ export default defineForm({
           options: COUNTRY_OPTIONS,
         }),
         q.comboBox("birthplaceState", {
+          when: (data) => data.birthplaceCountry === "US",
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
           options: JURISDICTION_OPTIONS,
-          when: (data) => data.birthplaceCountry === "US",
         }),
       ],
     },
@@ -91,20 +91,20 @@ export default defineForm({
           { when: (data) => data.isCurrentlyUnhoused === true },
         ),
         q.address("residence", {
+          when: isHoused,
           address2: true,
           county: true,
-          when: isHoused,
         }),
         q.checkbox("isMailingAddressDifferentFromResidence", {
+          when: isHoused,
           label: "I use a different mailing address",
           reviewLabel: "Mailing address different from residence?",
-          when: isHoused,
         }),
         q.subsection([q.address("mailing", { address2: true })], {
-          title: "What is your mailing address?",
           when: (data) =>
             isHoused(data) &&
             data.isMailingAddressDifferentFromResidence === true,
+          title: "What is your mailing address?",
         }),
       ],
     },
@@ -133,8 +133,8 @@ export default defineForm({
             }),
           ],
           {
-            title: "Please list your past legal name.",
             when: (data) => data.hasPreviousNameChange === true,
+            title: "Please list your past legal name.",
           },
         ),
       ],
@@ -160,8 +160,8 @@ export default defineForm({
             }),
           ],
           {
-            title: "Please list all names you haven't previously listed.",
             when: (data) => data.hasUsedOtherNameOrAlias === true,
+            title: "Please list all names you haven't previously listed.",
           },
         ),
       ],

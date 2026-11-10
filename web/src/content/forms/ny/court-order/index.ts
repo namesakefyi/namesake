@@ -85,17 +85,17 @@ export default defineForm({
           options: COUNTRY_OPTIONS,
         }),
         q.comboBox("birthplaceState", {
+          when: (data) => data.birthplaceCountry === "US",
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
           options: JURISDICTION_OPTIONS,
-          when: (data) => data.birthplaceCountry === "US",
         }),
         q.shortText("birthplaceRegion", {
-          label: "Province or region",
-          reviewLabel: "Province or region of birth",
           when: (data) =>
             !!data.birthplaceCountry && data.birthplaceCountry !== "US",
+          label: "Province or region",
+          reviewLabel: "Province or region of birth",
         }),
       ],
     },

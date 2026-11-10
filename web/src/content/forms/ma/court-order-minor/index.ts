@@ -63,8 +63,8 @@ export default defineForm({
         q.banner(
           "The petitioner is over 18 years of age. Submit the [adult court order](/forms/ma/court-order) instead.",
           {
-            variant: "warning",
             when: (data) => deriveCurrentAge(data.dateOfBirth) >= 18,
+            variant: "warning",
           },
         ),
         q.banner(
@@ -134,8 +134,8 @@ export default defineForm({
                   : undefined,
             }),
             q.subsection([q.address("parent2")], {
-              title: "Second parent's address",
               when: (data) => data.parentsHaveDifferentAddresses === true,
+              title: "Second parent's address",
             }),
           ],
           { when: (data) => data.parentsHaveUnknownAddresses !== true },
@@ -197,8 +197,8 @@ export default defineForm({
             q.email("guardianEmail", { reviewLabel: "Guardian email" }),
           ],
           {
-            title: "Guardian information",
             when: (data) => data.hasCourtAppointedGuardian === true,
+            title: "Guardian information",
           },
         ),
       ],
@@ -224,8 +224,8 @@ export default defineForm({
             }),
           ],
           {
-            title: "Co-guardian information",
             when: (data) => data.hasCourtAppointedCoGuardian === true,
+            title: "Co-guardian information",
           },
         ),
       ],
@@ -305,8 +305,8 @@ export default defineForm({
             }),
           ],
           {
-            title: "Please list the minor's past legal name.",
             when: (data) => data.hasPreviousNameChange === true,
+            title: "Please list the minor's past legal name.",
           },
         ),
       ],

@@ -61,11 +61,11 @@ export default defineForm({
           options: COUNTRY_OPTIONS,
         }),
         q.comboBox("birthplaceState", {
+          when: (data) => data.birthplaceCountry === "US",
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
           options: JURISDICTION_OPTIONS,
-          when: (data) => data.birthplaceCountry === "US",
         }),
       ],
     },
@@ -88,8 +88,8 @@ export default defineForm({
           },
         }),
         q.banner(copy.governmentDocument, {
-          variant: "warning",
           when: needsGovernmentDocument,
+          variant: "warning",
         }),
       ],
     },
@@ -176,9 +176,9 @@ As of January 20, 2025, the Trump administration has directed the Social Securit
           extraChoices: ["dontKnow"],
         }),
         q.subsection([q.name("previousSocialSecurityCardName")], {
+          when: (data) => data.hasPreviousSocialSecurityCard === true,
           title:
             "What is the name shown on your most recent Social Security card?",
-          when: (data) => data.hasPreviousSocialSecurityCard === true,
         }),
       ],
     },
@@ -211,17 +211,17 @@ As of January 20, 2025, the Trump administration has directed the Social Securit
               },
             }),
             q.shortText("relationshipToFilingForOther", {
+              when: (data) => data.relationshipToFilingFor === "other",
               label: "Specify relationship",
               reviewLabel:
                 "Relationship to the person you are filing for (other)",
               size: 34,
-              when: (data) => data.relationshipToFilingFor === "other",
             }),
           ],
           {
+            when: (data) => data.isFilingForSomeoneElse === true,
             title:
               "What is your relationship to the person you are filing for?",
-            when: (data) => data.isFilingForSomeoneElse === true,
           },
         ),
       ],

@@ -8,7 +8,10 @@ type TestField =
   | { ids: readonly string[]; when: Condition };
 
 function textField(id: string, when?: Condition) {
-  return q.shortText(id as TextFieldName, { label: id, when });
+  return q.shortText(id as TextFieldName, {
+    when,
+    label: id,
+  });
 }
 
 /**
@@ -26,9 +29,7 @@ export function makeStep(
     if ("id" in entry) return textField(entry.id, entry.when);
     return q.subsection(
       entry.ids.map((fieldId) => textField(fieldId)),
-      {
-        when: entry.when,
-      },
+      { when: entry.when },
     );
   });
   return { id, title: `Step ${id}`, questions, ...(when && { when }) };

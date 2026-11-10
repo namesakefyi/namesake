@@ -393,7 +393,7 @@ export const q = {
 
   subsection(
     children: readonly Question[],
-    { when, title }: { title?: OptionalText; when?: Condition } = {},
+    { when, title }: { when?: Condition; title?: OptionalText } = {},
   ): SubsectionQuestion {
     return {
       type: "block",

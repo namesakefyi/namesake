@@ -30,9 +30,9 @@ export default defineForm({
         q.banner(
           "Your birth and new gender markers are identical. Massachusetts doesn't allow people to amend their birth certificate if their gender markers are unchanged.",
           {
-            variant: "warning",
             when: (data) =>
               data.oldGender != null && data.oldGender === data.newGender,
+            variant: "warning",
           },
         ),
       ],

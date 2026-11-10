@@ -49,16 +49,16 @@ const hidden = () => false;
 
 const oldFirstName = (when?: () => boolean) =>
   q.shortText("oldFirstName", {
+    when,
     label: "First name",
     reviewLabel: "Old first name",
-    when,
   });
 
 const oldLastName = (when?: () => boolean) =>
   q.shortText("oldLastName", {
+    when,
     label: "Last name",
     reviewLabel: "Old last name",
-    when,
   });
 
 const nameStep: Step = {

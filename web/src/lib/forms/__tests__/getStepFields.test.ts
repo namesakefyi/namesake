@@ -14,8 +14,8 @@ describe("getStepFields", () => {
         q.subsection(
           [
             q.shortText("previousNameFrom", {
-              label: "From",
               when: (data) => Boolean(data.previousNameTo),
+              label: "From",
             }),
           ],
           { when: (data) => data.hasPreviousNameChange === true },
