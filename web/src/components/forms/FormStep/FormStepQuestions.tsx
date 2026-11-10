@@ -1,6 +1,6 @@
 import type { ComponentType } from "react";
 import type { Step } from "#constants/forms";
-import type { Data, Question } from "#lib/forms/questions";
+import type { Data, Question, QuestionKind } from "#lib/forms/questions";
 import { resolveText } from "#lib/forms/resolveStepContent";
 import {
   getChildContext,
@@ -8,7 +8,11 @@ import {
   type QuestionContext,
   usesTitleAsLabel,
 } from "#lib/forms/walkQuestions";
-import { renderers } from "./renderers";
+import {
+  type QuestionOfKind,
+  type RendererProps,
+  renderers,
+} from "./renderers";
 
 export interface FormStepQuestionsProps {
   step: Step;
@@ -34,7 +38,6 @@ interface QuestionsProps {
 function Questions({ questions, data, context }: QuestionsProps) {
   return questions.map((question, index) => {
     if (question.when && !question.when(data)) return null;
-    // `FormContainer` keys each step, so a new step starts fresh.
     const key = `${question.kind}-${index}`;
     return (
       <QuestionView
@@ -52,36 +55,27 @@ function QuestionView({
   data,
   context,
 }: { question: Question } & Omit<QuestionsProps, "questions">) {
-  if (question.type === "field") {
-    return renderQuestion({
-      question,
-      label: resolveText(question.label ?? context.title, data),
-      labelHidden: usesTitleAsLabel(question),
-    });
-  }
-  if (question.kind === "subsection") {
-    return renderQuestion({
-      question,
-      data,
-      children: (
+  const isField = question.type === "field";
+  return renderQuestion(question, {
+    data,
+    label: isField ? resolveText(question.label ?? context.title, data) : "",
+    labelHidden: isField && usesTitleAsLabel(question),
+    children:
+      question.kind === "subsection" ? (
         <Questions
           questions={question.children}
           data={data}
           context={getChildContext(question, context)}
         />
-      ),
-    });
-  }
-  return renderQuestion({ question, data });
+      ) : undefined,
+  });
 }
 
-function renderQuestion(
-  props: { question: Question } & Record<string, unknown>,
+/** Renders a question with the renderer for its kind. */
+function renderQuestion<K extends QuestionKind>(
+  question: QuestionOfKind<K> & { kind: K },
+  props: Omit<RendererProps<K>, "question">,
 ) {
-  // The registry is keyed by kind, so this renderer takes these props; the
-  // lookup can't carry that link through the union.
-  const Renderer = renderers[props.question.kind] as unknown as ComponentType<
-    typeof props
-  >;
-  return <Renderer {...props} />;
+  const Renderer: ComponentType<RendererProps<K>> = renderers[question.kind];
+  return <Renderer {...props} question={question} />;
 }

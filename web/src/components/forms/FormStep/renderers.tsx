@@ -20,7 +20,6 @@ import { ShortTextField } from "#components/forms/ShortTextField";
 import { YesNoField } from "#components/forms/YesNoField";
 import type { FieldName, ListFieldName } from "#constants/fields";
 import type {
-  BlockKind,
   BlockQuestion,
   Data,
   FieldKind,
@@ -33,23 +32,18 @@ import { useFormStep } from "../FormContainer/FormStepContext";
 import { FormSubsection } from "./FormSubsection";
 import { MarkdownText } from "./MarkdownText";
 
-export interface FieldRendererProps<K extends FieldKind> {
-  question: FieldQuestion<K>;
+export type QuestionOfKind<K extends QuestionKind> = K extends FieldKind
+  ? FieldQuestion<K>
+  : Extract<BlockQuestion, { kind: K }>;
+
+/** Every renderer gets the same props; blocks ignore the label. */
+export interface RendererProps<K extends QuestionKind> {
+  question: QuestionOfKind<K>;
+  data: Data;
   label: string;
   labelHidden: boolean;
-}
-
-export interface BlockRendererProps<K extends BlockKind> {
-  question: Extract<BlockQuestion, { kind: K }>;
-  data: Data;
   children?: ReactNode;
 }
-
-export type RendererProps<K extends QuestionKind> = K extends FieldKind
-  ? FieldRendererProps<K>
-  : K extends BlockKind
-    ? BlockRendererProps<K>
-    : never;
 
 /** US dollars, with cents only when entered. */
 const CURRENCY_FORMAT: Intl.NumberFormatOptions = {
@@ -62,7 +56,7 @@ function fieldProps({
   question,
   label,
   labelHidden,
-}: FieldRendererProps<FieldKind>) {
+}: Omit<RendererProps<FieldKind>, "question"> & { question: FieldQuestion }) {
   if (!question.name)
     throw new Error(`${question.kind} writes no single field`);
   return {
@@ -84,7 +78,7 @@ function toChoices(options: OptionLabels) {
 function choiceGroup<K extends "radioGroup" | "checkboxGroup">(
   Group: typeof RadioGroupField | typeof CheckboxGroupField,
 ) {
-  return (props: FieldRendererProps<K>) => (
+  return (props: RendererProps<K>) => (
     <Group
       {...fieldProps(props)}
       options={toChoices(props.question.props.options)}
