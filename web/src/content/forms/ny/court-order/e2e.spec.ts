@@ -282,7 +282,7 @@ for (const request of [
         page.getByText("What do I write?", { exact: true }),
       ).toBeVisible();
       await page
-        .getByRole("textbox", { name: "Reason to seal the court record" })
+        .getByRole("textbox", { name: "Reason to seal court record" })
         .fill("For my personal safety.");
       await next();
     });

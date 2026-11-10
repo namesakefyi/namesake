@@ -199,7 +199,6 @@ export default defineForm({
               [
                 q.number("childSupportArrearsAmount", {
                   label: "Child support owed",
-                  reviewLabel: "Child support amount owed",
                   minValue: 0,
                   formatOptions: USD_FORMAT,
                 }),
@@ -232,7 +231,6 @@ export default defineForm({
               [
                 q.number("spousalSupportArrearsAmount", {
                   label: "Spousal support owed",
-                  reviewLabel: "Spousal support amount owed",
                   minValue: 0,
                   formatOptions: USD_FORMAT,
                 }),
@@ -339,8 +337,7 @@ export default defineForm({
         q.subsection(
           [
             q.longText("reasonToSealCourtRecord", {
-              label: "Reason to seal the court record",
-              reviewLabel: "Reason to seal court record",
+              label: "Reason to seal court record",
               description: "Explain why you want to keep your case private.",
             }),
             q.banner(
@@ -365,7 +362,6 @@ export default defineForm({
           [
             q.longText("supportingDocumentsDetails", {
               label: "Documents or additional pages",
-              reviewLabel: "Supporting documents or additional pages",
               description: "List the name or a description of each document.",
             }),
           ],
