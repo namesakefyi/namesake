@@ -1,8 +1,8 @@
-export { node } from "./node";
+export { q } from "./questions";
 export type {
   BooleanFieldName,
   Condition,
-  StepNode,
+  Question,
   StringFieldName,
   TextFieldName,
 } from "./types";

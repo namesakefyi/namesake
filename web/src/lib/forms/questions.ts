@@ -12,21 +12,21 @@ import {
 } from "#constants/fieldGroups";
 import { type FieldName, shouldShowOtherPronouns } from "#constants/fields";
 import type {
-  BannerNode,
+  BannerQuestion,
   BooleanFieldName,
   CommonFieldOptions,
   Condition,
-  DisplayNode,
+  DisplayQuestion,
   FieldKind,
-  FieldNode,
   FieldPropsByKind,
+  FieldQuestion,
   ListFieldName,
   OptionalText,
   OptionLabels,
   Options,
-  StepNode,
+  Question,
   StringFieldName,
-  SubsectionNode,
+  SubsectionQuestion,
   Text,
   TextFieldName,
   WrittenField,
@@ -56,7 +56,7 @@ function singleField<K extends FieldKind, W extends FieldName>(
   kind: K,
   name: W,
   { label, description, when, reviewLabel, ...props }: SingleFieldOptions<K>,
-): FieldNode<K, W> {
+): FieldQuestion<K, W> {
   const options =
     "options" in props ? (props.options as OptionLabels) : undefined;
   return {
@@ -77,16 +77,16 @@ function composite<K extends FieldKind>(
   writes: readonly WrittenField[],
   { when, reviewLabel }: CommonFieldOptions,
   props: FieldPropsByKind[K],
-): FieldNode<K> {
+): FieldQuestion<K> {
   return { type: "field", kind, when, reviewLabel, writes, props };
 }
 
 /**
  * Builders for everything in a step's `body`. Each is named after its
  * component with the `Field` or `Form` affix dropped: `YesNoField` →
- * `node.yesNo`, `FormSubsection` → `node.subsection`.
+ * `q.yesNo`, `FormSubsection` → `q.subsection`.
  */
-export const node = {
+export const q = {
   shortText<W extends TextFieldName>(
     name: W,
     options: SingleFieldOptions<"shortText"> = {},
@@ -235,15 +235,15 @@ export const node = {
   /** `content` is markdown. */
   banner(
     content: Text,
-    options?: { variant?: BannerNode["variant"]; when?: Condition },
-  ): BannerNode {
+    options?: { variant?: BannerQuestion["variant"]; when?: Condition },
+  ): BannerQuestion {
     return { type: "block", kind: "banner", content, ...options };
   },
 
   subsection(
-    children: readonly StepNode[],
+    children: readonly Question[],
     options?: { title?: OptionalText; when?: Condition },
-  ): SubsectionNode {
+  ): SubsectionQuestion {
     return { type: "block", kind: "subsection", children, ...options };
   },
 
@@ -251,7 +251,7 @@ export const node = {
   display<P extends object>(
     component: ComponentType<P>,
     ...[options]: DisplayArguments<P>
-  ): DisplayNode {
+  ): DisplayQuestion {
     return { type: "block", kind: "display", component, props: options?.props };
   },
 };

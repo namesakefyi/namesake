@@ -1,6 +1,6 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineForm } from "#lib/forms/defineForm";
-import { type Condition, node } from "#lib/forms/steps";
+import { type Condition, q } from "#lib/forms/steps";
 
 const isHoused: Condition = (data) => data.isCurrentlyUnhoused !== true;
 
@@ -11,23 +11,23 @@ export default defineForm({
       title: "What is your new name?",
       description:
         "This is the name you're making official! Type it exactly as you want it to appear.",
-      body: [node.name("newName")],
+      questions: [q.name("newName")],
     },
     {
       id: "current-name",
       title: "What is your current legal name?",
       description:
         "This is the name you're leaving behind. Type it exactly as it appears on your ID.",
-      body: [node.name("oldName")],
+      questions: [q.name("oldName")],
     },
     {
       id: "reason",
       title: "What is the reason you're changing your name?",
-      body: [
-        node.longText("reasonForChangingName", {
+      questions: [
+        q.longText("reasonForChangingName", {
           label: "Reason for name change",
         }),
-        node.display(NameChangeReasonBanner),
+        q.display(NameChangeReasonBanner),
       ],
     },
     {
@@ -35,9 +35,9 @@ export default defineForm({
       title: "What is your contact information?",
       description:
         "The court uses this to communicate with you about your filing status.",
-      body: [
-        node.phone("phoneNumber"),
-        node.email("email", { reviewLabel: "Email" }),
+      questions: [
+        q.phone("phoneNumber"),
+        q.email("email", { reviewLabel: "Email" }),
       ],
     },
     {
@@ -45,22 +45,22 @@ export default defineForm({
       title: "What is your residential address?",
       description:
         "You must file your name change with the Probate Court in the city or town where you live.",
-      body: [
-        node.checkbox("isCurrentlyUnhoused", {
+      questions: [
+        q.checkbox("isCurrentlyUnhoused", {
           label: "I am currently unhoused or without permanent housing",
           reviewLabel: "Currently unhoused?",
         }),
-        node.banner(
+        q.banner(
           "We recommend reaching out to [Thundermist Health Center](https://www.thundermisthealth.org/services/social-services/), which has locations in Woonsocket, West Warwick, and Wakefield. Thundermist can help connect you with social services and may be able to provide an address to use for your name change application.",
           { when: (data) => data.isCurrentlyUnhoused === true },
         ),
-        node.address("residence", { when: isHoused }),
-        node.checkbox("isMailingAddressDifferentFromResidence", {
+        q.address("residence", { when: isHoused }),
+        q.checkbox("isMailingAddressDifferentFromResidence", {
           label: "I use a different mailing address",
           reviewLabel: "Mailing address different from residence?",
           when: isHoused,
         }),
-        node.subsection([node.address("mailing")], {
+        q.subsection([q.address("mailing")], {
           title: "What is your mailing address?",
           when: (data) =>
             isHoused(data) &&
@@ -73,8 +73,8 @@ export default defineForm({
       title: "What are your most recent addresses?",
       description:
         "List up to three addresses where you have resided prior to your current address.",
-      body: [
-        node.repeatingEntry("previousAddresses", {
+      questions: [
+        q.repeatingEntry("previousAddresses", {
           reviewLabel: "Previous addresses",
           min: 0,
           max: 3,
@@ -86,23 +86,23 @@ export default defineForm({
     {
       id: "date-of-birth",
       title: "What is your date of birth?",
-      body: [node.memorableDate("dateOfBirth", { label: "Date of birth" })],
+      questions: [q.memorableDate("dateOfBirth", { label: "Date of birth" })],
     },
     {
       id: "birthplace",
       title: "Where were you born?",
-      body: [
-        node.shortText("birthplaceCity", {
+      questions: [
+        q.shortText("birthplaceCity", {
           label: "City",
           reviewLabel: "City of birth",
         }),
-        node.comboBox("birthplaceCountry", {
+        q.comboBox("birthplaceCountry", {
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
           source: "countries",
         }),
-        node.comboBox("birthplaceState", {
+        q.comboBox("birthplaceState", {
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
@@ -116,8 +116,8 @@ export default defineForm({
       title: "Do you want to update your Rhode Island birth certificate?",
       when: (data) =>
         data.birthplaceCountry === "US" && data.birthplaceState === "RI",
-      body: [
-        node.yesNo("shouldChangeBirthCertificate", {
+      questions: [
+        q.yesNo("shouldChangeBirthCertificate", {
           reviewLabel: "Update birth certificate?",
           yesLabel: "Yes, update my birth certificate to my new name",
           noLabel: "No, don't change my birth certificate",
@@ -127,13 +127,13 @@ export default defineForm({
     {
       id: "previous-name-change",
       title: "Have you ever changed your name before?",
-      body: [
-        node.yesNo("hasPreviousNameChange", {
+      questions: [
+        q.yesNo("hasPreviousNameChange", {
           reviewLabel: "Has previous name change?",
           yesLabel: "Yes, I've changed my name before",
           noLabel: "No, I've never changed my name",
         }),
-        node.banner(
+        q.banner(
           "Attach a copy of each prior court order or marriage license to your petition.",
           { when: (data) => data.hasPreviousNameChange === true },
         ),
@@ -142,11 +142,11 @@ export default defineForm({
     {
       id: "family-info",
       title: "What are your parents' names?",
-      body: [
-        node.subsection([node.name("mothersName")], {
+      questions: [
+        q.subsection([q.name("mothersName")], {
           title: "Mother's maiden name",
         }),
-        node.subsection([node.name("fathersName")], {
+        q.subsection([q.name("fathersName")], {
           title: "Father's name",
         }),
       ],
@@ -154,9 +154,9 @@ export default defineForm({
     {
       id: "personal-info",
       title: "What is your occupation and marital status?",
-      body: [
-        node.shortText("occupation", { label: "Occupation" }),
-        node.comboBox("maritalStatus", {
+      questions: [
+        q.shortText("occupation", { label: "Occupation" }),
+        q.comboBox("maritalStatus", {
           label: "Marital status (optional)",
           reviewLabel: "Marital status",
           placeholder: "Select marital status",

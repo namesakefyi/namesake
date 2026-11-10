@@ -1,5 +1,5 @@
 import { defineForm } from "#lib/forms/defineForm";
-import { node } from "#lib/forms/steps";
+import { q } from "#lib/forms/steps";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
 import { joinNames } from "#lib/utils/joinNames";
 
@@ -10,8 +10,8 @@ export default defineForm({
     {
       id: "birth-gender",
       title: "Which gender marker appears on your birth certificate?",
-      body: [
-        node.radioGroup("oldGender", {
+      questions: [
+        q.radioGroup("oldGender", {
           options: genderOptions,
           reviewLabel: "Existing gender marker",
         }),
@@ -22,12 +22,12 @@ export default defineForm({
       title: "What is your new gender marker?",
       description:
         "This is the gender marker that will display on your amended birth certificate.",
-      body: [
-        node.radioGroup("newGender", {
+      questions: [
+        q.radioGroup("newGender", {
           options: genderOptions,
           reviewLabel: "Desired gender marker",
         }),
-        node.banner(
+        q.banner(
           "Your birth and new gender markers are identical. Massachusetts doesn't allow people to amend their birth certificate if their gender markers are unchanged.",
           {
             variant: "warning",
@@ -40,25 +40,25 @@ export default defineForm({
     {
       id: "birth-name",
       title: "What is the name on your current birth certificate?",
-      body: [node.name("oldName")],
+      questions: [q.name("oldName")],
     },
     {
       id: "new-name",
       title: "What is your new name?",
       description:
         "This is the name that will appear on your amended birth certificate.",
-      body: [node.name("newName")],
+      questions: [q.name("newName")],
     },
     {
       id: "date-of-birth",
       title: "What is your date of birth?",
-      body: [node.memorableDate("dateOfBirth", { label: "Date of birth" })],
+      questions: [q.memorableDate("dateOfBirth", { label: "Date of birth" })],
     },
     {
       id: "birthplace",
       title: "Where were you born?",
-      body: [
-        node.shortText("birthplaceCity", {
+      questions: [
+        q.shortText("birthplaceCity", {
           label: "City/town",
           reviewLabel: "City of birth",
         }),
@@ -69,24 +69,24 @@ export default defineForm({
       title: "What are your parents' names?",
       description:
         "Provide the names of the parents as listed on your birth certificate.",
-      body: [
-        node.shortText("parent1FullName", { label: "Parent 1 full name" }),
-        node.shortText("parent2FullName", { label: "Parent 2 full name" }),
+      questions: [
+        q.shortText("parent1FullName", { label: "Parent 1 full name" }),
+        q.shortText("parent2FullName", { label: "Parent 2 full name" }),
       ],
     },
     {
       id: "address",
       title: "What is your mailing address?",
-      body: [node.address("mailing", { address2: true })],
+      questions: [q.address("mailing", { address2: true })],
     },
     {
       id: "contact-info",
       title: "What is your contact information?",
       description:
         "The government uses this to communicate with you about your filing status.",
-      body: [
-        node.phone("phoneNumber"),
-        node.email("email", { reviewLabel: "Email" }),
+      questions: [
+        q.phone("phoneNumber"),
+        q.email("email", { reviewLabel: "Email" }),
       ],
     },
     {
@@ -94,8 +94,8 @@ export default defineForm({
       title: "Do you need to waive filing fees?",
       description:
         "To waive the fees, you'll need to file the Affidavit of Indigency. We can help you with that.",
-      body: [
-        node.checkbox("waiveDocumentFees", {
+      questions: [
+        q.checkbox("waiveDocumentFees", {
           label: "Waive the fees",
           reviewLabel: "Waive fees?",
         }),
@@ -107,13 +107,13 @@ export default defineForm({
       description:
         "Since you are under 18 years old, at least one parent or guardian must authorize this change.",
       when: (data) => deriveCurrentAge(data.dateOfBirth) < 18,
-      body: [
-        node.shortText("guardianOneFullName", {
+      questions: [
+        q.shortText("guardianOneFullName", {
           label: "Parent or guardian 1's full name",
           reviewLabel: "Guardian/parent 1's full name",
           size: 24,
         }),
-        node.shortText("guardianTwoFullName", {
+        q.shortText("guardianTwoFullName", {
           label: "Parent or guardian 2's full name",
           reviewLabel: "Guardian/parent 2's full name",
           size: 24,

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
-import { node } from "#lib/forms/steps";
+import { q } from "#lib/forms/steps";
 import type { Step } from "#lib/forms/types";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormReviewTable } from "./FormReviewTable";
@@ -48,14 +48,14 @@ function renderWithValues(
 const hidden = () => false;
 
 const oldFirstName = (when?: () => boolean) =>
-  node.shortText("oldFirstName", {
+  q.shortText("oldFirstName", {
     label: "First name",
     reviewLabel: "Old first name",
     when,
   });
 
 const oldLastName = (when?: () => boolean) =>
-  node.shortText("oldLastName", {
+  q.shortText("oldLastName", {
     label: "Last name",
     reviewLabel: "Old last name",
     when,
@@ -64,13 +64,13 @@ const oldLastName = (when?: () => boolean) =>
 const nameStep: Step = {
   id: "legal-name",
   title: "Legal Name",
-  body: [oldFirstName(), oldLastName()],
+  questions: [oldFirstName(), oldLastName()],
 };
 
 const contactStep: Step = {
   id: "contact",
   title: "Contact",
-  body: [node.phone("phoneNumber")],
+  questions: [q.phone("phoneNumber")],
 };
 
 describe("FormReviewTable", () => {
@@ -138,8 +138,8 @@ describe("FormReviewTable", () => {
     const yesNoStep: Step = {
       id: "yes-no-step",
       title: "Yes/No",
-      body: [
-        node.yesNo("hasCourtAppointedGuardian", {
+      questions: [
+        q.yesNo("hasCourtAppointedGuardian", {
           reviewLabel: "Court-appointed guardian?",
         }),
       ],
@@ -158,7 +158,7 @@ describe("FormReviewTable", () => {
     const hiddenStep: Step = {
       ...nameStep,
       id: "hidden-step",
-      body: [oldFirstName(hidden), oldLastName(hidden)],
+      questions: [oldFirstName(hidden), oldLastName(hidden)],
     };
 
     renderWithValues(<FormReviewTable steps={[hiddenStep, contactStep]} />, {
@@ -173,7 +173,7 @@ describe("FormReviewTable", () => {
   it("renders no sections when all steps have no visible fields", () => {
     const emptyStep: Step = {
       ...nameStep,
-      body: [oldFirstName(hidden), oldLastName(hidden)],
+      questions: [oldFirstName(hidden), oldLastName(hidden)],
     };
 
     renderWithValues(<FormReviewTable steps={[emptyStep]} />, {
@@ -187,7 +187,7 @@ describe("FormReviewTable", () => {
   it("only includes fields that are visible within a step", () => {
     const partialStep: Step = {
       ...nameStep,
-      body: [oldFirstName(), oldLastName(hidden)],
+      questions: [oldFirstName(), oldLastName(hidden)],
     };
 
     renderWithValues(<FormReviewTable steps={[partialStep]} />, {

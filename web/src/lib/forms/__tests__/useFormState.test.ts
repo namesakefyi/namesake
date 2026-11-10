@@ -20,7 +20,7 @@ vi.mock("#db/database", () => ({
 }));
 
 function makeStep(id: string): Step {
-  return { id, title: `Step ${id}`, body: [] };
+  return { id, title: `Step ${id}`, questions: [] };
 }
 
 const flow = [makeStep("a"), makeStep("b")];

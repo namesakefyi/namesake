@@ -1,6 +1,6 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineForm } from "#lib/forms/defineForm";
-import { type Condition, node } from "#lib/forms/steps";
+import { type Condition, q } from "#lib/forms/steps";
 
 const isHoused: Condition = (data) => data.isCurrentlyUnhoused !== true;
 
@@ -11,24 +11,24 @@ export default defineForm({
       title: "What is your new name?",
       description:
         "This is the name you're making official! Type it exactly as you want it to appear.",
-      body: [node.name("newName")],
+      questions: [q.name("newName")],
     },
     {
       id: "current-name",
       title: "What is your current legal name?",
       description:
         "This is the name you're leaving behind. Type it exactly as it appears on your ID.",
-      body: [node.name("oldName")],
+      questions: [q.name("oldName")],
     },
     {
       id: "reason",
       title: "What is the reason you're changing your name?",
-      body: [
-        node.longText("reasonForChangingName", {
+      questions: [
+        q.longText("reasonForChangingName", {
           label: "Reason for name change",
         }),
-        node.display(NameChangeReasonBanner),
-        node.checkbox("hasNoRecordOfOtherStateConvictionsProbationParole", {
+        q.display(NameChangeReasonBanner),
+        q.checkbox("hasNoRecordOfOtherStateConvictionsProbationParole", {
           label:
             "I certify that I have no record of convictions, probation, or parole in any other state.",
           reviewLabel:
@@ -41,26 +41,26 @@ export default defineForm({
       title: "What is your contact information?",
       description:
         "The court uses this to communicate with you about your filing status.",
-      body: [
-        node.phone("phoneNumber"),
-        node.email("email", { reviewLabel: "Email" }),
+      questions: [
+        q.phone("phoneNumber"),
+        q.email("email", { reviewLabel: "Email" }),
       ],
     },
     {
       id: "birthplace",
       title: "Where were you born?",
-      body: [
-        node.shortText("birthplaceCity", {
+      questions: [
+        q.shortText("birthplaceCity", {
           label: "City",
           reviewLabel: "City of birth",
         }),
-        node.comboBox("birthplaceCountry", {
+        q.comboBox("birthplaceCountry", {
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
           source: "countries",
         }),
-        node.comboBox("birthplaceState", {
+        q.comboBox("birthplaceState", {
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
@@ -72,33 +72,33 @@ export default defineForm({
     {
       id: "date-of-birth",
       title: "What is your date of birth?",
-      body: [node.memorableDate("dateOfBirth", { label: "Date of birth" })],
+      questions: [q.memorableDate("dateOfBirth", { label: "Date of birth" })],
     },
     {
       id: "address",
       title: "What is your residential address?",
       description:
         "You must file your name change in the county where you live. We'll help you find where to file.",
-      body: [
-        node.checkbox("isCurrentlyUnhoused", {
+      questions: [
+        q.checkbox("isCurrentlyUnhoused", {
           label: "I am currently unhoused or without permanent housing",
           reviewLabel: "Currently unhoused?",
         }),
-        node.banner(
+        q.banner(
           "We recommend reaching out to the [Massachusetts Transgender Political Coalition](https://www.masstpc.org/homelessness/). MTPC can provide an address to use for your name change application and connect you with housing resources.",
           { when: (data) => data.isCurrentlyUnhoused === true },
         ),
-        node.address("residence", {
+        q.address("residence", {
           address2: true,
           county: true,
           when: isHoused,
         }),
-        node.checkbox("isMailingAddressDifferentFromResidence", {
+        q.checkbox("isMailingAddressDifferentFromResidence", {
           label: "I use a different mailing address",
           reviewLabel: "Mailing address different from residence?",
           when: isHoused,
         }),
-        node.subsection([node.address("mailing", { address2: true })], {
+        q.subsection([q.address("mailing", { address2: true })], {
           title: "What is your mailing address?",
           when: (data) =>
             isHoused(data) &&
@@ -109,23 +109,23 @@ export default defineForm({
     {
       id: "previous-name-change",
       title: "Have you ever changed your name before?",
-      body: [
-        node.yesNo("hasPreviousNameChange", {
+      questions: [
+        q.yesNo("hasPreviousNameChange", {
           reviewLabel: "Has previous name change?",
           yesLabel: "Yes, I've changed my name",
           noLabel: "No, I've never changed my name",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.shortText("previousNameFrom", {
+            q.shortText("previousNameFrom", {
               label: "From",
               reviewLabel: "Previous name from",
             }),
-            node.shortText("previousNameTo", {
+            q.shortText("previousNameTo", {
               label: "To",
               reviewLabel: "Previous name to",
             }),
-            node.longText("previousNameReason", {
+            q.longText("previousNameReason", {
               label: "Reason for change",
               reviewLabel: "Previous name reason",
             }),
@@ -142,18 +142,18 @@ export default defineForm({
       title: "Have you ever used any other name or alias?",
       description:
         "This includes any names that you have used over a long period of time but did not change legally.",
-      body: [
-        node.yesNo("hasUsedOtherNameOrAlias", {
+      questions: [
+        q.yesNo("hasUsedOtherNameOrAlias", {
           reviewLabel: "Has used other name or alias?",
           yesLabel: "Yes, I've used other names",
           noLabel: "No, there are no other major names I've used",
         }),
-        node.banner(
+        q.banner(
           "This does not include nicknames or other names you've used for short periods of time.",
         ),
-        node.subsection(
+        q.subsection(
           [
-            node.longText("otherNamesOrAliases", {
+            q.longText("otherNamesOrAliases", {
               label: "Other names or aliases",
             }),
           ],
@@ -169,13 +169,13 @@ export default defineForm({
       title:
         "If there is a hearing for your name change, do you need an interpreter?",
       description: "In most cases, a hearing is not required.",
-      body: [
-        node.yesNo("isInterpreterNeeded", {
+      questions: [
+        q.yesNo("isInterpreterNeeded", {
           reviewLabel: "Interpreter needed?",
           yesLabel: "Yes, I need an interpreter",
           noLabel: "No, I don't need an interpreter",
         }),
-        node.subsection([node.languageSelect("language")], {
+        q.subsection([q.languageSelect("language")], {
           when: (data) => data.isInterpreterNeeded === true,
         }),
       ],
@@ -183,11 +183,11 @@ export default defineForm({
     {
       id: "pronouns",
       title: "Do you want to share your pronouns with the court staff?",
-      body: [
-        node.yesNo("isOkayToSharePronouns", {
+      questions: [
+        q.yesNo("isOkayToSharePronouns", {
           reviewLabel: "Okay to share pronouns?",
         }),
-        node.subsection([node.pronounSelect()], {
+        q.subsection([q.pronounSelect()], {
           when: (data) => data.isOkayToSharePronouns === true,
         }),
       ],
@@ -197,11 +197,11 @@ export default defineForm({
       title: "What is your mother's maiden name?",
       description:
         "The court requests this information in order to look up past court records and verify your identity.",
-      body: [
-        node.shortText("mothersMaidenName", {
+      questions: [
+        q.shortText("mothersMaidenName", {
           label: "Mother's maiden name",
         }),
-        node.banner(
+        q.banner(
           "The maiden name is the last name (or family name) of your mother (or guardian) before marriage.",
         ),
       ],

@@ -1,19 +1,19 @@
 import { describe, expect, it } from "vitest";
 import { getStepFields } from "../getStepFields";
-import { node } from "../steps";
+import { q } from "../steps";
 import type { Step } from "../types";
 
 describe("getStepFields", () => {
-  it("combines the step, subsection and node conditions", () => {
+  it("combines the step, subsection and question conditions", () => {
     const step: Step = {
       id: "body",
       title: "Body",
       when: (data) => data.isFilingForSomeoneElse === true,
-      body: [
-        node.yesNo("hasPreviousNameChange", { label: "Changed before?" }),
-        node.subsection(
+      questions: [
+        q.yesNo("hasPreviousNameChange", { label: "Changed before?" }),
+        q.subsection(
           [
-            node.shortText("previousNameFrom", {
+            q.shortText("previousNameFrom", {
               label: "From",
               when: (data) => Boolean(data.previousNameTo),
             }),
@@ -39,9 +39,9 @@ describe("getStepFields", () => {
     const step: Step = {
       id: "subsection",
       title: "Have you changed your name before?",
-      body: [
-        node.yesNo("hasPreviousNameChange"),
-        node.subsection([node.shortText("previousNameFrom")], {
+      questions: [
+        q.yesNo("hasPreviousNameChange"),
+        q.subsection([q.shortText("previousNameFrom")], {
           title: "What was your previous name?",
         }),
       ],
@@ -56,9 +56,9 @@ describe("getStepFields", () => {
     const step: Step = {
       id: "two",
       title: "Two",
-      body: [
-        node.yesNo("hasPreviousNameChange"),
-        node.shortText("previousNameFrom"),
+      questions: [
+        q.yesNo("hasPreviousNameChange"),
+        q.shortText("previousNameFrom"),
       ],
     };
     expect(() => getStepFields(step)).toThrow(/more than one unlabeled field/);
@@ -68,14 +68,14 @@ describe("getStepFields", () => {
     const step: Step = {
       id: "labels",
       title: "Labels",
-      body: [
-        node.shortText("occupation", {
+      questions: [
+        q.shortText("occupation", {
           label: "Job",
           reviewLabel: "Occupation",
         }),
-        node.phone("phoneNumber"),
-        node.name("newName"),
-        node.radioGroup("incomePeriod", {
+        q.phone("phoneNumber"),
+        q.name("newName"),
+        q.radioGroup("incomePeriod", {
           label: "How often?",
           options: {
             weekly: "Every week",
@@ -108,7 +108,7 @@ describe("getStepFields", () => {
     const step: Step = {
       id: "pronouns",
       title: "Pronouns",
-      body: [node.pronounSelect()],
+      questions: [q.pronounSelect()],
     };
     const other = getStepFields(step)[1];
     expect(other.id).toBe("otherPronouns");

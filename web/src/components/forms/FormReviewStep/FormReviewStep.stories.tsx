@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
-import { node } from "#lib/forms/steps";
+import { q } from "#lib/forms/steps";
 import type { Step } from "#lib/forms/types";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormReviewStep, type FormReviewStepProps } from "./FormReviewStep";
@@ -8,12 +8,12 @@ const mockSteps: Step[] = [
   {
     id: "personal-info",
     title: "Personal Information",
-    body: [
-      node.shortText("oldFirstName", {
+    questions: [
+      q.shortText("oldFirstName", {
         label: "First name",
         reviewLabel: "Old first name",
       }),
-      node.shortText("oldLastName", {
+      q.shortText("oldLastName", {
         label: "Last name",
         reviewLabel: "Old last name",
       }),
@@ -22,7 +22,7 @@ const mockSteps: Step[] = [
   {
     id: "contact",
     title: "Contact Details",
-    body: [node.email("email")],
+    questions: [q.email("email")],
   },
 ];
 

@@ -5,7 +5,7 @@ import type { PDFDefinition } from "#constants/pdf";
 import { getFormConfigs } from "../getFormConfig";
 import { getStepFields } from "../getStepFields";
 import type { Condition, Data } from "../types";
-import { getRootContext, walkNodes } from "../walkNodes";
+import { getRootContext, walkQuestions } from "../walkQuestions";
 
 const forms = Object.entries(getFormConfigs());
 
@@ -122,10 +122,10 @@ describe("form integrity", () => {
           }
         };
         check(step.when);
-        walkNodes(step.body, getRootContext(step), (node) => {
-          if ("when" in node) check(node.when);
-          if (node.type === "field") {
-            for (const written of node.writes) {
+        walkQuestions(step.questions, getRootContext(step), (question) => {
+          if ("when" in question) check(question.when);
+          if (question.type === "field") {
+            for (const written of question.writes) {
               check(written.when);
               known.add(written.id);
             }

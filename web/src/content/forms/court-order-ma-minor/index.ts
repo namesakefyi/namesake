@@ -2,7 +2,7 @@ import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner
 import type { FormData } from "#constants/fields";
 import { defineForm } from "#lib/forms/defineForm";
 import { nameOrFallback } from "#lib/forms/resolveStepContent";
-import { node } from "#lib/forms/steps";
+import { q } from "#lib/forms/steps";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
 
 const minor = (data: Partial<FormData>) => nameOrFallback(data, "the minor");
@@ -13,39 +13,39 @@ export default defineForm({
       id: "new-name",
       title: "What is the minor's new name?",
       description: "This is the name being made official!",
-      body: [node.name("newName")],
+      questions: [q.name("newName")],
     },
     {
       id: "current-name",
       title: (data) => `What is ${minor(data)}'s current legal name?`,
       description:
         "This is the name being left behind. Type it exactly as it appears on the minor's ID.",
-      body: [node.name("oldName")],
+      questions: [q.name("oldName")],
     },
     {
       id: "reason",
       title: (data) => `What is the reason ${minor(data)} is changing names?`,
-      body: [
-        node.longText("reasonForChangingName", {
+      questions: [
+        q.longText("reasonForChangingName", {
           label: "Reason for name change",
         }),
-        node.display(NameChangeReasonBanner, { props: { for: "child" } }),
+        q.display(NameChangeReasonBanner, { props: { for: "child" } }),
       ],
     },
     {
       id: "presented-by",
       title: "Who is presenting this petition?",
       description: "Select all that apply.",
-      body: [
-        node.checkbox("isPresentedByLegalMotherParent1", {
+      questions: [
+        q.checkbox("isPresentedByLegalMotherParent1", {
           label: "Legal mother (or parent 1)",
           reviewLabel: "Presented by legal mother (parent 1)?",
         }),
-        node.checkbox("isPresentedByLegalFatherParent2", {
+        q.checkbox("isPresentedByLegalFatherParent2", {
           label: "Legal father (or parent 2)",
           reviewLabel: "Presented by legal father (parent 2)?",
         }),
-        node.checkbox("isPresentedByCourtAppointedGuardian", {
+        q.checkbox("isPresentedByCourtAppointedGuardian", {
           label: "Court-appointed guardian(s)",
           reviewLabel: "Presented by court-appointed guardian?",
         }),
@@ -54,16 +54,16 @@ export default defineForm({
     {
       id: "date-of-birth",
       title: (data) => `What is ${minor(data)}'s date of birth?`,
-      body: [
-        node.memorableDate("dateOfBirth", { label: "Date of birth" }),
-        node.banner(
+      questions: [
+        q.memorableDate("dateOfBirth", { label: "Date of birth" }),
+        q.banner(
           "The petitioner is over 18 years of age. Submit the [adult court order](/forms/court-order-ma) instead.",
           {
             variant: "warning",
             when: (data) => deriveCurrentAge(data.dateOfBirth) >= 18,
           },
         ),
-        node.banner(
+        q.banner(
           "Since the minor is 12 years of age or older, **the child's written notarized assent must be obtained before filing this petition**. You will fill this out after downloading and printing the final packet.",
           {
             when: (data) => {
@@ -77,18 +77,18 @@ export default defineForm({
     {
       id: "birthplace",
       title: (data) => `Where was ${minor(data)} born?`,
-      body: [
-        node.shortText("birthplaceCity", {
+      questions: [
+        q.shortText("birthplaceCity", {
           label: "City",
           reviewLabel: "City of birth",
         }),
-        node.comboBox("birthplaceCountry", {
+        q.comboBox("birthplaceCountry", {
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
           source: "countries",
         }),
-        node.comboBox("birthplaceState", {
+        q.comboBox("birthplaceState", {
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
@@ -102,33 +102,33 @@ export default defineForm({
       title: (data) => `What is ${minor(data)}'s address?`,
       description: (data) =>
         `You must file in the county where ${minor(data)} lives. We'll help you find where to file.`,
-      body: [node.address("residence", { county: true })],
+      questions: [q.address("residence", { county: true })],
     },
     {
       id: "parent-info",
       title: "What are both parents' information?",
       description: (data) =>
         `List ${minor(data)}'s legal parents and contact information.`,
-      body: [
-        node.subsection(
+      questions: [
+        q.subsection(
           [
-            node.shortText("parent1FullName", {
+            q.shortText("parent1FullName", {
               label: "Full name",
               reviewLabel: "Parent 1 full name",
             }),
-            node.phone("parent1Phone", { reviewLabel: "Parent 1 phone" }),
-            node.email("parent1Email", { reviewLabel: "Parent 1 email" }),
+            q.phone("parent1Phone", { reviewLabel: "Parent 1 phone" }),
+            q.email("parent1Email", { reviewLabel: "Parent 1 email" }),
           ],
           { title: "Legal mother (or parent 1)" },
         ),
-        node.subsection(
+        q.subsection(
           [
-            node.shortText("parent2FullName", {
+            q.shortText("parent2FullName", {
               label: "Full name",
               reviewLabel: "Parent 2 full name",
             }),
-            node.phone("parent2Phone", { reviewLabel: "Parent 2 phone" }),
-            node.email("parent2Email", { reviewLabel: "Parent 2 email" }),
+            q.phone("parent2Phone", { reviewLabel: "Parent 2 phone" }),
+            q.email("parent2Email", { reviewLabel: "Parent 2 email" }),
           ],
           { title: "Legal father (or parent 2)" },
         ),
@@ -137,28 +137,28 @@ export default defineForm({
     {
       id: "parent-address",
       title: (data) => `Where do ${minor(data)}'s parents live?`,
-      body: [
-        node.checkbox("parentsHaveUnknownAddresses", {
+      questions: [
+        q.checkbox("parentsHaveUnknownAddresses", {
           label: "The addresses of the parents are unknown",
           reviewLabel: "Parents' addresses are unknown?",
         }),
-        node.banner(
+        q.banner(
           "Since the address or whereabouts of legal parents are unknown, you must also file a [Motion for Service by Alternate Means and Affidavit of Diligent Search (CJP 31)](https://www.mass.gov/info-details/probate-and-family-court-motion-for-service-by-alternate-means-and-affidavit-of-diligent-search-cjp-31) with a [Military Affidavit (TC0002)](https://www.mass.gov/doc/military-affidavit/download).",
           { when: (data) => data.parentsHaveUnknownAddresses === true },
         ),
-        node.subsection(
+        q.subsection(
           [
-            node.checkbox("parentsHaveDifferentAddresses", {
+            q.checkbox("parentsHaveDifferentAddresses", {
               label: "Parents have different addresses",
               reviewLabel: "Parents have different addresses?",
             }),
-            node.subsection([node.address("parent1")], {
+            q.subsection([q.address("parent1")], {
               title: (data) =>
                 data.parentsHaveDifferentAddresses === true
                   ? "First parent's address"
                   : undefined,
             }),
-            node.subsection([node.address("parent2")], {
+            q.subsection([q.address("parent2")], {
               title: "Second parent's address",
               when: (data) => data.parentsHaveDifferentAddresses === true,
             }),
@@ -171,8 +171,8 @@ export default defineForm({
       id: "birth-certificate-parents",
       title: (data) =>
         `Are both parents listed on ${minor(data)}'s birth certificate?`,
-      body: [
-        node.yesNo("areBothParentsListedOnBirthCertificate", {
+      questions: [
+        q.yesNo("areBothParentsListedOnBirthCertificate", {
           reviewLabel: "Both parents listed on the minor's birth certificate?",
           yesLabel: "Yes, both parents are listed",
           noLabel: "No, only one parent is listed",
@@ -182,13 +182,13 @@ export default defineForm({
     {
       id: "parent-deceased",
       title: (data) => `Are any of ${minor(data)}'s legal parents deceased?`,
-      body: [
-        node.yesNo("isALegalParentDeceased", {
+      questions: [
+        q.yesNo("isALegalParentDeceased", {
           reviewLabel: "Is a legal parent deceased?",
           yesLabel: "Yes, one or more parents have died",
           noLabel: "No, both parents are living",
         }),
-        node.banner(
+        q.banner(
           "We're sorry for your loss. When filing, the court requests that you attach a copy of the death certificate to your application.",
           { when: (data) => data.isALegalParentDeceased === true },
         ),
@@ -197,51 +197,48 @@ export default defineForm({
     {
       id: "parental-rights-terminated",
       title: "Has either parent had their parental rights terminated?",
-      body: [
-        node.yesNo("hasLegalParentHadParentalRightsTerminated", {
+      questions: [
+        q.yesNo("hasLegalParentHadParentalRightsTerminated", {
           reviewLabel: "Has legal parent had parental rights terminated?",
         }),
-        node.banner(
-          "When filing, attach proof from the prior court proceeding.",
-          {
-            when: (data) =>
-              data.hasLegalParentHadParentalRightsTerminated === true,
-          },
-        ),
+        q.banner("When filing, attach proof from the prior court proceeding.", {
+          when: (data) =>
+            data.hasLegalParentHadParentalRightsTerminated === true,
+        }),
       ],
     },
     {
       id: "guardian",
       title: (data) => `Does ${minor(data)} have a court-appointed guardian?`,
-      body: [
-        node.yesNo("hasCourtAppointedGuardian", {
+      questions: [
+        q.yesNo("hasCourtAppointedGuardian", {
           reviewLabel: "Court-appointed guardian?",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.shortText("guardianFullName", {
+            q.shortText("guardianFullName", {
               label: "Guardian full name",
             }),
-            node.shortText("guardianStreetAddress", {
+            q.shortText("guardianStreetAddress", {
               label: "Street address",
               reviewLabel: "Guardian street address",
             }),
-            node.shortText("guardianCity", {
+            q.shortText("guardianCity", {
               label: "City",
               reviewLabel: "Guardian city",
             }),
-            node.comboBox("guardianState", {
+            q.comboBox("guardianState", {
               label: "State",
               reviewLabel: "Guardian state",
               placeholder: "Select state",
               source: "jurisdictions",
             }),
-            node.shortText("guardianZipCode", {
+            q.shortText("guardianZipCode", {
               label: "ZIP code",
               reviewLabel: "Guardian zip code",
             }),
-            node.phone("guardianPhone", { reviewLabel: "Guardian phone" }),
-            node.email("guardianEmail", { reviewLabel: "Guardian email" }),
+            q.phone("guardianPhone", { reviewLabel: "Guardian phone" }),
+            q.email("guardianEmail", { reviewLabel: "Guardian email" }),
           ],
           {
             title: "Guardian information",
@@ -255,37 +252,37 @@ export default defineForm({
       title: (data) =>
         `Does ${minor(data)} have a court-appointed co-guardian?`,
       when: (data) => data.hasCourtAppointedGuardian === true,
-      body: [
-        node.yesNo("hasCourtAppointedCoGuardian", {
+      questions: [
+        q.yesNo("hasCourtAppointedCoGuardian", {
           reviewLabel: "Court-appointed co-guardian?",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.shortText("coGuardianFullName", {
+            q.shortText("coGuardianFullName", {
               label: "Co-guardian full name",
             }),
-            node.shortText("coGuardianStreetAddress", {
+            q.shortText("coGuardianStreetAddress", {
               label: "Street address",
               reviewLabel: "Co-guardian street address",
             }),
-            node.shortText("coGuardianCity", {
+            q.shortText("coGuardianCity", {
               label: "City",
               reviewLabel: "Co-guardian city",
             }),
-            node.comboBox("coGuardianState", {
+            q.comboBox("coGuardianState", {
               label: "State",
               reviewLabel: "Co-guardian state",
               placeholder: "Select state",
               source: "jurisdictions",
             }),
-            node.shortText("coGuardianZipCode", {
+            q.shortText("coGuardianZipCode", {
               label: "ZIP code",
               reviewLabel: "Co-guardian zip code",
             }),
-            node.phone("coGuardianPhone", {
+            q.phone("coGuardianPhone", {
               reviewLabel: "Co-guardian phone",
             }),
-            node.email("coGuardianEmail", {
+            q.email("coGuardianEmail", {
               reviewLabel: "Co-guardian email",
             }),
           ],
@@ -299,43 +296,43 @@ export default defineForm({
     {
       id: "consent",
       title: "Does everyone consent to the name change?",
-      body: [
-        node.yesNo("isParent1Assenting", {
+      questions: [
+        q.yesNo("isParent1Assenting", {
           label: "Does parent 1 consent to the name change?",
           reviewLabel: "Parent 1 assenting?",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.longText("parent1DissentReason", {
+            q.longText("parent1DissentReason", {
               label: "Reason",
               reviewLabel: "Parent 1 dissent reason",
             }),
           ],
           { when: (data) => data.isParent1Assenting === false },
         ),
-        node.yesNo("isParent2Assenting", {
+        q.yesNo("isParent2Assenting", {
           label: "Does parent 2 consent to the name change?",
           reviewLabel: "Parent 2 assenting?",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.longText("parent2DissentReason", {
+            q.longText("parent2DissentReason", {
               label: "Reason",
               reviewLabel: "Parent 2 dissent reason",
             }),
           ],
           { when: (data) => data.isParent2Assenting === false },
         ),
-        node.subsection(
+        q.subsection(
           [
-            node.yesNo("isAllGuardiansAssenting", {
+            q.yesNo("isAllGuardiansAssenting", {
               label:
                 "Do all court-appointed guardians consent to the name change?",
               reviewLabel: "All guardians assenting?",
             }),
-            node.subsection(
+            q.subsection(
               [
-                node.longText("guardianDissentReason", {
+                q.longText("guardianDissentReason", {
                   label: "Reason",
                   reviewLabel: "Guardian dissent reason",
                 }),
@@ -351,21 +348,21 @@ export default defineForm({
       id: "previous-name-change",
       title: (data) =>
         `Has ${minor(data)} ever changed their legal name before?`,
-      body: [
-        node.yesNo("hasPreviousNameChange", {
+      questions: [
+        q.yesNo("hasPreviousNameChange", {
           reviewLabel: "Has previous name change?",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.shortText("previousNameFrom", {
+            q.shortText("previousNameFrom", {
               label: "From",
               reviewLabel: "Previous name from",
             }),
-            node.shortText("previousNameTo", {
+            q.shortText("previousNameTo", {
               label: "To",
               reviewLabel: "Previous name to",
             }),
-            node.longText("previousNameReason", {
+            q.longText("previousNameReason", {
               label: "Reason for change",
               reviewLabel: "Previous name reason",
             }),
@@ -381,8 +378,8 @@ export default defineForm({
       id: "youth-services",
       title: (data) =>
         `Is ${minor(data)} under the supervision of the Massachusetts Department of Youth Services?`,
-      body: [
-        node.yesNo("isUnderSupervisionOfMassDeptOfYouthServices", {
+      questions: [
+        q.yesNo("isUnderSupervisionOfMassDeptOfYouthServices", {
           reviewLabel: "Under supervision of Mass. Dept. of Youth Services?",
         }),
       ],
@@ -391,24 +388,24 @@ export default defineForm({
       id: "interpreter",
       title: "If there is a hearing, does anyone need an interpreter?",
       description: "In most cases, a hearing is not required.",
-      body: [
-        node.checkbox("isInterpreterNeededForChild", {
+      questions: [
+        q.checkbox("isInterpreterNeededForChild", {
           label: "The child needs an interpreter",
           reviewLabel: "Interpreter needed for child?",
         }),
-        node.checkbox("isInterpreterNeededForParent1", {
+        q.checkbox("isInterpreterNeededForParent1", {
           label: "Parent 1 needs an interpreter",
           reviewLabel: "Interpreter needed for parent 1?",
         }),
-        node.checkbox("isInterpreterNeededForParent2", {
+        q.checkbox("isInterpreterNeededForParent2", {
           label: "Parent 2 needs an interpreter",
           reviewLabel: "Interpreter needed for parent 2?",
         }),
-        node.checkbox("isInterpreterNeededForGuardian", {
+        q.checkbox("isInterpreterNeededForGuardian", {
           label: "A guardian needs an interpreter",
           reviewLabel: "Interpreter needed for guardian?",
         }),
-        node.subsection([node.languageSelect("language")], {
+        q.subsection([q.languageSelect("language")], {
           when: (data) =>
             data.isInterpreterNeededForChild === true ||
             data.isInterpreterNeededForParent1 === true ||
@@ -421,11 +418,11 @@ export default defineForm({
       id: "pronouns",
       title: (data) =>
         `Do you want to share ${minor(data)}'s pronouns with the court staff?`,
-      body: [
-        node.yesNo("isOkayToSharePronouns", {
+      questions: [
+        q.yesNo("isOkayToSharePronouns", {
           reviewLabel: "Okay to share pronouns?",
         }),
-        node.subsection([node.pronounSelect()], {
+        q.subsection([q.pronounSelect()], {
           when: (data) => data.isOkayToSharePronouns === true,
         }),
       ],

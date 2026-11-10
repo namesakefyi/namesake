@@ -1,17 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { node } from "../steps";
+import { q } from "../steps";
 
 describe("node builders", () => {
   it("lists the fields composite nodes write", () => {
-    expect(node.name("oldName").writes.map((entry) => entry.id)).toEqual([
+    expect(q.name("oldName").writes.map((entry) => entry.id)).toEqual([
       "oldFirstName",
       "oldMiddleName",
       "oldLastName",
     ]);
     expect(
-      node
-        .address("residence", { county: true })
-        .writes.map((entry) => entry.id),
+      q.address("residence", { county: true }).writes.map((entry) => entry.id),
     ).toEqual([
       "residenceStreetAddress",
       "residenceCity",
@@ -19,7 +17,7 @@ describe("node builders", () => {
       "residenceState",
       "residenceZipCode",
     ]);
-    expect(node.address("parent1").writes.map((entry) => entry.id)).toEqual([
+    expect(q.address("parent1").writes.map((entry) => entry.id)).toEqual([
       "parent1StreetAddress",
       "parent1City",
       "parent1State",
@@ -29,17 +27,17 @@ describe("node builders", () => {
 
   it("rejects mismatched fields and options at compile time", () => {
     // @ts-expect-error yesNo only accepts boolean fields
-    node.yesNo("oldFirstName");
+    q.yesNo("oldFirstName");
     // @ts-expect-error shortText doesn't accept fields with declared values
-    node.shortText("incomePeriod");
+    q.shortText("incomePeriod");
     // @ts-expect-error parent addresses have no county
-    node.address("parent1", { county: true });
-    node.radioGroup("incomePeriod", {
+    q.address("parent1", { county: true });
+    q.radioGroup("incomePeriod", {
       label: "How often?",
       // @ts-expect-error every declared value needs a label
       options: { weekly: "Weekly", monthly: "Monthly" },
     });
-    node.radioGroup("incomePeriod", {
+    q.radioGroup("incomePeriod", {
       label: "How often?",
       options: {
         weekly: "Weekly",

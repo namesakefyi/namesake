@@ -1,6 +1,10 @@
 import type { FieldName } from "#constants/fields";
 import type { Condition, OptionLabels, Step, Text } from "./types";
-import { getRootContext, usesTitleAsLabel, walkNodes } from "./walkNodes";
+import {
+  getRootContext,
+  usesTitleAsLabel,
+  walkQuestions,
+} from "./walkQuestions";
 
 export interface StepField {
   id: FieldName;
@@ -21,9 +25,9 @@ function collectStepFields(step: Step): StepField[] {
   const fields: StepField[] = [];
   const unlabeledTitles = new Set<Text>();
 
-  walkNodes(step.body, getRootContext(step), (node, context) => {
-    if (node.type === "field") {
-      if (usesTitleAsLabel(node)) {
+  walkQuestions(step.questions, getRootContext(step), (question, context) => {
+    if (question.type === "field") {
+      if (usesTitleAsLabel(question)) {
         if (unlabeledTitles.has(context.title)) {
           throw new Error(
             `Step "${step.id}" has more than one unlabeled field under the same title. Only the single question of a step or titled subsection may omit its label.`,
@@ -31,19 +35,19 @@ function collectStepFields(step: Step): StepField[] {
         }
         unlabeledTitles.add(context.title);
       }
-      const label = node.label ?? context.title;
-      for (const written of node.writes) {
+      const label = question.label ?? context.title;
+      for (const written of question.writes) {
         fields.push({
           id: written.id,
           when: allOf([
             step.when,
             ...context.conditions,
-            node.when,
+            question.when,
             written.when,
           ]),
           options: written.options,
-          currency: node.kind === "number" && !!node.props.currency,
-          reviewLabel: written.reviewLabel ?? node.reviewLabel ?? label,
+          currency: question.kind === "number" && !!question.props.currency,
+          reviewLabel: written.reviewLabel ?? question.reviewLabel ?? label,
         });
       }
     }

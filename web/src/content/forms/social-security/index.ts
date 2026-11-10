@@ -1,5 +1,5 @@
 import { defineForm } from "#lib/forms/defineForm";
-import { type Condition, node } from "#lib/forms/steps";
+import { type Condition, q } from "#lib/forms/steps";
 
 const copy = {
   governmentDocument:
@@ -19,26 +19,26 @@ export default defineForm({
       id: "new-name",
       title: "What is your new name?",
       description: "This is the name that will show on your new card.",
-      body: [node.name("newName")],
+      questions: [q.name("newName")],
     },
     {
       id: "old-name",
       title: "What was your name at birth?",
       description:
         "This is the name that appears on your original birth certificate.",
-      body: [node.name("oldName")],
+      questions: [q.name("oldName")],
     },
     {
       id: "previous-names",
       title: "Have you used any other legal names?",
-      body: [
-        node.yesNo("hasOtherLegalNames", {
+      questions: [
+        q.yesNo("hasOtherLegalNames", {
           reviewLabel: "Has other legal names?",
           noLabel: "No, I've never changed my name before",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.longText("previousLegalNames", {
+            q.longText("previousLegalNames", {
               label: "Other names used",
               reviewLabel: "Previous legal names",
             }),
@@ -50,15 +50,15 @@ export default defineForm({
     {
       id: "birthplace",
       title: "Where were you born?",
-      body: [
-        node.shortText("birthplaceCity", { label: "City of birth" }),
-        node.comboBox("birthplaceCountry", {
+      questions: [
+        q.shortText("birthplaceCity", { label: "City of birth" }),
+        q.comboBox("birthplaceCountry", {
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
           source: "countries",
         }),
-        node.comboBox("birthplaceState", {
+        q.comboBox("birthplaceState", {
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
@@ -70,13 +70,13 @@ export default defineForm({
     {
       id: "date-of-birth",
       title: "What is your date of birth?",
-      body: [node.memorableDate("dateOfBirth", { label: "Date of birth" })],
+      questions: [q.memorableDate("dateOfBirth", { label: "Date of birth" })],
     },
     {
       id: "citizenship",
       title: "What is your citizenship status?",
-      body: [
-        node.radioGroup("citizenshipStatus", {
+      questions: [
+        q.radioGroup("citizenshipStatus", {
           label: "Citizenship status",
           options: {
             usCitizen: "U.S. Citizen",
@@ -85,7 +85,7 @@ export default defineForm({
             other: "Other",
           },
         }),
-        node.banner(copy.governmentDocument, {
+        q.banner(copy.governmentDocument, {
           variant: "warning",
           when: needsGovernmentDocument,
         }),
@@ -96,23 +96,23 @@ export default defineForm({
       title: "What is your ethnicity?",
       description:
         "This response is optional and does not affect your application. The Social Security Administration requests this information for research and statistical purposes.",
-      body: [
-        node.yesNo("isHispanicOrLatino", {
+      questions: [
+        q.yesNo("isHispanicOrLatino", {
           label: "Ethnicity",
           reviewLabel: "Hispanic or Latino?",
           yesLabel: "I am Hispanic or Latino",
           noLabel: "I am not Hispanic or Latino",
           extraChoices: ["preferNotToAnswer"],
         }),
-        node.banner(copy.researchPurposes),
+        q.banner(copy.researchPurposes),
       ],
     },
     {
       id: "race",
       title: "What is your race?",
       description: "This response is optional.",
-      body: [
-        node.checkboxGroup("race", {
+      questions: [
+        q.checkboxGroup("race", {
           label: "Race",
           extraChoices: ["preferNotToAnswer"],
           options: {
@@ -125,7 +125,7 @@ export default defineForm({
             white: "White",
           },
         }),
-        node.banner(copy.researchPurposes),
+        q.banner(copy.researchPurposes),
       ],
     },
     {
@@ -133,13 +133,13 @@ export default defineForm({
       title: "What is your sex?",
       description:
         "The Social Security Administration accepts only two options: male or female.",
-      body: [
-        node.radioGroup("sexAssignedAtBirth", {
+      questions: [
+        q.radioGroup("sexAssignedAtBirth", {
           label: "Sex",
           reviewLabel: "Sex assigned at birth",
           options: { male: "Male", female: "Female" },
         }),
-        node.banner(
+        q.banner(
           `**Namesake recommends selecting the same gender marker that the Social Security Administration already has on file.** The gender marker is not shown on your Social Security card.
 
 As of January 20, 2025, the Trump administration has directed the Social Security Administration to [stop processing gender marker updates](https://www.whitehouse.gov/presidential-actions/2025/01/defending-women-from-gender-ideology-extremism-and-restoring-biological-truth-to-the-federal-government/) associated with social security records. Per [Lambda Legal](https://lambdalegal.org/tgnc-checklist-under-trump/#:~:text=If%20you%20apply%20for%20a%20gender%20marker%20change%20with%20Social%20Security%20now%2C%20you%20will%20likely%20be%20told%20that%20they%20cannot%20process%20your%20request.), if you apply for a gender marker change with Social Security now, you will likely be told that they cannot process your request.`,
@@ -152,20 +152,20 @@ As of January 20, 2025, the Trump administration has directed the Social Securit
       title: "What is your mother's (or first parent's) name?",
       description:
         "Use your parent's name at their birth, before marriage. This is also known as a maiden name.",
-      body: [node.name("mothersName")],
+      questions: [q.name("mothersName")],
     },
     {
       id: "parent-two",
       title: "What is your father's (or second parent's) name?",
-      body: [node.name("fathersName")],
+      questions: [q.name("fathersName")],
     },
     {
       id: "previous-social-security-card",
       title: "Do you have a previous Social Security card?",
       description:
         "Or, have you ever filed for a Social Security number in the past?",
-      body: [
-        node.yesNo("hasPreviousSocialSecurityCard", {
+      questions: [
+        q.yesNo("hasPreviousSocialSecurityCard", {
           reviewLabel: "Previous Social Security card?",
           yesLabel:
             "Yes, I have a previous Social Security card or have applied for one",
@@ -173,7 +173,7 @@ As of January 20, 2025, the Trump administration has directed the Social Securit
             "No, I have never filed for or received a Social Security card before",
           extraChoices: ["dontKnow"],
         }),
-        node.subsection([node.name("previousSocialSecurityCardName")], {
+        q.subsection([q.name("previousSocialSecurityCardName")], {
           title:
             "What is the name shown on your most recent Social Security card?",
           when: (data) => data.hasPreviousSocialSecurityCard === true,
@@ -183,24 +183,24 @@ As of January 20, 2025, the Trump administration has directed the Social Securit
     {
       id: "phone-number",
       title: "What is your phone number?",
-      body: [node.phone("phoneNumber")],
+      questions: [q.phone("phoneNumber")],
     },
     {
       id: "address",
       title: "What is your mailing address?",
-      body: [node.address("mailing")],
+      questions: [q.address("mailing")],
     },
     {
       id: "filing-for-someone-else",
       title: "Are you filing this form for someone else?",
-      body: [
-        node.yesNo("isFilingForSomeoneElse", {
+      questions: [
+        q.yesNo("isFilingForSomeoneElse", {
           yesLabel: "Yes, I am filing this for someone else",
           noLabel: "No, I am filing this for myself",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.radioGroup("relationshipToFilingFor", {
+            q.radioGroup("relationshipToFilingFor", {
               reviewLabel: "Relationship to the person you are filing for",
               options: {
                 parent: "Natural or Adoptive Parent",
@@ -208,7 +208,7 @@ As of January 20, 2025, the Trump administration has directed the Social Securit
                 other: "Other",
               },
             }),
-            node.shortText("relationshipToFilingForOther", {
+            q.shortText("relationshipToFilingForOther", {
               label: "Specify relationship",
               reviewLabel:
                 "Relationship to the person you are filing for (other)",

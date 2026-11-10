@@ -22,30 +22,30 @@ import type { FieldName } from "#constants/fields";
 import { resolveText } from "#lib/forms/resolveStepContent";
 import type {
   BlockKind,
-  BlockNode,
+  BlockQuestion,
   Data,
   FieldKind,
-  FieldNode,
+  FieldQuestion,
   ListFieldName,
-  NodeKind,
   OptionLabels,
+  QuestionKind,
 } from "#lib/forms/types";
 import { FormSubsection } from "./FormSubsection";
 import { MarkdownText } from "./MarkdownText";
 
 export interface FieldRendererProps<K extends FieldKind> {
-  node: FieldNode<K>;
+  question: FieldQuestion<K>;
   label: string;
   labelHidden: boolean;
 }
 
 export interface BlockRendererProps<K extends BlockKind> {
-  node: Extract<BlockNode, { kind: K }>;
+  question: Extract<BlockQuestion, { kind: K }>;
   data: Data;
   children?: ReactNode;
 }
 
-export type RendererProps<K extends NodeKind> = K extends FieldKind
+export type RendererProps<K extends QuestionKind> = K extends FieldKind
   ? FieldRendererProps<K>
   : K extends BlockKind
     ? BlockRendererProps<K>
@@ -59,16 +59,17 @@ const CURRENCY_FORMAT: Intl.NumberFormatOptions = {
 };
 
 function fieldProps({
-  node,
+  question,
   label,
   labelHidden,
 }: FieldRendererProps<FieldKind>) {
-  if (!node.name) throw new Error(`${node.kind} writes no single field`);
+  if (!question.name)
+    throw new Error(`${question.kind} writes no single field`);
   return {
-    name: node.name as FieldName,
+    name: question.name as FieldName,
     label,
     labelHidden,
-    description: node.description,
+    description: question.description,
   };
 }
 
@@ -86,21 +87,21 @@ function choiceGroup<K extends "radioGroup" | "checkboxGroup">(
   return (props: FieldRendererProps<K>) => (
     <Group
       {...fieldProps(props)}
-      options={toChoices(props.node.props.options)}
-      extraChoices={props.node.props.extraChoices}
+      options={toChoices(props.question.props.options)}
+      extraChoices={props.question.props.extraChoices}
     />
   );
 }
 
 export const renderers: {
-  [K in NodeKind]: ComponentType<RendererProps<K>>;
+  [K in QuestionKind]: ComponentType<RendererProps<K>>;
 } = {
   shortText: (props) => (
-    <ShortTextField {...fieldProps(props)} size={props.node.props.size} />
+    <ShortTextField {...fieldProps(props)} size={props.question.props.size} />
   ),
   longText: (props) => <LongTextField {...fieldProps(props)} />,
   number: (props) => {
-    const { min, currency, defaultValue } = props.node.props;
+    const { min, currency, defaultValue } = props.question.props;
     return (
       <NumberField
         {...fieldProps(props)}
@@ -118,9 +119,9 @@ export const renderers: {
   yesNo: (props) => (
     <YesNoField
       {...fieldProps(props)}
-      yesLabel={props.node.props.yesLabel}
-      noLabel={props.node.props.noLabel}
-      extraChoices={props.node.props.extraChoices}
+      yesLabel={props.question.props.yesLabel}
+      noLabel={props.question.props.noLabel}
+      extraChoices={props.question.props.extraChoices}
     />
   ),
   radioGroup: choiceGroup(RadioGroupField),
@@ -128,8 +129,8 @@ export const renderers: {
   comboBox: (props) => (
     <ComboBoxField
       {...fieldProps(props)}
-      placeholder={props.node.props.placeholder}
-      options={COMBO_BOX_SOURCES[props.node.props.source]}
+      placeholder={props.question.props.placeholder}
+      options={COMBO_BOX_SOURCES[props.question.props.source]}
     />
   ),
   phone: (props) => {
@@ -143,17 +144,17 @@ export const renderers: {
   languageSelect: (props) => (
     <LanguageSelectField name={fieldProps(props).name} />
   ),
-  name: ({ node }) => <NameField type={node.props.type} />,
-  address: ({ node }) => (
+  name: ({ question }) => <NameField type={question.props.type} />,
+  address: ({ question }) => (
     <AddressField
-      type={node.props.type}
-      includeAddress2={node.props.address2}
-      includeCounty={node.props.county}
+      type={question.props.type}
+      includeAddress2={question.props.address2}
+      includeCounty={question.props.county}
     />
   ),
   pronounSelect: () => <PronounSelectField />,
   repeatingEntry: (props) => {
-    const { min, max, itemLabel, size } = props.node.props;
+    const { min, max, itemLabel, size } = props.question.props;
     return (
       <RepeatingEntry
         name={fieldProps(props).name as ListFieldName}
@@ -172,24 +173,28 @@ export const renderers: {
       </RepeatingEntry>
     );
   },
-  banner: ({ node, data }) => (
-    <Banner variant={node.variant}>
-      <MarkdownText text={resolveText(node.content, data)} />
+  banner: ({ question, data }) => (
+    <Banner variant={question.variant}>
+      <MarkdownText text={resolveText(question.content, data)} />
     </Banner>
   ),
-  subsection: ({ node, data, children }) => (
+  subsection: ({ question, data, children }) => (
     <FormSubsection
-      title={typeof node.title === "function" ? node.title(data) : node.title}
+      title={
+        typeof question.title === "function"
+          ? question.title(data)
+          : question.title
+      }
     >
       {children}
     </FormSubsection>
   ),
-  display: ({ node }) => {
-    const Display = node.component;
-    return <Display {...node.props} />;
+  display: ({ question }) => {
+    const Display = question.component;
+    return <Display {...question.props} />;
   },
 };
 
 for (const [kind, renderer] of Object.entries(renderers)) {
-  renderer.displayName = `node.${kind}`;
+  renderer.displayName = `q.${kind}`;
 }

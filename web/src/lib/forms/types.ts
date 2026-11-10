@@ -91,7 +91,7 @@ export interface CommonFieldOptions {
   reviewLabel?: Text;
 }
 
-export interface FieldNode<
+export interface FieldQuestion<
   K extends FieldKind = FieldKind,
   W extends FieldName = FieldName,
 > extends CommonFieldOptions {
@@ -106,9 +106,11 @@ export interface FieldNode<
   props: FieldPropsByKind[K];
 }
 
-export type AnyFieldNode = { [K in FieldKind]: FieldNode<K> }[FieldKind];
+export type AnyFieldQuestion = {
+  [K in FieldKind]: FieldQuestion<K>;
+}[FieldKind];
 
-export interface BannerNode {
+export interface BannerQuestion {
   type: "block";
   kind: "banner";
   /** Markdown */
@@ -117,28 +119,31 @@ export interface BannerNode {
   when?: Condition;
 }
 
-export interface SubsectionNode {
+export interface SubsectionQuestion {
   type: "block";
   kind: "subsection";
-  children: readonly StepNode[];
+  children: readonly Question[];
   title?: OptionalText;
   when?: Condition;
 }
 
-export interface DisplayNode {
+export interface DisplayQuestion {
   type: "block";
   kind: "display";
   component: ComponentType<any>;
   props?: object;
 }
 
-export type BlockNode = BannerNode | SubsectionNode | DisplayNode;
+export type BlockQuestion =
+  | BannerQuestion
+  | SubsectionQuestion
+  | DisplayQuestion;
 
-export type BlockKind = BlockNode["kind"];
+export type BlockKind = BlockQuestion["kind"];
 
-export type StepNode = AnyFieldNode | BlockNode;
+export type Question = AnyFieldQuestion | BlockQuestion;
 
-export type NodeKind = FieldKind | BlockKind;
+export type QuestionKind = FieldKind | BlockKind;
 
 export interface Step {
   id: string;
@@ -146,7 +151,7 @@ export interface Step {
   description?: Text;
   /** Leaves the step out of the flow while this returns false. */
   when?: Condition;
-  body: readonly StepNode[];
+  questions: readonly Question[];
 }
 
 export type FormPhase =

@@ -1,6 +1,6 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineForm } from "#lib/forms/defineForm";
-import { node } from "#lib/forms/steps";
+import { q } from "#lib/forms/steps";
 import {
   livesInNewYorkCity,
   requestsNameChange,
@@ -15,8 +15,8 @@ export default defineForm({
     {
       id: "request-type",
       title: "What would you like to change?",
-      body: [
-        node.radioGroup("nyCourtOrderRequest", {
+      questions: [
+        q.radioGroup("nyCourtOrderRequest", {
           reviewLabel: "Requested New York court order",
           options: {
             "Name change": "My name",
@@ -33,7 +33,7 @@ export default defineForm({
         requestsNameChange(data)
           ? "This is the name you're leaving behind. Type it exactly as it appears on your ID."
           : "Type it exactly as it appears on your ID.",
-      body: [node.name("oldName")],
+      questions: [q.name("oldName")],
     },
     {
       id: "new-name",
@@ -41,17 +41,17 @@ export default defineForm({
       description:
         "This is the name you're making official! Type it exactly as you want it to appear.",
       when: requestsNameChange,
-      body: [node.name("newName")],
+      questions: [q.name("newName")],
     },
     {
       id: "date-of-birth",
       title: "What is your date of birth?",
-      body: [node.memorableDate("dateOfBirth", { label: "Date of birth" })],
+      questions: [q.memorableDate("dateOfBirth", { label: "Date of birth" })],
     },
     {
       id: "address",
       title: "What is your current address?",
-      body: [node.address("residence", { address2: true, county: true })],
+      questions: [q.address("residence", { address2: true, county: true })],
     },
     {
       id: "court",
@@ -59,8 +59,8 @@ export default defineForm({
       description:
         "Because you live in New York City, you can file your petition in Civil Court or Supreme Court in your borough. We recommend Civil Court, which has a lower filing fee.",
       when: livesInNewYorkCity,
-      body: [
-        node.radioGroup("courtType", {
+      questions: [
+        q.radioGroup("courtType", {
           reviewLabel: "Court type",
           options: { Civil: "Civil Court", Supreme: "Supreme Court" },
         }),
@@ -70,25 +70,25 @@ export default defineForm({
       id: "birthplace",
       title: "Where were you born?",
       when: requestsNameChange,
-      body: [
-        node.shortText("birthplaceCity", {
+      questions: [
+        q.shortText("birthplaceCity", {
           label: "City, town, or village",
           reviewLabel: "City of birth",
         }),
-        node.comboBox("birthplaceCountry", {
+        q.comboBox("birthplaceCountry", {
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
           source: "countries",
         }),
-        node.comboBox("birthplaceState", {
+        q.comboBox("birthplaceState", {
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
           source: "jurisdictions",
           when: (data) => data.birthplaceCountry === "US",
         }),
-        node.shortText("birthplaceRegion", {
+        q.shortText("birthplaceRegion", {
           label: "Province or region",
           reviewLabel: "Province or region of birth",
           when: (data) =>
@@ -102,17 +102,17 @@ export default defineForm({
       description:
         "A crime is a misdemeanor or felony. Traffic tickets and violations, like disorderly conduct, aren't crimes.",
       when: requestsNameChange,
-      body: [
-        node.yesNo("hasBeenConvictedOfCrime", {
+      questions: [
+        q.yesNo("hasBeenConvictedOfCrime", {
           reviewLabel: "Ever convicted of a crime?",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.shortText("courtOfConviction", {
+            q.shortText("courtOfConviction", {
               label: "Court where you were convicted",
               reviewLabel: "Court of conviction",
             }),
-            node.longText("crime", {
+            q.longText("crime", {
               label: "Crime for which you were convicted",
               reviewLabel: "Crime of conviction",
             }),
@@ -126,22 +126,22 @@ export default defineForm({
       title:
         "Do you have any bankruptcy filings, judgments, liens, or court cases?",
       when: requestsNameChange,
-      body: [
-        node.yesNo("hasFiledForBankruptcy", {
+      questions: [
+        q.yesNo("hasFiledForBankruptcy", {
           label: "Have you ever filed for bankruptcy?",
           reviewLabel: "Ever filed for bankruptcy?",
         }),
-        node.yesNo("hasJudgmentsOrLiens", {
+        q.yesNo("hasJudgmentsOrLiens", {
           label: "Are there any judgments or liens against you?",
           reviewLabel: "Judgments or liens?",
         }),
-        node.yesNo("isPartyToLawsuitOrCourtCase", {
+        q.yesNo("isPartyToLawsuitOrCourtCase", {
           label: "Are you a party in a lawsuit or other court case?",
           reviewLabel: "Party to a lawsuit or court case?",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.longText("bankruptcyJudgmentsLiensDetails", {
+            q.longText("bankruptcyJudgmentsLiensDetails", {
               label: "Case details",
               reviewLabel:
                 "Bankruptcy, judgments, liens, or court case details",
@@ -162,16 +162,16 @@ export default defineForm({
       id: "family",
       title: "What is your family situation?",
       when: requestsNameChange,
-      body: [
-        node.yesNo("isCurrentlyMarried", {
+      questions: [
+        q.yesNo("isCurrentlyMarried", {
           label: "Are you currently married?",
           reviewLabel: "Currently married?",
         }),
-        node.yesNo("wasPreviouslyMarried", {
+        q.yesNo("wasPreviouslyMarried", {
           label: "Were you previously married?",
           reviewLabel: "Previously married?",
         }),
-        node.yesNo("hasChildrenUnder21", {
+        q.yesNo("hasChildrenUnder21", {
           label: "Do you have any children under 21?",
           reviewLabel: "Children under 21?",
         }),
@@ -181,20 +181,20 @@ export default defineForm({
       id: "support-payments",
       title: "Do you have to pay child or spousal support?",
       when: requestsNameChange,
-      body: [
-        node.yesNo("paysChildSupport", {
+      questions: [
+        q.yesNo("paysChildSupport", {
           label: "Do you have to pay child support?",
           reviewLabel: "Required to pay child support?",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.yesNo("areChildSupportPaymentsUpToDate", {
+            q.yesNo("areChildSupportPaymentsUpToDate", {
               label: "Are your child support payments up to date?",
               reviewLabel: "Child support payments up to date?",
             }),
-            node.subsection(
+            q.subsection(
               [
-                node.number("childSupportArrearsAmount", {
+                q.number("childSupportArrearsAmount", {
                   label: "Child support owed",
                   reviewLabel: "Child support amount owed",
                   min: 0,
@@ -205,29 +205,29 @@ export default defineForm({
                 when: (data) => data.areChildSupportPaymentsUpToDate === false,
               },
             ),
-            node.shortText("courtIssuingChildSupportOrder", {
+            q.shortText("courtIssuingChildSupportOrder", {
               label: "Court that issued the child support order",
               reviewLabel: "Court issuing child support order",
             }),
-            node.shortText("supportCollectionsUnit", {
+            q.shortText("supportCollectionsUnit", {
               label: "Child Support Collections Unit",
             }),
           ],
           { when: (data) => data.paysChildSupport === true },
         ),
-        node.yesNo("paysSpousalSupport", {
+        q.yesNo("paysSpousalSupport", {
           label: "Do you have to pay spousal support?",
           reviewLabel: "Required to pay spousal support?",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.yesNo("areSpousalSupportPaymentsUpToDate", {
+            q.yesNo("areSpousalSupportPaymentsUpToDate", {
               label: "Are your spousal support payments up to date?",
               reviewLabel: "Spousal support payments up to date?",
             }),
-            node.subsection(
+            q.subsection(
               [
-                node.number("spousalSupportArrearsAmount", {
+                q.number("spousalSupportArrearsAmount", {
                   label: "Spousal support owed",
                   reviewLabel: "Spousal support amount owed",
                   min: 0,
@@ -239,7 +239,7 @@ export default defineForm({
                   data.areSpousalSupportPaymentsUpToDate === false,
               },
             ),
-            node.shortText("courtIssuingSpousalSupportOrder", {
+            q.shortText("courtIssuingSpousalSupportOrder", {
               label: "Court that issued the spousal support order",
               reviewLabel: "Court issuing spousal support order",
             }),
@@ -252,13 +252,13 @@ export default defineForm({
       id: "previous-name-petition",
       title: "Have you ever filed a name change petition before?",
       when: requestsNameChange,
-      body: [
-        node.yesNo("hasPreviouslyFiledNameChange", {
+      questions: [
+        q.yesNo("hasPreviouslyFiledNameChange", {
           reviewLabel: "Ever filed a name change petition?",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.longText("previousNameChangePetitionDetails", {
+            q.longText("previousNameChangePetitionDetails", {
               label: "Previous petition details",
               reviewLabel: "Previous name change petition details",
               description: PREVIOUS_PETITION_DESCRIPTION,
@@ -272,30 +272,30 @@ export default defineForm({
       id: "name-reason",
       title: "Why are you changing your name?",
       when: requestsNameChange,
-      body: [
-        node.longText("reasonForChangingName", {
+      questions: [
+        q.longText("reasonForChangingName", {
           label: "Reason for name change",
         }),
-        node.display(NameChangeReasonBanner),
+        q.display(NameChangeReasonBanner),
       ],
     },
     {
       id: "sex-designation",
       title: "What is your new sex designation?",
       when: requestsSexDesignationChange,
-      body: [
-        node.radioGroup("newGender", {
+      questions: [
+        q.radioGroup("newGender", {
           reviewLabel: "Desired gender marker",
           options: { Female: "Female", Male: "Male", X: "X" },
         }),
-        node.yesNo("hasPreviouslyFiledSexDesignationChange", {
+        q.yesNo("hasPreviouslyFiledSexDesignationChange", {
           label:
             "Have you ever filed a sex designation change petition before?",
           reviewLabel: "Ever filed a sex designation change petition?",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.longText("previouslyFiledSexDesignationChangeDetails", {
+            q.longText("previouslyFiledSexDesignationChangeDetails", {
               label: "Previous petition details",
               reviewLabel: "Previous sex designation change petition details",
               description: PREVIOUS_PETITION_DESCRIPTION,
@@ -306,14 +306,14 @@ export default defineForm({
               data.hasPreviouslyFiledSexDesignationChange === true,
           },
         ),
-        node.yesNo("isProvidingReasonForGenderChange", {
+        q.yesNo("isProvidingReasonForGenderChange", {
           label:
             "Would you like to include your reasons for changing your sex designation?",
           reviewLabel: "Include reasons for sex designation change?",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.longText("reasonForGenderChange", {
+            q.longText("reasonForGenderChange", {
               label: "Reason for sex designation change",
             }),
           ],
@@ -326,21 +326,21 @@ export default defineForm({
       title: "Would you like your court record sealed?",
       description:
         "Your case is automatically kept private until the judge makes a decision. If public access to your record could put your safety at risk, you can ask the court to keep it sealed after that, too.",
-      body: [
-        node.yesNo("shouldSealCourtRecord", {
+      questions: [
+        q.yesNo("shouldSealCourtRecord", {
           reviewLabel: "Request sealing for personal safety?",
           yesLabel: "Yes, ask the court to keep my record sealed",
           noLabel:
             "No, it's okay for my record to be public after the decision",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.longText("reasonToSealCourtRecord", {
+            q.longText("reasonToSealCourtRecord", {
               label: "Reason to seal the court record",
               reviewLabel: "Reason to seal court record",
               description: "Explain why you want to keep your case private.",
             }),
-            node.banner(
+            q.banner(
               `**What do I write?** Explain how public access to your court record could affect your personal safety.
 
 - Describe the privacy or safety concerns that apply to you.
@@ -354,13 +354,13 @@ export default defineForm({
     {
       id: "supporting-documents",
       title: "Are you attaching supporting documents or additional pages?",
-      body: [
-        node.yesNo("hasAttachedSupportingDocuments", {
+      questions: [
+        q.yesNo("hasAttachedSupportingDocuments", {
           reviewLabel: "Attaching supporting documents or pages?",
         }),
-        node.subsection(
+        q.subsection(
           [
-            node.longText("supportingDocumentsDetails", {
+            q.longText("supportingDocumentsDetails", {
               label: "Documents or additional pages",
               reviewLabel: "Supporting documents or additional pages",
               description: "List the name or a description of each document.",

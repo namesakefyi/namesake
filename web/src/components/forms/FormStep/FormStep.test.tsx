@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
-import { node } from "#lib/forms/steps";
+import { q } from "#lib/forms/steps";
 import type { FormPhase, Step } from "#lib/forms/types";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormStep } from "./FormStep";
@@ -46,7 +46,7 @@ describe("FormStep", () => {
     id: "what-is-your-legal-name",
     title: "What is your legal name?",
     description: "Type your name exactly as it appears on your ID.",
-    body: [],
+    questions: [],
   };
 
   it("renders title correctly", () => {
@@ -253,20 +253,20 @@ function renderStep(step: Step, defaultValues: Record<string, unknown> = {}) {
 }
 
 describe("FormStep body", () => {
-  it("renders each node and leaves hidden ones unmounted", async () => {
+  it("renders each question and leaves hidden ones unmounted", async () => {
     const step: Step = {
       id: "previous-name",
       title: "Have you changed your name before?",
-      body: [
-        node.yesNo("hasPreviousNameChange"),
-        node.subsection(
-          [node.shortText("previousNameFrom", { label: "Previous name" })],
+      questions: [
+        q.yesNo("hasPreviousNameChange"),
+        q.subsection(
+          [q.shortText("previousNameFrom", { label: "Previous name" })],
           {
             title: "Details",
             when: (data) => data.hasPreviousNameChange === true,
           },
         ),
-        node.banner("Read the [guide](https://example.com/guide).", {
+        q.banner("Read the [guide](https://example.com/guide).", {
           when: (data) => data.hasPreviousNameChange === true,
         }),
       ],
@@ -296,7 +296,7 @@ describe("FormStep body", () => {
     const step: Step = {
       id: "banner",
       title: "Banner",
-      body: [node.banner((data) => `Hello, ${data.newFirstName}`)],
+      questions: [q.banner((data) => `Hello, ${data.newFirstName}`)],
     };
     renderStep(step, { newFirstName: "<b>Sylvia</b>" });
     expect(screen.getByText("Hello, <b>Sylvia</b>")).toBeInTheDocument();

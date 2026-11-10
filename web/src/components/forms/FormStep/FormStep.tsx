@@ -10,7 +10,7 @@ import { slugify } from "#lib/utils/slugify";
 import { smartquotes } from "#lib/utils/smartquotes";
 import { Button } from "../../common/Button";
 import { useFormStep } from "../FormContainer/FormStepContext";
-import { FormStepNodes } from "./FormStepNodes";
+import { FormStepQuestions } from "./FormStepQuestions";
 import "./FormStep.css";
 import clsx from "clsx";
 import { useId } from "react";
@@ -56,7 +56,7 @@ export function FormStep({ stepConfig, className }: FormStepProps) {
         )}
       </header>
       <div className="form-step-content">
-        <FormStepNodes step={stepConfig} data={data} />
+        <FormStepQuestions step={stepConfig} data={data} />
       </div>
       <Button
         type="submit"

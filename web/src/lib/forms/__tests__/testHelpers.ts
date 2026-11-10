@@ -1,4 +1,4 @@
-import { node, type StepNode } from "../steps";
+import { type Question, q } from "../steps";
 import type { Condition, Step, TextFieldName } from "../types";
 
 type TestField =
@@ -7,7 +7,7 @@ type TestField =
   | { ids: readonly string[]; when: Condition };
 
 function textField(id: string, when?: Condition) {
-  return node.shortText(id as TextFieldName, { label: id, when });
+  return q.shortText(id as TextFieldName, { label: id, when });
 }
 
 /**
@@ -20,15 +20,15 @@ export function makeStep(
   fields: readonly TestField[] = [],
   when?: Condition,
 ): Step {
-  const body: StepNode[] = fields.map((entry) => {
+  const questions: Question[] = fields.map((entry) => {
     if (typeof entry === "string") return textField(entry);
     if ("id" in entry) return textField(entry.id, entry.when);
-    return node.subsection(
+    return q.subsection(
       entry.ids.map((fieldId) => textField(fieldId)),
       {
         when: entry.when,
       },
     );
   });
-  return { id, title: `Step ${id}`, body, ...(when && { when }) };
+  return { id, title: `Step ${id}`, questions, ...(when && { when }) };
 }
