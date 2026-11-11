@@ -31,6 +31,8 @@ function makeEvent() {
 
 function makeConfig(download: Partial<FormDownload> = {}): FormConfig {
   return {
+    title: "Test",
+    category: "court-order",
     steps: [],
     download: {
       title: "Court Order MA",

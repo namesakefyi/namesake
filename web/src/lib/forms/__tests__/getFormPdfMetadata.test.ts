@@ -16,6 +16,8 @@ describe("getFormPdfMetadata", () => {
 
   it("describes each PDF in the download, marking conditional ones", () => {
     vi.mocked(forms.getFormConfig).mockReturnValue({
+      title: "Test",
+      category: "court-order",
       steps: [],
       download: {
         title: "Packet",

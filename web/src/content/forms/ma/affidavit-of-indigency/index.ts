@@ -14,6 +14,13 @@ const amount = (name: string, reviewLabel: string) =>
   });
 
 export default defineForm({
+  title: "Affidavit of Indigency: Massachusetts",
+  description: "Fill out this form to waive court fees and other expenses.",
+  category: "court-order",
+  costs: [
+    { title: "Filing fee", amount: 150, required: true },
+    { title: "Surcharge fee", amount: 15, required: true },
+  ],
   steps: [
     {
       id: "current-name",

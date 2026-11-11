@@ -6,10 +6,17 @@ type FormPdfs<P extends readonly PdfSchema[]> = {
   [I in keyof P]: FormPdf<P[I]>;
 };
 
-export function defineForm<const P extends readonly PdfSchema[]>(
-  config: Omit<FormConfig, "download"> & {
-    download: Omit<FormDownload, "pdfs"> & { pdfs: FormPdfs<P> };
-  },
-): FormConfig {
-  return config;
+export function defineForm<const P extends readonly PdfSchema[]>({
+  download,
+  ...config
+}: Omit<FormConfig, "download"> & {
+  download: Omit<FormDownload, "title" | "pdfs"> & {
+    title?: string;
+    pdfs: FormPdfs<P>;
+  };
+}): FormConfig {
+  return {
+    ...config,
+    download: { ...download, title: download.title ?? config.title },
+  };
 }

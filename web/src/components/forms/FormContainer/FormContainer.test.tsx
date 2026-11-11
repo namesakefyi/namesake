@@ -33,11 +33,15 @@ const formStepStep: Step = {
 };
 
 const plainConfig: FormConfig = {
+  title: "Test",
+  category: "court-order",
   steps: [plainStep],
   download: { title: "Test", instructions: [], pdfs: [] },
 };
 
 const formStepConfig: FormConfig = {
+  title: "Test",
+  category: "court-order",
   steps: [formStepStep],
   download: { title: "Test", instructions: [], pdfs: [] },
 };
@@ -172,6 +176,8 @@ describe("FormContainer", () => {
   it("starts the next step's questions fresh", async () => {
     vi.mocked(getFormConfig).mockReturnValue({
       ...plainConfig,
+      title: "Test",
+      category: "court-order",
       steps: [
         {
           id: "residence",

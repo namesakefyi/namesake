@@ -13,6 +13,14 @@ import { joinPronouns } from "#lib/utils/joinPronouns";
 const isHoused: Condition = (data) => data.isCurrentlyUnhoused !== true;
 
 export default defineForm({
+  title: "Court Order: Massachusetts",
+  description:
+    "If you live in Massachusetts and want to legally update your name, this is the place to start.",
+  category: "court-order",
+  costs: [
+    { title: "Filing fee", amount: 150, required: true },
+    { title: "Surcharge fee", amount: 15, required: true },
+  ],
   steps: [
     {
       id: "new-name",

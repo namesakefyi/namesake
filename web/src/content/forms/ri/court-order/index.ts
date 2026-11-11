@@ -14,6 +14,10 @@ import { joinParts } from "#lib/utils/joinParts";
 const isHoused: Condition = (data) => data.isCurrentlyUnhoused !== true;
 
 export default defineForm({
+  title: "Court Order: Rhode Island",
+  description:
+    "If you live in Rhode Island and want to legally update your name, this is the place to start.",
+  category: "court-order",
   steps: [
     {
       id: "new-name",

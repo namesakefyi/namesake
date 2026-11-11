@@ -8,6 +8,10 @@ import { joinParts } from "#lib/utils/joinParts";
 const genderOptions = { Female: "Female", Male: "Male", X: "X" };
 
 export default defineForm({
+  title: "Birth Certificate: Massachusetts",
+  description:
+    "Use this form to update your legal name and gender marker on your Massachusetts birth certificate.",
+  category: "birth-certificate",
   steps: [
     {
       id: "birth-gender",

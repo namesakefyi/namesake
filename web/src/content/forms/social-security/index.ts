@@ -21,6 +21,9 @@ const needsGovernmentDocument: Condition = (data) =>
   data.citizenshipStatus === "other";
 
 export default defineForm({
+  title: "Social Security",
+  description: "Apply for a new Social Security card with your updated name.",
+  category: "social-security",
   steps: [
     {
       id: "new-name",

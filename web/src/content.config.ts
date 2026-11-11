@@ -4,6 +4,7 @@ import { z } from "astro/zod";
 import { ANNOTATION_TYPES } from "./constants/annotations";
 import { CATEGORIES } from "./constants/categories";
 import { COLOR_KEYS } from "./constants/colors";
+import type { FormConfig } from "./constants/forms";
 import {
   JURISDICTIONS,
   type JurisdictionName,
@@ -11,6 +12,7 @@ import {
 import { DIRECTORY_LANGUAGES } from "./constants/languages";
 import type { PDFDefinition } from "./constants/pdf";
 import { SERVICES } from "./constants/services";
+import { formLoader } from "./lib/loaders/formLoader";
 import { jurisdictionGlobLoader } from "./lib/loaders/jurisdictionGlobLoader";
 import { pdfLoader } from "./lib/loaders/pdfLoader";
 
@@ -67,10 +69,11 @@ const directory = defineCollection({
 });
 
 const forms = defineCollection({
-  loader: jurisdictionGlobLoader({
-    collection: "forms",
-    base: "./src/content/forms",
-    pattern: "**/index.yml",
+  loader: formLoader({
+    modules: import.meta.glob<{ default: FormConfig }>(
+      "./content/forms/**/index.ts",
+      { eager: true },
+    ),
   }),
   schema: z.object({
     title: z.string(),
@@ -87,6 +90,15 @@ const forms = defineCollection({
         }),
       )
       .optional(),
+    stepCount: z.number(),
+    pdfs: z.array(
+      z.object({
+        title: z.string(),
+        code: z.string().optional(),
+        conditional: z.boolean(),
+        file: z.string(),
+      }),
+    ),
   }),
 });
 
