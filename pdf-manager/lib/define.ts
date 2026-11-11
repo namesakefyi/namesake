@@ -2,8 +2,8 @@ import { spawnSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { jurisdictionDir as getJurisdictionDir, PDFS_DIR } from "./catalog";
-import { buildFillEntries } from "./fields";
+import { jurisdictionDir as getJurisdictionDir, PDFS_DIR } from "./catalog.ts";
+import { buildFillEntries } from "./fields.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");

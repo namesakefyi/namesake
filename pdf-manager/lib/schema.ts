@@ -1,13 +1,13 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, extname, join, relative } from "node:path";
-import { PDFS_DIR } from "./catalog";
+import { PDFS_DIR } from "./catalog.ts";
 import {
   convertDropdownsToTextFields,
   extractFields,
   normalizeRadioOptionNames,
   type PdfFieldInfo,
-} from "./pdf";
-import { escapeKey } from "./utils";
+} from "./pdf.ts";
+import { escapeKey } from "./utils.ts";
 
 /** Returns the set of field names currently active (non-excluded) in schema.ts. */
 function loadCurrentSchemaFields(schemaPath: string): Set<string> {

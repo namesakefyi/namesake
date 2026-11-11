@@ -10,7 +10,7 @@ import { spawnSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { intro, log, taskLog } from "@clack/prompts";
-import { findPdfFiles, processPdf } from "../lib/schema";
+import { findPdfFiles, processPdf } from "../lib/schema.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const MONOREPO_ROOT = join(__dirname, "..", "..");

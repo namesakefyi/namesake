@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { PdfEntry } from "../lib/catalog";
-import { type CheckResult, type FetchResult, formatDiff } from "./pdf-monitor";
+import type { PdfEntry } from "../lib/catalog.ts";
+import {
+  type CheckResult,
+  type FetchResult,
+  formatDiff,
+} from "./pdf-monitor.ts";
 
 const byStatus =
   (status: FetchResult["status"]) =>

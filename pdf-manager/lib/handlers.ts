@@ -1,22 +1,22 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Context } from "hono";
-import { findPdfById, listAllPdfs } from "./catalog";
+import { findPdfById, listAllPdfs } from "./catalog.ts";
 import {
   computeOutputPaths,
   formatFiles,
   generateFillSnippet,
   writeDefinitionFiles,
-} from "./define";
-import { loadJurisdictions } from "./fields";
+} from "./define.ts";
+import { loadJurisdictions } from "./fields.ts";
 import {
   applyRenames,
   extractFields,
   extractFieldsFromBytes,
   loadPdf,
-} from "./pdf";
-import { loadExclusions, processPdf } from "./schema";
-import { suggestName } from "./suggest";
+} from "./pdf.ts";
+import { loadExclusions, processPdf } from "./schema.ts";
+import { suggestName } from "./suggest.ts";
 
 export async function handleListPdfs(c: Context) {
   return c.json(

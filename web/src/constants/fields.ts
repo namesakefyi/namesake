@@ -1,4 +1,4 @@
-import { ALL } from "./all";
+import { ALL } from "./all.ts";
 import {
   ADDRESS_FIELDS,
   type AddressFieldName,
@@ -6,8 +6,8 @@ import {
   type AddressType,
   NAME_FIELDS,
   type NameFieldName,
-} from "./fieldGroups";
-import type { JurisdictionId } from "./jurisdictions";
+} from "./fieldGroups.ts";
+import type { JurisdictionId } from "./jurisdictions.ts";
 
 export const PREFER_NOT_TO_ANSWER = "preferNotToAnswer";
 export const DONT_KNOW = "dontKnow";
