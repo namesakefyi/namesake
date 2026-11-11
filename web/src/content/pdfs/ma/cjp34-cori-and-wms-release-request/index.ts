@@ -21,7 +21,7 @@ export default definePdf<PdfFieldName>({
     isChangeOfNameProceeding: true,
     oldName: joinNames(data.oldFirstName, data.oldMiddleName, data.oldLastName),
     dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
-    mothersMaidenName: data.mothersMaidenName,
+    mothersMaidenName: data.mothersLastName,
     otherNamesOrAliases: data.otherNamesOrAliases,
     ssnFirstThree: undefined,
     ssnMiddleTwo: undefined,

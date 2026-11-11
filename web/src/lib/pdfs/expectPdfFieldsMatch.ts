@@ -1,6 +1,6 @@
 import { expect } from "vitest";
-import type { FormData } from "#constants/fields";
 import type { PDFDefinition } from "#constants/pdf";
+import type { Data } from "#lib/forms/questions";
 import { getPdfForm } from "./getPdfForm";
 
 /**
@@ -8,7 +8,7 @@ import { getPdfForm } from "./getPdfForm";
  */
 export async function expectPdfFieldsMatch(
   pdf: PDFDefinition,
-  userData: Partial<FormData>,
+  userData: Data,
 ): Promise<void> {
   const form = await getPdfForm({ pdf, userData });
   const expected = pdf.resolver(userData);

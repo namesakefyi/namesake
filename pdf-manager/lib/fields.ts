@@ -1,10 +1,10 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { SHARED_FIELDS } from "../../web/src/constants/fields";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
-const FIELDS_PATH = join(ROOT, "web/src/constants/fields.ts");
 const JURISDICTIONS_PATH = join(ROOT, "web/src/constants/jurisdictions.ts");
 
 /** Common PDF field name → form field name mappings. */
@@ -28,17 +28,17 @@ export interface Jurisdiction {
 let _formFields: FormField[] | null = null;
 let _jurisdictions: Jurisdiction[] | null = null;
 
-/** Returns { name, type }[] parsed from FIELD_DEFS in fields.ts. */
+const VALUE_TYPES: Record<string, string> = {
+  bool: "boolean",
+  list: "string[]",
+};
+
+/** Returns { name, type }[] for the shared fields, name and address groups included. */
 export function loadFormFields(): FormField[] {
-  if (_formFields) return _formFields;
-  const content = readFileSync(FIELDS_PATH, "utf8");
-  const regex =
-    /\{\s*name:\s*"([^"]+)"[^}]*type:\s*"(string|boolean|string\[\])"/g;
-  const result: FormField[] = [];
-  for (const m of content.matchAll(regex)) {
-    result.push({ name: m[1], type: m[2] });
-  }
-  _formFields = result;
+  _formFields ??= Object.entries(SHARED_FIELDS).map(([name, field]) => ({
+    name,
+    type: VALUE_TYPES[field.type] ?? "string",
+  }));
   return _formFields;
 }
 

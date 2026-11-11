@@ -1,8 +1,7 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
-import { COUNTRY_OPTIONS } from "#constants/countries";
-import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 import { defineForm } from "#lib/forms/defineForm";
-import { type Condition, q } from "#lib/forms/questions";
+import type { Condition } from "#lib/forms/questions";
+import { q } from "#lib/forms/questions";
 
 const isHoused: Condition = (data) => data.isCurrentlyUnhoused !== true;
 
@@ -60,14 +59,12 @@ export default defineForm({
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
-          options: COUNTRY_OPTIONS,
         }),
         q.comboBox("birthplaceState", {
           when: (data) => data.birthplaceCountry === "US",
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
-          options: JURISDICTION_OPTIONS,
         }),
       ],
     },
@@ -200,9 +197,7 @@ export default defineForm({
       description:
         "The court requests this information in order to look up past court records and verify your identity.",
       questions: [
-        q.shortText("mothersMaidenName", {
-          label: "Mother's maiden name",
-        }),
+        q.shortText("mothersLastName", { label: "Mother's maiden name" }),
         q.banner(
           "The maiden name is the last name (or family name) of your mother (or guardian) before marriage.",
         ),

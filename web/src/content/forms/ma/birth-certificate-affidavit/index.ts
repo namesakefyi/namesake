@@ -70,8 +70,8 @@ export default defineForm({
       description:
         "Provide the names of the parents as listed on your birth certificate.",
       questions: [
-        q.shortText("parent1FullName", { label: "Parent 1 full name" }),
-        q.shortText("parent2FullName", { label: "Parent 2 full name" }),
+        q.subsection([q.name("parent1Name")], { title: "Parent 1" }),
+        q.subsection([q.name("parent2Name")], { title: "Parent 2" }),
       ],
     },
     {
@@ -95,7 +95,7 @@ export default defineForm({
       description:
         "To waive the fees, you'll need to file the Affidavit of Indigency. We can help you with that.",
       questions: [
-        q.checkbox("waiveDocumentFees", {
+        q.checkbox("shouldWaiveDocumentFees", {
           label: "Waive the fees",
           reviewLabel: "Waive fees?",
         }),
@@ -108,15 +108,11 @@ export default defineForm({
         "Since you are under 18 years old, at least one parent or guardian must authorize this change.",
       when: (data) => deriveCurrentAge(data.dateOfBirth) < 18,
       questions: [
-        q.shortText("guardianOneFullName", {
-          label: "Parent or guardian 1's full name",
-          reviewLabel: "Guardian/parent 1's full name",
-          size: 24,
+        q.subsection([q.name("guardianName")], {
+          title: "Parent or guardian 1",
         }),
-        q.shortText("guardianTwoFullName", {
-          label: "Parent or guardian 2's full name",
-          reviewLabel: "Guardian/parent 2's full name",
-          size: 24,
+        q.subsection([q.name("coGuardianName")], {
+          title: "Parent or guardian 2",
         }),
       ],
     },

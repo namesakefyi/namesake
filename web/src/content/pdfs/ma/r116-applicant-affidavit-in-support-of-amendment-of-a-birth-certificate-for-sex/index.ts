@@ -24,9 +24,17 @@ export default definePdf<PdfFieldName>({
     dateOfBirth: data.dateOfBirth,
     birthplaceCity: data.birthplaceCity,
     // Parent 1 Name
-    parent1Name: data.parent1FullName,
+    parent1Name: joinNames(
+      data.parent1FirstName,
+      data.parent1MiddleName,
+      data.parent1LastName,
+    ),
     // Parent 2 Name
-    parent2Name: data.parent2FullName,
+    parent2Name: joinNames(
+      data.parent2FirstName,
+      data.parent2MiddleName,
+      data.parent2LastName,
+    ),
     // Name First Middle Last to appear
     newFullName: joinNames(
       data.newFirstName,
@@ -51,10 +59,18 @@ export default definePdf<PdfFieldName>({
       joinNames(data.oldFirstName, data.oldMiddleName, data.oldLastName) !==
       joinNames(data.newFirstName, data.newMiddleName, data.newLastName),
     // A check or money order payable to the Commonwealth of Massachusetts as follows
-    paymentIncluded: !data.waiveDocumentFees,
+    paymentIncluded: !data.shouldWaiveDocumentFees,
     // Name of Parent/Guardian1
-    guardianOneFullName: data.guardianOneFullName,
+    guardianOneFullName: joinNames(
+      data.guardianFirstName,
+      data.guardianMiddleName,
+      data.guardianLastName,
+    ),
     // Name of Parent/Guardian2
-    guardianTwoFullName: data.guardianTwoFullName,
+    guardianTwoFullName: joinNames(
+      data.coGuardianFirstName,
+      data.coGuardianMiddleName,
+      data.coGuardianLastName,
+    ),
   }),
 });

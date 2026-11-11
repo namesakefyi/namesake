@@ -1,9 +1,9 @@
-import type { FieldName, FormData } from "#constants/fields";
 import type { FormPdfConfig, Step } from "#constants/forms";
 import type { PDFId } from "#constants/pdf";
+import type { Data } from "#lib/forms/questions";
 import { getStepFields, type StepField } from "./getStepFields";
 
-export function getFormFields(steps: readonly Step[]): FieldName[] {
+export function getFormFields(steps: readonly Step[]): string[] {
   return steps.flatMap((step) => getStepFields(step).map((field) => field.id));
 }
 
@@ -14,7 +14,7 @@ export interface VisibilitySection {
 
 export interface FormVisibility {
   visibleStepIds: string[];
-  visibleFields: Partial<FormData>;
+  visibleFields: Data;
   sections: readonly VisibilitySection[];
   pdfsToInclude: Array<{ pdfId: PDFId; include: boolean }>;
 }
@@ -22,7 +22,7 @@ export interface FormVisibility {
 /** Returns only the visible step IDs (cheap — skips field/PDF resolution). */
 export function getVisibleStepIds(
   steps: readonly Step[],
-  formData: Partial<FormData>,
+  formData: Data,
 ): string[] {
   return steps.filter((s) => !s.when || s.when(formData)).map((s) => s.id);
 }
@@ -37,11 +37,11 @@ export function getVisibleStepIds(
  */
 export function resolveFormVisibility(
   steps: readonly Step[],
-  formData: Partial<FormData>,
+  formData: Data,
   pdfs: readonly FormPdfConfig[] = [],
 ): FormVisibility {
   const visibleStepIds: string[] = [];
-  const visibleFields: Partial<FormData> = {};
+  const visibleFields: Data = {};
   const sections: VisibilitySection[] = [];
 
   for (const step of steps) {

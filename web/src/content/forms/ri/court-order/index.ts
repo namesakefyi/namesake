@@ -1,8 +1,7 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
-import { COUNTRY_OPTIONS } from "#constants/countries";
-import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 import { defineForm } from "#lib/forms/defineForm";
-import { type Condition, q } from "#lib/forms/questions";
+import type { Condition } from "#lib/forms/questions";
+import { q } from "#lib/forms/questions";
 
 const isHoused: Condition = (data) => data.isCurrentlyUnhoused !== true;
 
@@ -102,14 +101,12 @@ export default defineForm({
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
-          options: COUNTRY_OPTIONS,
         }),
         q.comboBox("birthplaceState", {
           when: (data) => data.birthplaceCountry === "US",
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
-          options: JURISDICTION_OPTIONS,
         }),
       ],
     },

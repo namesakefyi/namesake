@@ -87,12 +87,12 @@ function generateStarterTest({
       : "    // TODO: Add form data for resolver";
 
   return `import { describe, it } from "vitest";
-import type { FormData } from "#constants/fields";
+import type { Data } from "#lib/forms/questions";
 import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import ${importName} from ".";
 
 describe("${escapedTitle}", () => {
-  const testData: Partial<FormData> = {
+  const testData: Data = {
 ${testDataBody}
   };
 

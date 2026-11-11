@@ -3,7 +3,7 @@ import { migrations } from "./migrations";
 import type { Migration, NamesakeDB, NamesakeDBSchema } from "./types";
 
 export const DB_NAME = "namesake";
-export const DB_VERSION = 4;
+export const DB_VERSION = 5;
 
 export { FORM_DATA_STORE, FORM_PROGRESS_STORE } from "./types";
 

@@ -1,5 +1,5 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { type FieldName, PREFER_NOT_TO_ANSWER } from "#constants/fields";
+import { PREFER_NOT_TO_ANSWER } from "#constants/fields";
 import { type OptionLabels, toChoices } from "#lib/forms/questions";
 import { smartquotes } from "#lib/utils/smartquotes";
 import { Checkbox } from "../../common/Checkbox";
@@ -11,7 +11,7 @@ import "./CheckboxGroupField.css";
 
 export interface CheckboxGroupFieldProps extends CheckboxGroupProps {
   children?: React.ReactNode;
-  name: FieldName;
+  name: string;
   label: string;
   labelHidden?: boolean;
   /** A `preferNotToAnswer` option clears and disables the others. */

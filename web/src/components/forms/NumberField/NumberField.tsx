@@ -1,5 +1,4 @@
 import { Controller, useFormContext } from "react-hook-form";
-import type { FieldName } from "#constants/fields";
 import { getLabelProps } from "#lib/utils/getLabelProps";
 import { smartquotes } from "#lib/utils/smartquotes";
 import {
@@ -12,7 +11,7 @@ export interface NumberFieldFormProps
   extends Omit<NumberFieldProps, "value" | "onChange" | "defaultValue"> {
   label: string;
   labelHidden?: boolean;
-  name: FieldName;
+  name: string;
   defaultValue?: number;
   children?: React.ReactNode;
 }

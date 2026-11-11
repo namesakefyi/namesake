@@ -1,7 +1,7 @@
 import { useFormContext } from "react-hook-form";
-import type { FormData } from "#constants/fields";
 import type { Step } from "#constants/forms";
 import { resolveFormVisibility } from "#lib/forms/formVisibility";
+import type { Data } from "#lib/forms/questions";
 import { resolveText } from "#lib/forms/resolveStepContent";
 import { formatFieldValue } from "#lib/utils/formatReviewFields";
 import { smartquotes } from "#lib/utils/smartquotes";
@@ -24,7 +24,7 @@ interface ReviewSection {
 }
 
 export function FormReviewTable({ steps }: FormReviewTableProps) {
-  const form = useFormContext<Partial<FormData>>();
+  const form = useFormContext<Data>();
   const { onEditStep } = useFormStep();
   const formData = form.getValues();
 
@@ -32,7 +32,7 @@ export function FormReviewTable({ steps }: FormReviewTableProps) {
     .sections.map(({ step, fields }) => ({
       stepId: step.id,
       fields: fields.flatMap((field) => {
-        const value = formatFieldValue(field.id, formData[field.id], {
+        const value = formatFieldValue(field.type, formData[field.id], {
           options: field.options,
           currency: field.currency,
         });

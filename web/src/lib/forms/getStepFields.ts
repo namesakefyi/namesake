@@ -1,4 +1,4 @@
-import type { FieldName } from "#constants/fields";
+import type { FieldTypeName } from "#constants/fields";
 import type { Step } from "#constants/forms";
 import type { Condition, OptionLabels, Text } from "./questions";
 import {
@@ -8,7 +8,8 @@ import {
 } from "./walkQuestions";
 
 export interface StepField {
-  id: FieldName;
+  id: string;
+  type: FieldTypeName;
   /** The step's, enclosing subsections' and the field's own conditions. */
   when?: Condition;
   options?: OptionLabels;
@@ -42,6 +43,7 @@ function collectStepFields(step: Step): StepField[] {
       for (const written of question.writes) {
         fields.push({
           id: written.id,
+          type: written.type,
           when: allOf([
             step.when,
             ...context.conditions,

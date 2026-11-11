@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { FormData } from "#constants/fields";
+import type { Data } from "#lib/forms/questions";
 import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import backgroundCheckAuthorizationOfRelease from ".";
 
 describe("Background Check Authorization of Release", () => {
-  const testData: Partial<FormData> = {
+  const testData: Data = {
     oldFirstName: "My",
     oldMiddleName: "Old",
     oldLastName: "Name",

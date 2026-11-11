@@ -1,14 +1,14 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
-import type { FormData } from "#constants/fields";
 import { defineForm } from "#lib/forms/defineForm";
+import type { Data } from "#lib/forms/questions";
 import { q } from "#lib/forms/questions";
 import { nameOrFallback } from "#lib/forms/resolveStepContent";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
 
-const minor = (data: Partial<FormData>) => nameOrFallback(data, "the minor");
+const minor = (data: Data) => nameOrFallback(data, "the minor");
 
 /** Minors 12 and older also file a court activity record request (CJP 34). */
-const needsRecordRequest = (data: Partial<FormData>) =>
+const needsRecordRequest = (data: Data) =>
   deriveCurrentAge(data.dateOfBirth) >= 12;
 
 export default defineForm({
@@ -113,32 +113,32 @@ export default defineForm({
       id: "parent-address",
       title: (data) => `Where do ${minor(data)}'s parents live?`,
       questions: [
-        q.checkbox("parentsHaveUnknownAddresses", {
+        q.checkbox("areParentAddressesUnknown", {
           label: "The addresses of the parents are unknown",
           reviewLabel: "Parents' addresses are unknown?",
         }),
         q.banner(
           "Since the address or whereabouts of legal parents are unknown, you must also file a [Motion for Service by Alternate Means and Affidavit of Diligent Search (CJP 31)](https://www.mass.gov/info-details/probate-and-family-court-motion-for-service-by-alternate-means-and-affidavit-of-diligent-search-cjp-31) with a [Military Affidavit (TC0002)](https://www.mass.gov/doc/military-affidavit/download).",
-          { when: (data) => data.parentsHaveUnknownAddresses === true },
+          { when: (data) => data.areParentAddressesUnknown === true },
         ),
         q.subsection(
           [
-            q.checkbox("parentsHaveDifferentAddresses", {
+            q.checkbox("areParentAddressesDifferent", {
               label: "Parents have different addresses",
               reviewLabel: "Parents have different addresses?",
             }),
             q.subsection([q.address("parent1")], {
               title: (data) =>
-                data.parentsHaveDifferentAddresses === true
+                data.areParentAddressesDifferent === true
                   ? "First parent's address"
                   : undefined,
             }),
             q.subsection([q.address("parent2")], {
-              when: (data) => data.parentsHaveDifferentAddresses === true,
+              when: (data) => data.areParentAddressesDifferent === true,
               title: "Second parent's address",
             }),
           ],
-          { when: (data) => data.parentsHaveUnknownAddresses !== true },
+          { when: (data) => data.areParentAddressesUnknown !== true },
         ),
       ],
     },
@@ -391,7 +391,7 @@ export default defineForm({
         "The court requests this information in order to look up past court records and verify the minor's identity.",
       when: needsRecordRequest,
       questions: [
-        q.shortText("mothersMaidenName", { label: "Mother's maiden name" }),
+        q.shortText("mothersLastName", { label: "Mother's maiden name" }),
         q.banner(
           "The maiden name is the last name (or family name) of the minor's mother (or guardian) before marriage.",
         ),
@@ -413,7 +413,7 @@ export default defineForm({
     "File with the Probate and Family Court in your county.",
     {
       text: "Since the address or whereabouts of legal parent(s) is unknown, you must file a Motion for Service by Alternate Means and Affidavit of Diligent Search (CJP 31) with a Military Affidavit (TC0002).",
-      when: (data) => data.parentsHaveUnknownAddresses === true,
+      when: (data) => data.areParentAddressesUnknown === true,
     },
     {
       text: "Attach a copy of the parental death certificate.",

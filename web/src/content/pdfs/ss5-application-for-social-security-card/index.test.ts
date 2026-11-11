@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { DONT_KNOW } from "#constants/fields";
+import type { Data } from "#lib/forms/questions";
 import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import { getPdfForm } from "#lib/pdfs/getPdfForm";
 import ss5Application from ".";
 
 describe("SS-5 Application for Social Security Card", () => {
-  const testData = {
+  const testData: Data = {
     // Field 1: Name
     newFirstName: "Marsha",
     newMiddleName: "P",
@@ -63,7 +64,6 @@ describe("SS-5 Application for Social Security Card", () => {
 
     // Field 18: Relationship
     isFilingForSomeoneElse: false,
-    relationshipToFilingFor: "self",
   };
 
   it("maps all fields correctly to the PDF", async () => {

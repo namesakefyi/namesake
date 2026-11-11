@@ -64,8 +64,8 @@ export default definePdf<PdfFieldName>({
     otherFeesSection2Details: data.shouldWaiveOtherFeesSection2
       ? data.otherFeesSection2Details
       : undefined,
-    applySubstitutionSection2: data.applySubstitutionSection2,
-    substitutionDetailsSection2: data.applySubstitutionSection2
+    applySubstitutionSection2: data.shouldApplySubstitutionSection2,
+    substitutionDetailsSection2: data.shouldApplySubstitutionSection2
       ? data.substitutionDetailsSection2
       : undefined,
 
@@ -97,8 +97,8 @@ export default definePdf<PdfFieldName>({
     otherFeesSection3Details: data.shouldWaiveOtherFeesSection3
       ? data.otherFeesSection3Details
       : undefined,
-    applySubstitutionSection3: data.applySubstitutionSection3,
-    substitutionDetailsSection3: data.applySubstitutionSection3
+    applySubstitutionSection3: data.shouldApplySubstitutionSection3,
+    substitutionDetailsSection3: data.shouldApplySubstitutionSection3
       ? data.substitutionDetailsSection3
       : undefined,
   }),

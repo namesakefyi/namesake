@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { FormData } from "#constants/fields";
 import { resolveFormVisibility } from "#lib/forms/formVisibility";
+import type { Data } from "#lib/forms/questions";
 import form from ".";
 
-const resolve = (data: Partial<FormData>) =>
+/** Also takes answers saved by other forms. */
+const resolve = (data: Data & Data) =>
   resolveFormVisibility(form.steps, data, form.pdfs);
 
 const nameSteps = [
@@ -27,7 +28,7 @@ const sharedSteps = [
 
 describe("New York question flow", () => {
   it("keeps US birth states separate from international regions", () => {
-    const data = {
+    const data: Data = {
       nyCourtOrderRequest: "Name change",
       birthplaceCountry: "CA",
       birthplaceState: "NY",
@@ -80,11 +81,11 @@ describe("New York question flow", () => {
       hasBeenConvictedOfCrime: false,
       courtOfConviction: "Old court",
       crime: "Old answer",
-      paysChildSupport: false,
+      doesPayChildSupport: false,
       areChildSupportPaymentsUpToDate: false,
       childSupportArrearsAmount: "500",
       courtIssuingChildSupportOrder: "Old court",
-      paysSpousalSupport: true,
+      doesPaySpousalSupport: true,
       areSpousalSupportPaymentsUpToDate: true,
       spousalSupportArrearsAmount: "500",
       shouldSealCourtRecord: false,

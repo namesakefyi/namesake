@@ -1,5 +1,5 @@
-import type { FormData } from "#constants/fields";
 import type { PDFDefinition } from "#constants/pdf";
+import type { Data } from "#lib/forms/questions";
 import { buildPdfPacket } from "./buildPdfPacket";
 import { downloadPdf } from "./downloadPdf";
 import { fillPdf } from "./fillPdf";
@@ -16,7 +16,7 @@ export async function downloadFilledPdf({
   title: string;
   instructions: string[];
   pdfs: PDFDefinition[];
-  userData: Partial<FormData>;
+  userData: Data;
 }) {
   const pdfBytes = await Promise.all(
     pdfs.map((pdf) => fillPdf({ pdf, userData })),

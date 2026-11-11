@@ -2,7 +2,6 @@ import { type MaskitoOptions, maskitoTransform } from "@maskito/core";
 import { type Key, useState } from "react";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { getCountyOptions, matchCounty } from "#constants/counties";
-import type { FieldName } from "#constants/fields";
 import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 import { ComboBox, ComboBoxItem } from "../../common/ComboBox";
 import { TextField } from "../../common/TextField";
@@ -31,8 +30,8 @@ const FIELD_FOR_GEOAPIFY = {
 export function mapPlaceToFields(
   place: GeoapifyResult,
   names: AddressNames,
-): Array<[FieldName, string]> {
-  const updates: Array<[FieldName, string]> = [];
+): Array<[string, string]> {
+  const updates: Array<[string, string]> = [];
   for (const [source, key] of Object.entries(FIELD_FOR_GEOAPIFY) as [
     keyof GeoapifyResult,
     keyof AddressNames,

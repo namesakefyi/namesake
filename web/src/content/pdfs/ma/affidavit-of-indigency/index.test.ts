@@ -1,9 +1,10 @@
 import { describe, it } from "vitest";
+import type { Data } from "#lib/forms/questions";
 import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import affidavitOfIndigency from ".";
 
 describe("Affidavit of Indigency", () => {
-  const testData = {
+  const testData: Data = {
     oldFirstName: "Alex",
     oldMiddleName: "J",
     oldLastName: "Smith",

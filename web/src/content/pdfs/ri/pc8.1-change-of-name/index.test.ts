@@ -1,10 +1,10 @@
 import { describe, it } from "vitest";
-import type { FormData } from "#constants/fields";
+import type { Data } from "#lib/forms/questions";
 import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import pc81ChangeOfName from ".";
 
 describe("Change of Name", () => {
-  const testData: Partial<FormData> = {
+  const testData: Data = {
     oldFirstName: "My",
     oldMiddleName: "Old",
     oldLastName: "Name",

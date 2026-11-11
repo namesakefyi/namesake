@@ -1,18 +1,13 @@
 import { RiAddLine, RiDeleteBinLine } from "@remixicon/react";
 import { useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import type { FieldName, FormData } from "#constants/fields";
 import { Button } from "../../common/Button";
 import { TextField } from "../../common/TextField";
 import "./RepeatingEntry.css";
 
-type ArrayFieldName = {
-  [K in FieldName]: FormData[K] extends string[] ? K : never;
-}[FieldName];
-
 export interface RepeatingEntryProps {
   /** The array field name to store all entries. */
-  name: ArrayFieldName;
+  name: string;
 
   /**
    * Minimum number of visible instances.
@@ -44,7 +39,7 @@ export function RepeatingEntry({
   defaultCount,
   children,
 }: RepeatingEntryProps) {
-  const { watch, setValue } = useFormContext<FormData>();
+  const { watch, setValue } = useFormContext<Record<string, string[]>>();
   const raw = watch(name) ?? [];
 
   const [count, setCount] = useState(() =>
@@ -121,7 +116,7 @@ export function RepeatingEntryField({
   itemLabel,
   size,
 }: {
-  name: ArrayFieldName;
+  name: string;
   min: number;
   max?: number;
   itemLabel: string;

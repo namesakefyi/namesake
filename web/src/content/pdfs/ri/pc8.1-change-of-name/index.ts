@@ -1,4 +1,5 @@
 import { definePdf } from "#lib/pdfs/definePdf";
+import { asList } from "#lib/utils/fieldValue";
 import { formatBirthplaceCountryOrState } from "#lib/utils/formatBirthplaceCountryOrState";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
 import { joinNames } from "#lib/utils/joinNames";
@@ -14,6 +15,7 @@ export default definePdf<PdfFieldName>({
     "https://docs.sos.ri.gov/documents/BusinessServices/PC8.1-change-of-name.pdf",
   pdfPath: pdf,
   resolver: (data) => {
+    const previousAddresses = asList(data.previousAddresses);
     return {
       currentLegalName: joinNames(
         data.oldFirstName,
@@ -57,9 +59,9 @@ export default definePdf<PdfFieldName>({
       ),
       occupation: data.occupation,
       maritalStatus: data.maritalStatus,
-      previousAddress1: data.previousAddresses?.[0],
-      previousAddress2: data.previousAddresses?.[1],
-      previousAddress3: data.previousAddresses?.[2],
+      previousAddress1: previousAddresses?.[0],
+      previousAddress2: previousAddresses?.[1],
+      previousAddress3: previousAddresses?.[2],
       reasonForNameChange: data.reasonForChangingName,
       reasonForNameChange2: undefined,
       newFirstName: data.newFirstName,

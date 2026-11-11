@@ -1,5 +1,4 @@
-import type { Condition, Question, Text } from "#lib/forms/questions";
-import type { FormData } from "./fields";
+import type { Condition, Data, Question, Text } from "#lib/forms/questions";
 import type { PDFId } from "./pdf";
 
 export interface Step {
@@ -17,16 +16,14 @@ export interface FormPdfConfig {
   /** The PDF identifier */
   pdfId: PDFId;
   /** Optional predicate to determine if this PDF should be included based on form data */
-  when?: (data: Partial<FormData>) => boolean;
+  when?: Condition;
 }
 
 /**
  * A single instruction entry. Plain string = always included.
  * Object form: `{ text, when }` = included only when `when` returns true.
  */
-export type Instruction =
-  | string
-  | { text: string; when: (data: Partial<FormData>) => boolean };
+export type Instruction = string | { text: string; when: Condition };
 
 /**
  * Resolves an instructions array to plain strings, filtering out conditional
@@ -34,7 +31,7 @@ export type Instruction =
  */
 export function resolveInstructions(
   instructions: readonly Instruction[],
-  data: Partial<FormData>,
+  data: Data,
 ): string[] {
   return instructions.flatMap((item) => {
     if (typeof item === "string") return [item];

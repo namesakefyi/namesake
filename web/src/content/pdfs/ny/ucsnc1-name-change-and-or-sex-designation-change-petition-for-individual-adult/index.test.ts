@@ -1,18 +1,18 @@
 import { describe, expect, it, vi } from "vitest";
-import type { FormData } from "#constants/fields";
 import formConfig from "#content/forms/ny/court-order";
 import { resolveFormVisibility } from "#lib/forms/formVisibility";
+import type { Data } from "#lib/forms/questions";
 import { getPdfForm } from "#lib/pdfs/getPdfForm";
 import pdf from ".";
 
 // Exercise the same visibility filtering used by createFormSubmitHandler.
-const visibleAnswers = (data: Partial<FormData>) =>
+const visibleAnswers = (data: Data) =>
   resolveFormVisibility(formConfig.steps, data, formConfig.pdfs).visibleFields;
 
-const getPetitionForm = (userData: Partial<FormData>) =>
+const getPetitionForm = (userData: Data) =>
   getPdfForm({ pdf, userData: visibleAnswers(userData) });
 
-const names: Partial<FormData> = {
+const names: Data = {
   oldFirstName: "Alex",
   oldMiddleName: "J",
   oldLastName: "Example",
@@ -68,7 +68,7 @@ describe("New York petition names and request type", () => {
   });
 });
 
-const complete: Partial<FormData> = {
+const complete: Data = {
   ...names,
   nyCourtOrderRequest: "Both",
   courtType: "Civil",
@@ -92,12 +92,12 @@ const complete: Partial<FormData> = {
   isCurrentlyMarried: true,
   wasPreviouslyMarried: true,
   hasChildrenUnder21: true,
-  paysChildSupport: true,
+  doesPayChildSupport: true,
   areChildSupportPaymentsUpToDate: false,
   childSupportArrearsAmount: "1250.50",
   courtIssuingChildSupportOrder: "Example Family Court",
   supportCollectionsUnit: "Kings County SCU",
-  paysSpousalSupport: true,
+  doesPaySpousalSupport: true,
   areSpousalSupportPaymentsUpToDate: false,
   spousalSupportArrearsAmount: "0",
   courtIssuingSpousalSupportOrder: "Example Supreme Court",
@@ -116,6 +116,13 @@ const complete: Partial<FormData> = {
   supportingDocumentsDetails: "Certified birth certificate",
 };
 
+/** The PDF names radios whose answers were renamed. */
+const PDF_NAMES: Record<string, string> = {
+  doesPayChildSupport: "paysChildSupport",
+  doesPaySpousalSupport: "paysSpousalSupport",
+};
+const pdfName = (field: string) => PDF_NAMES[field] ?? field;
+
 const nameRadios = [
   "hasBeenConvictedOfCrime",
   "hasFiledForBankruptcy",
@@ -124,9 +131,9 @@ const nameRadios = [
   "isCurrentlyMarried",
   "wasPreviouslyMarried",
   "hasChildrenUnder21",
-  "paysChildSupport",
+  "doesPayChildSupport",
   "areChildSupportPaymentsUpToDate",
-  "paysSpousalSupport",
+  "doesPaySpousalSupport",
   "areSpousalSupportPaymentsUpToDate",
 ] as const;
 const sexRadios = [
@@ -203,7 +210,7 @@ describe("New York petition field mapping", () => {
       expect(form.getTextField(name)?.getValue(), name).toBe(expected);
     }
     for (const name of radios) {
-      expect(form.getRadioGroup(name)?.getValue(), name).toBe(
+      expect(form.getRadioGroup(pdfName(name))?.getValue(), name).toBe(
         complete[name] ? "Yes" : "No",
       );
     }
@@ -232,11 +239,11 @@ describe("New York petition field mapping", () => {
         ...Object.fromEntries(radios.map((name) => [name, answer])),
       };
       // Both support-payment questions must be visible to exercise their radios.
-      userData.paysChildSupport = true;
-      userData.paysSpousalSupport = true;
+      userData.doesPayChildSupport = true;
+      userData.doesPaySpousalSupport = true;
       const form = await getPetitionForm(userData);
       for (const name of radios) {
-        const field = form.getRadioGroup(name);
+        const field = form.getRadioGroup(pdfName(name));
         if (!field) throw new Error(`Missing radio: ${name}`);
         const expectedYes = userData[name] === true;
         expect(field.getOptions().sort(), name).toEqual(["No", "Yes"]);
@@ -255,7 +262,7 @@ describe("New York petition field mapping", () => {
   it("leaves unanswered questions and personal information blank", async () => {
     const form = await getPetitionForm({ nyCourtOrderRequest: "Both" });
     for (const name of radios) {
-      const field = form.getRadioGroup(name);
+      const field = form.getRadioGroup(pdfName(name));
       if (!field) throw new Error(`Missing radio: ${name}`);
       expect(field.getValue(), name).toBeNull();
       expect(
@@ -279,7 +286,7 @@ describe("New York petition field mapping", () => {
     }
   });
 
-  it.each(["Name change", "Sex designation change"])(
+  it.each(["Name change", "Sex designation change"] as const)(
     "omits the other section for %s, even with stale answers",
     async (request) => {
       const form = await getPetitionForm({
@@ -293,7 +300,7 @@ describe("New York petition field mapping", () => {
         );
       }
       for (const name of sexOnly ? nameRadios : sexRadios) {
-        expect(form.getRadioGroup(name)?.getValue(), name).toBeNull();
+        expect(form.getRadioGroup(pdfName(name))?.getValue(), name).toBeNull();
       }
       if (sexOnly) {
         expect(form.getCheckbox("hasPreviousNameChangeTrue")?.isChecked()).toBe(

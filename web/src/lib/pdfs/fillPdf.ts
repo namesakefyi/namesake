@@ -1,6 +1,6 @@
 import type { PDFForm } from "@libpdf/core";
-import type { FormData } from "#constants/fields";
 import type { PDFDefinition, PDFFieldValue } from "#constants/pdf";
+import type { Data } from "#lib/forms/questions";
 import { fetchPdf } from "./fetchPdf";
 import { loadPdfLib } from "./loadPdfLib";
 
@@ -31,7 +31,7 @@ export async function fillPdf({
   userData,
 }: {
   pdf: PDFDefinition;
-  userData: Partial<FormData>;
+  userData: Data;
 }): Promise<Uint8Array> {
   try {
     const { PDF } = await loadPdfLib();

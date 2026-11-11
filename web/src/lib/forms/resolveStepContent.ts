@@ -1,21 +1,18 @@
-import type { FormData } from "#constants/fields";
 import type { Step } from "#constants/forms";
+import type { Data } from "#lib/forms/questions";
 
 /**
  * Returns the subject's first name from form data, or the fallback when empty.
  * Useful for dynamic step titles and descriptions (e.g., "Where do Erika's parents live?").
  */
-export function nameOrFallback(
-  data: Partial<FormData>,
-  fallback: string,
-): string {
+export function nameOrFallback(data: Data, fallback: string): string {
   const name = data.newFirstName;
   return (typeof name === "string" && name.trim()) || fallback;
 }
 
 export function resolveText<T extends string | undefined>(
-  text: T | ((data: Partial<FormData>) => T),
-  data: Partial<FormData>,
+  text: T | ((data: Data) => T),
+  data: Data,
 ): T {
   return typeof text === "function" ? text(data) : text;
 }
@@ -23,10 +20,7 @@ export function resolveText<T extends string | undefined>(
 /**
  * Resolves a step's title to a string, using form data when the title is dynamic.
  */
-export function resolveTitle(
-  step: Pick<Step, "title">,
-  data: Partial<FormData>,
-): string {
+export function resolveTitle(step: Pick<Step, "title">, data: Data): string {
   return resolveText(step.title, data);
 }
 
@@ -35,7 +29,7 @@ export function resolveTitle(
  */
 export function resolveDescription(
   step: Pick<Step, "description">,
-  data: Partial<FormData>,
+  data: Data,
 ): string | undefined {
   return step.description && resolveText(step.description, data);
 }

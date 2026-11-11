@@ -1,7 +1,6 @@
 import { parseDate } from "@internationalized/date";
 import type { DateValue } from "react-aria-components";
 import { Controller, useFormContext } from "react-hook-form";
-import type { FieldName } from "#constants/fields";
 import { getLabelProps } from "#lib/utils/getLabelProps";
 import { DateField, type DateFieldProps } from "../../common/DateField";
 import "./MemorableDateField.css";
@@ -10,7 +9,7 @@ export interface MemorableDateFieldProps<T extends DateValue = DateValue>
   extends DateFieldProps<T> {
   label: string;
   labelHidden?: boolean;
-  name: FieldName;
+  name: string;
   children?: React.ReactNode;
 }
 

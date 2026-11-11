@@ -1,5 +1,3 @@
-import type { FieldName } from "#constants/fields";
-
 const nameFields = <P extends string>(prefix: P) =>
   ({
     first: `${prefix}FirstName`,
@@ -17,13 +15,12 @@ export const NAME_FIELDS = {
   parent2Name: nameFields("parent2"),
   guardianName: nameFields("guardian"),
   coGuardianName: nameFields("coGuardian"),
-} satisfies Record<
-  string,
-  { first: FieldName; middle: FieldName; last: FieldName }
->;
+} satisfies Record<string, Record<"first" | "middle" | "last", string>>;
 
 export type NameType = keyof typeof NAME_FIELDS;
 export type NamePart = keyof (typeof NAME_FIELDS)[NameType];
+export type NameFieldName<T extends NameType = NameType> =
+  (typeof NAME_FIELDS)[T][NamePart];
 
 const NAME_PART_LABELS: Record<NamePart, string> = {
   first: "first name",
@@ -46,12 +43,12 @@ export const NAME_REVIEW_LABELS: Record<NameType, (part: NamePart) => string> =
   };
 
 export interface AddressNames {
-  street: FieldName;
-  street2?: FieldName;
-  city: FieldName;
-  state: FieldName;
-  zip: FieldName;
-  county?: FieldName;
+  street: string;
+  street2?: string;
+  city: string;
+  state: string;
+  zip: string;
+  county?: string;
 }
 
 /** An address stored as `${prefix}StreetAddress`, `${prefix}City` and so on. */
@@ -82,6 +79,14 @@ export const ADDRESS_FIELDS = {
 
 export type AddressType = keyof typeof ADDRESS_FIELDS;
 export type AddressPart = keyof AddressNames;
+
+/** The field names of an address type's parts, all parts by default. */
+export type AddressFieldName<
+  T extends AddressType = AddressType,
+  P extends AddressPart = AddressPart,
+> = T extends AddressType
+  ? (typeof ADDRESS_FIELDS)[T][P & keyof (typeof ADDRESS_FIELDS)[T]]
+  : never;
 
 /** Address types that can ask for a second address line and a county. */
 export type ExtendedAddressType = {

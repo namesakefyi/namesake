@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { FormData } from "#constants/fields";
+import type { Data } from "#lib/forms/questions";
 import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import { getPdfForm } from "#lib/pdfs/getPdfForm";
 import cjp25PetitionToChangeNameOfMinor from ".";
@@ -9,7 +9,7 @@ describe("Petition to Change Name of Minor", () => {
     vi.useRealTimers();
   });
 
-  const testData: Partial<FormData> = {
+  const testData: Data = {
     oldFirstName: "Old",
     oldMiddleName: "M",
     oldLastName: "Name",

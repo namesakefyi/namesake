@@ -1,5 +1,4 @@
 import { Controller, useFormContext } from "react-hook-form";
-import type { FieldName } from "#constants/fields";
 import { getLabelProps } from "#lib/utils/getLabelProps";
 import { smartquotes } from "#lib/utils/smartquotes";
 import { TextField, type TextFieldProps } from "../../common/TextField";
@@ -8,7 +7,7 @@ import "./ShortTextField.css";
 export interface ShortTextFieldProps extends TextFieldProps {
   label: string;
   labelHidden?: boolean;
-  name: FieldName;
+  name: string;
   children?: React.ReactNode;
 }
 

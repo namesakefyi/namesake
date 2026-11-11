@@ -1,5 +1,5 @@
-import type { FormData } from "#constants/fields";
 import type { PDFDefinition } from "#constants/pdf";
+import type { Data } from "#lib/forms/questions";
 import { fillPdf } from "./fillPdf";
 import { loadPdfLib } from "./loadPdfLib";
 
@@ -12,7 +12,7 @@ export async function getPdfForm({
   userData,
 }: {
   pdf: PDFDefinition;
-  userData: Partial<FormData>;
+  userData: Data;
 }) {
   try {
     const { PDF } = await loadPdfLib();

@@ -1,6 +1,4 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
-import { COUNTRY_OPTIONS } from "#constants/countries";
-import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 import { defineForm } from "#lib/forms/defineForm";
 import { q } from "#lib/forms/questions";
 import { USD_FORMAT } from "#lib/utils/formatCurrency";
@@ -82,14 +80,12 @@ export default defineForm({
           label: "Country",
           reviewLabel: "Country of birth",
           placeholder: "Select a country",
-          options: COUNTRY_OPTIONS,
         }),
         q.comboBox("birthplaceState", {
           when: (data) => data.birthplaceCountry === "US",
           label: "State",
           reviewLabel: "State of birth",
           placeholder: "Select a state",
-          options: JURISDICTION_OPTIONS,
         }),
         q.shortText("birthplaceRegion", {
           when: (data) =>
@@ -185,7 +181,7 @@ export default defineForm({
       title: "Do you have to pay child or spousal support?",
       when: requestsNameChange,
       questions: [
-        q.yesNo("paysChildSupport", {
+        q.yesNo("doesPayChildSupport", {
           label: "Do you have to pay child support?",
           reviewLabel: "Required to pay child support?",
         }),
@@ -215,9 +211,9 @@ export default defineForm({
               label: "Child Support Collections Unit",
             }),
           ],
-          { when: (data) => data.paysChildSupport === true },
+          { when: (data) => data.doesPayChildSupport === true },
         ),
-        q.yesNo("paysSpousalSupport", {
+        q.yesNo("doesPaySpousalSupport", {
           label: "Do you have to pay spousal support?",
           reviewLabel: "Required to pay spousal support?",
         }),
@@ -245,7 +241,7 @@ export default defineForm({
               reviewLabel: "Court issuing spousal support order",
             }),
           ],
-          { when: (data) => data.paysSpousalSupport === true },
+          { when: (data) => data.doesPaySpousalSupport === true },
         ),
       ],
     },

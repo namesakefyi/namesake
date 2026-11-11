@@ -1,10 +1,10 @@
 import { describe, it } from "vitest";
-import type { FormData } from "#constants/fields";
+import type { Data } from "#lib/forms/questions";
 import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import petitionToChangeNameOfAdult from ".";
 
 describe("CJP27 Petition to Change Name of Adult", () => {
-  const testData: Partial<FormData> = {
+  const testData: Data = {
     newFirstName: "Eva",
     newMiddleName: "K",
     newLastName: "Decker",

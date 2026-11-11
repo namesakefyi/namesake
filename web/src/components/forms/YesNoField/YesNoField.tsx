@@ -3,7 +3,6 @@ import {
   DONT_KNOW,
   EXTRA_CHOICE_LABELS,
   type ExtraChoice,
-  type FieldName,
   PREFER_NOT_TO_ANSWER,
 } from "#constants/fields";
 import { smartquotes } from "#lib/utils/smartquotes";
@@ -32,7 +31,7 @@ export const getBooleanValueFromYesNoString = (value: string): YesNoValue => {
 
 export interface YesNoFieldProps extends RadioGroupProps {
   children?: React.ReactNode;
-  name: FieldName;
+  name: string;
   label: string;
   labelHidden?: boolean;
   yesLabel?: string;

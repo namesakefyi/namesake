@@ -5,6 +5,7 @@ import {
 } from "#content/forms/ny/court-order/conditions";
 import { definePdf } from "#lib/pdfs/definePdf";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
+import { asText } from "#lib/utils/fieldValue";
 import { formatAddress } from "#lib/utils/formatAddress";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
 import { joinNames } from "#lib/utils/joinNames";
@@ -49,7 +50,7 @@ export default definePdf<PdfFieldName>({
       placeOfBirth: formatAddress({
         city: data.birthplaceCity,
         state: data.birthplaceState,
-        region: data.birthplaceRegion,
+        region: asText(data.birthplaceRegion),
         country: data.birthplaceCountry && COUNTRIES[data.birthplaceCountry],
       }),
       hasBeenConvictedOfCrime: data.hasBeenConvictedOfCrime,
@@ -62,12 +63,12 @@ export default definePdf<PdfFieldName>({
       isCurrentlyMarried: data.isCurrentlyMarried,
       wasPreviouslyMarried: data.wasPreviouslyMarried,
       hasChildrenUnder21: data.hasChildrenUnder21,
-      paysChildSupport: data.paysChildSupport,
+      paysChildSupport: data.doesPayChildSupport,
       areChildSupportPaymentsUpToDate: data.areChildSupportPaymentsUpToDate,
       childSupportArrearsAmount: data.childSupportArrearsAmount,
       courtIssuingChildSupportOrder: data.courtIssuingChildSupportOrder,
       supportCollectionsUnit: data.supportCollectionsUnit,
-      paysSpousalSupport: data.paysSpousalSupport,
+      paysSpousalSupport: data.doesPaySpousalSupport,
       areSpousalSupportPaymentsUpToDate: data.areSpousalSupportPaymentsUpToDate,
       spousalSupportArrearsAmount: data.spousalSupportArrearsAmount,
       courtIssuingSpousalSupportOrder: data.courtIssuingSpousalSupportOrder,

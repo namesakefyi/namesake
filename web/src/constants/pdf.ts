@@ -1,4 +1,4 @@
-import type { FormData } from "./fields";
+import type { Data } from "#lib/forms/questions";
 
 /** Matches libpdf's FieldValue, plus undefined for omitted fields. */
 export type PDFFieldValue = string | boolean | string[] | null | undefined;
@@ -61,10 +61,5 @@ export interface PDFDefinition<TPdfFieldName extends string = string> {
    * })
    * ```
    */
-  resolver: PDFResolver<TPdfFieldName>;
+  resolver: (data: Data) => Record<TPdfFieldName, PDFFieldValue>;
 }
-
-export type PDFResolver<
-  TPdfFieldName extends string,
-  TFormData = Partial<FormData>,
-> = (data: TFormData) => Record<TPdfFieldName, PDFFieldValue>;

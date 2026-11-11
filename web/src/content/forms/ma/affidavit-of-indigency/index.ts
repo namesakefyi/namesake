@@ -1,31 +1,15 @@
-import type { BooleanFieldName, StringFieldName } from "#constants/fields";
 import { defineForm } from "#lib/forms/defineForm";
-import { type Question, q } from "#lib/forms/questions";
+import { q } from "#lib/forms/questions";
 import { USD_FORMAT } from "#lib/utils/formatCurrency";
 import { MTPC_ASSISTANCE_URL, PovertyResult } from "./PovertyResult";
 
-const amount = (name: StringFieldName, reviewLabel: string) =>
+const amount = (name: string, reviewLabel: string) =>
   q.number(name, {
     label: "Amount (if known)",
     reviewLabel,
     minValue: 0,
     formatOptions: USD_FORMAT,
   });
-
-/** A fee to waive, with follow-up questions shown once it's checked. */
-const waiver = (
-  name: BooleanFieldName,
-  {
-    label,
-    reviewLabel,
-    followUps = [],
-  }: { label: string; reviewLabel: string; followUps?: readonly Question[] },
-): Question[] => [
-  q.checkbox(name, { label, reviewLabel }),
-  ...(followUps.length > 0
-    ? [q.subsection(followUps, { when: (data) => data[name] === true })]
-    : []),
-];
 
 export default defineForm({
   steps: [
@@ -151,53 +135,67 @@ export default defineForm({
       description: "Check all that apply. Enter the amount if you know it.",
       questions: [
         q.costsTable(),
-        ...waiver("shouldWaiveFilingFeeAndSurcharge", {
+        q.checkbox("shouldWaiveFilingFeeAndSurcharge", {
           label: "Filing fee and any surcharge",
           reviewLabel: "Waive filing fee and surcharge?",
-          followUps: [
-            amount("filingFeeAndSurcharge", "Filing fee and surcharge amount"),
-          ],
         }),
-        ...waiver("shouldWaiveFilingFeeAndSurchargeForAppeal", {
+        q.subsection(
+          [amount("filingFeeAndSurcharge", "Filing fee and surcharge amount")],
+          { when: (data) => data.shouldWaiveFilingFeeAndSurcharge === true },
+        ),
+        q.checkbox("shouldWaiveFilingFeeAndSurchargeForAppeal", {
           label: "Filing fee and any surcharge for appeal (uncommon)",
           reviewLabel: "Waive filing fee and surcharge for appeal?",
-          followUps: [
+        }),
+        q.subsection(
+          [
             amount(
               "filingFeeAndSurchargeForAppeal",
               "Filing fee and surcharge for appeal amount",
             ),
           ],
-        }),
-        ...waiver("shouldWaiveFeesForCourtSummons", {
+          {
+            when: (data) =>
+              data.shouldWaiveFilingFeeAndSurchargeForAppeal === true,
+          },
+        ),
+        q.checkbox("shouldWaiveFeesForCourtSummons", {
           label:
             "Fees or costs for serving court summons, witness subpoenas, or other court papers",
           reviewLabel: "Waive fees for court summons?",
-          followUps: [
-            amount("feesForCourtSummons", "Fees for court summons amount"),
-          ],
         }),
-        ...waiver("shouldWaiveOtherFeesSection2", {
+        q.subsection(
+          [amount("feesForCourtSummons", "Fees for court summons amount")],
+          { when: (data) => data.shouldWaiveFeesForCourtSummons === true },
+        ),
+        q.checkbox("shouldWaiveOtherFeesSection2", {
           label: "Other fees or costs",
           reviewLabel: "Waive other fees (Section 2)?",
-          followUps: [
+        }),
+        q.subsection(
+          [
             amount("otherFeesSection2", "Other fees amount (Section 2)"),
             q.shortText("otherFeesSection2Details", {
               label: "What are these fees for?",
               reviewLabel: "Other fees details (Section 2)",
             }),
           ],
-        }),
-        ...waiver("applySubstitutionSection2", {
+          { when: (data) => data.shouldWaiveOtherFeesSection2 === true },
+        ),
+        q.checkbox("shouldApplySubstitutionSection2", {
           label:
             "Ask the court to substitute a required service with a free or lower-cost alternative (uncommon)",
           reviewLabel: "Apply substitution (Section 2)?",
-          followUps: [
+        }),
+        q.subsection(
+          [
             q.shortText("substitutionDetailsSection2", {
               label: "Describe the substitution",
               reviewLabel: "Substitution details (Section 2)",
             }),
           ],
-        }),
+          { when: (data) => data.shouldApplySubstitutionSection2 === true },
+        ),
       ],
     },
     {
@@ -206,64 +204,81 @@ export default defineForm({
       description:
         "These are rare for name changes. If none apply, you can skip this step.",
       questions: [
-        ...waiver("shouldWaiveExpertServices", {
+        q.checkbox("shouldWaiveExpertServices", {
           label:
             "Expert services for testing, examination, testimony, or other assistance",
           reviewLabel: "Waive expert services?",
-          followUps: [
+        }),
+        q.subsection(
+          [
             amount("costOfExpertServices", "Expert services cost"),
             q.shortText("expertServicesDetails", {
               label: "Describe the expert services needed",
               reviewLabel: "Expert services details",
             }),
           ],
-        }),
-        ...waiver("shouldWaiveCostOfTranscription", {
+          { when: (data) => data.shouldWaiveExpertServices === true },
+        ),
+        q.checkbox("shouldWaiveCostOfTranscription", {
           label: "Taking and/or transcribing a deposition",
           reviewLabel: "Waive cost of transcription?",
-          followUps: [amount("costOfTranscription", "Transcription cost")],
         }),
-        ...waiver("shouldWaiveRecordingOfTrialForAppeal", {
+        q.subsection([amount("costOfTranscription", "Transcription cost")], {
+          when: (data) => data.shouldWaiveCostOfTranscription === true,
+        }),
+        q.checkbox("shouldWaiveRecordingOfTrialForAppeal", {
           label:
             "Recording of trial for appeal (if you don't have a public defender)",
           reviewLabel: "Waive recording of trial for appeal?",
         }),
-        ...waiver("shouldWaiveAppealBond", {
+        q.checkbox("shouldWaiveAppealBond", {
           label: "Appeal bond",
           reviewLabel: "Waive appeal bond?",
         }),
-        ...waiver("shouldWaiveCostOfWrittenTranscriptPreparation", {
+        q.checkbox("shouldWaiveCostOfWrittenTranscriptPreparation", {
           label: "Preparing a written transcript of trial or other proceeding",
           reviewLabel: "Waive cost of written transcript preparation?",
-          followUps: [
+        }),
+        q.subsection(
+          [
             amount(
               "costOfWrittenTranscriptPreparation",
               "Written transcript preparation cost",
             ),
           ],
-        }),
-        ...waiver("shouldWaiveOtherFeesSection3", {
+          {
+            when: (data) =>
+              data.shouldWaiveCostOfWrittenTranscriptPreparation === true,
+          },
+        ),
+        q.checkbox("shouldWaiveOtherFeesSection3", {
           label: "Other extra fees or costs",
           reviewLabel: "Waive other fees (Section 3)?",
-          followUps: [
+        }),
+        q.subsection(
+          [
             amount("otherFeesSection3", "Other fees amount (Section 3)"),
             q.shortText("otherFeesSection3Details", {
               label: "What are these fees for?",
               reviewLabel: "Other fees details (Section 3)",
             }),
           ],
-        }),
-        ...waiver("applySubstitutionSection3", {
+          { when: (data) => data.shouldWaiveOtherFeesSection3 === true },
+        ),
+        q.checkbox("shouldApplySubstitutionSection3", {
           label:
             "Ask the court to substitute one of these costs with a free or lower-cost alternative",
           reviewLabel: "Apply substitution (Section 3)?",
-          followUps: [
+        }),
+        q.subsection(
+          [
             q.shortText("substitutionDetailsSection3", {
               label: "Describe the substitution",
               reviewLabel: "Substitution details (Section 3)",
             }),
           ],
-        }),
+          { when: (data) => data.shouldApplySubstitutionSection3 === true },
+        ),
       ],
     },
   ],

@@ -1,41 +1,28 @@
 import { parseDate } from "@internationalized/date";
-import {
-  EXTRA_CHOICE_LABELS,
-  FIELD_DEFS,
-  type FieldName,
-} from "#constants/fields";
+import { EXTRA_CHOICE_LABELS, type FieldTypeName } from "#constants/fields";
 import type { OptionLabels } from "#lib/forms/questions";
 import { formatCurrency } from "./formatCurrency";
 
 /**
- * Given a field name and value, return the formatted value for display in
- * the review table based on its type, or undefined if the field has no
- * response.
+ * Given a field's type and value, return the formatted value for display in
+ * the review table, or undefined if the field has no response.
  *
  * @example
- * formatFieldValue("dateOfBirth", "1990-06-15")
+ * formatFieldValue("date", "1990-06-15")
  * // "June 15, 1990"
  *
  * Pass the step's `options` to label stored values, and `currency` to show
  * amounts as dollars.
  */
 export function formatFieldValue(
-  fieldName: FieldName,
+  type: FieldTypeName,
   value: any,
   { options, currency }: { options?: OptionLabels; currency?: boolean } = {},
 ): string | undefined {
-  // Get the field definition to determine the type
-  const fieldDef = FIELD_DEFS.find(
-    (definition) => definition.name === fieldName,
-  );
-  if (!fieldDef) {
-    return String(value);
-  }
-
   // Handle empty values - return undefined to trigger warning display
   // Exception: boolean fields treat undefined/null as false (unchecked checkbox)
   if (
-    fieldDef.type !== "boolean" &&
+    type !== "bool" &&
     (value === null || value === undefined || value === "")
   ) {
     return undefined;
@@ -48,13 +35,13 @@ export function formatFieldValue(
   };
 
   // Format based on type
-  switch (fieldDef.type) {
-    case "boolean":
+  switch (type) {
+    case "bool":
       // Treat undefined/null as false for boolean fields (single checkboxes default to unchecked)
       if (typeof value === "string") return labelOf(value); // An extra choice
       return value === true ? "Yes" : "No";
 
-    case "string[]":
+    case "list":
       if (Array.isArray(value)) {
         const nonEmpty = value.filter(Boolean).map(labelOf);
         return nonEmpty.length > 0 ? nonEmpty.join(", ") : undefined;
@@ -65,25 +52,11 @@ export function formatFieldValue(
 
       if (currency) return formatCurrency(value);
 
-      // Phone number formatting
-      if (fieldName === "phoneNumber") {
-        return formatPhoneNumber(value);
-      }
-
-      // Date formatting
-      if (fieldName === "dateOfBirth") {
-        return formatDate(value);
-      }
+      if (type === "date") return formatDate(value);
 
       return String(value);
     }
   }
-}
-
-function formatPhoneNumber(phone: string): string | undefined {
-  if (!phone) return undefined;
-  // Phone is already formatted by the mask, just return as-is
-  return phone;
 }
 
 function formatDate(date: string): string | undefined {
