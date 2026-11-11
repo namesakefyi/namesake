@@ -1,7 +1,7 @@
 import { COUNTRIES } from "#constants/countries";
 import ucsnc1 from "#content/pdfs/ny/ucsnc1-name-change-and-or-sex-designation-change-petition-for-individual-adult";
 import { defineDownload } from "#lib/forms/defineForm";
-import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
+import { formatCurrentAge } from "#lib/utils/deriveCurrentAge";
 import { asText } from "#lib/utils/fieldValue";
 import { formatAddress } from "#lib/utils/formatAddress";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
@@ -18,7 +18,6 @@ export default defineDownload({
     {
       pdf: ucsnc1,
       fill: (data) => {
-        const age = deriveCurrentAge(data.dateOfBirth);
         const residence = formatAddress({
           street: data.residenceStreetAddress,
           street2: data.residenceStreetAddress2,
@@ -80,7 +79,7 @@ export default defineDownload({
           reasonForGenderChange: data.reasonForGenderChange,
 
           // Section C: all applicants. The address step collects US addresses.
-          currentAge: age >= 0 ? String(age) : undefined,
+          currentAge: formatCurrentAge(data.dateOfBirth),
           dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
           residenceAddress: residence
             ? `${residence}, United States`

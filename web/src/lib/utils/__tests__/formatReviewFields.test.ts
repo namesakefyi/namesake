@@ -100,6 +100,13 @@ describe("formatFieldValue", () => {
       expect(result).toBe("$1,234");
     });
 
+    it("formats a stored amount without cents unless it has them", () => {
+      expect(formatFieldValue("number", "50", { currency: true })).toBe("$50");
+      expect(formatFieldValue("number", "29.95", { currency: true })).toBe(
+        "$29.95",
+      );
+    });
+
     it("leaves amounts unformatted unless marked as currency", () => {
       expect(formatFieldValue("number", 1234)).toBe("1234");
     });

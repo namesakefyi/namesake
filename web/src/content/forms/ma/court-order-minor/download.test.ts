@@ -104,6 +104,14 @@ describe("Petition to Change Name of Minor", () => {
     expect(form.getCheckbox("isChildUnder12")?.isChecked()).toBe(false);
   });
 
+  it("leaves the age blank and isChildUnder12 unchecked when the age is unknown", async () => {
+    const { dateOfBirth, ...withoutBirthDate } = testData;
+    const form = await getPdfForm(cjp25, fillCjp25(withoutBirthDate));
+
+    expect(form.getTextField("currentAge")?.getValue() ?? "").toBe("");
+    expect(form.getCheckbox("isChildUnder12")?.isChecked()).toBe(false);
+  });
+
   it("derives hasPreviousNameChangeFalse when no previous name change", async () => {
     vi.setSystemTime(new Date(2025, 5, 15));
     const dataWithNoPreviousChange = {

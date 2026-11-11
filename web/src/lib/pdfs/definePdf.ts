@@ -5,17 +5,16 @@ import type { PDFDefinition, PdfSchema } from "#constants/pdf";
  *
  * @example
  * ```ts
- * definePdf({
+ * definePdf<typeof pdfSchema>({
  *   title: "Change of Name",
  *   code: "PC-8.1",
  *   canonicalUrl: "https://…",
  *   file,
- *   fields: pdfSchema,
  * })
  * ```
  */
-export function definePdf<const S extends PdfSchema>(
-  pdf: PDFDefinition<S>,
+export function definePdf<S extends PdfSchema>(
+  pdf: Omit<PDFDefinition<S>, "fields">,
 ): PDFDefinition<S> {
   return pdf;
 }

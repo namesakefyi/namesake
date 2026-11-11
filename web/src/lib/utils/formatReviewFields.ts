@@ -50,7 +50,8 @@ export function formatFieldValue(
     default: {
       if (options) return labelOf(value);
 
-      if (currency) return formatCurrency(value);
+      // Number questions store their answer as a string.
+      if (currency) return formatCurrency(Number(value));
 
       if (type === "date") return formatDate(value);
 

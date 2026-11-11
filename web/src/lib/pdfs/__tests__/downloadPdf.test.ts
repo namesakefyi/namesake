@@ -90,7 +90,6 @@ describe("downloadPdf", () => {
       title: "Custom Form Name",
       canonicalUrl: "https://example.com",
       file: "public/forms/test-form.pdf",
-      fields: {},
     });
 
     const pdfBytes = await fillPdf(customPdf, {});

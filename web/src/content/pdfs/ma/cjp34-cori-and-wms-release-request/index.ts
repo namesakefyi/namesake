@@ -4,15 +4,14 @@ import { definePdf } from "#lib/pdfs/definePdf";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
 import { fullName } from "#lib/utils/fullName";
 import file from "./cjp34-cori-and-wms-release-request.pdf";
-import { pdfSchema } from "./schema";
+import type { pdfSchema } from "./schema";
 
-export default definePdf({
+export default definePdf<typeof pdfSchema>({
   title: "Court Activity Record Request Form",
   code: "CJP-34",
   canonicalUrl:
     "https://www.mass.gov/doc/court-activity-record-information-and-warrant-management-system-release-request-form-cjp-34/download",
   file,
-  fields: pdfSchema,
 });
 
 /** Reads only shared fields, so any form can use it. */

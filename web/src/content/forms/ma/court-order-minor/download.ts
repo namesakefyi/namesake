@@ -3,7 +3,10 @@ import cjp34, {
   fillCjp34,
 } from "#content/pdfs/ma/cjp34-cori-and-wms-release-request";
 import { defineDownload } from "#lib/forms/defineForm";
-import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
+import {
+  deriveCurrentAge,
+  formatCurrentAge,
+} from "#lib/utils/deriveCurrentAge";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
 import { formatLanguage } from "#lib/utils/formatLanguage";
 import { joinPronouns } from "#lib/utils/joinPronouns";
@@ -53,7 +56,7 @@ export default defineDownload({
 
         // 3. Minor's info
         dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
-        currentAge: deriveCurrentAge(data.dateOfBirth)?.toString(),
+        currentAge: formatCurrentAge(data.dateOfBirth),
 
         // 4. Minor's address
         mailingStreetAddress: data.residenceStreetAddress,
@@ -157,7 +160,8 @@ export default defineDownload({
         coGuardianEmail: data.coGuardianEmail,
 
         // 8. Child under 12?
-        isChildUnder12: !needsRecordRequest(data),
+        isChildUnder12:
+          deriveCurrentAge(data.dateOfBirth) >= 0 && !needsRecordRequest(data),
 
         // 9. Legal parent 1 consents?
         isParent1AssentingTrue: data.isParent1Assenting,

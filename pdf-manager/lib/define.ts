@@ -34,13 +34,12 @@ function generateDefinition({
     ...(code ? [`code: ${JSON.stringify(code)},`] : []),
     `canonicalUrl: ${JSON.stringify(canonicalUrl)},`,
     "file,",
-    "fields: pdfSchema,",
   ];
   return `import { definePdf } from "#lib/pdfs/definePdf";
 import file from "./${pdfFile}";
-import { pdfSchema } from "./schema";
+import type { pdfSchema } from "./schema";
 
-export default definePdf({
+export default definePdf<typeof pdfSchema>({
 ${props.map((prop) => `  ${prop}`).join("\n")}
 });
 `;

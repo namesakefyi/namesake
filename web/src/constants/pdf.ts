@@ -30,8 +30,11 @@ export interface PDFDefinition<S extends PdfSchema = PdfSchema> {
   /** The PDF file, imported as a module. */
   file: string;
 
-  /** The fillable fields, from the PDF's `schema.ts`. */
-  fields: S;
+  /**
+   * Type-only: the fillable fields, from the PDF's `schema.ts`. Kept out of
+   * the bundle, since only `fill` type checks need them.
+   */
+  readonly fields?: S;
 }
 
 /**

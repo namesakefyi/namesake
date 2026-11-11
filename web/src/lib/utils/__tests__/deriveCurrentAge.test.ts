@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { deriveCurrentAge } from "../deriveCurrentAge";
+import { deriveCurrentAge, formatCurrentAge } from "../deriveCurrentAge";
 
 describe("deriveCurrentAge", () => {
   afterEach(() => {
@@ -45,5 +45,21 @@ describe("deriveCurrentAge", () => {
     vi.setSystemTime(new Date(2025, 0, 1)); // Jan 1, 2025
     // Born Jan 1, 2024 — 1 year old as of 2025-01-01
     expect(deriveCurrentAge("2024-01-01")).toBe(1);
+  });
+});
+
+describe("formatCurrentAge", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("formats a known age", () => {
+    vi.setSystemTime(new Date(2025, 0, 1));
+    expect(formatCurrentAge("2024-01-01")).toBe("1");
+  });
+
+  it("returns undefined when the age is unknown", () => {
+    expect(formatCurrentAge(undefined)).toBeUndefined();
+    expect(formatCurrentAge("not a date")).toBeUndefined();
   });
 });
