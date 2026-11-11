@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { type Instruction, resolveInstructions } from "../forms";
+import type { Instruction } from "#constants/forms";
+import { resolveInstructions } from "../formVisibility";
 
 describe("resolveInstructions", () => {
   it("includes plain string instructions unconditionally", () => {

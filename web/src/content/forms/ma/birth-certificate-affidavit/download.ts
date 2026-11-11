@@ -1,7 +1,11 @@
 import r116 from "#content/pdfs/ma/r116-applicant-affidavit-in-support-of-amendment-of-a-birth-certificate-for-sex";
 import { defineDownload } from "#lib/forms/defineForm";
+import type { Condition } from "#lib/forms/questions";
 import { fullName } from "#lib/utils/fullName";
 import { joinParts } from "#lib/utils/joinParts";
+
+const isChangingName: Condition = (data) =>
+  fullName(data, "oldName") !== fullName(data, "newName");
 
 export default defineDownload({
   title: "Massachusetts Birth Certificate Affidavit",
@@ -10,7 +14,7 @@ export default defineDownload({
     "For a name change, you must first update your name with the Social Security Administration, then you must submit a legal name change order with the application.",
     {
       text: "Provide a court-certified copy of your legal name change decree",
-      when: (data) => fullName(data, "oldName") !== fullName(data, "newName"),
+      when: isChangingName,
     },
     "Sign and date the required fields.",
   ],
@@ -44,8 +48,7 @@ export default defineDownload({
         email: data.email,
         // A court certified copy of a legal name change decree if applicable and
         // We check this box if the applicant is changing their name
-        nameChangeDecreeIncluded:
-          fullName(data, "oldName") !== fullName(data, "newName"),
+        nameChangeDecreeIncluded: isChangingName(data),
         // A check or money order payable to the Commonwealth of Massachusetts as follows
         paymentIncluded: !data.shouldWaiveDocumentFees,
         // Name of Parent/Guardian1

@@ -1,6 +1,7 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { PREFER_NOT_TO_ANSWER } from "#constants/fields";
 import { type OptionLabels, toChoices } from "#lib/forms/questions";
+import { getLabelProps } from "#lib/utils/getLabelProps";
 import { smartquotes } from "#lib/utils/smartquotes";
 import { Checkbox } from "../../common/Checkbox";
 import {
@@ -49,8 +50,7 @@ export function CheckboxGroupField({
           return (
             <CheckboxGroup
               {...field}
-              label={!labelHidden ? smartquotes(label) : undefined}
-              aria-label={labelHidden ? label : undefined}
+              {...getLabelProps(smartquotes(label), labelHidden)}
               isInvalid={invalid}
               errorMessage={error?.message}
               onChange={(value) => {

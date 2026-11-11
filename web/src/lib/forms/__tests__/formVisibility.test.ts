@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { secondTestFormPdf, testFormPdf } from "#lib/pdfs/__tests__/helpers";
-import { getFormFields, resolveFormVisibility } from "../formVisibility";
+import {
+  getFormFields,
+  getVisibleStepIds,
+  resolveFormVisibility,
+} from "../formVisibility";
 import { makeStep } from "./testHelpers";
 
 /** Each visible section as its step ID and the IDs of its visible fields. */
@@ -31,7 +34,6 @@ describe("resolveFormVisibility", () => {
       phoneNumber: "555",
     });
 
-    expect(result.visibleStepIds).toEqual(["a", "b"]);
     expect(result.visibleFields).toEqual({
       oldFirstName: "Jane",
       oldLastName: "Doe",
@@ -49,12 +51,10 @@ describe("resolveFormVisibility", () => {
       makeStep("b", ["phoneNumber"], () => false),
     ];
 
-    const result = resolveFormVisibility(steps, {
-      oldFirstName: "Jane",
-      phoneNumber: "555",
-    });
+    const data = { oldFirstName: "Jane", phoneNumber: "555" };
+    const result = resolveFormVisibility(steps, data);
 
-    expect(result.visibleStepIds).toEqual(["a"]);
+    expect(getVisibleStepIds(steps, data)).toEqual(["a"]);
     expect(result.visibleFields).toEqual({ oldFirstName: "Jane" });
     expect(sectionIds(result)).toEqual([
       { stepId: "a", fields: ["oldFirstName"] },
@@ -75,15 +75,6 @@ describe("resolveFormVisibility", () => {
     expect(sectionIds(result)).toEqual([
       { stepId: "a", fields: ["alwaysVisible"] },
     ]);
-  });
-
-  it("includes only PDFs whose `when` passes", () => {
-    const steps = [makeStep("a")];
-    const conditional = { ...secondTestFormPdf, when: () => false };
-
-    const result = resolveFormVisibility(steps, {}, [testFormPdf, conditional]);
-
-    expect(result.includedPdfs).toEqual([testFormPdf]);
   });
 
   it("handles grouped conditional fields", () => {

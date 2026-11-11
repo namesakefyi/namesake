@@ -6,7 +6,7 @@ import { asText } from "#lib/utils/fieldValue";
 import { formatAddress } from "#lib/utils/formatAddress";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
 import { fullName } from "#lib/utils/fullName";
-import { requestsNameChange, requestsSexDesignationChange } from "./conditions";
+import { requestsNameChange, requestsSexDesignationChange } from "./steps";
 
 export default defineDownload({
   title: "New York Court Order",

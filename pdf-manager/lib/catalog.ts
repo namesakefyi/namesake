@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { JURISDICTIONS } from "../../web/src/constants/jurisdictions.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, "../..");
+export const ROOT = join(__dirname, "../..");
 export const PDFS_DIR = join(ROOT, "web/src/content/pdfs");
 
 interface PdfMeta {
@@ -44,7 +44,7 @@ function countSchemaFields(pdfDir: string): number {
   return (content.match(/:\s*"(?:text|checkbox|radio|button)"/g) ?? []).length;
 }
 
-const FEDERAL = "federal";
+export const FEDERAL = "federal";
 
 function findPdfFile(dir: string): string | undefined {
   return readdirSync(dir).find((file) => file.endsWith(".pdf"));

@@ -4,7 +4,10 @@ import type { FormData } from "#lib/forms/questions";
 import { q } from "#lib/forms/questions";
 import { nameOrFallback } from "#lib/forms/resolveStepContent";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
-import { needsRecordRequest } from "./conditions";
+
+/** Minors 12 and older also file a court activity record request (CJP 34). */
+export const needsRecordRequest = (data: FormData) =>
+  deriveCurrentAge(data.dateOfBirth) >= 12;
 
 const minor = (data: FormData) => nameOrFallback(data, "the minor");
 
@@ -66,10 +69,8 @@ export default defineSteps([
       q.banner(
         "Since the minor is 12 years of age or older, **the child's written notarized assent must be obtained before filing this petition**. You will fill this out after downloading and printing the final packet.",
         {
-          when: (data) => {
-            const age = deriveCurrentAge(data.dateOfBirth);
-            return age >= 12 && age < 18;
-          },
+          when: (data) =>
+            needsRecordRequest(data) && deriveCurrentAge(data.dateOfBirth) < 18,
         },
       ),
     ],

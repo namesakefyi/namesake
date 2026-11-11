@@ -1,12 +1,27 @@
 import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner";
 import { defineSteps } from "#lib/forms/defineForm";
+import type { FormData } from "#lib/forms/questions";
 import { q } from "#lib/forms/questions";
 import { USD_FORMAT } from "#lib/utils/formatCurrency";
-import {
-  livesInNewYorkCity,
-  requestsNameChange,
-  requestsSexDesignationChange,
-} from "./conditions";
+
+export const requestsNameChange = (data: FormData) =>
+  data.nyCourtOrderRequest === "Name change" ||
+  data.nyCourtOrderRequest === "Both";
+
+export const requestsSexDesignationChange = (data: FormData) =>
+  data.nyCourtOrderRequest === "Sex designation change" ||
+  data.nyCourtOrderRequest === "Both";
+
+const NEW_YORK_CITY_COUNTIES = [
+  "Bronx",
+  "Kings",
+  "New York",
+  "Queens",
+  "Richmond",
+];
+
+const livesInNewYorkCity = (data: FormData) =>
+  NEW_YORK_CITY_COUNTIES.includes(data.residenceCounty ?? "");
 
 const PREVIOUS_PETITION_DESCRIPTION =
   "Include the court, filing date, case number if known, and result.";

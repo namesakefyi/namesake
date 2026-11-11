@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FormProvider } from "react-hook-form";
 import type { FormMeta, Step } from "#constants/forms";
-import { createFormSubmitHandler } from "#lib/forms/createFormSubmitHandler";
-import { downloadBlankPdfPacket } from "#lib/forms/downloadBlankPdfPacket";
-import { loadFormDownload, useFormSteps } from "#lib/forms/loadForm";
+import { downloadFormPacket } from "#lib/forms/downloadFormPacket";
+import { loadFormDownload, loadFormSteps } from "#lib/forms/loadForm";
 import { useFormData } from "#lib/forms/useFormData";
 import {
   type PersistedSnapshot,
   useFormState,
   usePersistedSnapshot,
 } from "#lib/forms/useFormState";
+import { loadPdfLib } from "#lib/pdfs/loadPdfLib";
 import { FormCompleteStep } from "../FormCompleteStep";
 import { FormNavigation } from "../FormNavigation";
 import { FormReviewStep } from "../FormReviewStep";
@@ -36,6 +36,27 @@ export interface FormContainerProps {
   children?: React.ReactNode;
 }
 
+function useFormSteps(formId: string): readonly Step[] | undefined {
+  const [loaded, setLoaded] = useState<readonly Step[]>();
+
+  useEffect(() => {
+    let isCurrent = true;
+    setLoaded(undefined);
+    loadFormSteps(formId)
+      .then((formSteps) => {
+        if (isCurrent) setLoaded(formSteps);
+      })
+      .catch((error) => {
+        console.error(`Failed to load form "${formId}":`, error);
+      });
+    return () => {
+      isCurrent = false;
+    };
+  }, [formId]);
+
+  return loaded;
+}
+
 const containerClass = (inline: boolean) =>
   inline ? "form-container not-content" : "form-container";
 
@@ -51,7 +72,7 @@ function TitleStep({
   onStart,
 }: FormContainerProps & { totalSteps?: number; onStart?: () => void }) {
   const onDownloadBlank = useCallback(
-    () => downloadBlankPdfPacket(() => loadFormDownload(form.id)),
+    () => downloadFormPacket(form.id),
     [form.id],
   );
   return (
@@ -102,8 +123,11 @@ function LoadedFormContainer({
 }) {
   const { id: formId, title, description, costs } = formProp;
   const form = useFormData(steps);
-  const loadDownload = useCallback(() => loadFormDownload(formId), [formId]);
-  const onSubmit = createFormSubmitHandler({ steps, loadDownload }, form);
+  const { getValues } = form;
+  const onSubmit = useCallback(
+    () => downloadFormPacket(formId, { steps, data: getValues() }),
+    [formId, steps, getValues],
+  );
 
   const {
     phase,
@@ -115,13 +139,18 @@ function LoadedFormContainer({
     goBack,
   } = useFormState(formId, steps, form.getValues, progress);
 
+  // Warm the download's code while the person fills the form in.
   const isFilling = phase !== "title";
   useEffect(() => {
     if (!isFilling) return;
-    loadDownload().catch((error) => {
+    Promise.all([
+      loadFormDownload(formId),
+      import("#lib/pdfs/downloadPdfPacket"),
+      loadPdfLib(),
+    ]).catch((error) => {
       console.error(`Failed to preload downloads for "${formId}":`, error);
     });
-  }, [isFilling, loadDownload, formId]);
+  }, [isFilling, formId]);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -191,7 +220,7 @@ function LoadedFormContainer({
           setSubmitError(null);
           send({ type: "SUBMIT" });
           try {
-            await onSubmit(e);
+            await onSubmit();
             send({ type: "SUBMIT_DONE" });
             scrollToFormTop();
           } catch (error) {
@@ -259,19 +288,34 @@ function LoadedFormContainer({
 
   const showNavigation = !["title", "complete"].includes(phase);
 
-  const stepContextValue = {
-    onNext,
-    onBack,
-    formTitle: title,
-    formDescription: description,
-    currentStepIndex,
-    totalSteps,
-    phase,
-    onSubmit: handleFormSubmit,
-    onEditStep,
-    submitError,
-    costs,
-  };
+  const stepContextValue = useMemo(
+    () => ({
+      onNext,
+      onBack,
+      formTitle: title,
+      formDescription: description,
+      currentStepIndex,
+      totalSteps,
+      phase,
+      onSubmit: handleFormSubmit,
+      onEditStep,
+      submitError,
+      costs,
+    }),
+    [
+      onNext,
+      onBack,
+      title,
+      description,
+      currentStepIndex,
+      totalSteps,
+      phase,
+      handleFormSubmit,
+      onEditStep,
+      submitError,
+      costs,
+    ],
+  );
 
   return (
     <FormProvider {...form}>

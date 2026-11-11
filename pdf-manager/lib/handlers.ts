@@ -1,14 +1,14 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Context } from "hono";
-import { findPdfById, listAllPdfs } from "./catalog.ts";
+import { JURISDICTIONS } from "../../web/src/constants/jurisdictions.ts";
+import { FEDERAL, findPdfById, listAllPdfs } from "./catalog.ts";
 import {
   computeOutputPaths,
   formatFiles,
   generateFillSnippet,
   writeDefinitionFiles,
 } from "./define.ts";
-import { jurisdictions } from "./fields.ts";
 import {
   applyRenames,
   extractFields,
@@ -236,5 +236,8 @@ export async function handleReplacePdf(c: Context) {
 }
 
 export async function handleGetJurisdictions(c: Context) {
-  return c.json([{ id: "federal", name: "Federal" }, ...jurisdictions]);
+  return c.json([
+    { id: FEDERAL, name: "Federal" },
+    ...Object.entries(JURISDICTIONS).map(([id, { name }]) => ({ id, name })),
+  ]);
 }

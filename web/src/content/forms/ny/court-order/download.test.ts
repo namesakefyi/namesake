@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import ucsnc1 from "#content/pdfs/ny/ucsnc1-name-change-and-or-sex-designation-change-petition-for-individual-adult";
-import { resolveFormVisibility } from "#lib/forms/formVisibility";
+import {
+  getVisibleStepIds,
+  resolveFormVisibility,
+} from "#lib/forms/formVisibility";
 import type { FormData } from "#lib/forms/questions";
 import { getPdfForm } from "#lib/pdfs/getPdfForm";
 import download from "./download";
@@ -9,8 +12,7 @@ import steps from "./steps";
 const [{ fill: fillUcsnc1 }] = download.pdfs;
 
 /** Also takes answers saved by other forms. */
-const resolve = (data: FormData) =>
-  resolveFormVisibility(steps, data, download.pdfs);
+const resolve = (data: FormData) => resolveFormVisibility(steps, data);
 
 const nameSteps = [
   "new-name",
@@ -50,7 +52,9 @@ describe("New York question flow", () => {
     ["Sex designation change", false, true],
     ["Both", true, true],
   ] as const)("shows the relevant sections for %s", (request, name, sex) => {
-    const { visibleStepIds } = resolve({ nyCourtOrderRequest: request });
+    const visibleStepIds = getVisibleStepIds(steps, {
+      nyCourtOrderRequest: request,
+    });
     for (const id of sharedSteps) expect(visibleStepIds).toContain(id);
     for (const id of nameSteps) {
       expect(visibleStepIds.includes(id)).toBe(name);
@@ -60,7 +64,10 @@ describe("New York question flow", () => {
 
   it("asks which court to file in only for New York City residents", () => {
     const stepsFor = (residenceCounty: string) =>
-      resolve({ nyCourtOrderRequest: "Both", residenceCounty }).visibleStepIds;
+      getVisibleStepIds(steps, {
+        nyCourtOrderRequest: "Both",
+        residenceCounty,
+      });
     expect(stepsFor("Kings")).toContain("court");
     expect(stepsFor("Albany")).not.toContain("court");
   });
@@ -145,9 +152,9 @@ describe("New York question flow", () => {
   });
 });
 
-// Exercise the same visibility filtering used by createFormSubmitHandler.
+// The same filtering downloadFormPacket applies before filling.
 const visibleAnswers = (data: FormData) =>
-  resolveFormVisibility(steps, data, download.pdfs).visibleFields;
+  resolveFormVisibility(steps, data).visibleFields;
 
 const getPetitionForm = (userData: FormData) =>
   getPdfForm(ucsnc1, fillUcsnc1(visibleAnswers(userData)));

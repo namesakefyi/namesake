@@ -1,5 +1,6 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { type OptionLabels, toChoices } from "#lib/forms/questions";
+import { getLabelProps } from "#lib/utils/getLabelProps";
 import { smartquotes } from "#lib/utils/smartquotes";
 import {
   Radio,
@@ -35,8 +36,7 @@ export function RadioGroupField({
         render={({ field, fieldState: { invalid, error } }) => (
           <RadioGroup
             {...field}
-            label={!labelHidden ? smartquotes(label) : undefined}
-            aria-label={labelHidden ? label : undefined}
+            {...getLabelProps(smartquotes(label), labelHidden)}
             isInvalid={invalid}
             errorMessage={error?.message}
             orientation="vertical"

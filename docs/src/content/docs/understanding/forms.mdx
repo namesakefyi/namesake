@@ -70,12 +70,12 @@ On its own, the state machine doesn't "know" about any of the values the user en
 
 As the user progresses through the form, they will enter data which affects the visibility of other fields and steps. To make sure we are displaying the correct fields on the review table and writing the correct data to the final PDF, visibility must be **resolved**.
 
-The [`resolveFormVisibility`](https://github.com/namesakefyi/namesake/blob/main/web/src/lib/forms/formVisibility.ts) function  takes an input of `steps`, user `formData`, and `pdfs`, and parses the visibility rules. It returns:
+The [`resolveFormVisibility`](https://github.com/namesakefyi/namesake/blob/main/web/src/lib/forms/formVisibility.ts) function takes the form's `steps` and the user's `formData` and applies their `when` conditions. It returns:
 
-- `visibleStepIds` — steps not excluded by `when` predicates
-- `visibleFields` — field values for visible fields only
-- `sections` — per-step arrays of visible field names (used to section the review table into scannable chunks)
-- `includedPdfs` — which PDFs to include based on their `when` predicates
+- `visibleFields` — field values for visible fields only, which is what fills the PDFs
+- `sections` — each visible step with its visible fields (used to section the review table into scannable chunks)
+
+When the person downloads, PDFs and cover page instructions with a `when` are included only if it passes.
 
 ## Persistence
 

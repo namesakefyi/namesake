@@ -5,7 +5,7 @@ import { asList } from "#lib/utils/fieldValue";
 import { formatBirthplaceCountryOrState } from "#lib/utils/formatBirthplaceCountryOrState";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
 import { splitPhoneNumber } from "#lib/utils/splitPhoneNumber";
-import { GOVERNMENT_DOCUMENT, needsGovernmentDocument } from "./conditions";
+import { GOVERNMENT_DOCUMENT, needsGovernmentDocument } from "./steps";
 
 export default defineDownload({
   title: "Social Security Card",
@@ -21,6 +21,7 @@ export default defineDownload({
       pdf: ss5,
       fill: (data) => {
         const race = asList(data.race);
+        const phone = splitPhoneNumber(data.phoneNumber);
         return {
           newFirstName: data.newFirstName,
           newMiddleName: data.newMiddleName,
@@ -75,8 +76,8 @@ export default defineDownload({
             day: "2-digit",
             year: "numeric",
           }),
-          areaCode: splitPhoneNumber(data.phoneNumber).areaCode,
-          phoneNumber: splitPhoneNumber(data.phoneNumber).localNumber,
+          areaCode: phone.areaCode,
+          phoneNumber: phone.localNumber,
           mailingStreetAddress: data.mailingStreetAddress,
           mailingCity: data.mailingCity,
           mailingState: data.mailingState,

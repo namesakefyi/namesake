@@ -16,10 +16,7 @@ export function useFormData<TFieldValues extends FieldValues = FieldValues>(
 ) {
   const [isLoading, setIsLoading] = useState(true);
 
-  const fieldsList = useMemo(
-    () => [...getFormFields(steps)] as string[],
-    [steps],
-  );
+  const fieldsList = useMemo(() => getFormFields(steps), [steps]);
 
   const form = useForm<TFieldValues>({
     mode: "onBlur",

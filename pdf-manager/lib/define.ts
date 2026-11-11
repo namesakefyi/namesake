@@ -1,15 +1,11 @@
 import { spawnSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
-import { basename, dirname, join, relative } from "node:path";
-import { fileURLToPath } from "node:url";
-import { jurisdictionDir, PDFS_DIR } from "./catalog.ts";
+import { basename, join, relative } from "node:path";
+import { jurisdictionDir, PDFS_DIR, ROOT } from "./catalog.ts";
 import { buildFillEntries } from "./fields.ts";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, "../..");
-
 /** Returns a kebab-case PDF id from code and title. */
-export function generatePdfId(code: string, title: string): string {
+function generatePdfId(code: string, title: string): string {
   const codePart = (code || "").replace(/[\s-]/g, "").toLowerCase();
   const titlePart = (title || "")
     .toLowerCase()
@@ -90,7 +86,7 @@ export function formatFiles(paths: string[]): void {
   });
 }
 
-export interface OutputPaths {
+interface OutputPaths {
   id: string;
   pdfDir: string;
   pdfDestPath: string;
@@ -117,7 +113,7 @@ export function computeOutputPaths({
   };
 }
 
-export interface WriteDefinitionFilesParams {
+interface WriteDefinitionFilesParams {
   title: string;
   code: string;
   canonicalUrl: string;

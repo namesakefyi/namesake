@@ -7,7 +7,7 @@ import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
 import { formatLanguage } from "#lib/utils/formatLanguage";
 import { joinPronouns } from "#lib/utils/joinPronouns";
-import { needsRecordRequest } from "./conditions";
+import { needsRecordRequest } from "./steps";
 
 export default defineDownload({
   title: "Massachusetts Court Order (Minor)",
@@ -157,7 +157,7 @@ export default defineDownload({
         coGuardianEmail: data.coGuardianEmail,
 
         // 8. Child under 12?
-        isChildUnder12: deriveCurrentAge(data.dateOfBirth) < 12,
+        isChildUnder12: !needsRecordRequest(data),
 
         // 9. Legal parent 1 consents?
         isParent1AssentingTrue: data.isParent1Assenting,

@@ -1,4 +1,4 @@
-import type { Condition, FormData, Question, Text } from "#lib/forms/questions";
+import type { Condition, Question, Text } from "#lib/forms/questions";
 import type { CategoryId } from "./categories";
 import type { FormPdf } from "./pdf";
 
@@ -15,20 +15,6 @@ export interface Step {
  * Object form: `{ text, when }` = included only when `when` returns true.
  */
 export type Instruction = string | { text: string; when: Condition };
-
-/**
- * Resolves an instructions array to plain strings, filtering out conditional
- * entries whose `when` predicate returns false for the given form data.
- */
-export function resolveInstructions(
-  instructions: readonly Instruction[],
-  data: FormData,
-): string[] {
-  return instructions.flatMap((item) => {
-    if (typeof item === "string") return [item];
-    return item.when(data) ? [item.text] : [];
-  });
-}
 
 export interface FormCost {
   title: string;
@@ -63,10 +49,7 @@ export interface FormConfig extends FormMeta {
 export interface FormDownload {
   /** The packet's title, on its cover page and file name. */
   title: string;
-  /**
-   * Shown on the cover page. A plain string is always included; `{ text,
-   * when }` is included only when `when` returns true.
-   */
+  /** Shown on the cover page. */
   instructions: readonly Instruction[];
   /** The PDFs in the packet, in order. */
   pdfs: readonly FormPdf[];

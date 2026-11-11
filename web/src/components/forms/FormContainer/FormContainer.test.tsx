@@ -18,7 +18,7 @@ vi.mock("#db/database", () => ({
 
 vi.mock("#lib/forms/loadForm");
 
-import { loadFormDownload, useFormSteps } from "#lib/forms/loadForm";
+import { loadFormDownload, loadFormSteps } from "#lib/forms/loadForm";
 
 /** Waits until the form and its saved progress have loaded. */
 async function waitForLoad() {
@@ -54,7 +54,7 @@ const testForm: FormContainerProps["form"] = {
 describe("FormContainer", () => {
   beforeEach(() => {
     vi.mocked(db.getFormProgress).mockResolvedValue(undefined);
-    vi.mocked(useFormSteps).mockReturnValue([plainStep]);
+    vi.mocked(loadFormSteps).mockResolvedValue([plainStep]);
     vi.mocked(loadFormDownload).mockResolvedValue({
       title: "Test",
       instructions: [],
@@ -118,7 +118,7 @@ describe("FormContainer", () => {
     });
 
     it("shows the title step with Start disabled while the form loads", async () => {
-      vi.mocked(useFormSteps).mockReturnValue(undefined);
+      vi.mocked(loadFormSteps).mockReturnValue(new Promise(() => {}));
 
       render(<FormContainer form={testForm} />);
       await act(async () => {});
@@ -178,7 +178,7 @@ describe("FormContainer", () => {
 
   describe("handleFormSubmit — default case (filling)", () => {
     it("advances to review when a filling-phase form step is submitted", async () => {
-      vi.mocked(useFormSteps).mockReturnValue([formStepStep]);
+      vi.mocked(loadFormSteps).mockResolvedValue([formStepStep]);
       const user = userEvent.setup();
       render(<FormContainer form={testForm} />);
 
@@ -192,7 +192,7 @@ describe("FormContainer", () => {
   });
 
   it("starts the next step's questions fresh", async () => {
-    vi.mocked(useFormSteps).mockReturnValue([
+    vi.mocked(loadFormSteps).mockResolvedValue([
       {
         id: "residence",
         title: "Where do you live?",

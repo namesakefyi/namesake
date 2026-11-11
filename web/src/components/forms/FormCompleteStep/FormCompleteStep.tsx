@@ -10,7 +10,7 @@ import "./FormCompleteStep.css";
 export interface FormCompleteStepProps {
   formId: string;
   title: string;
-  onRedownload: (e: React.SubmitEvent<HTMLFormElement>) => void | Promise<void>;
+  onRedownload: () => Promise<void>;
   inline?: boolean;
   headingLevel?: 1 | 2 | 3;
 }
@@ -37,7 +37,7 @@ export function FormCompleteStep({
     e.preventDefault();
     setIsDownloading(true);
     try {
-      await onRedownload(e);
+      await onRedownload();
     } catch (error) {
       console.error("Re-download failed:", error);
     } finally {

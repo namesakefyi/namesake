@@ -1,11 +1,7 @@
 import type { FormConfig } from "#constants/forms";
 import { parseContentPath } from "#lib/loaders/parseContentPath";
-import {
-  formIds,
-  loadFormDownload,
-  loadFormMeta,
-  loadFormSteps,
-} from "./loadForm";
+import { formIds, loadFormMeta } from "./formIds";
+import { loadFormDownload, loadFormSteps } from "./loadForm";
 
 /**
  * Every form with its three files joined, keyed by id. Loads all of them, so

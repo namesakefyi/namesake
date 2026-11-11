@@ -1,6 +1,5 @@
-import type { Step } from "#constants/forms";
-import type { FormPdf } from "#constants/pdf";
-import type { FormData } from "#lib/forms/questions";
+import type { Instruction, Step } from "#constants/forms";
+import type { Condition, FormData } from "#lib/forms/questions";
 import { getStepFields, type StepField } from "./getStepFields";
 
 export function getFormFields(steps: readonly Step[]): string[] {
@@ -13,44 +12,49 @@ export interface VisibilitySection {
 }
 
 export interface FormVisibility {
-  visibleStepIds: string[];
   visibleFields: FormData;
   sections: readonly VisibilitySection[];
-  includedPdfs: FormPdf[];
 }
 
-/** Returns only the visible step IDs (cheap — skips field/PDF resolution). */
+export const isShown = (item: { when?: Condition }, formData: FormData) =>
+  !item.when || item.when(formData);
+
+export function resolveInstructions(
+  instructions: readonly Instruction[],
+  formData: FormData,
+): string[] {
+  return instructions.flatMap((item) =>
+    typeof item === "string"
+      ? [item]
+      : isShown(item, formData)
+        ? [item.text]
+        : [],
+  );
+}
+
 export function getVisibleStepIds(
   steps: readonly Step[],
   formData: FormData,
 ): string[] {
-  return steps.filter((s) => !s.when || s.when(formData)).map((s) => s.id);
+  return steps.filter((step) => isShown(step, formData)).map((step) => step.id);
 }
 
 /**
- * Resolves all form visibility in one pass: which steps are visible, which
- * fields are visible, and which PDFs to include.
- *
- * This is the single source of truth for visibility. Review table and submit
- * handler should use this. For navigation, prefer `getVisibleStepIds` when
- * field/PDF resolution isn't needed.
+ * The visible steps with their visible fields, and the answers to those
+ * fields alone, which is what the review page shows and the PDFs are filled
+ * with.
  */
 export function resolveFormVisibility(
   steps: readonly Step[],
   formData: FormData,
-  pdfs: readonly FormPdf[] = [],
 ): FormVisibility {
-  const visibleStepIds: string[] = [];
   const visibleFields: FormData = {};
   const sections: VisibilitySection[] = [];
 
   for (const step of steps) {
-    if (step.when && !step.when(formData)) continue;
-
-    visibleStepIds.push(step.id);
-
-    const fields = getStepFields(step).filter(
-      ({ when }) => !when || when(formData),
+    if (!isShown(step, formData)) continue;
+    const fields = getStepFields(step).filter((field) =>
+      isShown(field, formData),
     );
     for (const { id } of fields) {
       (visibleFields as Record<string, unknown>)[id] = formData[id];
@@ -58,9 +62,7 @@ export function resolveFormVisibility(
     sections.push({ step, fields });
   }
 
-  const includedPdfs = pdfs.filter((pdf) => !pdf.when || pdf.when(formData));
-
-  return { visibleStepIds, visibleFields, sections, includedPdfs };
+  return { visibleFields, sections };
 }
 
 /**

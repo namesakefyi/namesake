@@ -208,10 +208,9 @@ const SHARED_COMBO_BOX_OPTIONS = {
 };
 
 /**
- * Builders for everything in a step's `body`. Each is named after its
+ * Builders for everything in a step's `questions`. Each is named after its
  * component with the `Field` or `Form` affix dropped: `YesNoField` →
  * `q.yesNo`, `FormSubsection` → `q.subsection`.
-
  */
 export const q = {
   shortText(name: string, options: SingleFieldOptions<"shortText"> = {}) {
@@ -352,7 +351,6 @@ export const q = {
     return singleField("repeatingEntry", "list", name, options);
   },
 
-  /** `content` is markdown. */
   banner(
     content: Text,
     {

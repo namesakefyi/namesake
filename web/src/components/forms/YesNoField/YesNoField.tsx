@@ -5,6 +5,7 @@ import {
   type ExtraChoice,
   PREFER_NOT_TO_ANSWER,
 } from "#constants/fields";
+import { getLabelProps } from "#lib/utils/getLabelProps";
 import { smartquotes } from "#lib/utils/smartquotes";
 import {
   Radio,
@@ -60,8 +61,7 @@ export function YesNoField({
         render={({ field, fieldState: { invalid, error } }) => (
           <RadioGroup
             {...field}
-            label={!labelHidden ? label : undefined}
-            aria-label={label}
+            {...getLabelProps(smartquotes(label), labelHidden)}
             isInvalid={invalid}
             value={getYesNoStringFromBoolean(field.value)}
             onChange={(value) => {
@@ -71,14 +71,11 @@ export function YesNoField({
           >
             <Radio value="yes">{smartquotes(yesLabel ?? "Yes")}</Radio>
             <Radio value="no">{smartquotes(noLabel ?? "No")}</Radio>
-            {extraChoices.includes(PREFER_NOT_TO_ANSWER) && (
-              <Radio value={PREFER_NOT_TO_ANSWER}>
-                {EXTRA_CHOICE_LABELS[PREFER_NOT_TO_ANSWER]}
+            {extraChoices.map((choice) => (
+              <Radio key={choice} value={choice}>
+                {EXTRA_CHOICE_LABELS[choice]}
               </Radio>
-            )}
-            {extraChoices.includes(DONT_KNOW) && (
-              <Radio value={DONT_KNOW}>{EXTRA_CHOICE_LABELS[DONT_KNOW]}</Radio>
-            )}
+            ))}
           </RadioGroup>
         )}
       />
