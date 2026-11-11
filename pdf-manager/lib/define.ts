@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { jurisdictionDir as getJurisdictionDir, PDFS_DIR } from "./catalog.ts";
+import { jurisdictionDir, PDFS_DIR } from "./catalog.ts";
 import { buildFillEntries } from "./fields.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -51,8 +51,8 @@ ${props.map((prop) => `  ${prop}`).join("\n")}
 }
 
 /**
- * A starter \`{ pdf, fill }\` entry to paste into a form's
- * \`download.pdfs\`. Every PDF field is listed so the mapping is complete.
+ * A starter \`{ pdf, fill }\` entry to paste into the \`pdfs\` of a form's
+ * \`download.ts\`. Every PDF field is listed so the mapping is complete.
  */
 export function generateFillSnippet({
   id,
@@ -92,7 +92,6 @@ export function formatFiles(paths: string[]): void {
 
 export interface OutputPaths {
   id: string;
-  jurisdictionDir: string;
   pdfDir: string;
   pdfDestPath: string;
   indexPath: string;
@@ -109,11 +108,9 @@ export function computeOutputPaths({
   jurisdiction: string;
 }): OutputPaths {
   const id = generatePdfId(code, title);
-  const jurisdictionDir = getJurisdictionDir(jurisdiction);
-  const pdfDir = join(jurisdictionDir, id);
+  const pdfDir = join(jurisdictionDir(jurisdiction), id);
   return {
     id,
-    jurisdictionDir,
     pdfDir,
     pdfDestPath: join(pdfDir, `${id}.pdf`),
     indexPath: join(pdfDir, "index.ts"),
@@ -130,7 +127,6 @@ export interface WriteDefinitionFilesParams {
   pdfBytes: Uint8Array | Buffer;
 }
 
-/** Creates the PDF directory and writes the PDF and its definition. */
 export function writeDefinitionFiles({
   title,
   code,

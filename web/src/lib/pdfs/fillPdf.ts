@@ -21,44 +21,30 @@ function toFieldValue(
     : undefined;
 }
 
-/**
- * Fill out a PDF form with values from its form's `fill`.
- * @returns PDF bytes for the filled form.
- */
 export async function fillPdf(
   pdf: PDFDefinition,
   values: Readonly<Record<string, PDFFieldValue>>,
 ): Promise<Uint8Array> {
-  try {
-    const { PDF } = await loadPdfLib();
+  const [{ PDF }, formPdfBytes] = await Promise.all([
+    loadPdfLib(),
+    fetchPdf(pdf.file),
+  ]);
 
-    // Fetch the PDF with form fields
-    const formPdfBytes = await fetchPdf(pdf.file);
+  // PDF.load requires a Uint8Array, not an ArrayBuffer.
+  const pdfDoc = await PDF.load(new Uint8Array(formPdfBytes));
+  pdfDoc.setTitle(pdf.title);
+  pdfDoc.setAuthor("Filled by Namesake Collaborative");
 
-    // Load a PDF with form fields (PDF.load requires Uint8Array, not ArrayBuffer)
-    const pdfDoc = await PDF.load(new Uint8Array(formPdfBytes));
-
-    // Set the title
-    pdfDoc.setTitle(pdf.title);
-    pdfDoc.setAuthor("Filled by Namesake Collaborative");
-
-    // Get the form containing all the fields
-    const form = pdfDoc.getForm();
-
-    if (form) {
-      const filled: Record<string, NonNullable<PDFFieldValue>> = {};
-      for (const [name, resolved] of Object.entries(values)) {
-        if (resolved == null) continue;
-        const value = toFieldValue(form, name, resolved);
-        if (value !== undefined) filled[name] = value;
-      }
-      form.fill(filled);
+  const form = pdfDoc.getForm();
+  if (form) {
+    const filled: Record<string, NonNullable<PDFFieldValue>> = {};
+    for (const [name, resolved] of Object.entries(values)) {
+      if (resolved == null) continue;
+      const value = toFieldValue(form, name, resolved);
+      if (value !== undefined) filled[name] = value;
     }
-
-    // Serialize the PDFDocument to bytes
-    return await pdfDoc.save();
-  } catch (error) {
-    console.error(error);
-    throw error;
+    form.fill(filled);
   }
+
+  return pdfDoc.save();
 }

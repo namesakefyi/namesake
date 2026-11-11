@@ -65,9 +65,3 @@
     font-size: var(--step-1);
   }
 }
-
-.form-container-loading {
-  align-items: center;
-  justify-content: center;
-  padding-block-start: var(--space-xl);
-}

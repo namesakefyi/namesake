@@ -78,11 +78,6 @@ const GROUP_FIELDS = Object.fromEntries([
 > &
   Record<AddressFieldName<AddressType, "state">, typeof state>;
 
-/** Names of the fields in the name and address groups. */
-export const GROUP_FIELD_NAMES: ReadonlySet<string> = new Set(
-  Object.keys(GROUP_FIELDS),
-);
-
 /**
  * Common fields asked by more than one form.
  */
@@ -114,26 +109,11 @@ type Registry = typeof SHARED_FIELDS;
 
 export type SharedFieldName = keyof Registry;
 
-/** Every shared field's stored value. */
 export type SharedFields = {
   [K in SharedFieldName]: Registry[K] extends FieldType<FieldTypeName, infer V>
     ? V
     : never;
 };
-
-/** Each shared field's type name. */
-export type SharedFieldType = {
-  [K in SharedFieldName]: Registry[K]["type"];
-};
-
-/** A shared `oneOf` field's allowed values. */
-export function getSharedFieldValues(name: string): readonly string[] {
-  const field: (FieldType & { values?: readonly string[] }) | undefined =
-    Object.hasOwn(SHARED_FIELDS, name)
-      ? SHARED_FIELDS[name as SharedFieldName]
-      : undefined;
-  return field?.values ?? [];
-}
 
 export function getSharedFieldType(name: string): FieldTypeName | undefined {
   return Object.hasOwn(SHARED_FIELDS, name)

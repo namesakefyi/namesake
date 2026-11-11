@@ -1,5 +1,5 @@
 import { NAME_FIELDS, type NameType } from "#constants/fieldGroups";
-import type { Data } from "#lib/forms/questions";
+import type { FormData } from "#lib/forms/questions";
 import { joinNames } from "./joinNames";
 
 /**
@@ -9,7 +9,7 @@ import { joinNames } from "./joinNames";
  * fullName({ oldFirstName: "Marsha", oldLastName: "Johnson" }, "oldName")
  * // "Marsha Johnson"
  */
-export function fullName(data: Data, type: NameType): string {
+export function fullName(data: FormData, type: NameType): string {
   const { first, middle, last } = NAME_FIELDS[type];
   return joinNames(data[first], data[middle], data[last]);
 }

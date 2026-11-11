@@ -3,15 +3,15 @@ import type { FieldValues, UseFormReturn } from "react-hook-form";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FormConfig, FormDownload } from "#constants/forms";
 import { testFormPdf } from "#lib/pdfs/__tests__/helpers";
-import { downloadFilledPdf } from "#lib/pdfs/downloadFilledPdf";
+import { downloadPdfPacket } from "#lib/pdfs/downloadPdfPacket";
 import { createFormSubmitHandler } from "../createFormSubmitHandler";
 import { resolveFormVisibility } from "../formVisibility";
 
 vi.mock("../formVisibility", () => ({
   resolveFormVisibility: vi.fn(),
 }));
-vi.mock("../../pdfs/downloadFilledPdf", () => ({
-  downloadFilledPdf: vi.fn(),
+vi.mock("../../pdfs/downloadPdfPacket", () => ({
+  downloadPdfPacket: vi.fn(),
 }));
 
 const mockFormData = { oldFirstName: "Jane" };
@@ -43,6 +43,10 @@ function makeConfig(download: Partial<FormDownload> = {}): FormConfig {
   };
 }
 
+function partsOf({ steps, download }: FormConfig) {
+  return { steps, loadDownload: async () => download };
+}
+
 describe("createFormSubmitHandler", () => {
   beforeEach(() => {
     vi.mocked(resolveFormVisibility).mockReturnValue({
@@ -51,7 +55,7 @@ describe("createFormSubmitHandler", () => {
       sections: [],
       includedPdfs: [testFormPdf],
     });
-    vi.mocked(downloadFilledPdf).mockResolvedValue(undefined);
+    vi.mocked(downloadPdfPacket).mockResolvedValue(undefined);
   });
 
   afterEach(() => {
@@ -60,7 +64,7 @@ describe("createFormSubmitHandler", () => {
 
   it("prevents the default form submission", async () => {
     const event = makeEvent();
-    const handler = createFormSubmitHandler(makeConfig(), makeForm());
+    const handler = createFormSubmitHandler(partsOf(makeConfig()), makeForm());
 
     await handler(event);
 
@@ -70,7 +74,7 @@ describe("createFormSubmitHandler", () => {
   it("calls resolveFormVisibility with steps, formData, and pdfs", async () => {
     const config = makeConfig();
 
-    await createFormSubmitHandler(config, makeForm())(makeEvent());
+    await createFormSubmitHandler(partsOf(config), makeForm())(makeEvent());
 
     expect(resolveFormVisibility).toHaveBeenCalledWith(
       config.steps,
@@ -87,9 +91,9 @@ describe("createFormSubmitHandler", () => {
       ],
     });
 
-    await createFormSubmitHandler(config, makeForm())(makeEvent());
+    await createFormSubmitHandler(partsOf(config), makeForm())(makeEvent());
 
-    expect(downloadFilledPdf).toHaveBeenCalledWith(
+    expect(downloadPdfPacket).toHaveBeenCalledWith(
       expect.objectContaining({ instructions: ["Always", "Depends on data"] }),
     );
   });
@@ -97,13 +101,13 @@ describe("createFormSubmitHandler", () => {
   it("downloads the included PDFs, filled with the visible data", async () => {
     const config = makeConfig({ title: "My Package" });
 
-    await createFormSubmitHandler(config, makeForm())(makeEvent());
+    await createFormSubmitHandler(partsOf(config), makeForm())(makeEvent());
 
-    expect(downloadFilledPdf).toHaveBeenCalledWith({
+    expect(downloadPdfPacket).toHaveBeenCalledWith({
       title: "My Package",
       instructions: ["Step 1", "Step 2"],
       pdfs: [testFormPdf],
-      userData: mockVisibleData,
+      data: mockVisibleData,
     });
   });
 });

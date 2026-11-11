@@ -1,15 +1,16 @@
 import { describe, expect, it, vi } from "vitest";
 import ucsnc1 from "#content/pdfs/ny/ucsnc1-name-change-and-or-sex-designation-change-petition-for-individual-adult";
 import { resolveFormVisibility } from "#lib/forms/formVisibility";
-import type { Data } from "#lib/forms/questions";
+import type { FormData } from "#lib/forms/questions";
 import { getPdfForm } from "#lib/pdfs/getPdfForm";
-import form from ".";
+import download from "./download";
+import steps from "./steps";
 
-const [{ fill: fillUcsnc1 }] = form.download.pdfs;
+const [{ fill: fillUcsnc1 }] = download.pdfs;
 
 /** Also takes answers saved by other forms. */
-const resolve = (data: Data) =>
-  resolveFormVisibility(form.steps, data, form.download.pdfs);
+const resolve = (data: FormData) =>
+  resolveFormVisibility(steps, data, download.pdfs);
 
 const nameSteps = [
   "new-name",
@@ -32,7 +33,7 @@ const sharedSteps = [
 
 describe("New York question flow", () => {
   it("keeps US birth states separate from international regions", () => {
-    const data: Data = {
+    const data: FormData = {
       nyCourtOrderRequest: "Name change",
       birthplaceCountry: "CA",
       birthplaceState: "NY",
@@ -145,13 +146,13 @@ describe("New York question flow", () => {
 });
 
 // Exercise the same visibility filtering used by createFormSubmitHandler.
-const visibleAnswers = (data: Data) =>
-  resolveFormVisibility(form.steps, data, form.download.pdfs).visibleFields;
+const visibleAnswers = (data: FormData) =>
+  resolveFormVisibility(steps, data, download.pdfs).visibleFields;
 
-const getPetitionForm = (userData: Data) =>
+const getPetitionForm = (userData: FormData) =>
   getPdfForm(ucsnc1, fillUcsnc1(visibleAnswers(userData)));
 
-const names: Data = {
+const names: FormData = {
   oldFirstName: "Alex",
   oldMiddleName: "J",
   oldLastName: "Example",
@@ -207,7 +208,7 @@ describe("New York petition names and request type", () => {
   });
 });
 
-const complete: Data = {
+const complete: FormData = {
   ...names,
   nyCourtOrderRequest: "Both",
   courtType: "Civil",

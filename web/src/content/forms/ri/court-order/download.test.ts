@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import type { Data } from "#lib/forms/questions";
-import form from ".";
+import type { FormData } from "#lib/forms/questions";
+import download from "./download";
 
-const [{ fill: fillBackgroundCheck }] = form.download.pdfs;
+const [{ fill: fillBackgroundCheck }] = download.pdfs;
 
 describe("Background Check Authorization of Release", () => {
-  const testData: Data = {
+  const testData: FormData = {
     oldFirstName: "My",
     oldMiddleName: "Old",
     oldLastName: "Name",

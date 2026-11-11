@@ -4,17 +4,13 @@ import { z } from "astro/zod";
 import { ANNOTATION_TYPES } from "./constants/annotations";
 import { CATEGORIES } from "./constants/categories";
 import { COLOR_KEYS } from "./constants/colors";
-import type { FormConfig } from "./constants/forms";
 import {
   JURISDICTIONS,
   type JurisdictionName,
 } from "./constants/jurisdictions";
 import { DIRECTORY_LANGUAGES } from "./constants/languages";
-import type { PDFDefinition } from "./constants/pdf";
 import { SERVICES } from "./constants/services";
-import { formLoader } from "./lib/loaders/formLoader";
 import { jurisdictionGlobLoader } from "./lib/loaders/jurisdictionGlobLoader";
-import { pdfLoader } from "./lib/loaders/pdfLoader";
 
 const authors = defineCollection({
   loader: glob({ base: "./src/content/authors", pattern: "**/index.yml" }),
@@ -68,40 +64,6 @@ const directory = defineCollection({
     }),
 });
 
-const forms = defineCollection({
-  loader: formLoader({
-    modules: import.meta.glob<{ default: FormConfig }>(
-      "./content/forms/**/index.ts",
-      { eager: true },
-    ),
-  }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    jurisdiction: reference("jurisdictions").optional(),
-    category: reference("categories"),
-    unlisted: z.boolean().default(false),
-    costs: z
-      .array(
-        z.object({
-          title: z.string(),
-          amount: z.number(),
-          required: z.boolean(),
-        }),
-      )
-      .optional(),
-    stepCount: z.number(),
-    pdfs: z.array(
-      z.object({
-        title: z.string(),
-        code: z.string().optional(),
-        conditional: z.boolean(),
-        file: z.string(),
-      }),
-    ),
-  }),
-});
-
 const guides = defineCollection({
   loader: jurisdictionGlobLoader({
     collection: "guides",
@@ -140,21 +102,6 @@ const pages = defineCollection({
     description: z.string(),
     annotation: z.enum(ANNOTATION_TYPES).optional(),
     color: z.enum(COLOR_KEYS).optional(),
-  }),
-});
-
-const pdfs = defineCollection({
-  loader: pdfLoader({
-    modules: import.meta.glob<{ default: PDFDefinition }>(
-      "./content/pdfs/**/index.ts",
-      { eager: true },
-    ),
-  }),
-  schema: z.object({
-    title: z.string(),
-    code: z.string().optional(),
-    jurisdiction: reference("jurisdictions").optional(),
-    canonicalUrl: z.url(),
   }),
 });
 
@@ -208,11 +155,9 @@ export const collections = {
   authors,
   categories,
   directory,
-  forms,
   guides,
   jurisdictions,
   pages,
-  pdfs,
   posts,
   press,
   sponsors,

@@ -1,4 +1,4 @@
-import type { Condition, Data } from "#lib/forms/questions";
+import type { Condition, FormData } from "#lib/forms/questions";
 
 /** Matches libpdf's FieldValue, plus undefined for omitted fields. */
 export type PDFFieldValue = string | boolean | string[] | null | undefined;
@@ -42,10 +42,9 @@ export type PdfValues<S extends PdfSchema = PdfSchema> = {
   [K in keyof S]: PDFFieldValue;
 };
 
-/** A PDF a form fills, and how it fills it. */
 export interface FormPdf<S extends PdfSchema = PdfSchema> {
   pdf: PDFDefinition<S>;
   /** Includes the PDF only when this returns true. */
   when?: Condition;
-  fill: (data: Data) => PdfValues<S>;
+  fill: (data: FormData) => PdfValues<S>;
 }

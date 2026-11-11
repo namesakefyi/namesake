@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  nameOrFallback,
-  resolveDescription,
-  resolveTitle,
-} from "../resolveStepContent";
+import type { FormData } from "../questions";
+import { nameOrFallback, resolveText } from "../resolveStepContent";
 
 describe("nameOrFallback", () => {
   it("returns the name when newFirstName is a non-empty string", () => {
@@ -27,34 +24,17 @@ describe("nameOrFallback", () => {
   });
 });
 
-describe("resolveTitle", () => {
-  it("returns the title string directly when it is a string", () => {
-    expect(resolveTitle({ title: "Legal Name" }, {})).toBe("Legal Name");
+describe("resolveText", () => {
+  it("returns plain text as is", () => {
+    expect(resolveText("Legal Name", {})).toBe("Legal Name");
   });
 
-  it("calls the title function with form data when it is a function", () => {
-    const title = (data: any) => `Hello, ${data.newFirstName}`;
-    expect(resolveTitle({ title }, { newFirstName: "Erika" })).toBe(
-      "Hello, Erika",
-    );
-  });
-});
-
-describe("resolveDescription", () => {
-  it("returns the description string directly when it is a string", () => {
-    expect(resolveDescription({ description: "Some info" }, {})).toBe(
-      "Some info",
-    );
+  it("calls a text function with the form data", () => {
+    const title = (data: FormData) => `Hello, ${data.newFirstName}`;
+    expect(resolveText(title, { newFirstName: "Erika" })).toBe("Hello, Erika");
   });
 
-  it("calls the description function with form data when it is a function", () => {
-    const description = (data: any) => `Hi ${data.newFirstName}`;
-    expect(resolveDescription({ description }, { newFirstName: "Erika" })).toBe(
-      "Hi Erika",
-    );
-  });
-
-  it("returns undefined when description is not set", () => {
-    expect(resolveDescription({}, {})).toBeUndefined();
+  it("returns undefined when there's no text", () => {
+    expect(resolveText(undefined, {})).toBeUndefined();
   });
 });

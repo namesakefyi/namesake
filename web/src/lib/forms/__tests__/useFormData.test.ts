@@ -1,6 +1,5 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { FormConfig } from "#constants/forms";
 import * as database from "#db/database";
 import { useFormData } from "../useFormData";
 import { makeStep } from "./testHelpers";
@@ -11,13 +10,8 @@ vi.mock("#db/database", () => ({
   deleteField: vi.fn(),
 }));
 
-function makeConfig(fields: string[]): FormConfig {
-  return {
-    title: "Test",
-    category: "court-order",
-    steps: [makeStep("s", fields)],
-    download: { title: "Test", instructions: [], pdfs: [] },
-  };
+function makeSteps(fields: string[]) {
+  return [makeStep("s", fields)];
 }
 
 describe("useFormData", () => {
@@ -36,7 +30,7 @@ describe("useFormData", () => {
   describe("initial state", () => {
     it("starts with isLoading true", async () => {
       const { result } = renderHook(() =>
-        useFormData(makeConfig(["oldFirstName"])),
+        useFormData(makeSteps(["oldFirstName"])),
       );
 
       expect(result.current.isLoading).toBe(true);
@@ -46,7 +40,7 @@ describe("useFormData", () => {
 
     it("exposes react-hook-form methods alongside custom properties", async () => {
       const { result } = renderHook(() =>
-        useFormData(makeConfig(["oldFirstName"])),
+        useFormData(makeSteps(["oldFirstName"])),
       );
 
       expect(result.current).toHaveProperty("register");
@@ -62,7 +56,7 @@ describe("useFormData", () => {
   describe("loading saved data", () => {
     it("sets isLoading to false after loading completes", async () => {
       const { result } = renderHook(() =>
-        useFormData(makeConfig(["oldFirstName"])),
+        useFormData(makeSteps(["oldFirstName"])),
       );
 
       await waitFor(() => {
@@ -72,7 +66,7 @@ describe("useFormData", () => {
 
     it("calls getFieldsByNames with the provided field names", async () => {
       const { result } = renderHook(() =>
-        useFormData(makeConfig(["oldFirstName", "oldLastName"])),
+        useFormData(makeSteps(["oldFirstName", "oldLastName"])),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -90,7 +84,7 @@ describe("useFormData", () => {
       ]);
 
       const { result } = renderHook(() =>
-        useFormData(makeConfig(["oldFirstName", "oldLastName"])),
+        useFormData(makeSteps(["oldFirstName", "oldLastName"])),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -105,7 +99,7 @@ describe("useFormData", () => {
       );
 
       const { result } = renderHook(() =>
-        useFormData(makeConfig(["oldFirstName"])),
+        useFormData(makeSteps(["oldFirstName"])),
       );
 
       await waitFor(() => {
@@ -117,7 +111,7 @@ describe("useFormData", () => {
   describe("auto-save on change", () => {
     it("saves a field when its value changes after loading", async () => {
       const { result } = renderHook(() =>
-        useFormData(makeConfig(["oldFirstName"])),
+        useFormData(makeSteps(["oldFirstName"])),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -133,7 +127,7 @@ describe("useFormData", () => {
 
     it("deletes a field when its value is cleared to an empty string", async () => {
       const { result } = renderHook(() =>
-        useFormData(makeConfig(["oldFirstName"])),
+        useFormData(makeSteps(["oldFirstName"])),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -151,7 +145,7 @@ describe("useFormData", () => {
 
     it("deletes a field when its value is set to null", async () => {
       const { result } = renderHook(() =>
-        useFormData(makeConfig(["oldFirstName"])),
+        useFormData(makeSteps(["oldFirstName"])),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -168,9 +162,7 @@ describe("useFormData", () => {
     });
 
     it("deletes a field when its value is set to an empty array", async () => {
-      const { result } = renderHook(() =>
-        useFormData(makeConfig(["pronouns"])),
-      );
+      const { result } = renderHook(() => useFormData(makeSteps(["pronouns"])));
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       vi.clearAllMocks();
@@ -191,7 +183,7 @@ describe("useFormData", () => {
       );
 
       const { result } = renderHook(() =>
-        useFormData(makeConfig(["oldFirstName"])),
+        useFormData(makeSteps(["oldFirstName"])),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -216,7 +208,7 @@ describe("useFormData", () => {
       );
 
       const { result } = renderHook(() =>
-        useFormData(makeConfig(["oldFirstName"])),
+        useFormData(makeSteps(["oldFirstName"])),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -237,7 +229,7 @@ describe("useFormData", () => {
 
     it("does not save when value is undefined", async () => {
       const { result } = renderHook(() =>
-        useFormData(makeConfig(["oldFirstName"])),
+        useFormData(makeSteps(["oldFirstName"])),
       );
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));

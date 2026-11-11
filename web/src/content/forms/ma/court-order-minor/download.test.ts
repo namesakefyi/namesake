@@ -1,17 +1,17 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import cjp25 from "#content/pdfs/ma/cjp25-petition-to-change-name-of-minor";
-import type { Data } from "#lib/forms/questions";
+import type { FormData } from "#lib/forms/questions";
 import { getPdfForm } from "#lib/pdfs/getPdfForm";
-import form from ".";
+import download from "./download";
 
-const [{ fill: fillCjp25 }] = form.download.pdfs;
+const [{ fill: fillCjp25 }] = download.pdfs;
 
 describe("Petition to Change Name of Minor", () => {
   afterEach(() => {
     vi.useRealTimers();
   });
 
-  const testData: Data = {
+  const testData: FormData = {
     oldFirstName: "Old",
     oldMiddleName: "M",
     oldLastName: "Name",

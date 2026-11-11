@@ -20,21 +20,20 @@ import {
 } from "#constants/fields";
 import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 
-/** Any stored answer. */
 export type FieldValue = string | boolean | string[];
 
 /**
  * A form's saved fields. Shared fields are typed by the registry; the
  * integrity tests check every other field a form reads.
  */
-export type Data = Partial<SharedFields> & {
+export type FormData = Partial<SharedFields> & {
   readonly [name: string]: FieldValue | undefined;
 };
 
-export type Condition = (data: Data) => boolean;
+export type Condition = (data: FormData) => boolean;
 
-export type Text = string | ((data: Data) => string);
-export type OptionalText = string | ((data: Data) => string | undefined);
+export type Text = string | ((data: FormData) => string);
+export type OptionalText = string | ((data: FormData) => string | undefined);
 
 export type OptionLabel = string | { label: string; description?: string };
 

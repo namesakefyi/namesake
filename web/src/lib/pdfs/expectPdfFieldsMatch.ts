@@ -2,7 +2,6 @@ import { expect } from "vitest";
 import type { PDFDefinition, PDFFieldValue } from "#constants/pdf";
 import { getPdfForm } from "./getPdfForm";
 
-/** Assert that every value is written to its PDF field. */
 export async function expectPdfFieldsMatch(
   pdf: PDFDefinition,
   values: Readonly<Record<string, PDFFieldValue>>,
@@ -12,15 +11,15 @@ export async function expectPdfFieldsMatch(
   for (const [fieldName, value] of Object.entries(values)) {
     if (value === undefined) continue;
 
-    const field = form?.getField(fieldName);
+    const field = form.getField(fieldName);
     if (field?.type === "radio") {
       const option =
         typeof value === "boolean" ? (value ? "Yes" : "No") : value;
-      expect(form?.getRadioGroup(fieldName)?.getValue()).toBe(option);
+      expect(form.getRadioGroup(fieldName)?.getValue()).toBe(option);
     } else if (typeof value === "boolean") {
-      expect(form?.getCheckbox(fieldName)?.isChecked()).toBe(value);
+      expect(form.getCheckbox(fieldName)?.isChecked()).toBe(value);
     } else {
-      expect(form?.getTextField(fieldName)?.getValue()).toBe(value);
+      expect(form.getTextField(fieldName)?.getValue()).toBe(value);
     }
   }
 }

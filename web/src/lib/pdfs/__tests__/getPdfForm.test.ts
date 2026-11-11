@@ -23,8 +23,6 @@ describe("getPdfForm", () => {
   });
 
   it("should throw error for invalid PDF path", async () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-
     const invalidPdf = {
       ...testPdf,
       file: "/nonexistent.pdf",
@@ -37,8 +35,5 @@ describe("getPdfForm", () => {
         shouldReturnOriginalDocuments: false,
       }),
     ).rejects.toThrow();
-
-    expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
-    consoleSpy.mockRestore();
   });
 });

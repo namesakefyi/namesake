@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { ADDRESS_FIELDS, NAME_FIELDS } from "#constants/fieldGroups";
 import {
-  GROUP_FIELD_NAMES,
+  type FieldType,
   getSharedFieldType,
-  getSharedFieldValues,
   SHARED_FIELDS,
+  type SharedFieldName,
 } from "#constants/fields";
 import type { FormConfig } from "#constants/forms";
 import {
@@ -11,15 +12,16 @@ import {
   getAskedFields,
   traceReads,
 } from "#lib/forms/__tests__/formFixtures";
-import type { Data, Text } from "#lib/forms/questions";
+import { getStepFields } from "#lib/forms/getStepFields";
+import type { FormData, Text } from "#lib/forms/questions";
 import { getRootContext, walkQuestions } from "#lib/forms/walkQuestions";
 
 const BOOLEAN_PREFIX = /^(is|has|should|are|was|does|can)[A-Z0-9]/;
 
 /** Every function in a form that reads answers. */
-function getReaders(config: FormConfig): ((data: Data) => unknown)[] {
-  const readers: ((data: Data) => unknown)[] = [];
-  const add = (reader: Text | ((data: Data) => unknown) | undefined) => {
+function getReaders(config: FormConfig): ((data: FormData) => unknown)[] {
+  const readers: ((data: FormData) => unknown)[] = [];
+  const add = (reader: Text | ((data: FormData) => unknown) | undefined) => {
     if (typeof reader === "function") readers.push(reader);
   };
   for (const step of config.steps) {
@@ -52,22 +54,26 @@ function getReaders(config: FormConfig): ((data: Data) => unknown)[] {
   return readers;
 }
 
-/** Each field a form asks, with the question that asks it. */
+const GROUP_FIELD_NAMES = new Set<string>(
+  [...Object.values(NAME_FIELDS), ...Object.values(ADDRESS_FIELDS)].flatMap(
+    (parts) => Object.values(parts),
+  ),
+);
+
+function getSharedFieldValues(name: string): readonly string[] {
+  const field: (FieldType & { values?: readonly string[] }) | undefined =
+    Object.hasOwn(SHARED_FIELDS, name)
+      ? SHARED_FIELDS[name as SharedFieldName]
+      : undefined;
+  return field?.values ?? [];
+}
+
 function getWrittenFields(config: FormConfig) {
-  const written: { id: string; type: string; options: string[] }[] = [];
-  for (const step of config.steps) {
-    walkQuestions(step.questions, getRootContext(step), (question) => {
-      if (question.type !== "field") return;
-      for (const field of question.writes) {
-        written.push({
-          id: field.id,
-          type: field.type,
-          options: Object.keys(field.options ?? {}),
-        });
-      }
-    });
-  }
-  return written;
+  return config.steps.flatMap(getStepFields).map(({ id, type, options }) => ({
+    id,
+    type,
+    options: Object.keys(options ?? {}),
+  }));
 }
 
 describe("fields", () => {

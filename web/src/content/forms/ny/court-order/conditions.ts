@@ -1,10 +1,10 @@
-import type { Data } from "#lib/forms/questions";
+import type { FormData } from "#lib/forms/questions";
 
-export const requestsNameChange = (data: Data) =>
+export const requestsNameChange = (data: FormData) =>
   data.nyCourtOrderRequest === "Name change" ||
   data.nyCourtOrderRequest === "Both";
 
-export const requestsSexDesignationChange = (data: Data) =>
+export const requestsSexDesignationChange = (data: FormData) =>
   data.nyCourtOrderRequest === "Sex designation change" ||
   data.nyCourtOrderRequest === "Both";
 
@@ -16,5 +16,5 @@ const NEW_YORK_CITY_COUNTIES = [
   "Richmond",
 ];
 
-export const livesInNewYorkCity = (data: Data) =>
+export const livesInNewYorkCity = (data: FormData) =>
   NEW_YORK_CITY_COUNTIES.includes(data.residenceCounty ?? "");

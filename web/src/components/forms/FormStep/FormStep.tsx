@@ -2,11 +2,8 @@ import { RiArrowRightLine } from "@remixicon/react";
 import { Heading } from "react-aria-components";
 import { useWatch } from "react-hook-form";
 import type { Step } from "#constants/forms";
-import type { Data } from "#lib/forms/questions";
-import {
-  resolveDescription,
-  resolveTitle,
-} from "#lib/forms/resolveStepContent";
+import type { FormData } from "#lib/forms/questions";
+import { resolveText } from "#lib/forms/resolveStepContent";
 import { slugify } from "#lib/utils/slugify";
 import { smartquotes } from "#lib/utils/smartquotes";
 import { Button } from "../../common/Button";
@@ -26,9 +23,9 @@ export interface FormStepProps {
 }
 
 export function FormStep({ stepConfig, className }: FormStepProps) {
-  const data = useWatch() as Data;
-  const title = resolveTitle(stepConfig, data);
-  const description = resolveDescription(stepConfig, data);
+  const data = useWatch() as FormData;
+  const title = resolveText(stepConfig.title, data);
+  const description = resolveText(stepConfig.description, data);
   const titleId = slugify(title);
   const descriptionId = useId();
   const { onSubmit, phase } = useFormStep();

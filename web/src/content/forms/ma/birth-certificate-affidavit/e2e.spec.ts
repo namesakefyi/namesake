@@ -145,12 +145,16 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
       page.getByRole("heading", { name: "What are your parents’ names?" }),
     ).toBeVisible();
 
-    await page
-      .getByRole("textbox", { name: "Parent 1 full name" })
-      .fill("Favorite parent");
-    await page
-      .getByRole("textbox", { name: "Parent 2 full name" })
-      .fill("Second favorite parent");
+    const parentOne = page.locator("fieldset").filter({ hasText: /Parent 1/ });
+    await parentOne.getByRole("textbox", { name: "First name" }).fill("Fave");
+    await parentOne
+      .getByRole("textbox", { name: "Last or family name" })
+      .fill("Parent");
+    const parentTwo = page.locator("fieldset").filter({ hasText: /Parent 2/ });
+    await parentTwo.getByRole("textbox", { name: "First name" }).fill("Second");
+    await parentTwo
+      .getByRole("textbox", { name: "Last or family name" })
+      .fill("Parent");
 
     await page.getByRole("button", { name: "Continue" }).click();
   });
@@ -217,11 +221,13 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
       ),
     ).toBeVisible();
 
-    await page
-      .getByRole("textbox", {
-        name: "Parent or guardian 1’s full name",
-      })
-      .fill("Guardian numero uno");
+    const guardian = page
+      .locator("fieldset")
+      .filter({ hasText: /Parent or guardian 1/ });
+    await guardian.getByRole("textbox", { name: "First name" }).fill("Uno");
+    await guardian
+      .getByRole("textbox", { name: "Last or family name" })
+      .fill("Guardian");
 
     await page.getByRole("button", { name: "Continue" }).click();
   });
@@ -245,12 +251,10 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
 
     await expect(page.getByText("City of birth: Boston")).toBeVisible();
 
-    await expect(
-      page.getByText("Parent 1 full name: Favorite parent"),
-    ).toBeVisible();
-    await expect(
-      page.getByText("Parent 2 full name: Second favorite parent"),
-    ).toBeVisible();
+    await expect(page.getByText("Parent 1 first name: Fave")).toBeVisible();
+    await expect(page.getByText("Parent 1 last name: Parent")).toBeVisible();
+    await expect(page.getByText("Parent 2 first name: Second")).toBeVisible();
+    await expect(page.getByText("Parent 2 last name: Parent")).toBeVisible();
 
     await expect(page.getByText("New first name: Elliot")).toBeVisible();
     await expect(page.getByText("New middle name: Missing!")).toBeVisible();
@@ -271,11 +275,10 @@ test("Massachusetts birth certificate", async ({ page }, testInfo) => {
     ).toBeVisible();
     await expect(page.getByText("Email: test@email.com")).toBeVisible();
 
+    await expect(page.getByText("Guardian first name: Uno")).toBeVisible();
+    await expect(page.getByText("Guardian last name: Guardian")).toBeVisible();
     await expect(
-      page.getByText("Guardian/parent 1’s full name: Guardian numero uno"),
-    ).toBeVisible();
-    await expect(
-      page.getByText("Guardian/parent 2’s full name: Missing!"),
+      page.getByText("Co-guardian first name: Missing!"),
     ).toBeVisible();
   });
 

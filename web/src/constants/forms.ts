@@ -1,4 +1,4 @@
-import type { Condition, Data, Question, Text } from "#lib/forms/questions";
+import type { Condition, FormData, Question, Text } from "#lib/forms/questions";
 import type { CategoryId } from "./categories";
 import type { FormPdf } from "./pdf";
 
@@ -22,7 +22,7 @@ export type Instruction = string | { text: string; when: Condition };
  */
 export function resolveInstructions(
   instructions: readonly Instruction[],
-  data: Data,
+  data: FormData,
 ): string[] {
   return instructions.flatMap((item) => {
     if (typeof item === "string") return [item];
@@ -36,8 +36,11 @@ export interface FormCost {
   required: boolean;
 }
 
-/** A form: what it's called, the questions it asks, and what it downloads. */
-export interface FormConfig {
+/**
+ * A form's `index.ts`: plain data that pages read while they build, before
+ * any of the form's code reaches the browser.
+ */
+export interface FormMeta {
   /** Shown on the forms page, the form's title step and its preview image. */
   title: string;
   description?: string;
@@ -46,14 +49,19 @@ export interface FormConfig {
   unlisted?: boolean;
   /** Fees the person pays when filing, shown on the title step. */
   costs?: readonly FormCost[];
+}
+
+/** A form's three files together: `index.ts`, `steps.ts` and `download.ts`. */
+export interface FormConfig extends FormMeta {
   /** Ordered steps, including optional guards for conditional inclusion. */
   steps: readonly Step[];
   /** The PDF packet the person downloads at the end. */
   download: FormDownload;
 }
 
+/** A form's `download.ts`, which loads once the person starts filling. */
 export interface FormDownload {
-  /** The packet's title, on its cover page and file name. Defaults to the form's title. */
+  /** The packet's title, on its cover page and file name. */
   title: string;
   /**
    * Shown on the cover page. A plain string is always included; `{ text,
@@ -62,17 +70,6 @@ export interface FormDownload {
   instructions: readonly Instruction[];
   /** The PDFs in the packet, in order. */
   pdfs: readonly FormPdf[];
-}
-
-/** What the forms page and title step show about each of a form's PDFs. */
-export interface FormPdfSummary {
-  title: string;
-  /** The form code, if one exists, such as "CJP-27". */
-  code?: string;
-  /** Whether the PDF is included only for some answers. */
-  conditional?: boolean;
-  /** The blank PDF file. */
-  file: string;
 }
 
 /**

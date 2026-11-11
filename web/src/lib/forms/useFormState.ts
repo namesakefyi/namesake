@@ -41,8 +41,12 @@ export interface UseFormStateReturn {
   goBack: () => void;
 }
 
-// Loads a persisted XState snapshot from IndexedDB for the given form.
-function usePersistedSnapshot(formId: string) {
+export interface PersistedSnapshot {
+  isLoading: boolean;
+  savedSnapshot: unknown;
+}
+
+export function usePersistedSnapshot(formId: string): PersistedSnapshot {
   const [savedSnapshot, setSavedSnapshot] = useState<unknown>(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -125,13 +129,13 @@ export function useFormState(
   formId: string,
   steps: readonly Step[],
   getFormData: () => Record<string, any>,
+  { isLoading, savedSnapshot }: PersistedSnapshot,
 ): UseFormStateReturn {
   const machine = useMemo(
     () => createFormMachine({ id: formId, steps }),
     [formId, steps],
   );
 
-  const { isLoading, savedSnapshot } = usePersistedSnapshot(formId);
   const { actorRef, state, send } = useFormActor(
     machine,
     savedSnapshot,

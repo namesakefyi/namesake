@@ -7,6 +7,7 @@ import { defineConfig, fontProviders } from "astro/config";
 import pagefind from "astro-pagefind";
 import browserslist from "browserslist";
 import { browserslistToTargets } from "lightningcss";
+import { preloadFormModules } from "./scripts/preload-form-modules";
 import { satteriModifiedTime } from "./scripts/satteri-modified-time.mjs";
 import { RENAMED_FORM_IDS } from "./src/constants/renamedFormIds";
 
@@ -27,6 +28,7 @@ export default defineConfig({
     // Fast Refresh breaks CMS previews, which use the CMS's React.
     react({ exclude: [/\/src\/lib\/cms\//] }),
     pagefind(),
+    preloadFormModules(),
   ],
   prefetch: true,
   // Name pages `page.astro`, not `page/index.astro`, to avoid trailing

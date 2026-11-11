@@ -1,5 +1,5 @@
 import type { Step } from "#constants/forms";
-import type { Data, Question } from "#lib/forms/questions";
+import type { FormData, Question } from "#lib/forms/questions";
 import { resolveText } from "#lib/forms/resolveStepContent";
 import {
   getChildContext,
@@ -11,7 +11,7 @@ import { renderBlock, renderField } from "./renderers";
 
 export interface FormStepQuestionsProps {
   step: Step;
-  data: Data;
+  data: FormData;
 }
 
 export function FormStepQuestions({ step, data }: FormStepQuestionsProps) {
@@ -26,7 +26,7 @@ export function FormStepQuestions({ step, data }: FormStepQuestionsProps) {
 
 interface QuestionsProps {
   questions: readonly Question[];
-  data: Data;
+  data: FormData;
   context: QuestionContext;
 }
 

@@ -1,7 +1,8 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { buildPdfPacket } from "../buildPdfPacket";
-import { downloadFilledPdf } from "../downloadFilledPdf";
 import { downloadPdf } from "../downloadPdf";
+import { downloadPdfPacket } from "../downloadPdfPacket";
+import { fetchPdf } from "../fetchPdf";
 import { fillPdf } from "../fillPdf";
 import {
   secondTestFormPdf,
@@ -12,28 +13,25 @@ import {
 
 vi.mock("../buildPdfPacket", () => ({ buildPdfPacket: vi.fn() }));
 vi.mock("../downloadPdf", () => ({ downloadPdf: vi.fn() }));
+vi.mock("../fetchPdf", () => ({ fetchPdf: vi.fn() }));
 vi.mock("../fillPdf", () => ({ fillPdf: vi.fn() }));
 
 const packetBytes = new Uint8Array([9, 9, 9]);
 
-describe("downloadFilledPdf", () => {
+describe("downloadPdfPacket", () => {
   beforeEach(() => {
     vi.mocked(buildPdfPacket).mockResolvedValue(packetBytes);
+    vi.mocked(downloadPdf).mockResolvedValue(undefined);
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it("fills each PDF with the given user data", async () => {
-    const userData = { newFirstName: "Jamie" };
+  it("fills each PDF with the given data", async () => {
     vi.mocked(fillPdf).mockResolvedValue(new Uint8Array());
 
-    await downloadFilledPdf({
+    await downloadPdfPacket({
       title: "Test Packet",
       instructions: [],
       pdfs: [testFormPdf, secondTestFormPdf],
-      userData,
+      data: { newFirstName: "Jamie" },
     });
 
     expect(fillPdf).toHaveBeenCalledWith(testPdf, {
@@ -42,38 +40,55 @@ describe("downloadFilledPdf", () => {
       shouldReturnOriginalDocuments: undefined,
     });
     expect(fillPdf).toHaveBeenCalledWith(secondTestPdf, { field1: "Jamie" });
+    expect(fetchPdf).not.toHaveBeenCalled();
   });
 
-  it("builds the packet with each PDF's filled bytes, in order", async () => {
+  it("fetches each PDF unfilled when there's no data", async () => {
+    vi.mocked(fetchPdf).mockResolvedValue(new Uint8Array([1, 2, 3]).buffer);
+
+    await downloadPdfPacket({
+      title: "Test Packet",
+      instructions: [],
+      pdfs: [testFormPdf, secondTestFormPdf],
+    });
+
+    expect(fetchPdf).toHaveBeenCalledWith(testPdf.file);
+    expect(fetchPdf).toHaveBeenCalledWith(secondTestPdf.file);
+    expect(fillPdf).not.toHaveBeenCalled();
+  });
+
+  it("builds the packet from each PDF and its bytes, in order", async () => {
     const firstBytes = new Uint8Array([1]);
     const secondBytes = new Uint8Array([2]);
     vi.mocked(fillPdf)
       .mockResolvedValueOnce(firstBytes)
       .mockResolvedValueOnce(secondBytes);
 
-    await downloadFilledPdf({
+    await downloadPdfPacket({
       title: "Multi-PDF Packet",
       instructions: ["Step 1"],
       pdfs: [testFormPdf, secondTestFormPdf],
-      userData: {},
+      data: {},
     });
 
     expect(buildPdfPacket).toHaveBeenCalledWith({
       title: "Multi-PDF Packet",
       instructions: ["Step 1"],
-      pdfs: [testPdf, secondTestPdf],
-      pdfBytes: [firstBytes, secondBytes],
+      documents: [
+        { pdf: testPdf, bytes: firstBytes },
+        { pdf: secondTestPdf, bytes: secondBytes },
+      ],
     });
   });
 
-  it("downloads the packet returned by buildPdfPacket, under the given title", async () => {
+  it("downloads the built packet under the given title", async () => {
     vi.mocked(fillPdf).mockResolvedValue(new Uint8Array());
 
-    await downloadFilledPdf({
+    await downloadPdfPacket({
       title: "Test Packet",
       instructions: [],
       pdfs: [testFormPdf],
-      userData: {},
+      data: {},
     });
 
     expect(downloadPdf).toHaveBeenCalledWith({
@@ -82,16 +97,16 @@ describe("downloadFilledPdf", () => {
     });
   });
 
-  it("propagates a rejection from downloadPdf instead of swallowing it", async () => {
+  it("propagates a rejection from downloadPdf", async () => {
     vi.mocked(fillPdf).mockResolvedValue(new Uint8Array());
     vi.mocked(downloadPdf).mockRejectedValue(new Error("download failed"));
 
     await expect(
-      downloadFilledPdf({
+      downloadPdfPacket({
         title: "Test Packet",
         instructions: [],
         pdfs: [testFormPdf],
-        userData: {},
+        data: {},
       }),
     ).rejects.toThrow("download failed");
   });

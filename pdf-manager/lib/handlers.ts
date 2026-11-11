@@ -8,7 +8,7 @@ import {
   generateFillSnippet,
   writeDefinitionFiles,
 } from "./define.ts";
-import { loadJurisdictions } from "./fields.ts";
+import { jurisdictions } from "./fields.ts";
 import {
   applyRenames,
   extractFields,
@@ -116,8 +116,6 @@ export async function handleAddPdf(c: Context) {
   const pdfDoc = await loadPdf(rawBytes);
   const cleanedBytes = await pdfDoc.save();
 
-  const pdfFields = await extractFieldsFromBytes(cleanedBytes);
-
   writeDefinitionFiles({
     title,
     code: code ?? "",
@@ -132,9 +130,9 @@ export async function handleAddPdf(c: Context) {
   formatFiles([join(pdfDir, "schema.ts")]);
 
   const fill = generateFillSnippet({ id, pdfDir, fieldNames });
-  console.log(`\nAdd this to a form's download.pdfs:\n\n${fill}`);
+  console.log(`\nAdd this to the pdfs in a form's download.ts:\n\n${fill}`);
 
-  return c.json({ id, fieldCount: pdfFields.length, fill });
+  return c.json({ id, fieldCount: fieldNames.length });
 }
 
 export async function handlePreviewReplace(c: Context) {
@@ -238,5 +236,5 @@ export async function handleReplacePdf(c: Context) {
 }
 
 export async function handleGetJurisdictions(c: Context) {
-  return c.json([{ id: "federal", name: "Federal" }, ...loadJurisdictions()]);
+  return c.json([{ id: "federal", name: "Federal" }, ...jurisdictions]);
 }

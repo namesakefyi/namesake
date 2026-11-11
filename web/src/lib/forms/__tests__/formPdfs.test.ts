@@ -5,7 +5,7 @@ import type { PDFFieldValue, PdfFieldType } from "#constants/pdf";
 import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import { resolveFormVisibility } from "../formVisibility";
 import { getStepFields } from "../getStepFields";
-import type { Data, FieldValue } from "../questions";
+import type { FieldValue, FormData } from "../questions";
 import { forms } from "./formFixtures";
 
 const SAMPLE_TEXT: Partial<Record<FieldTypeName, readonly [string, string]>> = {
@@ -19,7 +19,7 @@ const SAMPLE_TEXT: Partial<Record<FieldTypeName, readonly [string, string]>> = {
 };
 
 /** Two answer sets: yes to everything, then no to everything. */
-function sampleAnswers(config: FormConfig, variant: 0 | 1): Data {
+function sampleAnswers(config: FormConfig, variant: 0 | 1): FormData {
   const data: Record<string, FieldValue> = {};
   for (const step of config.steps) {
     for (const { id, type, options } of getStepFields(step)) {

@@ -4,11 +4,10 @@ import { q } from "#lib/forms/questions";
 import { getStepFields } from "../getStepFields";
 
 describe("getStepFields", () => {
-  it("combines the step, subsection and question conditions", () => {
+  it("combines the subsection and question conditions", () => {
     const step: Step = {
       id: "body",
       title: "Body",
-      when: (data) => data.isFilingForSomeoneElse === true,
       questions: [
         q.yesNo("hasPreviousNameChange", { label: "Changed before?" }),
         q.subsection(
@@ -23,15 +22,14 @@ describe("getStepFields", () => {
       ],
     };
     const [, from] = getStepFields(step);
-    const base = { isFilingForSomeoneElse: true, hasPreviousNameChange: true };
-    expect(from.when?.({ ...base, previousNameTo: "A" })).toBe(true);
-    expect(from.when?.({ ...base, previousNameTo: "" })).toBe(false);
     expect(
-      from.when?.({
-        ...base,
-        isFilingForSomeoneElse: false,
-        previousNameTo: "A",
-      }),
+      from.when?.({ hasPreviousNameChange: true, previousNameTo: "A" }),
+    ).toBe(true);
+    expect(
+      from.when?.({ hasPreviousNameChange: true, previousNameTo: "" }),
+    ).toBe(false);
+    expect(
+      from.when?.({ hasPreviousNameChange: false, previousNameTo: "A" }),
     ).toBe(false);
   });
 

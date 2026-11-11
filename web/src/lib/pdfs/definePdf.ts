@@ -1,7 +1,7 @@
 import type { PDFDefinition, PdfSchema } from "#constants/pdf";
 
 /**
- * Describe a PDF in the library. Its jurisdiction comes from its folder.
+ * Describe a PDF in the library.
  *
  * @example
  * ```ts

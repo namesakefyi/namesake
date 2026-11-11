@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadJurisdictions } from "./fields.ts";
+import { JURISDICTIONS } from "../../web/src/constants/jurisdictions.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "../..");
@@ -56,12 +56,11 @@ function findPdfFile(dir: string): string | undefined {
  * PDFS_DIR is a federal PDF.
  */
 function listPdfDirs() {
-  const jurisdictions = new Set(loadJurisdictions().map(({ id }) => id));
   const result: { jurisdiction: string; id: string; pdfDir: string }[] = [];
   for (const entry of readdirSync(PDFS_DIR, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
     const dir = join(PDFS_DIR, entry.name);
-    if (!jurisdictions.has(entry.name)) {
+    if (!Object.hasOwn(JURISDICTIONS, entry.name)) {
       result.push({ jurisdiction: FEDERAL, id: entry.name, pdfDir: dir });
       continue;
     }

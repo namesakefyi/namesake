@@ -1,15 +1,16 @@
-import { type FormConfig, resolveInstructions } from "#constants/forms";
+import { type FormDownload, resolveInstructions } from "#constants/forms";
 
-/**
- * Downloads every PDF for a form, unfilled, with a cover page. PDF
- * lib and utilities are loaded on demand when the user clicks download.
- */
-export async function downloadBlankPdfPacket({ download }: FormConfig) {
-  const { downloadBlankPdfs } = await import("#lib/pdfs/downloadBlankPdfs");
+export async function downloadBlankPdfPacket(
+  loadDownload: () => Promise<FormDownload>,
+) {
+  const [download, { downloadPdfPacket }] = await Promise.all([
+    loadDownload(),
+    import("#lib/pdfs/downloadPdfPacket"),
+  ]);
 
-  await downloadBlankPdfs({
+  await downloadPdfPacket({
     title: download.title,
     instructions: resolveInstructions(download.instructions, {}),
-    pdfs: download.pdfs.map(({ pdf }) => pdf),
+    pdfs: download.pdfs,
   });
 }

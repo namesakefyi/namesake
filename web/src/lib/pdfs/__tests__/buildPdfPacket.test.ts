@@ -36,8 +36,7 @@ describe("buildPdfPacket", () => {
     const result = await buildPdfPacket({
       title: "Test Packet",
       instructions: ["First instruction"],
-      pdfs: [testPdf],
-      pdfBytes: [mockPdfBytes],
+      documents: [{ pdf: testPdf, bytes: mockPdfBytes }],
     });
 
     const pdfDoc = await PDF.load(result);
@@ -49,8 +48,10 @@ describe("buildPdfPacket", () => {
     const result = await buildPdfPacket({
       title: "Multi-PDF Packet",
       instructions: [],
-      pdfs: [testPdf, testPdf],
-      pdfBytes: [mockPdfBytes, mockPdfBytes],
+      documents: [
+        { pdf: testPdf, bytes: mockPdfBytes },
+        { pdf: testPdf, bytes: mockPdfBytes },
+      ],
     });
 
     const pdfDoc = await PDF.load(result);

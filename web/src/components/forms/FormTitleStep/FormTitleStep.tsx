@@ -7,7 +7,7 @@ import {
 } from "@remixicon/react";
 import { useEffect, useState } from "react";
 import { type IBrowser, type IDevice, UAParser } from "ua-parser-js";
-import type { FormPdfMetadata } from "#lib/forms/getFormPdfMetadata";
+import type { PDFDefinition } from "#constants/pdf";
 import { formatBrowser } from "#lib/utils/formatBrowser";
 import { formatDevice } from "#lib/utils/formatDevice";
 import { formatTimeEstimate } from "#lib/utils/formatTimeEstimate";
@@ -48,9 +48,10 @@ export interface FormTitleStepProps {
   title: string;
   description?: string | null;
   children?: React.ReactNode;
-  onStart: () => void;
+  /** Leave out while the form loads, which disables Start. */
+  onStart?: () => void;
   onDownloadBlank: () => Promise<void>;
-  pdfs: FormPdfMetadata[];
+  pdfs: readonly Pick<PDFDefinition, "title" | "code" | "file">[];
   totalSteps: number;
   headingLevel?: 1 | 2 | 3;
 }
@@ -164,7 +165,7 @@ export function FormTitleStep({
           size="large"
           endIcon={RiArrowRightLine}
           className="form-title-step-button"
-          isDisabled={isDownloading}
+          isDisabled={!onStart || isDownloading}
         >
           Start
         </Button>

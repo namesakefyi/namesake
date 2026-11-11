@@ -1,5 +1,5 @@
 import type { PdfValues } from "#constants/pdf";
-import type { Data } from "#lib/forms/questions";
+import type { FormData } from "#lib/forms/questions";
 import { definePdf } from "#lib/pdfs/definePdf";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
 import { fullName } from "#lib/utils/fullName";
@@ -16,7 +16,7 @@ export default definePdf({
 });
 
 /** Reads only shared fields, so any form can use it. */
-export const fillCjp34 = (data: Data): PdfValues<typeof pdfSchema> => ({
+export const fillCjp34 = (data: FormData): PdfValues<typeof pdfSchema> => ({
   county: data.residenceCounty,
   caseName: fullName(data, "oldName"),
   isChangeOfNameProceeding: true,

@@ -1,12 +1,6 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { SHARED_FIELDS } from "../../web/src/constants/fields.ts";
+import { JURISDICTIONS } from "../../web/src/constants/jurisdictions.ts";
 import { escapeKey } from "./utils.ts";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, "../..");
-const JURISDICTIONS_PATH = join(ROOT, "web/src/constants/jurisdictions.ts");
 
 /** Common PDF field name → form field name mappings. */
 const PDF_TO_FORM_FIELD_MAP: Record<string, string> = {
@@ -21,18 +15,9 @@ export interface Jurisdiction {
   name: string;
 }
 
-let _jurisdictions: Jurisdiction[] | null = null;
-
-export function loadJurisdictions(): Jurisdiction[] {
-  if (_jurisdictions) return _jurisdictions;
-  const content = readFileSync(JURISDICTIONS_PATH, "utf8");
-  const regex = /^\s*(\w{2}):\s*\{\s*name:\s*"([^"]+)"/gm;
-  _jurisdictions = [...content.matchAll(regex)].map(([, id, name]) => ({
-    id,
-    name,
-  }));
-  return _jurisdictions;
-}
+export const jurisdictions: readonly Jurisdiction[] = Object.entries(
+  JURISDICTIONS,
+).map(([id, { name }]) => ({ id, name }));
 
 /** The shared field a PDF field most likely holds, if any. */
 function matchSharedField(pdfFieldName: string): string | undefined {

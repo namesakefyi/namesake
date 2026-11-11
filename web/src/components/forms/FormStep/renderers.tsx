@@ -20,9 +20,9 @@ import { YesNoField } from "#components/forms/YesNoField";
 import type {
   BlockKind,
   BlockPropsByKind,
-  Data,
   FieldKind,
   FieldPropsByKind,
+  FormData,
 } from "#lib/forms/questions";
 import { resolveText } from "#lib/forms/resolveStepContent";
 import { useFormStep } from "../FormContainer/FormStepContext";
@@ -35,7 +35,7 @@ export interface FieldRenderProps extends Attributes {
 }
 
 export interface BlockRenderProps extends Attributes {
-  data: Data;
+  data: FormData;
   children?: ReactNode;
 }
 

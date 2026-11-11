@@ -1,17 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FormConfig, FormDownload } from "#constants/forms";
-import {
-  secondTestFormPdf,
-  secondTestPdf,
-  testFormPdf,
-  testPdf,
-} from "#lib/pdfs/__tests__/helpers";
-import { downloadBlankPdfs } from "#lib/pdfs/downloadBlankPdfs";
+import { secondTestFormPdf, testFormPdf } from "#lib/pdfs/__tests__/helpers";
+import { downloadPdfPacket } from "#lib/pdfs/downloadPdfPacket";
 import { downloadBlankPdfPacket } from "../downloadBlankPdfPacket";
 
-vi.mock("../../pdfs/downloadBlankPdfs", () => ({
-  downloadBlankPdfs: vi.fn(),
+vi.mock("../../pdfs/downloadPdfPacket", () => ({
+  downloadPdfPacket: vi.fn(),
 }));
+
+const conditionalPdf = { ...secondTestFormPdf, when: () => false };
 
 function makeConfig(download: Partial<FormDownload> = {}): FormConfig {
   return {
@@ -21,7 +18,7 @@ function makeConfig(download: Partial<FormDownload> = {}): FormConfig {
     download: {
       title: "Court Order MA",
       instructions: ["Step 1", "Step 2"],
-      pdfs: [testFormPdf, { ...secondTestFormPdf, when: () => false }],
+      pdfs: [testFormPdf, conditionalPdf],
       ...download,
     },
   };
@@ -29,7 +26,7 @@ function makeConfig(download: Partial<FormDownload> = {}): FormConfig {
 
 describe("downloadBlankPdfPacket", () => {
   beforeEach(() => {
-    vi.mocked(downloadBlankPdfs).mockResolvedValue(undefined);
+    vi.mocked(downloadPdfPacket).mockResolvedValue(undefined);
   });
 
   afterEach(() => {
@@ -37,10 +34,10 @@ describe("downloadBlankPdfPacket", () => {
   });
 
   it("includes every PDF, ignoring conditional `when` predicates", async () => {
-    await downloadBlankPdfPacket(makeConfig());
+    await downloadBlankPdfPacket(async () => makeConfig().download);
 
-    expect(downloadBlankPdfs).toHaveBeenCalledWith(
-      expect.objectContaining({ pdfs: [testPdf, secondTestPdf] }),
+    expect(downloadPdfPacket).toHaveBeenCalledWith(
+      expect.objectContaining({ pdfs: [testFormPdf, conditionalPdf] }),
     );
   });
 
@@ -52,20 +49,22 @@ describe("downloadBlankPdfPacket", () => {
       ],
     });
 
-    await downloadBlankPdfPacket(config);
+    await downloadBlankPdfPacket(async () => config.download);
 
-    expect(downloadBlankPdfs).toHaveBeenCalledWith(
+    expect(downloadPdfPacket).toHaveBeenCalledWith(
       expect.objectContaining({ instructions: ["Always"] }),
     );
   });
 
-  it("passes the download title to downloadBlankPdfs", async () => {
-    await downloadBlankPdfPacket(makeConfig({ title: "My Package" }));
+  it("passes the download title to downloadPdfPacket", async () => {
+    await downloadBlankPdfPacket(
+      async () => makeConfig({ title: "My Package" }).download,
+    );
 
-    expect(downloadBlankPdfs).toHaveBeenCalledWith({
+    expect(downloadPdfPacket).toHaveBeenCalledWith({
       title: "My Package",
       instructions: ["Step 1", "Step 2"],
-      pdfs: [testPdf, secondTestPdf],
+      pdfs: [testFormPdf, conditionalPdf],
     });
   });
 });

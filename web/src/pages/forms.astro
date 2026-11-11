@@ -1,23 +1,13 @@
 ---
-import { getCollection } from "astro:content";
 import FormLink from "#components/FormLink.astro";
 import PageHeader from "#components/PageHeader.astro";
 import BaseLayout from "#layouts/BaseLayout.astro";
-import { getFormConfig } from "#lib/forms/getFormConfig";
-import { getFormPdfMetadata } from "#lib/forms/getFormPdfMetadata";
+import { allForms } from "#lib/forms/allForms";
 import { formatTimeEstimate } from "#lib/utils/formatTimeEstimate";
 
-const allForms = await getCollection("forms", ({ data }) => !data.unlisted);
-
-const formsWithPdfs = allForms.map((form) => {
-  const config = getFormConfig(form.id);
-  return {
-    title: form.data.title,
-    id: form.id,
-    pdfs: getFormPdfMetadata(form.id),
-    timeEstimate: formatTimeEstimate(config?.steps.length ?? 0),
-  };
-});
+const listedForms = Object.entries(allForms).filter(
+  ([, form]) => !form.unlisted,
+);
 ---
 
 <BaseLayout
@@ -35,13 +25,13 @@ const formsWithPdfs = allForms.map((form) => {
   />
   <div class="forms">
     {
-      formsWithPdfs.length ? (
-        formsWithPdfs.map((form) => (
+      listedForms.length ? (
+        listedForms.map(([formId, form]) => (
           <FormLink
             title={form.title}
-            formId={form.id}
-            documentCount={form.pdfs.length}
-            timeEstimate={form.timeEstimate}
+            formId={formId}
+            documentCount={form.download.pdfs.length}
+            timeEstimate={formatTimeEstimate(form.steps.length)}
           />
         ))
       ) : (

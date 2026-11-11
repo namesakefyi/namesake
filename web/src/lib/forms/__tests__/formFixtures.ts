@@ -1,10 +1,10 @@
 import type { FieldTypeName } from "#constants/fields";
 import type { FormConfig } from "#constants/forms";
-import type { Data } from "#lib/forms/questions";
-import { getFormConfigs } from "../getFormConfig";
+import type { FormData } from "#lib/forms/questions";
+import { allForms } from "../allForms";
 import { getStepFields } from "../getStepFields";
 
-export const forms = Object.entries(getFormConfigs());
+export const forms = Object.entries(allForms);
 
 const askedFields = new WeakMap<FormConfig, Map<string, FieldTypeName>>();
 
@@ -35,12 +35,12 @@ const SAMPLES: readonly ((type: FieldTypeName) => unknown)[] = [
  * recording proxies.
  */
 export function traceReads(
-  read: (data: Data) => unknown,
+  read: (data: FormData) => unknown,
   types: ReadonlyMap<string, FieldTypeName>,
 ): string[] {
   const fields = new Set<string>();
   for (const sample of SAMPLES) {
-    const data = new Proxy({} as Data, {
+    const data = new Proxy({} as FormData, {
       get(_target, property) {
         const type = typeof property === "string" && types.get(property);
         if (!type) return undefined;

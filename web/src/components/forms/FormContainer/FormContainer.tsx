@@ -1,65 +1,111 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FormProvider } from "react-hook-form";
-import type { FormCost } from "#constants/forms";
+import type { FormMeta, Step } from "#constants/forms";
 import { createFormSubmitHandler } from "#lib/forms/createFormSubmitHandler";
 import { downloadBlankPdfPacket } from "#lib/forms/downloadBlankPdfPacket";
-import { getFormConfig } from "#lib/forms/getFormConfig";
-import type { FormPdfMetadata } from "#lib/forms/getFormPdfMetadata";
+import { loadFormDownload, useFormSteps } from "#lib/forms/loadForm";
 import { useFormData } from "#lib/forms/useFormData";
-import { useFormState } from "#lib/forms/useFormState";
-import { ProgressCircle } from "../../common/ProgressCircle";
+import {
+  type PersistedSnapshot,
+  useFormState,
+  usePersistedSnapshot,
+} from "#lib/forms/useFormState";
 import { FormCompleteStep } from "../FormCompleteStep";
 import { FormNavigation } from "../FormNavigation";
 import { FormReviewStep } from "../FormReviewStep";
 import { FormStep } from "../FormStep";
-import { FormTitleStep } from "../FormTitleStep/FormTitleStep";
+import {
+  FormTitleStep,
+  type FormTitleStepProps,
+} from "../FormTitleStep/FormTitleStep";
 import { FormStepContext } from "./FormStepContext";
 import "./FormContainer.css";
 
 export interface FormContainerProps {
-  formId: string;
-
-  /** The form's display title, from the `forms` content collection. */
-  title: string;
-
-  /** The form's description, from the `forms` content collection. */
-  description?: string;
-
-  /** Costs associated with this form, from the `forms` content collection. */
-  costs?: readonly FormCost[];
+  /** Worked out while pages build, so the title step needs no form code. */
+  form: Pick<FormMeta, "title" | "description" | "costs"> & {
+    id: string;
+    stepCount: number;
+    pdfs: FormTitleStepProps["pdfs"];
+  };
 
   /** Render inline within a page rather than as a full-page experience. */
   inline?: boolean;
-
-  /** PDF metadata rendered by Astro and passed into hydrated form islands. */
-  pdfMetadata?: FormPdfMetadata[];
 
   /** Optional content to render on the title step (e.g. a <Banner>). */
   children?: React.ReactNode;
 }
 
-export function FormContainer({
-  formId,
-  title,
-  description,
-  costs,
-  inline = false,
-  pdfMetadata = [],
-  children,
-}: FormContainerProps) {
-  const config = getFormConfig(formId);
-  if (!config) throw new Error(`No form config found with id: ${formId}`);
-  const { steps } = config;
+const containerClass = (inline: boolean) =>
+  inline ? "form-container not-content" : "form-container";
 
-  const form = useFormData(config);
-  const onSubmit = createFormSubmitHandler(config, form);
+/**
+ * Needs only `form`, so it renders on the server and works before the form's
+ * steps and saved progress load.
+ */
+function TitleStep({
+  form,
+  inline = false,
+  children,
+  totalSteps = form.stepCount,
+  onStart,
+}: FormContainerProps & { totalSteps?: number; onStart?: () => void }) {
   const onDownloadBlank = useCallback(
-    () => downloadBlankPdfPacket(config),
-    [config],
+    () => downloadBlankPdfPacket(() => loadFormDownload(form.id)),
+    [form.id],
   );
+  return (
+    <FormTitleStep
+      title={form.title}
+      description={form.description}
+      pdfs={form.pdfs}
+      totalSteps={totalSteps}
+      onStart={onStart}
+      onDownloadBlank={onDownloadBlank}
+      headingLevel={inline ? 2 : 1}
+    >
+      {children}
+    </FormTitleStep>
+  );
+}
+
+function FormTitlePlaceholder(props: FormContainerProps) {
+  const inline = props.inline ?? false;
+  return (
+    <section
+      className={containerClass(inline)}
+      data-inline={inline || undefined}
+    >
+      <div className="form-container-content">
+        <TitleStep {...props} />
+      </div>
+    </section>
+  );
+}
+
+export function FormContainer(props: FormContainerProps) {
+  const steps = useFormSteps(props.form.id);
+  const progress = usePersistedSnapshot(props.form.id);
+  if (!steps || progress.isLoading) return <FormTitlePlaceholder {...props} />;
+  return <LoadedFormContainer {...props} steps={steps} progress={progress} />;
+}
+
+function LoadedFormContainer({
+  steps,
+  progress,
+  form: formProp,
+  inline = false,
+  children,
+}: FormContainerProps & {
+  steps: readonly Step[];
+  progress: PersistedSnapshot;
+}) {
+  const { id: formId, title, description, costs } = formProp;
+  const form = useFormData(steps);
+  const loadDownload = useCallback(() => loadFormDownload(formId), [formId]);
+  const onSubmit = createFormSubmitHandler({ steps, loadDownload }, form);
 
   const {
-    isLoading,
     phase,
     send,
     activeStep,
@@ -67,7 +113,15 @@ export function FormContainer({
     totalSteps,
     goNext,
     goBack,
-  } = useFormState(formId, steps, form.getValues);
+  } = useFormState(formId, steps, form.getValues, progress);
+
+  const isFilling = phase !== "title";
+  useEffect(() => {
+    if (!isFilling) return;
+    loadDownload().catch((error) => {
+      console.error(`Failed to preload downloads for "${formId}":`, error);
+    });
+  }, [isFilling, loadDownload, formId]);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -159,17 +213,14 @@ export function FormContainer({
     switch (phase) {
       case "title":
         return (
-          <FormTitleStep
-            title={title}
-            description={description}
-            pdfs={pdfMetadata}
+          <TitleStep
+            form={formProp}
+            inline={inline}
             totalSteps={totalSteps}
             onStart={onStart}
-            onDownloadBlank={onDownloadBlank}
-            headingLevel={inline ? 2 : 1}
           >
             {children}
-          </FormTitleStep>
+          </TitleStep>
         );
       case "filling":
       case "editing": {
@@ -196,14 +247,12 @@ export function FormContainer({
     phase,
     steps,
     activeStep,
-    pdfMetadata,
-    title,
-    description,
+    formProp,
     children,
+    title,
     formId,
     totalSteps,
     onStart,
-    onDownloadBlank,
     onSubmit,
     inline,
   ]);
@@ -224,27 +273,11 @@ export function FormContainer({
     costs,
   };
 
-  if (isLoading) {
-    return (
-      <section
-        className={
-          inline
-            ? "form-container form-container-loading not-content"
-            : "form-container form-container-loading"
-        }
-        data-inline={inline || undefined}
-        ref={containerRef}
-      >
-        <ProgressCircle isIndeterminate aria-label="Loading form" size={40} />
-      </section>
-    );
-  }
-
   return (
     <FormProvider {...form}>
       <FormStepContext.Provider value={stepContextValue}>
         <section
-          className={inline ? "form-container not-content" : "form-container"}
+          className={containerClass(inline)}
           data-inline={inline || undefined}
           ref={containerRef}
         >

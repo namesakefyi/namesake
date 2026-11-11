@@ -10,7 +10,10 @@ import {
 export interface StepField {
   id: string;
   type: FieldTypeName;
-  /** The step's, enclosing subsections' and the field's own conditions. */
+  /**
+   * Enclosing subsections' and the field's own conditions. The step's own
+   * `when` is checked separately, before its fields.
+   */
   when?: Condition;
   options?: OptionLabels;
   currency?: boolean;
@@ -44,12 +47,7 @@ function collectStepFields(step: Step): StepField[] {
         fields.push({
           id: written.id,
           type: written.type,
-          when: allOf([
-            step.when,
-            ...context.conditions,
-            question.when,
-            written.when,
-          ]),
+          when: allOf([...context.conditions, question.when, written.when]),
           options: written.options,
           optional: !!written.optional,
           currency:

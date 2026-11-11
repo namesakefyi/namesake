@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { DONT_KNOW } from "#constants/fields";
-import type { Data } from "#lib/forms/questions";
+import type { FormData } from "#lib/forms/questions";
 import { getPdfForm } from "#lib/pdfs/getPdfForm";
-import form from ".";
+import download from "./download";
 
-const [{ pdf: ss5, fill: fillSs5 }] = form.download.pdfs;
+const [{ pdf: ss5, fill: fillSs5 }] = download.pdfs;
 
 describe("SS-5 Application for Social Security Card", () => {
-  const testData: Data = {
+  const testData: FormData = {
     // Field 1: Name
     newFirstName: "Marsha",
     newMiddleName: "P",
