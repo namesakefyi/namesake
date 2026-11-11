@@ -34,16 +34,12 @@ const formStepStep: Step = {
 
 const plainConfig: FormConfig = {
   steps: [plainStep],
-  pdfs: [],
-  downloadTitle: "Test",
-  instructions: [],
+  download: { title: "Test", instructions: [], pdfs: [] },
 };
 
 const formStepConfig: FormConfig = {
   steps: [formStepStep],
-  pdfs: [],
-  downloadTitle: "Test",
-  instructions: [],
+  download: { title: "Test", instructions: [], pdfs: [] },
 };
 
 describe("FormContainer", () => {
@@ -94,10 +90,9 @@ describe("FormContainer", () => {
           title="Test"
           pdfMetadata={[
             {
-              pdfId: "cjp27-petition-to-change-name-of-adult",
               title: "Petition to Change Name of Adult",
               code: "CJP-27",
-              pdfPath: "/forms/cjp27-petition-to-change-name-of-adult.pdf",
+              file: "/forms/cjp27-petition-to-change-name-of-adult.pdf",
             },
           ]}
         />,

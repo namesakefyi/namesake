@@ -1,45 +1,25 @@
-import type { PDFId } from "#constants/pdf";
-import { getPdfDefinition } from "#lib/pdfs/getPdfDefinition";
 import { getFormConfig } from "./getFormConfig";
 
-/**
- * Metadata for a PDF form that includes display information.
- */
+/** What the forms list and title step show about each of a form's PDFs. */
 export interface FormPdfMetadata {
-  /** The unique PDF identifier */
-  pdfId: PDFId;
-  /** The display title of the PDF */
   title: string;
-  /** The form code, if one exists (e.g., "CJP-27") */
+  /** The form code, if one exists, such as "CJP-27". */
   code?: string;
-  /** Whether this PDF is conditionally included based on form data */
+  /** Whether the PDF is included only for some answers. */
   conditional?: boolean;
-  /** The path to the blank PDF file */
-  pdfPath: string;
+  /** The blank PDF file. */
+  file: string;
 }
 
-/**
- * Get PDF metadata for a form to display on the forms index page.
- *
- * @param formId - The form's id, such as `ma/court-order`
- * @returns Array of PDF metadata including title, code, and whether it's conditional
- */
-export async function getFormPdfMetadata(
-  formId: string,
-): Promise<FormPdfMetadata[]> {
+/** @param formId - The form's id, such as `ma/court-order` */
+export function getFormPdfMetadata(formId: string): FormPdfMetadata[] {
   const config = getFormConfig(formId);
   if (!config) return [];
 
-  return await Promise.all(
-    config.pdfs.map(async (pdf) => {
-      const definition = await getPdfDefinition(pdf.pdfId);
-      return {
-        pdfId: pdf.pdfId,
-        title: definition.title,
-        code: definition.code,
-        conditional: !!pdf.when,
-        pdfPath: definition.pdfPath,
-      };
-    }),
-  );
+  return config.download.pdfs.map(({ pdf, when }) => ({
+    title: pdf.title,
+    code: pdf.code,
+    conditional: !!when,
+    file: pdf.file,
+  }));
 }

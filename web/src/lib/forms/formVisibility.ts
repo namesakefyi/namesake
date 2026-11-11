@@ -1,5 +1,5 @@
-import type { FormPdfConfig, Step } from "#constants/forms";
-import type { PDFId } from "#constants/pdf";
+import type { Step } from "#constants/forms";
+import type { FormPdf } from "#constants/pdf";
 import type { Data } from "#lib/forms/questions";
 import { getStepFields, type StepField } from "./getStepFields";
 
@@ -16,7 +16,8 @@ export interface FormVisibility {
   visibleStepIds: string[];
   visibleFields: Data;
   sections: readonly VisibilitySection[];
-  pdfsToInclude: Array<{ pdfId: PDFId; include: boolean }>;
+  /** The PDFs to fill, in order. */
+  includedPdfs: FormPdf[];
 }
 
 /** Returns only the visible step IDs (cheap — skips field/PDF resolution). */
@@ -38,7 +39,7 @@ export function getVisibleStepIds(
 export function resolveFormVisibility(
   steps: readonly Step[],
   formData: Data,
-  pdfs: readonly FormPdfConfig[] = [],
+  pdfs: readonly FormPdf[] = [],
 ): FormVisibility {
   const visibleStepIds: string[] = [];
   const visibleFields: Data = {};
@@ -58,12 +59,9 @@ export function resolveFormVisibility(
     sections.push({ step, fields });
   }
 
-  const pdfsToInclude = pdfs.map((pdf) => ({
-    pdfId: pdf.pdfId,
-    include: pdf.when ? pdf.when(formData) : true,
-  }));
+  const includedPdfs = pdfs.filter((pdf) => !pdf.when || pdf.when(formData));
 
-  return { visibleStepIds, visibleFields, sections, pdfsToInclude };
+  return { visibleStepIds, visibleFields, sections, includedPdfs };
 }
 
 /**

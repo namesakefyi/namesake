@@ -11,7 +11,7 @@ interface Props {
 const { formId, inline = true } = Astro.props;
 const entry = await getEntry("forms", formId);
 if (!entry) throw new Error(`No form found with id: ${formId}`);
-const pdfMetadata = await getFormPdfMetadata(formId);
+const pdfMetadata = getFormPdfMetadata(formId);
 const { title, description, costs } = entry.data;
 ---
 

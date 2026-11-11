@@ -9,21 +9,15 @@ import { formatTimeEstimate } from "#lib/utils/formatTimeEstimate";
 
 const allForms = await getCollection("forms", ({ data }) => !data.unlisted);
 
-const formsWithPdfs = await Promise.all(
-  allForms.map(async (form) => {
-    const config = getFormConfig(form.id);
-    const pdfs = config ? await getFormPdfMetadata(form.id) : [];
-    const stepCount = config?.steps.length ?? 0;
-    const timeEstimate = formatTimeEstimate(stepCount);
-
-    return {
-      title: form.data.title,
-      id: form.id,
-      pdfs,
-      timeEstimate,
-    };
-  }),
-);
+const formsWithPdfs = allForms.map((form) => {
+  const config = getFormConfig(form.id);
+  return {
+    title: form.data.title,
+    id: form.id,
+    pdfs: getFormPdfMetadata(form.id),
+    timeEstimate: formatTimeEstimate(config?.steps.length ?? 0),
+  };
+});
 ---
 
 <BaseLayout

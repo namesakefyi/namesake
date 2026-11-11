@@ -1,4 +1,4 @@
-import type { Data } from "#lib/forms/questions";
+import type { Condition, Data } from "#lib/forms/questions";
 
 /** Matches libpdf's FieldValue, plus undefined for omitted fields. */
 export type PDFFieldValue = string | boolean | string[] | null | undefined;
@@ -6,28 +6,10 @@ export type PDFFieldValue = string | boolean | string[] | null | undefined;
 /** Valid field types that can appear in a generated pdfSchema. */
 export type PdfFieldType = "text" | "checkbox" | "radio" | "button";
 
-export const PDF_IDS = [
-  "affidavit-of-indigency",
-  "cjp25-petition-to-change-name-of-minor",
-  "cjp27-petition-to-change-name-of-adult",
-  "cjp34-cori-and-wms-release-request",
-  "ss5-application-for-social-security-card",
-  "pc8.1-change-of-name",
-  "background-check-authorization-of-release",
-  "r116-applicant-affidavit-in-support-of-amendment-of-a-birth-certificate-for-sex",
-  "ucsnc1-name-change-and-or-sex-designation-change-petition-for-individual-adult",
-] as const;
+/** A PDF's fillable fields and their types, from its generated `schema.ts`. */
+export type PdfSchema = Readonly<Record<string, PdfFieldType>>;
 
-export type PDFId = (typeof PDF_IDS)[number];
-
-export interface PDFDefinition<TPdfFieldName extends string = string> {
-  /**
-   * The unique identifier for the PDF definition.
-   * @example "cjp27-petition-to-change-name-of-adult"
-   * @url https://github.com/namesakefyi/namesake/tree/main/src/forms/README.md
-   */
-  id: PDFId;
-
+export interface PDFDefinition<S extends PdfSchema = PdfSchema> {
   /**
    * The title of the form. Do not include the form code or state.
    * @example "Petition to Change Name of Adult"
@@ -36,7 +18,6 @@ export interface PDFDefinition<TPdfFieldName extends string = string> {
 
   /**
    * The form code, if one exists.
-   * @optional
    * @example "CJP-27"
    */
   code?: string;
@@ -46,20 +27,25 @@ export interface PDFDefinition<TPdfFieldName extends string = string> {
    */
   canonicalUrl: string;
 
-  /**
-   * The path to the PDF file, imported as a module.
-   */
-  pdfPath: string;
+  /** The PDF file, imported as a module. */
+  file: string;
 
-  /**
-   * Function that maps form data to PDF field values.
-   * @example
-   * ```ts
-   * resolver: (data) => ({
-   *   division: data.residenceCounty,
-   *   petitionerName: joinNames(data.oldFirstName, data.oldMiddleName, data.oldLastName),
-   * })
-   * ```
-   */
-  resolver: (data: Data) => Record<TPdfFieldName, PDFFieldValue>;
+  /** The fillable fields, from the PDF's `schema.ts`. */
+  fields: S;
+}
+
+/**
+ * A value for every field of a PDF. Fields left blank on purpose are
+ * written as `undefined`.
+ */
+export type PdfValues<S extends PdfSchema = PdfSchema> = {
+  [K in keyof S]: PDFFieldValue;
+};
+
+/** A PDF a form fills, and how it fills it. */
+export interface FormPdf<S extends PdfSchema = PdfSchema> {
+  pdf: PDFDefinition<S>;
+  /** Includes the PDF only when this returns true. */
+  when?: Condition;
+  fill: (data: Data) => PdfValues<S>;
 }

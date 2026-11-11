@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { definePdf } from "../definePdf";
 import { downloadPdf } from "../downloadPdf";
 import { fillPdf } from "../fillPdf";
-import { testPdfDefinition } from "./helpers";
+import { testPdf } from "./helpers";
 
 describe("downloadPdf", () => {
   let createObjectURL: typeof URL.createObjectURL;
@@ -39,13 +39,10 @@ describe("downloadPdf", () => {
     };
     document.createElement = vi.fn().mockReturnValue(mockAnchor);
 
-    const pdfBytes = await fillPdf({
-      pdf: testPdfDefinition,
-      userData: {
-        newFirstName: "Test",
-        oldFirstName: "Old",
-        shouldReturnOriginalDocuments: true,
-      },
+    const pdfBytes = await fillPdf(testPdf, {
+      newFirstName: "Test",
+      oldFirstName: "Old",
+      shouldReturnOriginalDocuments: true,
     });
 
     await downloadPdf({
@@ -67,13 +64,10 @@ describe("downloadPdf", () => {
       throw new Error("Failed to create element");
     });
 
-    const pdfBytes = await fillPdf({
-      pdf: testPdfDefinition,
-      userData: {
-        newFirstName: "Test",
-        oldFirstName: "Old",
-        shouldReturnOriginalDocuments: true,
-      },
+    const pdfBytes = await fillPdf(testPdf, {
+      newFirstName: "Test",
+      oldFirstName: "Old",
+      shouldReturnOriginalDocuments: true,
     });
 
     await expect(
@@ -93,17 +87,13 @@ describe("downloadPdf", () => {
     document.createElement = vi.fn().mockReturnValue(mockAnchor);
 
     const customPdf = definePdf({
-      id: "test-form" as any,
       title: "Custom Form Name",
       canonicalUrl: "https://example.com",
-      pdfPath: "public/forms/test-form.pdf",
-      resolver: () => ({}),
+      file: "public/forms/test-form.pdf",
+      fields: {},
     });
 
-    const pdfBytes = await fillPdf({
-      pdf: customPdf,
-      userData: {},
-    });
+    const pdfBytes = await fillPdf(customPdf, {});
 
     await downloadPdf({
       pdfBytes,

@@ -1,28 +1,15 @@
-import type { PDFDefinition } from "#constants/pdf";
-import type { Data } from "#lib/forms/questions";
+import type { PDFDefinition, PDFFieldValue } from "#constants/pdf";
 import { fillPdf } from "./fillPdf";
 import { loadPdfLib } from "./loadPdfLib";
 
-/**
- * This is a helper function that returns the form object from a filled PDF.
- * Useful for testing.
- */
-export async function getPdfForm({
-  pdf,
-  userData,
-}: {
-  pdf: PDFDefinition;
-  userData: Data;
-}) {
-  try {
-    const { PDF } = await loadPdfLib();
-    const pdfBytes = await fillPdf({ pdf, userData });
-    const pdfDoc = await PDF.load(pdfBytes);
-    const form = pdfDoc.getForm();
-    if (!form) throw new Error("PDF has no AcroForm");
-    return form;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+/** Fills a PDF and reads its form back. Useful for testing. */
+export async function getPdfForm(
+  pdf: PDFDefinition,
+  values: Readonly<Record<string, PDFFieldValue>>,
+) {
+  const { PDF } = await loadPdfLib();
+  const pdfDoc = await PDF.load(await fillPdf(pdf, values));
+  const form = pdfDoc.getForm();
+  if (!form) throw new Error("PDF has no AcroForm");
+  return form;
 }

@@ -4,7 +4,7 @@ import { parseContentPath } from "./parseContentPath";
 
 export type PdfModules = Record<string, { default: PDFDefinition }>;
 
-/** Stores each PDF definition under its folder name: `pdfs/ma/cjp25/index.ts` is `cjp25`. */
+/** Stores each PDF under its path: `pdfs/ma/cjp25/index.ts` is `ma/cjp25`. */
 export function pdfLoader({ modules }: { modules: PdfModules }): Loader {
   return {
     name: "pdfs-loader",
@@ -12,15 +12,14 @@ export function pdfLoader({ modules }: { modules: PdfModules }): Loader {
       store.clear();
 
       for (const [path, module] of Object.entries(modules)) {
-        const entryPath = path.match(/pdfs\/(.+)\/index\.ts$/)?.[1] ?? path;
+        const id = path.match(/pdfs\/(.+)\/index\.ts$/)?.[1] ?? path;
         const definition = module.default;
-        const id = entryPath.split("/").at(-1) as string;
         const data = await parseData({
           id,
           data: {
             title: definition.title,
             code: definition.code,
-            jurisdiction: parseContentPath(entryPath, "pdfs", definition),
+            jurisdiction: parseContentPath(id, "pdfs", definition),
             canonicalUrl: definition.canonicalUrl,
           },
         });

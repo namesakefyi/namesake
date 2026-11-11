@@ -15,25 +15,19 @@ export function createFormSubmitHandler(
     event.preventDefault();
 
     const formData = form.getValues();
-    const { visibleFields, pdfsToInclude } = resolveFormVisibility(
+    const { download } = config;
+    const { visibleFields, includedPdfs } = resolveFormVisibility(
       config.steps,
       formData,
-      config.pdfs,
+      download.pdfs,
     );
 
-    const [{ loadPdfs }, { downloadFilledPdf }] = await Promise.all([
-      import("#lib/pdfs/loadPdfs"),
-      import("#lib/pdfs/downloadFilledPdf"),
-    ]);
-
-    const pdfs = await loadPdfs(pdfsToInclude);
-
-    const instructions = resolveInstructions(config.instructions, formData);
+    const { downloadFilledPdf } = await import("#lib/pdfs/downloadFilledPdf");
 
     await downloadFilledPdf({
-      title: config.downloadTitle,
-      instructions,
-      pdfs,
+      title: download.title,
+      instructions: resolveInstructions(download.instructions, formData),
+      pdfs: includedPdfs,
       userData: visibleFields,
     });
   };

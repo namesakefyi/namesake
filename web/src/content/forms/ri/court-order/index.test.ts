@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import type { Data } from "#lib/forms/questions";
-import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
-import backgroundCheckAuthorizationOfRelease from ".";
+import form from ".";
+
+const [{ fill: fillBackgroundCheck }] = form.download.pdfs;
 
 describe("Background Check Authorization of Release", () => {
   const testData: Data = {
@@ -18,22 +19,18 @@ describe("Background Check Authorization of Release", () => {
     residenceZipCode: "02903",
   };
 
-  it("maps all fields correctly to the PDF", async () => {
-    await expectPdfFieldsMatch(backgroundCheckAuthorizationOfRelease, testData);
-  });
-
   it("sets purpose to 'Legal name change'", () => {
-    const result = backgroundCheckAuthorizationOfRelease.resolver(testData);
+    const result = fillBackgroundCheck(testData);
     expect(result.nameChange).toBe("Legal name change");
   });
 
   it("includes new name in otherNames", () => {
-    const result = backgroundCheckAuthorizationOfRelease.resolver(testData);
+    const result = fillBackgroundCheck(testData);
     expect(result.otherNames).toBe("Marsha P Johnson");
   });
 
   it("includes previous name in otherNames when present", () => {
-    const result = backgroundCheckAuthorizationOfRelease.resolver({
+    const result = fillBackgroundCheck({
       ...testData,
       previousNameFrom: "Former Name",
     });

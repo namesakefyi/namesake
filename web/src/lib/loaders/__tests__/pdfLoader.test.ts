@@ -3,7 +3,7 @@ import { expect, it, vi } from "vitest";
 import type { PDFDefinition } from "#constants/pdf";
 import { pdfLoader } from "../pdfLoader";
 
-it("stores each PDF under its folder name with the jurisdiction from its path", async () => {
+it("stores each PDF under its path with the jurisdiction from its path", async () => {
   const definition = {
     default: { title: "Test", canonicalUrl: "https://example.com" },
   } as unknown as { default: PDFDefinition };
@@ -21,7 +21,7 @@ it("stores each PDF under its folder name with the jurisdiction from its path", 
 
   expect(store.set).toHaveBeenCalledWith(
     expect.objectContaining({
-      id: "ucsnc1",
+      id: "ny/ucsnc1",
       data: expect.objectContaining({ jurisdiction: "ny" }),
     }),
   );

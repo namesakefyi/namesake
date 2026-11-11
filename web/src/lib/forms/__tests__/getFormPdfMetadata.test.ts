@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import * as pdfs from "#lib/pdfs/getPdfDefinition";
+import { secondTestFormPdf, testFormPdf } from "#lib/pdfs/__tests__/helpers";
 import * as forms from "../getFormConfig";
 import { getFormPdfMetadata } from "../getFormPdfMetadata";
 
@@ -7,119 +7,39 @@ vi.mock("../getFormConfig", () => ({
   getFormConfig: vi.fn(),
 }));
 
-vi.mock("../../pdfs/getPdfDefinition", () => ({
-  getPdfDefinition: vi.fn(),
-}));
-
 describe("getFormPdfMetadata", () => {
-  it("returns an empty array when the form id has no config", async () => {
+  it("returns an empty array when the form id has no config", () => {
     vi.mocked(forms.getFormConfig).mockReturnValue(undefined);
 
-    const result = await getFormPdfMetadata("unknown-form" as never);
-
-    expect(result).toEqual([]);
+    expect(getFormPdfMetadata("unknown-form")).toEqual([]);
   });
 
-  it("returns metadata for each PDF in the form config", async () => {
+  it("describes each PDF in the download, marking conditional ones", () => {
     vi.mocked(forms.getFormConfig).mockReturnValue({
-      pdfs: [{ pdfId: "cjp27-petition-to-change-name-of-adult" }],
-    } as never);
+      steps: [],
+      download: {
+        title: "Packet",
+        instructions: [],
+        pdfs: [
+          { ...testFormPdf, pdf: { ...testFormPdf.pdf, code: "CJP-27" } },
+          { ...secondTestFormPdf, when: () => true },
+        ],
+      },
+    });
 
-    vi.mocked(pdfs.getPdfDefinition).mockResolvedValue({
-      id: "cjp27-petition-to-change-name-of-adult",
-      title: "Petition to Change Name of Adult",
-      code: "CJP-27",
-      pdfPath: "/forms/cjp27-petition-to-change-name-of-adult.pdf",
-    } as never);
-
-    const result = await getFormPdfMetadata("ma/court-order");
-
-    expect(result).toEqual([
+    expect(getFormPdfMetadata("ma/court-order")).toEqual([
       {
-        pdfId: "cjp27-petition-to-change-name-of-adult",
-        title: "Petition to Change Name of Adult",
+        title: "Test Form",
         code: "CJP-27",
         conditional: false,
-        pdfPath: "/forms/cjp27-petition-to-change-name-of-adult.pdf",
+        file: "public/forms/test-form.pdf",
+      },
+      {
+        title: "Test Form 2",
+        code: undefined,
+        conditional: true,
+        file: "public/forms/test-form-2.pdf",
       },
     ]);
-  });
-
-  it("sets conditional to false when a PDF has no include predicate", async () => {
-    vi.mocked(forms.getFormConfig).mockReturnValue({
-      pdfs: [{ pdfId: "affidavit-of-indigency" }],
-    } as never);
-
-    vi.mocked(pdfs.getPdfDefinition).mockResolvedValue({
-      id: "affidavit-of-indigency",
-      title: "Affidavit of Indigency",
-    } as never);
-
-    const [metadata] = await getFormPdfMetadata("ma/court-order");
-
-    expect(metadata.conditional).toBe(false);
-  });
-
-  it("sets conditional to true when a PDF has an include predicate", async () => {
-    vi.mocked(forms.getFormConfig).mockReturnValue({
-      pdfs: [
-        {
-          pdfId: "cjp25-petition-to-change-name-of-minor",
-          when: () => true,
-        },
-      ],
-    } as never);
-
-    vi.mocked(pdfs.getPdfDefinition).mockResolvedValue({
-      id: "cjp25-petition-to-change-name-of-minor",
-      title: "Petition to Change Name of Minor",
-      code: "CJP-25",
-    } as never);
-
-    const [metadata] = await getFormPdfMetadata("ma/court-order");
-
-    expect(metadata.conditional).toBe(true);
-  });
-
-  it("omits code when the PDF definition has none", async () => {
-    vi.mocked(forms.getFormConfig).mockReturnValue({
-      pdfs: [{ pdfId: "ss5-application-for-social-security-card" }],
-    } as never);
-
-    vi.mocked(pdfs.getPdfDefinition).mockResolvedValue({
-      id: "ss5-application-for-social-security-card",
-      title: "Application for a Social Security Card",
-    } as never);
-
-    const [metadata] = await getFormPdfMetadata("social-security");
-
-    expect(metadata.code).toBeUndefined();
-  });
-
-  it("returns metadata for all PDFs when a form has multiple", async () => {
-    vi.mocked(forms.getFormConfig).mockReturnValue({
-      pdfs: [
-        { pdfId: "cjp27-petition-to-change-name-of-adult" },
-        { pdfId: "affidavit-of-indigency", when: () => true },
-      ],
-    } as never);
-
-    vi.mocked(pdfs.getPdfDefinition)
-      .mockResolvedValueOnce({
-        id: "cjp27-petition-to-change-name-of-adult",
-        title: "Petition to Change Name of Adult",
-        code: "CJP-27",
-      } as never)
-      .mockResolvedValueOnce({
-        id: "affidavit-of-indigency",
-        title: "Affidavit of Indigency",
-      } as never);
-
-    const result = await getFormPdfMetadata("ma/court-order");
-
-    expect(result).toHaveLength(2);
-    expect(result[0].pdfId).toBe("cjp27-petition-to-change-name-of-adult");
-    expect(result[1].pdfId).toBe("affidavit-of-indigency");
-    expect(result[1].conditional).toBe(true);
   });
 });

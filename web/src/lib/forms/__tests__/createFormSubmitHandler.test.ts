@@ -1,10 +1,9 @@
 import type { SubmitEvent } from "react";
 import type { FieldValues, UseFormReturn } from "react-hook-form";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { FormConfig } from "#constants/forms";
-import type { PDFId } from "#constants/pdf";
+import type { FormConfig, FormDownload } from "#constants/forms";
+import { testFormPdf } from "#lib/pdfs/__tests__/helpers";
 import { downloadFilledPdf } from "#lib/pdfs/downloadFilledPdf";
-import { loadPdfs } from "#lib/pdfs/loadPdfs";
 import { createFormSubmitHandler } from "../createFormSubmitHandler";
 import { resolveFormVisibility } from "../formVisibility";
 
@@ -14,10 +13,8 @@ vi.mock("../formVisibility", () => ({
 vi.mock("../../pdfs/downloadFilledPdf", () => ({
   downloadFilledPdf: vi.fn(),
 }));
-vi.mock("../../pdfs/loadPdfs", () => ({ loadPdfs: vi.fn() }));
 
-const mockFormData = { oldFirstName: "Jane" } as unknown as FormData;
-const mockPdfs = [{ id: "cjp27-petition-to-change-name-of-adult" }];
+const mockFormData = { oldFirstName: "Jane" };
 const mockVisibleData = { oldFirstName: "Jane" };
 
 function makeForm(data = mockFormData) {
@@ -32,26 +29,25 @@ function makeEvent() {
   } as unknown as SubmitEvent<HTMLFormElement>;
 }
 
-function makeConfig(overrides: Partial<FormConfig> = {}): FormConfig {
+function makeConfig(download: Partial<FormDownload> = {}): FormConfig {
   return {
-    steps: [{ fields: ["oldFirstName"] }],
-    pdfs: [{ pdfId: "cjp27-petition-to-change-name-of-adult" }],
-    downloadTitle: "Court Order MA",
-    instructions: ["Step 1", "Step 2"],
-    ...overrides,
-  } as unknown as FormConfig;
+    steps: [],
+    download: {
+      title: "Court Order MA",
+      instructions: ["Step 1", "Step 2"],
+      pdfs: [testFormPdf],
+      ...download,
+    },
+  };
 }
 
 describe("createFormSubmitHandler", () => {
   beforeEach(() => {
-    vi.mocked(loadPdfs).mockResolvedValue(mockPdfs as never);
     vi.mocked(resolveFormVisibility).mockReturnValue({
       visibleStepIds: [],
       visibleFields: mockVisibleData,
       sections: [],
-      pdfsToInclude: [
-        { pdfId: "cjp27-petition-to-change-name-of-adult", include: true },
-      ],
+      includedPdfs: [testFormPdf],
     });
     vi.mocked(downloadFilledPdf).mockResolvedValue(undefined);
   });
@@ -77,25 +73,8 @@ describe("createFormSubmitHandler", () => {
     expect(resolveFormVisibility).toHaveBeenCalledWith(
       config.steps,
       mockFormData,
-      config.pdfs,
+      config.download.pdfs,
     );
-  });
-
-  it("passes pdfsToInclude to loadPdfs", async () => {
-    const pdfsToInclude: { pdfId: PDFId; include: boolean }[] = [
-      { pdfId: "cjp27-petition-to-change-name-of-adult", include: true },
-      { pdfId: "affidavit-of-indigency", include: false },
-    ];
-    vi.mocked(resolveFormVisibility).mockReturnValue({
-      visibleStepIds: [],
-      visibleFields: mockVisibleData,
-      sections: [],
-      pdfsToInclude,
-    });
-
-    await createFormSubmitHandler(makeConfig(), makeForm())(makeEvent());
-
-    expect(loadPdfs).toHaveBeenCalledWith(pdfsToInclude);
   });
 
   it("resolves instructions against the submitted form data", async () => {
@@ -113,15 +92,15 @@ describe("createFormSubmitHandler", () => {
     );
   });
 
-  it("passes the download title, loaded PDFs, and visible data to downloadFilledPdf", async () => {
-    const config = makeConfig({ downloadTitle: "My Package" });
+  it("downloads the included PDFs, filled with the visible data", async () => {
+    const config = makeConfig({ title: "My Package" });
 
     await createFormSubmitHandler(config, makeForm())(makeEvent());
 
     expect(downloadFilledPdf).toHaveBeenCalledWith({
       title: "My Package",
       instructions: ["Step 1", "Step 2"],
-      pdfs: mockPdfs,
+      pdfs: [testFormPdf],
       userData: mockVisibleData,
     });
   });

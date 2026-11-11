@@ -1,30 +1,30 @@
+import type { PdfValues } from "#constants/pdf";
+import type { Data } from "#lib/forms/questions";
 import { definePdf } from "#lib/pdfs/definePdf";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
-import { joinNames } from "#lib/utils/joinNames";
-import pdf from "./cjp34-cori-and-wms-release-request.pdf";
-import type { PdfFieldName } from "./schema";
+import { fullName } from "#lib/utils/fullName";
+import file from "./cjp34-cori-and-wms-release-request.pdf";
+import { pdfSchema } from "./schema";
 
-export default definePdf<PdfFieldName>({
-  id: "cjp34-cori-and-wms-release-request",
+export default definePdf({
   title: "Court Activity Record Request Form",
   code: "CJP-34",
   canonicalUrl:
     "https://www.mass.gov/doc/court-activity-record-information-and-warrant-management-system-release-request-form-cjp-34/download",
-  pdfPath: pdf,
-  resolver: (data) => ({
-    county: data.residenceCounty,
-    caseName: joinNames(
-      data.oldFirstName,
-      data.oldMiddleName,
-      data.oldLastName,
-    ),
-    isChangeOfNameProceeding: true,
-    oldName: joinNames(data.oldFirstName, data.oldMiddleName, data.oldLastName),
-    dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
-    mothersMaidenName: data.mothersLastName,
-    otherNamesOrAliases: data.otherNamesOrAliases,
-    ssnFirstThree: undefined,
-    ssnMiddleTwo: undefined,
-    ssnLastFour: undefined,
-  }),
+  file,
+  fields: pdfSchema,
+});
+
+/** Reads only shared fields, so any form can use it. */
+export const fillCjp34 = (data: Data): PdfValues<typeof pdfSchema> => ({
+  county: data.residenceCounty,
+  caseName: fullName(data, "oldName"),
+  isChangeOfNameProceeding: true,
+  oldName: fullName(data, "oldName"),
+  dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
+  mothersMaidenName: data.mothersLastName,
+  otherNamesOrAliases: data.otherNamesOrAliases,
+  ssnFirstThree: undefined,
+  ssnMiddleTwo: undefined,
+  ssnLastFour: undefined,
 });

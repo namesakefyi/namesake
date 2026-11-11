@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { secondTestFormPdf, testFormPdf } from "#lib/pdfs/__tests__/helpers";
 import { getFormFields, resolveFormVisibility } from "../formVisibility";
 import { makeStep } from "./testHelpers";
 
@@ -76,19 +77,13 @@ describe("resolveFormVisibility", () => {
     ]);
   });
 
-  it("resolves PDF inclusion based on include predicates", () => {
+  it("includes only PDFs whose `when` passes", () => {
     const steps = [makeStep("a")];
-    const pdfs = [
-      { pdfId: "always" as any },
-      { pdfId: "conditional" as any, when: () => false },
-    ];
+    const conditional = { ...secondTestFormPdf, when: () => false };
 
-    const result = resolveFormVisibility(steps, {}, pdfs);
+    const result = resolveFormVisibility(steps, {}, [testFormPdf, conditional]);
 
-    expect(result.pdfsToInclude).toEqual([
-      { pdfId: "always", include: true },
-      { pdfId: "conditional", include: false },
-    ]);
+    expect(result.includedPdfs).toEqual([testFormPdf]);
   });
 
   it("handles grouped conditional fields", () => {

@@ -3,7 +3,7 @@ import { type FieldTypeName, SHARED_FIELDS } from "#constants/fields";
 import type { Condition } from "#lib/forms/questions";
 import { getStepFields } from "../getStepFields";
 import { getRootContext, walkQuestions } from "../walkQuestions";
-import { forms, getAskedFields, getPdf, traceReads } from "./formFixtures";
+import { forms, getAskedFields, traceReads } from "./formFixtures";
 
 /** Every known field, so reads of fields a form doesn't ask are caught. */
 const ALL_FIELDS = new Map<string, FieldTypeName>([
@@ -17,10 +17,10 @@ describe("form integrity", () => {
   it("asks for every field an included PDF reads", () => {
     const failures = forms.flatMap(([formId, config]) => {
       const asked = getAskedFields(config);
-      return config.pdfs.flatMap(({ pdfId }) => {
-        return traceReads(getPdf(pdfId).resolver, ALL_FIELDS)
+      return config.download.pdfs.flatMap(({ pdf, fill }) => {
+        return traceReads(fill, ALL_FIELDS)
           .filter((field) => !asked.has(field))
-          .map((field) => `${formId}: ${pdfId} reads ${field}`);
+          .map((field) => `${formId}: ${pdf.title} reads ${field}`);
       });
     });
     expect(failures).toEqual([]);

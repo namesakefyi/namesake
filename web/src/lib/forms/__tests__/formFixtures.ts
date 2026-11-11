@@ -1,26 +1,10 @@
 import type { FieldTypeName } from "#constants/fields";
 import type { FormConfig } from "#constants/forms";
-import type { PDFDefinition } from "#constants/pdf";
 import type { Data } from "#lib/forms/questions";
 import { getFormConfigs } from "../getFormConfig";
 import { getStepFields } from "../getStepFields";
 
 export const forms = Object.entries(getFormConfigs());
-
-const pdfDefinitions = new Map(
-  Object.values(
-    import.meta.glob<{ default: PDFDefinition }>(
-      "/src/content/pdfs/**/index.ts",
-      { eager: true },
-    ),
-  ).map((module) => [module.default.id, module.default]),
-);
-
-export function getPdf(pdfId: string): PDFDefinition {
-  const pdf = pdfDefinitions.get(pdfId as PDFDefinition["id"]);
-  if (!pdf) throw new Error(`No PDF definition for ${pdfId}`);
-  return pdf;
-}
 
 const askedFields = new WeakMap<FormConfig, Map<string, FieldTypeName>>();
 

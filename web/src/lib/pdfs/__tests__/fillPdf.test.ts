@@ -1,17 +1,14 @@
 import { PDF } from "@libpdf/core";
 import { describe, expect, it } from "vitest";
 import { fillPdf } from "../fillPdf";
-import { testPdfDefinition } from "./helpers";
+import { testPdf } from "./helpers";
 
 describe("fillPdf", () => {
   it("should fill PDF with text and checkbox fields", async () => {
-    const result = await fillPdf({
-      pdf: testPdfDefinition,
-      userData: {
-        newFirstName: "New",
-        oldFirstName: "Old",
-        shouldReturnOriginalDocuments: true,
-      },
+    const result = await fillPdf(testPdf, {
+      newFirstName: "New",
+      oldFirstName: "Old",
+      shouldReturnOriginalDocuments: true,
     });
 
     expect(result).toBeInstanceOf(Uint8Array);
@@ -28,10 +25,7 @@ describe("fillPdf", () => {
 
   it("should skip null values instead of passing them to text fields", async () => {
     // null means "not provided" — pdf-lib rejects non-string values for text fields
-    const result = await fillPdf({
-      pdf: testPdfDefinition,
-      userData: {},
-    });
+    const result = await fillPdf(testPdf, {});
 
     const pdfDoc = await PDF.load(result);
     const form = pdfDoc.getForm();
@@ -39,13 +33,10 @@ describe("fillPdf", () => {
   });
 
   it("should handle empty or undefined values", async () => {
-    const result = await fillPdf({
-      pdf: testPdfDefinition,
-      userData: {
-        newFirstName: "",
-        oldFirstName: "",
-        shouldReturnOriginalDocuments: false,
-      },
+    const result = await fillPdf(testPdf, {
+      newFirstName: "",
+      oldFirstName: "",
+      shouldReturnOriginalDocuments: false,
     });
 
     const pdfDoc = await PDF.load(result);
@@ -58,10 +49,7 @@ describe("fillPdf", () => {
   });
 
   it("should set a title and author", async () => {
-    const result = await fillPdf({
-      pdf: testPdfDefinition,
-      userData: {},
-    });
+    const result = await fillPdf(testPdf, {});
 
     const pdfDoc = await PDF.load(result);
 

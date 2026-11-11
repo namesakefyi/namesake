@@ -9,7 +9,6 @@ import type { FormConfig } from "#constants/forms";
 import {
   forms,
   getAskedFields,
-  getPdf,
   traceReads,
 } from "#lib/forms/__tests__/formFixtures";
 import type { Data, Text } from "#lib/forms/questions";
@@ -43,12 +42,11 @@ function getReaders(config: FormConfig): ((data: Data) => unknown)[] {
       }
     });
   }
-  for (const pdf of config.pdfs) {
+  for (const pdf of config.download.pdfs) {
     add(pdf.when);
-    const definition = getPdf(pdf.pdfId);
-    add((data) => definition.resolver(data));
+    add(pdf.fill);
   }
-  for (const instruction of config.instructions) {
+  for (const instruction of config.download.instructions) {
     if (typeof instruction !== "string") add(instruction.when);
   }
   return readers;

@@ -14,7 +14,7 @@ export async function buildPdfPacket({
 }: {
   title: string;
   instructions: string[];
-  pdfs: PDFDefinition[];
+  pdfs: readonly PDFDefinition[];
   pdfBytes: Uint8Array[];
 }): Promise<Uint8Array> {
   const { PDF } = await loadPdfLib();

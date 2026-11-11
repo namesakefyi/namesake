@@ -13,11 +13,11 @@ export async function downloadBlankPdfs({
 }: {
   title: string;
   instructions: string[];
-  pdfs: PDFDefinition[];
+  pdfs: readonly PDFDefinition[];
 }) {
   const pdfBytes = await Promise.all(
     pdfs.map((pdf) =>
-      fetchPdf(pdf.pdfPath).then((bytes) => new Uint8Array(bytes)),
+      fetchPdf(pdf.file).then((bytes) => new Uint8Array(bytes)),
     ),
   );
 

@@ -1,11 +1,15 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import ucsnc1 from "#content/pdfs/ny/ucsnc1-name-change-and-or-sex-designation-change-petition-for-individual-adult";
 import { resolveFormVisibility } from "#lib/forms/formVisibility";
 import type { Data } from "#lib/forms/questions";
+import { getPdfForm } from "#lib/pdfs/getPdfForm";
 import form from ".";
 
+const [{ fill: fillUcsnc1 }] = form.download.pdfs;
+
 /** Also takes answers saved by other forms. */
-const resolve = (data: Data & Data) =>
-  resolveFormVisibility(form.steps, data, form.pdfs);
+const resolve = (data: Data) =>
+  resolveFormVisibility(form.steps, data, form.download.pdfs);
 
 const nameSteps = [
   "new-name",
@@ -137,5 +141,386 @@ describe("New York question flow", () => {
     });
     expect(visibleFields.hasPreviouslyFiledNameChange).toBeUndefined();
     expect(visibleFields).not.toHaveProperty("previousNameFrom");
+  });
+});
+
+// Exercise the same visibility filtering used by createFormSubmitHandler.
+const visibleAnswers = (data: Data) =>
+  resolveFormVisibility(form.steps, data, form.download.pdfs).visibleFields;
+
+const getPetitionForm = (userData: Data) =>
+  getPdfForm(ucsnc1, fillUcsnc1(visibleAnswers(userData)));
+
+const names: Data = {
+  oldFirstName: "Alex",
+  oldMiddleName: "J",
+  oldLastName: "Example",
+  newFirstName: "Taylor",
+  newLastName: "Example",
+};
+
+describe("New York petition names and request type", () => {
+  it.each([
+    ["Name change", true, false],
+    ["Sex designation change", false, true],
+    ["Both", true, true],
+  ] as const)("fills the PDF for %s", async (request, name, sex) => {
+    // Include a saved new name to ensure sex-only requests do not use it.
+    const form = await getPetitionForm({
+      ...names,
+      nyCourtOrderRequest: request,
+    });
+    expect(form.getTextField("currentLegalName")?.getValue()).toBe(
+      "Alex J Example",
+    );
+    expect(form.getCheckbox("isRequestingNameChange")?.isChecked()).toBe(name);
+    expect(
+      form.getCheckbox("isRequestingSexDesignationChange")?.isChecked(),
+    ).toBe(sex);
+    for (const [fieldName, checked] of [
+      ["isRequestingNameChange", name],
+      ["isRequestingSexDesignationChange", sex],
+    ] as const) {
+      const field = form.getCheckbox(fieldName);
+      if (!field) throw new Error(`Missing checkbox: ${fieldName}`);
+      expect(field.getWidgets()).toHaveLength(2);
+      for (const widget of field.getWidgets()) {
+        expect(widget.dict.getName("AS")?.value !== "Off").toBe(checked);
+        expect(widget.dict.getName("V")).toBeUndefined();
+      }
+    }
+    const newName = form.getTextField("newFullName")?.getValue();
+    if (name) expect(newName).toBe("Taylor Example");
+    else expect(newName ?? "").toBe("");
+  });
+
+  it("uses the existing name when no new name was collected", async () => {
+    const form = await getPetitionForm({
+      nyCourtOrderRequest: "Sex designation change",
+      oldFirstName: "Alex",
+      oldLastName: "Example",
+    });
+    expect(form.getTextField("currentLegalName")?.getValue()).toBe(
+      "Alex Example",
+    );
+    expect(form.getTextField("newFullName")?.getValue() ?? "").toBe("");
+  });
+});
+
+const complete: Data = {
+  ...names,
+  nyCourtOrderRequest: "Both",
+  courtType: "Civil",
+  dateOfBirth: "1990-06-15",
+  residenceStreetAddress: "123 Example Street",
+  residenceStreetAddress2: "Apt 4",
+  residenceCity: "Brooklyn",
+  residenceState: "NY",
+  residenceZipCode: "11201",
+  residenceCounty: "Queens",
+  birthplaceCity: "Boston",
+  birthplaceState: "MA",
+  birthplaceCountry: "US",
+  hasBeenConvictedOfCrime: true,
+  courtOfConviction: "Example Court",
+  crime: "Example conviction",
+  hasFiledForBankruptcy: true,
+  hasJudgmentsOrLiens: true,
+  isPartyToLawsuitOrCourtCase: true,
+  bankruptcyJudgmentsLiensDetails: "Example Court, 2020, case 123",
+  isCurrentlyMarried: true,
+  wasPreviouslyMarried: true,
+  hasChildrenUnder21: true,
+  doesPayChildSupport: true,
+  areChildSupportPaymentsUpToDate: false,
+  childSupportArrearsAmount: "1250.50",
+  courtIssuingChildSupportOrder: "Example Family Court",
+  supportCollectionsUnit: "Kings County SCU",
+  doesPaySpousalSupport: true,
+  areSpousalSupportPaymentsUpToDate: false,
+  spousalSupportArrearsAmount: "0",
+  courtIssuingSpousalSupportOrder: "Example Supreme Court",
+  hasPreviouslyFiledNameChange: true,
+  previousNameChangePetitionDetails: "Example Court, 2021, case 456, withdrawn",
+  reasonForChangingName: "This is the name I use.",
+  newGender: "X",
+  hasPreviouslyFiledSexDesignationChange: true,
+  previouslyFiledSexDesignationChangeDetails:
+    "Example Court, 2022, case 789, withdrawn",
+  isProvidingReasonForGenderChange: true,
+  reasonForGenderChange: "To reflect my gender identity.",
+  shouldSealCourtRecord: true,
+  reasonToSealCourtRecord: "For my personal safety.",
+  hasAttachedSupportingDocuments: true,
+  supportingDocumentsDetails: "Certified birth certificate",
+};
+
+/** The PDF names radios whose answers were renamed. */
+const PDF_NAMES: Record<string, string> = {
+  doesPayChildSupport: "paysChildSupport",
+  doesPaySpousalSupport: "paysSpousalSupport",
+};
+const pdfName = (field: string) => PDF_NAMES[field] ?? field;
+
+const nameRadios = [
+  "hasBeenConvictedOfCrime",
+  "hasFiledForBankruptcy",
+  "hasJudgmentsOrLiens",
+  "isPartyToLawsuitOrCourtCase",
+  "isCurrentlyMarried",
+  "wasPreviouslyMarried",
+  "hasChildrenUnder21",
+  "doesPayChildSupport",
+  "areChildSupportPaymentsUpToDate",
+  "doesPaySpousalSupport",
+  "areSpousalSupportPaymentsUpToDate",
+] as const;
+const sexRadios = [
+  "hasPreviouslyFiledSexDesignationChange",
+  "isProvidingReasonForGenderChange",
+] as const;
+const radios = [
+  ...nameRadios,
+  ...sexRadios,
+  "shouldSealCourtRecord",
+  "hasAttachedSupportingDocuments",
+] as const;
+const nameText = [
+  "newFullName",
+  "placeOfBirth",
+  "courtOfConviction",
+  "crime",
+  "bankruptcyJudgmentsLiensDetails",
+  "childSupportArrearsAmount",
+  "courtIssuingChildSupportOrder",
+  "supportCollectionsUnit",
+  "spousalSupportArrearsAmount",
+  "courtIssuingSpousalSupportOrder",
+  "previousNameChangeDetails",
+  "reasonForChangingName",
+] as const;
+const sexText = [
+  "newGender",
+  "previouslyFiledSexDesignationChangeDetails",
+  "reasonForGenderChange",
+] as const;
+
+describe("New York petition field mapping", () => {
+  it("derives the age at download time", () => {
+    vi.setSystemTime(new Date(2026, 5, 14));
+    try {
+      expect(fillUcsnc1(visibleAnswers(complete)).currentAge).toBe("35");
+      vi.setSystemTime(new Date(2026, 5, 15));
+      expect(fillUcsnc1(visibleAnswers(complete)).currentAge).toBe("36");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("fills every collected answer in the saved PDF", async () => {
+    const form = await getPetitionForm(complete);
+    const expectedText = {
+      currentLegalName: "Alex J Example",
+      newFullName: "Taylor Example",
+      courtType: "Civil",
+      county: "Queens",
+      dateOfBirth: "06/15/1990",
+      residenceAddress:
+        "123 Example Street, Apt 4, Brooklyn, NY, 11201, United States",
+      placeOfBirth: "Boston, MA, United States of America",
+      courtOfConviction: complete.courtOfConviction,
+      crime: complete.crime,
+      bankruptcyJudgmentsLiensDetails: complete.bankruptcyJudgmentsLiensDetails,
+      childSupportArrearsAmount: "1250.50",
+      courtIssuingChildSupportOrder: complete.courtIssuingChildSupportOrder,
+      supportCollectionsUnit: complete.supportCollectionsUnit,
+      spousalSupportArrearsAmount: "0",
+      courtIssuingSpousalSupportOrder: complete.courtIssuingSpousalSupportOrder,
+      previousNameChangeDetails: complete.previousNameChangePetitionDetails,
+      reasonForChangingName: complete.reasonForChangingName,
+      newGender: "X",
+      previouslyFiledSexDesignationChangeDetails:
+        complete.previouslyFiledSexDesignationChangeDetails,
+      reasonForGenderChange: complete.reasonForGenderChange,
+      reasonToSealCourtRecord: complete.reasonToSealCourtRecord,
+      supportingDocumentsDetails: complete.supportingDocumentsDetails,
+    };
+    for (const [name, expected] of Object.entries(expectedText)) {
+      expect(form.getTextField(name)?.getValue(), name).toBe(expected);
+    }
+    for (const name of radios) {
+      expect(form.getRadioGroup(pdfName(name))?.getValue(), name).toBe(
+        complete[name] ? "Yes" : "No",
+      );
+    }
+    expect(form.getCheckbox("hasPreviousNameChangeTrue")?.isChecked()).toBe(
+      true,
+    );
+    expect(form.getCheckbox("hasPreviousNameChangeFalse")?.isChecked()).toBe(
+      false,
+    );
+    for (const name of [
+      "signatureDate",
+      "petitionDay",
+      "petitionMonth",
+      "petitionYearSuffix",
+      "indexNumber",
+    ]) {
+      expect((form.getTextField(name)?.getValue() ?? "").trim(), name).toBe("");
+    }
+  });
+
+  it.each([true, false])(
+    "selects exactly the printed %s radio button",
+    async (answer) => {
+      const userData = {
+        ...complete,
+        ...Object.fromEntries(radios.map((name) => [name, answer])),
+      };
+      // Both support-payment questions must be visible to exercise their radios.
+      userData.doesPayChildSupport = true;
+      userData.doesPaySpousalSupport = true;
+      const form = await getPetitionForm(userData);
+      for (const name of radios) {
+        const field = form.getRadioGroup(pdfName(name));
+        if (!field) throw new Error(`Missing radio: ${name}`);
+        const expectedYes = userData[name] === true;
+        expect(field.getOptions().sort(), name).toEqual(["No", "Yes"]);
+        expect(field.getValue(), name).toBe(expectedYes ? "Yes" : "No");
+        const widgets = field
+          .getWidgets()
+          .sort((a, b) => a.rect[0] - b.rect[0]);
+        expect(
+          widgets.map((w) => w.dict.getName("AS")?.value),
+          name,
+        ).toEqual(expectedYes ? ["Yes", "Off"] : ["Off", "No"]);
+      }
+    },
+  );
+
+  it("leaves unanswered questions and personal information blank", async () => {
+    const form = await getPetitionForm({ nyCourtOrderRequest: "Both" });
+    for (const name of radios) {
+      const field = form.getRadioGroup(pdfName(name));
+      if (!field) throw new Error(`Missing radio: ${name}`);
+      expect(field.getValue(), name).toBeNull();
+      expect(
+        field.getWidgets().every((w) => w.dict.getName("AS")?.value === "Off"),
+        name,
+      ).toBe(true);
+    }
+    for (const name of [
+      "hasPreviousNameChangeTrue",
+      "hasPreviousNameChangeFalse",
+    ]) {
+      expect(form.getCheckbox(name)?.isChecked(), name).toBe(false);
+    }
+    for (const name of [
+      "currentAge",
+      "dateOfBirth",
+      "residenceAddress",
+      "placeOfBirth",
+    ]) {
+      expect((form.getTextField(name)?.getValue() ?? "").trim(), name).toBe("");
+    }
+  });
+
+  it.each(["Name change", "Sex designation change"] as const)(
+    "omits the other section for %s, even with stale answers",
+    async (request) => {
+      const form = await getPetitionForm({
+        ...complete,
+        nyCourtOrderRequest: request,
+      });
+      const sexOnly = request === "Sex designation change";
+      for (const name of sexOnly ? nameText : sexText) {
+        expect((form.getTextField(name)?.getValue() ?? "").trim(), name).toBe(
+          "",
+        );
+      }
+      for (const name of sexOnly ? nameRadios : sexRadios) {
+        expect(form.getRadioGroup(pdfName(name))?.getValue(), name).toBeNull();
+      }
+      if (sexOnly) {
+        expect(form.getCheckbox("hasPreviousNameChangeTrue")?.isChecked()).toBe(
+          false,
+        );
+        expect(
+          form.getCheckbox("hasPreviousNameChangeFalse")?.isChecked(),
+        ).toBe(false);
+      }
+    },
+  );
+
+  it("does not print hidden details after an answer changes to no", async () => {
+    const form = await getPetitionForm({
+      ...complete,
+      ...Object.fromEntries(radios.map((name) => [name, false])),
+      hasPreviouslyFiledNameChange: false,
+    });
+    for (const name of [
+      "courtOfConviction",
+      "crime",
+      "bankruptcyJudgmentsLiensDetails",
+      "childSupportArrearsAmount",
+      "courtIssuingChildSupportOrder",
+      "supportCollectionsUnit",
+      "spousalSupportArrearsAmount",
+      "courtIssuingSpousalSupportOrder",
+      "previousNameChangeDetails",
+      "previouslyFiledSexDesignationChangeDetails",
+      "reasonForGenderChange",
+      "reasonToSealCourtRecord",
+      "supportingDocumentsDetails",
+    ])
+      expect((form.getTextField(name)?.getValue() ?? "").trim(), name).toBe("");
+    expect(
+      form.getRadioGroup("areChildSupportPaymentsUpToDate")?.getValue(),
+    ).toBeNull();
+    expect(
+      form.getRadioGroup("areSpousalSupportPaymentsUpToDate")?.getValue(),
+    ).toBeNull();
+    expect(form.getCheckbox("hasPreviousNameChangeTrue")?.isChecked()).toBe(
+      false,
+    );
+    expect(form.getCheckbox("hasPreviousNameChangeFalse")?.isChecked()).toBe(
+      true,
+    );
+  });
+
+  it("omits stale arrears when payments are up to date", () => {
+    const result = fillUcsnc1(
+      visibleAnswers({
+        ...complete,
+        areChildSupportPaymentsUpToDate: true,
+        areSpousalSupportPaymentsUpToDate: true,
+      }),
+    );
+    expect(result.childSupportArrearsAmount).toBeUndefined();
+    expect(result.spousalSupportArrearsAmount).toBeUndefined();
+    expect(result.courtIssuingChildSupportOrder).toBe(
+      complete.courtIssuingChildSupportOrder,
+    );
+  });
+
+  it("uses the chosen court in New York City and Supreme Court elsewhere", () => {
+    expect(fillUcsnc1(visibleAnswers(complete)).courtType).toBe("Civil");
+    const outsideCity = fillUcsnc1(
+      visibleAnswers({ ...complete, residenceCounty: "Albany" }),
+    );
+    expect(outsideCity.courtType).toBe("Supreme");
+    expect(outsideCity.county).toBe("Albany");
+  });
+
+  it("uses the international birthplace region instead of a saved US state", () => {
+    const result = fillUcsnc1(
+      visibleAnswers({
+        ...complete,
+        birthplaceCity: "Toronto",
+        birthplaceRegion: "Ontario",
+        birthplaceCountry: "CA",
+      }),
+    );
+    expect(result.placeOfBirth).toBe("Toronto, Ontario, Canada");
   });
 });

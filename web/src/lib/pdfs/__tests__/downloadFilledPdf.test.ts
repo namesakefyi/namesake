@@ -3,7 +3,12 @@ import { buildPdfPacket } from "../buildPdfPacket";
 import { downloadFilledPdf } from "../downloadFilledPdf";
 import { downloadPdf } from "../downloadPdf";
 import { fillPdf } from "../fillPdf";
-import { secondTestPdfDefinition, testPdfDefinition } from "./helpers";
+import {
+  secondTestFormPdf,
+  secondTestPdf,
+  testFormPdf,
+  testPdf,
+} from "./helpers";
 
 vi.mock("../buildPdfPacket", () => ({ buildPdfPacket: vi.fn() }));
 vi.mock("../downloadPdf", () => ({ downloadPdf: vi.fn() }));
@@ -27,15 +32,16 @@ describe("downloadFilledPdf", () => {
     await downloadFilledPdf({
       title: "Test Packet",
       instructions: [],
-      pdfs: [testPdfDefinition, secondTestPdfDefinition],
+      pdfs: [testFormPdf, secondTestFormPdf],
       userData,
     });
 
-    expect(fillPdf).toHaveBeenCalledWith({ pdf: testPdfDefinition, userData });
-    expect(fillPdf).toHaveBeenCalledWith({
-      pdf: secondTestPdfDefinition,
-      userData,
+    expect(fillPdf).toHaveBeenCalledWith(testPdf, {
+      newFirstName: "Jamie",
+      oldFirstName: undefined,
+      shouldReturnOriginalDocuments: undefined,
     });
+    expect(fillPdf).toHaveBeenCalledWith(secondTestPdf, { field1: "Jamie" });
   });
 
   it("builds the packet with each PDF's filled bytes, in order", async () => {
@@ -48,14 +54,14 @@ describe("downloadFilledPdf", () => {
     await downloadFilledPdf({
       title: "Multi-PDF Packet",
       instructions: ["Step 1"],
-      pdfs: [testPdfDefinition, secondTestPdfDefinition],
+      pdfs: [testFormPdf, secondTestFormPdf],
       userData: {},
     });
 
     expect(buildPdfPacket).toHaveBeenCalledWith({
       title: "Multi-PDF Packet",
       instructions: ["Step 1"],
-      pdfs: [testPdfDefinition, secondTestPdfDefinition],
+      pdfs: [testPdf, secondTestPdf],
       pdfBytes: [firstBytes, secondBytes],
     });
   });
@@ -66,7 +72,7 @@ describe("downloadFilledPdf", () => {
     await downloadFilledPdf({
       title: "Test Packet",
       instructions: [],
-      pdfs: [testPdfDefinition],
+      pdfs: [testFormPdf],
       userData: {},
     });
 
@@ -84,7 +90,7 @@ describe("downloadFilledPdf", () => {
       downloadFilledPdf({
         title: "Test Packet",
         instructions: [],
-        pdfs: [testPdfDefinition],
+        pdfs: [testFormPdf],
         userData: {},
       }),
     ).rejects.toThrow("download failed");

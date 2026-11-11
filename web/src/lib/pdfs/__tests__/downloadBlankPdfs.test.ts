@@ -3,7 +3,7 @@ import { buildPdfPacket } from "../buildPdfPacket";
 import { downloadBlankPdfs } from "../downloadBlankPdfs";
 import { downloadPdf } from "../downloadPdf";
 import { fetchPdf } from "../fetchPdf";
-import { secondTestPdfDefinition, testPdfDefinition } from "./helpers";
+import { secondTestPdf, testPdf } from "./helpers";
 
 vi.mock("../buildPdfPacket", () => ({ buildPdfPacket: vi.fn() }));
 vi.mock("../downloadPdf", () => ({ downloadPdf: vi.fn() }));
@@ -26,11 +26,11 @@ describe("downloadBlankPdfs", () => {
     await downloadBlankPdfs({
       title: "Test Packet",
       instructions: [],
-      pdfs: [testPdfDefinition, secondTestPdfDefinition],
+      pdfs: [testPdf, secondTestPdf],
     });
 
-    expect(fetchPdf).toHaveBeenCalledWith(testPdfDefinition.pdfPath);
-    expect(fetchPdf).toHaveBeenCalledWith(secondTestPdfDefinition.pdfPath);
+    expect(fetchPdf).toHaveBeenCalledWith(testPdf.file);
+    expect(fetchPdf).toHaveBeenCalledWith(secondTestPdf.file);
   });
 
   it("builds the packet with each PDF's fetched bytes, in order", async () => {
@@ -41,13 +41,13 @@ describe("downloadBlankPdfs", () => {
     await downloadBlankPdfs({
       title: "Multi-PDF Packet",
       instructions: ["Step 1"],
-      pdfs: [testPdfDefinition, secondTestPdfDefinition],
+      pdfs: [testPdf, secondTestPdf],
     });
 
     expect(buildPdfPacket).toHaveBeenCalledWith({
       title: "Multi-PDF Packet",
       instructions: ["Step 1"],
-      pdfs: [testPdfDefinition, secondTestPdfDefinition],
+      pdfs: [testPdf, secondTestPdf],
       pdfBytes: [new Uint8Array([1]), new Uint8Array([2])],
     });
   });
@@ -58,7 +58,7 @@ describe("downloadBlankPdfs", () => {
     await downloadBlankPdfs({
       title: "Test Packet",
       instructions: [],
-      pdfs: [testPdfDefinition],
+      pdfs: [testPdf],
     });
 
     expect(downloadPdf).toHaveBeenCalledWith({
@@ -75,7 +75,7 @@ describe("downloadBlankPdfs", () => {
       downloadBlankPdfs({
         title: "Test Packet",
         instructions: [],
-        pdfs: [testPdfDefinition],
+        pdfs: [testPdf],
       }),
     ).rejects.toThrow("download failed");
   });

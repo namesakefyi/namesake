@@ -14,9 +14,7 @@ vi.mock("#db/database", () => ({
 function makeConfig(fields: string[]): FormConfig {
   return {
     steps: [makeStep("s", fields)],
-    pdfs: [],
-    downloadTitle: "Test",
-    instructions: [],
+    download: { title: "Test", instructions: [], pdfs: [] },
   };
 }
 

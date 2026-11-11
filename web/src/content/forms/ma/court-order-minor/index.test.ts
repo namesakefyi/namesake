@@ -1,8 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import cjp25 from "#content/pdfs/ma/cjp25-petition-to-change-name-of-minor";
 import type { Data } from "#lib/forms/questions";
-import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
 import { getPdfForm } from "#lib/pdfs/getPdfForm";
-import cjp25PetitionToChangeNameOfMinor from ".";
+import form from ".";
+
+const [{ fill: fillCjp25 }] = form.download.pdfs;
 
 describe("Petition to Change Name of Minor", () => {
   afterEach(() => {
@@ -84,17 +86,9 @@ describe("Petition to Change Name of Minor", () => {
     language: "es",
   };
 
-  it("maps all fields correctly to the PDF", async () => {
-    vi.setSystemTime(new Date(2025, 5, 15)); // Jun 15, 2025 — child turns 10
-    await expectPdfFieldsMatch(cjp25PetitionToChangeNameOfMinor, testData);
-  });
-
   it("derives isChildUnder12 true when child is under 12", async () => {
     vi.setSystemTime(new Date(2025, 5, 15));
-    const form = await getPdfForm({
-      pdf: cjp25PetitionToChangeNameOfMinor,
-      userData: testData, // dateOfBirth 2015-06-15 → age 10
-    });
+    const form = await getPdfForm(cjp25, fillCjp25(testData));
     expect(form.getCheckbox("isChildUnder12")?.isChecked()).toBe(true);
   });
 
@@ -105,10 +99,7 @@ describe("Petition to Change Name of Minor", () => {
       dateOfBirth: "2012-01-01", // 13 years old — isChildUnder12 becomes false
     };
 
-    const form = await getPdfForm({
-      pdf: cjp25PetitionToChangeNameOfMinor,
-      userData: dataWithOlderChild,
-    });
+    const form = await getPdfForm(cjp25, fillCjp25(dataWithOlderChild));
 
     expect(form.getCheckbox("isChildUnder12")?.isChecked()).toBe(false);
   });
@@ -119,10 +110,7 @@ describe("Petition to Change Name of Minor", () => {
       ...testData,
       hasPreviousNameChange: false,
     };
-    const form = await getPdfForm({
-      pdf: cjp25PetitionToChangeNameOfMinor,
-      userData: dataWithNoPreviousChange,
-    });
+    const form = await getPdfForm(cjp25, fillCjp25(dataWithNoPreviousChange));
     expect(form.getCheckbox("hasPreviousNameChangeTrue")?.isChecked()).toBe(
       false,
     );
@@ -137,10 +125,7 @@ describe("Petition to Change Name of Minor", () => {
       ...testData,
       hasCourtAppointedGuardian: false,
     };
-    const form = await getPdfForm({
-      pdf: cjp25PetitionToChangeNameOfMinor,
-      userData: dataWithNoGuardian,
-    });
+    const form = await getPdfForm(cjp25, fillCjp25(dataWithNoGuardian));
     expect(
       form.getCheckbox("hasCountAppointedGuardianFalse")?.isChecked(),
     ).toBe(true);
@@ -155,10 +140,7 @@ describe("Petition to Change Name of Minor", () => {
       ...testData,
       areBothParentsListedOnBirthCertificate: true,
     };
-    const form = await getPdfForm({
-      pdf: cjp25PetitionToChangeNameOfMinor,
-      userData: dataWithBothParents,
-    });
+    const form = await getPdfForm(cjp25, fillCjp25(dataWithBothParents));
     expect(
       form.getCheckbox("isOnlyOneParentListedOnBirthCertificate")?.isChecked(),
     ).toBe(false);

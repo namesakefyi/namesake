@@ -43,5 +43,7 @@ export interface Rename {
 export interface AddPdfResult {
   id: string;
   fieldCount: number;
+  /** A starter `{ pdf, fill }` entry for a form's `download.pdfs`. */
+  fill?: string;
   error?: string;
 }

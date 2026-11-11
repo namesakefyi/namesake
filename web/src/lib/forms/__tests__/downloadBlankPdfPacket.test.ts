@@ -1,32 +1,32 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { FormConfig } from "#constants/forms";
+import type { FormConfig, FormDownload } from "#constants/forms";
+import {
+  secondTestFormPdf,
+  secondTestPdf,
+  testFormPdf,
+  testPdf,
+} from "#lib/pdfs/__tests__/helpers";
 import { downloadBlankPdfs } from "#lib/pdfs/downloadBlankPdfs";
-import { loadPdfs } from "#lib/pdfs/loadPdfs";
 import { downloadBlankPdfPacket } from "../downloadBlankPdfPacket";
 
 vi.mock("../../pdfs/downloadBlankPdfs", () => ({
   downloadBlankPdfs: vi.fn(),
 }));
-vi.mock("../../pdfs/loadPdfs", () => ({ loadPdfs: vi.fn() }));
 
-const mockPdfs = [{ id: "cjp27-petition-to-change-name-of-adult" }];
-
-function makeConfig(overrides: Partial<FormConfig> = {}): FormConfig {
+function makeConfig(download: Partial<FormDownload> = {}): FormConfig {
   return {
-    steps: [{ fields: ["oldFirstName"] }],
-    pdfs: [
-      { pdfId: "cjp27-petition-to-change-name-of-adult" },
-      { pdfId: "affidavit-of-indigency", when: () => false },
-    ],
-    downloadTitle: "Court Order MA",
-    instructions: ["Step 1", "Step 2"],
-    ...overrides,
-  } as unknown as FormConfig;
+    steps: [],
+    download: {
+      title: "Court Order MA",
+      instructions: ["Step 1", "Step 2"],
+      pdfs: [testFormPdf, { ...secondTestFormPdf, when: () => false }],
+      ...download,
+    },
+  };
 }
 
 describe("downloadBlankPdfPacket", () => {
   beforeEach(() => {
-    vi.mocked(loadPdfs).mockResolvedValue(mockPdfs as never);
     vi.mocked(downloadBlankPdfs).mockResolvedValue(undefined);
   });
 
@@ -34,15 +34,12 @@ describe("downloadBlankPdfPacket", () => {
     vi.clearAllMocks();
   });
 
-  it("calls loadPdfs with every PDF id, ignoring conditional `when` predicates", async () => {
-    const config = makeConfig();
+  it("includes every PDF, ignoring conditional `when` predicates", async () => {
+    await downloadBlankPdfPacket(makeConfig());
 
-    await downloadBlankPdfPacket(config);
-
-    expect(loadPdfs).toHaveBeenCalledWith([
-      { pdfId: "cjp27-petition-to-change-name-of-adult" },
-      { pdfId: "affidavit-of-indigency" },
-    ]);
+    expect(downloadBlankPdfs).toHaveBeenCalledWith(
+      expect.objectContaining({ pdfs: [testPdf, secondTestPdf] }),
+    );
   });
 
   it("resolves instructions against empty form data", async () => {
@@ -60,15 +57,13 @@ describe("downloadBlankPdfPacket", () => {
     );
   });
 
-  it("passes the download title and loaded PDFs to downloadBlankPdfs", async () => {
-    const config = makeConfig({ downloadTitle: "My Package" });
-
-    await downloadBlankPdfPacket(config);
+  it("passes the download title to downloadBlankPdfs", async () => {
+    await downloadBlankPdfPacket(makeConfig({ title: "My Package" }));
 
     expect(downloadBlankPdfs).toHaveBeenCalledWith({
       title: "My Package",
       instructions: ["Step 1", "Step 2"],
-      pdfs: mockPdfs,
+      pdfs: [testPdf, secondTestPdf],
     });
   });
 });

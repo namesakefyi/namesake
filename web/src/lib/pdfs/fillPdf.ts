@@ -1,6 +1,5 @@
 import type { PDFForm } from "@libpdf/core";
 import type { PDFDefinition, PDFFieldValue } from "#constants/pdf";
-import type { Data } from "#lib/forms/questions";
 import { fetchPdf } from "./fetchPdf";
 import { loadPdfLib } from "./loadPdfLib";
 
@@ -23,21 +22,18 @@ function toFieldValue(
 }
 
 /**
- * Fill out a PDF form with the given user data.
+ * Fill out a PDF form with values from its form's `fill`.
  * @returns PDF bytes for the filled form.
  */
-export async function fillPdf({
-  pdf,
-  userData,
-}: {
-  pdf: PDFDefinition;
-  userData: Data;
-}): Promise<Uint8Array> {
+export async function fillPdf(
+  pdf: PDFDefinition,
+  values: Readonly<Record<string, PDFFieldValue>>,
+): Promise<Uint8Array> {
   try {
     const { PDF } = await loadPdfLib();
 
     // Fetch the PDF with form fields
-    const formPdfBytes = await fetchPdf(pdf.pdfPath);
+    const formPdfBytes = await fetchPdf(pdf.file);
 
     // Load a PDF with form fields (PDF.load requires Uint8Array, not ArrayBuffer)
     const pdfDoc = await PDF.load(new Uint8Array(formPdfBytes));
@@ -49,16 +45,14 @@ export async function fillPdf({
     // Get the form containing all the fields
     const form = pdfDoc.getForm();
 
-    // Fill out each field from the resolver
-    const fields = pdf.resolver(userData);
     if (form) {
-      const values: Record<string, NonNullable<PDFFieldValue>> = {};
-      for (const [name, resolved] of Object.entries(fields)) {
+      const filled: Record<string, NonNullable<PDFFieldValue>> = {};
+      for (const [name, resolved] of Object.entries(values)) {
         if (resolved == null) continue;
         const value = toFieldValue(form, name, resolved);
-        if (value !== undefined) values[name] = value;
+        if (value !== undefined) filled[name] = value;
       }
-      form.fill(values);
+      form.fill(filled);
     }
 
     // Serialize the PDFDocument to bytes

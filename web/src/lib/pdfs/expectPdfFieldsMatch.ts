@@ -1,19 +1,15 @@
 import { expect } from "vitest";
-import type { PDFDefinition } from "#constants/pdf";
-import type { Data } from "#lib/forms/questions";
+import type { PDFDefinition, PDFFieldValue } from "#constants/pdf";
 import { getPdfForm } from "./getPdfForm";
 
-/**
- * Assert that all form data values are correctly written to the PDF fields.
- */
+/** Assert that every value is written to its PDF field. */
 export async function expectPdfFieldsMatch(
   pdf: PDFDefinition,
-  userData: Data,
+  values: Readonly<Record<string, PDFFieldValue>>,
 ): Promise<void> {
-  const form = await getPdfForm({ pdf, userData });
-  const expected = pdf.resolver(userData);
+  const form = await getPdfForm(pdf, values);
 
-  for (const [fieldName, value] of Object.entries(expected)) {
+  for (const [fieldName, value] of Object.entries(values)) {
     if (value === undefined) continue;
 
     const field = form?.getField(fieldName);

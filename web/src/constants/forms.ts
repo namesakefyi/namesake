@@ -1,5 +1,5 @@
 import type { Condition, Data, Question, Text } from "#lib/forms/questions";
-import type { PDFId } from "./pdf";
+import type { FormPdf } from "./pdf";
 
 export interface Step {
   id: string;
@@ -7,16 +7,6 @@ export interface Step {
   description?: Text;
   when?: Condition;
   questions: readonly Question[];
-}
-
-/**
- * Configuration for a PDF within a form.
- */
-export interface FormPdfConfig {
-  /** The PDF identifier */
-  pdfId: PDFId;
-  /** Optional predicate to determine if this PDF should be included based on form data */
-  when?: Condition;
 }
 
 /**
@@ -53,16 +43,20 @@ export interface FormCost {
 export interface FormConfig {
   /** Ordered steps, including optional guards for conditional inclusion. */
   steps: readonly Step[];
-  /** PDFs included in this form */
-  pdfs: readonly FormPdfConfig[];
-  /** Title for the downloaded PDF package */
-  downloadTitle: string;
+  /** The PDF packet the person downloads at the end. */
+  download: FormDownload;
+}
+
+export interface FormDownload {
+  /** The packet's title, on its cover page and file name. */
+  title: string;
   /**
-   * Instructions shown on the cover page of the downloaded packet.
-   * Plain string = always included.
-   * Object form: `{ text, when }` = included only when `when` returns true.
+   * Shown on the cover page. A plain string is always included; `{ text,
+   * when }` is included only when `when` returns true.
    */
   instructions: readonly Instruction[];
+  /** The PDFs in the packet, in order. */
+  pdfs: readonly FormPdf[];
 }
 
 /**

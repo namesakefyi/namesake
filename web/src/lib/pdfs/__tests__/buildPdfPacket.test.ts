@@ -1,7 +1,7 @@
 import { PDF } from "@libpdf/core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { buildPdfPacket } from "../buildPdfPacket";
-import { testPdfDefinition } from "./helpers";
+import { testPdf } from "./helpers";
 
 describe("buildPdfPacket", () => {
   let mockPdfBytes: Uint8Array;
@@ -36,7 +36,7 @@ describe("buildPdfPacket", () => {
     const result = await buildPdfPacket({
       title: "Test Packet",
       instructions: ["First instruction"],
-      pdfs: [testPdfDefinition],
+      pdfs: [testPdf],
       pdfBytes: [mockPdfBytes],
     });
 
@@ -49,7 +49,7 @@ describe("buildPdfPacket", () => {
     const result = await buildPdfPacket({
       title: "Multi-PDF Packet",
       instructions: [],
-      pdfs: [testPdfDefinition, testPdfDefinition],
+      pdfs: [testPdf, testPdf],
       pdfBytes: [mockPdfBytes, mockPdfBytes],
     });
 

@@ -5,6 +5,7 @@ import { findPdfById, listAllPdfs } from "./catalog";
 import {
   computeOutputPaths,
   formatFiles,
+  generateFillSnippet,
   writeDefinitionFiles,
 } from "./define";
 import { loadJurisdictions } from "./fields";
@@ -101,7 +102,7 @@ export async function handleAddPdf(c: Context) {
     );
   }
 
-  const { id, pdfDir, pdfDestPath, indexPath, testPath } = computeOutputPaths({
+  const { id, pdfDir, pdfDestPath, indexPath } = computeOutputPaths({
     title,
     code: code ?? "",
     jurisdiction,
@@ -118,22 +119,22 @@ export async function handleAddPdf(c: Context) {
   const pdfFields = await extractFieldsFromBytes(cleanedBytes);
 
   writeDefinitionFiles({
-    id,
     title,
     code: code ?? "",
     canonicalUrl,
     pdfDir,
     pdfDestPath,
     indexPath,
-    testPath,
-    pdfFields,
     pdfBytes: cleanedBytes,
   });
 
-  await processPdf(pdfDestPath);
+  const { fieldNames } = await processPdf(pdfDestPath);
   formatFiles([join(pdfDir, "schema.ts")]);
 
-  return c.json({ id, fieldCount: pdfFields.length });
+  const fill = generateFillSnippet({ id, pdfDir, fieldNames });
+  console.log(`\nAdd this to a form's download.pdfs:\n\n${fill}`);
+
+  return c.json({ id, fieldCount: pdfFields.length, fill });
 }
 
 export async function handlePreviewReplace(c: Context) {
