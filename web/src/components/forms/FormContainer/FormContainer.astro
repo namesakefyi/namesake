@@ -25,11 +25,6 @@ const form = {
 };
 ---
 
-{
-  import.meta.env.PROD && (
-    <link rel="modulepreload" data-form-module={formId} />
-  )
-}
 <ReactFormContainer
   client:load
   form={form}
