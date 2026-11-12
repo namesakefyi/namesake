@@ -1,8 +1,8 @@
 import { definePdf } from "#lib/pdfs/definePdf";
 import file from "./applicant-affidavit-in-support-of-amendment-of-a-birth-certificate-for-sex.pdf";
-import type { pdfSchema } from "./schema";
+import type { Fields } from "./schema";
 
-export default definePdf<typeof pdfSchema>({
+export default definePdf<Fields>({
   title:
     "Applicant Affidavit in Support of Amendment of a Birth Certificate for Sex",
   code: "R-116",

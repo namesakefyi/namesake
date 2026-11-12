@@ -4,9 +4,9 @@ import { definePdf } from "#lib/pdfs/definePdf";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
 import { fullName } from "#lib/utils/fullName";
 import file from "./cjp34-cori-and-wms-release-request.pdf";
-import type { pdfSchema } from "./schema";
+import type { Fields } from "./schema";
 
-export default definePdf<typeof pdfSchema>({
+export default definePdf<Fields>({
   title: "Court Activity Record Request Form",
   code: "CJP-34",
   canonicalUrl:
@@ -15,7 +15,7 @@ export default definePdf<typeof pdfSchema>({
 });
 
 /** Reads only shared fields, so any form can use it. */
-export const fillCjp34 = (data: FormData): PdfValues<typeof pdfSchema> => ({
+export const fillCjp34 = (data: FormData): PdfValues<Fields> => ({
   county: data.residenceCounty,
   caseName: fullName(data, "oldName"),
   isChangeOfNameProceeding: true,

@@ -1,72 +1,68 @@
 /** Auto-generated from ss5-application-for-social-security-card.pdf — do not edit */
 
-import type { PdfFieldType } from "#constants/pdf";
-
-export const pdfSchema = {
-  newFirstName: "text",
-  newMiddleName: "text",
-  newLastName: "text",
-  oldFirstName: "text",
-  oldMiddleName: "text",
-  oldLastName: "text",
-  otherNames: "text",
-  previousSSN1: "text",
-  previousSSN2: "text",
-  previousSSN3: "text",
-  birthplaceCity: "text",
-  birthplaceState: "text",
-  dateOfBirth: "text",
-  usCitizen: "checkbox",
-  legalAlienAllowedToWork: "checkbox",
-  legalAlienNotAllowedToWork: "checkbox",
-  citizenshipOther: "checkbox",
-  isNativeHawaiian: "checkbox",
-  isAmericanIndian: "checkbox",
-  isOtherPacificIslander: "checkbox",
-  isAlaskaNative: "checkbox",
-  isBlack: "checkbox",
-  isWhite: "checkbox",
-  isHispanicOrLatino: "checkbox",
-  isNotHispanicOrLatino: "checkbox",
-  isAsian: "checkbox",
-  isMale: "checkbox",
-  isFemale: "checkbox",
-  mothersFirstName: "text",
-  mothersMiddleName: "text",
-  mothersLastName: "text",
-  motherSSN1: "text",
-  motherSSN2: "text",
-  motherSSN3: "text",
-  isMotherSSNUnknown: "checkbox",
-  fathersFirstName: "text",
-  fathersMiddleName: "text",
-  fathersLastName: "text",
-  fatherSSN1: "text",
-  fatherSSN2: "text",
-  fatherSSN3: "text",
-  isFatherSSNUnknown: "checkbox",
-  hasPreviousSocialSecurityCard: "checkbox",
-  hasNoPreviousSocialSecurityCard: "checkbox",
-  previousSocialSecurityCardUnknown: "checkbox",
-  previousSocialSecurityCardFirstName: "text",
-  previousSocialSecurityCardMiddleName: "text",
-  previousSocialSecurityCardLastName: "text",
-  differentDateOfBirthOnPreviousApplication: "text",
-  todaysDate: "text",
-  areaCode: "text",
-  phoneNumber: "text",
-  mailingStreetAddress: "text",
-  mailingCity: "text",
-  mailingState: "text",
-  mailingZipCode: "text",
-  isSelf: "checkbox",
-  isParent: "checkbox",
-  isGuardian: "checkbox",
-  isFilingOther: "checkbox",
-  otherSpecify: "text",
-} as const satisfies Record<string, PdfFieldType>;
-
-export type PdfFieldName = keyof typeof pdfSchema;
+export type Fields = {
+  newFirstName: "text";
+  newMiddleName: "text";
+  newLastName: "text";
+  oldFirstName: "text";
+  oldMiddleName: "text";
+  oldLastName: "text";
+  otherNames: "text";
+  previousSSN1: "text";
+  previousSSN2: "text";
+  previousSSN3: "text";
+  birthplaceCity: "text";
+  birthplaceState: "text";
+  dateOfBirth: "text";
+  usCitizen: "checkbox";
+  legalAlienAllowedToWork: "checkbox";
+  legalAlienNotAllowedToWork: "checkbox";
+  citizenshipOther: "checkbox";
+  isNativeHawaiian: "checkbox";
+  isAmericanIndian: "checkbox";
+  isOtherPacificIslander: "checkbox";
+  isAlaskaNative: "checkbox";
+  isBlack: "checkbox";
+  isWhite: "checkbox";
+  isHispanicOrLatino: "checkbox";
+  isNotHispanicOrLatino: "checkbox";
+  isAsian: "checkbox";
+  isMale: "checkbox";
+  isFemale: "checkbox";
+  mothersFirstName: "text";
+  mothersMiddleName: "text";
+  mothersLastName: "text";
+  motherSSN1: "text";
+  motherSSN2: "text";
+  motherSSN3: "text";
+  isMotherSSNUnknown: "checkbox";
+  fathersFirstName: "text";
+  fathersMiddleName: "text";
+  fathersLastName: "text";
+  fatherSSN1: "text";
+  fatherSSN2: "text";
+  fatherSSN3: "text";
+  isFatherSSNUnknown: "checkbox";
+  hasPreviousSocialSecurityCard: "checkbox";
+  hasNoPreviousSocialSecurityCard: "checkbox";
+  previousSocialSecurityCardUnknown: "checkbox";
+  previousSocialSecurityCardFirstName: "text";
+  previousSocialSecurityCardMiddleName: "text";
+  previousSocialSecurityCardLastName: "text";
+  differentDateOfBirthOnPreviousApplication: "text";
+  todaysDate: "text";
+  areaCode: "text";
+  phoneNumber: "text";
+  mailingStreetAddress: "text";
+  mailingCity: "text";
+  mailingState: "text";
+  mailingZipCode: "text";
+  isSelf: "checkbox";
+  isParent: "checkbox";
+  isGuardian: "checkbox";
+  isFilingOther: "checkbox";
+  otherSpecify: "text";
+};
 
 /** Fields present in the PDF but excluded from the schema */
 export const pdfExcludedFields = [

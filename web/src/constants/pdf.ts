@@ -3,10 +3,9 @@ import type { Condition, FormData } from "#lib/forms/questions";
 /** Matches libpdf's FieldValue, plus undefined for omitted fields. */
 export type PDFFieldValue = string | boolean | string[] | null | undefined;
 
-/** Valid field types that can appear in a generated pdfSchema. */
 export type PdfFieldType = "text" | "checkbox" | "radio" | "button";
 
-/** A PDF's fillable fields and their types, from its generated `schema.ts`. */
+/** A PDF's fillable fields and their kinds, from its generated `schema.ts`. */
 export type PdfSchema = Readonly<Record<string, PdfFieldType>>;
 
 export interface PDFDefinition<S extends PdfSchema = PdfSchema> {

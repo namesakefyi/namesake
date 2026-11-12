@@ -1,51 +1,47 @@
-import type { PdfFieldType } from "#constants/pdf";
-
 /** Auto-generated from cjp27-petition-to-change-name-of-adult.pdf — do not edit */
 
-export const pdfSchema = {
-  county: "text",
-  petitionerFirstName: "text",
-  petitionerMiddleName: "text",
-  petitionerLastName: "text",
-  oldFirstName: "text",
-  oldMiddleName: "text",
-  oldLastName: "text",
-  birthplaceCity: "text",
-  birthplaceState: "text",
-  dateOfBirth: "text",
-  residenceStreetAddress: "text",
-  residenceSteetAddress2: "text",
-  residenceCity: "text",
-  residenceState: "text",
-  residenceZipCode: "text",
-  mailingStreetAddress: "text",
-  mailingStreetAddress2: "text",
-  mailingCity: "text",
-  mailingState: "text",
-  mailingZipCode: "text",
-  phoneNumber: "text",
-  email: "text",
-  hasPreviousNameChangeFalse: "checkbox",
-  hasPreviousNameChangeTrue: "checkbox",
-  previousNameFrom: "text",
-  previousNameTo: "text",
-  previousNameReason: "text",
-  shouldReturnOriginalDocuments: "checkbox",
-  hasUsedOtherNameOrAliasFalse: "checkbox",
-  hasUsedOtherNameOrAliasTrue: "checkbox",
-  otherNamesOrAliases: "text",
-  newFirstName: "text",
-  newMiddleName: "text",
-  newLastName: "text",
-  reasonForChangingName: "text",
-  hasNoRecordOfOtherStateConvictionsProbationParole: "checkbox",
-  isInterpreterNeeded: "checkbox",
-  language: "text",
-  isOkayToSharePronouns: "checkbox",
-  pronouns: "text",
-} as const satisfies Record<string, PdfFieldType>;
-
-export type PdfFieldName = keyof typeof pdfSchema;
+export type Fields = {
+  county: "text";
+  petitionerFirstName: "text";
+  petitionerMiddleName: "text";
+  petitionerLastName: "text";
+  oldFirstName: "text";
+  oldMiddleName: "text";
+  oldLastName: "text";
+  birthplaceCity: "text";
+  birthplaceState: "text";
+  dateOfBirth: "text";
+  residenceStreetAddress: "text";
+  residenceSteetAddress2: "text";
+  residenceCity: "text";
+  residenceState: "text";
+  residenceZipCode: "text";
+  mailingStreetAddress: "text";
+  mailingStreetAddress2: "text";
+  mailingCity: "text";
+  mailingState: "text";
+  mailingZipCode: "text";
+  phoneNumber: "text";
+  email: "text";
+  hasPreviousNameChangeFalse: "checkbox";
+  hasPreviousNameChangeTrue: "checkbox";
+  previousNameFrom: "text";
+  previousNameTo: "text";
+  previousNameReason: "text";
+  shouldReturnOriginalDocuments: "checkbox";
+  hasUsedOtherNameOrAliasFalse: "checkbox";
+  hasUsedOtherNameOrAliasTrue: "checkbox";
+  otherNamesOrAliases: "text";
+  newFirstName: "text";
+  newMiddleName: "text";
+  newLastName: "text";
+  reasonForChangingName: "text";
+  hasNoRecordOfOtherStateConvictionsProbationParole: "checkbox";
+  isInterpreterNeeded: "checkbox";
+  language: "text";
+  isOkayToSharePronouns: "checkbox";
+  pronouns: "text";
+};
 
 /** Fields present in the PDF but excluded from the schema */
 export const pdfExcludedFields = [

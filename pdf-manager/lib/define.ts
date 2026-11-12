@@ -37,9 +37,9 @@ function generateDefinition({
   ];
   return `import { definePdf } from "#lib/pdfs/definePdf";
 import file from "./${pdfFile}";
-import type { pdfSchema } from "./schema";
+import type { Fields } from "./schema";
 
-export default definePdf<typeof pdfSchema>({
+export default definePdf<Fields>({
 ${props.map((prop) => `  ${prop}`).join("\n")}
 });
 `;

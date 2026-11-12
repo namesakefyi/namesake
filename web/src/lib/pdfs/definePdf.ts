@@ -5,7 +5,7 @@ import type { PDFDefinition, PdfSchema } from "#constants/pdf";
  *
  * @example
  * ```ts
- * definePdf<typeof pdfSchema>({
+ * definePdf<Fields>({
  *   title: "Change of Name",
  *   code: "PC-8.1",
  *   canonicalUrl: "https://…",

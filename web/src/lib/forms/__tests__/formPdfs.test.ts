@@ -1,13 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { FieldTypeName } from "#constants/fields";
 import type { FormConfig } from "#constants/forms";
-import type {
-  PDFDefinition,
-  PDFFieldValue,
-  PdfFieldType,
-  PdfSchema,
-} from "#constants/pdf";
+import type { PDFFieldValue, PdfFieldType } from "#constants/pdf";
 import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
+import { getPdfForm } from "#lib/pdfs/getPdfForm";
 import { resolveFormVisibility } from "../formVisibility";
 import { getStepFields } from "../getStepFields";
 import type { FieldValue, FormData } from "../questions";
@@ -47,24 +43,6 @@ const fitsField: Record<PdfFieldType, (value: PDFFieldValue) => boolean> = {
   button: (value) => value == null,
 };
 
-const schemaFiles = import.meta.glob<PdfSchema>(
-  "../../../content/pdfs/**/schema.ts",
-  { import: "pdfSchema", eager: true },
-);
-
-/** Each PDF's schema, read from the `schema.ts` beside its `index.ts`. */
-const schemas = new Map(
-  Object.entries(
-    import.meta.glob<PDFDefinition>("../../../content/pdfs/**/index.ts", {
-      import: "default",
-      eager: true,
-    }),
-  ).map(([path, pdf]) => [
-    pdf,
-    schemaFiles[path.replace(/index\.ts$/, "schema.ts")],
-  ]),
-);
-
 const pairs = forms.flatMap(([formId, config]) =>
   config.download.pdfs.map((entry) => ({
     name: `${formId} › ${entry.pdf.code ?? entry.pdf.title}`,
@@ -74,9 +52,6 @@ const pairs = forms.flatMap(([formId, config]) =>
 );
 
 describe.each(pairs)("$name", ({ config, entry: { pdf, fill } }) => {
-  const fields = schemas.get(pdf);
-  if (!fields) throw new Error(`No schema.ts found for ${pdf.title}`);
-
   const fills = ([0, 1] as const).map((variant) =>
     fill(
       resolveFormVisibility(config.steps, sampleAnswers(config, variant))
@@ -84,20 +59,18 @@ describe.each(pairs)("$name", ({ config, entry: { pdf, fill } }) => {
     ),
   );
 
-  it("fills every field of the PDF, and no others", () => {
-    for (const values of fills) {
-      expect(Object.keys(values).sort()).toEqual(Object.keys(fields).sort());
-    }
-  });
-
-  it("gives each field a value of its kind", () => {
+  // `fill` must return every field of the PDF's schema, which type checks
+  // enforce. These check its values against the PDF's own fields.
+  it("gives each field a value of its kind", async () => {
+    const form = await getPdfForm(pdf, {});
     const failures = fills.flatMap((values) =>
-      Object.entries(fields)
-        .filter(([name, kind]) => !fitsField[kind](values[name]))
-        .map(
-          ([name, kind]) =>
-            `${name} (${kind}): ${JSON.stringify(values[name])}`,
-        ),
+      Object.entries(values).flatMap(([name, value]) => {
+        const kind = form.getField(name)?.type;
+        if (!kind) return [`${name} isn't a field of the PDF`];
+        return kind in fitsField && fitsField[kind as PdfFieldType](value)
+          ? []
+          : [`${name} (${kind}): ${JSON.stringify(value)}`];
+      }),
     );
     expect(failures).toEqual([]);
   });

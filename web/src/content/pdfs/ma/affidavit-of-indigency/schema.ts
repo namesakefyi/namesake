@@ -1,58 +1,54 @@
-import type { PdfFieldType } from "#constants/pdf";
-
 /** Auto-generated from affidavit-of-indigency.pdf — do not edit */
 
-export const pdfSchema = {
-  courtName: "text",
-  caseNameAndNumber: "text",
-  applicantName: "text",
-  residenceStreetAddress: "text",
-  residenceCity: "text",
-  residenceStateAndZip: "text",
-  isReceivingPublicAssistance: "checkbox",
-  isReceivingTAFDC: "checkbox",
-  isReceivingMedicaid: "checkbox",
-  isReceivingEAEDC: "checkbox",
-  isReceivingSSI: "checkbox",
-  isReceivingVeteransBenefits: "checkbox",
-  dollarAmount: "text",
-  isUnderPovertyLevel: "checkbox",
-  perWeek: "checkbox",
-  biweekly: "checkbox",
-  perMonth: "checkbox",
-  perYear: "checkbox",
-  householdSize: "text",
-  numberOfDependents: "text",
-  otherHouseholdIncome: "text",
-  isUnableToPay: "checkbox",
-  shouldWaiveFilingFeeAndSurcharge: "checkbox",
-  filingFeeAndSurcharge: "text",
-  shouldWaiveFilingFeeAndSurchargeForAppeal: "checkbox",
-  filingFeeAndSurchargeForAppeal: "text",
-  shouldWaiveFeesForCourtSummons: "checkbox",
-  feesForCourtSummons: "text",
-  shouldWaiveOtherFeesSection2: "checkbox",
-  otherFeesSection2: "text",
-  otherFeesSection2Details: "text",
-  applySubstitutionSection2: "checkbox",
-  substitutionDetailsSection2: "text",
-  shouldWaiveExpertServices: "checkbox",
-  costOfExpertServices: "text",
-  expertServicesDetails: "text",
-  shouldWaiveCostOfTranscription: "checkbox",
-  costOfTranscription: "text",
-  shouldWaiveRecordingOfTrialForAppeal: "checkbox",
-  shouldWaiveAppealBond: "checkbox",
-  shouldWaiveCostOfWrittenTranscriptPreparation: "checkbox",
-  costOfWrittenTranscriptPreparation: "text",
-  shouldWaiveOtherFeesSection3: "checkbox",
-  otherFeesSection3: "text",
-  otherFeesSection3Details: "text",
-  applySubstitutionSection3: "checkbox",
-  substitutionDetailsSection3: "text",
-} as const satisfies Record<string, PdfFieldType>;
-
-export type PdfFieldName = keyof typeof pdfSchema;
+export type Fields = {
+  courtName: "text";
+  caseNameAndNumber: "text";
+  applicantName: "text";
+  residenceStreetAddress: "text";
+  residenceCity: "text";
+  residenceStateAndZip: "text";
+  isReceivingPublicAssistance: "checkbox";
+  isReceivingTAFDC: "checkbox";
+  isReceivingMedicaid: "checkbox";
+  isReceivingEAEDC: "checkbox";
+  isReceivingSSI: "checkbox";
+  isReceivingVeteransBenefits: "checkbox";
+  dollarAmount: "text";
+  isUnderPovertyLevel: "checkbox";
+  perWeek: "checkbox";
+  biweekly: "checkbox";
+  perMonth: "checkbox";
+  perYear: "checkbox";
+  householdSize: "text";
+  numberOfDependents: "text";
+  otherHouseholdIncome: "text";
+  isUnableToPay: "checkbox";
+  shouldWaiveFilingFeeAndSurcharge: "checkbox";
+  filingFeeAndSurcharge: "text";
+  shouldWaiveFilingFeeAndSurchargeForAppeal: "checkbox";
+  filingFeeAndSurchargeForAppeal: "text";
+  shouldWaiveFeesForCourtSummons: "checkbox";
+  feesForCourtSummons: "text";
+  shouldWaiveOtherFeesSection2: "checkbox";
+  otherFeesSection2: "text";
+  otherFeesSection2Details: "text";
+  applySubstitutionSection2: "checkbox";
+  substitutionDetailsSection2: "text";
+  shouldWaiveExpertServices: "checkbox";
+  costOfExpertServices: "text";
+  expertServicesDetails: "text";
+  shouldWaiveCostOfTranscription: "checkbox";
+  costOfTranscription: "text";
+  shouldWaiveRecordingOfTrialForAppeal: "checkbox";
+  shouldWaiveAppealBond: "checkbox";
+  shouldWaiveCostOfWrittenTranscriptPreparation: "checkbox";
+  costOfWrittenTranscriptPreparation: "text";
+  shouldWaiveOtherFeesSection3: "checkbox";
+  otherFeesSection3: "text";
+  otherFeesSection3Details: "text";
+  applySubstitutionSection3: "checkbox";
+  substitutionDetailsSection3: "text";
+};
 
 /** Fields present in the PDF but excluded from the schema */
 export const pdfExcludedFields = [

@@ -1,8 +1,8 @@
 import { definePdf } from "#lib/pdfs/definePdf";
 import file from "./cjp27-petition-to-change-name-of-adult.pdf";
-import type { pdfSchema } from "./schema";
+import type { Fields } from "./schema";
 
-export default definePdf<typeof pdfSchema>({
+export default definePdf<Fields>({
   title: "Petition to Change Name of Adult",
   code: "CJP-27",
   canonicalUrl:
