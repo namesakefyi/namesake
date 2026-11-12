@@ -1,59 +1,15 @@
 import type { FieldName, FormData } from "#constants/fields";
-import type { FormPdfConfig } from "#constants/forms";
+import type { FormPdfConfig, Step } from "#constants/forms";
 import type { PDFId } from "#constants/pdf";
-import type { Field, Step } from "./types";
+import { getStepFields, type StepField } from "./getStepFields";
 
-type ExpandedField = {
-  id: FieldName;
-  when?: (data: Partial<FormData>) => boolean;
-};
-
-function expandFields(fields: readonly Field[]): ExpandedField[] {
-  const result: ExpandedField[] = [];
-  for (const f of fields) {
-    if (typeof f === "string") {
-      result.push({ id: f });
-    } else if ("id" in f) {
-      result.push({ id: f.id, when: f.when });
-    } else {
-      for (const id of f.ids) {
-        result.push({ id, when: f.when });
-      }
-    }
-  }
-  return result;
-}
-
-/** Extracts all field names from a step's fields array. */
-export function getFieldNames(fields: readonly Field[]): FieldName[] {
-  return expandFields(fields).map((e) => e.id);
-}
-
-/** Extracts all field names from form steps. */
 export function getFormFields(steps: readonly Step[]): FieldName[] {
-  return steps.flatMap((s) => getFieldNames(s.fields));
-}
-
-/**
- * Looks up a field's `when` predicate from the fields array.
- *
- * Returns the callback if the field is conditional, `null` if the field
- * exists but is unconditional (always visible), or `undefined` if the
- * field is not listed at all.
- */
-export function getFieldWhen(
-  fields: readonly Field[],
-  fieldName: FieldName,
-): ((data: Partial<FormData>) => boolean) | null | undefined {
-  const expanded = expandFields(fields);
-  const entry = expanded.find((e) => e.id === fieldName);
-  if (!entry) return undefined;
-  return entry.when ?? null;
+  return steps.flatMap((step) => getStepFields(step).map((field) => field.id));
 }
 
 export interface VisibilitySection {
-  stepId: string;
-  fields: readonly FieldName[];
+  step: Step;
+  fields: readonly StepField[];
 }
 
 export interface FormVisibility {
@@ -93,15 +49,13 @@ export function resolveFormVisibility(
 
     visibleStepIds.push(step.id);
 
-    const visibleFieldNames: FieldName[] = [];
-    const expanded = expandFields(step.fields);
-    for (const { id: fieldId, when } of expanded) {
-      if (!when || when(formData)) {
-        (visibleFields as Record<string, unknown>)[fieldId] = formData[fieldId];
-        visibleFieldNames.push(fieldId);
-      }
+    const fields = getStepFields(step).filter(
+      ({ when }) => !when || when(formData),
+    );
+    for (const { id } of fields) {
+      (visibleFields as Record<string, unknown>)[id] = formData[id];
     }
-    sections.push({ stepId: step.id, fields: visibleFieldNames });
+    sections.push({ step, fields });
   }
 
   const pdfsToInclude = pdfs.map((pdf) => ({

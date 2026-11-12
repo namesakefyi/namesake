@@ -1,16 +1,18 @@
 import { Controller, useFormContext } from "react-hook-form";
 import type { FieldName } from "#constants/fields";
+import { getLabelProps } from "#lib/utils/getLabelProps";
 import { smartquotes } from "#lib/utils/smartquotes";
 import { ComboBox, ComboBoxItem } from "../../common/ComboBox";
 import "./ComboBoxField.css";
 
 export interface ComboBoxFieldProps {
   label: string;
+  labelHidden?: boolean;
   name: FieldName;
   placeholder?: string;
   children?: React.ReactNode;
   defaultValue?: string;
-  options: {
+  options: readonly {
     label: string;
     value: string;
   }[];
@@ -18,6 +20,7 @@ export interface ComboBoxFieldProps {
 
 export function ComboBoxField({
   label,
+  labelHidden,
   name,
   placeholder,
   children,
@@ -36,7 +39,7 @@ export function ComboBoxField({
         render={({ field, fieldState: { invalid, error } }) => (
           <ComboBox
             {...field}
-            label={smartquotes(label)}
+            {...getLabelProps(smartquotes(label), labelHidden)}
             placeholder={placeholder}
             value={field.value}
             onChange={field.onChange}

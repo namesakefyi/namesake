@@ -9,22 +9,16 @@ import { TextField } from "../../common/TextField";
 import "./AddressField.css";
 import { useAsyncList } from "react-aria-components";
 import {
+  ADDRESS_FIELDS,
+  type AddressNames,
+  type AddressType,
+} from "#constants/fieldGroups";
+import {
   createLocationLoader,
   type GeoapifyResult,
 } from "#lib/utils/fetchLocationResults.ts";
 import { Autocomplete } from "../../common/Autocomplete";
 import { MenuItem } from "../../common/Menu";
-
-type AddressType = "residence" | "mailing" | "parent1" | "parent2";
-
-interface AddressNames {
-  street: FieldName;
-  street2?: FieldName;
-  city: FieldName;
-  state: FieldName;
-  zip: FieldName;
-  county?: FieldName;
-}
 
 const FIELD_FOR_GEOAPIFY = {
   address_line1: "street",
@@ -57,54 +51,25 @@ export function mapPlaceToFields(
 export interface AddressFieldProps {
   children?: React.ReactNode;
   type: AddressType;
-  includeAddress2?: boolean;
-  includeCounty?: boolean;
+  address2?: boolean;
+  county?: boolean;
 }
 
 export function AddressField({
   children,
   type,
-  includeAddress2 = false,
-  includeCounty = false,
+  address2 = false,
+  county = false,
 }: AddressFieldProps) {
   const { control, getValues, setValue } = useFormContext();
 
-  const names: Record<AddressType, AddressNames> = {
-    residence: {
-      street: "residenceStreetAddress",
-      street2: "residenceStreetAddress2",
-      city: "residenceCity",
-      state: "residenceState",
-      zip: "residenceZipCode",
-      county: "residenceCounty",
-    },
-    mailing: {
-      street: "mailingStreetAddress",
-      street2: "mailingStreetAddress2",
-      city: "mailingCity",
-      state: "mailingState",
-      zip: "mailingZipCode",
-      county: "mailingCounty",
-    },
-    parent1: {
-      street: "parent1StreetAddress",
-      city: "parent1City",
-      state: "parent1State",
-      zip: "parent1ZipCode",
-    },
-    parent2: {
-      street: "parent2StreetAddress",
-      city: "parent2City",
-      state: "parent2State",
-      zip: "parent2ZipCode",
-    },
-  };
+  const names: AddressNames = ADDRESS_FIELDS[type];
 
-  const state = useWatch({ control, name: names[type].state });
+  const state = useWatch({ control, name: names.state });
   const countyOptions = getCountyOptions(state);
 
-  const street2Name = names[type].street2;
-  const canAddAddress2 = includeAddress2 && !!street2Name;
+  const street2Name = names.street2;
+  const canAddAddress2 = address2 && !!street2Name;
   const [address2Expanded, setAddress2Expanded] = useState(
     () => !!street2Name && !!getValues(street2Name),
   );
@@ -119,7 +84,7 @@ export function AddressField({
   const autocompleteAddress = (id: Key): void => {
     const place = list.items.find((i) => i.place_id === id);
     if (!place) return;
-    for (const [field, value] of mapPlaceToFields(place, names[type])) {
+    for (const [field, value] of mapPlaceToFields(place, names)) {
       setValue(field, value, { shouldValidate: true, shouldDirty: true });
     }
     list.setFilterText("");
@@ -129,7 +94,7 @@ export function AddressField({
     <div className="namesake-address-field">
       <Controller
         control={control}
-        name={names[type].street}
+        name={names.street}
         defaultValue=""
         render={({ field, fieldState: { invalid, error } }) => (
           <Autocomplete
@@ -142,7 +107,7 @@ export function AddressField({
             onInputChange={(text) => {
               list.setFilterText(text);
               field.onChange(text);
-              setValue(names[type].street, text);
+              setValue(names.street, text);
             }}
             isAsync={true}
             isLoading={list.isLoading}
@@ -184,7 +149,7 @@ export function AddressField({
         ))}
       <Controller
         control={control}
-        name={names[type].city}
+        name={names.city}
         defaultValue=""
         render={({ field, fieldState: { invalid, error } }) => (
           <TextField
@@ -200,7 +165,7 @@ export function AddressField({
       />
       <Controller
         control={control}
-        name={names[type].state}
+        name={names.state}
         defaultValue=""
         render={({ field, fieldState: { invalid, error } }) => (
           <ComboBox
@@ -222,10 +187,10 @@ export function AddressField({
           </ComboBox>
         )}
       />
-      {includeCounty && names[type].county && (
+      {county && names.county && (
         <Controller
           control={control}
-          name={names[type].county}
+          name={names.county}
           defaultValue=""
           render={({ field, fieldState: { invalid, error } }) =>
             countyOptions ? (
@@ -258,7 +223,7 @@ export function AddressField({
       )}
       <Controller
         control={control}
-        name={names[type].zip}
+        name={names.zip}
         defaultValue=""
         render={({ field, fieldState: { invalid, error } }) => (
           <TextField

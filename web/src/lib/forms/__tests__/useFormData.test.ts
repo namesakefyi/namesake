@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FormConfig } from "#constants/forms";
 import * as database from "#db/database";
 import { useFormData } from "../useFormData";
+import { makeStep } from "./testHelpers";
 
 vi.mock("#db/database", () => ({
   getFieldsByNames: vi.fn(),
@@ -12,14 +13,7 @@ vi.mock("#db/database", () => ({
 
 function makeConfig(fields: string[]): FormConfig {
   return {
-    steps: [
-      {
-        id: "s",
-        title: "S",
-        fields: fields as any,
-        component: () => null,
-      },
-    ],
+    steps: [makeStep("s", fields)],
     pdfs: [],
     downloadTitle: "Test",
     instructions: [],

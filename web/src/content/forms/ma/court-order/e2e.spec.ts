@@ -295,7 +295,7 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
 
     await expect(
       page.getByText(
-        "Reason for changing name: I want a name which aligns with my gender identity.",
+        "Reason for name change: I want a name which aligns with my gender identity.",
       ),
     ).toBeVisible();
 

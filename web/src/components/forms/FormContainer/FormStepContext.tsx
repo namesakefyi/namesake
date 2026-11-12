@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import type { FormCost } from "#constants/forms";
-import type { FormPhase } from "#lib/forms/types";
+import type { FormPhase } from "#lib/forms/createFormMachine";
 
 export interface FormStepContextValue {
   onNext: () => void;

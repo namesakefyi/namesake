@@ -1,5 +1,6 @@
 import { Controller, useFormContext } from "react-hook-form";
 import type { FieldName } from "#constants/fields";
+import { getLabelProps } from "#lib/utils/getLabelProps";
 import { smartquotes } from "#lib/utils/smartquotes";
 import {
   NumberField as AriaNumberField,
@@ -10,6 +11,7 @@ import "./NumberField.css";
 export interface NumberFieldFormProps
   extends Omit<NumberFieldProps, "value" | "onChange" | "defaultValue"> {
   label: string;
+  labelHidden?: boolean;
   name: FieldName;
   defaultValue?: number;
   children?: React.ReactNode;
@@ -17,6 +19,7 @@ export interface NumberFieldFormProps
 
 export function NumberField({
   label,
+  labelHidden,
   name,
   children,
   defaultValue,
@@ -47,7 +50,7 @@ export function NumberField({
                   : String(value),
               );
             }}
-            label={smartquotes(label)}
+            {...getLabelProps(smartquotes(label), labelHidden)}
             isInvalid={invalid}
             errorMessage={error?.message}
           />

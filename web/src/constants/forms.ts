@@ -1,6 +1,14 @@
-import type { Step } from "#lib/forms/types";
+import type { Condition, Question, Text } from "#lib/forms/questions";
 import type { FormData } from "./fields";
 import type { PDFId } from "./pdf";
+
+export interface Step {
+  id: string;
+  title: Text;
+  description?: Text;
+  when?: Condition;
+  questions: readonly Question[];
+}
 
 /**
  * Configuration for a PDF within a form.

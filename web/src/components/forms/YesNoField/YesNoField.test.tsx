@@ -1,5 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
+import { PREFER_NOT_TO_ANSWER } from "#constants/fields";
 import { renderWithFormProvider, screen } from "../test-utils";
 import {
   getBooleanValueFromYesNoString,
@@ -95,12 +96,12 @@ describe("YesNoField", () => {
     expect(childComponent).toBeInTheDocument();
   });
 
-  it("renders prefer not to answer option when includePreferNotToAnswer is true", () => {
+  it("renders prefer not to answer option when extraChoices includes it", () => {
     renderWithFormProvider(
       <YesNoField
         name="isCurrentlyUnhoused"
         label="Are you currently unhoused?"
-        includePreferNotToAnswer
+        extraChoices={[PREFER_NOT_TO_ANSWER]}
       />,
     );
 
@@ -129,7 +130,7 @@ describe("YesNoField", () => {
       <YesNoField
         name="isCurrentlyUnhoused"
         label="Are you currently unhoused?"
-        includePreferNotToAnswer
+        extraChoices={[PREFER_NOT_TO_ANSWER]}
       />,
     );
 

@@ -1,13 +1,14 @@
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
+import { PREFER_NOT_TO_ANSWER } from "#constants/fields";
 import { renderWithFormProvider, screen } from "../test-utils";
 import { CheckboxGroupField } from "./CheckboxGroupField";
 
-const mockOptions = [
-  { label: "Option 1", value: "option1" },
-  { label: "Option 2", value: "option2" },
-  { label: "Option 3", value: "option3" },
-];
+const mockOptions = {
+  option1: "Option 1",
+  option2: "Option 2",
+  option3: "Option 3",
+};
 
 describe("CheckboxGroupField", () => {
   it("renders checkbox group with correct label", () => {
@@ -34,8 +35,8 @@ describe("CheckboxGroupField", () => {
       />,
     );
 
-    for (const option of mockOptions) {
-      const checkboxOption = screen.getByText(option.label);
+    for (const label of Object.values(mockOptions)) {
+      const checkboxOption = screen.getByText(label);
       expect(checkboxOption).toBeInTheDocument();
     }
   });
@@ -71,27 +72,15 @@ describe("CheckboxGroupField", () => {
     expect(childComponent).toBeInTheDocument();
   });
 
-  it("renders prefer not to answer option when enabled", () => {
-    renderWithFormProvider(
-      <CheckboxGroupField
-        name="reasonForChangingName"
-        label="Test Label"
-        options={mockOptions}
-        includePreferNotToAnswer
-      />,
-    );
-
-    const preferNotToAnswer = screen.getByText("Prefer not to answer");
-    expect(preferNotToAnswer).toBeInTheDocument();
-  });
-
   it("disables other options when prefer not to answer is selected", async () => {
     renderWithFormProvider(
       <CheckboxGroupField
         name="reasonForChangingName"
         label="Test Label"
-        options={mockOptions}
-        includePreferNotToAnswer
+        options={{
+          ...mockOptions,
+          [PREFER_NOT_TO_ANSWER]: "Prefer not to answer",
+        }}
       />,
     );
 
@@ -102,9 +91,9 @@ describe("CheckboxGroupField", () => {
     await userEvent.click(preferNotToAnswer);
 
     // Check that all other options are disabled
-    for (const option of mockOptions) {
+    for (const label of Object.values(mockOptions)) {
       const checkbox = screen.getByRole("checkbox", {
-        name: option.label,
+        name: label,
       }) as HTMLInputElement;
       expect(checkbox.disabled).toBe(true);
       expect(checkbox.checked).toBe(false);
@@ -122,9 +111,9 @@ describe("CheckboxGroupField", () => {
     );
 
     // Verify all options are enabled
-    for (const option of mockOptions) {
+    for (const label of Object.values(mockOptions)) {
       const checkbox = screen.getByRole("checkbox", {
-        name: option.label,
+        name: label,
       }) as HTMLInputElement;
       expect(checkbox.disabled).toBe(false);
     }

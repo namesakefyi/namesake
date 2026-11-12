@@ -282,7 +282,7 @@ for (const request of [
         page.getByText("What do I write?", { exact: true }),
       ).toBeVisible();
       await page
-        .getByRole("textbox", { name: "Reason to seal the court record" })
+        .getByRole("textbox", { name: "Reason to seal court record" })
         .fill("For my personal safety.");
       await next();
     });
@@ -317,7 +317,7 @@ for (const request of [
         page.getByText("Residence county: Kings", { exact: true }),
       ).toBeVisible();
       await expect(
-        page.getByText("Court type: Civil", { exact: true }),
+        page.getByText("Court type: Civil Court", { exact: true }),
       ).toBeVisible();
       // Reopening the draft resumes at review with saved answers.
       await page.reload();

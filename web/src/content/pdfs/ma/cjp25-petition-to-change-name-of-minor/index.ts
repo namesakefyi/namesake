@@ -56,9 +56,9 @@ export default definePdf<PdfFieldName>({
     shouldReturnOriginalDocuments: true,
 
     // 6. Legal parents
-    parent1FirstName: undefined,
-    parent1MiddleName: undefined,
-    parent1LastName: undefined,
+    parent1FirstName: data.parent1FirstName,
+    parent1MiddleName: data.parent1MiddleName,
+    parent1LastName: data.parent1LastName,
     parent1StreetAddress: data.parent1StreetAddress,
     parent1StreetAddress2: undefined,
     parent1City: data.parent1City,
@@ -67,9 +67,9 @@ export default definePdf<PdfFieldName>({
     parent1Phone: data.parent1Phone,
     parent1Email: data.parent1Email,
 
-    parent2FirstName: undefined,
-    parent2MiddleName: undefined,
-    parent2LastName: undefined,
+    parent2FirstName: data.parent2FirstName,
+    parent2MiddleName: data.parent2MiddleName,
+    parent2LastName: data.parent2LastName,
     parent2StreetAddress:
       data.parentsHaveDifferentAddresses === true
         ? data.parent2StreetAddress
@@ -116,9 +116,9 @@ export default definePdf<PdfFieldName>({
     hasCountAppointedGuardianFalse: data.hasCourtAppointedGuardian === false,
     hasCourtAppointedGuardianTrue: data.hasCourtAppointedGuardian,
 
-    guardianFirstName: undefined,
-    guardianMiddleName: undefined,
-    guardianLastName: undefined,
+    guardianFirstName: data.guardianFirstName,
+    guardianMiddleName: data.guardianMiddleName,
+    guardianLastName: data.guardianLastName,
     guardianStreetAddress: data.guardianStreetAddress,
     guardianStreetAddress2: undefined,
     guardianCity: data.guardianCity,
@@ -127,9 +127,9 @@ export default definePdf<PdfFieldName>({
     guardianPhone: data.guardianPhone,
     guardianEmail: data.guardianEmail,
 
-    coGuardianFirstName: undefined,
-    coGuardianMiddleName: undefined,
-    coGuardianLastName: undefined,
+    coGuardianFirstName: data.coGuardianFirstName,
+    coGuardianMiddleName: data.coGuardianMiddleName,
+    coGuardianLastName: data.coGuardianLastName,
     coGuardianStreetAddress: data.coGuardianStreetAddress,
     coGuardianStreetAddress2: undefined,
     coGuardianCity: data.coGuardianCity,
@@ -166,7 +166,7 @@ export default definePdf<PdfFieldName>({
     newMiddleName: data.newMiddleName,
     newLastName: data.newLastName,
 
-    // 14. Reason for changing name
+    // 14. Reason for name change
     reasonForChangingName: data.reasonForChangingName,
 
     // 15. Text-only

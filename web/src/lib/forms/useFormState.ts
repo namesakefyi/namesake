@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createActor } from "xstate";
+import type { Step } from "#constants/forms";
 import { getFormProgress, saveFormProgress } from "#db/database";
 import {
   createFormMachine,
   type FormMachine,
+  type FormMachineContext,
+  type FormPhase,
   getPhase,
 } from "./createFormMachine";
 import {
@@ -11,7 +14,6 @@ import {
   findPrevStepIndex,
   getVisibleStepIds,
 } from "./formVisibility";
-import type { FormMachineContext, FormPhase, Step } from "./types";
 
 type FormActor = ReturnType<typeof createActor<FormMachine>>;
 type FormSnapshot = ReturnType<FormActor["getSnapshot"]>;

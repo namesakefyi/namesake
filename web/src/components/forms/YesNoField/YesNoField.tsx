@@ -1,6 +1,8 @@
 import { Controller, useFormContext } from "react-hook-form";
 import {
   DONT_KNOW,
+  EXTRA_CHOICE_LABELS,
+  type ExtraChoice,
   type FieldName,
   PREFER_NOT_TO_ANSWER,
 } from "#constants/fields";
@@ -35,8 +37,7 @@ export interface YesNoFieldProps extends RadioGroupProps {
   labelHidden?: boolean;
   yesLabel?: string;
   noLabel?: string;
-  includePreferNotToAnswer?: boolean;
-  includeDontKnow?: boolean;
+  extraChoices?: readonly ExtraChoice[];
 }
 
 export function YesNoField({
@@ -47,8 +48,7 @@ export function YesNoField({
   noLabel,
   children,
   defaultValue,
-  includePreferNotToAnswer,
-  includeDontKnow,
+  extraChoices = [],
 }: YesNoFieldProps) {
   const { control, setValue } = useFormContext();
 
@@ -72,10 +72,14 @@ export function YesNoField({
           >
             <Radio value="yes">{smartquotes(yesLabel ?? "Yes")}</Radio>
             <Radio value="no">{smartquotes(noLabel ?? "No")}</Radio>
-            {includePreferNotToAnswer && (
-              <Radio value={PREFER_NOT_TO_ANSWER}>Prefer not to answer</Radio>
+            {extraChoices.includes(PREFER_NOT_TO_ANSWER) && (
+              <Radio value={PREFER_NOT_TO_ANSWER}>
+                {EXTRA_CHOICE_LABELS[PREFER_NOT_TO_ANSWER]}
+              </Radio>
             )}
-            {includeDontKnow && <Radio value={DONT_KNOW}>I don’t know</Radio>}
+            {extraChoices.includes(DONT_KNOW) && (
+              <Radio value={DONT_KNOW}>{EXTRA_CHOICE_LABELS[DONT_KNOW]}</Radio>
+            )}
           </RadioGroup>
         )}
       />

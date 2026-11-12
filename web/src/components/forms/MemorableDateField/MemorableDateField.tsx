@@ -2,12 +2,14 @@ import { parseDate } from "@internationalized/date";
 import type { DateValue } from "react-aria-components";
 import { Controller, useFormContext } from "react-hook-form";
 import type { FieldName } from "#constants/fields";
+import { getLabelProps } from "#lib/utils/getLabelProps";
 import { DateField, type DateFieldProps } from "../../common/DateField";
 import "./MemorableDateField.css";
 
 export interface MemorableDateFieldProps<T extends DateValue = DateValue>
   extends DateFieldProps<T> {
   label: string;
+  labelHidden?: boolean;
   name: FieldName;
   children?: React.ReactNode;
 }
@@ -15,6 +17,7 @@ export interface MemorableDateFieldProps<T extends DateValue = DateValue>
 export function MemorableDateField<T extends DateValue>({
   children,
   label,
+  labelHidden,
   name,
   defaultValue,
   ...props
@@ -44,7 +47,7 @@ export function MemorableDateField<T extends DateValue>({
                 onChange(date ? date.toString() : null);
                 props.onChange?.(date);
               }}
-              label={label}
+              {...getLabelProps(label, labelHidden)}
               isInvalid={invalid}
               errorMessage={error?.message}
               {...props}

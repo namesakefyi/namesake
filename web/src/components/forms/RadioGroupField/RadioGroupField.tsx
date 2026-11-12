@@ -1,26 +1,20 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { type FieldName, PREFER_NOT_TO_ANSWER } from "#constants/fields";
+import type { FieldName } from "#constants/fields";
+import { type OptionLabels, toChoices } from "#lib/forms/questions";
 import { smartquotes } from "#lib/utils/smartquotes";
 import {
   Radio,
   RadioGroup,
   type RadioGroupProps,
-  type RadioProps,
 } from "../../common/RadioGroup";
 import "./RadioGroupField.css";
-
-interface RadioOption extends RadioProps {
-  label: string;
-  value: string;
-}
 
 export interface RadioGroupFieldProps extends RadioGroupProps {
   children?: React.ReactNode;
   name: FieldName;
   label: string;
   labelHidden?: boolean;
-  options: RadioOption[];
-  includePreferNotToAnswer?: boolean;
+  options: OptionLabels;
 }
 
 export function RadioGroupField({
@@ -29,7 +23,6 @@ export function RadioGroupField({
   labelHidden,
   options,
   children,
-  includePreferNotToAnswer,
   ...props
 }: RadioGroupFieldProps) {
   const { control } = useFormContext();
@@ -50,14 +43,11 @@ export function RadioGroupField({
             orientation="vertical"
             {...props}
           >
-            {options?.map(({ label, ...option }) => (
+            {toChoices(options).map(({ label, ...option }) => (
               <Radio key={option.value} {...option}>
                 {label}
               </Radio>
             ))}
-            {includePreferNotToAnswer && (
-              <Radio value={PREFER_NOT_TO_ANSWER}>Prefer not to answer</Radio>
-            )}
           </RadioGroup>
         )}
       />

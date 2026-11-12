@@ -11,6 +11,7 @@ import { ProgressCircle } from "../../common/ProgressCircle";
 import { FormCompleteStep } from "../FormCompleteStep";
 import { FormNavigation } from "../FormNavigation";
 import { FormReviewStep } from "../FormReviewStep";
+import { FormStep } from "../FormStep";
 import { FormTitleStep } from "../FormTitleStep/FormTitleStep";
 import { FormStepContext } from "./FormStepContext";
 import "./FormContainer.css";
@@ -173,8 +174,7 @@ export function FormContainer({
       case "filling":
       case "editing": {
         if (!activeStep) return null;
-        const StepComponent = activeStep.component;
-        return <StepComponent stepConfig={activeStep} />;
+        return <FormStep key={activeStep.id} stepConfig={activeStep} />;
       }
       case "review":
       case "submitting":

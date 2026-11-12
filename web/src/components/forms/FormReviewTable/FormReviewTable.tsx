@@ -1,11 +1,12 @@
 import { useFormContext } from "react-hook-form";
 import type { FormData } from "#constants/fields";
+import type { Step } from "#constants/forms";
 import { resolveFormVisibility } from "#lib/forms/formVisibility";
-import type { Step } from "#lib/forms/types";
-import { formatFieldValue, getFieldLabel } from "#lib/utils/formatReviewFields";
-import { useFormStep } from "../FormContainer";
-import "./FormReviewTable.css";
+import { resolveText } from "#lib/forms/resolveStepContent";
+import { formatFieldValue } from "#lib/utils/formatReviewFields";
 import { smartquotes } from "#lib/utils/smartquotes";
+import { useFormStep } from "../FormContainer/FormStepContext";
+import "./FormReviewTable.css";
 
 export interface FormReviewTableProps {
   steps: readonly Step[];
@@ -23,22 +24,29 @@ interface ReviewSection {
 }
 
 export function FormReviewTable({ steps }: FormReviewTableProps) {
-  const form = useFormContext();
+  const form = useFormContext<Partial<FormData>>();
   const { onEditStep } = useFormStep();
-  const formData = form.getValues() as FormData;
+  const formData = form.getValues();
 
-  const { sections } = resolveFormVisibility(steps, formData);
-
-  const reviewSections: ReviewSection[] = sections
-    .filter(({ fields }) => fields.length > 0)
-    .map(({ stepId, fields }) => ({
-      stepId,
-      fields: fields.map((fieldName) => ({
-        fieldName,
-        label: smartquotes(getFieldLabel(fieldName)),
-        value: formatFieldValue(fieldName, formData[fieldName]),
-      })),
-    }));
+  const reviewSections: ReviewSection[] = resolveFormVisibility(steps, formData)
+    .sections.map(({ step, fields }) => ({
+      stepId: step.id,
+      fields: fields.flatMap((field) => {
+        const value = formatFieldValue(field.id, formData[field.id], {
+          options: field.options,
+          currency: field.currency,
+        });
+        if (field.optional && value === undefined) return [];
+        return [
+          {
+            fieldName: field.id,
+            label: smartquotes(resolveText(field.reviewLabel, formData)),
+            value,
+          },
+        ];
+      }),
+    }))
+    .filter(({ fields }) => fields.length > 0);
 
   return (
     <div className="form-review-sections">

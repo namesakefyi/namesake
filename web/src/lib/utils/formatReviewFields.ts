@@ -1,22 +1,33 @@
 import { parseDate } from "@internationalized/date";
-import { FIELD_DEFS, type FieldName } from "#constants/fields";
+import {
+  EXTRA_CHOICE_LABELS,
+  FIELD_DEFS,
+  type FieldName,
+} from "#constants/fields";
+import type { OptionLabels } from "#lib/forms/questions";
 import { formatCurrency } from "./formatCurrency";
 
 /**
  * Given a field name and value, return the formatted value for display in
- * the review table based on its type from FIELD_DEFS, or undefined if the
- * field has no response.
+ * the review table based on its type, or undefined if the field has no
+ * response.
  *
  * @example
  * formatFieldValue("dateOfBirth", "1990-06-15")
  * // "June 15, 1990"
+ *
+ * Pass the step's `options` to label stored values, and `currency` to show
+ * amounts as dollars.
  */
 export function formatFieldValue(
   fieldName: FieldName,
   value: any,
+  { options, currency }: { options?: OptionLabels; currency?: boolean } = {},
 ): string | undefined {
   // Get the field definition to determine the type
-  const fieldDef = FIELD_DEFS.find((def) => def.name === fieldName);
+  const fieldDef = FIELD_DEFS.find(
+    (definition) => definition.name === fieldName,
+  );
   if (!fieldDef) {
     return String(value);
   }
@@ -30,30 +41,29 @@ export function formatFieldValue(
     return undefined;
   }
 
+  const labelOf = (item: unknown) => {
+    const option = options?.[String(item)] ?? EXTRA_CHOICE_LABELS[String(item)];
+    if (option === undefined) return String(item);
+    return typeof option === "string" ? option : option.label;
+  };
+
   // Format based on type
   switch (fieldDef.type) {
     case "boolean":
       // Treat undefined/null as false for boolean fields (single checkboxes default to unchecked)
+      if (typeof value === "string") return labelOf(value); // An extra choice
       return value === true ? "Yes" : "No";
 
     case "string[]":
       if (Array.isArray(value)) {
-        const nonEmpty = value.filter(Boolean);
+        const nonEmpty = value.filter(Boolean).map(labelOf);
         return nonEmpty.length > 0 ? nonEmpty.join(", ") : undefined;
       }
       return undefined;
-    default:
-      // Enum fields: map stored keys to human-readable labels
-      if ("options" in fieldDef) {
-        return (
-          (fieldDef.options as Record<string, string>)[value] ?? String(value)
-        );
-      }
+    default: {
+      if (options) return labelOf(value);
 
-      // Currency fields: format as whole-dollar USD
-      if ("format" in fieldDef && fieldDef.format === "currency") {
-        return formatCurrency(value);
-      }
+      if (currency) return formatCurrency(value);
 
       // Phone number formatting
       if (fieldName === "phoneNumber") {
@@ -66,6 +76,7 @@ export function formatFieldValue(
       }
 
       return String(value);
+    }
   }
 }
 
@@ -88,16 +99,4 @@ function formatDate(date: string): string | undefined {
   } catch {
     return date; // Return as-is if parsing fails
   }
-}
-
-/**
- * Given a field name, return its label from FIELD_DEFS.
- *
- * @example
- * getFieldLabel("dateOfBirth")
- * // "Date of birth"
- */
-export function getFieldLabel(fieldName: FieldName): string {
-  const fieldDef = FIELD_DEFS.find((def) => def.name === fieldName);
-  return fieldDef?.label || fieldName;
 }

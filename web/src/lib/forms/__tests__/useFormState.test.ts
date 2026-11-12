@@ -9,9 +9,9 @@ import {
   vi,
 } from "vitest";
 import { createActor } from "xstate";
+import type { Step } from "#constants/forms";
 import * as db from "#db/database";
 import { createFormMachine } from "../createFormMachine";
-import type { Step } from "../types";
 import { useFormState } from "../useFormState";
 
 vi.mock("#db/database", () => ({
@@ -20,7 +20,7 @@ vi.mock("#db/database", () => ({
 }));
 
 function makeStep(id: string): Step {
-  return { id, title: `Step ${id}`, fields: [], component: () => null };
+  return { id, title: `Step ${id}`, questions: [] };
 }
 
 const flow = [makeStep("a"), makeStep("b")];
