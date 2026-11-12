@@ -10,7 +10,7 @@ import type { FormConfig } from "#constants/forms";
 import {
   forms,
   getAskedFields,
-  traceReads,
+  getFieldsReadBy,
 } from "#lib/forms/__tests__/formFixtures";
 import { getStepFields } from "#lib/forms/getStepFields";
 import type { FormData, Text } from "#lib/forms/questions";
@@ -122,7 +122,7 @@ describe("fields", () => {
     const failures = forms.flatMap(([formId, config]) => {
       const asked = getAskedFields(config);
       const read = new Set(
-        getReaders(config).flatMap((reader) => traceReads(reader, asked)),
+        getReaders(config).flatMap((reader) => getFieldsReadBy(reader, asked)),
       );
       return [...asked.keys()]
         .filter((name) => !read.has(name))

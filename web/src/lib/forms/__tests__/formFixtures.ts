@@ -31,10 +31,11 @@ const SAMPLES: readonly ((type: FieldTypeName) => unknown)[] = [
 ];
 
 /**
- * The fields of `types` a function reads, found by calling it with
- * recording proxies.
+ * The fields a function reads, found by calling it with recording proxies.
+ * Fields of `types` get sample answers; any other name is still recorded,
+ * so misspelled or removed fields show up.
  */
-export function traceReads(
+export function getFieldsReadBy(
   read: (data: FormData) => unknown,
   types: ReadonlyMap<string, FieldTypeName>,
 ): string[] {
@@ -42,10 +43,10 @@ export function traceReads(
   for (const sample of SAMPLES) {
     const data = new Proxy({} as FormData, {
       get(_target, property) {
-        const type = typeof property === "string" && types.get(property);
-        if (!type) return undefined;
-        fields.add(property as string);
-        return sample(type);
+        if (typeof property !== "string") return undefined;
+        fields.add(property);
+        const type = types.get(property);
+        return type ? sample(type) : undefined;
       },
     });
     try {

@@ -3,7 +3,7 @@ import { type FieldTypeName, SHARED_FIELDS } from "#constants/fields";
 import type { Condition } from "#lib/forms/questions";
 import { getStepFields } from "../getStepFields";
 import { getRootContext, walkQuestions } from "../walkQuestions";
-import { forms, getAskedFields, traceReads } from "./formFixtures";
+import { forms, getAskedFields, getFieldsReadBy } from "./formFixtures";
 
 /** Every known field, so reads of fields a form doesn't ask are caught. */
 const ALL_FIELDS = new Map<string, FieldTypeName>([
@@ -18,10 +18,35 @@ describe("form integrity", () => {
     const failures = forms.flatMap(([formId, config]) => {
       const asked = getAskedFields(config);
       return config.download.pdfs.flatMap(({ pdf, fill }) => {
-        return traceReads(fill, ALL_FIELDS)
+        return getFieldsReadBy(fill, ALL_FIELDS)
           .filter((field) => !asked.has(field))
           .map((field) => `${formId}: ${pdf.title} reads ${field}`);
       });
+    });
+    expect(failures).toEqual([]);
+  });
+
+  it("only includes PDFs and instructions based on fields the form asks", () => {
+    const failures = forms.flatMap(([formId, config]) => {
+      const asked = getAskedFields(config);
+      const conditions = [
+        ...config.download.pdfs.map(({ pdf, when }) => ({
+          name: pdf.title,
+          when,
+        })),
+        ...config.download.instructions.flatMap((instruction) =>
+          typeof instruction === "string"
+            ? []
+            : [{ name: `"${instruction.text}"`, when: instruction.when }],
+        ),
+      ];
+      return conditions.flatMap(({ name, when }) =>
+        when
+          ? getFieldsReadBy(when, ALL_FIELDS)
+              .filter((field) => !asked.has(field))
+              .map((field) => `${formId}: ${name} reads ${field}`)
+          : [],
+      );
     });
     expect(failures).toEqual([]);
   });
@@ -33,7 +58,7 @@ describe("form integrity", () => {
       for (const step of config.steps) {
         const check = (condition: Condition | undefined) => {
           for (const field of condition
-            ? traceReads(condition, ALL_FIELDS)
+            ? getFieldsReadBy(condition, ALL_FIELDS)
             : []) {
             if (!known.has(field)) {
               failures.push(`${formId} › ${step.id}: reads ${field} too early`);
