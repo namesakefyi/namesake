@@ -1,6 +1,5 @@
 export const prerender = false;
 
-import { getEntry } from "astro:content";
 import { env } from "cloudflare:workers";
 import type { APIRoute } from "astro";
 import { z } from "astro/zod";
@@ -8,15 +7,15 @@ import {
   FORM_FEEDBACK_SENTIMENT,
   type FormFeedbackSentiment,
 } from "#constants/forms";
+import { isFormId } from "#lib/forms/loadForm";
+import { escapeHtml } from "#lib/utils/escapeHtml";
 import { isRateLimited } from "#lib/utils/rateLimitByIp";
 
 const PRODUCTION_ORIGIN = "https://namesake.fyi";
 const ALLOWED_ORIGINS = [PRODUCTION_ORIGIN, "http://localhost:4321"];
 
 const FeedbackSchema = z.object({
-  form_id: z.string().refine(async (id) => !!(await getEntry("forms", id)), {
-    message: "Unknown form",
-  }),
+  form_id: z.string().refine(isFormId, { message: "Unknown form" }),
   sentiment: z.enum(
     Object.keys(FORM_FEEDBACK_SENTIMENT) as [
       FormFeedbackSentiment,
@@ -34,7 +33,7 @@ export const POST: APIRoute = async ({ request }) => {
     return Response.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const result = await FeedbackSchema.safeParseAsync(body);
+  const result = FeedbackSchema.safeParse(body);
   if (!result.success) {
     return Response.json(
       { error: result.error.issues[0]?.message ?? "Invalid request" },
@@ -95,13 +94,6 @@ export const POST: APIRoute = async ({ request }) => {
   if (resendApiKey && origin === PRODUCTION_ORIGIN) {
     const sentimentLabel = FORM_FEEDBACK_SENTIMENT[sentiment];
     const location = [city, region, country].filter(Boolean).join(", ");
-
-    const escapeHtml = (text: string) =>
-      text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
 
     try {
       const emailRes = await fetch("https://api.resend.com/emails", {

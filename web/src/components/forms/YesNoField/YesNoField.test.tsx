@@ -1,6 +1,5 @@
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { PREFER_NOT_TO_ANSWER } from "#constants/fields";
 import { renderWithFormProvider, screen } from "../test-utils";
 import {
   getBooleanValueFromYesNoString,
@@ -101,7 +100,7 @@ describe("YesNoField", () => {
       <YesNoField
         name="isCurrentlyUnhoused"
         label="Are you currently unhoused?"
-        extraChoices={[PREFER_NOT_TO_ANSWER]}
+        extraChoices={["preferNotToAnswer"]}
       />,
     );
 
@@ -130,7 +129,7 @@ describe("YesNoField", () => {
       <YesNoField
         name="isCurrentlyUnhoused"
         label="Are you currently unhoused?"
-        extraChoices={[PREFER_NOT_TO_ANSWER]}
+        extraChoices={["preferNotToAnswer"]}
       />,
     );
 

@@ -1,20 +1,13 @@
 import { memo } from "react";
 import snarkdown from "snarkdown";
-
-const HTML_ESCAPES: Record<string, string> = {
-  "&": "&amp;",
-  "<": "&lt;",
-  ">": "&gt;",
-  '"': "&quot;",
-};
+import { escapeHtml } from "#lib/utils/escapeHtml";
 
 /**
  * Escapes the text first, so an answer quoted into a banner can't add
  * markup, and turns each blank-line-separated block into a paragraph or list.
  */
 export function markdownToHtml(markdown: string): string {
-  const escaped = markdown.replace(/[&<>"]/g, (match) => HTML_ESCAPES[match]);
-  return escaped
+  return escapeHtml(markdown)
     .trim()
     .split(/\n\s*\n/)
     .map((block) => {

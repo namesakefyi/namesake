@@ -1,4 +1,3 @@
-import type { TextFieldName } from "#constants/fields";
 import type { Step } from "#constants/forms";
 import { type Condition, type Question, q } from "#lib/forms/questions";
 
@@ -8,7 +7,7 @@ type TestField =
   | { ids: readonly string[]; when: Condition };
 
 function textField(id: string, when?: Condition) {
-  return q.shortText(id as TextFieldName, {
+  return q.shortText(id, {
     when,
     label: id,
   });

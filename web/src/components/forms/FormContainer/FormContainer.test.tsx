@@ -1,10 +1,10 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { FormConfig, Step } from "#constants/forms";
+import type { Step } from "#constants/forms";
 import * as db from "#db/database";
 import { q } from "#lib/forms/questions";
-import { FormContainer } from "./FormContainer";
+import { FormContainer, type FormContainerProps } from "./FormContainer";
 
 vi.mock("#db/database", () => ({
   getFormProgress: vi.fn().mockResolvedValue(undefined),
@@ -16,9 +16,21 @@ vi.mock("#db/database", () => ({
   deleteField: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.mock("#lib/forms/getFormConfig");
+vi.mock("#lib/forms/loadForm");
 
-import { getFormConfig } from "#lib/forms/getFormConfig";
+import { loadFormDownload, loadFormSteps } from "#lib/forms/loadForm";
+
+/** Waits until the form and its saved progress have loaded. */
+async function waitForLoad() {
+  await waitFor(() =>
+    expect(screen.getByRole("button", { name: "Start" })).toBeEnabled(),
+  );
+}
+
+async function start(user: ReturnType<typeof userEvent.setup>) {
+  await waitForLoad();
+  await user.click(screen.getByRole("button", { name: "Start" }));
+}
 
 const plainStep: Step = {
   id: "plain",
@@ -32,24 +44,22 @@ const formStepStep: Step = {
   questions: [],
 };
 
-const plainConfig: FormConfig = {
-  steps: [plainStep],
+const testForm: FormContainerProps["form"] = {
+  id: "ma/court-order",
+  title: "Test",
+  stepCount: 1,
   pdfs: [],
-  downloadTitle: "Test",
-  instructions: [],
-};
-
-const formStepConfig: FormConfig = {
-  steps: [formStepStep],
-  pdfs: [],
-  downloadTitle: "Test",
-  instructions: [],
 };
 
 describe("FormContainer", () => {
   beforeEach(() => {
     vi.mocked(db.getFormProgress).mockResolvedValue(undefined);
-    vi.mocked(getFormConfig).mockReturnValue(plainConfig);
+    vi.mocked(loadFormSteps).mockResolvedValue([plainStep]);
+    vi.mocked(loadFormDownload).mockResolvedValue({
+      title: "Test",
+      instructions: [],
+      pdfs: [],
+    });
   });
 
   beforeAll(() => {
@@ -65,68 +75,75 @@ describe("FormContainer", () => {
 
   describe("title step", () => {
     it("renders title on title step", async () => {
-      render(<FormContainer formId="ma/court-order" title="Test" />);
-      expect(await screen.findByText("Test")).toBeInTheDocument();
+      render(<FormContainer form={testForm} />);
+      await waitForLoad();
+      expect(screen.getByText("Test")).toBeInTheDocument();
     });
 
     it("renders description on title step", async () => {
       render(
         <FormContainer
-          formId="ma/court-order"
-          title="Test"
-          description="Test Description"
+          form={{ ...testForm, description: "Test Description" }}
         />,
       );
-      expect(await screen.findByText("Test Description")).toBeInTheDocument();
+      await waitForLoad();
+      expect(screen.getByText("Test Description")).toBeInTheDocument();
     });
 
     it("renders start button on title step", async () => {
-      render(<FormContainer formId="ma/court-order" title="Test" />);
-      expect(
-        await screen.findByRole("button", { name: "Start" }),
-      ).toBeInTheDocument();
+      render(<FormContainer form={testForm} />);
+      await waitForLoad();
     });
 
     it("renders PDF metadata provided by the Astro wrapper", async () => {
       render(
         <FormContainer
-          formId="ma/court-order"
-          title="Test"
-          pdfMetadata={[
-            {
-              pdfId: "cjp27-petition-to-change-name-of-adult",
-              title: "Petition to Change Name of Adult",
-              code: "CJP-27",
-              pdfPath: "/forms/cjp27-petition-to-change-name-of-adult.pdf",
-            },
-          ]}
+          form={{
+            ...testForm,
+            pdfs: [
+              {
+                title: "Petition to Change Name of Adult",
+                code: "CJP-27",
+                file: "/forms/cjp27-petition-to-change-name-of-adult.pdf",
+              },
+            ],
+          }}
         />,
       );
 
+      await waitForLoad();
       expect(
-        await screen.findByText("Petition to Change Name of Adult (CJP-27)"),
+        screen.getByText("Petition to Change Name of Adult (CJP-27)"),
       ).toBeInTheDocument();
     });
 
-    it("renders a loading spinner while saved progress is being fetched", async () => {
-      vi.mocked(db.getFormProgress).mockReturnValue(new Promise(() => {}));
+    it("shows the title step with Start disabled while the form loads", async () => {
+      vi.mocked(loadFormSteps).mockReturnValue(new Promise(() => {}));
 
-      render(<FormContainer formId="ma/court-order" title="Test" />);
+      render(<FormContainer form={testForm} />);
       await act(async () => {});
 
-      expect(
-        screen.getByRole("progressbar", { name: "Loading form" }),
-      ).toBeInTheDocument();
-      expect(screen.queryByText("Test")).not.toBeInTheDocument();
+      expect(screen.getByText("Test")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Start" })).toBeDisabled();
+    });
+
+    it("keeps Start disabled while saved progress is being fetched", async () => {
+      vi.mocked(db.getFormProgress).mockReturnValue(new Promise(() => {}));
+
+      render(<FormContainer form={testForm} />);
+      await act(async () => {});
+
+      expect(screen.getByText("Test")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Start" })).toBeDisabled();
     });
   });
 
   describe("filling phase", () => {
     it("renders step content and navigation after clicking Start", async () => {
       const user = userEvent.setup();
-      render(<FormContainer formId="ma/court-order" title="Test" />);
+      render(<FormContainer form={testForm} />);
 
-      await user.click(await screen.findByRole("button", { name: "Start" }));
+      await start(user);
 
       expect(screen.getByText("Step content")).toBeInTheDocument();
       expect(screen.getByRole("navigation")).toBeInTheDocument();
@@ -134,9 +151,9 @@ describe("FormContainer", () => {
 
     it("returns to title after clicking Previous step", async () => {
       const user = userEvent.setup();
-      render(<FormContainer formId="ma/court-order" title="Test" />);
+      render(<FormContainer form={testForm} />);
 
-      await user.click(await screen.findByRole("button", { name: "Start" }));
+      await start(user);
       await user.click(screen.getByRole("button", { name: "Previous step" }));
 
       expect(
@@ -148,9 +165,9 @@ describe("FormContainer", () => {
   describe("review phase", () => {
     it("renders review step after clicking Next step", async () => {
       const user = userEvent.setup();
-      render(<FormContainer formId="ma/court-order" title="Test" />);
+      render(<FormContainer form={testForm} />);
 
-      await user.click(await screen.findByRole("button", { name: "Start" }));
+      await start(user);
       await user.click(screen.getByRole("button", { name: "Next step" }));
 
       expect(
@@ -161,11 +178,11 @@ describe("FormContainer", () => {
 
   describe("handleFormSubmit — default case (filling)", () => {
     it("advances to review when a filling-phase form step is submitted", async () => {
-      vi.mocked(getFormConfig).mockReturnValue(formStepConfig);
+      vi.mocked(loadFormSteps).mockResolvedValue([formStepStep]);
       const user = userEvent.setup();
-      render(<FormContainer formId="ma/court-order" title="Test" />);
+      render(<FormContainer form={testForm} />);
 
-      await user.click(await screen.findByRole("button", { name: "Start" }));
+      await start(user);
       await user.click(screen.getByRole("button", { name: "Continue" }));
 
       expect(
@@ -175,23 +192,20 @@ describe("FormContainer", () => {
   });
 
   it("starts the next step's questions fresh", async () => {
-    vi.mocked(getFormConfig).mockReturnValue({
-      ...plainConfig,
-      steps: [
-        {
-          id: "residence",
-          title: "Where do you live?",
-          questions: [q.address("residence", { address2: true })],
-        },
-        {
-          id: "mailing",
-          title: "Where do you get mail?",
-          questions: [q.address("mailing", { address2: true })],
-        },
-      ],
-    });
-    render(<FormContainer formId="ma/court-order" title="Test" />);
-    await userEvent.click(await screen.findByRole("button", { name: "Start" }));
+    vi.mocked(loadFormSteps).mockResolvedValue([
+      {
+        id: "residence",
+        title: "Where do you live?",
+        questions: [q.address("residence", { address2: true })],
+      },
+      {
+        id: "mailing",
+        title: "Where do you get mail?",
+        questions: [q.address("mailing", { address2: true })],
+      },
+    ]);
+    render(<FormContainer form={testForm} />);
+    await start(userEvent.setup());
     await userEvent.click(
       screen.getByRole("button", { name: "Add apartment, suite, unit, etc." }),
     );
@@ -203,5 +217,16 @@ describe("FormContainer", () => {
     expect(
       screen.getByRole("button", { name: "Add apartment, suite, unit, etc." }),
     ).toBeInTheDocument();
+  });
+
+  it("loads the form's downloads once the person starts filling", async () => {
+    const user = userEvent.setup();
+    render(<FormContainer form={testForm} />);
+
+    await waitForLoad();
+    expect(loadFormDownload).not.toHaveBeenCalled();
+
+    await start(user);
+    expect(loadFormDownload).toHaveBeenCalledWith("ma/court-order");
   });
 });

@@ -3,8 +3,6 @@ import { parseContentPath } from "./parseContentPath";
 
 /**
  * A glob loader that sets each entry's `jurisdiction` from its folder.
- * Used by collections whose entries are files (guides) or folders with an
- * `index.*` file (forms); either way the entry's id is its path.
  */
 export function jurisdictionGlobLoader({
   collection,

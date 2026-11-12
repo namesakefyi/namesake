@@ -27,3 +27,9 @@ export const deriveCurrentAge = (dateOfBirth?: string): number => {
     today.getFullYear() - birth.getUTCFullYear() - (birthdayHasPassed ? 0 : 1);
   return age >= 0 ? age : -1;
 };
+
+/** The current age for a PDF, or undefined when it's unknown. */
+export const formatCurrentAge = (dateOfBirth?: string): string | undefined => {
+  const age = deriveCurrentAge(dateOfBirth);
+  return age >= 0 ? String(age) : undefined;
+};

@@ -1,4 +1,4 @@
-import type { FieldName } from "#constants/fields";
+import type { FieldType } from "#constants/fields";
 import type { Step } from "#constants/forms";
 import type { Condition, OptionLabels, Text } from "./questions";
 import {
@@ -8,8 +8,12 @@ import {
 } from "./walkQuestions";
 
 export interface StepField {
-  id: FieldName;
-  /** The step's, enclosing subsections' and the field's own conditions. */
+  id: string;
+  type: FieldType;
+  /**
+   * Enclosing subsections' and the field's own conditions. The step's own
+   * `when` is checked separately, before its fields.
+   */
   when?: Condition;
   options?: OptionLabels;
   currency?: boolean;
@@ -42,12 +46,8 @@ function collectStepFields(step: Step): StepField[] {
       for (const written of question.writes) {
         fields.push({
           id: written.id,
-          when: allOf([
-            step.when,
-            ...context.conditions,
-            question.when,
-            written.when,
-          ]),
+          type: written.type,
+          when: allOf([...context.conditions, question.when, written.when]),
           options: written.options,
           optional: !!written.optional,
           currency:
@@ -72,4 +72,9 @@ export function getStepFields(step: Step): readonly StepField[] {
     cache.set(step, fields);
   }
   return fields;
+}
+
+/** Every field a form's steps write, in the order they are asked. */
+export function getFormFields(steps: readonly Step[]): StepField[] {
+  return steps.flatMap(getStepFields);
 }

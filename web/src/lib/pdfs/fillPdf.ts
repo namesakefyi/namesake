@@ -1,6 +1,5 @@
 import type { PDFForm } from "@libpdf/core";
-import type { FormData } from "#constants/fields";
-import type { PDFDefinition, PDFFieldValue } from "#constants/pdf";
+import type { PdfDefinition, PdfFieldValue } from "#constants/pdf";
 import { fetchPdf } from "./fetchPdf";
 import { loadPdfLib } from "./loadPdfLib";
 
@@ -12,7 +11,7 @@ import { loadPdfLib } from "./loadPdfLib";
 function toFieldValue(
   form: PDFForm,
   name: string,
-  value: NonNullable<PDFFieldValue>,
+  value: NonNullable<PdfFieldValue>,
 ) {
   const radio = form.getRadioGroup(name);
   if (!radio) return value;
@@ -22,49 +21,30 @@ function toFieldValue(
     : undefined;
 }
 
-/**
- * Fill out a PDF form with the given user data.
- * @returns PDF bytes for the filled form.
- */
-export async function fillPdf({
-  pdf,
-  userData,
-}: {
-  pdf: PDFDefinition;
-  userData: Partial<FormData>;
-}): Promise<Uint8Array> {
-  try {
-    const { PDF } = await loadPdfLib();
+export async function fillPdf(
+  pdf: PdfDefinition,
+  values: Readonly<Record<string, PdfFieldValue>>,
+): Promise<Uint8Array> {
+  const [{ PDF }, formPdfBytes] = await Promise.all([
+    loadPdfLib(),
+    fetchPdf(pdf.file),
+  ]);
 
-    // Fetch the PDF with form fields
-    const formPdfBytes = await fetchPdf(pdf.pdfPath);
+  // PDF.load requires a Uint8Array, not an ArrayBuffer.
+  const pdfDoc = await PDF.load(new Uint8Array(formPdfBytes));
+  pdfDoc.setTitle(pdf.title);
+  pdfDoc.setAuthor("Filled by Namesake Collaborative");
 
-    // Load a PDF with form fields (PDF.load requires Uint8Array, not ArrayBuffer)
-    const pdfDoc = await PDF.load(new Uint8Array(formPdfBytes));
-
-    // Set the title
-    pdfDoc.setTitle(pdf.title);
-    pdfDoc.setAuthor("Filled by Namesake Collaborative");
-
-    // Get the form containing all the fields
-    const form = pdfDoc.getForm();
-
-    // Fill out each field from the resolver
-    const fields = pdf.resolver(userData);
-    if (form) {
-      const values: Record<string, NonNullable<PDFFieldValue>> = {};
-      for (const [name, resolved] of Object.entries(fields)) {
-        if (resolved == null) continue;
-        const value = toFieldValue(form, name, resolved);
-        if (value !== undefined) values[name] = value;
-      }
-      form.fill(values);
+  const form = pdfDoc.getForm();
+  if (form) {
+    const filled: Record<string, NonNullable<PdfFieldValue>> = {};
+    for (const [name, resolved] of Object.entries(values)) {
+      if (resolved == null) continue;
+      const value = toFieldValue(form, name, resolved);
+      if (value !== undefined) filled[name] = value;
     }
-
-    // Serialize the PDFDocument to bytes
-    return await pdfDoc.save();
-  } catch (error) {
-    console.error(error);
-    throw error;
+    form.fill(filled);
   }
+
+  return pdfDoc.save();
 }

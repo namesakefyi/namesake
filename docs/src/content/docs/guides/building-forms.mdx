@@ -15,58 +15,57 @@ Add a new folder to `web/src/content/forms`. Put a state or territory form insid
 
 - ma
   - my-form
+    - index.ts # Form metadata: title, description, and costs
+    - steps.ts # The questions asked for each step
+    - download.ts # The PDFs to fill and the cover page instructions
     - e2e.spec.ts
-    - index.ts # Steps, PDFs, and instructions
-    - index.yml # Static metadata (title, description, costs, etc.)
 
 </FileTree>
 
-## Define form metadata
+## Describe the form
 
-Inside `index.yml`, fill out static metadata for the form, such as the title, description, and costs.
-
-```yml wrap
-# index.yml
-title: "Court Order: Massachusetts"
-description: "If you live in Massachusetts and want to legally update your name, this is the place to start."
-category: "court-order"
-costs:
-  - title: "Filing fee"
-    amount: 150
-    required: true
-  - title: "Surcharge fee"
-    amount: 15
-    required: true
-```
-
-## Write the steps
-
-Inside `index.ts`, import `defineForm` and list the steps in the order people see them. Each step has an `id`, a `title`, and an array of `questions`.
+In `index.ts`, give the form its title, description, category, and costs. This is what the forms page and the form's first screen show.
 
 ```ts
 // index.ts
 import { defineForm } from "#lib/forms/defineForm";
-import { q } from "#lib/forms/questions";
 
 export default defineForm({
-  steps: [
-    {
-      id: "new-name",
-      title: "What is your new name?",
-      description: "Type it exactly as you want it to appear.",
-      questions: [q.name("newName")],
-    },
-    {
-      id: "contact-info",
-      title: "What is your contact information?",
-      questions: [
-        q.phone("phoneNumber"),
-        q.email("email"),
-      ],
-    },
+  title: "Court Order: Massachusetts",
+  description:
+    "If you live in Massachusetts and want to legally update your name, this is the place to start.",
+  category: "court-order",
+  costs: [
+    { title: "Filing fee", amount: 150, required: true },
+    { title: "Surcharge fee", amount: 15, required: true },
   ],
-  // ...
 });
+```
+
+To keep a form off the forms page while it's still reachable by its URL, add `unlisted: true`.
+
+## Write the steps
+
+In `steps.ts`, list the steps in the order people see them. Each step has an `id`, a `title`, and an array of `questions`.
+
+```ts
+// steps.ts
+import { defineSteps } from "#lib/forms/defineForm";
+import { q } from "#lib/forms/questions";
+
+export default defineSteps([
+  {
+    id: "new-name",
+    title: "What is your new name?",
+    description: "Type it exactly as you want it to appear.",
+    questions: [q.name("newName")],
+  },
+  {
+    id: "contact-info",
+    title: "What is your contact information?",
+    questions: [q.phone("phoneNumber"), q.email("email")],
+  },
+]);
 ```
 
 ### Choose a question type
@@ -136,42 +135,38 @@ q.banner(
 ),
 ```
 
-If the same copy appears more than once in a form, for example in a banner and in the instructions, define it once at the top of `index.ts`.
+If the same copy or condition is used in both `steps.ts` and `download.ts`, for example in a banner and in the instructions, you can define it once in a `conditions.ts` next to them and import it into both.
 
-### Add a new field
+### Name the answers
 
-If a question saves an answer that no form has asked for before, add it to `web/src/constants/fields.ts` with its `name` and `type`. For a fixed set of answers, also list its `values`:
+The name you give a question, such as `"incomePeriod"`, is where its answer is saved. Answers are shared across forms to prevent unnecessary re-entry.
+
+- **An answer only your form asks for** needs nothing else. Pick a name no other form uses.
+- **An answer another form already asks for** should use that form's name, so people don't have to answer twice. If that name isn't in `SHARED_FIELDS` yet, move it into [`web/src/constants/fields.ts`](https://github.com/namesakefyi/namesake/blob/main/web/src/constants/fields.ts).
+
+Name yes-or-no answers as questions, starting with a word like `is`, `has`, or `should`, such as `hasPreviousNameChange`.
+
+For a yes-or-no question that also offers "Prefer not to answer" or "I don't know", add `extraChoices`:
 
 ```ts
-{
-  name: "incomePeriod",
-  type: "string",
-  values: ["weekly", "biweekly", "monthly", "yearly"],
-},
+q.yesNo("isHispanicOrLatino", {
+  label: "Are you Hispanic or Latino?",
+  extraChoices: ["preferNotToAnswer"],
+}),
 ```
 
-For a yes-or-no question that also offers "Prefer not to answer" or "I don't know", list those `extraChoices` on the field:
+## Fill the PDFs
+
+In `download.ts`, list the PDFs to fill, how to fill each one, and the instructions for the download's cover page. Import each PDF from `web/src/content/pdfs`.
 
 ```ts
-{
-  name: "isHispanicOrLatino",
-  type: "boolean",
-  extraChoices: [PREFER_NOT_TO_ANSWER],
-},
-```
+// download.ts
+import cjp27 from "#content/pdfs/ma/cjp27-petition-to-change-name-of-adult";
+import { defineDownload } from "#lib/forms/defineForm";
+import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
 
-## Add PDFs and instructions
-
-Finish `index.ts` with the PDFs to fill and the instructions for the cover page of the download:
-
-```ts
-export default defineForm({
-  steps: [/* ... */],
-  pdfs: [
-    { pdfId: "cjp27-petition-to-change-name-of-adult" },
-    { pdfId: "cjp34-cori-and-wms-release-request" },
-  ],
-  downloadTitle: "Massachusetts Court Order",
+export default defineDownload({
+  title: "Massachusetts Court Order",
   instructions: [
     "Review all documents carefully.",
     {
@@ -179,10 +174,26 @@ export default defineForm({
       when: (data) => data.hasPreviousNameChange === true,
     },
   ],
+  pdfs: [
+    {
+      pdf: cjp27,
+      fill: (data) => ({
+        petitionerFirstName: data.oldFirstName,
+        petitionerLastName: data.oldLastName,
+        dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
+        county: undefined,
+        // ...every other field in the PDF's schema.ts
+      }),
+    },
+  ],
 });
 ```
 
+`fill` returns a value for every field in the PDF's `schema.ts`. Write `undefined` for a field the form leaves blank.
+
 A PDF or instruction with a `when` is only included for matching answers.
+
+The `title` names the downloaded file and appears on its cover page.
 
 ## Render the form
 
@@ -196,23 +207,6 @@ import FormContainer from "#components/forms/FormContainer/FormContainer.astro"
 ## Fill out forms
 
 <FormContainer formId="ma/court-order" />
-```
-
-## Connect PDF fields
-
-Now that your form collects data, go back to `web/src/content/pdfs` and update the resolver values in `index.ts` with the matching fields from `data`:
-
-```ts {4-9}
-// index.ts
-export default definePdf<PdfFieldName>({
-  // ...
-  resolver: (data) => ({
-    petitionerFirstName: data.newFirstName,
-    petitionerMiddleName: data.newMiddleName,
-    petitionerLastName: data.newLastName,
-    // Map remaining PDF fields to form data...
-  }),
-});
 ```
 
 ## Test the form

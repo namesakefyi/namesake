@@ -1,22 +1,21 @@
-import { type CollectionEntry, getCollection } from "astro:content";
 import type { APIRoute, GetStaticPaths } from "astro";
+import type { FormDefinition } from "#constants/forms";
+import { allForms } from "#lib/forms/allForms";
 import { createOgImageResponse } from "#lib/utils/createOgImageResponse";
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const entries = await getCollection("forms");
-  return entries.map((entry) => ({
-    params: { id: entry.id },
-    props: { entry },
+export const getStaticPaths: GetStaticPaths = () =>
+  Object.entries(allForms).map(([id, form]) => ({
+    params: { id },
+    props: { form },
   }));
-};
 
-export const GET: APIRoute<{ entry: CollectionEntry<"forms"> }> = async ({
+export const GET: APIRoute<{ form: FormDefinition }> = async ({
   props,
   request,
 }) =>
   createOgImageResponse({
     subhead: "Name Change Form",
-    title: props.entry.data.title,
+    title: props.form.title,
     color: "white",
     origin: new URL(request.url).origin,
   });

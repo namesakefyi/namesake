@@ -1,85 +1,52 @@
 import { describe, expect, it } from "vitest";
-import { FIELD_DEFS, type FieldName } from "#constants/fields";
-import type { FormConfig } from "#constants/forms";
-import type { PDFDefinition } from "#constants/pdf";
-import type { Condition, Data } from "#lib/forms/questions";
-import { getFormConfigs } from "../getFormConfig";
+import { type FieldType, SHARED_FIELDS } from "#constants/fields";
+import type { Condition } from "#lib/forms/questions";
 import { getStepFields } from "../getStepFields";
 import { getRootContext, walkQuestions } from "../walkQuestions";
+import { forms, getAskedFields, getFieldsReadBy } from "./formFixtures";
 
-const forms = Object.entries(getFormConfigs());
-
-const pdfDefinitions = new Map(
-  Object.values(
-    import.meta.glob<{ default: PDFDefinition }>(
-      "/src/content/pdfs/**/index.ts",
-      { eager: true },
-    ),
-  ).map((module) => [module.default.id, module.default]),
-);
-
-const DEFINITIONS = new Map<string, (typeof FIELD_DEFS)[number]>(
-  FIELD_DEFS.map((definition) => [definition.name, definition]),
-);
-
-/** Answer sets to trace with, so more branches of each function run. */
-const SAMPLES: readonly ((fieldName: string) => unknown)[] = [
-  () => undefined,
-  (fieldName) => {
-    const definition = DEFINITIONS.get(fieldName);
-    if (definition?.type === "boolean") return true;
-    if (definition?.type === "string[]") return ["other"];
-    return definition && "values" in definition
-      ? definition.values[0]
-      : "1990-01-01";
-  },
-  (fieldName) => {
-    const type = DEFINITIONS.get(fieldName)?.type;
-    return type === "boolean" ? false : type === "string[]" ? [] : "";
-  },
-];
-
-/** The fields a function reads, found by calling it with recording proxies. */
-function traceReads(read: (data: Data) => unknown): FieldName[] {
-  const fields = new Set<FieldName>();
-  for (const sample of SAMPLES) {
-    const data = new Proxy({} as Data, {
-      get(_target, property) {
-        if (typeof property !== "string" || !DEFINITIONS.has(property)) {
-          return undefined;
-        }
-        fields.add(property as FieldName);
-        return sample(property);
-      },
-    });
-    try {
-      read(data);
-    } catch {
-      // Reads made before the error still count.
-    }
-  }
-  return [...fields];
-}
-
-function getWrittenFields(config: FormConfig): Set<FieldName> {
-  return new Set(
-    config.steps.flatMap((step) =>
-      getStepFields(step).map((field) => field.id),
-    ),
-  );
-}
+/** Every known field, so reads of fields a form doesn't ask are caught. */
+const ALL_FIELDS = new Map<string, FieldType>([
+  ...Object.entries(SHARED_FIELDS).map(
+    ([name, field]) => [name, field.type] as const,
+  ),
+  ...forms.flatMap(([, config]) => [...getAskedFields(config)]),
+]);
 
 describe("form integrity", () => {
   it("asks for every field an included PDF reads", () => {
     const failures = forms.flatMap(([formId, config]) => {
-      const written = getWrittenFields(config);
-      return config.pdfs.flatMap(({ pdfId }) => {
-        const pdf = pdfDefinitions.get(pdfId);
-        if (!pdf) throw new Error(`No PDF definition for ${pdfId}`);
-        return traceReads(pdf.resolver)
-          .filter((field) => !written.has(field))
-          .map((field) => `${formId}: ${pdfId} reads ${field}`);
+      const asked = getAskedFields(config);
+      return config.download.pdfs.flatMap(({ pdf, fill }) => {
+        return getFieldsReadBy(fill, ALL_FIELDS)
+          .filter((field) => !asked.has(field))
+          .map((field) => `${formId}: ${pdf.title} reads ${field}`);
       });
+    });
+    expect(failures).toEqual([]);
+  });
+
+  it("only includes PDFs and instructions based on fields the form asks", () => {
+    const failures = forms.flatMap(([formId, config]) => {
+      const asked = getAskedFields(config);
+      const conditions = [
+        ...config.download.pdfs.map(({ pdf, when }) => ({
+          name: pdf.title,
+          when,
+        })),
+        ...config.download.instructions.flatMap((instruction) =>
+          typeof instruction === "string"
+            ? []
+            : [{ name: `"${instruction.text}"`, when: instruction.when }],
+        ),
+      ];
+      return conditions.flatMap(({ name, when }) =>
+        when
+          ? getFieldsReadBy(when, ALL_FIELDS)
+              .filter((field) => !asked.has(field))
+              .map((field) => `${formId}: ${name} reads ${field}`)
+          : [],
+      );
     });
     expect(failures).toEqual([]);
   });
@@ -87,10 +54,12 @@ describe("form integrity", () => {
   it("only bases conditions on fields asked earlier", () => {
     const failures: string[] = [];
     for (const [formId, config] of forms) {
-      const known = new Set<FieldName>();
+      const known = new Set<string>();
       for (const step of config.steps) {
         const check = (condition: Condition | undefined) => {
-          for (const field of condition ? traceReads(condition) : []) {
+          for (const field of condition
+            ? getFieldsReadBy(condition, ALL_FIELDS)
+            : []) {
             if (!known.has(field)) {
               failures.push(`${formId} › ${step.id}: reads ${field} too early`);
             }
@@ -123,7 +92,7 @@ describe("form integrity", () => {
 
   it("asks for each field in only one step", () => {
     const failures = forms.flatMap(([formId, config]) => {
-      const writers = new Map<FieldName, string[]>();
+      const writers = new Map<string, string[]>();
       for (const step of config.steps) {
         for (const { id } of getStepFields(step)) {
           writers.set(id, [...(writers.get(id) ?? []), step.id]);

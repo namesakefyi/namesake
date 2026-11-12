@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { getPdfForm } from "../getPdfForm";
-import { testPdfDefinition } from "./helpers";
+import { getPdfForm } from "./getPdfForm";
+import { testPdf } from "./helpers";
 
 vi.mock("../loadPdfLib", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../loadPdfLib")>();
@@ -9,13 +9,10 @@ vi.mock("../loadPdfLib", async (importOriginal) => {
 
 describe("getPdfForm", () => {
   it("should return form object for testing", async () => {
-    const form = await getPdfForm({
-      pdf: testPdfDefinition,
-      userData: {
-        newFirstName: "New",
-        oldFirstName: "Old",
-        shouldReturnOriginalDocuments: true,
-      },
+    const form = await getPdfForm(testPdf, {
+      newFirstName: "New",
+      oldFirstName: "Old",
+      shouldReturnOriginalDocuments: true,
     });
 
     expect(form.getTextField("newFirstName")?.getValue()).toBe("New");
@@ -26,25 +23,17 @@ describe("getPdfForm", () => {
   });
 
   it("should throw error for invalid PDF path", async () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-
     const invalidPdf = {
-      ...testPdfDefinition,
-      pdfPath: "/nonexistent.pdf",
+      ...testPdf,
+      file: "/nonexistent.pdf",
     };
 
     await expect(
-      getPdfForm({
-        pdf: invalidPdf,
-        userData: {
-          newFirstName: "New",
-          oldFirstName: "Old",
-          shouldReturnOriginalDocuments: false,
-        },
+      getPdfForm(invalidPdf, {
+        newFirstName: "New",
+        oldFirstName: "Old",
+        shouldReturnOriginalDocuments: false,
       }),
     ).rejects.toThrow();
-
-    expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error));
-    consoleSpy.mockRestore();
   });
 });

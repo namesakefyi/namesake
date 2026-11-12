@@ -6,7 +6,7 @@ import type {
   SubsectionQuestion,
   Text,
 } from "./questions";
-import { resolveText } from "./resolveStepContent";
+import { resolveText } from "./resolveText";
 
 /** Composite questions (no single `name`) label each of their own inputs. */
 export function usesTitleAsLabel(question: AnyFieldQuestion): boolean {

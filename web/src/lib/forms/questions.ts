@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import { COUNTRY_OPTIONS } from "#constants/countries";
 import {
   ADDRESS_FIELDS,
   type AddressPart,
@@ -11,31 +12,30 @@ import {
   type NameType,
 } from "#constants/fieldGroups";
 import {
-  type BooleanFieldName,
   type ExtraChoice,
-  type FieldExtraChoice,
-  type FieldName,
-  type FieldValue,
-  type FormData,
-  type ListFieldName,
-  type StringFieldName,
+  type FieldType,
+  getSharedFieldType,
+  type SharedFields,
   shouldShowOtherPronouns,
-  type TextFieldName,
 } from "#constants/fields";
+import { JURISDICTION_OPTIONS } from "#constants/jurisdictions";
 
-export type Data = Partial<FormData>;
+export type FieldValue = string | boolean | string[];
 
-export type Condition = (data: Data) => boolean;
+/**
+ * A form's saved fields. Shared fields are typed by the registry; the
+ * integrity tests check every other field a form reads.
+ */
+export type FormData = Partial<SharedFields> & {
+  readonly [name: string]: FieldValue | undefined;
+};
 
-export type Text = string | ((data: Data) => string);
-export type OptionalText = string | ((data: Data) => string | undefined);
+export type Condition = (data: FormData) => boolean;
+
+export type Text = string | ((data: FormData) => string);
+export type OptionalText = string | ((data: FormData) => string | undefined);
 
 export type OptionLabel = string | { label: string; description?: string };
-
-/** Labels for every allowed value of a field, each exactly once. */
-export type Options<K extends FieldName> = {
-  [V in FieldValue<K>]: OptionLabel;
-};
 
 export type OptionLabels = Readonly<Record<string, OptionLabel>>;
 
@@ -47,8 +47,9 @@ export function toChoices(options: OptionLabels) {
   );
 }
 
-export interface WrittenField<W extends FieldName = FieldName> {
-  id: W;
+export interface WrittenField {
+  id: string;
+  type: FieldType;
   when?: Condition;
   /** Left off the review page while it has no answer. */
   optional?: boolean;
@@ -92,9 +93,7 @@ interface SingleFieldPropsByKind {
 /** Each question's props, which its component receives as-is. */
 export type FieldPropsByKind = {
   [K in keyof SingleFieldPropsByKind]: SingleFieldPropsByKind[K] & {
-    name: K extends "checkboxGroup" | "repeatingEntry"
-      ? ListFieldName
-      : FieldName;
+    name: string;
     description?: string;
   };
 } & {
@@ -120,17 +119,15 @@ export interface CommonFieldOptions {
   reviewLabel?: Text;
 }
 
-export interface FieldQuestion<
-  K extends FieldKind = FieldKind,
-  W extends FieldName = FieldName,
-> extends CommonFieldOptions {
+export interface FieldQuestion<K extends FieldKind = FieldKind>
+  extends CommonFieldOptions {
   type: "field";
   kind: K;
   /** Set for nodes that write a single field. */
-  name?: W;
+  name?: string;
   /** Undefined when the nearest title stands in as a hidden label. */
   label?: Text;
-  writes: readonly WrittenField<W>[];
+  writes: readonly WrittenField[];
   props: FieldPropsByKind[K];
 }
 
@@ -156,8 +153,6 @@ export type Question =
     }[Exclude<BlockKind, "subsection">]
   | SubsectionQuestion;
 
-export type QuestionKind = FieldKind | BlockKind;
-
 interface LabelOptions extends CommonFieldOptions {
   /** Omit for the single question under a title, which becomes its label. */
   label?: Text;
@@ -179,15 +174,13 @@ type DisplayArguments<P> =
     : [options: { props: P }];
 
 /** `options` labels the stored values on the review page. */
-function singleField<
-  K extends keyof SingleFieldPropsByKind,
-  W extends FieldName,
->(
+function singleField<K extends keyof SingleFieldPropsByKind>(
   kind: K,
-  name: W,
+  type: FieldType,
+  name: string,
   { label, description, when, reviewLabel, ...props }: SingleFieldOptions<K>,
   options?: OptionLabels,
-): FieldQuestion<K, W> {
+): FieldQuestion<K> {
   return {
     type: "field",
     kind,
@@ -195,7 +188,7 @@ function singleField<
     label,
     when,
     reviewLabel,
-    writes: [{ id: name, options }],
+    writes: [{ id: name, type, options }],
     props: { ...props, name, description } as FieldPropsByKind[K],
   };
 }
@@ -209,100 +202,87 @@ function composite<K extends FieldKind>(
   return { type: "field", kind, when, reviewLabel, writes, props };
 }
 
+const SHARED_COMBO_BOX_OPTIONS = {
+  state: JURISDICTION_OPTIONS,
+  country: COUNTRY_OPTIONS,
+};
+
 /**
- * Builders for everything in a step's `body`. Each is named after its
+ * Builders for everything in a step's `questions`. Each is named after its
  * component with the `Field` or `Form` affix dropped: `YesNoField` →
  * `q.yesNo`, `FormSubsection` → `q.subsection`.
  */
 export const q = {
-  shortText<W extends TextFieldName>(
-    name: W,
-    options: SingleFieldOptions<"shortText"> = {},
-  ) {
-    return singleField("shortText", name, options);
+  shortText(name: string, options: SingleFieldOptions<"shortText"> = {}) {
+    return singleField("shortText", "text", name, options);
   },
 
-  longText<W extends TextFieldName>(
-    name: W,
-    options: SingleFieldOptions<"longText"> = {},
-  ) {
-    return singleField("longText", name, options);
+  longText(name: string, options: SingleFieldOptions<"longText"> = {}) {
+    return singleField("longText", "text", name, options);
   },
 
   /** Stored as a string. */
-  number<W extends StringFieldName>(
-    name: W,
-    options: SingleFieldOptions<"number"> = {},
-  ) {
-    return singleField("number", name, options);
+  number(name: string, options: SingleFieldOptions<"number"> = {}) {
+    return singleField("number", "number", name, options);
   },
 
-  memorableDate<W extends StringFieldName>(
-    name: W,
+  memorableDate(
+    name: string,
     options: SingleFieldOptions<"memorableDate"> = {},
   ) {
-    return singleField("memorableDate", name, options);
+    return singleField("memorableDate", "date", name, options);
   },
 
-  checkbox<W extends BooleanFieldName>(
-    name: W,
-    options: CommonFieldOptions & { label: Text },
+  checkbox(name: string, options: CommonFieldOptions & { label: Text }) {
+    return singleField("checkbox", "bool", name, options);
+  },
+
+  /** `extraChoices` are stored as themselves, besides yes and no. */
+  yesNo(name: string, options: SingleFieldOptions<"yesNo"> = {}) {
+    return singleField("yesNo", "bool", name, options);
+  },
+
+  radioGroup(name: string, options: SingleFieldOptions<"radioGroup">) {
+    return singleField("radioGroup", "oneOf", name, options, options.options);
+  },
+
+  checkboxGroup(name: string, options: SingleFieldOptions<"checkboxGroup">) {
+    return singleField("checkboxGroup", "list", name, options, options.options);
+  },
+
+  /** Shared state and country fields come with their options. */
+  comboBox(
+    name: string,
+    options: Omit<SingleFieldOptions<"comboBox">, "options"> &
+      Partial<Pick<SingleFieldOptions<"comboBox">, "options">>,
   ) {
-    return singleField("checkbox", name, options);
+    const type = getSharedFieldType(name) ?? "text";
+    const choices =
+      options.options ??
+      SHARED_COMBO_BOX_OPTIONS[type as keyof typeof SHARED_COMBO_BOX_OPTIONS];
+    if (!choices) throw new Error(`Combo box "${name}" needs options.`);
+    return singleField("comboBox", type, name, {
+      ...options,
+      options: choices,
+    });
   },
 
-  /** `extraChoices` must be declared on the field in `FIELD_DEFS`. */
-  yesNo<W extends BooleanFieldName>(
-    name: W,
-    options: Omit<SingleFieldOptions<"yesNo">, "extraChoices"> & {
-      extraChoices?: readonly FieldExtraChoice<W>[];
-    } = {},
-  ) {
-    return singleField("yesNo", name, options);
-  },
-
-  radioGroup<W extends StringFieldName>(
-    name: W,
-    options: Omit<SingleFieldOptions<"radioGroup">, "options"> & {
-      options: Options<W>;
-    },
-  ) {
-    return singleField("radioGroup", name, options, options.options);
-  },
-
-  checkboxGroup<W extends ListFieldName>(
-    name: W,
-    options: SingleFieldOptions<"checkboxGroup">,
-  ) {
-    return singleField("checkboxGroup", name, options, options.options);
-  },
-
-  comboBox<W extends StringFieldName>(
-    name: W,
-    options: SingleFieldOptions<"comboBox">,
-  ) {
-    return singleField("comboBox", name, options);
-  },
-
-  phone<W extends StringFieldName>(name: W, options: LabelOptions = {}) {
-    return singleField("phone", name, {
+  phone(name: string, options: LabelOptions = {}) {
+    return singleField("phone", "phone", name, {
       ...options,
       label: options.label ?? "Phone number",
     });
   },
 
-  email<W extends StringFieldName>(name: W, options: LabelOptions = {}) {
-    return singleField("email", name, {
+  email(name: string, options: LabelOptions = {}) {
+    return singleField("email", "email", name, {
       ...options,
       label: options.label ?? "Email address",
     });
   },
 
-  languageSelect<W extends StringFieldName>(
-    name: W,
-    options: CommonFieldOptions = {},
-  ) {
-    return singleField("languageSelect", name, {
+  languageSelect(name: string, options: CommonFieldOptions = {}) {
+    return singleField("languageSelect", "language", name, {
       ...options,
       label: "Language",
     });
@@ -312,6 +292,7 @@ export const q = {
     const names = NAME_FIELDS[type];
     const writes = (Object.keys(names) as NamePart[]).map((part) => ({
       id: names[part],
+      type: "text" as const,
       reviewLabel: NAME_REVIEW_LABELS[type](part),
     }));
     return composite("name", writes, options, { type });
@@ -323,7 +304,7 @@ export const q = {
       county = false,
       ...common
     } = (options ?? {}) as AddressOptions<ExtendedAddressType>;
-    const names: Partial<Record<AddressPart, FieldName>> = ADDRESS_FIELDS[type];
+    const names: Partial<Record<AddressPart, string>> = ADDRESS_FIELDS[type];
     const parts: AddressPart[] = [
       "street",
       ...(address2 ? (["street2"] as const) : []),
@@ -338,6 +319,7 @@ export const q = {
         ? [
             {
               id,
+              type: part === "state" ? ("state" as const) : ("text" as const),
               reviewLabel: getAddressReviewLabel(type, part),
               optional: part === "street2",
             },
@@ -351,9 +333,10 @@ export const q = {
     return composite(
       "pronounSelect",
       [
-        { id: "pronouns", reviewLabel: "Pronouns" },
+        { id: "pronouns", type: "list", reviewLabel: "Pronouns" },
         {
           id: "otherPronouns",
+          type: "text",
           reviewLabel: "Other pronouns",
           when: (data) => shouldShowOtherPronouns(data.pronouns),
         },
@@ -364,20 +347,18 @@ export const q = {
   },
 
   /** Each entry is labeled `itemLabel` and its position, like "Address 2". */
-  repeatingEntry<W extends ListFieldName>(
-    name: W,
-    options: SingleFieldOptions<"repeatingEntry">,
-  ) {
-    return singleField("repeatingEntry", name, options);
+  repeatingEntry(name: string, options: SingleFieldOptions<"repeatingEntry">) {
+    return singleField("repeatingEntry", "list", name, options);
   },
 
-  /** `content` is markdown. */
   banner(
     content: Text,
     {
       when,
       ...props
-    }: Omit<BlockPropsByKind["banner"], "content"> & { when?: Condition } = {},
+    }: Omit<BlockPropsByKind["banner"], "content"> & {
+      when?: Condition;
+    } = {},
   ): BlockQuestion<"banner"> {
     return {
       type: "block",

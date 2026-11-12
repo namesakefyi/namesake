@@ -9,10 +9,8 @@ import {
   type JurisdictionName,
 } from "./constants/jurisdictions";
 import { DIRECTORY_LANGUAGES } from "./constants/languages";
-import type { PDFDefinition } from "./constants/pdf";
 import { SERVICES } from "./constants/services";
 import { jurisdictionGlobLoader } from "./lib/loaders/jurisdictionGlobLoader";
-import { pdfLoader } from "./lib/loaders/pdfLoader";
 
 const authors = defineCollection({
   loader: glob({ base: "./src/content/authors", pattern: "**/index.yml" }),
@@ -66,30 +64,6 @@ const directory = defineCollection({
     }),
 });
 
-const forms = defineCollection({
-  loader: jurisdictionGlobLoader({
-    collection: "forms",
-    base: "./src/content/forms",
-    pattern: "**/index.yml",
-  }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    jurisdiction: reference("jurisdictions").optional(),
-    category: reference("categories"),
-    unlisted: z.boolean().default(false),
-    costs: z
-      .array(
-        z.object({
-          title: z.string(),
-          amount: z.number(),
-          required: z.boolean(),
-        }),
-      )
-      .optional(),
-  }),
-});
-
 const guides = defineCollection({
   loader: jurisdictionGlobLoader({
     collection: "guides",
@@ -128,21 +102,6 @@ const pages = defineCollection({
     description: z.string(),
     annotation: z.enum(ANNOTATION_TYPES).optional(),
     color: z.enum(COLOR_KEYS).optional(),
-  }),
-});
-
-const pdfs = defineCollection({
-  loader: pdfLoader({
-    modules: import.meta.glob<{ default: PDFDefinition }>(
-      "./content/pdfs/**/index.ts",
-      { eager: true },
-    ),
-  }),
-  schema: z.object({
-    title: z.string(),
-    code: z.string().optional(),
-    jurisdiction: reference("jurisdictions").optional(),
-    canonicalUrl: z.url(),
   }),
 });
 
@@ -196,11 +155,9 @@ export const collections = {
   authors,
   categories,
   directory,
-  forms,
   guides,
   jurisdictions,
   pages,
-  pdfs,
   posts,
   press,
   sponsors,

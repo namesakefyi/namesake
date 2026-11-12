@@ -1,18 +1,11 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-import { jurisdictionDir as getJurisdictionDir } from "./catalog";
-import { buildTestDataEntries, loadFormFields } from "./fields";
-import type { PdfFieldInfo } from "./pdf";
-import { escapeKey } from "./utils";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, "../..");
-const PDF_TS_PATH = join(ROOT, "web/src/constants/pdf.ts");
+import { mkdirSync, writeFileSync } from "node:fs";
+import { basename, join, relative } from "node:path";
+import { jurisdictionDir, PDFS_DIR, ROOT } from "./catalog.ts";
+import { buildFillEntries } from "./fields.ts";
 
 /** Returns a kebab-case PDF id from code and title. */
-export function generatePdfId(code: string, title: string): string {
+function generatePdfId(code: string, title: string): string {
   const codePart = (code || "").replace(/[\s-]/g, "").toLowerCase();
   const titlePart = (title || "")
     .toLowerCase()
@@ -23,95 +16,64 @@ export function generatePdfId(code: string, title: string): string {
 }
 
 interface DefinitionParams {
-  id: string;
   title: string;
   code: string;
   canonicalUrl: string;
-  pdfFields: PdfFieldInfo[];
+  pdfFile: string;
 }
 
 /** Returns index.ts definition content as a string. */
 function generateDefinition({
-  id,
   title,
   code,
   canonicalUrl,
-  pdfFields,
+  pdfFile,
 }: DefinitionParams): string {
   const props = [
-    `id: "${id}",`,
-    `title: "${title}",`,
-    ...(code ? [`code: "${code}",`] : []),
-    `canonicalUrl: "${canonicalUrl}",`,
-    "pdfPath: pdf,",
+    `title: ${JSON.stringify(title)},`,
+    ...(code ? [`code: ${JSON.stringify(code)},`] : []),
+    `canonicalUrl: ${JSON.stringify(canonicalUrl)},`,
+    "file,",
   ];
-  const fieldLines = pdfFields.map((f) => `  ${escapeKey(f.name)}: undefined,`);
   return `import { definePdf } from "#lib/pdfs/definePdf";
-import pdf from "./${id}.pdf";
-import type { PdfFieldName } from "./schema";
+import file from "./${pdfFile}";
+import type { Fields } from "./schema";
 
-export default definePdf<PdfFieldName>({
-${props.join("\n")}
-  resolver: (data) => ({
-    // TODO: Map fields to form data
-${fieldLines.join("\n")}
-  }),
+export default definePdf<Fields>({
+${props.map((prop) => `  ${prop}`).join("\n")}
 });
 `;
 }
 
-interface StarterTestParams {
-  id: string;
-  title: string;
-  pdfFields: PdfFieldInfo[];
-}
-
-/** Returns index.test.ts starter content as a string. */
-function generateStarterTest({
+/**
+ * A starter \`{ pdf, fill }\` entry to paste into the \`pdfs\` of a form's
+ * \`download.ts\`. Every PDF field is listed so the mapping is complete.
+ */
+export function generateFillSnippet({
   id,
-  title,
-  pdfFields,
-}: StarterTestParams): string {
-  const importName = id
-    .split("-")
+  pdfDir,
+  fieldNames,
+}: {
+  id: string;
+  pdfDir: string;
+  fieldNames: readonly string[];
+}): string {
+  const name = id
+    .split(/[^a-zA-Z0-9]+/)
+    .filter(Boolean)
     .map((part, i) => (i === 0 ? part : part[0].toUpperCase() + part.slice(1)))
-    .join("");
-  const escapedTitle = String(title)
-    .replace(/\\/g, "\\\\")
-    .replace(/"/g, '\\"');
-  const formFields = loadFormFields();
-  const testDataLines = buildTestDataEntries(pdfFields, formFields);
-  const testDataBody =
-    testDataLines.length > 0
-      ? testDataLines.join("\n")
-      : "    // TODO: Add form data for resolver";
+    .join("")
+    .replace(/^(\d)/, "pdf$1");
+  const importPath = `#content/pdfs/${relative(PDFS_DIR, pdfDir)}`;
+  return `import ${name} from "${importPath}";
 
-  return `import { describe, it } from "vitest";
-import type { FormData } from "#constants/fields";
-import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
-import ${importName} from ".";
-
-describe("${escapedTitle}", () => {
-  const testData: Partial<FormData> = {
-${testDataBody}
-  };
-
-  it("maps all fields correctly to the PDF", async () => {
-    await expectPdfFieldsMatch(${importName}, testData);
-  });
-
-  // Test any derived fields below
-});
+{
+  pdf: ${name},
+  fill: (data) => ({
+${buildFillEntries(fieldNames).join("\n")}
+  }),
+},
 `;
-}
-
-/** Appends id to PDF_IDS in src/constants/pdf.ts. Returns false if already present. */
-function addIdToPdfConstants(id: string): boolean {
-  let content = readFileSync(PDF_TS_PATH, "utf8");
-  if (content.includes(`"${id}"`)) return false;
-  content = content.replace(/(\] as const;)/, `  "${id}",\n$1`);
-  writeFileSync(PDF_TS_PATH, content);
-  return true;
 }
 
 /** Runs biome format --write on the given file paths. */
@@ -123,13 +85,11 @@ export function formatFiles(paths: string[]): void {
   });
 }
 
-export interface OutputPaths {
+interface OutputPaths {
   id: string;
-  jurisdictionDir: string;
   pdfDir: string;
   pdfDestPath: string;
   indexPath: string;
-  testPath: string;
 }
 
 /** Computes output paths from normalized metadata. */
@@ -143,62 +103,40 @@ export function computeOutputPaths({
   jurisdiction: string;
 }): OutputPaths {
   const id = generatePdfId(code, title);
-  const jurisdictionDir = getJurisdictionDir(jurisdiction);
-  const pdfDir = join(jurisdictionDir, id);
+  const pdfDir = join(jurisdictionDir(jurisdiction), id);
   return {
     id,
-    jurisdictionDir,
     pdfDir,
     pdfDestPath: join(pdfDir, `${id}.pdf`),
     indexPath: join(pdfDir, "index.ts"),
-    testPath: join(pdfDir, "index.test.ts"),
   };
 }
 
-export interface WriteDefinitionFilesParams {
-  id: string;
+interface WriteDefinitionFilesParams {
   title: string;
   code: string;
   canonicalUrl: string;
   pdfDir: string;
   pdfDestPath: string;
   indexPath: string;
-  testPath: string;
-  pdfFields: PdfFieldInfo[];
   pdfBytes: Uint8Array | Buffer;
 }
 
-/** Creates the PDF directory and writes all generated files. Returns the id. */
 export function writeDefinitionFiles({
-  id,
   title,
   code,
   canonicalUrl,
   pdfDir,
   pdfDestPath,
   indexPath,
-  testPath,
-  pdfFields,
   pdfBytes,
 }: WriteDefinitionFilesParams): void {
   mkdirSync(pdfDir, { recursive: true });
   writeFileSync(pdfDestPath, pdfBytes);
-
-  const definition = generateDefinition({
-    id,
-    title,
-    code,
-    canonicalUrl,
-    pdfFields,
-  });
-  writeFileSync(indexPath, `${definition}\n`);
-
-  const testIsNew = !existsSync(testPath);
-  if (testIsNew) {
-    const test = generateStarterTest({ id, title, pdfFields });
-    writeFileSync(testPath, `${test}\n`);
-  }
-
-  addIdToPdfConstants(id);
-  formatFiles(testIsNew ? [indexPath, testPath] : [indexPath]);
+  const pdfFile = basename(pdfDestPath);
+  writeFileSync(
+    indexPath,
+    generateDefinition({ title, code, canonicalUrl, pdfFile }),
+  );
+  formatFiles([indexPath]);
 }

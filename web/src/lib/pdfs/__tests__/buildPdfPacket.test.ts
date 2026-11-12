@@ -1,7 +1,7 @@
 import { PDF } from "@libpdf/core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { buildPdfPacket } from "../buildPdfPacket";
-import { testPdfDefinition } from "./helpers";
+import { testPdf } from "./helpers";
 
 describe("buildPdfPacket", () => {
   let mockPdfBytes: Uint8Array;
@@ -32,12 +32,24 @@ describe("buildPdfPacket", () => {
     consoleSpy.mockRestore();
   });
 
+  it("starts with a US Letter cover page that includes the logo", async () => {
+    const result = await buildPdfPacket({
+      title: "Massachusetts Court Order",
+      instructions: ["Review all documents carefully."],
+      documents: [{ pdf: testPdf, bytes: mockPdfBytes }],
+    });
+
+    const coverPage = (await PDF.load(result)).getPages()[0];
+    expect(coverPage.width).toBe(612);
+    expect(coverPage.height).toBe(792);
+    expect(fetch).toHaveBeenCalledWith("/forms/pdf-cover-logo.png");
+  });
+
   it("returns merged PDF bytes with a cover page followed by each PDF", async () => {
     const result = await buildPdfPacket({
       title: "Test Packet",
       instructions: ["First instruction"],
-      pdfs: [testPdfDefinition],
-      pdfBytes: [mockPdfBytes],
+      documents: [{ pdf: testPdf, bytes: mockPdfBytes }],
     });
 
     const pdfDoc = await PDF.load(result);
@@ -49,8 +61,10 @@ describe("buildPdfPacket", () => {
     const result = await buildPdfPacket({
       title: "Multi-PDF Packet",
       instructions: [],
-      pdfs: [testPdfDefinition, testPdfDefinition],
-      pdfBytes: [mockPdfBytes, mockPdfBytes],
+      documents: [
+        { pdf: testPdf, bytes: mockPdfBytes },
+        { pdf: testPdf, bytes: mockPdfBytes },
+      ],
     });
 
     const pdfDoc = await PDF.load(result);

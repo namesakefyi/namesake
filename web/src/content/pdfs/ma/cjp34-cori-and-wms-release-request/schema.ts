@@ -1,21 +1,17 @@
-import type { PdfFieldType } from "#constants/pdf";
-
 /** Auto-generated from cjp34-cori-and-wms-release-request.pdf — do not edit */
 
-export const pdfSchema = {
-  caseName: "text",
-  county: "text",
-  isChangeOfNameProceeding: "checkbox",
-  oldName: "text",
-  dateOfBirth: "text",
-  ssnFirstThree: "text",
-  ssnMiddleTwo: "text",
-  ssnLastFour: "text",
-  mothersMaidenName: "text",
-  otherNamesOrAliases: "text",
-} as const satisfies Record<string, PdfFieldType>;
-
-export type PdfFieldName = keyof typeof pdfSchema;
+export type Fields = {
+  caseName: "text";
+  county: "text";
+  isChangeOfNameProceeding: "checkbox";
+  oldName: "text";
+  dateOfBirth: "text";
+  ssnFirstThree: "text";
+  ssnMiddleTwo: "text";
+  ssnLastFour: "text";
+  mothersMaidenName: "text";
+  otherNamesOrAliases: "text";
+};
 
 /** Fields present in the PDF but excluded from the schema */
 export const pdfExcludedFields = [

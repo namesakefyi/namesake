@@ -1,13 +1,13 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, extname, join, relative } from "node:path";
-import { PDFS_DIR } from "./catalog";
+import { PDFS_DIR } from "./catalog.ts";
 import {
   convertDropdownsToTextFields,
   extractFields,
   normalizeRadioOptionNames,
   type PdfFieldInfo,
-} from "./pdf";
-import { escapeKey } from "./utils";
+} from "./pdf.ts";
+import { escapeKey } from "./utils.ts";
 
 /** Returns the set of field names currently active (non-excluded) in schema.ts. */
 function loadCurrentSchemaFields(schemaPath: string): Set<string> {
@@ -70,9 +70,11 @@ function generateTypesContent(
   excluded: Set<string> = new Set(),
 ): string {
   const schemaEntries = fields
-    .map((f) => `  ${escapeKey(f.name)}: "${f.type}"`)
-    .join(",\n");
-  const schemaBody = schemaEntries ? `\n${schemaEntries},\n` : "\n";
+    .map((f) => `  ${escapeKey(f.name)}: "${f.type}";`)
+    .join("\n");
+  const schemaType = schemaEntries
+    ? `{\n${schemaEntries}\n}`
+    : "Record<never, never>";
 
   const sortedExcludes = [...excluded].sort();
   const excludedSection =
@@ -82,11 +84,7 @@ function generateTypesContent(
 
   return `/** Auto-generated from ${stem}.pdf — do not edit */
 
-import type { PdfFieldType } from "#constants/pdf";
-
-export const pdfSchema = {${schemaBody}} as const satisfies Record<string, PdfFieldType>;
-
-export type PdfFieldName = keyof typeof pdfSchema;
+export type Fields = ${schemaType};
 ${excludedSection}`;
 }
 
