@@ -24,7 +24,9 @@ export function DiffBanner({ diff, onDismiss }: DiffBannerProps) {
           </del>
         )}
         {added.length > 0 && (
-          <span className="diff-hint">Wire new fields in index.ts</span>
+          <span className="diff-hint">
+            Fill new fields in the form's download.ts
+          </span>
         )}
       </div>
       <button

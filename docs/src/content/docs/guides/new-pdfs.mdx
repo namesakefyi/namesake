@@ -35,7 +35,7 @@ Complete the fields and click **Create**.
 
 On success, you will see your new PDF appear in the PDF Manager alongside a list of form fields.
 
-Behind the scenes, the PDF has been copied into a new folder inside `web/src/pdfs` alongside new `index.ts`, `index.test.ts`, and `schema.ts` files. Take a look inside!
+Behind the scenes, the PDF has been copied into a new folder at `web/src/content/pdfs/{jurisdiction}/{id}` (or `web/src/content/pdfs/{id}` for a federal PDF) alongside new `index.ts` and `schema.ts` files. Take a look inside!
 
 :::caution[Don't edit schemas manually]
 
@@ -73,29 +73,9 @@ First, select a field in the list. The PDF preview highlights the current field 
 
 ## Connect PDF fields to user data
 
-The `index.ts` file for each PDF contains an exported `PDFDefinition`. This lists the id, title, code, and other metadata about the PDF, along with a `resolver`. The resolver is a function that maps PDF field names to user data. At the start, all data will be listed as `undefined`.
+The PDF's `index.ts` describes the PDF: its title, code, and canonical URL. Each form that uses the PDF fills it from its own `download.ts`, mapping every PDF field to the person's answers.
 
-```ts title="index.ts" {5-14}
-export default definePdf<PdfFieldName>({
-  id: "cjp27-petition-to-change-name-of-adult",
-  title: "Petition to Change Name of Adult",
-  // ...
-  resolver: (data) => ({
-    petitionerFirstName: undefined,
-    petitionerMiddleName: undefined,
-    petitionerLastName: undefined,
-    county: undefined,
-    oldFirstName: undefined,
-    oldMiddleName: undefined,
-    oldLastName: undefined,
-    // ...
-  }),
-});
-```
-
-We want to replace `undefined` values with `data` from the user, but before we can do that, we will need to [build a user-facing form](/guides/building-forms) to collect data!
-
-Since building a form will take a fair amount of work, let's go ahead and [open a pull request](https://github.com/namesakefyi/namesake/pulls) to get our new PDF definition reviewed with fields mapped to `undefined`. Once we've built the form, we can come back and map the values to `data` from the user.
+Before you can connect the fields, you will need to [build a user-facing form](/guides/building-forms) to collect data. Building a form takes a fair amount of work, so go ahead and [open a pull request](https://github.com/namesakefyi/namesake/pulls) to get the new PDF reviewed first.
 
 <LinkCard title="Building Forms" description="Learn how to build a user-facing form to collect data for your PDF." href="/guides/building-forms" />
 

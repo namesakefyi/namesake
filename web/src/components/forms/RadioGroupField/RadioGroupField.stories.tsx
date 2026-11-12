@@ -17,10 +17,10 @@ export const Example = (args: RadioGroupFieldProps) => (
 Example.args = {
   label: "Select an option",
   name: "option",
-  options: [
-    { label: "Option 1", value: "option-1" },
-    { label: "Option 2", value: "option-2" },
-    { label: "Option 3", value: "option-3" },
-  ],
+  options: {
+    "option-1": "Option 1",
+    "option-2": "Option 2",
+    "option-3": "Option 3",
+  },
   children: <div>Children</div>,
 };

@@ -57,7 +57,6 @@ The state machine also stores `context`:
 
 | Context | Description |
 |---|---|
-| `formSlug` | Set once when the machine is created |
 | `currentStepId` | Set on `START` and updated on each `GOTO_STEP` while in `filling` |
 | `editingStepId` | Set on `EDIT_STEP` when entering `editing`, then cleared on `SAVE_EDIT` |
 
@@ -71,13 +70,16 @@ On its own, the state machine doesn't "know" about any of the values the user en
 
 As the user progresses through the form, they will enter data which affects the visibility of other fields and steps. To make sure we are displaying the correct fields on the review table and writing the correct data to the final PDF, visibility must be **resolved**.
 
-The [`resolveFormVisibility`](https://github.com/namesakefyi/namesake/blob/main/web/src/lib/forms/formVisibility.ts#L82) function  takes an input of `steps`, user `formData`, and `pdfs`, and parses the visibility rules. It returns:
+The [`resolveFormVisibility`](https://github.com/namesakefyi/namesake/blob/main/web/src/lib/forms/resolveFormVisibility.ts) function takes the form's `steps` and the user's `formData` and applies their `when` conditions. It returns:
 
-- `visibleStepIds` — steps not excluded by `when` predicates
-- `visibleFields` — field values for visible fields only
-- `sections` — per-step arrays of visible field names (used to section the review table into scannable chunks)
-- `pdfsToInclude` — which PDFs to include based on their `when` predicates
+- `visibleFields` — field values for visible fields only, which is what fills the PDFs
+- `sections` — each visible step with its visible fields (used to section the review table into scannable chunks)
+
+When the person downloads, PDFs and cover page instructions with a `when` are included only if it passes.
 
 ## Persistence
 
-Forms can be lengthy, so it's important to save a user's progress as they go. Field values and form progress are automatically saved to IndexedDB in the `formProgress` table. A form that is closed and reopened will resume where it left off.
+Forms can be lengthy, so it's important to save a user's progress as they go. Both are saved automatically to IndexedDB:
+
+- `formData` holds one record per answered field, saved as the user types. Answers are shared across forms, so a name entered in one form is filled in on the next.
+- `formProgress` holds each form's state machine snapshot, so a form that is closed and reopened resumes on the same step.

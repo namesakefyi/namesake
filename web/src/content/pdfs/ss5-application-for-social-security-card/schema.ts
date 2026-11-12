@@ -1,0 +1,78 @@
+/** Auto-generated from ss5-application-for-social-security-card.pdf — do not edit */
+
+export type Fields = {
+  newFirstName: "text";
+  newMiddleName: "text";
+  newLastName: "text";
+  oldFirstName: "text";
+  oldMiddleName: "text";
+  oldLastName: "text";
+  otherNames: "text";
+  previousSSN1: "text";
+  previousSSN2: "text";
+  previousSSN3: "text";
+  birthplaceCity: "text";
+  birthplaceState: "text";
+  dateOfBirth: "text";
+  usCitizen: "checkbox";
+  legalAlienAllowedToWork: "checkbox";
+  legalAlienNotAllowedToWork: "checkbox";
+  citizenshipOther: "checkbox";
+  isNativeHawaiian: "checkbox";
+  isAmericanIndian: "checkbox";
+  isOtherPacificIslander: "checkbox";
+  isAlaskaNative: "checkbox";
+  isBlack: "checkbox";
+  isWhite: "checkbox";
+  isHispanicOrLatino: "checkbox";
+  isNotHispanicOrLatino: "checkbox";
+  isAsian: "checkbox";
+  isMale: "checkbox";
+  isFemale: "checkbox";
+  mothersFirstName: "text";
+  mothersMiddleName: "text";
+  mothersLastName: "text";
+  motherSSN1: "text";
+  motherSSN2: "text";
+  motherSSN3: "text";
+  isMotherSSNUnknown: "checkbox";
+  fathersFirstName: "text";
+  fathersMiddleName: "text";
+  fathersLastName: "text";
+  fatherSSN1: "text";
+  fatherSSN2: "text";
+  fatherSSN3: "text";
+  isFatherSSNUnknown: "checkbox";
+  hasPreviousSocialSecurityCard: "checkbox";
+  hasNoPreviousSocialSecurityCard: "checkbox";
+  previousSocialSecurityCardUnknown: "checkbox";
+  previousSocialSecurityCardFirstName: "text";
+  previousSocialSecurityCardMiddleName: "text";
+  previousSocialSecurityCardLastName: "text";
+  differentDateOfBirthOnPreviousApplication: "text";
+  todaysDate: "text";
+  areaCode: "text";
+  phoneNumber: "text";
+  mailingStreetAddress: "text";
+  mailingCity: "text";
+  mailingState: "text";
+  mailingZipCode: "text";
+  isSelf: "checkbox";
+  isParent: "checkbox";
+  isGuardian: "checkbox";
+  isFilingOther: "checkbox";
+  otherSpecify: "text";
+};
+
+/** Fields present in the PDF but excluded from the schema */
+export const pdfExcludedFields = [
+  "topmostSubform[0].Page1[0].P1_First_FLD[0]",
+  "topmostSubform[0].Page1[0].P1_second_FLD[0]",
+  "topmostSubform[0].Page2[0].P2_First_FLD[0]",
+  "topmostSubform[0].Page2[0].P2_Second_FLD[0]",
+  "topmostSubform[0].Page3[0].P3_First_FLD[0]",
+  "topmostSubform[0].Page4[0].P4_First_FLD[0]",
+  "topmostSubform[0].Page4[0].P4_Second_FLD[0]",
+  "topmostSubform[0].Page5[0].P5_17Namesig_FLD[0]",
+  "topmostSubform[0].Page5[0].P5_Last_FLD[0]",
+] as const;

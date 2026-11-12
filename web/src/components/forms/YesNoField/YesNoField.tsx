@@ -1,9 +1,10 @@
 import { Controller, useFormContext } from "react-hook-form";
 import {
-  DONT_KNOW,
-  type FieldName,
-  PREFER_NOT_TO_ANSWER,
+  EXTRA_CHOICES,
+  type ExtraChoice,
+  isExtraChoice,
 } from "#constants/fields";
+import { getLabelProps } from "#lib/utils/getLabelProps";
 import { smartquotes } from "#lib/utils/smartquotes";
 import {
   Radio,
@@ -12,31 +13,28 @@ import {
 } from "../../common/RadioGroup";
 import "./YesNoField.css";
 
-type YesNoValue = boolean | typeof PREFER_NOT_TO_ANSWER | typeof DONT_KNOW;
+type YesNoValue = boolean | ExtraChoice;
 
 export const getYesNoStringFromBoolean = (value: YesNoValue) => {
   if (value === undefined || value === null) return null;
-  if (value === PREFER_NOT_TO_ANSWER) return PREFER_NOT_TO_ANSWER;
-  if (value === DONT_KNOW) return DONT_KNOW;
+  if (isExtraChoice(value)) return value;
   if (value) return "yes";
   return "no";
 };
 
 export const getBooleanValueFromYesNoString = (value: string): YesNoValue => {
-  if (value === PREFER_NOT_TO_ANSWER) return PREFER_NOT_TO_ANSWER;
-  if (value === DONT_KNOW) return DONT_KNOW;
+  if (isExtraChoice(value)) return value;
   return value === "yes";
 };
 
 export interface YesNoFieldProps extends RadioGroupProps {
   children?: React.ReactNode;
-  name: FieldName;
+  name: string;
   label: string;
   labelHidden?: boolean;
   yesLabel?: string;
   noLabel?: string;
-  includePreferNotToAnswer?: boolean;
-  includeDontKnow?: boolean;
+  extraChoices?: readonly ExtraChoice[];
 }
 
 export function YesNoField({
@@ -47,8 +45,7 @@ export function YesNoField({
   noLabel,
   children,
   defaultValue,
-  includePreferNotToAnswer,
-  includeDontKnow,
+  extraChoices = [],
 }: YesNoFieldProps) {
   const { control, setValue } = useFormContext();
 
@@ -61,8 +58,7 @@ export function YesNoField({
         render={({ field, fieldState: { invalid, error } }) => (
           <RadioGroup
             {...field}
-            label={!labelHidden ? label : undefined}
-            aria-label={label}
+            {...getLabelProps(smartquotes(label), labelHidden)}
             isInvalid={invalid}
             value={getYesNoStringFromBoolean(field.value)}
             onChange={(value) => {
@@ -72,10 +68,11 @@ export function YesNoField({
           >
             <Radio value="yes">{smartquotes(yesLabel ?? "Yes")}</Radio>
             <Radio value="no">{smartquotes(noLabel ?? "No")}</Radio>
-            {includePreferNotToAnswer && (
-              <Radio value={PREFER_NOT_TO_ANSWER}>Prefer not to answer</Radio>
-            )}
-            {includeDontKnow && <Radio value={DONT_KNOW}>I don’t know</Radio>}
+            {extraChoices.map((choice) => (
+              <Radio key={choice} value={choice}>
+                {EXTRA_CHOICES[choice]}
+              </Radio>
+            ))}
           </RadioGroup>
         )}
       />

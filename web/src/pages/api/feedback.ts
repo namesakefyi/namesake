@@ -5,17 +5,18 @@ import type { APIRoute } from "astro";
 import { z } from "astro/zod";
 import {
   FORM_FEEDBACK_SENTIMENT,
-  FORM_SLUGS,
   type FormFeedbackSentiment,
   shouldRequestShareConsent,
 } from "#constants/forms";
+import { isFormId } from "#lib/forms/loadForm";
+import { escapeHtml } from "#lib/utils/escapeHtml";
 import { isRateLimited } from "#lib/utils/rateLimitByIp";
 
 const PRODUCTION_ORIGIN = "https://namesake.fyi";
 const ALLOWED_ORIGINS = [PRODUCTION_ORIGIN, "http://localhost:4321"];
 
 const FeedbackSchema = z.object({
-  form_slug: z.enum(FORM_SLUGS),
+  form_id: z.string().refine(isFormId, { message: "Unknown form" }),
   sentiment: z.enum(
     Object.keys(FORM_FEEDBACK_SENTIMENT) as [
       FormFeedbackSentiment,
@@ -42,7 +43,7 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
-  const { form_slug, sentiment, comment, share_consent } = result.data;
+  const { form_id, sentiment, comment, share_consent } = result.data;
   const commentValue = comment || null;
   const shareConsentValue =
     shouldRequestShareConsent(sentiment, commentValue) &&
@@ -82,10 +83,10 @@ export const POST: APIRoute = async ({ request }) => {
 
   await db
     .prepare(
-      "INSERT INTO form_feedback (form_slug, sentiment, comment, share_consent, ip, user_agent, country, region, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO form_feedback (form_id, sentiment, comment, share_consent, ip, user_agent, country, region, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
     )
     .bind(
-      form_slug,
+      form_id,
       sentiment,
       commentValue,
       shareConsentValue,
@@ -102,13 +103,6 @@ export const POST: APIRoute = async ({ request }) => {
     const sentimentLabel = FORM_FEEDBACK_SENTIMENT[sentiment];
     const location = [city, region, country].filter(Boolean).join(", ");
 
-    const escapeHtml = (text: string) =>
-      text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-
     try {
       const emailRes = await fetch("https://api.resend.com/emails", {
         method: "POST",
@@ -119,8 +113,8 @@ export const POST: APIRoute = async ({ request }) => {
         body: JSON.stringify({
           from: "noreply@namesake.fyi",
           to: "hey@namesake.fyi",
-          subject: `${sentimentLabel} feedback on ${form_slug}`,
-          html: `<p>A user ${location ? `in <strong>${location}</strong>` : ""} submitted <strong>${sentimentLabel}</strong> feedback on <a href="https://namesake.fyi/forms/${form_slug}">${form_slug}</a>.</p><p>${commentValue ? escapeHtml(commentValue) : "<em>No comment</em>"}</p>${shareConsentValue !== null ? `<p>Permission to share publicly: <strong>${shareConsentValue ? "Yes" : "No"}</strong></p>` : ""}`,
+          subject: `${sentimentLabel} feedback on ${form_id}`,
+          html: `<p>A user ${location ? `in <strong>${location}</strong>` : ""} submitted <strong>${sentimentLabel}</strong> feedback on <a href="https://namesake.fyi/forms/${form_id}">${form_id}</a>.</p><p>${commentValue ? escapeHtml(commentValue) : "<em>No comment</em>"}</p>${shareConsentValue !== null ? `<p>Permission to share publicly: <strong>${shareConsentValue ? "Yes" : "No"}</strong></p>` : ""}`,
         }),
       });
       if (!emailRes.ok) {

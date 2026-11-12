@@ -1,49 +1,20 @@
-import type { Step } from "#lib/forms/types";
-import type { FormData } from "./fields";
-import type { PDFId } from "./pdf";
+import type { Condition, FormData, Question, Text } from "#lib/forms/questions";
+import type { CategoryId } from "./categories";
+import type { PdfDefinition, PdfSchema, PdfValues } from "./pdf";
 
-export const FORM_SLUGS = [
-  "affidavit-of-indigency-ma",
-  "court-order-ma",
-  "court-order-ma-minor",
-  "court-order-ri",
-  "social-security",
-  "birth-certificate-affidavit-ma",
-] as const;
-
-export type FormSlug = (typeof FORM_SLUGS)[number];
-
-/**
- * Configuration for a PDF within a form.
- */
-export interface FormPdfConfig {
-  /** The PDF identifier */
-  pdfId: PDFId;
-  /** Optional predicate to determine if this PDF should be included based on form data */
-  when?: (data: Partial<FormData>) => boolean;
+export interface Step {
+  id: string;
+  title: Text;
+  description?: Text;
+  when?: Condition;
+  questions: readonly Question[];
 }
 
 /**
  * A single instruction entry. Plain string = always included.
  * Object form: `{ text, when }` = included only when `when` returns true.
  */
-export type Instruction =
-  | string
-  | { text: string; when: (data: Partial<FormData>) => boolean };
-
-/**
- * Resolves an instructions array to plain strings, filtering out conditional
- * entries whose `when` predicate returns false for the given form data.
- */
-export function resolveInstructions(
-  instructions: readonly Instruction[],
-  data: Partial<FormData>,
-): string[] {
-  return instructions.flatMap((item) => {
-    if (typeof item === "string") return [item];
-    return item.when(data) ? [item.text] : [];
-  });
-}
+export type Instruction = string | { text: string; when: Condition };
 
 export interface FormCost {
   title: string;
@@ -52,23 +23,44 @@ export interface FormCost {
 }
 
 /**
- * Runtime configuration for a form. Static display metadata such as
- * title and description are set in `index.yml` and fetched via Astro's
- * content collection.
+ * A form's `index.ts`: plain data that pages read while they build, before
+ * any of the form's code reaches the browser.
  */
-export interface FormConfig {
+export interface FormDefinition {
+  /** Shown on the forms page, the form's title step and its preview image. */
+  title: string;
+  description?: string;
+  category: CategoryId;
+  /** Left off the forms page; still reachable by its URL. */
+  unlisted?: boolean;
+  /** Fees the person pays when filing, shown on the title step. */
+  costs?: readonly FormCost[];
+}
+
+/** A form's three files together: `index.ts`, `steps.ts` and `download.ts`. */
+export interface FormConfig extends FormDefinition {
   /** Ordered steps, including optional guards for conditional inclusion. */
   steps: readonly Step[];
-  /** PDFs included in this form */
-  pdfs: readonly FormPdfConfig[];
-  /** Title for the downloaded PDF package */
-  downloadTitle: string;
-  /**
-   * Instructions shown on the cover page of the downloaded packet.
-   * Plain string = always included.
-   * Object form: `{ text, when }` = included only when `when` returns true.
-   */
+  /** The PDF packet the person downloads at the end. */
+  download: FormDownload;
+}
+
+/** A PDF in a form's download, filled from the form's answers. */
+export interface FormPdf<S extends PdfSchema = PdfSchema> {
+  pdf: PdfDefinition<S>;
+  /** Includes the PDF only when this returns true. */
+  when?: Condition;
+  fill: (data: FormData) => PdfValues<S>;
+}
+
+/** A form's `download.ts`, which loads once the person starts filling. */
+export interface FormDownload {
+  /** The packet's title, on its cover page and file name. */
+  title: string;
+  /** Shown on the cover page. */
   instructions: readonly Instruction[];
+  /** The PDFs in the packet, in order. */
+  pdfs: readonly FormPdf[];
 }
 
 /**

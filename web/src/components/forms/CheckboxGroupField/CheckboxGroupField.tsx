@@ -1,25 +1,21 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { type FieldName, PREFER_NOT_TO_ANSWER } from "#constants/fields";
+import { type OptionLabels, toChoices } from "#lib/forms/questions";
+import { getLabelProps } from "#lib/utils/getLabelProps";
 import { smartquotes } from "#lib/utils/smartquotes";
-import { Checkbox, type CheckboxProps } from "../../common/Checkbox";
+import { Checkbox } from "../../common/Checkbox";
 import {
   CheckboxGroup,
   type CheckboxGroupProps,
 } from "../../common/CheckboxGroup";
 import "./CheckboxGroupField.css";
 
-interface CheckboxOption extends CheckboxProps {
-  label: string;
-  value: string;
-}
-
 export interface CheckboxGroupFieldProps extends CheckboxGroupProps {
   children?: React.ReactNode;
-  name: FieldName;
+  name: string;
   label: string;
   labelHidden?: boolean;
-  options: CheckboxOption[];
-  includePreferNotToAnswer?: boolean;
+  /** A `preferNotToAnswer` option clears and disables the others. */
+  options: OptionLabels;
 }
 
 export function CheckboxGroupField({
@@ -28,15 +24,14 @@ export function CheckboxGroupField({
   labelHidden,
   options,
   children,
-  includePreferNotToAnswer,
   ...props
 }: CheckboxGroupFieldProps) {
   const { control, setValue } = useFormContext();
 
   const handlePreferNotToAnswer = (value: string[]) => {
-    if (value.includes(PREFER_NOT_TO_ANSWER)) {
+    if (value.includes("preferNotToAnswer")) {
       // If "prefer not to answer" is checked, uncheck all other options
-      setValue(name, [PREFER_NOT_TO_ANSWER]);
+      setValue(name, ["preferNotToAnswer"]);
     }
   };
 
@@ -49,13 +44,12 @@ export function CheckboxGroupField({
         render={({ field, fieldState: { error, invalid } }) => {
           const currentValue = field.value || [];
           const isPreferNotToAnswerChecked =
-            currentValue.includes(PREFER_NOT_TO_ANSWER);
+            currentValue.includes("preferNotToAnswer");
 
           return (
             <CheckboxGroup
               {...field}
-              label={!labelHidden ? smartquotes(label) : undefined}
-              aria-label={labelHidden ? label : undefined}
+              {...getLabelProps(smartquotes(label), labelHidden)}
               isInvalid={invalid}
               errorMessage={error?.message}
               onChange={(value) => {
@@ -64,20 +58,17 @@ export function CheckboxGroupField({
               }}
               {...props}
             >
-              {options?.map(({ label, ...option }) => (
+              {toChoices(options).map(({ label, ...option }) => (
                 <Checkbox
                   key={option.value}
                   {...option}
                   label={label}
-                  isDisabled={isPreferNotToAnswerChecked}
+                  isDisabled={
+                    isPreferNotToAnswerChecked &&
+                    option.value !== "preferNotToAnswer"
+                  }
                 />
               ))}
-              {includePreferNotToAnswer && (
-                <Checkbox
-                  value={PREFER_NOT_TO_ANSWER}
-                  label="Prefer not to answer"
-                />
-              )}
             </CheckboxGroup>
           );
         }}

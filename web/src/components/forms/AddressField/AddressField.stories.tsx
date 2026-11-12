@@ -33,7 +33,7 @@ export const IncludeAddress2 = (args: AddressFieldProps) => (
 
 IncludeAddress2.args = {
   type: "residence",
-  includeAddress2: true,
+  address2: true,
 };
 
 export const IncludeCounty = (args: AddressFieldProps) => (
@@ -42,5 +42,5 @@ export const IncludeCounty = (args: AddressFieldProps) => (
 
 IncludeCounty.args = {
   type: "residence",
-  includeCounty: true,
+  county: true,
 };

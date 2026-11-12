@@ -29,7 +29,7 @@ export function TextField({
       className={clsx("namesake-text-field", className)}
       {...props}
     >
-      <Label>{label}</Label>
+      {label && <Label>{label}</Label>}
       <Input size={size} />
       {description && <Text slot="description">{description}</Text>}
       <FieldError>{errorMessage}</FieldError>

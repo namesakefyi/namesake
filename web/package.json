@@ -74,6 +74,7 @@
     "react-lite-youtube-embed": "^3.7.0",
     "rough-notation": "^0.5.1",
     "sanitize-html": "^2.18.1",
+    "snarkdown": "^2.0.0",
     "topojson-client": "^3.1.0",
     "typescript": "^6.0.3",
     "ua-parser-js": "^2.0.10",

@@ -5,8 +5,8 @@ import { fileURLToPath } from "node:url";
 import { PDF } from "@libpdf/core";
 import { diffWords } from "diff";
 import pc from "picocolors";
-import { listAllPdfs, type PdfEntry } from "../lib/catalog";
-import { monitorConfig } from "../pdf-monitor.config";
+import { listAllPdfs, type PdfEntry } from "../lib/catalog.ts";
+import { monitorConfig } from "../pdf-monitor.config.ts";
 
 const USER_AGENT =
   "namesake-pdf-monitor/1.0 (+https://github.com/namesakefyi/namesake)";

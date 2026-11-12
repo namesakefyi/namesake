@@ -1,38 +1,34 @@
-import type { PdfFieldType } from "#constants/pdf";
-
 /** Auto-generated from pc8.1-change-of-name.pdf — do not edit */
 
-export const pdfSchema = {
-  currentLegalName: "text",
-  residenceStreetAddress: "text",
-  residenceCity: "text",
-  residenceState: "text",
-  residenceZipCode: "text",
-  phoneNumber: "text",
-  mailingStreetAddress: "text",
-  mailingCityStateAndZip: "text",
-  email: "text",
-  nameOnOriginalBirthRecord: "text",
-  dateOfBirth: "text",
-  placeOfBirth: "text",
-  mothersMaidenName: "text",
-  fathersName: "text",
-  occupation: "text",
-  maritalStatus: "text",
-  previousAddress1: "text",
-  previousAddress2: "text",
-  previousAddress3: "text",
-  reasonForNameChange: "text",
-  reasonForNameChange2: "text",
-  newFirstName: "text",
-  newMiddleName: "text",
-  newLastName: "text",
-  newBirthCertFirstName: "text",
-  newBirthCertMiddleName: "text",
-  newBirthCertLastName: "text",
-} as const satisfies Record<string, PdfFieldType>;
-
-export type PdfFieldName = keyof typeof pdfSchema;
+export type Fields = {
+  currentLegalName: "text";
+  residenceStreetAddress: "text";
+  residenceCity: "text";
+  residenceState: "text";
+  residenceZipCode: "text";
+  phoneNumber: "text";
+  mailingStreetAddress: "text";
+  mailingCityStateAndZip: "text";
+  email: "text";
+  nameOnOriginalBirthRecord: "text";
+  dateOfBirth: "text";
+  placeOfBirth: "text";
+  mothersMaidenName: "text";
+  fathersName: "text";
+  occupation: "text";
+  maritalStatus: "text";
+  previousAddress1: "text";
+  previousAddress2: "text";
+  previousAddress3: "text";
+  reasonForNameChange: "text";
+  reasonForNameChange2: "text";
+  newFirstName: "text";
+  newMiddleName: "text";
+  newLastName: "text";
+  newBirthCertFirstName: "text";
+  newBirthCertMiddleName: "text";
+  newBirthCertLastName: "text";
+};
 
 /** Fields present in the PDF but excluded from the schema */
 export const pdfExcludedFields = [

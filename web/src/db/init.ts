@@ -1,43 +1,63 @@
 import { openDB } from "idb";
 import { migrations } from "./migrations";
-import type { NamesakeDB, NamesakeDBSchema } from "./types";
+import type { Migration, NamesakeDB, NamesakeDBSchema } from "./types";
 
 export const DB_NAME = "namesake";
-export const DB_VERSION = 3;
+export const DB_VERSION = 5;
 
 export { FORM_DATA_STORE, FORM_PROGRESS_STORE } from "./types";
 
-let dbInstance: NamesakeDB | null = null;
+let dbPromise: Promise<NamesakeDB> | null = null;
 
-export async function getDB(): Promise<NamesakeDB> {
-  if (dbInstance) {
-    return dbInstance;
-  }
-
+// Runs each migration only after the previous one finishes. If one fails, the
+// upgrade is aborted so the database stays at its old version, unchanged.
+async function runMigrations(
+  db: NamesakeDB,
+  transaction: Parameters<Migration>[1],
+  fromVersion: number,
+  toVersion: number,
+): Promise<void> {
   try {
-    dbInstance = await openDB<NamesakeDBSchema>(DB_NAME, DB_VERSION, {
-      upgrade(db, oldVersion, newVersion, transaction) {
-        for (let v = oldVersion; v < (newVersion ?? DB_VERSION); v++) {
-          migrations[v]?.(db, transaction);
-        }
-      },
-      blocked(currentVersion, blockedVersion) {
-        console.warn(
-          `IndexedDB upgrade blocked (v${currentVersion} open elsewhere, needs v${blockedVersion})`,
-        );
-      },
-      blocking(currentVersion, blockedVersion) {
-        console.warn(
-          `IndexedDB: closing to allow upgrade (v${currentVersion} → v${blockedVersion})`,
-        );
-        dbInstance?.close();
-        dbInstance = null;
-      },
-    });
+    for (let version = fromVersion; version < toVersion; version++) {
+      await migrations[version]?.(db, transaction);
+    }
   } catch (error) {
-    dbInstance = null;
-    throw error;
+    console.error(
+      `IndexedDB migration to v${toVersion} failed; aborting upgrade:`,
+      error,
+    );
+    // getDB already rejects with the abort, so this copy needs no handler.
+    transaction.done.catch(() => {});
+    try {
+      transaction.abort();
+    } catch {
+      // The transaction already aborted itself because a request failed.
+    }
   }
+}
 
-  return dbInstance;
+// Caches the open in progress too, so callers racing on first load share one
+// connection.
+export function getDB(): Promise<NamesakeDB> {
+  dbPromise ??= openDB<NamesakeDBSchema>(DB_NAME, DB_VERSION, {
+    upgrade(db, oldVersion, newVersion, transaction) {
+      runMigrations(db, transaction, oldVersion, newVersion ?? DB_VERSION);
+    },
+    blocked(currentVersion, blockedVersion) {
+      console.warn(
+        `IndexedDB upgrade blocked (v${currentVersion} open elsewhere, needs v${blockedVersion})`,
+      );
+    },
+    blocking(currentVersion, blockedVersion, event) {
+      console.warn(
+        `IndexedDB: closing to allow upgrade (v${currentVersion} → v${blockedVersion})`,
+      );
+      (event.target as IDBDatabase).close();
+      dbPromise = null;
+    },
+  }).catch((error) => {
+    dbPromise = null;
+    throw error;
+  });
+  return dbPromise;
 }

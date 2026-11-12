@@ -41,7 +41,7 @@ describe("FormFeedback", () => {
   });
 
   it("renders form fields", () => {
-    render(<FormFeedback slug="court-order-ma" />);
+    render(<FormFeedback formId="ma/court-order" />);
 
     expect(
       screen.getByRole("radiogroup", { name: /form rating/i }),
@@ -58,7 +58,7 @@ describe("FormFeedback", () => {
 
   it("allows selecting a sentiment option", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback slug="court-order-ma" />);
+    render(<FormFeedback formId="ma/court-order" />);
 
     const positive = screen.getByRole("radio", { name: /easy/i });
     const negative = screen.getByRole("radio", { name: /problems/i });
@@ -77,7 +77,7 @@ describe("FormFeedback", () => {
     const scrollIntoView = vi.fn();
     window.HTMLElement.prototype.scrollIntoView = scrollIntoView;
 
-    render(<FormFeedback slug="court-order-ma" />);
+    render(<FormFeedback formId="ma/court-order" />);
 
     await submitPositive(user);
 
@@ -91,7 +91,7 @@ describe("FormFeedback", () => {
 
   it("shows a success message after submission", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback slug="court-order-ma" />);
+    render(<FormFeedback formId="ma/court-order" />);
 
     await submitPositive(user);
 
@@ -102,15 +102,15 @@ describe("FormFeedback", () => {
     });
   });
 
-  it("submits the correct form_slug and sentiment to the API", async () => {
+  it("submits the correct form_id and sentiment to the API", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback slug="court-order-ma" />);
+    render(<FormFeedback formId="ma/court-order" />);
 
     await submitPositive(user);
 
     await waitFor(() => {
       expect(getSubmitBody()).toMatchObject({
-        form_slug: "court-order-ma",
+        form_id: "ma/court-order",
         sentiment: "positive",
       });
     });
@@ -118,7 +118,7 @@ describe("FormFeedback", () => {
 
   it("includes the comment in the submission when provided", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback slug="court-order-ma" />);
+    render(<FormFeedback formId="ma/court-order" />);
 
     await user.click(screen.getByRole("radio", { name: /problems/i }));
     await user.type(
@@ -134,7 +134,7 @@ describe("FormFeedback", () => {
 
   it("omits the comment from the submission when left blank", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback slug="court-order-ma" />);
+    render(<FormFeedback formId="ma/court-order" />);
 
     await submitPositive(user);
 
@@ -145,7 +145,7 @@ describe("FormFeedback", () => {
 
   it("preserves field values after a submission error", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback slug="court-order-ma" />);
+    render(<FormFeedback formId="ma/court-order" />);
 
     vi.mocked(fetch).mockResolvedValueOnce(
       new Response(JSON.stringify({ error: "Server error" }), { status: 500 }),
@@ -163,7 +163,7 @@ describe("FormFeedback", () => {
 
   it("shows an error message when the API request fails", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback slug="court-order-ma" />);
+    render(<FormFeedback formId="ma/court-order" />);
 
     await user.click(screen.getByRole("radio", { name: /problems/i }));
     vi.mocked(fetch).mockResolvedValueOnce(errorResponse());
@@ -178,7 +178,7 @@ describe("FormFeedback", () => {
 
   it("shows a generic error when fetch throws a network error", async () => {
     const user = userEvent.setup();
-    render(<FormFeedback slug="court-order-ma" />);
+    render(<FormFeedback formId="ma/court-order" />);
 
     await user.click(screen.getByRole("radio", { name: /easy/i }));
     vi.mocked(fetch).mockRejectedValueOnce(new Error("Network error"));
@@ -194,7 +194,7 @@ describe("FormFeedback", () => {
   describe("share consent dialog", () => {
     it("asks for consent before submitting positive feedback with a comment", async () => {
       const user = userEvent.setup();
-      render(<FormFeedback slug="court-order-ma" />);
+      render(<FormFeedback formId="ma/court-order" />);
 
       await fillPositiveWithComment(user);
 
@@ -213,7 +213,7 @@ describe("FormFeedback", () => {
       "submits share_consent when %s is selected",
       async (_, choice, expected) => {
         const user = userEvent.setup();
-        render(<FormFeedback slug="court-order-ma" />);
+        render(<FormFeedback formId="ma/court-order" />);
 
         await fillPositiveWithComment(user);
         const dialog = await screen.findByRole("dialog");
@@ -224,6 +224,7 @@ describe("FormFeedback", () => {
 
         await waitFor(() => {
           expect(getSubmitBody()).toMatchObject({
+            form_id: "ma/court-order",
             sentiment: "positive",
             comment: "Very helpful!",
             share_consent: expected,
@@ -238,7 +239,7 @@ describe("FormFeedback", () => {
     it("keeps the share choice when retrying after a failed submission", async () => {
       const user = userEvent.setup();
       vi.mocked(fetch).mockRejectedValueOnce(new Error("Network error"));
-      render(<FormFeedback slug="court-order-ma" />);
+      render(<FormFeedback formId="ma/court-order" />);
 
       await fillPositiveWithComment(user);
       const dialog = await screen.findByRole("dialog");
@@ -255,7 +256,7 @@ describe("FormFeedback", () => {
 
     it("returns to the form without submitting when the dialog is dismissed", async () => {
       const user = userEvent.setup();
-      render(<FormFeedback slug="court-order-ma" />);
+      render(<FormFeedback formId="ma/court-order" />);
 
       await fillPositiveWithComment(user);
       await screen.findByRole("dialog");
@@ -276,7 +277,7 @@ describe("FormFeedback", () => {
       ["negative feedback with a comment", /problems/i, "Confusing"],
     ])("does not ask for consent for %s", async (_, sentiment, comment) => {
       const user = userEvent.setup();
-      render(<FormFeedback slug="court-order-ma" />);
+      render(<FormFeedback formId="ma/court-order" />);
 
       await user.click(screen.getByRole("radio", { name: sentiment }));
       if (comment) {
@@ -303,7 +304,7 @@ describe("FormFeedback", () => {
 
     it("calls navigator.share with the current page title and URL", async () => {
       const user = userEvent.setup();
-      render(<FormFeedback slug="court-order-ma" />);
+      render(<FormFeedback formId="ma/court-order" />);
 
       await submitPositive(user);
 

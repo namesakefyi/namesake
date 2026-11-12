@@ -1,10 +1,14 @@
-import { fireEvent, render, renderHook, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
-import type { FormPhase, Step } from "#lib/forms/types";
+import type { Step } from "#constants/forms";
+import type { FormPhase } from "#lib/forms/createFormMachine";
+import { q } from "#lib/forms/questions";
 import { FormStepContext } from "../FormContainer/FormStepContext";
-import { FormStep, FormSubsection, useFieldVisible } from "./FormStep";
+import { FormStep } from "./FormStep";
+import { FormSubsection } from "./FormSubsection";
 
 const defaultContextValue = {
   onNext: vi.fn(),
@@ -41,14 +45,13 @@ const TestWrapper = makeWrapper();
 describe("FormStep", () => {
   const formStep: Step = {
     id: "what-is-your-legal-name",
-    component: () => <div>Test content</div>,
     title: "What is your legal name?",
     description: "Type your name exactly as it appears on your ID.",
-    fields: [],
+    questions: [],
   };
 
   it("renders title correctly", () => {
-    render(<FormStep stepConfig={formStep} />, { wrapper: TestWrapper });
+    render(<FormStep step={formStep} />, { wrapper: TestWrapper });
 
     const titleElement = screen.getByText(formStep.title as string);
     expect(titleElement).toBeInTheDocument();
@@ -56,7 +59,7 @@ describe("FormStep", () => {
   });
 
   it("renders optional description", () => {
-    render(<FormStep stepConfig={formStep} />, { wrapper: TestWrapper });
+    render(<FormStep step={formStep} />, { wrapper: TestWrapper });
 
     const descriptionElement = screen.getByText(formStep.description as string);
     expect(descriptionElement).toBeInTheDocument();
@@ -72,7 +75,7 @@ describe("FormStep", () => {
     };
     const WrapperWithData = makeWrapper({}, { oldFirstName: "Erika" });
 
-    render(<FormStep stepConfig={stepWithDynamicContent} />, {
+    render(<FormStep step={stepWithDynamicContent} />, {
       wrapper: WrapperWithData,
     });
 
@@ -101,7 +104,7 @@ describe("FormStep", () => {
         `Where do ${(data as { oldFirstName?: string }).oldFirstName ?? "the minor"}'s parents live?`,
     };
 
-    render(<FormStep stepConfig={stepWithDynamicContent} />, {
+    render(<FormStep step={stepWithDynamicContent} />, {
       wrapper: TestWrapper,
     });
 
@@ -121,7 +124,7 @@ describe("FormStep", () => {
       description: undefined,
     };
 
-    render(<FormStep stepConfig={stepWithoutDescription} />, {
+    render(<FormStep step={stepWithoutDescription} />, {
       wrapper: TestWrapper,
     });
 
@@ -133,7 +136,7 @@ describe("FormStep", () => {
   });
 
   it("associates the form with the title", () => {
-    render(<FormStep stepConfig={formStep} />, {
+    render(<FormStep step={formStep} />, {
       wrapper: TestWrapper,
     });
     const form = screen.getByRole("form");
@@ -149,7 +152,7 @@ describe("FormStep", () => {
       title: "What is the reason you're changing your name?",
     };
 
-    render(<FormStep stepConfig={stepWithApostrophe} />, {
+    render(<FormStep step={stepWithApostrophe} />, {
       wrapper: TestWrapper,
     });
     const form = screen.getByRole("form");
@@ -160,7 +163,7 @@ describe("FormStep", () => {
   });
 
   it("has accessible description when description is provided", () => {
-    render(<FormStep stepConfig={formStep} />, { wrapper: TestWrapper });
+    render(<FormStep step={formStep} />, { wrapper: TestWrapper });
 
     const form = screen.getByRole("form", {
       description: formStep.description as string,
@@ -174,7 +177,7 @@ describe("FormStep", () => {
       description: undefined,
     };
 
-    render(<FormStep stepConfig={stepWithoutDescription} />, {
+    render(<FormStep step={stepWithoutDescription} />, {
       wrapper: TestWrapper,
     });
 
@@ -188,7 +191,7 @@ describe("FormStep", () => {
   describe("form submission", () => {
     it("calls onSubmit when not in reviewing mode", () => {
       const onSubmit = vi.fn();
-      render(<FormStep stepConfig={formStep} />, {
+      render(<FormStep step={formStep} />, {
         wrapper: makeWrapper({ onSubmit, phase: "filling" }),
       });
 
@@ -199,7 +202,7 @@ describe("FormStep", () => {
 
     it("calls onSubmit when in reviewing mode (machine handles routing)", () => {
       const onSubmit = vi.fn();
-      render(<FormStep stepConfig={formStep} />, {
+      render(<FormStep step={formStep} />, {
         wrapper: makeWrapper({ onSubmit, phase: "editing" }),
       });
 
@@ -209,80 +212,12 @@ describe("FormStep", () => {
     });
 
     it("prevents the default form submission", () => {
-      render(<FormStep stepConfig={formStep} />, { wrapper: TestWrapper });
+      render(<FormStep step={formStep} />, { wrapper: TestWrapper });
       const form = screen.getByRole("form");
       const event = fireEvent.submit(form);
 
       expect(event).toBe(false);
     });
-  });
-});
-
-function FieldVisibleWrapper({ children }: { children: ReactNode }) {
-  const form = useForm({ defaultValues: { middleName: "Lee" } });
-  return <FormProvider {...form}>{children}</FormProvider>;
-}
-
-describe("useFieldVisible", () => {
-  const stepConfig: Step = {
-    id: "name",
-    title: "Name",
-    fields: ["middleName" as any],
-    component: () => null,
-  };
-
-  it("returns true when field has no when callback", () => {
-    const { result } = renderHook(
-      () => useFieldVisible(stepConfig, "middleName" as any),
-      { wrapper: FieldVisibleWrapper },
-    );
-    expect(result.current).toBe(true);
-  });
-
-  it("returns true when when callback returns true", () => {
-    const config: Step = {
-      ...stepConfig,
-      fields: [{ id: "middleName" as any, when: () => true }],
-    };
-    const { result } = renderHook(
-      () => useFieldVisible(config, "middleName" as any),
-      { wrapper: FieldVisibleWrapper },
-    );
-    expect(result.current).toBe(true);
-  });
-
-  it("returns false when when callback returns false", () => {
-    const config: Step = {
-      ...stepConfig,
-      fields: [{ id: "middleName" as any, when: () => false }],
-    };
-    const { result } = renderHook(
-      () => useFieldVisible(config, "middleName" as any),
-      { wrapper: FieldVisibleWrapper },
-    );
-    expect(result.current).toBe(false);
-  });
-
-  it("passes live form data to the when callback", () => {
-    const when = vi.fn(() => true);
-    const config: Step = {
-      ...stepConfig,
-      fields: [{ id: "middleName" as any, when }],
-    };
-    renderHook(() => useFieldVisible(config, "middleName" as any), {
-      wrapper: FieldVisibleWrapper,
-    });
-    expect(when).toHaveBeenCalledWith(
-      expect.objectContaining({ middleName: "Lee" }),
-    );
-  });
-
-  it("returns false for a field not listed in the step fields", () => {
-    const { result } = renderHook(
-      () => useFieldVisible(stepConfig, "unknownField" as any),
-      { wrapper: FieldVisibleWrapper },
-    );
-    expect(result.current).toBe(false);
   });
 });
 
@@ -310,13 +245,61 @@ describe("FormSubsection", () => {
     );
     expect(screen.getByText("Test content")).toBeInTheDocument();
   });
+});
 
-  it("does not render when not visible", () => {
-    render(
-      <FormSubsection title="What is your legal name?" isVisible={false} />,
+function renderStep(step: Step, defaultValues: Record<string, unknown> = {}) {
+  return render(<FormStep step={step} />, {
+    wrapper: makeWrapper({}, defaultValues),
+  });
+}
+
+describe("FormStep body", () => {
+  it("renders each question and leaves hidden ones unmounted", async () => {
+    const step: Step = {
+      id: "previous-name",
+      title: "Have you changed your name before?",
+      questions: [
+        q.yesNo("hasPreviousNameChange"),
+        q.subsection(
+          [q.shortText("previousNameFrom", { label: "Previous name" })],
+          {
+            when: (data) => data.hasPreviousNameChange === true,
+            title: "Details",
+          },
+        ),
+        q.banner("Read the [guide](https://example.com/guide).", {
+          when: (data) => data.hasPreviousNameChange === true,
+        }),
+      ],
+    };
+    renderStep(step);
+
+    expect(
+      screen.getByRole("radiogroup", {
+        name: "Have you changed your name before?",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.queryByLabelText("Previous name")).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("radio", { name: "Yes" }));
+
+    expect(screen.getByLabelText("Previous name")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Details" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "guide" })).toHaveAttribute(
+      "href",
+      "https://example.com/guide",
     );
+  });
 
-    const titleElement = screen.queryByText("What is your legal name?");
-    expect(titleElement).toBeNull();
+  it("escapes answers interpolated into banner content", () => {
+    const step: Step = {
+      id: "banner",
+      title: "Banner",
+      questions: [q.banner((data) => `Hello, ${data.newFirstName}`)],
+    };
+    renderStep(step, { newFirstName: "<b>Sylvia</b>" });
+    expect(screen.getByText("Hello, <b>Sylvia</b>")).toBeInTheDocument();
   });
 });

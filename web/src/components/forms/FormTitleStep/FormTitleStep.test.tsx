@@ -86,14 +86,12 @@ describe("FormTitleStep", () => {
         {...formTitleStep}
         pdfs={[
           {
-            pdfId: "pdf-1" as any,
             title: "Petition for Name Change",
-            pdfPath: "test-1.pdf",
+            file: "test-1.pdf",
           },
           {
-            pdfId: "pdf-2" as any,
             title: "Civil Cover Sheet",
-            pdfPath: "test-2.pdf",
+            file: "test-2.pdf",
           },
         ]}
       />,
@@ -110,10 +108,9 @@ describe("FormTitleStep", () => {
         {...formTitleStep}
         pdfs={[
           {
-            pdfId: "pdf-1" as any,
             title: "Petition",
             code: "CJD 400",
-            pdfPath: "test-1.pdf",
+            file: "test-1.pdf",
           },
         ]}
       />,
@@ -127,9 +124,7 @@ describe("FormTitleStep", () => {
     render(
       <FormTitleStep
         {...formTitleStep}
-        pdfs={[
-          { pdfId: "pdf-1" as any, title: "Petition", pdfPath: "test-1.pdf" },
-        ]}
+        pdfs={[{ title: "Petition", file: "test-1.pdf" }]}
       />,
       { wrapper: TestWrapper },
     );
@@ -157,9 +152,7 @@ describe("FormTitleStep", () => {
       <FormTitleStep
         {...formTitleStep}
         onDownloadBlank={onDownloadBlank}
-        pdfs={[
-          { pdfId: "pdf-1" as any, title: "Petition", pdfPath: "test-1.pdf" },
-        ]}
+        pdfs={[{ title: "Petition", file: "test-1.pdf" }]}
       />,
       { wrapper: TestWrapper },
     );
@@ -186,9 +179,7 @@ describe("FormTitleStep", () => {
       <FormTitleStep
         {...formTitleStep}
         onDownloadBlank={onDownloadBlank}
-        pdfs={[
-          { pdfId: "pdf-1" as any, title: "Petition", pdfPath: "test-1.pdf" },
-        ]}
+        pdfs={[{ title: "Petition", file: "test-1.pdf" }]}
       />,
       { wrapper: TestWrapper },
     );
@@ -218,9 +209,7 @@ describe("FormTitleStep", () => {
       <FormTitleStep
         {...formTitleStep}
         onDownloadBlank={onDownloadBlank}
-        pdfs={[
-          { pdfId: "pdf-1" as any, title: "Petition", pdfPath: "test-1.pdf" },
-        ]}
+        pdfs={[{ title: "Petition", file: "test-1.pdf" }]}
       />,
       { wrapper: TestWrapper },
     );

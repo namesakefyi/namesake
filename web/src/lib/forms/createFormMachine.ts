@@ -1,10 +1,29 @@
 import { assign, setup } from "xstate";
-import type {
-  FormMachineContext,
-  FormMachineEvent,
-  FormPhase,
-  Step,
-} from "./types";
+import type { Step } from "#constants/forms";
+
+export type FormPhase =
+  | "title"
+  | "filling"
+  | "review"
+  | "editing"
+  | "submitting"
+  | "complete";
+
+export interface FormMachineContext {
+  currentStepId: string | null;
+  editingStepId: string | null;
+}
+
+export type FormMachineEvent =
+  | { type: "START" }
+  | { type: "GOTO_STEP"; stepId: string }
+  | { type: "GOTO_REVIEW" }
+  | { type: "GOTO_TITLE" }
+  | { type: "EDIT_STEP"; stepId: string }
+  | { type: "SAVE_EDIT" }
+  | { type: "SUBMIT" }
+  | { type: "SUBMIT_DONE" }
+  | { type: "SUBMIT_ERROR" };
 
 interface CreateFormMachineOptions {
   id: string;
@@ -33,7 +52,6 @@ export function createFormMachine({ id, steps }: CreateFormMachineOptions) {
     id,
     initial: "title",
     context: {
-      formSlug: id,
       currentStepId: null,
       editingStepId: null,
     },

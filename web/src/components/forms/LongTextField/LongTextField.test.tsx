@@ -7,12 +7,12 @@ describe("LongTextField", () => {
   it("renders long text field", () => {
     renderWithFormProvider(
       <LongTextField
-        label="Reason for changing name"
+        label="Reason for name change"
         name="reasonForChangingName"
       />,
     );
 
-    const customField = screen.getByLabelText("Reason for changing name");
+    const customField = screen.getByLabelText("Reason for name change");
 
     expect(customField).toBeInTheDocument();
   });
@@ -20,7 +20,7 @@ describe("LongTextField", () => {
   it("supports optional description", () => {
     renderWithFormProvider(
       <LongTextField
-        label="Reason for changing name"
+        label="Reason for name change"
         name="reasonForChangingName"
         description="A custom description"
       />,
@@ -33,12 +33,12 @@ describe("LongTextField", () => {
   it("allows entering text", async () => {
     renderWithFormProvider(
       <LongTextField
-        label="Reason for changing name"
+        label="Reason for name change"
         name="reasonForChangingName"
       />,
     );
 
-    const customField = screen.getByLabelText("Reason for changing name");
+    const customField = screen.getByLabelText("Reason for name change");
     await userEvent.type(customField, "Hello, world!");
     expect(customField).toHaveValue("Hello, world!");
   });
@@ -46,7 +46,7 @@ describe("LongTextField", () => {
   it("supports optional children", () => {
     renderWithFormProvider(
       <LongTextField
-        label="Reason for changing name"
+        label="Reason for name change"
         name="reasonForChangingName"
       >
         <div data-testid="child-component">Additional Info</div>

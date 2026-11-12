@@ -12,7 +12,6 @@ import { startTransition, useActionState, useRef, useState } from "react";
 import type { FormProps } from "react-aria-components";
 import {
   type FormFeedbackSentiment,
-  type FormSlug,
   shouldRequestShareConsent,
 } from "#constants/forms";
 import { Button } from "../../common/Button";
@@ -26,7 +25,7 @@ import { Dialog } from "../../common/Dialog";
 import { Modal } from "../../common/Modal";
 
 interface FormFeedbackProps {
-  slug: FormSlug;
+  formId: string;
 }
 
 const ERROR_MESSAGES: Record<number, string> = {
@@ -46,7 +45,7 @@ function isSubmitError(state: SubmitState): state is SubmitError {
   return typeof state === "object";
 }
 
-export function FormFeedback({ slug }: FormFeedbackProps) {
+export function FormFeedback({ formId }: FormFeedbackProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   // Submission paused while asking for consent to share it publicly
   const [pendingFormData, setPendingFormData] = useState<FormData | null>(null);
@@ -66,7 +65,7 @@ export function FormFeedback({ slug }: FormFeedbackProps) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          form_slug: slug,
+          form_id: formId,
           sentiment,
           comment: comment.trim() || undefined,
           share_consent: shareConsent,

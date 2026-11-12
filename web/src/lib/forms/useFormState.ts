@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createActor } from "xstate";
+import type { Step } from "#constants/forms";
 import { getFormProgress, saveFormProgress } from "#db/database";
 import {
   createFormMachine,
   type FormMachine,
+  type FormMachineContext,
+  type FormPhase,
   getPhase,
 } from "./createFormMachine";
-import {
-  findNextStepIndex,
-  findPrevStepIndex,
-  getVisibleStepIds,
-} from "./formVisibility";
-import type { FormMachineContext, FormPhase, Step } from "./types";
+import { getVisibleStepIds } from "./resolveFormVisibility";
+import { findNextStepIndex, findPrevStepIndex } from "./stepNavigation";
 
 type FormActor = ReturnType<typeof createActor<FormMachine>>;
 type FormSnapshot = ReturnType<FormActor["getSnapshot"]>;
@@ -39,8 +38,12 @@ export interface UseFormStateReturn {
   goBack: () => void;
 }
 
-// Loads a persisted XState snapshot from IndexedDB for the given form.
-function usePersistedSnapshot(formSlug: string) {
+export interface PersistedSnapshot {
+  isLoading: boolean;
+  savedSnapshot: unknown;
+}
+
+export function usePersistedSnapshot(formId: string): PersistedSnapshot {
   const [savedSnapshot, setSavedSnapshot] = useState<unknown>(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -50,20 +53,30 @@ function usePersistedSnapshot(formSlug: string) {
       return;
     }
 
-    getFormProgress(formSlug)
+    getFormProgress(formId)
       .then((snapshot) => {
         if (snapshot) setSavedSnapshot(snapshot);
       })
       .catch((error) => {
         console.error(
-          `Failed to load form progress for "${formSlug}" from IndexedDB:`,
+          `Failed to load form progress for "${formId}" from IndexedDB:`,
           error,
         );
       })
       .finally(() => setIsLoading(false));
-  }, [formSlug]);
+  }, [formId]);
 
   return { isLoading, savedSnapshot };
+}
+
+/** Drops saved progress on a step the form no longer has. Answers are kept. */
+function restorableSnapshot(snapshot: unknown, steps: readonly Step[]) {
+  const context = (snapshot as { context?: FormMachineContext } | undefined)
+    ?.context;
+  const stepIds = [context?.currentStepId, context?.editingStepId];
+  return stepIds.every((id) => !id || steps.some((step) => step.id === id))
+    ? snapshot
+    : undefined;
 }
 
 // Creates the XState actor, restores it from a snapshot if available,
@@ -72,7 +85,7 @@ function useFormActor(
   machine: FormMachine,
   savedSnapshot: unknown,
   isLoading: boolean,
-  formSlug: string,
+  formId: string,
 ) {
   const actorRef = useRef<FormActor | null>(null);
   const [state, setState] = useState<FormSnapshot | null>(null);
@@ -86,40 +99,31 @@ function useFormActor(
 
     actorRef.current = actor;
 
-    const canPersist = typeof indexedDB !== "undefined";
-
-    const subscription = actor.subscribe((snapshot) => {
-      setState(snapshot);
-      if (!canPersist) return;
-      const slug = (snapshot.context as FormMachineContext).formSlug;
-      saveFormProgress(slug, actor.getPersistedSnapshot()).catch((error) => {
+    const persist = () => {
+      if (typeof indexedDB === "undefined") return;
+      saveFormProgress(formId, actor.getPersistedSnapshot()).catch((error) => {
         console.error(
-          `Failed to save form progress for "${slug}" to IndexedDB:`,
+          `Failed to save form progress for "${formId}" to IndexedDB:`,
           error,
         );
       });
+    };
+
+    const subscription = actor.subscribe((snapshot) => {
+      setState(snapshot);
+      persist();
     });
 
     actor.start();
     setState(actor.getSnapshot());
-
-    if (canPersist) {
-      saveFormProgress(formSlug, actor.getPersistedSnapshot()).catch(
-        (error) => {
-          console.error(
-            `Failed to save initial form progress for "${formSlug}" to IndexedDB:`,
-            error,
-          );
-        },
-      );
-    }
+    persist();
 
     return () => {
       subscription.unsubscribe();
       actor.stop();
       actorRef.current = null;
     };
-  }, [isLoading, savedSnapshot, machine, formSlug]);
+  }, [isLoading, savedSnapshot, machine, formId]);
 
   const send: FormActor["send"] = useCallback((event) => {
     actorRef.current?.send(event);
@@ -129,21 +133,21 @@ function useFormActor(
 }
 
 export function useFormState(
-  formSlug: string,
+  formId: string,
   steps: readonly Step[],
   getFormData: () => Record<string, any>,
+  { isLoading, savedSnapshot }: PersistedSnapshot,
 ): UseFormStateReturn {
   const machine = useMemo(
-    () => createFormMachine({ id: formSlug, steps }),
-    [formSlug, steps],
+    () => createFormMachine({ id: formId, steps }),
+    [formId, steps],
   );
 
-  const { isLoading, savedSnapshot } = usePersistedSnapshot(formSlug);
   const { actorRef, state, send } = useFormActor(
     machine,
-    savedSnapshot,
+    restorableSnapshot(savedSnapshot, steps),
     isLoading,
-    formSlug,
+    formId,
   );
 
   const context = state?.context as FormMachineContext | undefined;

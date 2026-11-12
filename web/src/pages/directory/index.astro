@@ -74,7 +74,7 @@ const nextHref =
   currentPage < totalPages ? getPageHref(currentPage + 1) : undefined;
 
 const contacts = pageEntries.map(({ id, data }) => ({
-  slug: id,
+  id,
   name: data.name,
   description: data.description,
   jurisdictions: data.jurisdictions
@@ -183,7 +183,7 @@ const description =
                   </div>
                 )}
                 <h2>
-                  <a href={`/directory/${contact.slug}`}>{contact.name}</a>
+                  <a href={`/directory/${contact.id}`}>{contact.name}</a>
                 </h2>
                 <p class="description">{contact.description}</p>
               </header>

@@ -378,6 +378,9 @@ importers:
       sanitize-html:
         specifier: ^2.18.1
         version: 2.18.1
+      snarkdown:
+        specifier: ^2.0.0
+        version: 2.0.0
       topojson-client:
         specifier: ^3.1.0
         version: 3.1.0
@@ -4556,6 +4559,9 @@ packages:
   smol-toml@1.9.1:
     resolution: {integrity: sha512-j7WyPdf0CJoutMzMoPLF/bVXHtKZIT9Rb4eGeEbWw8X2t5oirjPgpL+OpaENZrILYaXqYwnVH+qgUwVbl+pUJQ==}
     engines: {node: '>= 18'}
+
+  snarkdown@2.0.0:
+    resolution: {integrity: sha512-MgL/7k/AZdXCTJiNgrO7chgDqaB9FGM/1Tvlcenenb7div6obaDATzs16JhFyHHBGodHT3B7RzRc5qk8pFhg3A==}
 
   source-map-js@1.2.2:
     resolution: {integrity: sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==}
@@ -9375,6 +9381,8 @@ snapshots:
       sax: 1.6.1
 
   smol-toml@1.9.1: {}
+
+  snarkdown@2.0.0: {}
 
   source-map-js@1.2.2: {}
 

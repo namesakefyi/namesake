@@ -8,13 +8,13 @@ import {
 
 interface Props {
   title: string;
-  slug: string;
+  formId: string;
   documentCount: number;
   timeEstimate: string;
   updatedAt?: string;
 }
 
-const { title, slug, documentCount, timeEstimate, updatedAt } = Astro.props;
+const { title, formId, documentCount, timeEstimate, updatedAt } = Astro.props;
 
 const formatter = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC",
@@ -25,7 +25,7 @@ const formattedDate = updatedAt ? formatter.format(new Date(updatedAt)) : null;
 ---
 
 <article class="form">
-  <a href={`/forms/${slug}`} class="form-link">
+  <a href={`/forms/${formId}`} class="form-link">
     <h2>
       {title}
     </h2>
@@ -33,7 +33,7 @@ const formattedDate = updatedAt ? formatter.format(new Date(updatedAt)) : null;
   <ul class="form-metadata">
     <li
       class="form-status"
-      data-form-slug={slug}
+      data-form-id={formId}
       data-time-estimate={timeEstimate}
       data-status="not-started"
       data-loading
@@ -66,12 +66,12 @@ const formattedDate = updatedAt ? formatter.format(new Date(updatedAt)) : null;
   import { getFormStatus } from "#lib/forms/getFormStatus";
 
   document
-    .querySelectorAll<HTMLElement>("[data-form-slug].form-status")
+    .querySelectorAll<HTMLElement>("[data-form-id].form-status")
     .forEach((el) => {
-      const slug = el.dataset.formSlug;
-      if (!slug) return;
+      const formId = el.dataset.formId;
+      if (!formId) return;
 
-      getFormStatus(slug)
+      getFormStatus(formId)
         .then((status) => {
           if (status === "inProgress") {
             el.dataset.status = "in-progress";
@@ -83,7 +83,7 @@ const formattedDate = updatedAt ? formatter.format(new Date(updatedAt)) : null;
         })
         .catch((err) => {
           console.error(
-            `Failed to load form status for "${slug}" from IndexedDB:`,
+            `Failed to load form status for "${formId}" from IndexedDB:`,
             err,
           );
           delete el.dataset.loading;

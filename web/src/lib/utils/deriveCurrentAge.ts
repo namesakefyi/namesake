@@ -10,9 +10,26 @@
 export const deriveCurrentAge = (dateOfBirth?: string): number => {
   if (typeof dateOfBirth !== "string" || !dateOfBirth) return -1;
 
-  const birth = new Date(dateOfBirth);
-  if (Number.isNaN(birth.getTime())) return -1;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateOfBirth)) return -1;
+  const birth = new Date(`${dateOfBirth}T00:00:00Z`);
+  if (
+    Number.isNaN(birth.getTime()) ||
+    birth.toISOString().slice(0, 10) !== dateOfBirth
+  )
+    return -1;
 
-  const elapsed = new Date(Date.now() - birth.getTime());
-  return elapsed.getUTCFullYear() - new Date(0).getUTCFullYear();
+  const today = new Date();
+  const birthdayHasPassed =
+    today.getMonth() > birth.getUTCMonth() ||
+    (today.getMonth() === birth.getUTCMonth() &&
+      today.getDate() >= birth.getUTCDate());
+  const age =
+    today.getFullYear() - birth.getUTCFullYear() - (birthdayHasPassed ? 0 : 1);
+  return age >= 0 ? age : -1;
+};
+
+/** The current age for a PDF, or undefined when it's unknown. */
+export const formatCurrentAge = (dateOfBirth?: string): string | undefined => {
+  const age = deriveCurrentAge(dateOfBirth);
+  return age >= 0 ? String(age) : undefined;
 };

@@ -1,63 +1,11 @@
 import { definePdf } from "#lib/pdfs/definePdf";
-import type { PdfFieldName } from "./schema";
-import pdf from "./ucsnc1-name-change-and-or-sex-designation-change-petition-for-individual-adult.pdf";
+import type { Fields } from "./schema";
+import file from "./ucsnc1-name-change-and-or-sex-designation-change-petition-for-individual-adult.pdf";
 
-export default definePdf<PdfFieldName>({
-  id: "ucsnc1-name-change-and-or-sex-designation-change-petition-for-individual-adult",
+export default definePdf<Fields>({
   title:
     "Name Change and/or Sex Designation Change Petition for Individual Adult",
   code: "UCS-NC1",
-  jurisdiction: "ny",
   canonicalUrl: "https://www.nycourts.gov/media/32631",
-  pdfPath: pdf,
-  resolver: (_data) => ({
-    // TODO: Map fields to form data
-    shouldSealCourtRecord: undefined,
-    hasBeenConvictedOfCrime: undefined,
-    reasonToSealCourtRecord: undefined,
-    reasonForChangingName: undefined,
-    courtOfConviction: undefined,
-    courtType: undefined,
-    crime: undefined,
-    county: undefined,
-    hasFiledForBankruptcy: undefined,
-    currentLegalName: undefined,
-    indexNumber: undefined,
-    hasJudgmentsOrLiens: undefined,
-    isPartyToLawsuitOrCourtCase: undefined,
-    hasAttachedSupportingDocuments: undefined,
-    isRequestingNameChange: undefined,
-    isRequestingSexDesignationChange: undefined,
-    bankruptcyJudgmentsLiensDetails: undefined,
-    supportingDocumentsDetails: undefined,
-    newGender: undefined,
-    hasPreviouslyFiledSexDesignationChange: undefined,
-    previouslyFiledSexDesignationChangeDetails: undefined,
-    isCurrentlyMarried: undefined,
-    wasPreviouslyMarried: undefined,
-    hasChildrenUnder21: undefined,
-    isProvidingReasonForGenderChange: undefined,
-    paysChildSupport: undefined,
-    signatureDate: undefined,
-    areChildSupportPaymentsUpToDate: undefined,
-    reasonForGenderChange: undefined,
-    childSupportArrearsAmount: undefined,
-    newFullName: undefined,
-    courtIssuingChildSupportOrder: undefined,
-    petitionDay: undefined,
-    petitionMonth: undefined,
-    supportCollectionsUnit: undefined,
-    petitionYearSuffix: undefined,
-    placeOfBirth: undefined,
-    paysSpousalSupport: undefined,
-    areSpousalSupportPaymentsUpToDate: undefined,
-    spousalSupportArrearsAmount: undefined,
-    courtIssuingSpousalSupportOrder: undefined,
-    hasPreviousNameChangeTrue: undefined,
-    hasPreviousNameChangeFalse: undefined,
-    currentAge: undefined,
-    dateOfBirth: undefined,
-    previousNameChangeDetails: undefined,
-    residenceAddress: undefined,
-  }),
+  file,
 });

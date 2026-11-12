@@ -10,7 +10,7 @@ import {
   handlePreviewReplace,
   handleReplacePdf,
   handleSaveFields,
-} from "./handlers";
+} from "./handlers.ts";
 
 const app = new Hono()
   .get("/api/pdfs", handleListPdfs)

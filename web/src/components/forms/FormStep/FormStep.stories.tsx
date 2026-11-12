@@ -1,5 +1,6 @@
 import type { Meta } from "@storybook/react-vite";
 import { FormProvider, useForm } from "react-hook-form";
+import { q } from "#lib/forms/questions";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormStep, type FormStepProps } from "./FormStep";
 
@@ -42,24 +43,20 @@ export default meta;
 export const Example = (args: FormStepProps) => <FormStep {...args} />;
 
 Example.args = {
-  stepConfig: {
+  step: {
     id: "legal-name",
     title: "What is your current legal name?",
-    fields: ["oldFirstName", "oldLastName"],
-    component: () => null,
+    questions: [q.name("oldName")],
   },
-  children: <div>Children</div>,
 };
 
 export const WithDescription = (args: FormStepProps) => <FormStep {...args} />;
 
 WithDescription.args = {
-  stepConfig: {
+  step: {
     id: "legal-name",
     title: "What is your current legal name?",
     description: "Type your name exactly as it appears on your ID.",
-    fields: ["oldFirstName", "oldLastName"],
-    component: () => null,
+    questions: [q.name("oldName")],
   },
-  children: <div>Children</div>,
 };

@@ -41,18 +41,18 @@ if (!versionMatch) {
 const currentVersion = Number.parseInt(versionMatch[1], 10);
 const nextNum = currentVersion + 1;
 const paddedNum = String(nextNum).padStart(3, "0");
-const slug = `${paddedNum}-${name}`;
+const migrationId = `${paddedNum}-${name}`;
 
-/* Derive a readable title from the slug for comments */
+/* Derive a readable title from the migration id for comments */
 
 const title = name.replace(/-/g, " ");
 
 /* Write migration file */
 
-const migrationFile = join(MIGRATIONS_DIR, `${slug}.ts`);
+const migrationFile = join(MIGRATIONS_DIR, `${migrationId}.ts`);
 
 if (existsSync(migrationFile)) {
-  console.error(`Error: src/db/migrations/${slug}.ts already exists.`);
+  console.error(`Error: src/db/migrations/${migrationId}.ts already exists.`);
   process.exit(1);
 }
 const migrationSource = `import type { Migration } from "../types";
@@ -63,15 +63,15 @@ export const migration: Migration = (db) => {
 `;
 
 writeFileSync(migrationFile, migrationSource);
-console.log(`  created  src/db/migrations/${slug}.ts`);
+console.log(`  created  src/db/migrations/${migrationId}.ts`);
 
 /* Write test file */
 
-const testFile = join(MIGRATIONS_DIR, `__tests__/${slug}.test.ts`);
+const testFile = join(MIGRATIONS_DIR, `__tests__/${migrationId}.test.ts`);
 const testSource = `import { IDBFactory } from "fake-indexeddb";
 import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it } from "vitest";
-import { migration } from "../${slug}";
+import { migration } from "../${migrationId}";
 import { makeMockDb, runMockMigration } from "../test-utils";
 
 beforeEach(() => {
@@ -93,7 +93,7 @@ describe("${nextNum}: ${title}", () => {
 `;
 
 writeFileSync(testFile, testSource);
-console.log(`  created  src/db/migrations/__tests__/${slug}.test.ts`);
+console.log(`  created  src/db/migrations/__tests__/${migrationId}.test.ts`);
 
 /* Register in migrations/index.ts */
 
@@ -104,7 +104,7 @@ const indexSource = readFileSync(MIGRATIONS_INDEX, "utf8");
 const updatedIndex = indexSource
   .replace(
     /^(import type \{ Migration \} from "\.\.\/types";)/m,
-    `$1\nimport { migration as ${importAlias} } from "./${slug}";`,
+    `$1\nimport { migration as ${importAlias} } from "./${migrationId}";`,
   )
   .replace(
     /^(export const migrations: Migration\[\] = \[)([\s\S]*?)(\];)/m,
@@ -131,7 +131,7 @@ console.log(
 
 console.log(`
 Next steps:
-  1. Implement the migration in src/db/migrations/${slug}.ts
+  1. Implement the migration in src/db/migrations/${migrationId}.ts
   2. Update NamesakeDBSchema in src/db/types.ts if you added or removed a store
-  3. Fill in the tests in src/db/migrations/__tests__/${slug}.test.ts
+  3. Fill in the tests in src/db/migrations/__tests__/${migrationId}.test.ts
 `);

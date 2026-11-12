@@ -2,7 +2,8 @@ import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { describe, expect, it, vi } from "vitest";
-import type { Step } from "#lib/forms/types";
+import type { Step } from "#constants/forms";
+import { q } from "#lib/forms/questions";
 import { FormStepContext } from "../FormContainer/FormStepContext";
 import { FormReviewTable } from "./FormReviewTable";
 
@@ -44,18 +45,32 @@ function renderWithValues(
   return render(<FormWrapper defaultValues={defaultValues}>{ui}</FormWrapper>);
 }
 
+const hidden = () => false;
+
+const oldFirstName = (when?: () => boolean) =>
+  q.shortText("oldFirstName", {
+    when,
+    label: "First name",
+    reviewLabel: "Old first name",
+  });
+
+const oldLastName = (when?: () => boolean) =>
+  q.shortText("oldLastName", {
+    when,
+    label: "Last name",
+    reviewLabel: "Old last name",
+  });
+
 const nameStep: Step = {
   id: "legal-name",
   title: "Legal Name",
-  component: () => null,
-  fields: ["oldFirstName", "oldLastName"],
+  questions: [oldFirstName(), oldLastName()],
 };
 
 const contactStep: Step = {
   id: "contact",
   title: "Contact",
-  component: () => null,
-  fields: ["phoneNumber"],
+  questions: [q.phone("phoneNumber")],
 };
 
 describe("FormReviewTable", () => {
@@ -123,8 +138,11 @@ describe("FormReviewTable", () => {
     const yesNoStep: Step = {
       id: "yes-no-step",
       title: "Yes/No",
-      component: () => null,
-      fields: ["hasCourtAppointedGuardian"],
+      questions: [
+        q.yesNo("hasCourtAppointedGuardian", {
+          reviewLabel: "Court-appointed guardian?",
+        }),
+      ],
     };
 
     renderWithValues(<FormReviewTable steps={[yesNoStep]} />, {
@@ -140,10 +158,7 @@ describe("FormReviewTable", () => {
     const hiddenStep: Step = {
       ...nameStep,
       id: "hidden-step",
-      fields: [
-        { id: "oldFirstName", when: () => false },
-        { id: "oldLastName", when: () => false },
-      ],
+      questions: [oldFirstName(hidden), oldLastName(hidden)],
     };
 
     renderWithValues(<FormReviewTable steps={[hiddenStep, contactStep]} />, {
@@ -158,10 +173,7 @@ describe("FormReviewTable", () => {
   it("renders no sections when all steps have no visible fields", () => {
     const emptyStep: Step = {
       ...nameStep,
-      fields: [
-        { id: "oldFirstName", when: () => false },
-        { id: "oldLastName", when: () => false },
-      ],
+      questions: [oldFirstName(hidden), oldLastName(hidden)],
     };
 
     renderWithValues(<FormReviewTable steps={[emptyStep]} />, {
@@ -175,7 +187,7 @@ describe("FormReviewTable", () => {
   it("only includes fields that are visible within a step", () => {
     const partialStep: Step = {
       ...nameStep,
-      fields: ["oldFirstName", { id: "oldLastName", when: () => false }],
+      questions: [oldFirstName(), oldLastName(hidden)],
     };
 
     renderWithValues(<FormReviewTable steps={[partialStep]} />, {
@@ -189,5 +201,34 @@ describe("FormReviewTable", () => {
     expect(terms).toHaveLength(1);
     expect(terms[0]).toHaveTextContent("Old first name:");
     expect(definitions[0]).toHaveTextContent("Sylvia");
+  });
+
+  it("leaves out the optional address line until it's filled in", () => {
+    const step: Step = {
+      id: "address",
+      title: "Address",
+      questions: [q.address("mailing", { address2: true })],
+    };
+    const address = {
+      mailingStreetAddress: "1 Main St",
+      mailingCity: "Boston",
+      mailingState: "MA",
+      mailingZipCode: "02110",
+    };
+    const { unmount } = renderWithValues(
+      <FormReviewTable steps={[step]} />,
+      address,
+    );
+    expect(
+      screen.queryByText(/Apartment, suite, unit/),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText("Missing!")).not.toBeInTheDocument();
+
+    unmount();
+    renderWithValues(<FormReviewTable steps={[step]} />, {
+      ...address,
+      mailingStreetAddress2: "Apt 4",
+    });
+    expect(screen.getByText("Apt 4")).toBeInTheDocument();
   });
 });

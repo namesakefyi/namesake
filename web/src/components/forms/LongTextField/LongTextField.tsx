@@ -1,17 +1,19 @@
 import { Controller, useFormContext } from "react-hook-form";
-import type { FieldName } from "#constants/fields";
+import { getLabelProps } from "#lib/utils/getLabelProps";
 import { smartquotes } from "#lib/utils/smartquotes";
 import { TextArea, type TextAreaProps } from "../../common/TextArea";
 import "./LongTextField.css";
 
 export interface LongTextFieldProps extends Omit<TextAreaProps, "size"> {
   label: string;
-  name: FieldName;
+  labelHidden?: boolean;
+  name: string;
   children?: React.ReactNode;
 }
 
 export function LongTextField({
   label,
+  labelHidden,
   name,
   children,
   defaultValue,
@@ -28,7 +30,7 @@ export function LongTextField({
         render={({ field, fieldState: { invalid, error } }) => (
           <TextArea
             {...field}
-            label={smartquotes(label)}
+            {...getLabelProps(smartquotes(label), labelHidden)}
             isRequired
             validationBehavior="aria"
             isInvalid={invalid}

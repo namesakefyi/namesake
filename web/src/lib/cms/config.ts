@@ -122,13 +122,6 @@ export const cmsConfig: CmsConfig = {
           required: false,
         },
         {
-          name: "jurisdiction",
-          label: "Jurisdiction",
-          widget: "select",
-          options: jurisdictionOptions,
-          required: false,
-        },
-        {
           name: "category",
           label: "Category",
           widget: "select",

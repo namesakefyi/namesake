@@ -1,21 +1,22 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Context } from "hono";
-import { findPdfById, listAllPdfs } from "./catalog";
+import { JURISDICTIONS } from "../../web/src/constants/jurisdictions.ts";
+import { FEDERAL, findPdfById, listAllPdfs } from "./catalog.ts";
 import {
   computeOutputPaths,
   formatFiles,
+  generateFillSnippet,
   writeDefinitionFiles,
-} from "./define";
-import { loadJurisdictions } from "./fields";
+} from "./define.ts";
 import {
   applyRenames,
   extractFields,
   extractFieldsFromBytes,
   loadPdf,
-} from "./pdf";
-import { loadExclusions, processPdf } from "./schema";
-import { suggestName } from "./suggest";
+} from "./pdf.ts";
+import { loadExclusions, processPdf } from "./schema.ts";
+import { suggestName } from "./suggest.ts";
 
 export async function handleListPdfs(c: Context) {
   return c.json(
@@ -101,7 +102,7 @@ export async function handleAddPdf(c: Context) {
     );
   }
 
-  const { id, pdfDir, pdfDestPath, indexPath, testPath } = computeOutputPaths({
+  const { id, pdfDir, pdfDestPath, indexPath } = computeOutputPaths({
     title,
     code: code ?? "",
     jurisdiction,
@@ -115,26 +116,23 @@ export async function handleAddPdf(c: Context) {
   const pdfDoc = await loadPdf(rawBytes);
   const cleanedBytes = await pdfDoc.save();
 
-  const pdfFields = await extractFieldsFromBytes(cleanedBytes);
-
   writeDefinitionFiles({
-    id,
     title,
     code: code ?? "",
-    jurisdiction,
     canonicalUrl,
     pdfDir,
     pdfDestPath,
     indexPath,
-    testPath,
-    pdfFields,
     pdfBytes: cleanedBytes,
   });
 
-  await processPdf(pdfDestPath);
+  const { fieldNames } = await processPdf(pdfDestPath);
   formatFiles([join(pdfDir, "schema.ts")]);
 
-  return c.json({ id, fieldCount: pdfFields.length });
+  const fill = generateFillSnippet({ id, pdfDir, fieldNames });
+  console.log(`\nAdd this to the pdfs in a form's download.ts:\n\n${fill}`);
+
+  return c.json({ id, fieldCount: fieldNames.length });
 }
 
 export async function handlePreviewReplace(c: Context) {
@@ -238,5 +236,8 @@ export async function handleReplacePdf(c: Context) {
 }
 
 export async function handleGetJurisdictions(c: Context) {
-  return c.json([{ id: "federal", name: "Federal" }, ...loadJurisdictions()]);
+  return c.json([
+    { id: FEDERAL, name: "Federal" },
+    ...Object.entries(JURISDICTIONS).map(([id, { name }]) => ({ id, name })),
+  ]);
 }

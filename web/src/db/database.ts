@@ -24,16 +24,9 @@ export async function getFieldsByNames(
   fields: string[],
 ): Promise<FormFieldRecord[]> {
   const db = await getDB();
-  const records: FormFieldRecord[] = [];
-
-  for (const field of fields) {
-    const record = await db.get(FORM_DATA_STORE, field);
-    if (record) {
-      records.push(record);
-    }
-  }
-
-  return records;
+  const store = db.transaction(FORM_DATA_STORE).store;
+  const records = await Promise.all(fields.map((field) => store.get(field)));
+  return records.filter((record) => record !== undefined);
 }
 
 export async function deleteField(field: string): Promise<void> {
@@ -52,26 +45,26 @@ export async function getAllFields(): Promise<FormFieldRecord[]> {
 }
 
 export async function saveFormProgress(
-  formSlug: string,
+  formId: string,
   machineState: unknown,
 ): Promise<void> {
   const db = await getDB();
   await db.put(FORM_PROGRESS_STORE, {
-    formSlug,
+    formId,
     machineState,
     updatedAt: Date.now(),
   });
 }
 
 export async function getFormProgress(
-  formSlug: string,
+  formId: string,
 ): Promise<unknown | undefined> {
   const db = await getDB();
-  const record = await db.get(FORM_PROGRESS_STORE, formSlug);
+  const record = await db.get(FORM_PROGRESS_STORE, formId);
   return record?.machineState;
 }
 
-export async function clearFormProgress(formSlug: string): Promise<void> {
+export async function clearFormProgress(formId: string): Promise<void> {
   const db = await getDB();
-  await db.delete(FORM_PROGRESS_STORE, formSlug);
+  await db.delete(FORM_PROGRESS_STORE, formId);
 }

@@ -1,24 +1,20 @@
-import type { PDFDefinition } from "#constants/pdf";
+import type { PdfDefinition, PdfSchema } from "#constants/pdf";
 
 /**
- * Define a PDF form.
+ * Describe a PDF in the library.
  *
  * @example
  * ```ts
- * definePdf<PdfFieldName>({
- *   id: "cjp25-petition-to-change-name-of-minor",
- *   title: "Petition to Change Name of Minor",
- *   jurisdiction: "ma",
- *   pdfPath: pdf,
- *   resolver: {
- *     division: (data) => data.residenceCounty,
- *     petitionerName: (data) => joinNames(...),
- *   },
+ * definePdf<Fields>({
+ *   title: "Change of Name",
+ *   code: "PC-8.1",
+ *   canonicalUrl: "https://…",
+ *   file,
  * })
  * ```
  */
-export function definePdf<TPdfFieldName extends string = string>(
-  pdf: PDFDefinition<TPdfFieldName>,
-): PDFDefinition<TPdfFieldName> {
+export function definePdf<S extends PdfSchema>(
+  pdf: Omit<PdfDefinition<S>, "fields">,
+): PdfDefinition<S> {
   return pdf;
 }

@@ -1,6 +1,5 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { ALL } from "#constants/all";
-import { COMMON_PRONOUNS } from "#constants/fields";
+import { COMMON_PRONOUNS, shouldShowOtherPronouns } from "#constants/fields";
 import { Tag, TagGroup } from "../../common/TagGroup";
 import { TextField } from "../../common/TextField";
 import "./PronounSelectField.css";
@@ -40,7 +39,7 @@ export function PronounSelectField() {
           );
         }}
       />
-      {(pronounsValue === ALL || pronounsValue?.includes("other")) && (
+      {shouldShowOtherPronouns(pronounsValue) && (
         <Controller
           control={control}
           defaultValue=""

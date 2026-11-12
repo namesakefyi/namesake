@@ -3,11 +3,11 @@ import { describe, expect, it } from "vitest";
 import { renderWithFormProvider, screen } from "../test-utils";
 import { RadioGroupField } from "./RadioGroupField";
 
-const mockOptions = [
-  { label: "Option 1", value: "option1" },
-  { label: "Option 2", value: "option2" },
-  { label: "Option 3", value: "option3" },
-];
+const mockOptions = {
+  option1: "Option 1",
+  option2: "Option 2",
+  option3: "Option 3",
+};
 
 describe("RadioGroupField", () => {
   it("renders radio group with correct label", () => {
@@ -34,8 +34,8 @@ describe("RadioGroupField", () => {
       />,
     );
 
-    for (const option of mockOptions) {
-      const radioOption = screen.getByText(option.label);
+    for (const label of Object.values(mockOptions)) {
+      const radioOption = screen.getByText(label);
       expect(radioOption).toBeInTheDocument();
     }
   });
@@ -98,51 +98,5 @@ describe("RadioGroupField", () => {
 
     const childComponent = screen.getByTestId("child-component");
     expect(childComponent).toBeInTheDocument();
-  });
-
-  it("renders prefer not to answer option when includePreferNotToAnswer is true", () => {
-    renderWithFormProvider(
-      <RadioGroupField
-        name="pronouns"
-        label="Test Label"
-        options={mockOptions}
-        includePreferNotToAnswer
-      />,
-    );
-
-    const preferNotToAnswerOption = screen.getByText("Prefer not to answer");
-    expect(preferNotToAnswerOption).toBeInTheDocument();
-  });
-
-  it("does not render prefer not to answer option when includePreferNotToAnswer is false", () => {
-    renderWithFormProvider(
-      <RadioGroupField
-        name="pronouns"
-        label="Test Label"
-        options={mockOptions}
-      />,
-    );
-
-    const preferNotToAnswerOption = screen.queryByText("Prefer not to answer");
-    expect(preferNotToAnswerOption).not.toBeInTheDocument();
-  });
-
-  it("allows selecting prefer not to answer option", async () => {
-    renderWithFormProvider(
-      <RadioGroupField
-        name="pronouns"
-        label="Test Label"
-        options={mockOptions}
-        includePreferNotToAnswer={true}
-      />,
-    );
-
-    const preferNotToAnswerOption = screen.getByText("Prefer not to answer");
-    await userEvent.click(preferNotToAnswerOption);
-
-    const selectedRadio = screen.getByRole("radio", {
-      name: "Prefer not to answer",
-    }) as HTMLInputElement;
-    expect(selectedRadio.checked).toBe(true);
   });
 });

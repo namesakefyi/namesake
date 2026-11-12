@@ -25,7 +25,7 @@ export function NumberField({
 }: NumberFieldProps) {
   return (
     <AriaNumberField {...props}>
-      <Label>{label}</Label>
+      {label && <Label>{label}</Label>}
       <Group>
         <Input />
         <div className="number-field-stepper">
