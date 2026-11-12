@@ -8,8 +8,12 @@ import {
   RiThumbUpFill,
   RiThumbUpLine,
 } from "@remixicon/react";
-import { useActionState, useRef } from "react";
-import type { FormFeedbackSentiment } from "#constants/forms";
+import { startTransition, useActionState, useRef, useState } from "react";
+import type { FormProps } from "react-aria-components";
+import {
+  type FormFeedbackSentiment,
+  shouldRequestShareConsent,
+} from "#constants/forms";
 import { Button } from "../../common/Button";
 import { Form } from "../../common/Form";
 import { Radio, RadioGroup } from "../../common/RadioGroup";
@@ -17,6 +21,8 @@ import { TextArea } from "../../common/TextArea";
 import "./FormFeedback.css";
 import { Banner } from "../../common/Banner";
 import { Heading } from "../../common/Content";
+import { Dialog } from "../../common/Dialog";
+import { Modal } from "../../common/Modal";
 
 interface FormFeedbackProps {
   formId: string;
@@ -27,7 +33,12 @@ const ERROR_MESSAGES: Record<number, string> = {
   429: "You've submitted feedback too many times. Try again in an hour.",
 };
 
-type SubmitError = { error: string; sentiment: string; comment: string };
+type SubmitError = {
+  error: string;
+  sentiment: string;
+  comment: string;
+  shareConsent?: boolean;
+};
 type SubmitState = "idle" | "success" | SubmitError;
 
 function isSubmitError(state: SubmitState): state is SubmitError {
@@ -36,6 +47,8 @@ function isSubmitError(state: SubmitState): state is SubmitError {
 
 export function FormFeedback({ formId }: FormFeedbackProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  // Submission paused while asking for consent to share it publicly
+  const [pendingFormData, setPendingFormData] = useState<FormData | null>(null);
 
   const [state, submitAction, isPending] = useActionState<
     SubmitState,
@@ -43,6 +56,9 @@ export function FormFeedback({ formId }: FormFeedbackProps) {
   >(async (_prev, formData) => {
     const sentiment = formData.get("sentiment") as FormFeedbackSentiment;
     const comment = (formData.get("comment") as string) ?? "";
+    const shareConsentValue = formData.get("share_consent");
+    const shareConsent =
+      shareConsentValue === null ? undefined : shareConsentValue === "true";
 
     try {
       const response = await fetch("/api/feedback", {
@@ -52,6 +68,7 @@ export function FormFeedback({ formId }: FormFeedbackProps) {
           form_id: formId,
           sentiment,
           comment: comment.trim() || undefined,
+          share_consent: shareConsent,
         }),
       });
 
@@ -59,7 +76,7 @@ export function FormFeedback({ formId }: FormFeedbackProps) {
         const message =
           ERROR_MESSAGES[response.status] ??
           "Something went wrong. Please try again.";
-        return { error: message, sentiment, comment };
+        return { error: message, sentiment, comment, shareConsent };
       }
 
       wrapperRef.current?.scrollIntoView({
@@ -72,9 +89,31 @@ export function FormFeedback({ formId }: FormFeedbackProps) {
         error: "Something went wrong. Please try again.",
         sentiment,
         comment,
+        shareConsent,
       };
     }
   }, "idle");
+
+  const handleSubmit: NonNullable<FormProps["onSubmit"]> = (event) => {
+    const formData = new FormData(event.currentTarget);
+    if (
+      shouldRequestShareConsent(
+        formData.get("sentiment") as FormFeedbackSentiment,
+        formData.get("comment") as string,
+      )
+    ) {
+      event.preventDefault();
+      setPendingFormData(formData);
+    }
+  };
+
+  const handleConsentSubmit = (shareConsent: boolean) => {
+    if (!pendingFormData) return;
+
+    pendingFormData.set("share_consent", String(shareConsent));
+    setPendingFormData(null);
+    startTransition(() => submitAction(pendingFormData));
+  };
 
   const canShare = "share" in navigator;
 
@@ -99,8 +138,11 @@ export function FormFeedback({ formId }: FormFeedbackProps) {
           </div>
           <div className="form-feedback-success-actions">
             {canShare && (
-              <Button variant="secondary" onClick={handleShare}>
-                <RiShareForwardLine aria-hidden />
+              <Button
+                variant="secondary"
+                icon={RiShareForwardLine}
+                onPress={handleShare}
+              >
                 Share
               </Button>
             )}
@@ -111,7 +153,7 @@ export function FormFeedback({ formId }: FormFeedbackProps) {
           </div>
         </div>
       ) : (
-        <Form action={submitAction}>
+        <Form action={submitAction} onSubmit={handleSubmit}>
           <Heading level={2} className="form-feedback-title">
             Help improve this form
           </Heading>
@@ -152,8 +194,56 @@ export function FormFeedback({ formId }: FormFeedbackProps) {
           >
             Submit
           </Button>
+          <Modal
+            isDismissable
+            isOpen={pendingFormData !== null}
+            onOpenChange={(isOpen) => !isOpen && setPendingFormData(null)}
+          >
+            <ShareConsentDialog
+              defaultShareConsent={
+                isSubmitError(state) ? state.shareConsent : undefined
+              }
+              onSubmit={handleConsentSubmit}
+            />
+          </Modal>
         </Form>
       )}
     </div>
+  );
+}
+
+function ShareConsentDialog({
+  defaultShareConsent = true,
+  onSubmit,
+}: {
+  defaultShareConsent?: boolean;
+  onSubmit: (shareConsent: boolean) => void;
+}) {
+  const [shareConsent, setShareConsent] = useState(defaultShareConsent);
+
+  return (
+    <Dialog className="form-feedback-consent">
+      <Heading slot="title">Can we publicly share your feedback?</Heading>
+      <p className="form-feedback-consent-description">
+        It won’t be linked to your name or identity. Sharing positive feedback
+        helps us fundraise and expand support.
+      </p>
+      <RadioGroup
+        aria-label="Share feedback publicly"
+        value={String(shareConsent)}
+        onChange={(value) => setShareConsent(value === "true")}
+      >
+        <Radio value="true">Yes</Radio>
+        <Radio value="false">No</Radio>
+      </RadioGroup>
+      <Button
+        variant="primary"
+        endIcon={RiArrowRightLine}
+        onPress={() => onSubmit(shareConsent)}
+        className="form-feedback-consent-submit"
+      >
+        Submit
+      </Button>
+    </Dialog>
   );
 }
