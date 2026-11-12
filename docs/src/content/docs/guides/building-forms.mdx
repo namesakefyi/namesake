@@ -11,14 +11,12 @@ Once you have [added new PDFs](/guides/new-pdfs) to the codebase, you are ready 
 
 Add a new folder to `web/src/content/forms`. Put a state or territory form inside its jurisdiction's folder, such as `ma/court-order`. Put a federal form at the root, such as `social-security`. The folder path becomes the form's URL: `/forms/ma/court-order`.
 
-Each form has three files, which load at different times:
-
 <FileTree>
 
 - ma
   - my-form
-    - index.ts # Title, description, and costs
-    - steps.ts # The questions
+    - index.ts # Form metadata: title, description, and costs
+    - steps.ts # The questions asked for each step
     - download.ts # The PDFs to fill and the cover page instructions
     - e2e.spec.ts
 
@@ -137,11 +135,11 @@ q.banner(
 ),
 ```
 
-If the same copy or condition is used in both `steps.ts` and `download.ts`, for example in a banner and in the instructions, export it from `steps.ts` and import it into `download.ts`.
+If the same copy or condition is used in both `steps.ts` and `download.ts`, for example in a banner and in the instructions, you can define it once in a `conditions.ts` next to them and import it into both.
 
 ### Name the answers
 
-The name you give a question, such as `"incomePeriod"`, is where its answer is saved. Answers are shared across forms by name, so a name entered in one form is filled in on the next.
+The name you give a question, such as `"incomePeriod"`, is where its answer is saved. Answers are shared across forms to prevent unnecessary re-entry.
 
 - **An answer only your form asks for** needs nothing else. Pick a name no other form uses.
 - **An answer another form already asks for** should use that form's name, so people don't have to answer twice. If that name isn't in `SHARED_FIELDS` yet, move it into [`web/src/constants/fields.ts`](https://github.com/namesakefyi/namesake/blob/main/web/src/constants/fields.ts).
