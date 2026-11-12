@@ -24,6 +24,7 @@ const save = (field: string, value: unknown, updatedAt = 1000) =>
 it("moves saved answers to their new field names", async () => {
   await save("paysChildSupport", true);
   await save("guardianOneFullName", "Alex Smith");
+  await save("coGuardianFullName", "Jo Lee");
   await save("oldFirstName", "Sam");
 
   const db = await runMockMigration(migration, 5);
@@ -33,6 +34,7 @@ it("moves saved answers to their new field names", async () => {
   ).toEqual({
     doesPayChildSupport: true,
     guardianFirstName: "Alex Smith",
+    coGuardianFirstName: "Jo Lee",
     oldFirstName: "Sam",
   });
   db.close();

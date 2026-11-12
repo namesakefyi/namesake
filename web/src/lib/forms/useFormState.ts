@@ -69,6 +69,16 @@ export function usePersistedSnapshot(formId: string): PersistedSnapshot {
   return { isLoading, savedSnapshot };
 }
 
+/** Drops saved progress on a step the form no longer has. Answers are kept. */
+function restorableSnapshot(snapshot: unknown, steps: readonly Step[]) {
+  const context = (snapshot as { context?: FormMachineContext } | undefined)
+    ?.context;
+  const stepIds = [context?.currentStepId, context?.editingStepId];
+  return stepIds.every((id) => !id || steps.some((step) => step.id === id))
+    ? snapshot
+    : undefined;
+}
+
 // Creates the XState actor, restores it from a snapshot if available,
 // and persists each state transition back to IndexedDB.
 function useFormActor(
@@ -135,7 +145,7 @@ export function useFormState(
 
   const { actorRef, state, send } = useFormActor(
     machine,
-    savedSnapshot,
+    restorableSnapshot(savedSnapshot, steps),
     isLoading,
     formId,
   );

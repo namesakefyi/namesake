@@ -17,7 +17,10 @@ export default defineDownload({
         applicantName: formatFullName(data, "oldName"),
         residenceStreetAddress: data.residenceStreetAddress,
         residenceCity: data.residenceCity,
-        residenceStateAndZip: `${data.residenceState} ${data.residenceZipCode}`,
+        residenceStateAndZip:
+          [data.residenceState, data.residenceZipCode]
+            .filter(Boolean)
+            .join(" ") || undefined,
 
         // Section A: Public assistance
         isReceivingPublicAssistance:

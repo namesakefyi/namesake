@@ -17,6 +17,8 @@ const RENAMED_FIELDS: Readonly<Record<string, string>> = {
   mothersMaidenName: "mothersLastName",
   parent1FullName: "parent1FirstName",
   parent2FullName: "parent2FirstName",
+  guardianFullName: "guardianFirstName",
+  coGuardianFullName: "coGuardianFirstName",
   guardianOneFullName: "guardianFirstName",
   guardianTwoFullName: "coGuardianFirstName",
 };

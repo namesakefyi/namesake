@@ -129,6 +129,27 @@ describe("useFormState", () => {
       expect(result.current.activeStepId).toBe("a");
     });
 
+    it("starts over from the title when saved progress points at a removed step", async () => {
+      const m = createFormMachine({ id: "test-form", steps: flow });
+      const actor = createActor(m);
+      actor.start();
+      actor.send({ type: "START" });
+      actor.send({ type: "GOTO_STEP", stepId: "removed" });
+      const snapshot = actor.getPersistedSnapshot();
+      actor.stop();
+
+      vi.mocked(db.getFormProgress).mockResolvedValueOnce(snapshot);
+
+      const { result } = renderHook(() =>
+        useFormStateWithProgress("test-form", flow, getFormData),
+      );
+
+      await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+      expect(result.current.phase).toBe("title");
+      expect(result.current.activeStepId).toBeNull();
+    });
+
     it("restores machine to the review phase", async () => {
       const m = createFormMachine({ id: "test-form", steps: flow });
       const actor = createActor(m);

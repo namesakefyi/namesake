@@ -86,7 +86,7 @@ export function PovertyResult() {
     annualIncome != null
       ? derivePovertyComparison(annualIncome, threshold)
       : null;
-  const qualifies = comparison === "equal" || comparison === "below";
+  const isAbove = comparison === "above";
 
   return (
     <>
@@ -107,7 +107,7 @@ export function PovertyResult() {
           .
         </p>
         {annualIncome != null && (
-          <p className={qualifies ? undefined : "poverty-result-above"}>
+          <p className={isAbove ? "poverty-result-above" : undefined}>
             Your annualized income of{" "}
             <strong>{formatCurrency(Math.round(annualIncome))}</strong> is{" "}
             <strong>
@@ -130,7 +130,7 @@ export function PovertyResult() {
           </a>
         </small>
       </div>
-      {qualifies === false && (
+      {isAbove && (
         <Banner variant="warning">
           You may still qualify for a fee waiver if paying court fees would mean
           going without food, shelter, or clothing. Go back and select{" "}
