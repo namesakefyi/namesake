@@ -43,7 +43,7 @@ export default meta;
 export const Example = (args: FormStepProps) => <FormStep {...args} />;
 
 Example.args = {
-  stepConfig: {
+  step: {
     id: "legal-name",
     title: "What is your current legal name?",
     questions: [q.name("oldName")],
@@ -53,7 +53,7 @@ Example.args = {
 export const WithDescription = (args: FormStepProps) => <FormStep {...args} />;
 
 WithDescription.args = {
-  stepConfig: {
+  step: {
     id: "legal-name",
     title: "What is your current legal name?",
     description: "Type your name exactly as it appears on your ID.",

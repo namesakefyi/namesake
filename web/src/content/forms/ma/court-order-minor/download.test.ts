@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import cjp25 from "#content/pdfs/ma/cjp25-petition-to-change-name-of-minor";
 import type { FormData } from "#lib/forms/questions";
-import { getPdfForm } from "#lib/pdfs/getPdfForm";
+import { getPdfForm } from "#lib/pdfs/__tests__/getPdfForm";
 import download from "./download";
 
 const [{ fill: fillCjp25 }] = download.pdfs;

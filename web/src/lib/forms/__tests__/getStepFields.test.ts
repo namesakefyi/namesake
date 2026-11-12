@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import type { Step } from "#constants/forms";
 import { q } from "#lib/forms/questions";
-import { getStepFields } from "../getStepFields";
+import { getFormFields, getStepFields } from "../getStepFields";
+import { makeStep } from "./testHelpers";
 
 describe("getStepFields", () => {
   it("combines the subsection and question conditions", () => {
@@ -112,5 +113,16 @@ describe("getStepFields", () => {
     expect(other.id).toBe("otherPronouns");
     expect(other.when?.({ pronouns: ["she/her"] })).toBe(false);
     expect(other.when?.({ pronouns: ["other"] })).toBe(true);
+  });
+});
+
+describe("getFormFields", () => {
+  it("flattens the fields of all steps in order", () => {
+    const steps = [makeStep("a", ["f1", "f2"]), makeStep("b", ["f3"])];
+    expect(getFormFields(steps).map((field) => field.id)).toEqual([
+      "f1",
+      "f2",
+      "f3",
+    ]);
   });
 });

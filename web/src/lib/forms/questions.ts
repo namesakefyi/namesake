@@ -13,7 +13,7 @@ import {
 } from "#constants/fieldGroups";
 import {
   type ExtraChoice,
-  type FieldTypeName,
+  type FieldType,
   getSharedFieldType,
   type SharedFields,
   shouldShowOtherPronouns,
@@ -49,7 +49,7 @@ export function toChoices(options: OptionLabels) {
 
 export interface WrittenField {
   id: string;
-  type: FieldTypeName;
+  type: FieldType;
   when?: Condition;
   /** Left off the review page while it has no answer. */
   optional?: boolean;
@@ -176,7 +176,7 @@ type DisplayArguments<P> =
 /** `options` labels the stored values on the review page. */
 function singleField<K extends keyof SingleFieldPropsByKind>(
   kind: K,
-  type: FieldTypeName,
+  type: FieldType,
   name: string,
   { label, description, when, reviewLabel, ...props }: SingleFieldOptions<K>,
   options?: OptionLabels,

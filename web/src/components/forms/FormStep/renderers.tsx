@@ -24,7 +24,7 @@ import type {
   FieldPropsByKind,
   FormData,
 } from "#lib/forms/questions";
-import { resolveText } from "#lib/forms/resolveStepContent";
+import { resolveText } from "#lib/forms/resolveText";
 import { useFormStep } from "../FormContainer/FormStepContext";
 import { FormSubsection } from "./FormSubsection";
 import { MarkdownText } from "./MarkdownText";

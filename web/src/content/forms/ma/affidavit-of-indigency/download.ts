@@ -1,6 +1,6 @@
 import affidavitOfIndigency from "#content/pdfs/ma/affidavit-of-indigency";
 import { defineDownload } from "#lib/forms/defineForm";
-import { fullName } from "#lib/utils/fullName";
+import { formatFullName } from "#lib/utils/formatFullName";
 
 export default defineDownload({
   title: "Affidavit of Indigency",
@@ -14,7 +14,7 @@ export default defineDownload({
       fill: (data) => ({
         courtName: undefined,
         caseNameAndNumber: undefined,
-        applicantName: fullName(data, "oldName"),
+        applicantName: formatFullName(data, "oldName"),
         residenceStreetAddress: data.residenceStreetAddress,
         residenceCity: data.residenceCity,
         residenceStateAndZip: `${data.residenceState} ${data.residenceZipCode}`,

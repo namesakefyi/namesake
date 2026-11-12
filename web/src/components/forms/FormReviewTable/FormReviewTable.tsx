@@ -1,9 +1,9 @@
 import { useFormContext } from "react-hook-form";
 import type { Step } from "#constants/forms";
-import { resolveFormVisibility } from "#lib/forms/formVisibility";
 import type { FormData } from "#lib/forms/questions";
-import { resolveText } from "#lib/forms/resolveStepContent";
-import { formatFieldValue } from "#lib/utils/formatReviewFields";
+import { resolveFormVisibility } from "#lib/forms/resolveFormVisibility";
+import { resolveText } from "#lib/forms/resolveText";
+import { formatFieldValue } from "#lib/utils/formatFieldValue";
 import { smartquotes } from "#lib/utils/smartquotes";
 import { useFormStep } from "../FormContainer/FormStepContext";
 import "./FormReviewTable.css";

@@ -51,7 +51,7 @@ describe("FormStep", () => {
   };
 
   it("renders title correctly", () => {
-    render(<FormStep stepConfig={formStep} />, { wrapper: TestWrapper });
+    render(<FormStep step={formStep} />, { wrapper: TestWrapper });
 
     const titleElement = screen.getByText(formStep.title as string);
     expect(titleElement).toBeInTheDocument();
@@ -59,7 +59,7 @@ describe("FormStep", () => {
   });
 
   it("renders optional description", () => {
-    render(<FormStep stepConfig={formStep} />, { wrapper: TestWrapper });
+    render(<FormStep step={formStep} />, { wrapper: TestWrapper });
 
     const descriptionElement = screen.getByText(formStep.description as string);
     expect(descriptionElement).toBeInTheDocument();
@@ -75,7 +75,7 @@ describe("FormStep", () => {
     };
     const WrapperWithData = makeWrapper({}, { oldFirstName: "Erika" });
 
-    render(<FormStep stepConfig={stepWithDynamicContent} />, {
+    render(<FormStep step={stepWithDynamicContent} />, {
       wrapper: WrapperWithData,
     });
 
@@ -104,7 +104,7 @@ describe("FormStep", () => {
         `Where do ${(data as { oldFirstName?: string }).oldFirstName ?? "the minor"}'s parents live?`,
     };
 
-    render(<FormStep stepConfig={stepWithDynamicContent} />, {
+    render(<FormStep step={stepWithDynamicContent} />, {
       wrapper: TestWrapper,
     });
 
@@ -124,7 +124,7 @@ describe("FormStep", () => {
       description: undefined,
     };
 
-    render(<FormStep stepConfig={stepWithoutDescription} />, {
+    render(<FormStep step={stepWithoutDescription} />, {
       wrapper: TestWrapper,
     });
 
@@ -136,7 +136,7 @@ describe("FormStep", () => {
   });
 
   it("associates the form with the title", () => {
-    render(<FormStep stepConfig={formStep} />, {
+    render(<FormStep step={formStep} />, {
       wrapper: TestWrapper,
     });
     const form = screen.getByRole("form");
@@ -152,7 +152,7 @@ describe("FormStep", () => {
       title: "What is the reason you're changing your name?",
     };
 
-    render(<FormStep stepConfig={stepWithApostrophe} />, {
+    render(<FormStep step={stepWithApostrophe} />, {
       wrapper: TestWrapper,
     });
     const form = screen.getByRole("form");
@@ -163,7 +163,7 @@ describe("FormStep", () => {
   });
 
   it("has accessible description when description is provided", () => {
-    render(<FormStep stepConfig={formStep} />, { wrapper: TestWrapper });
+    render(<FormStep step={formStep} />, { wrapper: TestWrapper });
 
     const form = screen.getByRole("form", {
       description: formStep.description as string,
@@ -177,7 +177,7 @@ describe("FormStep", () => {
       description: undefined,
     };
 
-    render(<FormStep stepConfig={stepWithoutDescription} />, {
+    render(<FormStep step={stepWithoutDescription} />, {
       wrapper: TestWrapper,
     });
 
@@ -191,7 +191,7 @@ describe("FormStep", () => {
   describe("form submission", () => {
     it("calls onSubmit when not in reviewing mode", () => {
       const onSubmit = vi.fn();
-      render(<FormStep stepConfig={formStep} />, {
+      render(<FormStep step={formStep} />, {
         wrapper: makeWrapper({ onSubmit, phase: "filling" }),
       });
 
@@ -202,7 +202,7 @@ describe("FormStep", () => {
 
     it("calls onSubmit when in reviewing mode (machine handles routing)", () => {
       const onSubmit = vi.fn();
-      render(<FormStep stepConfig={formStep} />, {
+      render(<FormStep step={formStep} />, {
         wrapper: makeWrapper({ onSubmit, phase: "editing" }),
       });
 
@@ -212,7 +212,7 @@ describe("FormStep", () => {
     });
 
     it("prevents the default form submission", () => {
-      render(<FormStep stepConfig={formStep} />, { wrapper: TestWrapper });
+      render(<FormStep step={formStep} />, { wrapper: TestWrapper });
       const form = screen.getByRole("form");
       const event = fireEvent.submit(form);
 
@@ -248,7 +248,7 @@ describe("FormSubsection", () => {
 });
 
 function renderStep(step: Step, defaultValues: Record<string, unknown> = {}) {
-  return render(<FormStep stepConfig={step} />, {
+  return render(<FormStep step={step} />, {
     wrapper: makeWrapper({}, defaultValues),
   });
 }

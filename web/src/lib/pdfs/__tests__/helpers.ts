@@ -1,4 +1,4 @@
-import type { FormPdf } from "#constants/pdf";
+import type { FormPdf } from "#constants/forms";
 import { definePdf } from "../definePdf";
 
 type TestSchema = {

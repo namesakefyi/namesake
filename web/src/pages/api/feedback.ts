@@ -7,7 +7,7 @@ import {
   FORM_FEEDBACK_SENTIMENT,
   type FormFeedbackSentiment,
 } from "#constants/forms";
-import { isFormId } from "#lib/forms/formIds";
+import { isFormId } from "#lib/forms/loadForm";
 import { escapeHtml } from "#lib/utils/escapeHtml";
 import { isRateLimited } from "#lib/utils/rateLimitByIp";
 

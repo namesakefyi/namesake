@@ -1,10 +1,6 @@
-import type { Instruction, Step } from "#constants/forms";
+import type { Step } from "#constants/forms";
 import type { Condition, FormData } from "#lib/forms/questions";
 import { getStepFields, type StepField } from "./getStepFields";
-
-export function getFormFields(steps: readonly Step[]): string[] {
-  return steps.flatMap((step) => getStepFields(step).map((field) => field.id));
-}
 
 export interface VisibilitySection {
   step: Step;
@@ -18,19 +14,6 @@ export interface FormVisibility {
 
 export const isShown = (item: { when?: Condition }, formData: FormData) =>
   !item.when || item.when(formData);
-
-export function resolveInstructions(
-  instructions: readonly Instruction[],
-  formData: FormData,
-): string[] {
-  return instructions.flatMap((item) =>
-    typeof item === "string"
-      ? [item]
-      : isShown(item, formData)
-        ? [item.text]
-        : [],
-  );
-}
 
 export function getVisibleStepIds(
   steps: readonly Step[],
@@ -63,36 +46,4 @@ export function resolveFormVisibility(
   }
 
   return { visibleFields, sections };
-}
-
-/**
- * Finds the next visible step index after `fromIndex`.
- * Returns -1 if none (should advance to review).
- */
-export function findNextStepIndex(
-  steps: readonly Step[],
-  fromIndex: number,
-  visibleStepIds: readonly string[],
-): number {
-  const visibleSet = new Set(visibleStepIds);
-  for (let i = fromIndex + 1; i < steps.length; i++) {
-    if (visibleSet.has(steps[i].id)) return i;
-  }
-  return -1;
-}
-
-/**
- * Finds the previous visible step index before `fromIndex`.
- * Returns -1 if none (should go back to title).
- */
-export function findPrevStepIndex(
-  steps: readonly Step[],
-  fromIndex: number,
-  visibleStepIds: readonly string[],
-): number {
-  const visibleSet = new Set(visibleStepIds);
-  for (let i = fromIndex - 1; i >= 0; i--) {
-    if (visibleSet.has(steps[i].id)) return i;
-  }
-  return -1;
 }

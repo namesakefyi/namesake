@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
-import type { FieldTypeName } from "#constants/fields";
+import type { FieldType } from "#constants/fields";
 import type { FormConfig } from "#constants/forms";
-import type { PDFFieldValue, PdfFieldType } from "#constants/pdf";
-import { expectPdfFieldsMatch } from "#lib/pdfs/expectPdfFieldsMatch";
-import { getPdfForm } from "#lib/pdfs/getPdfForm";
-import { resolveFormVisibility } from "../formVisibility";
+import type { PdfFieldType, PdfFieldValue } from "#constants/pdf";
+import { expectPdfFieldsMatch } from "#lib/pdfs/__tests__/expectPdfFieldsMatch";
+import { getPdfForm } from "#lib/pdfs/__tests__/getPdfForm";
 import { getStepFields } from "../getStepFields";
 import type { FieldValue, FormData } from "../questions";
+import { resolveFormVisibility } from "../resolveFormVisibility";
 import { forms } from "./formFixtures";
 
-const SAMPLE_TEXT: Partial<Record<FieldTypeName, readonly [string, string]>> = {
+const SAMPLE_TEXT: Partial<Record<FieldType, readonly [string, string]>> = {
   date: ["1990-06-15", "2015-02-28"],
   number: ["1200", "0"],
   phone: ["+1 (234) 567-8901", "+1 (555) 010-0000"],
@@ -35,7 +35,7 @@ function sampleAnswers(config: FormConfig, variant: 0 | 1): FormData {
   return data;
 }
 
-const fitsField: Record<PdfFieldType, (value: PDFFieldValue) => boolean> = {
+const fitsField: Record<PdfFieldType, (value: PdfFieldValue) => boolean> = {
   text: (value) => value == null || typeof value === "string",
   checkbox: (value) => value == null || typeof value === "boolean",
   radio: (value) =>

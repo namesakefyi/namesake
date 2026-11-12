@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
-  getFormFields,
   getVisibleStepIds,
   resolveFormVisibility,
-} from "../formVisibility";
+} from "../resolveFormVisibility";
 import { makeStep } from "./testHelpers";
 
 /** Each visible section as its step ID and the IDs of its visible fields. */
@@ -13,13 +12,6 @@ function sectionIds({ sections }: ReturnType<typeof resolveFormVisibility>) {
     fields: fields.map((field) => field.id),
   }));
 }
-
-describe("getFormFields", () => {
-  it("flattens field names from all steps", () => {
-    const steps = [makeStep("a", ["f1", "f2"]), makeStep("b", ["f3"])];
-    expect(getFormFields(steps)).toEqual(["f1", "f2", "f3"]);
-  });
-});
 
 describe("resolveFormVisibility", () => {
   it("includes all steps and fields when no guards or when callbacks", () => {

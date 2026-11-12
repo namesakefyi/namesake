@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 import ucsnc1 from "#content/pdfs/ny/ucsnc1-name-change-and-or-sex-designation-change-petition-for-individual-adult";
+import type { FormData } from "#lib/forms/questions";
 import {
   getVisibleStepIds,
   resolveFormVisibility,
-} from "#lib/forms/formVisibility";
-import type { FormData } from "#lib/forms/questions";
-import { getPdfForm } from "#lib/pdfs/getPdfForm";
+} from "#lib/forms/resolveFormVisibility";
+import { getPdfForm } from "#lib/pdfs/__tests__/getPdfForm";
 import download from "./download";
 import steps from "./steps";
 

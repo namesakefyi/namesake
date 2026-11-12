@@ -7,7 +7,7 @@ import {
 } from "@remixicon/react";
 import { useEffect, useState } from "react";
 import { type IBrowser, type IDevice, UAParser } from "ua-parser-js";
-import type { PDFDefinition } from "#constants/pdf";
+import type { PdfDefinition } from "#constants/pdf";
 import { formatBrowser } from "#lib/utils/formatBrowser";
 import { formatDevice } from "#lib/utils/formatDevice";
 import { formatTimeEstimate } from "#lib/utils/formatTimeEstimate";
@@ -51,7 +51,7 @@ export interface FormTitleStepProps {
   /** Leave out while the form loads, which disables Start. */
   onStart?: () => void;
   onDownloadBlank: () => Promise<void>;
-  pdfs: readonly Pick<PDFDefinition, "title" | "code" | "file">[];
+  pdfs: readonly Pick<PdfDefinition, "title" | "code" | "file">[];
   totalSteps: number;
   headingLevel?: 1 | 2 | 3;
 }

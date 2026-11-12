@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { getPdfForm } from "../getPdfForm";
+import { getPdfForm } from "./getPdfForm";
 import { testPdf } from "./helpers";
 
 vi.mock("../loadPdfLib", async (importOriginal) => {

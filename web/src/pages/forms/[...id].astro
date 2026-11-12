@@ -1,6 +1,6 @@
 ---
 import FormContainer from "#components/forms/FormContainer/FormContainer.astro";
-import type { FormMeta } from "#constants/forms";
+import type { FormDefinition } from "#constants/forms";
 import BaseLayout from "#layouts/BaseLayout.astro";
 import { allForms } from "#lib/forms/allForms";
 
@@ -12,7 +12,7 @@ export function getStaticPaths() {
 }
 
 interface Props {
-  form: FormMeta;
+  form: FormDefinition;
 }
 
 const { id } = Astro.params;

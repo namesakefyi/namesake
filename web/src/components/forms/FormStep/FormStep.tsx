@@ -3,7 +3,7 @@ import { Heading } from "react-aria-components";
 import { useWatch } from "react-hook-form";
 import type { Step } from "#constants/forms";
 import type { FormData } from "#lib/forms/questions";
-import { resolveText } from "#lib/forms/resolveStepContent";
+import { resolveText } from "#lib/forms/resolveText";
 import { slugify } from "#lib/utils/slugify";
 import { smartquotes } from "#lib/utils/smartquotes";
 import { Button } from "../../common/Button";
@@ -14,7 +14,7 @@ import clsx from "clsx";
 import { useId } from "react";
 
 export interface FormStepProps {
-  stepConfig: Step;
+  step: Step;
 
   /**
    * Optional styles for the container.
@@ -22,10 +22,10 @@ export interface FormStepProps {
   className?: string;
 }
 
-export function FormStep({ stepConfig, className }: FormStepProps) {
+export function FormStep({ step, className }: FormStepProps) {
   const data = useWatch() as FormData;
-  const title = resolveText(stepConfig.title, data);
-  const description = resolveText(stepConfig.description, data);
+  const title = resolveText(step.title, data);
+  const description = resolveText(step.description, data);
   const titleId = slugify(title);
   const descriptionId = useId();
   const { onSubmit, phase } = useFormStep();
@@ -54,7 +54,7 @@ export function FormStep({ stepConfig, className }: FormStepProps) {
         )}
       </header>
       <div className="form-step-content">
-        <FormStepQuestions step={stepConfig} data={data} />
+        <FormStepQuestions step={step} data={data} />
       </div>
       <Button
         type="submit"

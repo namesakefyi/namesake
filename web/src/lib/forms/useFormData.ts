@@ -8,7 +8,7 @@ import {
 } from "react-hook-form";
 import type { Step } from "#constants/forms";
 import { deleteField, getFieldsByNames, saveField } from "#db/database";
-import { getFormFields } from "./formVisibility";
+import { getFormFields } from "./getStepFields";
 
 export function useFormData<TFieldValues extends FieldValues = FieldValues>(
   steps: readonly Step[],
@@ -16,7 +16,10 @@ export function useFormData<TFieldValues extends FieldValues = FieldValues>(
 ) {
   const [isLoading, setIsLoading] = useState(true);
 
-  const fieldsList = useMemo(() => getFormFields(steps), [steps]);
+  const fieldsList = useMemo(
+    () => getFormFields(steps).map((field) => field.id),
+    [steps],
+  );
 
   const form = useForm<TFieldValues>({
     mode: "onBlur",

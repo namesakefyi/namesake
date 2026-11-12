@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { fullName } from "../fullName";
+import { formatFullName } from "../formatFullName";
 
-describe("fullName", () => {
+describe("formatFullName", () => {
   it("joins the group's names, skipping blanks", () => {
     expect(
-      fullName(
+      formatFullName(
         { parent1FirstName: "Marsha", parent1LastName: "Johnson" },
         "parent1Name",
       ),
     ).toBe("Marsha Johnson");
-    expect(fullName({}, "oldName")).toBe("");
+    expect(formatFullName({}, "oldName")).toBe("");
   });
 });

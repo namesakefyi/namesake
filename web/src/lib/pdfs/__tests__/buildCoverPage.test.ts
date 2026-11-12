@@ -1,12 +1,12 @@
 import { PDF } from "@libpdf/core";
 import { describe, expect, it, vi } from "vitest";
-import { createCoverPage } from "../createCoverPage";
+import { buildCoverPage } from "../buildCoverPage";
 
-describe("createCoverPage", () => {
+describe("buildCoverPage", () => {
   it("should create a cover page with all required elements", async () => {
     const consoleSpy = vi.spyOn(console, "warn");
 
-    const result = await createCoverPage({
+    const result = await buildCoverPage({
       title: "Massachusetts Court Order",
       instructions: [
         "Review all documents carefully.",

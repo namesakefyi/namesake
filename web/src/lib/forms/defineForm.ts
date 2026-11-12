@@ -1,12 +1,17 @@
-import type { FormDownload, FormMeta, Step } from "#constants/forms";
-import type { FormPdf, PdfSchema } from "#constants/pdf";
+import type {
+  FormDefinition,
+  FormDownload,
+  FormPdf,
+  Step,
+} from "#constants/forms";
+import type { PdfSchema } from "#constants/pdf";
 
 /** Pairs each PDF with a `fill` that must return every one of its fields. */
 type FormPdfs<P extends readonly PdfSchema[]> = {
   [I in keyof P]: FormPdf<P[I]>;
 };
 
-export function defineForm(meta: FormMeta): FormMeta {
+export function defineForm(meta: FormDefinition): FormDefinition {
   return meta;
 }
 

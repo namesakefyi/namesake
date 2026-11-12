@@ -5,7 +5,7 @@ import { formatCurrentAge } from "#lib/utils/deriveCurrentAge";
 import { asText } from "#lib/utils/fieldValue";
 import { formatAddress } from "#lib/utils/formatAddress";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
-import { fullName } from "#lib/utils/fullName";
+import { formatFullName } from "#lib/utils/formatFullName";
 import { requestsNameChange, requestsSexDesignationChange } from "./steps";
 
 export default defineDownload({
@@ -30,12 +30,12 @@ export default defineDownload({
           // Only New York City residents are asked; everyone else files in Supreme Court.
           courtType: data.courtType ?? "Supreme",
           county: data.residenceCounty,
-          currentLegalName: fullName(data, "oldName"),
+          currentLegalName: formatFullName(data, "oldName"),
           isRequestingNameChange: requestsNameChange(data),
           isRequestingSexDesignationChange: requestsSexDesignationChange(data),
 
           // Hidden answers are removed by resolveFormVisibility before submission.
-          newFullName: fullName(data, "newName"),
+          newFullName: formatFullName(data, "newName"),
           placeOfBirth: formatAddress({
             city: data.birthplaceCity,
             state: data.birthplaceState,

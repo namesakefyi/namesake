@@ -1,5 +1,5 @@
 import type { APIRoute, GetStaticPaths } from "astro";
-import type { FormMeta } from "#constants/forms";
+import type { FormDefinition } from "#constants/forms";
 import { allForms } from "#lib/forms/allForms";
 import { createOgImageResponse } from "#lib/utils/createOgImageResponse";
 
@@ -9,7 +9,10 @@ export const getStaticPaths: GetStaticPaths = () =>
     props: { form },
   }));
 
-export const GET: APIRoute<{ form: FormMeta }> = async ({ props, request }) =>
+export const GET: APIRoute<{ form: FormDefinition }> = async ({
+  props,
+  request,
+}) =>
   createOgImageResponse({
     subhead: "Name Change Form",
     title: props.form.title,

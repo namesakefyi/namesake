@@ -1,6 +1,6 @@
-import type { Condition, Question, Text } from "#lib/forms/questions";
+import type { Condition, FormData, Question, Text } from "#lib/forms/questions";
 import type { CategoryId } from "./categories";
-import type { FormPdf } from "./pdf";
+import type { PdfDefinition, PdfSchema, PdfValues } from "./pdf";
 
 export interface Step {
   id: string;
@@ -26,7 +26,7 @@ export interface FormCost {
  * A form's `index.ts`: plain data that pages read while they build, before
  * any of the form's code reaches the browser.
  */
-export interface FormMeta {
+export interface FormDefinition {
   /** Shown on the forms page, the form's title step and its preview image. */
   title: string;
   description?: string;
@@ -38,11 +38,19 @@ export interface FormMeta {
 }
 
 /** A form's three files together: `index.ts`, `steps.ts` and `download.ts`. */
-export interface FormConfig extends FormMeta {
+export interface FormConfig extends FormDefinition {
   /** Ordered steps, including optional guards for conditional inclusion. */
   steps: readonly Step[];
   /** The PDF packet the person downloads at the end. */
   download: FormDownload;
+}
+
+/** A PDF in a form's download, filled from the form's answers. */
+export interface FormPdf<S extends PdfSchema = PdfSchema> {
+  pdf: PdfDefinition<S>;
+  /** Includes the PDF only when this returns true. */
+  when?: Condition;
+  fill: (data: FormData) => PdfValues<S>;
 }
 
 /** A form's `download.ts`, which loads once the person starts filling. */

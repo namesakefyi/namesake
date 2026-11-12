@@ -4,7 +4,7 @@ import { loadPdfLib } from "./loadPdfLib";
 /**
  * Create a cover page PDF for a document packet.
  */
-export async function createCoverPage({
+export async function buildCoverPage({
   title,
   instructions,
   documents,

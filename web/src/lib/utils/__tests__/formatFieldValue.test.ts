@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatFieldValue } from "../formatReviewFields";
+import { formatFieldValue } from "../formatFieldValue";
 
 describe("formatFieldValue", () => {
   describe("bool fields", () => {

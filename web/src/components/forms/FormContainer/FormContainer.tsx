@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FormProvider } from "react-hook-form";
-import type { FormMeta, Step } from "#constants/forms";
+import type { FormDefinition, Step } from "#constants/forms";
 import { downloadFormPacket } from "#lib/forms/downloadFormPacket";
 import { loadFormDownload, loadFormSteps } from "#lib/forms/loadForm";
 import { useFormData } from "#lib/forms/useFormData";
@@ -23,7 +23,7 @@ import "./FormContainer.css";
 
 export interface FormContainerProps {
   /** Worked out while pages build, so the title step needs no form code. */
-  form: Pick<FormMeta, "title" | "description" | "costs"> & {
+  form: Pick<FormDefinition, "title" | "description" | "costs"> & {
     id: string;
     stepCount: number;
     pdfs: FormTitleStepProps["pdfs"];
@@ -254,7 +254,7 @@ function LoadedFormContainer({
       case "filling":
       case "editing": {
         if (!activeStep) return null;
-        return <FormStep key={activeStep.id} stepConfig={activeStep} />;
+        return <FormStep key={activeStep.id} step={activeStep} />;
       }
       case "review":
       case "submitting":

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { ADDRESS_FIELDS, NAME_FIELDS } from "#constants/fieldGroups";
 import {
-  type FieldType,
+  type FieldDefinition,
   getSharedFieldType,
   SHARED_FIELDS,
   type SharedFieldName,
@@ -61,7 +61,7 @@ const GROUP_FIELD_NAMES = new Set<string>(
 );
 
 function getSharedFieldValues(name: string): readonly string[] {
-  const field: (FieldType & { values?: readonly string[] }) | undefined =
+  const field: (FieldDefinition & { values?: readonly string[] }) | undefined =
     Object.hasOwn(SHARED_FIELDS, name)
       ? SHARED_FIELDS[name as SharedFieldName]
       : undefined;

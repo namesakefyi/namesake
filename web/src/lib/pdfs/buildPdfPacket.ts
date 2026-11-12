@@ -1,5 +1,5 @@
-import type { PDFDefinition } from "#constants/pdf";
-import { createCoverPage } from "./createCoverPage";
+import type { PdfDefinition } from "#constants/pdf";
+import { buildCoverPage } from "./buildCoverPage";
 import { loadPdfLib } from "./loadPdfLib";
 
 /**
@@ -12,11 +12,11 @@ export async function buildPdfPacket({
 }: {
   title: string;
   instructions: string[];
-  documents: readonly { pdf: PDFDefinition; bytes: Uint8Array }[];
+  documents: readonly { pdf: PdfDefinition; bytes: Uint8Array }[];
 }): Promise<Uint8Array> {
   const { PDF } = await loadPdfLib();
 
-  const coverPageBytes = await createCoverPage({
+  const coverPageBytes = await buildCoverPage({
     title,
     instructions,
     documents: documents.map(({ pdf }) => ({

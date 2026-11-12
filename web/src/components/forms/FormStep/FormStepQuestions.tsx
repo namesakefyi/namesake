@@ -1,6 +1,6 @@
 import type { Step } from "#constants/forms";
 import type { FormData, Question } from "#lib/forms/questions";
-import { resolveText } from "#lib/forms/resolveStepContent";
+import { resolveText } from "#lib/forms/resolveText";
 import {
   getChildContext,
   getRootContext,

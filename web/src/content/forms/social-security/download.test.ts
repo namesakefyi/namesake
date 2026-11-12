@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { DONT_KNOW } from "#constants/fields";
 import type { FormData } from "#lib/forms/questions";
-import { getPdfForm } from "#lib/pdfs/getPdfForm";
+import { getPdfForm } from "#lib/pdfs/__tests__/getPdfForm";
 import download from "./download";
 
 const [{ pdf: ss5, fill: fillSs5 }] = download.pdfs;

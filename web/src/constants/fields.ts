@@ -20,8 +20,8 @@ export const EXTRA_CHOICE_LABELS: Readonly<Record<string, string>> = {
   [DONT_KNOW]: "I don’t know",
 } satisfies Record<ExtraChoice, string>;
 
-/** How a field is asked, which decides the questions that may ask it. */
-export type FieldTypeName =
+/** How a field's answer is stored, which decides the questions that may ask it. */
+export type FieldType =
   | "text"
   | "date"
   | "phone"
@@ -34,29 +34,26 @@ export type FieldTypeName =
   | "oneOf"
   | "list";
 
-export interface FieldType<
-  T extends FieldTypeName = FieldTypeName,
-  V = unknown,
-> {
+export interface FieldDefinition<T extends FieldType = FieldType, V = unknown> {
   type: T;
   /** Type-only: the stored value. */
   readonly value?: V;
 }
 
-const fieldType = <T extends FieldTypeName, V>(type: T) =>
-  ({ type }) as FieldType<T, V>;
+const fieldDefinition = <T extends FieldType, V>(type: T) =>
+  ({ type }) as FieldDefinition<T, V>;
 
-const text = fieldType<"text", string>("text");
-const date = fieldType<"date", string>("date");
-const phone = fieldType<"phone", string>("phone");
-const email = fieldType<"email", string>("email");
-const state = fieldType<"state", Uppercase<JurisdictionId>>("state");
-const country = fieldType<"country", string>("country");
-const language = fieldType<"language", string>("language");
-const bool = fieldType<"bool", boolean>("bool");
-const list = fieldType<"list", string[]>("list");
+const text = fieldDefinition<"text", string>("text");
+const date = fieldDefinition<"date", string>("date");
+const phone = fieldDefinition<"phone", string>("phone");
+const email = fieldDefinition<"email", string>("email");
+const state = fieldDefinition<"state", Uppercase<JurisdictionId>>("state");
+const country = fieldDefinition<"country", string>("country");
+const language = fieldDefinition<"language", string>("language");
+const bool = fieldDefinition<"bool", boolean>("bool");
+const list = fieldDefinition<"list", string[]>("list");
 function oneOf<const V extends string>(...values: V[]) {
-  return { type: "oneOf", values } as FieldType<"oneOf", V> & {
+  return { type: "oneOf", values } as FieldDefinition<"oneOf", V> & {
     values: readonly V[];
   };
 }
@@ -103,19 +100,22 @@ export const SHARED_FIELDS = {
   hasUsedOtherNameOrAlias: bool,
   otherNamesOrAliases: text,
   newGender: oneOf("Female", "Male", "X"),
-} satisfies Record<string, FieldType>;
+} satisfies Record<string, FieldDefinition>;
 
 type Registry = typeof SHARED_FIELDS;
 
 export type SharedFieldName = keyof Registry;
 
 export type SharedFields = {
-  [K in SharedFieldName]: Registry[K] extends FieldType<FieldTypeName, infer V>
+  [K in SharedFieldName]: Registry[K] extends FieldDefinition<
+    FieldType,
+    infer V
+  >
     ? V
     : never;
 };
 
-export function getSharedFieldType(name: string): FieldTypeName | undefined {
+export function getSharedFieldType(name: string): FieldType | undefined {
   return Object.hasOwn(SHARED_FIELDS, name)
     ? SHARED_FIELDS[name as SharedFieldName].type
     : undefined;

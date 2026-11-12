@@ -5,7 +5,7 @@ import { asList } from "#lib/utils/fieldValue";
 import { formatAddress } from "#lib/utils/formatAddress";
 import { formatBirthplaceCountryOrState } from "#lib/utils/formatBirthplaceCountryOrState";
 import { formatDateMMDDYYYY } from "#lib/utils/formatDateMMDDYYYY";
-import { fullName } from "#lib/utils/fullName";
+import { formatFullName } from "#lib/utils/formatFullName";
 import { joinParts } from "#lib/utils/joinParts";
 
 export default defineDownload({
@@ -24,8 +24,11 @@ export default defineDownload({
     {
       pdf: backgroundCheck,
       fill: (data) => ({
-        fullName: fullName(data, "oldName"),
-        otherNames: joinParts(data.previousNameFrom, fullName(data, "newName")),
+        fullName: formatFullName(data, "oldName"),
+        otherNames: joinParts(
+          data.previousNameFrom,
+          formatFullName(data, "newName"),
+        ),
         dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
         residenceAddress: formatAddress({
           street: data.residenceStreetAddress,
@@ -41,7 +44,7 @@ export default defineDownload({
       fill: (data) => {
         const previousAddresses = asList(data.previousAddresses);
         return {
-          currentLegalName: fullName(data, "oldName"),
+          currentLegalName: formatFullName(data, "oldName"),
           residenceStreetAddress: data.residenceStreetAddress,
           residenceCity: data.residenceCity,
           residenceState: data.residenceState,
@@ -54,7 +57,7 @@ export default defineDownload({
             data.mailingZipCode,
           ),
           email: data.email,
-          nameOnOriginalBirthRecord: fullName(data, "oldName"),
+          nameOnOriginalBirthRecord: formatFullName(data, "oldName"),
           dateOfBirth: formatDateMMDDYYYY(data.dateOfBirth),
           placeOfBirth: joinParts(
             data.birthplaceCity,
@@ -63,8 +66,8 @@ export default defineDownload({
               data.birthplaceState,
             ),
           ),
-          mothersMaidenName: fullName(data, "mothersName"),
-          fathersName: fullName(data, "fathersName"),
+          mothersMaidenName: formatFullName(data, "mothersName"),
+          fathersName: formatFullName(data, "fathersName"),
           occupation: data.occupation,
           maritalStatus: data.maritalStatus,
           previousAddress1: previousAddresses?.[0],

@@ -1,10 +1,10 @@
 import { expect } from "vitest";
-import type { PDFDefinition, PDFFieldValue } from "#constants/pdf";
+import type { PdfDefinition, PdfFieldValue } from "#constants/pdf";
 import { getPdfForm } from "./getPdfForm";
 
 export async function expectPdfFieldsMatch(
-  pdf: PDFDefinition,
-  values: Readonly<Record<string, PDFFieldValue>>,
+  pdf: PdfDefinition,
+  values: Readonly<Record<string, PdfFieldValue>>,
 ): Promise<void> {
   const form = await getPdfForm(pdf, values);
 

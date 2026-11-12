@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { type FieldTypeName, SHARED_FIELDS } from "#constants/fields";
+import { type FieldType, SHARED_FIELDS } from "#constants/fields";
 import type { Condition } from "#lib/forms/questions";
 import { getStepFields } from "../getStepFields";
 import { getRootContext, walkQuestions } from "../walkQuestions";
 import { forms, getAskedFields, getFieldsReadBy } from "./formFixtures";
 
 /** Every known field, so reads of fields a form doesn't ask are caught. */
-const ALL_FIELDS = new Map<string, FieldTypeName>([
+const ALL_FIELDS = new Map<string, FieldType>([
   ...Object.entries(SHARED_FIELDS).map(
     ([name, field]) => [name, field.type] as const,
   ),

@@ -2,14 +2,14 @@ import { NameChangeReasonBanner } from "#components/forms/NameChangeReasonBanner
 import { defineSteps } from "#lib/forms/defineForm";
 import type { FormData } from "#lib/forms/questions";
 import { q } from "#lib/forms/questions";
-import { nameOrFallback } from "#lib/forms/resolveStepContent";
 import { deriveCurrentAge } from "#lib/utils/deriveCurrentAge";
 
 /** Minors 12 and older also file a court activity record request (CJP 34). */
 export const needsRecordRequest = (data: FormData) =>
   deriveCurrentAge(data.dateOfBirth) >= 12;
 
-const minor = (data: FormData) => nameOrFallback(data, "the minor");
+/** The minor's new first name, such as "Where do Erika's parents live?" */
+const minor = (data: FormData) => data.newFirstName?.trim() || "the minor";
 
 export default defineSteps([
   {

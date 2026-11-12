@@ -1,11 +1,11 @@
 import r116 from "#content/pdfs/ma/r116-applicant-affidavit-in-support-of-amendment-of-a-birth-certificate-for-sex";
 import { defineDownload } from "#lib/forms/defineForm";
 import type { Condition } from "#lib/forms/questions";
-import { fullName } from "#lib/utils/fullName";
+import { formatFullName } from "#lib/utils/formatFullName";
 import { joinParts } from "#lib/utils/joinParts";
 
 const isChangingName: Condition = (data) =>
-  fullName(data, "oldName") !== fullName(data, "newName");
+  formatFullName(data, "oldName") !== formatFullName(data, "newName");
 
 export default defineDownload({
   title: "Massachusetts Birth Certificate Affidavit",
@@ -22,18 +22,18 @@ export default defineDownload({
     {
       pdf: r116,
       fill: (data) => ({
-        oldFullName: fullName(data, "oldName"),
+        oldFullName: formatFullName(data, "oldName"),
         // Sex Listed
         oldGender: data.oldGender,
         // Date of birth
         dateOfBirth: data.dateOfBirth,
         birthplaceCity: data.birthplaceCity,
         // Parent 1 Name
-        parent1Name: fullName(data, "parent1Name"),
+        parent1Name: formatFullName(data, "parent1Name"),
         // Parent 2 Name
-        parent2Name: fullName(data, "parent2Name"),
+        parent2Name: formatFullName(data, "parent2Name"),
         // Name First Middle Last to appear
-        newFullName: fullName(data, "newName"),
+        newFullName: formatFullName(data, "newName"),
         // Sex to appear
         newGender: data.newGender,
         // Mailing Address
@@ -52,9 +52,9 @@ export default defineDownload({
         // A check or money order payable to the Commonwealth of Massachusetts as follows
         paymentIncluded: !data.shouldWaiveDocumentFees,
         // Name of Parent/Guardian1
-        guardianOneFullName: fullName(data, "guardianName"),
+        guardianOneFullName: formatFullName(data, "guardianName"),
         // Name of Parent/Guardian2
-        guardianTwoFullName: fullName(data, "coGuardianName"),
+        guardianTwoFullName: formatFullName(data, "coGuardianName"),
       }),
     },
   ],

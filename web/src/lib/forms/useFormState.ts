@@ -9,11 +9,8 @@ import {
   type FormPhase,
   getPhase,
 } from "./createFormMachine";
-import {
-  findNextStepIndex,
-  findPrevStepIndex,
-  getVisibleStepIds,
-} from "./formVisibility";
+import { getVisibleStepIds } from "./resolveFormVisibility";
+import { findNextStepIndex, findPrevStepIndex } from "./stepNavigation";
 
 type FormActor = ReturnType<typeof createActor<FormMachine>>;
 type FormSnapshot = ReturnType<FormActor["getSnapshot"]>;

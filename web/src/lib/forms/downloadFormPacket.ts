@@ -1,11 +1,8 @@
 import type { Step } from "#constants/forms";
-import {
-  isShown,
-  resolveFormVisibility,
-  resolveInstructions,
-} from "./formVisibility";
 import { loadFormDownload } from "./loadForm";
 import type { FormData } from "./questions";
+import { isShown, resolveFormVisibility } from "./resolveFormVisibility";
+import { resolveInstructions } from "./resolveInstructions";
 
 /**
  * Downloads the form's PDFs behind a cover page, filled from the answers to

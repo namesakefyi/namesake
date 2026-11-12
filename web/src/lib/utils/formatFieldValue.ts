@@ -1,5 +1,5 @@
 import { parseDate } from "@internationalized/date";
-import { EXTRA_CHOICE_LABELS, type FieldTypeName } from "#constants/fields";
+import { EXTRA_CHOICE_LABELS, type FieldType } from "#constants/fields";
 import type { OptionLabels } from "#lib/forms/questions";
 import { formatCurrency } from "./formatCurrency";
 
@@ -15,7 +15,7 @@ import { formatCurrency } from "./formatCurrency";
  * amounts as dollars.
  */
 export function formatFieldValue(
-  type: FieldTypeName,
+  type: FieldType,
   value: any,
   { options, currency }: { options?: OptionLabels; currency?: boolean } = {},
 ): string | undefined {

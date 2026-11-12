@@ -1,5 +1,5 @@
 import type { PDFForm } from "@libpdf/core";
-import type { PDFDefinition, PDFFieldValue } from "#constants/pdf";
+import type { PdfDefinition, PdfFieldValue } from "#constants/pdf";
 import { fetchPdf } from "./fetchPdf";
 import { loadPdfLib } from "./loadPdfLib";
 
@@ -11,7 +11,7 @@ import { loadPdfLib } from "./loadPdfLib";
 function toFieldValue(
   form: PDFForm,
   name: string,
-  value: NonNullable<PDFFieldValue>,
+  value: NonNullable<PdfFieldValue>,
 ) {
   const radio = form.getRadioGroup(name);
   if (!radio) return value;
@@ -22,8 +22,8 @@ function toFieldValue(
 }
 
 export async function fillPdf(
-  pdf: PDFDefinition,
-  values: Readonly<Record<string, PDFFieldValue>>,
+  pdf: PdfDefinition,
+  values: Readonly<Record<string, PdfFieldValue>>,
 ): Promise<Uint8Array> {
   const [{ PDF }, formPdfBytes] = await Promise.all([
     loadPdfLib(),
@@ -37,7 +37,7 @@ export async function fillPdf(
 
   const form = pdfDoc.getForm();
   if (form) {
-    const filled: Record<string, NonNullable<PDFFieldValue>> = {};
+    const filled: Record<string, NonNullable<PdfFieldValue>> = {};
     for (const [name, resolved] of Object.entries(values)) {
       if (resolved == null) continue;
       const value = toFieldValue(form, name, resolved);

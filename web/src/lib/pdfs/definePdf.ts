@@ -1,4 +1,4 @@
-import type { PDFDefinition, PdfSchema } from "#constants/pdf";
+import type { PdfDefinition, PdfSchema } from "#constants/pdf";
 
 /**
  * Describe a PDF in the library.
@@ -14,7 +14,7 @@ import type { PDFDefinition, PdfSchema } from "#constants/pdf";
  * ```
  */
 export function definePdf<S extends PdfSchema>(
-  pdf: Omit<PDFDefinition<S>, "fields">,
-): PDFDefinition<S> {
+  pdf: Omit<PdfDefinition<S>, "fields">,
+): PdfDefinition<S> {
   return pdf;
 }

@@ -1,4 +1,4 @@
-import type { FormPdf } from "#constants/pdf";
+import type { FormPdf } from "#constants/forms";
 import type { FormData } from "#lib/forms/questions";
 import { buildPdfPacket } from "./buildPdfPacket";
 import { downloadPdf } from "./downloadPdf";

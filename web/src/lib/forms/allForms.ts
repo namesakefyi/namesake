@@ -1,7 +1,11 @@
 import type { FormConfig } from "#constants/forms";
 import { parseContentPath } from "#lib/loaders/parseContentPath";
-import { formIds, loadFormMeta } from "./formIds";
-import { loadFormDownload, loadFormSteps } from "./loadForm";
+import {
+  formIds,
+  loadFormDefinition,
+  loadFormDownload,
+  loadFormSteps,
+} from "./loadForm";
 
 /**
  * Every form with its three files joined, keyed by id. Loads all of them, so
@@ -12,7 +16,7 @@ export const allForms: Readonly<Record<string, FormConfig>> =
     await Promise.all(
       formIds.map(async (id) => {
         const [meta, steps, download] = await Promise.all([
-          loadFormMeta(id),
+          loadFormDefinition(id),
           loadFormSteps(id),
           loadFormDownload(id),
         ]);

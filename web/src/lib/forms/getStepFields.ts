@@ -1,4 +1,4 @@
-import type { FieldTypeName } from "#constants/fields";
+import type { FieldType } from "#constants/fields";
 import type { Step } from "#constants/forms";
 import type { Condition, OptionLabels, Text } from "./questions";
 import {
@@ -9,7 +9,7 @@ import {
 
 export interface StepField {
   id: string;
-  type: FieldTypeName;
+  type: FieldType;
   /**
    * Enclosing subsections' and the field's own conditions. The step's own
    * `when` is checked separately, before its fields.
@@ -72,4 +72,9 @@ export function getStepFields(step: Step): readonly StepField[] {
     cache.set(step, fields);
   }
   return fields;
+}
+
+/** Every field a form's steps write, in the order they are asked. */
+export function getFormFields(steps: readonly Step[]): StepField[] {
+  return steps.flatMap(getStepFields);
 }
