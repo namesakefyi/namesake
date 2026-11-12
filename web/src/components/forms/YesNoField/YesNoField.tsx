@@ -1,9 +1,8 @@
 import { Controller, useFormContext } from "react-hook-form";
 import {
-  DONT_KNOW,
-  EXTRA_CHOICE_LABELS,
+  EXTRA_CHOICES,
   type ExtraChoice,
-  PREFER_NOT_TO_ANSWER,
+  isExtraChoice,
 } from "#constants/fields";
 import { getLabelProps } from "#lib/utils/getLabelProps";
 import { smartquotes } from "#lib/utils/smartquotes";
@@ -14,19 +13,17 @@ import {
 } from "../../common/RadioGroup";
 import "./YesNoField.css";
 
-type YesNoValue = boolean | typeof PREFER_NOT_TO_ANSWER | typeof DONT_KNOW;
+type YesNoValue = boolean | ExtraChoice;
 
 export const getYesNoStringFromBoolean = (value: YesNoValue) => {
   if (value === undefined || value === null) return null;
-  if (value === PREFER_NOT_TO_ANSWER) return PREFER_NOT_TO_ANSWER;
-  if (value === DONT_KNOW) return DONT_KNOW;
+  if (isExtraChoice(value)) return value;
   if (value) return "yes";
   return "no";
 };
 
 export const getBooleanValueFromYesNoString = (value: string): YesNoValue => {
-  if (value === PREFER_NOT_TO_ANSWER) return PREFER_NOT_TO_ANSWER;
-  if (value === DONT_KNOW) return DONT_KNOW;
+  if (isExtraChoice(value)) return value;
   return value === "yes";
 };
 
@@ -73,7 +70,7 @@ export function YesNoField({
             <Radio value="no">{smartquotes(noLabel ?? "No")}</Radio>
             {extraChoices.map((choice) => (
               <Radio key={choice} value={choice}>
-                {EXTRA_CHOICE_LABELS[choice]}
+                {EXTRA_CHOICES[choice]}
               </Radio>
             ))}
           </RadioGroup>

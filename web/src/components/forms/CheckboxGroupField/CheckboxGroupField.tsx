@@ -1,5 +1,4 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { PREFER_NOT_TO_ANSWER } from "#constants/fields";
 import { type OptionLabels, toChoices } from "#lib/forms/questions";
 import { getLabelProps } from "#lib/utils/getLabelProps";
 import { smartquotes } from "#lib/utils/smartquotes";
@@ -30,9 +29,9 @@ export function CheckboxGroupField({
   const { control, setValue } = useFormContext();
 
   const handlePreferNotToAnswer = (value: string[]) => {
-    if (value.includes(PREFER_NOT_TO_ANSWER)) {
+    if (value.includes("preferNotToAnswer")) {
       // If "prefer not to answer" is checked, uncheck all other options
-      setValue(name, [PREFER_NOT_TO_ANSWER]);
+      setValue(name, ["preferNotToAnswer"]);
     }
   };
 
@@ -45,7 +44,7 @@ export function CheckboxGroupField({
         render={({ field, fieldState: { error, invalid } }) => {
           const currentValue = field.value || [];
           const isPreferNotToAnswerChecked =
-            currentValue.includes(PREFER_NOT_TO_ANSWER);
+            currentValue.includes("preferNotToAnswer");
 
           return (
             <CheckboxGroup
@@ -66,7 +65,7 @@ export function CheckboxGroupField({
                   label={label}
                   isDisabled={
                     isPreferNotToAnswerChecked &&
-                    option.value !== PREFER_NOT_TO_ANSWER
+                    option.value !== "preferNotToAnswer"
                   }
                 />
               ))}

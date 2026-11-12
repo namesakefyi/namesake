@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { buildPdfPacket } from "../buildPdfPacket";
-import { downloadPdf } from "../downloadPdf";
 import { downloadPdfPacket } from "../downloadPdfPacket";
 import { fetchPdf } from "../fetchPdf";
 import { fillPdf } from "../fillPdf";
@@ -12,16 +11,30 @@ import {
 } from "./helpers";
 
 vi.mock("../buildPdfPacket", () => ({ buildPdfPacket: vi.fn() }));
-vi.mock("../downloadPdf", () => ({ downloadPdf: vi.fn() }));
 vi.mock("../fetchPdf", () => ({ fetchPdf: vi.fn() }));
 vi.mock("../fillPdf", () => ({ fillPdf: vi.fn() }));
 
 const packetBytes = new Uint8Array([9, 9, 9]);
 
 describe("downloadPdfPacket", () => {
+  const { createObjectURL, revokeObjectURL } = URL;
+  let link: { href: string; download: string; click: () => void };
+
   beforeEach(() => {
     vi.mocked(buildPdfPacket).mockResolvedValue(packetBytes);
-    vi.mocked(downloadPdf).mockResolvedValue(undefined);
+    URL.createObjectURL = vi.fn().mockReturnValue("blob:packet");
+    URL.revokeObjectURL = vi.fn();
+    link = { href: "", download: "", click: vi.fn() };
+    vi.spyOn(document, "createElement").mockReturnValue(
+      link as unknown as HTMLAnchorElement,
+    );
+  });
+
+  afterEach(() => {
+    URL.createObjectURL = createObjectURL;
+    URL.revokeObjectURL = revokeObjectURL;
+    vi.mocked(document.createElement).mockRestore();
+    vi.useRealTimers();
   });
 
   it("fills each PDF with the given data", async () => {
@@ -91,15 +104,31 @@ describe("downloadPdfPacket", () => {
       data: {},
     });
 
-    expect(downloadPdf).toHaveBeenCalledWith({
-      pdfBytes: packetBytes,
-      title: "Test Packet",
-    });
+    expect(URL.createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
+    expect(link.href).toBe("blob:packet");
+    expect(link.download).toBe("Test Packet.pdf");
+    expect(link.click).toHaveBeenCalled();
   });
 
-  it("propagates a rejection from downloadPdf", async () => {
+  it("frees the packet's URL once the download has had time to start", async () => {
+    vi.useFakeTimers();
     vi.mocked(fillPdf).mockResolvedValue(new Uint8Array());
-    vi.mocked(downloadPdf).mockRejectedValue(new Error("download failed"));
+
+    await downloadPdfPacket({
+      title: "Test Packet",
+      instructions: [],
+      pdfs: [testFormPdf],
+      data: {},
+    });
+
+    expect(URL.revokeObjectURL).not.toHaveBeenCalled();
+    vi.runAllTimers();
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:packet");
+  });
+
+  it("propagates a rejection from building the packet", async () => {
+    vi.mocked(fillPdf).mockResolvedValue(new Uint8Array());
+    vi.mocked(buildPdfPacket).mockRejectedValue(new Error("build failed"));
 
     await expect(
       downloadPdfPacket({
@@ -108,6 +137,6 @@ describe("downloadPdfPacket", () => {
         pdfs: [testFormPdf],
         data: {},
       }),
-    ).rejects.toThrow("download failed");
+    ).rejects.toThrow("build failed");
   });
 });

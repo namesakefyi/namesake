@@ -1,4 +1,3 @@
-import { DONT_KNOW } from "#constants/fields";
 import ss5 from "#content/pdfs/ss5-application-for-social-security-card";
 import { defineDownload } from "#lib/forms/defineForm";
 import { asList } from "#lib/utils/fieldValue";
@@ -64,7 +63,7 @@ export default defineDownload({
           hasNoPreviousSocialSecurityCard:
             data.hasPreviousSocialSecurityCard === false,
           previousSocialSecurityCardUnknown:
-            data.hasPreviousSocialSecurityCard === DONT_KNOW,
+            data.hasPreviousSocialSecurityCard === "dontKnow",
           previousSocialSecurityCardFirstName:
             data.previousSocialSecurityCardFirstName,
           previousSocialSecurityCardMiddleName:

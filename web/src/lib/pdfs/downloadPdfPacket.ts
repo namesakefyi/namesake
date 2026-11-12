@@ -1,9 +1,10 @@
 import type { FormPdf } from "#constants/forms";
 import type { FormData } from "#lib/forms/questions";
 import { buildPdfPacket } from "./buildPdfPacket";
-import { downloadPdf } from "./downloadPdf";
 import { fetchPdf } from "./fetchPdf";
 import { fillPdf } from "./fillPdf";
+
+const REVOKE_DELAY_MS = 40_000;
 
 /**
  * Downloads a cover page and the given PDFs as one file, filled with `data`
@@ -30,5 +31,16 @@ export async function downloadPdfPacket({
   );
 
   const packetBytes = await buildPdfPacket({ title, instructions, documents });
-  await downloadPdf({ pdfBytes: packetBytes, title });
+  savePdf(packetBytes, title);
+}
+
+function savePdf(bytes: Uint8Array, title: string) {
+  const url = URL.createObjectURL(new Blob([bytes as BlobPart]));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${title}.pdf`;
+  link.click();
+  // Some browsers read the file after `click` returns, so wait before
+  // freeing it.
+  setTimeout(() => URL.revokeObjectURL(url), REVOKE_DELAY_MS);
 }

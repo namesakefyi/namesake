@@ -32,6 +32,19 @@ describe("buildPdfPacket", () => {
     consoleSpy.mockRestore();
   });
 
+  it("starts with a US Letter cover page that includes the logo", async () => {
+    const result = await buildPdfPacket({
+      title: "Massachusetts Court Order",
+      instructions: ["Review all documents carefully."],
+      documents: [{ pdf: testPdf, bytes: mockPdfBytes }],
+    });
+
+    const coverPage = (await PDF.load(result)).getPages()[0];
+    expect(coverPage.width).toBe(612);
+    expect(coverPage.height).toBe(792);
+    expect(fetch).toHaveBeenCalledWith("/forms/pdf-cover-logo.png");
+  });
+
   it("returns merged PDF bytes with a cover page followed by each PDF", async () => {
     const result = await buildPdfPacket({
       title: "Test Packet",

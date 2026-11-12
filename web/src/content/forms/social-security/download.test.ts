@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { DONT_KNOW } from "#constants/fields";
 import type { FormData } from "#lib/forms/questions";
 import { getPdfForm } from "#lib/pdfs/__tests__/getPdfForm";
 import download from "./download";
@@ -78,7 +77,7 @@ describe("SS-5 Application for Social Security Card", () => {
       ss5,
       fillSs5({
         ...testData,
-        hasPreviousSocialSecurityCard: DONT_KNOW,
+        hasPreviousSocialSecurityCard: "dontKnow",
       }),
     );
     expect(

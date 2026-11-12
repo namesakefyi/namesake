@@ -1,5 +1,9 @@
 import { parseDate } from "@internationalized/date";
-import { EXTRA_CHOICE_LABELS, type FieldType } from "#constants/fields";
+import {
+  EXTRA_CHOICES,
+  type FieldType,
+  isExtraChoice,
+} from "#constants/fields";
 import type { OptionLabels } from "#lib/forms/questions";
 import { formatCurrency } from "./formatCurrency";
 
@@ -29,7 +33,9 @@ export function formatFieldValue(
   }
 
   const labelOf = (item: unknown) => {
-    const option = options?.[String(item)] ?? EXTRA_CHOICE_LABELS[String(item)];
+    const option =
+      options?.[String(item)] ??
+      (isExtraChoice(item) ? EXTRA_CHOICES[item] : undefined);
     if (option === undefined) return String(item);
     return typeof option === "string" ? option : option.label;
   };

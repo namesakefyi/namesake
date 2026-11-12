@@ -1,6 +1,5 @@
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { PREFER_NOT_TO_ANSWER } from "#constants/fields";
 import { renderWithFormProvider, screen } from "../test-utils";
 import { CheckboxGroupField } from "./CheckboxGroupField";
 
@@ -79,7 +78,7 @@ describe("CheckboxGroupField", () => {
         label="Test Label"
         options={{
           ...mockOptions,
-          [PREFER_NOT_TO_ANSWER]: "Prefer not to answer",
+          preferNotToAnswer: "Prefer not to answer",
         }}
       />,
     );

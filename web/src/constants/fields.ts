@@ -9,16 +9,19 @@ import {
 } from "./fieldGroups.ts";
 import type { JurisdictionId } from "./jurisdictions.ts";
 
-export const PREFER_NOT_TO_ANSWER = "preferNotToAnswer";
-export const DONT_KNOW = "dontKnow";
+/**
+ * Answers a question may offer beyond its own options, with how each reads on
+ * the review page and in its input.
+ */
+export const EXTRA_CHOICES = {
+  preferNotToAnswer: "Prefer not to answer",
+  dontKnow: "I don’t know",
+} as const;
 
-export type ExtraChoice = typeof PREFER_NOT_TO_ANSWER | typeof DONT_KNOW;
+export type ExtraChoice = keyof typeof EXTRA_CHOICES;
 
-/** How an extra choice reads on the review page and in its input. */
-export const EXTRA_CHOICE_LABELS: Readonly<Record<string, string>> = {
-  [PREFER_NOT_TO_ANSWER]: "Prefer not to answer",
-  [DONT_KNOW]: "I don’t know",
-} satisfies Record<ExtraChoice, string>;
+export const isExtraChoice = (value: unknown): value is ExtraChoice =>
+  typeof value === "string" && Object.hasOwn(EXTRA_CHOICES, value);
 
 /** How a field's answer is stored, which decides the questions that may ask it. */
 export type FieldType =
