@@ -28,14 +28,12 @@ If you violate any of the Terms, we may terminate your account. That’s a broad
 3. You are responsible for all activity that occurs under your account.
 4. You must be a human. Accounts registered by “bots” or other automated methods are not permitted.
 
-
 ## Cancellation and Termination
 
 1. You are solely responsible for properly cancelling your account. Within each of our Services, we provide a simple no-questions-asked cancellation link which will terminate your account.
 2. Because your application data is stored on your device, cancelling your account removes your ability to use the Services but does not delete data from your device. You can delete your local data at any time.
 3. We have the right to suspend or terminate your account and refuse any and all current or future use of our Services for any reason at any time. Suspension means you and any other users on your account will not be able to access the Services. We also reserve the right to refuse the use of the Services to anyone for any reason at any time. For more details, see our [Use Restrictions Policy](https://namesake.fyi/abuse).
 4. Verbal, physical, written or other abuse (including threats of abuse or retribution) of a Company employee or officer will result in immediate account termination.
-
 
 ## Uptime, Security, and Privacy
 
