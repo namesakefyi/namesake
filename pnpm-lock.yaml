@@ -231,7 +231,7 @@ importers:
         specifier: ^0.5.3
         version: 0.5.3
       hono:
-        specifier: ^4.13.14
+        specifier: ^4.13.16
         version: 4.13.16
       pdfjs-dist:
         specifier: ^6.4.299
