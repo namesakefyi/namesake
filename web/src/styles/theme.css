@@ -52,18 +52,26 @@
   --namesake-green: #97cf9c;
   --namesake-brown: #ddb896;
 
-  /* Semantic colors */
-  --background-color: var(--namesake-purple);
-  --text-color: var(--namesake-black);
+  --page-color: var(--namesake-purple);
 }
 
-/*
- * Derived colors are redeclared wherever the base colors change, since custom
- * properties resolve on the element that declares them.
- */
+:root,
+body {
+  --text-color: var(--namesake-black);
+  --background-color: var(--page-color);
+}
+
+[data-inverted] {
+  --text-color: var(--page-color);
+  --background-color: var(--namesake-black);
+
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
 :root,
 body,
-[data-inverted] > * {
+[data-inverted] {
   --text-color-muted: color-mix(in srgb, var(--text-color) 50%, transparent);
   --text-color-disabled: color-mix(in srgb, var(--text-color) 35%, transparent);
   --text-color-placeholder: var(--text-color-muted);
@@ -85,57 +93,39 @@ body {
   --invalid-color: #9a0c14;
 }
 
-/*
- * Inverted regions swap text and background colors. The swap happens on the
- * region's children because a custom property can't reference its own
- * inherited value on the same element.
- */
-[data-inverted] {
-  --inverted-text: var(--background-color);
-  --inverted-background: var(--text-color);
-
-  color: var(--inverted-text);
-  background-color: var(--inverted-background);
-
-  > * {
-    --text-color: var(--inverted-text);
-    --background-color: var(--inverted-background);
-  }
-}
-
 [data-color="purple"] {
-  --background-color: var(--namesake-purple);
+  --page-color: var(--namesake-purple);
 }
 
 [data-color="pink"] {
-  --background-color: var(--namesake-pink);
+  --page-color: var(--namesake-pink);
 }
 
 [data-color="blue"] {
-  --background-color: var(--namesake-blue);
+  --page-color: var(--namesake-blue);
 }
 
 [data-color="yellow"] {
-  --background-color: var(--namesake-yellow);
+  --page-color: var(--namesake-yellow);
 }
 
 [data-color="green"] {
-  --background-color: var(--namesake-green);
+  --page-color: var(--namesake-green);
 }
 
 [data-color="brown"] {
-  --background-color: var(--namesake-brown);
+  --page-color: var(--namesake-brown);
 }
 
 [data-color="white"] {
-  --background-color: var(--namesake-white);
+  --page-color: var(--namesake-white);
 }
 
 /* Windows high contrast mode overrides */
 @media (forced-colors: active) {
   :root,
   body,
-  [data-inverted] > * {
+  [data-inverted] {
     --background-color: Canvas;
     --focus-ring-color: Highlight;
     --text-color: ButtonText;
