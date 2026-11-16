@@ -8,7 +8,7 @@ import {
   RiMailSendFill,
   RiRssFill,
 } from "@remixicon/react";
-import { buildDonateUrl } from "#lib/utils/buildDonateUrl";
+import { donation } from "#constants/donation";
 
 type SocialPlatform =
   | "bluesky"
@@ -72,7 +72,7 @@ export const siteInfo: SiteInfo = {
     blog: "/blog",
     chat: "/chat",
     status: "/status",
-    donate: buildDonateUrl(),
+    donate: donation.path,
     contribute: "https://docs.namesake.fyi",
     start: "/guides/getting-started",
   },

@@ -1,7 +1,6 @@
 ---
 import { donation } from "#constants/donation";
 import { siteInfo } from "#constants/site-info";
-import { buildDonateUrl } from "#lib/utils/buildDonateUrl";
 import { formatCurrency } from "#lib/utils/formatCurrency";
 
 interface Props {
@@ -56,8 +55,7 @@ const { fiscalSponsor } = siteInfo;
         <li>
           <a
             class="button secondary"
-            href={buildDonateUrl({ amount })}
-            data-donate
+            href={amount ? `${donation.path}?amount=${amount}` : donation.path}
           >
             {amount ? formatCurrency(amount) : "Other"}
           </a>

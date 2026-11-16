@@ -4,9 +4,9 @@ import {
   donation,
 } from "#constants/donation";
 
-const WIDGET_SCRIPT_URL = "https://embeds.every.org/0.4/button.js?explicit=1";
+const POPOVER_SCRIPT_URL = "https://embeds.every.org/0.4/button.js?explicit=1";
 
-type WidgetOptions = {
+type PopoverOptions = {
   amount?: number;
   defaultFrequency?: DonationFrequency;
 };
@@ -21,51 +21,51 @@ declare global {
           addAmounts: readonly number[];
           primaryColor: string;
           methods: readonly string[];
-        } & WidgetOptions,
+        } & PopoverOptions,
       ) => void;
-      setOptions: (options: WidgetOptions) => void;
+      setOptions: (options: PopoverOptions) => void;
       showWidget: () => void;
     };
   }
 }
 
-let widgetReady: Promise<NonNullable<Window["everyDotOrgDonateButton"]>>;
+let popoverReady: Promise<NonNullable<Window["everyDotOrgDonateButton"]>>;
 
-const loadWidget = () => {
-  widgetReady ??= new Promise((resolve, reject) => {
+const loadPopover = () => {
+  popoverReady ??= new Promise((resolve, reject) => {
     const script = document.createElement("script");
-    script.src = WIDGET_SCRIPT_URL;
+    script.src = POPOVER_SCRIPT_URL;
     script.async = true;
     script.onerror = reject;
     script.onload = () => {
-      const widget = window.everyDotOrgDonateButton;
-      if (!widget) return reject(new Error("Every.org widget missing"));
+      const popover = window.everyDotOrgDonateButton;
+      if (!popover) return reject(new Error("Every.org popover missing"));
 
-      // The widget requires an element to bind its own click handler to;
+      // Every.org requires an element to bind its own click handler to;
       // a detached one keeps it from intercepting clicks on the page.
-      widget.createWidget({
+      popover.createWidget({
         element: document.createElement("button"),
         nonprofitSlug: donation.nonprofitSlug,
         addAmounts: donation.suggestedAmounts,
         primaryColor: donation.primaryColor,
         methods: donation.methods,
       });
-      resolve(widget);
+      resolve(popover);
     };
     document.head.appendChild(script);
   });
 
-  return widgetReady;
+  return popoverReady;
 };
 
-export const openDonateWidget = async ({
+export const openDonatePopover = async ({
   amount,
   frequency,
 }: DonateOptions = {}) => {
-  const widget = await loadWidget();
-  widget.setOptions({
+  const popover = await loadPopover();
+  popover.setOptions({
     amount,
     defaultFrequency: frequency ?? "once",
   });
-  widget.showWidget();
+  popover.showWidget();
 };

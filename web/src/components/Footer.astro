@@ -10,7 +10,6 @@ type Link = {
   href: string;
   label: string;
   title?: string;
-  donate?: boolean;
 };
 
 type LinkGroup = {
@@ -25,7 +24,7 @@ const linkGroups: LinkGroup[] = [
       { href: siteInfo.urls.blog, label: "Blog" },
       { href: "/press", label: "Press" },
       { href: "/brand-assets", label: "Brand" },
-      { href: siteInfo.urls.donate, label: "Donate", donate: true },
+      { href: siteInfo.urls.donate, label: "Donate" },
       { href: siteInfo.urls.contribute, label: "Contribute" },
     ],
   },
@@ -65,8 +64,8 @@ const linkGroups: LinkGroup[] = [
         linkGroups.map(({ title, links }) => (
           <div class="linkGroup">
             <strong>{title}</strong>
-            {links.map(({ href, label, title, donate }) => (
-              <a {href} {title} data-donate={donate}>
+            {links.map(({ href, label, title }) => (
+              <a {href} {title}>
                 {label}
               </a>
             ))}

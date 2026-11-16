@@ -6,6 +6,13 @@ test.describe("donate", () => {
     expect(page.url()).toContain("every.org");
   });
 
+  test("should carry the amount and frequency through the redirect", async ({
+    page,
+  }) => {
+    await page.goto("/donate?amount=25&frequency=monthly");
+    expect(page.url()).toMatch(/every\.org.*amount=25&frequency=monthly/);
+  });
+
   test("should show suggested amounts in the homepage banner", async ({
     page,
   }) => {
@@ -17,7 +24,7 @@ test.describe("donate", () => {
     for (const amount of ["$10", "$25", "$50", "$100"]) {
       await expect(
         banner.getByRole("link", { name: amount, exact: true }),
-      ).toHaveAttribute("href", /every\.org\/namesake/);
+      ).toHaveAttribute("href", /^\/donate\?amount=/);
     }
   });
 
@@ -37,6 +44,16 @@ test.describe("donate", () => {
       .getByRole("navigation", { name: "Site" })
       .getByRole("link", { name: "Donate" })
       .click();
+
+    await expect(page.locator("#every-shadow-wrapper")).toBeAttached();
+    expect(page.url()).not.toContain("every.org");
+  });
+
+  test("should open the donation popup from links in content", async ({
+    page,
+  }) => {
+    await page.goto("/guides/getting-started");
+    await page.getByRole("link", { name: "donating to Namesake" }).click();
 
     await expect(page.locator("#every-shadow-wrapper")).toBeAttached();
     expect(page.url()).not.toContain("every.org");
