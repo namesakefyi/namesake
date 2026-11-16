@@ -24,15 +24,15 @@ const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
 ---
 
 <section
-  class:list={["donation-banner", className]}
-  aria-labelledby="donation-banner-title"
+  class:list={["donate-banner", className]}
+  aria-labelledby="donate-banner-title"
   data-inverted
   data-no-print
   {...rest}
 >
   <div class="pitch">
-    <h2 id="donation-banner-title">
-      Support Namesake's mission <span class="highlight">everywhere</span>
+    <h2 id="donate-banner-title">
+      Support Namesake’s mission <span class="highlight">everywhere</span>
     </h2>
     <p>
       Namesake has no ads and requires no login. Donations from people like you
@@ -79,7 +79,7 @@ const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
 <script>
   import { annotate } from "rough-notation";
 
-  const banner = document.querySelector<HTMLElement>(".donation-banner");
+  const banner = document.querySelector<HTMLElement>(".donate-banner");
 
   if (banner) {
     annotate(banner, {
@@ -92,24 +92,35 @@ const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
   }
 
   const highlight = document.querySelector<HTMLElement>(
-    ".donation-banner .highlight",
+    ".donate-banner .highlight",
   );
 
   if (highlight) {
-    annotate(highlight, {
+    const underline = annotate(highlight, {
       type: "underline",
       iterations: 2,
-      animate: false,
+      animate: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
       padding: 0,
       strokeWidth: 2,
-    }).show();
+    });
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        underline.show();
+        observer.disconnect();
+      },
+      // Fire near the center of the viewport
+      { rootMargin: "0px 0px -50% 0px", threshold: 1 },
+    );
+    observer.observe(highlight);
   }
 
   const frequencyGroup = document.querySelector<HTMLFieldSetElement>(
-    ".donation-banner .frequency",
+    ".donate-banner .frequency",
   );
   const amountLinks = document.querySelectorAll<HTMLAnchorElement>(
-    ".donation-banner .amounts a",
+    ".donate-banner .amounts a",
   );
 
   frequencyGroup?.addEventListener("change", (event) => {
@@ -124,7 +135,7 @@ const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
 </script>
 
 <style>
-  .donation-banner {
+  .donate-banner {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-xl);

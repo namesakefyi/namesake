@@ -6,7 +6,7 @@ import {
   getEntry,
   render,
 } from "astro:content";
-import DonationBanner from "#components/DonationBanner.astro";
+import DonateBanner from "#components/DonateBanner.astro";
 import TableOfContents from "#components/TableOfContents.astro";
 import ProseLayout from "#layouts/ProseLayout.astro";
 
@@ -104,7 +104,7 @@ const previewImage = {
       ))}
     </div>
   )}
-  <DonationBanner slot="after-article" class="donation" />
+  <DonateBanner slot="after-article" class="donation" />
 </ProseLayout>
 
 <style>
