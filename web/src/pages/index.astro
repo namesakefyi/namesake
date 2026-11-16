@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import { RiArrowRightLine } from "@remixicon/react";
+import DonationBanner from "#components/DonationBanner.astro";
 import Search from "#components/Search.astro";
 import Sponsors from "#components/Sponsors.astro";
 import SupportMap from "#components/SupportMap.astro";
@@ -19,18 +20,20 @@ import passport from "./home/passport.png";
 >
   <div class="hero">
     <div class="hero-content">
-      <h1>Your name is <span class="hero-highlight">yours</span> to change</h1>
+      <h1>
+        Your name is <span class="hero-highlight">yours</span> to change
+      </h1>
       <p class="subtitle">
         Namesake publishes name change guides and tools for trans people in the
-        U.S. It's free, <a href={siteInfo.socialLinks.github.href}
-          >open&nbsp;source</a
-        >, and always will be.
+        U.S. It's free,{" "}
+        <a href={siteInfo.socialLinks.github.href}>open&nbsp;source</a>, and
+        always will be.
       </p>
       <Search />
       <div class="buttons">
-        <a href={siteInfo.urls.start} class="button primary"
-          >Get started <RiArrowRightLine className="icon" /></a
-        >
+        <a href={siteInfo.urls.start} class="button primary">
+          Get started <RiArrowRightLine className="icon" />
+        </a>
         <a href={siteInfo.urls.chat}>Join us on Discord</a>
       </div>
     </div>
@@ -42,6 +45,7 @@ import passport from "./home/passport.png";
       densities={[1, 2]}
     />
   </div>
+  <DonationBanner />
   <SupportMap />
   <Sponsors />
 </BaseLayout>
@@ -65,13 +69,14 @@ import passport from "./home/passport.png";
 
 <style>
   .hero {
-    width: min(100vw, 1200px);
+    width: calc(100% + 2 * var(--space-l));
     padding-inline: var(--space-l);
     margin-inline: calc(var(--space-l) * -1);
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: var(--space-xs);
+    overflow-x: clip;
   }
 
   .hero-content {
@@ -79,6 +84,7 @@ import passport from "./home/passport.png";
     flex-direction: column;
     gap: var(--space-l);
     padding-block: var(--space-2xl);
+    margin-block-end: var(--space-xl);
   }
 
   .hero-image {
@@ -134,9 +140,5 @@ import passport from "./home/passport.png";
 
   .icon {
     margin-inline-end: calc(var(--space-2xs) * -1);
-  }
-
-  .fundraiser-banner {
-    margin-block-start: var(--space-m);
   }
 </style>

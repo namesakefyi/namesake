@@ -1,0 +1,232 @@
+---
+import { donation } from "#constants/donation";
+import { siteInfo } from "#constants/site-info";
+import { buildDonateUrl } from "#lib/utils/buildDonateUrl";
+import { formatCurrency } from "#lib/utils/formatCurrency";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className, ...rest } = Astro.props;
+const { fiscalSponsor } = siteInfo;
+---
+
+<section
+  class:list={["donation-banner", className]}
+  aria-labelledby="donation-banner-title"
+  data-inverted
+  data-no-print
+  {...rest}
+>
+  <div class="pitch">
+    <h2 id="donation-banner-title">
+      Keep Namesake free for <span class="highlight">everyone</span>
+    </h2>
+    <p>
+      Namesake has no ads and requires no login. Donations from people like you
+      fund our work to simplify the legal name change process.
+    </p>
+  </div>
+  <div class="give">
+    <fieldset class="frequency">
+      <legend class="visually-hidden">Donation frequency</legend>
+      <label>
+        <input
+          class="visually-hidden"
+          type="radio"
+          name="donation-frequency"
+          value="once"
+          checked
+        />
+        One-time
+      </label>
+      <label>
+        <input
+          class="visually-hidden"
+          type="radio"
+          name="donation-frequency"
+          value="monthly"
+        />
+        Monthly
+      </label>
+    </fieldset>
+    <ul class="amounts">
+      {[...donation.suggestedAmounts, undefined].map((amount) => (
+        <li>
+          <a
+            class="button secondary"
+            href={buildDonateUrl({ amount })}
+            data-donate
+          >
+            {amount ? formatCurrency(amount) : "Other"}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="fine-print">
+      Namesake is a fiscally sponsored project of{" "}
+      <a href={fiscalSponsor.url}>{fiscalSponsor.name}</a>, a 501(c)(3)
+      nonprofit. Donations are tax-deductible to the extent allowed by law.
+    </p>
+  </div>
+</section>
+
+<script>
+  import { annotate } from "rough-notation";
+  import type { DonationFrequency } from "#constants/donation";
+
+  const banner = document.querySelector<HTMLElement>(".donation-banner");
+
+  if (banner) {
+    annotate(banner, {
+      type: "box",
+      iterations: 1,
+      animate: false,
+      padding: 2,
+      strokeWidth: 2,
+    }).show();
+  }
+
+  const highlight = document.querySelector<HTMLElement>(
+    ".donation-banner .highlight",
+  );
+
+  if (highlight) {
+    annotate(highlight, {
+      type: "underline",
+      iterations: 2,
+      padding: 0,
+      strokeWidth: 2,
+    }).show();
+  }
+
+  const frequencyGroup = document.querySelector<HTMLFieldSetElement>(
+    ".donation-banner .frequency",
+  );
+  const amountLinks = document.querySelectorAll<HTMLAnchorElement>(
+    ".donation-banner .amounts a",
+  );
+
+  frequencyGroup?.addEventListener("change", (event) => {
+    const frequency = (event.target as HTMLInputElement)
+      .value as DonationFrequency;
+
+    for (const link of amountLinks) {
+      const url = new URL(link.href);
+      url.searchParams.set("frequency", frequency);
+      link.href = url.toString();
+    }
+  });
+</script>
+
+<style>
+  .donation-banner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: var(--space-xl);
+    border-radius: var(--radius-2xs);
+
+    @media (width < 860px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .pitch {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+
+    h2 {
+      font-size: var(--step-3);
+      text-wrap: balance;
+    }
+
+    p {
+      font-size: var(--step-0);
+      text-wrap: pretty;
+    }
+  }
+
+  .give {
+    --control-border-width: 1.5px;
+
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-m);
+  }
+
+  .frequency {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-inline-size: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+
+    label {
+      position: relative;
+      padding: var(--space-2xs) var(--space-m);
+      text-align: center;
+      cursor: pointer;
+      border: var(--control-border-width) solid var(--text-color);
+      border-radius: var(--radius-2xs);
+
+      &:first-of-type {
+        border-start-end-radius: 0;
+        border-end-end-radius: 0;
+      }
+
+      /* Overlap the shared border so it doesn't double up */
+      &:last-of-type {
+        margin-inline-start: calc(var(--control-border-width) * -1);
+        border-start-start-radius: 0;
+        border-end-start-radius: 0;
+      }
+
+      &:has(:checked) {
+        font-weight: var(--weight-bold);
+        color: var(--background-color);
+        background-color: var(--text-color);
+      }
+
+      &:has(:focus-visible) {
+        z-index: 1;
+        outline: 3px solid var(--focus-ring-color);
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  .amounts {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-s);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    @container (width < 30rem) {
+      grid-template-columns: repeat(3, 1fr);
+
+      li:last-child {
+        grid-column: span 2;
+      }
+    }
+
+    .button {
+      padding-inline: var(--space-s);
+      border-width: var(--control-border-width);
+      border-radius: var(--radius-2xs);
+    }
+  }
+
+  .fine-print {
+    font-size: var(--step--2);
+  }
+</style>

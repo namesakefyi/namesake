@@ -8,6 +8,7 @@ import {
   RiMailSendFill,
   RiRssFill,
 } from "@remixicon/react";
+import { buildDonateUrl } from "#lib/utils/buildDonateUrl";
 
 type SocialPlatform =
   | "bluesky"
@@ -71,8 +72,7 @@ export const siteInfo: SiteInfo = {
     blog: "/blog",
     chat: "/chat",
     status: "/status",
-    donate:
-      "https://www.every.org/namesake?suggestedAmounts=20%2C40%2C100%2C250&theme_color=6E56CF&method=card%2Cbank%2Cpaypal%2Cvenmo%2Cpay%2Cdaf&utm_campaign=donate-link#/donate",
+    donate: buildDonateUrl(),
     contribute: "https://docs.namesake.fyi",
     start: "/guides/getting-started",
   },

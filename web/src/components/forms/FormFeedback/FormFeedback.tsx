@@ -19,6 +19,7 @@ import { Form } from "../../common/Form";
 import { Radio, RadioGroup } from "../../common/RadioGroup";
 import { TextArea } from "../../common/TextArea";
 import "./FormFeedback.css";
+import { buildDonateUrl } from "#lib/utils/buildDonateUrl";
 import { Banner } from "../../common/Banner";
 import { Heading } from "../../common/Content";
 import { Dialog } from "../../common/Dialog";
@@ -146,7 +147,11 @@ export function FormFeedback({ formId }: FormFeedbackProps) {
                 Share
               </Button>
             )}
-            <a href="https://namesake.fyi/donate" className="react-aria-Button">
+            <a
+              href={buildDonateUrl()}
+              data-donate
+              className="react-aria-Button"
+            >
               <RiHandHeartLine aria-hidden />
               Donate
             </a>

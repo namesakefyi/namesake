@@ -6,6 +6,7 @@ import {
   getEntry,
   render,
 } from "astro:content";
+import DonationBanner from "#components/DonationBanner.astro";
 import TableOfContents from "#components/TableOfContents.astro";
 import ProseLayout from "#layouts/ProseLayout.astro";
 
@@ -46,67 +47,68 @@ const previewImage = {
   color="blue"
   annotation={post.data.annotation ?? "highlight"}
 >
-  {
-    authors.length > 0 && (
-      <div class="authors" slot="after-header">
-        {authors.map((author) => (
-          <span class="author">
-            <Image
-              class="avatar author-avatar"
-              src={author.data.avatar}
-              alt={`${author.data.name} photo`}
-              width={32}
-              height={32}
-              densities={[1, 2]}
-            />
-            <div class="author-info">
-              <strong data-pagefind-filter="author">{author.data.name}</strong>
-              <span class="role">{author.data.role}</span>
-            </div>
-          </span>
-        ))}
-      </div>
-    )
-  }
+  {authors.length > 0 && (
+    <div class="authors" slot="after-header">
+      {authors.map((author) => (
+        <span class="author">
+          <Image
+            class="avatar author-avatar"
+            src={author.data.avatar}
+            alt={`${author.data.name} photo`}
+            width={32}
+            height={32}
+            densities={[1, 2]}
+          />
+          <div class="author-info">
+            <strong data-pagefind-filter="author">{author.data.name}</strong>
+            <span class="role">{author.data.role}</span>
+          </div>
+        </span>
+      ))}
+    </div>
+  )}
   <TableOfContents slot="toc" headings={headings} />
   <Content />
-  {
-    authors.length > 0 && (
-      <div class="bios" slot="after-content">
-        {authors.map((author) => (
-          <div class="bio">
-            <Image
-              class="avatar bio-avatar"
-              src={author.data.avatar}
-              alt={`${author.data.name} photo`}
-              width={80}
-              height={80}
-              densities={[1, 2]}
-            />
-            <div class="content">
-              <strong>{author.data.name}</strong>
-              <p>{author.data.bio}</p>
-              {author.data.socialLinks &&
-                author.data.socialLinks.length > 0 && (
-                  <ul class="social">
-                    {author.data.socialLinks.map((link) => (
-                      <li>
-                        <a
-                          href={link.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {link.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-            </div>
+  {authors.length > 0 && (
+    <div class="bios" slot="after-content">
+      {authors.map((author) => (
+        <div class="bio">
+          <Image
+            class="avatar bio-avatar"
+            src={author.data.avatar}
+            alt={`${author.data.name} photo`}
+            width={80}
+            height={80}
+            densities={[1, 2]}
+          />
+          <div class="content">
+            <strong>{author.data.name}</strong>
+            <p>{author.data.bio}</p>
+            {author.data.socialLinks && author.data.socialLinks.length > 0 && (
+              <ul class="social">
+                {author.data.socialLinks.map((link) => (
+                  <li>
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
-        ))}
-      </div>
-    )
-  }
+        </div>
+      ))}
+    </div>
+  )}
+  <DonationBanner slot="after-article" class="donation" />
 </ProseLayout>
 
+<style>
+  .donation {
+    margin-block-end: var(--space-3xl);
+  }
+</style>

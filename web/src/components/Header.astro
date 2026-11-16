@@ -7,7 +7,7 @@ const { pathname } = Astro.url;
 const navLinks = [
   { href: siteInfo.urls.guides, label: "Guides" },
   { href: siteInfo.urls.blog, label: "Blog" },
-  { href: siteInfo.urls.donate, label: "Donate" },
+  { href: siteInfo.urls.donate, label: "Donate", donate: true },
 ];
 ---
 
@@ -16,10 +16,11 @@ const navLinks = [
   <nav aria-label="Site">
     <ul>
       {
-        navLinks.map(({ href, label }) => (
+        navLinks.map(({ href, label, donate }) => (
           <li>
             <a
               href={href}
+              data-donate={donate}
               aria-current={pathname.startsWith(href) ? "page" : "false"}
             >
               {label}

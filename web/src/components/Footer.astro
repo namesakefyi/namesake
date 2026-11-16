@@ -10,6 +10,7 @@ type Link = {
   href: string;
   label: string;
   title?: string;
+  donate?: boolean;
 };
 
 type LinkGroup = {
@@ -24,7 +25,7 @@ const linkGroups: LinkGroup[] = [
       { href: siteInfo.urls.blog, label: "Blog" },
       { href: "/press", label: "Press" },
       { href: "/brand-assets", label: "Brand" },
-      { href: siteInfo.urls.donate, label: "Donate" },
+      { href: siteInfo.urls.donate, label: "Donate", donate: true },
       { href: siteInfo.urls.contribute, label: "Contribute" },
     ],
   },
@@ -49,7 +50,7 @@ const linkGroups: LinkGroup[] = [
 ];
 ---
 
-<footer data-no-print>
+<footer data-no-print data-inverted>
   <div class="footer-illustration">
     <img
       src="/site/footer/snail.png"
@@ -64,8 +65,8 @@ const linkGroups: LinkGroup[] = [
         linkGroups.map(({ title, links }) => (
           <div class="linkGroup">
             <strong>{title}</strong>
-            {links.map(({ href, label, title }) => (
-              <a {href} {title}>
+            {links.map(({ href, label, title, donate }) => (
+              <a {href} {title} data-donate={donate}>
                 {label}
               </a>
             ))}
@@ -99,19 +100,14 @@ const linkGroups: LinkGroup[] = [
 
   <style>
     footer {
-      --footerBg: var(--text-color);
-      --footerText: var(--background-color);
-
-      background: var(--footerBg);
-      color: var(--footerText);
       line-height: 1.5;
       width: 100%;
       padding-block-start: var(--space-xl);
       margin-block-start: var(--space-2xl);
       position: relative;
 
-      :focus-visible {
-        outline-color: var(--footerText);
+      a {
+        text-decoration: none;
       }
 
       @media (hover: hover) {
