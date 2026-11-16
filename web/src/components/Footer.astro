@@ -78,18 +78,16 @@ const linkGroups: LinkGroup[] = [
   <div class="content">
     <Subscribe />
     <div class="links">
-      {
-        linkGroups.map(({ title, links }) => (
-          <div class="linkGroup">
-            <strong>{title}</strong>
-            {links.map(({ href, label, title }) => (
-              <a {href} {title}>
-                {label}
-              </a>
-            ))}
-          </div>
-        ))
-      }
+      {linkGroups.map(({ title, links }) => (
+        <div class="linkGroup">
+          <strong>{title}</strong>
+          {links.map(({ href, label, title }) => (
+            <a {href} {title}>
+              {label}
+            </a>
+          ))}
+        </div>
+      ))}
     </div>
   </div>
   <div class="logo">
@@ -98,23 +96,22 @@ const linkGroups: LinkGroup[] = [
   <div class="content end">
     <div class="copyright">
       T4T <RiHeart3Line className="heart" />
-      <span
-        >A project of <a href={siteInfo.fiscalSponsor.url}
-          >{siteInfo.fiscalSponsor.name}</a
-        ></span
-      >
+      <span>
+        Fiscal sponsorship from{" "}
+        <a href={siteInfo.fiscalSponsor.url}>{siteInfo.fiscalSponsor.name}</a>
+      </span>
     </div>
     <div class="social">
-      {
-        Object.entries(siteInfo.socialLinks).map(([platform, { href, text }]) => {
+      {Object.entries(siteInfo.socialLinks).map(
+        ([platform, { href, text }]) => {
           const Icon = socialIcons[platform as SocialPlatform];
           return (
             <a {href} title={text}>
               <Icon size={28} />
             </a>
           );
-        })
-      }
+        },
+      )}
     </div>
   </div>
 

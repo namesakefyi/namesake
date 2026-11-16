@@ -66,12 +66,12 @@ export const siteInfo: SiteInfo = {
   description:
     "Streamlining the legal name and gender marker change process in the US.",
   fiscalSponsor: {
-    name: "Superbloom Design",
+    name: "Superbloom",
     url: "https://superbloom.design/",
   },
   donation: {
     nonprofitSlug: "namesake",
-    suggestedAmounts: [10, 25, 50, 100],
+    suggestedAmounts: [25, 100, 175, 250],
     primaryColor: COLORS.black.hex,
     methods: ["card", "bank", "paypal", "venmo", "pay", "daf"],
   },

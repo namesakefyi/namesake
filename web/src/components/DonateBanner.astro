@@ -14,7 +14,7 @@ interface Props {
 const { class: className, ...rest } = Astro.props;
 const { donation, fiscalSponsor } = siteInfo;
 
-const DEFAULT_FREQUENCY: DonationFrequency = "monthly";
+const DEFAULT_FREQUENCY: DonationFrequency = "yearly";
 
 const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
   yearly: "Yearly",
@@ -280,5 +280,6 @@ const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
 
   .fine-print {
     font-size: var(--step--2);
+    text-wrap: pretty;
   }
 </style>
