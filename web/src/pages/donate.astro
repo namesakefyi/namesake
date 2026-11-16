@@ -1,11 +1,11 @@
 ---
-import { buildDonateUrl } from "#lib/utils/buildDonateUrl";
+import { buildEveryOrgUrl } from "#lib/utils/buildDonateUrl";
 import { parseDonateOptions } from "#lib/utils/parseDonateOptions";
 
 export const prerender = false;
 
 return Astro.redirect(
-  buildDonateUrl(parseDonateOptions(Astro.url.searchParams)),
+  buildEveryOrgUrl(parseDonateOptions(Astro.url.searchParams)),
   308,
 );
 ---
