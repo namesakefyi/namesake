@@ -23,11 +23,11 @@
     if (!link || link.target === "_blank") return;
 
     const url = new URL(link.href);
-    const isDonateLink =
-      url.pathname === siteInfo.urls.donate &&
-      (url.origin === window.location.origin ||
-        url.hostname === "namesake.fyi");
-    if (!isDonateLink) return;
+    const isSiteOrigin = [
+      window.location.origin,
+      new URL(import.meta.env.SITE).origin,
+    ].includes(url.origin);
+    if (!isSiteOrigin || url.pathname !== siteInfo.urls.donate) return;
 
     event.preventDefault();
 

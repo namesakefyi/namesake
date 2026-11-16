@@ -1,31 +1,14 @@
-import {
-  type DonateOptions,
-  type DonationFrequency,
-  siteInfo,
-} from "#constants/site-info";
+import { type DonateOptions, siteInfo } from "#constants/site-info";
 
 const { donation } = siteInfo;
 
 const POPOVER_SCRIPT_URL = "https://embeds.every.org/0.4/button.js?explicit=1";
 
-type PopoverOptions = {
-  amount?: number;
-  defaultFrequency?: DonationFrequency;
-};
-
 declare global {
   interface Window {
     everyDotOrgDonateButton?: {
-      createWidget: (
-        options: {
-          element: HTMLElement;
-          nonprofitSlug: string;
-          addAmounts: readonly number[];
-          primaryColor: string;
-          methods: readonly string[];
-        } & PopoverOptions,
-      ) => void;
-      setOptions: (options: PopoverOptions) => void;
+      createWidget: (options: object) => void;
+      setOptions: (options: object) => void;
       showWidget: () => void;
     };
   }
@@ -37,7 +20,6 @@ const loadPopover = () => {
   popoverReady ??= new Promise((resolve, reject) => {
     const script = document.createElement("script");
     script.src = POPOVER_SCRIPT_URL;
-    script.async = true;
     script.onerror = reject;
     script.onload = () => {
       const popover = window.everyDotOrgDonateButton;
@@ -65,9 +47,6 @@ export const openDonatePopover = async ({
   frequency,
 }: DonateOptions = {}) => {
   const popover = await loadPopover();
-  popover.setOptions({
-    amount,
-    defaultFrequency: frequency ?? "once",
-  });
+  popover.setOptions({ amount, defaultFrequency: frequency ?? "once" });
   popover.showWidget();
 };

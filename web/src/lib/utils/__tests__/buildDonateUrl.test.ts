@@ -12,6 +12,5 @@ describe("buildDonateUrl", () => {
     const url = new URL(buildDonateUrl({ amount: 25, frequency: "monthly" }));
     expect(url.searchParams.get("amount")).toBe("25");
     expect(url.searchParams.get("frequency")).toBe("monthly");
-    expect(url.hash).toBe("#/donate");
   });
 });

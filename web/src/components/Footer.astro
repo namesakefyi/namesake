@@ -10,11 +10,7 @@ import {
   RiMailSendFill,
   RiRssFill,
 } from "@remixicon/react";
-import {
-  type SocialLink,
-  type SocialPlatform,
-  siteInfo,
-} from "#constants/site-info";
+import { type SocialPlatform, siteInfo } from "#constants/site-info";
 import Logo from "./Logo.astro";
 import Subscribe from "./Subscribe.astro";
 
@@ -27,11 +23,6 @@ const socialIcons: Record<SocialPlatform, RemixiconComponentType> = {
   email: RiMailSendFill,
   rss: RiRssFill,
 };
-
-const socialLinks = Object.entries(siteInfo.socialLinks) as [
-  SocialPlatform,
-  SocialLink,
-][];
 
 type Link = {
   href: string;
@@ -115,8 +106,8 @@ const linkGroups: LinkGroup[] = [
     </div>
     <div class="social">
       {
-        socialLinks.map(([platform, { href, text }]) => {
-          const Icon = socialIcons[platform];
+        Object.entries(siteInfo.socialLinks).map(([platform, { href, text }]) => {
+          const Icon = socialIcons[platform as SocialPlatform];
           return (
             <a {href} title={text}>
               <Icon size={28} />

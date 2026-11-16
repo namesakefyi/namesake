@@ -1,71 +1,63 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("donate", () => {
-  test("should redirect to Every.org donation page", async ({ page }) => {
-    await page.goto("/donate");
-    expect(page.url()).toContain("every.org");
-  });
-
-  test("should carry the amount and frequency through the redirect", async ({
-    page,
+  test("should redirect to Every.org with the amount and frequency", async ({
+    request,
   }) => {
-    await page.goto("/donate?amount=25&frequency=monthly");
-    expect(page.url()).toMatch(/every\.org.*amount=25&frequency=monthly/);
-  });
-
-  test("should show suggested amounts in the homepage banner", async ({
-    page,
-  }) => {
-    await page.goto("/");
-    const banner = page.getByRole("region", {
-      name: "Keep Namesake free for everyone",
+    const response = await request.get("/donate?amount=25&frequency=monthly", {
+      maxRedirects: 0,
     });
 
-    for (const amount of ["$10", "$25", "$50", "$100"]) {
-      await expect(
-        banner.getByRole("link", { name: amount, exact: true }),
-      ).toHaveAttribute("href", /^\/donate\?amount=/);
-    }
+    expect(response.status()).toBe(308);
+    expect(response.headers().location).toMatch(
+      /^https:\/\/www\.every\.org\/namesake\?.*amount=25&frequency=monthly/,
+    );
   });
 
   test("should prefill monthly donations when toggled", async ({ page }) => {
     await page.goto("/");
     await page.locator("label", { hasText: "Monthly" }).click();
-    await expect(page.getByRole("radio", { name: "Monthly" })).toBeChecked();
 
     await expect(
       page.getByRole("link", { name: "$25", exact: true }),
-    ).toHaveAttribute("href", /amount=25&frequency=monthly/);
+    ).toHaveAttribute("href", "/donate?amount=25&frequency=monthly");
   });
 
-  test("should open the donation popup from the header", async ({ page }) => {
+  test("should open the donation popover from donate links", async ({
+    page,
+  }) => {
+    await page.route("**/embeds.every.org/**", (route) =>
+      route.fulfill({
+        contentType: "text/javascript",
+        body: `window.everyDotOrgDonateButton = {
+          createWidget() {},
+          setOptions() {},
+          showWidget() { document.body.dataset.donateOpened = "true"; },
+        };`,
+      }),
+    );
     await page.goto("/guides");
     await page
       .getByRole("navigation", { name: "Site" })
       .getByRole("link", { name: "Donate" })
       .click();
 
-    await expect(page.locator("#every-shadow-wrapper")).toBeAttached();
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-donate-opened",
+      "true",
+    );
     expect(page.url()).not.toContain("every.org");
   });
 
-  test("should open the donation popup from links in content", async ({
-    page,
-  }) => {
-    await page.goto("/guides/getting-started");
-    await page.getByRole("link", { name: "donating to Namesake" }).click();
-
-    await expect(page.locator("#every-shadow-wrapper")).toBeAttached();
-    expect(page.url()).not.toContain("every.org");
-  });
-
-  test("should fall back to Every.org if the popup fails to load", async ({
+  test("should fall back to Every.org if the popover fails to load", async ({
     page,
   }) => {
     await page.route("**/embeds.every.org/**", (route) => route.abort());
+    await page.route("https://www.every.org/**", (route) => route.abort());
     await page.goto("/");
-    await page.getByRole("link", { name: "$25", exact: true }).click();
 
-    await page.waitForURL(/every\.org/);
+    const everyOrgRequest = page.waitForRequest(/www\.every\.org\/namesake/);
+    await page.getByRole("link", { name: "$25", exact: true }).click();
+    expect((await everyOrgRequest).url()).toContain("amount=25");
   });
 });

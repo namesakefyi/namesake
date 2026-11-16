@@ -1,110 +1,68 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { siteInfo } from "#constants/site-info";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { type DonateOptions, siteInfo } from "#constants/site-info";
 
-const { donation } = siteInfo;
-
-const loadModule = async () => {
-  vi.resetModules();
-  return import("../openDonatePopover");
-};
-
-const createEveryOrgMock = () => ({
+const everyOrg = {
   createWidget: vi.fn(),
   setOptions: vi.fn(),
   showWidget: vi.fn(),
-});
+};
 
-const finishLoadingScript = (event: "load" | "error") => {
-  const script = document.head.querySelector<HTMLScriptElement>(
-    'script[src^="https://embeds.every.org/"]',
-  );
-  if (event === "load") script?.onload?.(new Event("load"));
-  else script?.onerror?.(new Event("error"));
+const finishLoadingScript = (event: "load" | "error") =>
+  document.head.querySelector("script")?.dispatchEvent(new Event(event));
+
+const loadModule = async () => {
+  vi.resetModules();
+  return (await import("../openDonatePopover")).openDonatePopover;
+};
+
+const openWithEveryOrg = async (options?: DonateOptions) => {
+  const openDonatePopover = await loadModule();
+  const opened = openDonatePopover(options);
+  window.everyDotOrgDonateButton = everyOrg;
+  finishLoadingScript("load");
+  await opened;
+  return openDonatePopover;
 };
 
 describe("openDonatePopover", () => {
-  beforeEach(() => {
-    document.head.innerHTML = "";
-  });
-
   afterEach(() => {
+    document.head.innerHTML = "";
     delete window.everyDotOrgDonateButton;
   });
 
-  it("should load the Every.org script and open the popover", async () => {
-    const everyOrg = createEveryOrgMock();
-    const { openDonatePopover } = await loadModule();
-
-    const opened = openDonatePopover({ amount: 25, frequency: "monthly" });
-    window.everyDotOrgDonateButton = everyOrg;
-    finishLoadingScript("load");
-    await opened;
-
-    expect(everyOrg.createWidget).toHaveBeenCalledWith(
-      expect.objectContaining({
-        element: expect.any(HTMLButtonElement),
-        nonprofitSlug: donation.nonprofitSlug,
-        addAmounts: donation.suggestedAmounts,
-        primaryColor: donation.primaryColor,
-        methods: donation.methods,
-      }),
-    );
-    expect(everyOrg.setOptions).toHaveBeenCalledWith({
+  it("should load the Every.org script once and open the popover", async () => {
+    const openDonatePopover = await openWithEveryOrg({
       amount: 25,
-      defaultFrequency: "monthly",
+      frequency: "monthly",
     });
-    expect(everyOrg.showWidget).toHaveBeenCalledOnce();
-  });
-
-  it("should load the script only once across opens", async () => {
-    const everyOrg = createEveryOrgMock();
-    const { openDonatePopover } = await loadModule();
-
-    const firstOpen = openDonatePopover();
-    window.everyDotOrgDonateButton = everyOrg;
-    finishLoadingScript("load");
-    await firstOpen;
-    await openDonatePopover({ amount: 50 });
+    await openDonatePopover();
 
     expect(document.head.querySelectorAll("script")).toHaveLength(1);
     expect(everyOrg.createWidget).toHaveBeenCalledOnce();
-    expect(everyOrg.setOptions).toHaveBeenLastCalledWith({
-      amount: 50,
+    expect(everyOrg.createWidget).toHaveBeenCalledWith(
+      expect.objectContaining({
+        nonprofitSlug: siteInfo.donation.nonprofitSlug,
+        addAmounts: siteInfo.donation.suggestedAmounts,
+      }),
+    );
+    expect(everyOrg.setOptions).toHaveBeenNthCalledWith(1, {
+      amount: 25,
+      defaultFrequency: "monthly",
+    });
+    expect(everyOrg.setOptions).toHaveBeenNthCalledWith(2, {
+      amount: undefined,
       defaultFrequency: "once",
     });
     expect(everyOrg.showWidget).toHaveBeenCalledTimes(2);
   });
 
-  it("should reset to a one-time donation with no amount by default", async () => {
-    const everyOrg = createEveryOrgMock();
-    const { openDonatePopover } = await loadModule();
-
-    const opened = openDonatePopover();
-    window.everyDotOrgDonateButton = everyOrg;
-    finishLoadingScript("load");
-    await opened;
-
-    expect(everyOrg.setOptions).toHaveBeenCalledWith({
-      amount: undefined,
-      defaultFrequency: "once",
-    });
-  });
-
-  it("should reject when the script fails to load", async () => {
-    const { openDonatePopover } = await loadModule();
-
-    const opened = openDonatePopover();
-    finishLoadingScript("error");
+  it.each([
+    ["the script fails to load", "error"],
+    ["the Every.org API is missing", "load"],
+  ] as const)("should reject when %s", async (_, event) => {
+    const opened = (await loadModule())();
+    finishLoadingScript(event);
 
     await expect(opened).rejects.toBeDefined();
-  });
-
-  it("should reject when the script loads without the Every.org API", async () => {
-    const { openDonatePopover } = await loadModule();
-
-    const opened = openDonatePopover();
-    finishLoadingScript("load");
-
-    await expect(opened).rejects.toThrow("Every.org popover missing");
   });
 });

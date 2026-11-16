@@ -53,6 +53,9 @@
   --namesake-brown: #ddb896;
 
   --page-color: var(--namesake-purple);
+  --highlight-background-invalid: #5e0a0d;
+  --highlight-overlay: rgb(from #6f46ed r g b / 15%);
+  --invalid-color: #9a0c14;
 }
 
 :root,
@@ -85,12 +88,6 @@ body,
   --button-background: var(--background-color);
   --highlight-background: var(--text-color);
   --highlight-foreground: var(--background-color);
-}
-
-body {
-  --highlight-background-invalid: #5e0a0d;
-  --highlight-overlay: rgb(from #6f46ed r g b / 15%);
-  --invalid-color: #9a0c14;
 }
 
 [data-color="purple"] {

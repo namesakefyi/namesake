@@ -72,9 +72,6 @@ const { donation, fiscalSponsor } = siteInfo;
 
 <script>
   import { annotate } from "rough-notation";
-  import type { DonationFrequency } from "#constants/site-info";
-  import { buildDonatePath } from "#lib/utils/buildDonatePath";
-  import { parseDonateOptions } from "#lib/utils/parseDonateOptions";
 
   const banner = document.querySelector<HTMLElement>(".donation-banner");
 
@@ -109,12 +106,12 @@ const { donation, fiscalSponsor } = siteInfo;
   );
 
   frequencyGroup?.addEventListener("change", (event) => {
-    const frequency = (event.target as HTMLInputElement)
-      .value as DonationFrequency;
+    const { value } = event.target as HTMLInputElement;
 
     for (const link of amountLinks) {
-      const { amount } = parseDonateOptions(new URL(link.href).searchParams);
-      link.href = buildDonatePath({ amount, frequency });
+      const url = new URL(link.href);
+      url.searchParams.set("frequency", value);
+      link.href = url.pathname + url.search;
     }
   });
 </script>
