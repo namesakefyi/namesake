@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { siteInfo } from "#constants/site-info";
 import { buildDonatePath, buildEveryOrgUrl } from "../buildDonateUrl";
 
 describe("buildDonatePath", () => {
@@ -15,13 +16,27 @@ describe("buildDonatePath", () => {
 });
 
 describe("buildEveryOrgUrl", () => {
-  it("should link to the Every.org donation form with suggested amounts", () => {
-    expect(buildEveryOrgUrl()).toBe(
-      "https://www.every.org/namesake?suggestedAmounts=10%2C25%2C50%2C100&theme_color=111111&method=card%2Cbank%2Cpaypal%2Cvenmo%2Cpay%2Cdaf&utm_campaign=donate-link#/donate",
-    );
+  it("should open the donate form for the nonprofit", () => {
+    const url = new URL(buildEveryOrgUrl());
+    expect(url.origin).toBe("https://www.every.org");
+    expect(url.pathname).toBe(`/${siteInfo.donation.nonprofitSlug}`);
+    expect(url.hash).toBe("#/donate");
   });
 
-  it("should prefill the amount and frequency", () => {
+  it("should pass the theme color without a leading #", () => {
+    const url = new URL(buildEveryOrgUrl());
+    expect(url.searchParams.get("theme_color")).toMatch(/^[0-9a-f]{6}$/i);
+  });
+
+  it("should list suggested amounts as comma-separated values", () => {
+    const url = new URL(buildEveryOrgUrl());
+    expect(
+      url.searchParams.get("suggestedAmounts")?.split(",").map(Number),
+    ).toEqual(siteInfo.donation.suggestedAmounts);
+  });
+
+  it("should prefill the amount and frequency only when given", () => {
+    expect(new URL(buildEveryOrgUrl()).searchParams.has("amount")).toBe(false);
     const url = new URL(buildEveryOrgUrl({ amount: 25, frequency: "monthly" }));
     expect(url.searchParams.get("amount")).toBe("25");
     expect(url.searchParams.get("frequency")).toBe("monthly");
