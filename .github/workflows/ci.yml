@@ -54,3 +54,8 @@ jobs:
 
       - name: Biome
         run: pnpm biome ci
+
+      - name: Build
+        run: |
+          pnpm --filter "@namesake/web" --filter "@namesake/docs" run build:only
+          pnpm --filter "@namesake/pdf-manager" run build
