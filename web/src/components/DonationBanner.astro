@@ -1,5 +1,9 @@
 ---
-import { siteInfo } from "#constants/site-info";
+import {
+  DONATION_FREQUENCIES,
+  type DonationFrequency,
+  siteInfo,
+} from "#constants/site-info";
 import { buildDonatePath } from "#lib/utils/buildDonatePath";
 import { formatCurrency } from "#lib/utils/formatCurrency";
 
@@ -9,6 +13,14 @@ interface Props {
 
 const { class: className, ...rest } = Astro.props;
 const { donation, fiscalSponsor } = siteInfo;
+
+const DEFAULT_FREQUENCY: DonationFrequency = "monthly";
+
+const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
+  yearly: "Yearly",
+  monthly: "Monthly",
+  once: "Once",
+};
 ---
 
 <section
@@ -30,32 +42,25 @@ const { donation, fiscalSponsor } = siteInfo;
   <div class="give">
     <fieldset class="frequency">
       <legend class="visually-hidden">Donation frequency</legend>
-      <label>
-        <input
-          class="visually-hidden"
-          type="radio"
-          name="donation-frequency"
-          value="once"
-          checked
-        />
-        One-time
-      </label>
-      <label>
-        <input
-          class="visually-hidden"
-          type="radio"
-          name="donation-frequency"
-          value="monthly"
-        />
-        Monthly
-      </label>
+      {DONATION_FREQUENCIES.map((frequency) => (
+        <label>
+          <input
+            class="visually-hidden"
+            type="radio"
+            name="donation-frequency"
+            value={frequency}
+            checked={frequency === DEFAULT_FREQUENCY}
+          />
+          {FREQUENCY_LABELS[frequency]}
+        </label>
+      ))}
     </fieldset>
     <ul class="amounts">
       {[...donation.suggestedAmounts, undefined].map((amount) => (
         <li>
           <a
             class="button secondary"
-            href={buildDonatePath({ amount })}
+            href={buildDonatePath({ amount, frequency: DEFAULT_FREQUENCY })}
           >
             {amount ? formatCurrency(amount) : "Other"}
           </a>
@@ -149,7 +154,7 @@ const { donation, fiscalSponsor } = siteInfo;
   }
 
   .give {
-    --control-border-width: 1.5px;
+    --control-border-width: 1px;
 
     container-type: inline-size;
     display: flex;
@@ -159,7 +164,7 @@ const { donation, fiscalSponsor } = siteInfo;
 
   .frequency {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     min-inline-size: 0;
     padding: 0;
     margin: 0;
@@ -171,22 +176,23 @@ const { donation, fiscalSponsor } = siteInfo;
       text-align: center;
       cursor: pointer;
       border: var(--control-border-width) solid var(--text-color);
-      border-radius: var(--radius-2xs);
 
       &:first-of-type {
-        border-start-end-radius: 0;
-        border-end-end-radius: 0;
+        border-start-start-radius: var(--radius-2xs);
+        border-end-start-radius: var(--radius-2xs);
       }
 
       /* Overlap the shared border so it doesn't double up */
-      &:last-of-type {
+      &:not(:first-of-type) {
         margin-inline-start: calc(var(--control-border-width) * -1);
-        border-start-start-radius: 0;
-        border-end-start-radius: 0;
+      }
+
+      &:last-of-type {
+        border-start-end-radius: var(--radius-2xs);
+        border-end-end-radius: var(--radius-2xs);
       }
 
       &:has(:checked) {
-        font-weight: var(--weight-bold);
         color: var(--background-color);
         background-color: var(--text-color);
       }
@@ -202,23 +208,60 @@ const { donation, fiscalSponsor } = siteInfo;
   .amounts {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: var(--space-s);
     padding: 0;
     margin: 0;
     list-style: none;
 
+    --outer-radius: var(--radius-2xs);
+
+    /* Overlap shared borders so they don't double up */
+    li:not(:first-child) {
+      margin-inline-start: calc(var(--control-border-width) * -1);
+    }
+
+    li:first-child .button {
+      border-start-start-radius: var(--outer-radius);
+      border-end-start-radius: var(--outer-radius);
+    }
+
+    li:last-child .button {
+      border-start-end-radius: var(--outer-radius);
+      border-end-end-radius: var(--outer-radius);
+    }
+
     @container (width < 30rem) {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
 
       li:last-child {
-        grid-column: span 2;
+        grid-column: 1 / -1;
+        margin-block-start: calc(var(--control-border-width) * -1);
+        margin-inline-start: 0;
+      }
+
+      li:first-child .button {
+        border-end-start-radius: 0;
+      }
+
+      li:nth-last-child(2) .button {
+        border-start-end-radius: var(--outer-radius);
+      }
+
+      li:last-child .button {
+        border-start-end-radius: 0;
+        border-end-start-radius: var(--outer-radius);
       }
     }
 
     .button {
+      position: relative;
       padding-inline: var(--space-s);
       border-width: var(--control-border-width);
-      border-radius: var(--radius-2xs);
+      border-radius: 0;
+
+      &:hover,
+      &:focus-visible {
+        z-index: 1;
+      }
     }
   }
 

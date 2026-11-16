@@ -14,13 +14,21 @@ test.describe("donate", () => {
     );
   });
 
-  test("should prefill monthly donations when toggled", async ({ page }) => {
+  test("should prefill monthly donations by default", async ({ page }) => {
     await page.goto("/");
-    await page.locator("label", { hasText: "Monthly" }).click();
 
     await expect(
       page.getByRole("link", { name: "$25", exact: true }),
     ).toHaveAttribute("href", "/donate?amount=25&frequency=monthly");
+  });
+
+  test("should prefill the frequency when toggled", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("label", { hasText: "Once" }).click();
+
+    await expect(
+      page.getByRole("link", { name: "$25", exact: true }),
+    ).toHaveAttribute("href", "/donate?amount=25&frequency=once");
   });
 
   test("should open the donation popover from donate links", async ({

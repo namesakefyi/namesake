@@ -1,6 +1,6 @@
 import { COLORS } from "#constants/colors";
 
-export const DONATION_FREQUENCIES = ["once", "monthly"] as const;
+export const DONATION_FREQUENCIES = ["yearly", "monthly", "once"] as const;
 
 export type DonationFrequency = (typeof DONATION_FREQUENCIES)[number];
 
