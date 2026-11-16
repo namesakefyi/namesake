@@ -13,18 +13,18 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",
-    "@astrojs/cloudflare": "^14.4.3",
-    "@astrojs/starlight": "^0.42.9",
-    "@mermaid-js/layout-elk": "^1.0.1",
-    "astro": "^7.4.4",
+    "@astrojs/cloudflare": "14.4.6",
+    "@astrojs/starlight": "0.42.10",
+    "@mermaid-js/layout-elk": "^1.0.2",
+    "astro": "7.4.7",
     "astro-mermaid": "^2.2.0",
-    "astro-og-canvas": "^0.13.2",
+    "astro-og-canvas": "^0.13.3",
     "canvaskit-wasm": "^0.42.0",
-    "mermaid": "^12.2.0",
+    "mermaid": "^12.3.0",
     "sharp": "^0.35.5",
     "starlight-theme-flexoki": "^0.3.0",
     "typescript": "^6.0.3",
-    "wrangler": "^4.156.0"
+    "wrangler": "^4.157.0"
   },
   "devDependencies": {
     "@types/node": "^26.6.6"
