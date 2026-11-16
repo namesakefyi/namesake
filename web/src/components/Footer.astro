@@ -1,10 +1,37 @@
 ---
-import { RiHeart3Line } from "@remixicon/react";
-import { siteInfo } from "#constants/site-info";
+import {
+  type RemixiconComponentType,
+  RiBlueskyFill,
+  RiDiscordFill,
+  RiGithubFill,
+  RiHeart3Line,
+  RiInstagramFill,
+  RiLinkedinBoxFill,
+  RiMailSendFill,
+  RiRssFill,
+} from "@remixicon/react";
+import {
+  type SocialLink,
+  type SocialPlatform,
+  siteInfo,
+} from "#constants/site-info";
 import Logo from "./Logo.astro";
 import Subscribe from "./Subscribe.astro";
 
-const { socialLinks } = siteInfo;
+const socialIcons: Record<SocialPlatform, RemixiconComponentType> = {
+  discord: RiDiscordFill,
+  github: RiGithubFill,
+  instagram: RiInstagramFill,
+  bluesky: RiBlueskyFill,
+  linkedin: RiLinkedinBoxFill,
+  email: RiMailSendFill,
+  rss: RiRssFill,
+};
+
+const socialLinks = Object.entries(siteInfo.socialLinks) as [
+  SocialPlatform,
+  SocialLink,
+][];
 
 type Link = {
   href: string;
@@ -88,11 +115,14 @@ const linkGroups: LinkGroup[] = [
     </div>
     <div class="social">
       {
-        Object.values(socialLinks).map(({ href, Icon, text }) => (
-          <a {href} title={text}>
-            <Icon size={28} />
-          </a>
-        ))
+        socialLinks.map(([platform, { href, text }]) => {
+          const Icon = socialIcons[platform];
+          return (
+            <a {href} title={text}>
+              <Icon size={28} />
+            </a>
+          );
+        })
       }
     </div>
   </div>

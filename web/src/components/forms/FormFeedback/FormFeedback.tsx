@@ -19,7 +19,7 @@ import { Form } from "../../common/Form";
 import { Radio, RadioGroup } from "../../common/RadioGroup";
 import { TextArea } from "../../common/TextArea";
 import "./FormFeedback.css";
-import { donation } from "#constants/donation";
+import { siteInfo } from "#constants/site-info";
 import { Banner } from "../../common/Banner";
 import { Heading } from "../../common/Content";
 import { Dialog } from "../../common/Dialog";
@@ -147,7 +147,7 @@ export function FormFeedback({ formId }: FormFeedbackProps) {
                 Share
               </Button>
             )}
-            <a href={donation.path} className="react-aria-Button">
+            <a href={siteInfo.urls.donate} className="react-aria-Button">
               <RiHandHeartLine aria-hidden />
               Donate
             </a>

@@ -1,8 +1,10 @@
 import {
   type DonateOptions,
   type DonationFrequency,
-  donation,
-} from "#constants/donation";
+  siteInfo,
+} from "#constants/site-info";
+
+const { donation } = siteInfo;
 
 const POPOVER_SCRIPT_URL = "https://embeds.every.org/0.4/button.js?explicit=1";
 

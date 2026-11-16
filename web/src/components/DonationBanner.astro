@@ -1,6 +1,6 @@
 ---
-import { donation } from "#constants/donation";
 import { siteInfo } from "#constants/site-info";
+import { buildDonatePath } from "#lib/utils/buildDonatePath";
 import { formatCurrency } from "#lib/utils/formatCurrency";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { class: className, ...rest } = Astro.props;
-const { fiscalSponsor } = siteInfo;
+const { donation, fiscalSponsor } = siteInfo;
 ---
 
 <section
@@ -55,7 +55,7 @@ const { fiscalSponsor } = siteInfo;
         <li>
           <a
             class="button secondary"
-            href={amount ? `${donation.path}?amount=${amount}` : donation.path}
+            href={buildDonatePath({ amount })}
           >
             {amount ? formatCurrency(amount) : "Other"}
           </a>
@@ -72,7 +72,9 @@ const { fiscalSponsor } = siteInfo;
 
 <script>
   import { annotate } from "rough-notation";
-  import type { DonationFrequency } from "#constants/donation";
+  import type { DonationFrequency } from "#constants/site-info";
+  import { buildDonatePath } from "#lib/utils/buildDonatePath";
+  import { parseDonateOptions } from "#lib/utils/parseDonateOptions";
 
   const banner = document.querySelector<HTMLElement>(".donation-banner");
 
@@ -111,9 +113,8 @@ const { fiscalSponsor } = siteInfo;
       .value as DonationFrequency;
 
     for (const link of amountLinks) {
-      const url = new URL(link.href);
-      url.searchParams.set("frequency", frequency);
-      link.href = url.toString();
+      const { amount } = parseDonateOptions(new URL(link.href).searchParams);
+      link.href = buildDonatePath({ amount, frequency });
     }
   });
 </script>

@@ -1,4 +1,4 @@
-import { DONATION_FREQUENCIES, type DonateOptions } from "#constants/donation";
+import { DONATION_FREQUENCIES, type DonateOptions } from "#constants/site-info";
 
 export const parseDonateOptions = (
   searchParams: URLSearchParams,

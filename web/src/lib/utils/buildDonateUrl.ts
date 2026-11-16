@@ -1,4 +1,6 @@
-import { type DonateOptions, donation } from "#constants/donation";
+import { type DonateOptions, siteInfo } from "#constants/site-info";
+
+const { donation } = siteInfo;
 
 export const buildDonateUrl = ({ amount, frequency }: DonateOptions = {}) => {
   const url = new URL(`https://www.every.org/${donation.nonprofitSlug}`);

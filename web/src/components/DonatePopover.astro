@@ -1,5 +1,5 @@
 <script>
-  import { donation } from "#constants/donation";
+  import { siteInfo } from "#constants/site-info";
   import { openDonatePopover } from "#lib/donate/openDonatePopover";
   import { parseDonateOptions } from "#lib/utils/parseDonateOptions";
 
@@ -24,7 +24,7 @@
 
     const url = new URL(link.href);
     const isDonateLink =
-      url.pathname === donation.path &&
+      url.pathname === siteInfo.urls.donate &&
       (url.origin === window.location.origin ||
         url.hostname === "namesake.fyi");
     if (!isDonateLink) return;

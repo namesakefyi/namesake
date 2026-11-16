@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { donation } from "#constants/donation";
+import { siteInfo } from "#constants/site-info";
+
+const { donation } = siteInfo;
 
 const loadModule = async () => {
   vi.resetModules();
