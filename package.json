@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=24.0.0"
+    "node": ">=24.15.0"
   },
   "devEngines": {
     "packageManager": {
@@ -39,7 +39,7 @@
     ]
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.6.5",
+    "@biomejs/biome": "^2.6.7",
     "nano-staged": "^1.0.2",
     "simple-git-hooks": "^2.14.0"
   }
