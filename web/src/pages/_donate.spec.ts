@@ -1,4 +1,13 @@
-import { expect, test } from "@playwright/test";
+import { expect, type Page, test } from "@playwright/test";
+
+const frequencyInputs = (page: Page) =>
+  page.locator('input[name="donation-frequency"]');
+
+const firstAmountLink = (page: Page) =>
+  page.locator(".amounts").getByRole("link").first();
+
+const withFrequency = (frequency: string) =>
+  new RegExp(`^/donate\\?amount=\\d+&frequency=${frequency}$`);
 
 test.describe("donate", () => {
   test("should redirect to Every.org with the amount and frequency", async ({
@@ -14,21 +23,30 @@ test.describe("donate", () => {
     );
   });
 
-  test("should prefill monthly donations by default", async ({ page }) => {
+  test("should prefill the checked frequency by default", async ({ page }) => {
     await page.goto("/");
+    const frequency = await frequencyInputs(page)
+      .and(page.locator(":checked"))
+      .inputValue();
 
-    await expect(
-      page.getByRole("link", { name: "$25", exact: true }),
-    ).toHaveAttribute("href", "/donate?amount=25&frequency=monthly");
+    await expect(firstAmountLink(page)).toHaveAttribute(
+      "href",
+      withFrequency(frequency),
+    );
   });
 
   test("should prefill the frequency when toggled", async ({ page }) => {
     await page.goto("/");
-    await page.locator("label", { hasText: "Once" }).click();
 
-    await expect(
-      page.getByRole("link", { name: "$25", exact: true }),
-    ).toHaveAttribute("href", "/donate?amount=25&frequency=once");
+    for (const input of await frequencyInputs(page).all()) {
+      const frequency = await input.inputValue();
+      await input.locator("..").click();
+
+      await expect(firstAmountLink(page)).toHaveAttribute(
+        "href",
+        withFrequency(frequency),
+      );
+    }
   });
 
   test("should open the donation popover from donate links", async ({
@@ -65,7 +83,12 @@ test.describe("donate", () => {
     await page.goto("/");
 
     const everyOrgRequest = page.waitForRequest(/www\.every\.org\/namesake/);
-    await page.getByRole("link", { name: "$25", exact: true }).click();
-    expect((await everyOrgRequest).url()).toContain("amount=25");
+    const amountLink = firstAmountLink(page);
+    const amount = new URL(
+      (await amountLink.getAttribute("href")) ?? "",
+      page.url(),
+    ).searchParams.get("amount");
+    await amountLink.click();
+    expect((await everyOrgRequest).url()).toContain(`amount=${amount}`);
   });
 });
