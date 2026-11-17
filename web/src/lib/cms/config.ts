@@ -248,7 +248,19 @@ export const cmsConfig: CmsConfig = {
       identifier_field: "name",
       fields: [
         { name: "name", label: "Name" },
-        { name: "role", label: "Role" },
+        {
+          name: "org",
+          label: "Organization",
+          widget: "object",
+          fields: [
+            {
+              name: "name",
+              label: "Name",
+              hint: 'Use "Namesake" for Namesake team members.',
+            },
+            { name: "role", label: "Role" },
+          ],
+        },
         { name: "bio", label: "Bio", widget: "text" },
         { name: "avatar", label: "Avatar", widget: "image" },
         {

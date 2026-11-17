@@ -1,5 +1,7 @@
 name: mb bischoff
-role: Core Contributor, Namesake
+org:
+  name: Namesake
+  role: Core Contributor
 bio: mb bischoff (she/it) is a designer and developer in New York City. She is the co-founder of Lickability, a software studio which has built apps for clients like The Atlantic, Mastodon, and The New Yorker.
 avatar: 2026.jpeg
 socialLinks:

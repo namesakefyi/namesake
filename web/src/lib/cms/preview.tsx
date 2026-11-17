@@ -13,6 +13,7 @@ import { JURISDICTIONS } from "#constants/jurisdictions";
 import { SERVICE_LABELS, type Service } from "#constants/services";
 import { formatCleanUrl } from "#lib/utils/formatCleanUrl";
 import { formatLanguage } from "#lib/utils/formatLanguage";
+import { joinParts } from "#lib/utils/joinParts";
 import { smartquotes } from "#lib/utils/smartquotes";
 import boldFont from "../../fonts/AtkinsonHyperlegibleSoft-Bold.woff2?url";
 import boldItalicFont from "../../fonts/AtkinsonHyperlegibleSoft-BoldItalic.woff2?url";
@@ -153,7 +154,7 @@ const ArticlePreview = ({
 type Author = {
   slug: string;
   name: string;
-  role: string;
+  org?: { name?: string; role?: string };
   bio: string;
   avatarUrl?: string;
   socialLinks?: { name: string; url: string }[];
@@ -225,7 +226,9 @@ const AuthorList = ({ authors }: { authors: Author[] }) =>
           <AuthorAvatar author={author} className="author-avatar" size={32} />
           <div className="author-info">
             <strong>{author.name}</strong>
-            <span className="role">{author.role}</span>
+            <span className="role">
+              {joinParts(author.org?.role, author.org?.name)}
+            </span>
           </div>
         </span>
       ))}
