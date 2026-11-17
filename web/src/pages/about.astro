@@ -1,111 +1,495 @@
 ---
 import { Image } from "astro:assets";
-import PageHeader from "#components/PageHeader.astro";
+import { getCollection } from "astro:content";
+import DonateBanner from "#components/DonateBanner.astro";
+import Testimonials from "#components/Testimonials.astro";
+import { siteInfo } from "#constants/site-info";
 import BaseLayout from "#layouts/BaseLayout.astro";
+import { allForms } from "#lib/forms/allForms";
 import { getNamesakeAuthors } from "#lib/queries/authors";
+import { fetchGitHubContributors } from "#lib/utils/fetchGitHubContributors";
+import { shuffle } from "#lib/utils/shuffle";
+import { smartquotes } from "#lib/utils/smartquotes";
 
-const team = await getNamesakeAuthors();
+const REPO = "namesakefyi/namesake";
+const NAME_CHANGES_ASSISTED = 1000;
+const MAX_TILT_DEGREES = 3;
+
+const CONTRIBUTOR_ROW_LENGTH = 8;
+
+const randomUpTo = (max: number) => ((Math.random() * 2 - 1) * max).toFixed(2);
+
+const [team, contributors, guides, directoryEntries] = await Promise.all([
+  getNamesakeAuthors(),
+  fetchGitHubContributors(REPO, import.meta.env.GITHUB_TOKEN),
+  getCollection("guides", ({ data }) => !data.unlisted),
+  getCollection("directory"),
+]);
+
+const teamColumns = [0, 1].map((column) =>
+  team
+    .map((member, order) => ({ member, order }))
+    .filter(({ order }) => order % 2 === column),
+);
+
+const formatCount = (count: number) => count.toLocaleString("en-US");
+
+const stats: { value: string; label: string; href?: string }[] = [
+  {
+    value: `${formatCount(NAME_CHANGES_ASSISTED)}+`,
+    label: "Name changes assisted",
+  },
+  {
+    value: formatCount(guides.length),
+    label: "Guides",
+    href: siteInfo.urls.guides,
+  },
+  {
+    value: formatCount(
+      Object.values(allForms).filter((form) => !form.unlisted).length,
+    ),
+    label: "Forms",
+    href: siteInfo.urls.forms,
+  },
+  {
+    value: formatCount(directoryEntries.length),
+    label: "Organizations",
+    href: siteInfo.urls.directory,
+  },
+];
+
+const shuffledContributors = shuffle(contributors);
+
+const contributorRows: {
+  contributors: typeof contributors;
+  isShifted: boolean;
+}[] = [];
+for (let start = 0; start < shuffledContributors.length; ) {
+  const fullLength =
+    contributorRows.length % 2 === 0
+      ? CONTRIBUTOR_ROW_LENGTH - 1
+      : CONTRIBUTOR_ROW_LENGTH;
+  const row = shuffledContributors.slice(start, start + fullLength);
+  contributorRows.push({
+    contributors: row,
+    isShifted: (fullLength - row.length) % 2 === 1,
+  });
+  start += fullLength;
+}
 ---
 
-<BaseLayout
-  title="About"
-  description="Meet the team behind Namesake."
->
-  <PageHeader title="About" />
-  <section class="intro">
+<BaseLayout title="About" description="Meet the team behind Namesake.">
+  <h1 class="title">About Namesake</h1>
+  <section class="statement">
+    <h2
+      class="tag"
+      data-inverted
+      style={`rotate: ${randomUpTo(MAX_TILT_DEGREES)}deg`}
+    >
+      Mission
+    </h2>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-      commodo consequat.
-    </p>
-    <p>
-      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-      dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      Namesake simplifies the process of changing legal names and gender markers
+      for trans people in the U.S.
     </p>
   </section>
-  <section class="team">
-    <h2>Team</h2>
-    <ul class="members">
-      {team.map((member) => (
-        <li class="member">
-          <Image
-            class="photo"
-            src={member.data.avatar}
-            alt={`${member.data.name} photo`}
-            width={160}
-            height={160}
-            densities={[1, 2]}
-          />
-          <div class="details">
-            <strong>{member.data.name}</strong>
-            <span>{member.data.org.role}</span>
-            <p>{member.data.bio}</p>
-            {member.data.socialLinks && member.data.socialLinks.length > 0 && (
-              <ul class="social">
-                {member.data.socialLinks.map((link) => (
-                  <li>
-                    <a href={link.url} target="_blank" rel="noopener noreferrer">
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </li>
-      ))}
+  <section class="statement">
+    <h2
+      class="tag"
+      data-inverted
+      style={`rotate: ${randomUpTo(MAX_TILT_DEGREES)}deg`}
+    >
+      Vision
+    </h2>
+    <p>
+      To promote the freedom of <span class="nowrap">self-determination</span>{" "}
+      for all.
+    </p>
+  </section>
+  <section class="impact">
+    <h2
+      class="tag"
+      data-inverted
+      style={`rotate: ${randomUpTo(MAX_TILT_DEGREES)}deg`}
+    >
+      Impact
+    </h2>
+    <ul class="stats">
+      {stats.map(({ value, label, href }) => {
+        const Stat = href ? "a" : "div";
+        return (
+          <li>
+            <Stat class="stat" href={href}>
+              <strong class="stat-value">{value}</strong>
+              <span class="stat-label">{label}</span>
+            </Stat>
+          </li>
+        );
+      })}
     </ul>
+  </section>
+  <section class="team">
+    <h2
+      class="tag"
+      data-inverted
+      style={`rotate: ${randomUpTo(MAX_TILT_DEGREES)}deg`}
+    >
+      Team
+    </h2>
+    <div class="members">
+      {teamColumns.map((column) => (
+        <ul class="member-column">
+          {column.map(({ member, order }) => (
+            <li
+              class="member"
+              style={[
+                `order: ${order}`,
+                `--photo-rotation: ${randomUpTo(MAX_TILT_DEGREES)}deg`,
+                `--name-rotation: ${randomUpTo(MAX_TILT_DEGREES)}deg`,
+                `--meta-rotation: ${randomUpTo(MAX_TILT_DEGREES)}deg`,
+              ].join("; ")}
+            >
+              <div class="heading">
+                <h3>
+                  <span class="name" data-inverted>
+                    <span class="name-text">{member.data.name}</span>
+                  </span>
+                </h3>
+                <div class="meta">
+                  <span class="role">{member.data.org.role}</span>
+                  {member.data.pronouns && (
+                    <span class="pronouns">{member.data.pronouns}</span>
+                  )}
+                </div>
+              </div>
+              <div class="photo-frame">
+                <Image
+                  class="photo"
+                  src={member.data.avatar}
+                  alt={`${member.data.name} photo`}
+                  widths={[160, 320]}
+                  sizes="160px"
+                />
+              </div>
+              <p class="bio">{smartquotes(member.data.bio)}</p>
+              {member.data.socialLinks && member.data.socialLinks.length > 0 && (
+                <ul class="social">
+                  {member.data.socialLinks.map((link) => (
+                    <li>
+                      <a href={link.url} target="_blank" rel="noopener noreferrer">
+                        {link.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </section>
+  <section class="contributors-banner" aria-labelledby="contributors-title">
+    {contributorRows.length > 0 && (
+      <div class="contributors">
+        {contributorRows.map((row) => (
+          <ul class:list={["contributor-row", { shifted: row.isShifted }]}>
+            {row.contributors.map((contributor) => (
+              <li>
+                <img
+                  class="avatar contributor-avatar"
+                  src={`${contributor.avatar_url}&s=96`}
+                  alt={contributor.login}
+                  width="48"
+                  height="48"
+                  loading="lazy"
+                />
+              </li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    )}
+    <h2 id="contributors-title">&hellip;and many more volunteers</h2>
+    <p>
+      Namesake is built with the help of open source contributors around the
+      world.
+    </p>
+    <div class="actions">
+      <a href={`https://github.com/${REPO}`}>Star us on GitHub</a>
+      <a href={siteInfo.urls.contribute}>Read the Contributor Docs</a>
+    </div>
+  </section>
+  <DonateBanner class="donation" />
+  <section class="testimonials-section">
+    <h2 class="visually-hidden">Testimonials</h2>
+    <Testimonials />
   </section>
 </BaseLayout>
 
 <style>
-  .intro {
-    max-width: 720px;
+  .title {
+    padding-block: var(--space-2xl) 0;
+    text-align: center;
   }
 
-  .team {
-    padding-bottom: var(--space-3xl);
+  section > .tag {
+    margin: 0 auto var(--space-xl);
+    text-align: center;
   }
 
-  .members {
+  .tag {
+    width: fit-content;
+    padding: 0.15em var(--space-xs);
+    font-weight: var(--weight-bold);
+  }
+
+  .statement {
+    max-width: 60ch;
+    padding-block-start: var(--space-2xl);
+    margin: 0 auto;
+    text-align: center;
+
+    p {
+      font-size: var(--step-3);
+    }
+  }
+
+  .impact {
+    padding-block-start: var(--space-3xl);
+  }
+
+  .testimonials-section {
+    padding-block-end: var(--space-3xl);
+  }
+
+  .stats {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-xl);
-    max-width: 720px;
+    flex-wrap: wrap;
+    gap: var(--space-xl) var(--space-2xl);
+    justify-content: center;
     padding: 0;
+    margin: 0;
     list-style-type: none;
   }
 
-  .member {
+  .stat {
     display: flex;
-    gap: var(--space-m);
-    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    text-decoration: none;
 
-    @media (width < 600px) {
+    &:is(a) .stat-label {
+      text-decoration: underline;
+      text-decoration-color: var(--text-color-muted);
+      text-underline-offset: max(0.1em, 2.5px);
+    }
+  }
+
+  .stat-value {
+    font-size: var(--step-5);
+    line-height: var(--line-height-single);
+    letter-spacing: var(--letter-spacing-condensed);
+  }
+
+  .team {
+    padding-block: var(--space-3xl);
+
+    > .tag {
+      margin-block-end: var(--space-3xl);
+    }
+  }
+
+  .contributors-banner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+    align-items: center;
+    text-align: center;
+    padding-block: var(--space-xl);
+
+    h2 {
+      font-size: var(--step-2);
+      text-wrap: balance;
+    }
+  }
+
+  .donation {
+    margin-block: var(--space-3xl);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    justify-content: center;
+    margin-block-start: var(--space-s);
+  }
+
+  .contributors {
+    --avatar-gap: var(--space-s);
+    --avatar-size: min(
+      48px,
+      (100cqi - (var(--row-length) - 1) * var(--avatar-gap)) /
+        var(--row-length)
+    );
+    --row-length: 8;
+
+    display: grid;
+    row-gap: calc(
+      (var(--avatar-size) + var(--avatar-gap)) * 0.866 - var(--avatar-size)
+    );
+    width: 100%;
+    margin-block-end: var(--space-m);
+    container-type: inline-size;
+  }
+
+  .contributor-row {
+    display: flex;
+    gap: var(--avatar-gap);
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+
+    &.shifted {
+      translate: calc((var(--avatar-size) + var(--avatar-gap)) / 2) 0;
+    }
+
+    li {
+      flex: 0 0 var(--avatar-size);
+      isolation: isolate;
+      background-color: var(--background-color);
+      border-radius: 100%;
+      box-shadow: 0 0 0 1px var(--background-color);
+    }
+  }
+
+  .contributor-avatar {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .members {
+    --photo-size: 160px;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
+
+    @media (width >= 760px) {
+      flex-direction: row;
+      gap: var(--space-3xl);
+      align-items: flex-start;
+    }
+  }
+
+  .member-column {
+    display: contents;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+
+    @media (width >= 760px) {
+      display: flex;
+      flex: 1;
       flex-direction: column;
+      gap: var(--space-2xl);
+
+      & + & {
+        margin-block-start: var(--space-3xl);
+      }
+    }
+  }
+
+  .member {
+    display: grid;
+    grid-template-columns: var(--photo-size) 1fr;
+    column-gap: var(--space-m);
+    align-content: start;
+    align-items: center;
+
+    .photo-frame {
+      grid-row: 1;
+      grid-column: 1;
+      rotate: var(--photo-rotation);
+      isolation: isolate;
+      width: var(--photo-size);
+      background-color: var(--background-color);
+      border-radius: 100%;
+      box-shadow: 0 0 0 1px var(--background-color);
+    }
+
+    .heading {
+      position: relative;
+      z-index: 1;
+      grid-row: 1;
+      grid-column: 2;
+    }
+
+    .name {
+      padding: 0.15em var(--space-2xs);
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
+
+    .name-text {
+      position: relative;
+    }
+
+    .bio,
+    .social {
+      grid-column: 1 / -1;
+    }
+
+    .bio {
+      margin: var(--space-m) 0 0;
+    }
+
+    .social {
+      margin: var(--space-xs) 0 0;
     }
   }
 
   .photo {
-    flex-shrink: 0;
-    width: 160px;
-    height: 160px;
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
     object-fit: cover;
+    border-radius: 100%;
     user-select: none;
     mix-blend-mode: luminosity;
     filter: grayscale(100%);
   }
 
-  .details {
+  .heading {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2xs);
 
-    p {
-      margin: 0;
+    h3 {
+      margin-block-end: var(--space-m);
+      margin-inline-start: calc(-1 * (var(--space-l) + var(--space-m)));
+      rotate: var(--name-rotation);
     }
+
+    .meta {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2xs);
+      rotate: var(--meta-rotation);
+    }
+  }
+
+  .role {
+    font-weight: var(--weight-bold);
+    line-height: var(--line-height-display);
+    text-wrap: balance;
+  }
+
+  .pronouns {
+    font-size: var(--step--1);
   }
 
   .social {
@@ -116,3 +500,20 @@ const team = await getNamesakeAuthors();
     list-style-type: none;
   }
 </style>
+
+<script>
+  import { annotate } from "rough-notation";
+
+  const isForcedColors = window.matchMedia("(forced-colors: active)").matches;
+
+  if (!isForcedColors) {
+    for (const frame of document.querySelectorAll(".photo-frame")) {
+      annotate(frame as HTMLElement, {
+        type: "circle",
+        iterations: 1,
+        animate: false,
+        padding: 0,
+      }).show();
+    }
+  }
+</script>

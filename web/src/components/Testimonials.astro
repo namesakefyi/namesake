@@ -1,0 +1,72 @@
+---
+import { getCollection } from "astro:content";
+import { shuffle } from "#lib/utils/shuffle";
+import { smartquotes } from "#lib/utils/smartquotes";
+
+const TESTIMONIAL_COUNT = 3;
+
+const testimonials = shuffle(await getCollection("testimonials")).slice(
+  0,
+  TESTIMONIAL_COUNT,
+);
+
+const monthYear = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC",
+});
+---
+
+{testimonials.length > 0 && (
+  <ul class="testimonials">
+    {testimonials.map(({ data }) => (
+      <li>
+        <figure>
+          <blockquote>
+            <p>{smartquotes(data.quote)}</p>
+          </blockquote>
+          <figcaption>
+            <span class="location">{data.location}</span>
+            <time datetime={data.date.toISOString().slice(0, 10)}>
+              {monthYear.format(data.date)}
+            </time>
+          </figcaption>
+        </figure>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .testimonials {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: var(--space-xl);
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+  }
+
+  figure {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+    margin: 0;
+  }
+
+  blockquote {
+    margin: 0;
+    font-size: var(--step-1);
+    font-style: italic;
+    text-wrap: pretty;
+  }
+
+  figcaption {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .location {
+    font-weight: var(--weight-bold);
+  }
+</style>

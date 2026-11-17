@@ -30,41 +30,27 @@ type Link = {
   title?: string;
 };
 
-type LinkGroup = {
-  title: string;
-  links: Link[];
-};
-
-const linkGroups: LinkGroup[] = [
-  {
-    title: "About",
-    links: [
-      { href: "/about", label: "About" },
-      { href: siteInfo.urls.blog, label: "Blog" },
-      { href: "/press", label: "Press" },
-      { href: "/brand-assets", label: "Brand" },
-      { href: siteInfo.urls.donate, label: "Donate" },
-      { href: siteInfo.urls.contribute, label: "Contribute" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { href: "/terms", label: "Terms" },
-      { href: "/privacy", label: "Privacy" },
-      { href: "/abuse", label: "Abuse" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { href: siteInfo.urls.guides, label: "Guides" },
-      { href: siteInfo.urls.forms, label: "Forms" },
-      { href: siteInfo.urls.directory, label: "Directory" },
-      { href: siteInfo.urls.chat, label: "Chat" },
-      { href: siteInfo.urls.status, label: "Status" },
-    ],
-  },
+const linkGroups: Link[][] = [
+  [
+    { href: "/about", label: "About" },
+    { href: siteInfo.urls.blog, label: "Blog" },
+    { href: "/press", label: "Press" },
+    { href: "/brand-assets", label: "Brand" },
+    { href: siteInfo.urls.donate, label: "Donate" },
+    { href: siteInfo.urls.contribute, label: "Contribute" },
+  ],
+  [
+    { href: "/terms", label: "Terms" },
+    { href: "/privacy", label: "Privacy" },
+    { href: "/abuse", label: "Abuse" },
+  ],
+  [
+    { href: siteInfo.urls.guides, label: "Guides" },
+    { href: siteInfo.urls.forms, label: "Forms" },
+    { href: siteInfo.urls.directory, label: "Directory" },
+    { href: siteInfo.urls.chat, label: "Chat" },
+    { href: siteInfo.urls.status, label: "Status" },
+  ],
 ];
 ---
 
@@ -79,9 +65,8 @@ const linkGroups: LinkGroup[] = [
   <div class="content">
     <Subscribe />
     <div class="links">
-      {linkGroups.map(({ title, links }) => (
+      {linkGroups.map((links) => (
         <div class="linkGroup">
-          <strong>{title}</strong>
           {links.map(({ href, label, title }) => (
             <a {href} {title}>
               {label}

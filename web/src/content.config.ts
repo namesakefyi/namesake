@@ -1,6 +1,7 @@
 import { defineCollection, reference } from "astro:content";
-import { glob } from "astro/loaders";
+import { file, glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { parse } from "yaml";
 import { ANNOTATION_TYPES } from "./constants/annotations";
 import { CATEGORIES } from "./constants/categories";
 import { COLOR_KEYS } from "./constants/colors";
@@ -155,6 +156,21 @@ const sponsors = defineCollection({
     }),
 });
 
+const testimonials = defineCollection({
+  loader: file("src/content/testimonials.yml", {
+    parser: (text) =>
+      (parse(text) ?? []).map((testimonial: object, index: number) => ({
+        id: String(index + 1),
+        ...testimonial,
+      })),
+  }),
+  schema: z.object({
+    quote: z.string(),
+    location: z.string(),
+    date: z.coerce.date(),
+  }),
+});
+
 export const collections = {
   authors,
   categories,
@@ -165,4 +181,5 @@ export const collections = {
   posts,
   press,
   sponsors,
+  testimonials,
 };

@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import { joinParts } from "#lib/utils/joinParts";
+import { smartquotes } from "#lib/utils/smartquotes";
 
 interface Props {
   authors: CollectionEntry<"authors">[];
@@ -32,7 +33,7 @@ const { authors } = Astro.props;
           <span>{joinParts(author.data.org.role, author.data.org.name)}</span>
         </div>
         <div class="details">
-          <p>{author.data.bio}</p>
+          <p>{smartquotes(author.data.bio)}</p>
           {author.data.socialLinks && author.data.socialLinks.length > 0 && (
             <ul class="social">
               {author.data.socialLinks.map((link) => (
