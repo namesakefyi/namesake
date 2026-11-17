@@ -61,14 +61,22 @@ const headerDescription =
       annotation={annotation}
       breadcrumbs={breadcrumbs}
     />
-    <slot name="after-header" />
+    {Astro.slots.has("after-header") && (
+      <div class="after-header">
+        <slot name="after-header" />
+      </div>
+    )}
     <section class="toc" data-no-print>
       <slot name="toc" />
     </section>
     <section itemprop="articleBody" class="prose">
       <slot />
     </section>
-    <slot name="after-content" />
+    {Astro.slots.has("after-content") && (
+      <div class="after-content">
+        <slot name="after-content" />
+      </div>
+    )}
   </article>
   <slot name="after-article" />
 </BaseLayout>
@@ -148,7 +156,7 @@ const headerDescription =
       }
     }
 
-    > .bios {
+    .after-content {
       grid-area: bios;
     }
 
@@ -157,7 +165,7 @@ const headerDescription =
       margin-block-end: var(--space-m);
     }
 
-    > .authors {
+    .after-header {
       grid-area: authors;
     }
 

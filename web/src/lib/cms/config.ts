@@ -44,6 +44,7 @@ const imageField: Field = {
 
 export const cmsConfig: CmsConfig = {
   load_config_file: false,
+  editor: { preview: false },
   backend: {
     name: "github",
     repo: "namesakefyi/namesake",
@@ -68,7 +69,6 @@ export const cmsConfig: CmsConfig = {
       label_singular: "Blog Post",
       folder: `${CONTENT}/posts`,
       preview_path: "/blog/{{slug}}",
-      editor: { preview: false },
       path: "{{slug}}/index",
       extension: "mdx",
       sortable_fields: ["publishDate", "title"],
@@ -111,7 +111,6 @@ export const cmsConfig: CmsConfig = {
       label_singular: "Guide",
       folder: `${CONTENT}/guides`,
       preview_path: "/guides/{{slug}}",
-      editor: { preview: false },
       extension: "mdx",
       nested: { subfolders: false },
       meta: { path: {} },
@@ -161,7 +160,6 @@ export const cmsConfig: CmsConfig = {
       label_singular: "Page",
       folder: `${CONTENT}/pages`,
       preview_path: "/{{slug}}",
-      editor: { preview: false },
       extension: "md",
       fields: [
         { name: "title", label: "Title" },
@@ -183,7 +181,6 @@ export const cmsConfig: CmsConfig = {
       label_singular: "Organization",
       folder: `${CONTENT}/directory`,
       preview_path: "/directory/{{slug}}",
-      editor: { preview: false },
       path: "{{slug}}/index",
       extension: "yml",
       identifier_field: "name",
@@ -246,7 +243,6 @@ export const cmsConfig: CmsConfig = {
       label: "Authors",
       label_singular: "Author",
       folder: `${CONTENT}/authors`,
-      editor: { preview: false },
       path: "{{slug}}/index",
       extension: "yml",
       identifier_field: "name",
@@ -286,7 +282,6 @@ export const cmsConfig: CmsConfig = {
       label_singular: "Press Mention",
       folder: `${CONTENT}/press`,
       preview_path: "/press",
-      editor: { preview: false },
       path: "{{slug}}/index",
       extension: "yml",
       sortable_fields: ["date", "title"],
@@ -304,7 +299,6 @@ export const cmsConfig: CmsConfig = {
       label_singular: "Sponsor",
       folder: `${CONTENT}/sponsors`,
       preview_path: "/",
-      editor: { preview: false },
       path: "{{slug}}/index",
       extension: "yml",
       identifier_field: "name",
