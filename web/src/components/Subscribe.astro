@@ -27,10 +27,6 @@ import { RiArrowRightLine } from "@remixicon/react";
     border-radius: 5px;
     width: 100%;
     max-width: 520px;
-
-    :focus-visible {
-      outline-color: var(--footerText);
-    }
   }
 
   .input-group {
@@ -47,9 +43,9 @@ import { RiArrowRightLine } from "@remixicon/react";
   input,
   button {
     border: none;
-    background: var(--background-color);
+    background: var(--highlight-background);
     border-radius: var(--radius-s);
-    color: var(--text-color);
+    color: var(--highlight-foreground);
     padding: var(--space-xs) var(--space-s);
   }
 
@@ -58,7 +54,7 @@ import { RiArrowRightLine } from "@remixicon/react";
     min-width: 0;
 
     &::placeholder {
-      color: var(--text-color-placeholder);
+      color: color-mix(in srgb, var(--highlight-foreground) 50%, transparent);
     }
   }
 
