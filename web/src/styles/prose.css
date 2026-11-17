@@ -28,38 +28,7 @@
   }
 
   > .bios {
-    display: flex;
-    flex-direction: column;
     grid-area: bios;
-    gap: var(--space-xl);
-    margin-block-start: var(--space-3xl);
-
-    .bio {
-      display: flex;
-      gap: var(--space-m);
-      align-items: flex-start;
-      max-width: 720px;
-
-      .content {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-xs);
-      }
-    }
-
-    .bio-avatar {
-      flex-shrink: 0;
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-    }
-
-    .social {
-      display: flex;
-      gap: var(--space-s);
-      padding: 0;
-      list-style-type: none;
-    }
   }
 
   .toc {

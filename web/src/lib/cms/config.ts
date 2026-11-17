@@ -248,6 +248,7 @@ export const cmsConfig: CmsConfig = {
       identifier_field: "name",
       fields: [
         { name: "name", label: "Name" },
+        { name: "pronouns", label: "Pronouns", required: false },
         {
           name: "org",
           label: "Organization",
