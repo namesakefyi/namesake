@@ -44,6 +44,7 @@ const imageField: Field = {
 
 export const cmsConfig: CmsConfig = {
   load_config_file: false,
+  editor: { preview: false },
   backend: {
     name: "github",
     repo: "namesakefyi/namesake",
@@ -242,12 +243,12 @@ export const cmsConfig: CmsConfig = {
       label: "Authors",
       label_singular: "Author",
       folder: `${CONTENT}/authors`,
-      editor: { preview: false },
       path: "{{slug}}/index",
       extension: "yml",
       identifier_field: "name",
       fields: [
         { name: "name", label: "Name" },
+        { name: "pronouns", label: "Pronouns", required: false },
         {
           name: "org",
           label: "Organization",
@@ -281,7 +282,6 @@ export const cmsConfig: CmsConfig = {
       label_singular: "Press Mention",
       folder: `${CONTENT}/press`,
       preview_path: "/press",
-      editor: { preview: false },
       path: "{{slug}}/index",
       extension: "yml",
       sortable_fields: ["date", "title"],
@@ -299,7 +299,6 @@ export const cmsConfig: CmsConfig = {
       label_singular: "Sponsor",
       folder: `${CONTENT}/sponsors`,
       preview_path: "/",
-      editor: { preview: false },
       path: "{{slug}}/index",
       extension: "yml",
       identifier_field: "name",

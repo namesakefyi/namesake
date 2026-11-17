@@ -1,0 +1,104 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { joinParts } from "#lib/utils/joinParts";
+
+interface Props {
+  authors: CollectionEntry<"authors">[];
+}
+
+const { authors } = Astro.props;
+---
+
+{authors.length > 0 && (
+  <div class="bios">
+    {authors.map((author) => (
+      <div class="bio">
+        <Image
+          class="avatar bio-avatar"
+          src={author.data.avatar}
+          alt={`${author.data.name} photo`}
+          width={72}
+          height={72}
+          densities={[1, 2]}
+        />
+        <div class="heading">
+          <span class="name">
+            <strong>{author.data.name}</strong>
+            {author.data.pronouns && (
+              <span class="pronouns">{author.data.pronouns}</span>
+            )}
+          </span>
+          <span>{joinParts(author.data.org.role, author.data.org.name)}</span>
+        </div>
+        <div class="details">
+          <p>{author.data.bio}</p>
+          {author.data.socialLinks && author.data.socialLinks.length > 0 && (
+            <ul class="social">
+              {author.data.socialLinks.map((link) => (
+                <li>
+                  <a href={link.url} target="_blank" rel="noopener noreferrer">
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
+<style>
+  .bios {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    margin-block-start: var(--space-3xl);
+  }
+
+  .bio {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-xs) var(--space-m);
+    max-width: 720px;
+
+    .bio-avatar {
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+    }
+
+    .heading {
+      display: flex;
+      flex-direction: column;
+      align-self: center;
+    }
+
+    .details {
+      display: flex;
+      flex-direction: column;
+      grid-column: 2;
+      gap: var(--space-xs);
+    }
+
+    .name {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      align-items: baseline;
+    }
+
+    .pronouns {
+      font-size: var(--step--1);
+    }
+
+    .social {
+      display: flex;
+      gap: var(--space-s);
+      padding: 0;
+      list-style-type: none;
+    }
+  }
+</style>

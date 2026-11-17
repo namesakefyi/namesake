@@ -24,8 +24,7 @@ export default defineConfig({
   integrations: [
     sitemap({ filter: (page) => !/\/edit\/?$/.test(page) }),
     mdx(),
-    // Fast Refresh breaks CMS previews, which use the CMS's React.
-    react({ exclude: [/\/src\/lib\/cms\//] }),
+    react(),
     pagefind(),
   ],
   prefetch: true,
