@@ -6,6 +6,7 @@ import {
   getEntry,
   render,
 } from "astro:content";
+import AuthorBios from "#components/AuthorBios.astro";
 import DonateBanner from "#components/DonateBanner.astro";
 import TableOfContents from "#components/TableOfContents.astro";
 import ProseLayout from "#layouts/ProseLayout.astro";
@@ -72,46 +73,12 @@ const previewImage = {
   )}
   <TableOfContents slot="toc" headings={headings} />
   <Content />
-  {authors.length > 0 && (
-    <div class="bios" slot="after-content">
-      {authors.map((author) => (
-        <div class="bio">
-          <Image
-            class="avatar bio-avatar"
-            src={author.data.avatar}
-            alt={`${author.data.name} photo`}
-            width={80}
-            height={80}
-            densities={[1, 2]}
-          />
-          <div class="content">
-            <strong>{author.data.name}</strong>
-            <p>{author.data.bio}</p>
-            {author.data.socialLinks && author.data.socialLinks.length > 0 && (
-              <ul class="social">
-                {author.data.socialLinks.map((link) => (
-                  <li>
-                    <a
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-  )}
+  <AuthorBios slot="after-content" authors={authors} />
   <DonateBanner slot="after-article" class="donation" />
 </ProseLayout>
 
 <style>
   .donation {
-    margin-block-end: var(--space-3xl);
+    margin-block: var(--space-3xl);
   }
 </style>

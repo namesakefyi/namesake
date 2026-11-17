@@ -21,7 +21,6 @@ import regularFont from "../../fonts/AtkinsonHyperlegibleSoft-Regular.woff2?url"
 import regularItalicFont from "../../fonts/AtkinsonHyperlegibleSoft-RegularItalic.woff2?url";
 import baseCss from "../../styles/base.css?inline";
 import directoryCss from "../../styles/directory.css?inline";
-import pageHeadCss from "../../styles/page-head.css?inline";
 import proseCss from "../../styles/prose.css?inline";
 import resetCss from "../../styles/reset.css?inline";
 import themeCss from "../../styles/theme.css?inline";
@@ -55,7 +54,6 @@ registerPreviewStyle(
     themeCss,
     baseCss,
     proseCss,
-    pageHeadCss,
     directoryCss,
     // The rich text preview sets `translate: 0`, which creates a stacking
     // context and keeps images from blending with the page background.
@@ -154,6 +152,7 @@ const ArticlePreview = ({
 type Author = {
   slug: string;
   name: string;
+  pronouns?: string;
   org?: { name?: string; role?: string };
   bio: string;
   avatarUrl?: string;
@@ -242,7 +241,15 @@ const AuthorBios = ({ authors }: { authors: Author[] }) =>
         <div key={author.slug} className="bio">
           <AuthorAvatar author={author} className="bio-avatar" size={80} />
           <div className="content">
-            <strong>{author.name}</strong>
+            <div className="heading">
+              <span className="name">
+                <strong>{author.name}</strong>
+                {author.pronouns && (
+                  <span className="pronouns">{author.pronouns}</span>
+                )}
+              </span>
+              <span>{joinParts(author.org?.role, author.org?.name)}</span>
+            </div>
             <p>{author.bio}</p>
             {author.socialLinks && author.socialLinks.length > 0 && (
               <ul className="social">
