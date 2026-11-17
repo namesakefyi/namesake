@@ -78,6 +78,41 @@ const previewImage = {
 </ProseLayout>
 
 <style>
+  .authors {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .author {
+    display: inline-flex;
+    gap: var(--space-s);
+    align-items: center;
+  }
+
+  .author-info {
+    display: inline-flex;
+    gap: var(--space-xs);
+    align-items: baseline;
+
+    @media (width <= 600px) {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+
+  .role {
+    font-size: var(--step--1);
+  }
+
+  .author-avatar {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+  }
+
   .donation {
     margin-block: var(--space-3xl);
   }
