@@ -1,0 +1,118 @@
+---
+import { Image } from "astro:assets";
+import PageHeader from "#components/PageHeader.astro";
+import BaseLayout from "#layouts/BaseLayout.astro";
+import { getNamesakeAuthors } from "#lib/queries/authors";
+
+const team = await getNamesakeAuthors();
+---
+
+<BaseLayout
+  title="About"
+  description="Meet the team behind Namesake."
+>
+  <PageHeader title="About" />
+  <section class="intro">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+      commodo consequat.
+    </p>
+    <p>
+      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+      dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+  </section>
+  <section class="team">
+    <h2>Team</h2>
+    <ul class="members">
+      {team.map((member) => (
+        <li class="member">
+          <Image
+            class="photo"
+            src={member.data.avatar}
+            alt={`${member.data.name} photo`}
+            width={160}
+            height={160}
+            densities={[1, 2]}
+          />
+          <div class="details">
+            <strong>{member.data.name}</strong>
+            <span>{member.data.org.role}</span>
+            <p>{member.data.bio}</p>
+            {member.data.socialLinks && member.data.socialLinks.length > 0 && (
+              <ul class="social">
+                {member.data.socialLinks.map((link) => (
+                  <li>
+                    <a href={link.url} target="_blank" rel="noopener noreferrer">
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro {
+    max-width: 720px;
+  }
+
+  .team {
+    padding-bottom: var(--space-3xl);
+  }
+
+  .members {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    max-width: 720px;
+    padding: 0;
+    list-style-type: none;
+  }
+
+  .member {
+    display: flex;
+    gap: var(--space-m);
+    align-items: flex-start;
+
+    @media (width < 600px) {
+      flex-direction: column;
+    }
+  }
+
+  .photo {
+    flex-shrink: 0;
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    user-select: none;
+    mix-blend-mode: luminosity;
+    filter: grayscale(100%);
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    padding: 0;
+    list-style-type: none;
+  }
+</style>
