@@ -5,7 +5,8 @@ import { allForms } from "#lib/forms/allForms";
 
 const NAME_CHANGES_ASSISTED = "1,000+";
 
-const [guides, directoryEntries] = await Promise.all([
+const [statesServed, guides, directoryEntries] = await Promise.all([
+  getCollection("jurisdictions", ({ data }) => data.namesakeSupport === "full"),
   getCollection("guides", ({ data }) => !data.unlisted),
   getCollection("directory"),
 ]);
@@ -16,6 +17,10 @@ const stats = [
   {
     value: NAME_CHANGES_ASSISTED,
     label: "Name changes assisted",
+  },
+  {
+    value: formatCount(statesServed.length),
+    label: "States served",
   },
   {
     value: formatCount(guides.length),
@@ -38,17 +43,12 @@ const stats = [
 ---
 
 <ul class="stats">
-  {stats.map(({ value, label, href }) => {
-    const Element = href ? "a" : "div";
-    return (
-      <li>
-        <Element href={href}>
-          <strong>{value}</strong>
-          <span>{label}</span>
-        </Element>
-      </li>
-    );
-  })}
+  {stats.map(({ value, label, href }) => (
+    <li>
+      <strong>{value}</strong>
+      {href ? <a href={href}>{label}</a> : <span>{label}</span>}
+    </li>
+  ))}
 </ul>
 
 <style>
@@ -60,18 +60,10 @@ const stats = [
     margin: 0;
     list-style-type: none;
 
-    a,
-    div {
+    li {
       display: flex;
       flex-direction: column;
       gap: var(--space-2xs);
-      text-decoration: none;
-    }
-
-    a span {
-      text-decoration: underline;
-      text-decoration-color: var(--text-color-muted);
-      text-underline-offset: max(0.1em, 2.5px);
     }
 
     strong {

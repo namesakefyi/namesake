@@ -10,6 +10,7 @@ import { smartquotes } from "#lib/utils/smartquotes";
 
 const REPO = "namesakefyi/namesake";
 const CLUSTER_SIZE = 8;
+const RING_SIZE = CLUSTER_SIZE - 1;
 
 const [team, contributors] = await Promise.all([
   getNamesakeAuthors(),
@@ -20,8 +21,7 @@ const clusterContributors = shuffle(contributors)
   .slice(0, CLUSTER_SIZE)
   .map((contributor, index) => {
     if (index === 0) return { contributor, x: 0, y: 0, isCenter: true };
-    const angle =
-      ((index - 1) / (CLUSTER_SIZE - 1)) * 2 * Math.PI - Math.PI / 2;
+    const angle = ((index - 1) / RING_SIZE) * 2 * Math.PI - Math.PI / 2;
     return {
       contributor,
       x: Math.cos(angle),
@@ -50,7 +50,7 @@ const teamColumns = [0, 1].map((column) =>
   {teamColumns.map((column, columnIndex) => (
     <ul>
       {column.map(({ member, order }) => (
-        <li style={cardStyle(order)}>
+        <li class="member" style={cardStyle(order)}>
           <header>
             <h3>
               <span class="name" data-inverted>
@@ -78,7 +78,7 @@ const teamColumns = [0, 1].map((column) =>
         </li>
       ))}
       {columnIndex === volunteersColumn && clusterContributors.length > 0 && (
-        <li style={cardStyle(team.length)}>
+        <li class="member" style={cardStyle(team.length)}>
           <header>
             <h3>
               <span class="name" data-inverted>
@@ -95,7 +95,7 @@ const teamColumns = [0, 1].map((column) =>
             {clusterContributors.map(
               ({ contributor, x, y, isCenter }) => (
                 <img
-                  data-circle={isCenter || undefined}
+                  data-circle
                   class:list={["avatar", { center: isCenter }]}
                   src={`${contributor.avatar_url}&s=120`}
                   alt={contributor.login}
@@ -112,10 +112,10 @@ const teamColumns = [0, 1].map((column) =>
             )}
           </div>
           <p>
-            Namesake is built with the help of open source contributors around
-            the world.{" "}
-            <a href={`https://github.com/${REPO}`}>Star Namesake on GitHub</a>.
-            Want to get involved?{" "}
+            Namesake is built with the help of open source contributors from
+            around the world.{" "}
+            <a href={`https://github.com/${REPO}`}>Star Namesake on GitHub</a>!{" "}
+            Want to get help write code or edit content?{" "}
             <a href={siteInfo.urls.contribute}>Read the contributor docs</a>.
           </p>
         </li>
@@ -135,122 +135,122 @@ const teamColumns = [0, 1].map((column) =>
       gap: var(--space-3xl);
       align-items: flex-start;
     }
-  }
 
-  .members > ul {
-    display: contents;
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
+    > ul {
+      display: contents;
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
 
-    @media (width >= 760px) {
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-      gap: var(--space-2xl);
+      @media (width >= 760px) {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: var(--space-2xl);
+      }
     }
-  }
 
-  .members > ul + ul {
-    @media (width >= 760px) {
-      margin-block-start: var(--space-3xl);
+    > ul + ul {
+      @media (width >= 760px) {
+        margin-block-start: var(--space-3xl);
+      }
     }
-  }
 
-  .members li {
-    --photo-size: 160px;
+    .member {
+      --photo-size: 160px;
 
-    display: grid;
-    grid-template-columns: var(--photo-size) 1fr;
-    column-gap: var(--space-m);
-    align-content: start;
-    align-items: center;
+      display: grid;
+      grid-template-columns: var(--photo-size) 1fr;
+      column-gap: var(--space-m);
+      align-content: start;
+      align-items: center;
 
-    header {
+      header {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        grid-row: 1;
+        grid-column: 2;
+      }
+
+      h3 {
+        margin-block-end: var(--space-m);
+        margin-inline-start: calc(-1 * (var(--space-l) + var(--space-m)));
+        rotate: var(--name-rotation);
+      }
+
+      .name {
+        padding: 0.15em var(--space-2xs);
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+      }
+
+      .name-text {
+        position: relative;
+      }
+
+      .meta {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2xs);
+        rotate: var(--meta-rotation);
+      }
+
+      .role {
+        font-weight: var(--weight-bold);
+        line-height: var(--line-height-display);
+        text-wrap: balance;
+      }
+
+      .pronouns {
+        font-size: var(--step--1);
+      }
+
+      .photo-frame {
+        grid-row: 1;
+        grid-column: 1;
+        width: var(--photo-size);
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1;
+        object-fit: cover;
+        rotate: var(--photo-rotation);
+      }
+
+      p,
+      .social {
+        grid-column: 1 / -1;
+      }
+
+      p {
+        margin: var(--space-m) 0 0;
+      }
+
+      .social {
+        margin: var(--space-xs) 0 0;
+      }
+    }
+
+    .cluster {
       position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      grid-row: 1;
-      grid-column: 2;
-    }
-
-    h3 {
-      margin-block-end: var(--space-m);
-      margin-inline-start: calc(-1 * (var(--space-l) + var(--space-m)));
-      rotate: var(--name-rotation);
-    }
-
-    .name {
-      padding: 0.15em var(--space-2xs);
-      -webkit-box-decoration-break: clone;
-      box-decoration-break: clone;
-    }
-
-    .name-text {
-      position: relative;
-    }
-
-    .meta {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2xs);
-      rotate: var(--meta-rotation);
-    }
-
-    .role {
-      font-weight: var(--weight-bold);
-      line-height: var(--line-height-display);
-      text-wrap: balance;
-    }
-
-    .pronouns {
-      font-size: var(--step--1);
-    }
-
-    .photo-frame {
-      grid-row: 1;
-      grid-column: 1;
-      width: var(--photo-size);
-    }
-
-    img {
-      display: block;
-      width: 100%;
-      height: auto;
       aspect-ratio: 1;
-      object-fit: cover;
-      rotate: var(--photo-rotation);
     }
 
-    p,
-    .social {
-      grid-column: 1 / -1;
-    }
+    .cluster img {
+      position: absolute;
+      top: calc(50% + var(--y) * 36.25%);
+      left: calc(50% + var(--x) * 36.25%);
+      width: 27.5%;
+      translate: -50% -50%;
 
-    p {
-      margin: var(--space-m) 0 0;
-    }
-
-    .social {
-      margin: var(--space-xs) 0 0;
-    }
-  }
-
-  .members .cluster {
-    position: relative;
-    aspect-ratio: 1;
-  }
-
-  .members .cluster img {
-    position: absolute;
-    top: calc(50% + var(--y) * 36.25%);
-    left: calc(50% + var(--x) * 36.25%);
-    width: 27.5%;
-    translate: -50% -50%;
-
-    &.center {
-      width: 35%;
+      &.center {
+        width: 35%;
+      }
     }
   }
 </style>

@@ -49,8 +49,8 @@ import TeamGrid from "./about/_components/TeamGrid.astro";
         <div class="placeholder-image" aria-hidden="true"></div>
         <p>
           <strong>Partner</strong> with regional LGBTQ+{" "}
-          <a href="/directory">orgranizations</a> who can offer additional legal
-          and financial assistance.
+          <a href="/directory">orgranizations</a> who offer additional legal and
+          financial assistance.
         </p>
       </li>
     </ul>
@@ -78,57 +78,58 @@ import TeamGrid from "./about/_components/TeamGrid.astro";
     line-height: var(--line-height-display);
   }
 
-  .mission h3 {
-    display: flex;
-    gap: var(--space-s);
-    font-size: var(--step-0);
-    align-items: center;
-    margin-block-start: var(--space-xl);
+  .mission {
+    h3 {
+      display: flex;
+      gap: var(--space-s);
+      font-size: var(--step-0);
+      align-items: baseline;
+      margin-block-start: var(--space-xl);
 
-    span {
-      display: inline-block;
-      transform: rotate(-1deg);
+      span {
+        display: inline-block;
+      }
+
+      &::after {
+        flex: 1;
+        content: "";
+        border-block-start: 2px solid var(--border-color);
+      }
     }
 
-    &::after {
-      flex: 1;
-      content: "";
-      border-block-start: 2px solid var(--border-color);
-    }
-  }
+    ul {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-l);
+      padding: 0;
+      margin: var(--space-m) 0 0;
+      list-style-type: none;
 
-  .mission ul {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-l);
-    padding: 0;
-    margin: var(--space-s) 0;
-    list-style-type: none;
+      @media (width >= 480px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
 
-    @media (width >= 480px) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      @media (width >= 900px) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
     }
 
-    @media (width >= 900px) {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+    li {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-m);
     }
-  }
 
-  .mission li {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-m);
-  }
+    strong {
+      font-size: var(--step-1);
+      line-height: var(--line-height-single);
+    }
 
-  .mission strong {
-    font-size: var(--step-1);
-    line-height: var(--line-height-single);
-  }
-
-  .mission .placeholder-image {
-    aspect-ratio: 4 / 3;
-    background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
-    border-radius: var(--radius-2xs);
+    .placeholder-image {
+      aspect-ratio: 4 / 3;
+      background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
+      border-radius: var(--radius-2xs);
+    }
   }
 
   .team {
@@ -136,7 +137,7 @@ import TeamGrid from "./about/_components/TeamGrid.astro";
   }
 
   .donation {
-    margin-block: var(--space-3xl);
+    margin-block-end: var(--space-3xl);
   }
 
   .testimonials-section {
