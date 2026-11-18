@@ -8,5 +8,5 @@
 export const shuffle = <T>(items: readonly T[]): T[] =>
   items
     .map((item) => ({ item, sortKey: Math.random() }))
-    .sort((a, b) => a.sortKey - b.sortKey)
+    .sort((first, second) => first.sortKey - second.sortKey)
     .map(({ item }) => item);

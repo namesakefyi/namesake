@@ -5,6 +5,7 @@ import DonateBanner from "#components/DonateBanner.astro";
 import Search from "#components/Search.astro";
 import Sponsors from "#components/Sponsors.astro";
 import SupportMap from "#components/SupportMap.astro";
+import Testimonials from "#components/Testimonials.astro";
 import { siteInfo } from "#constants/site-info";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import passport from "./home/passport.png";
@@ -44,6 +45,7 @@ import passport from "./home/passport.png";
     />
   </div>
   <DonateBanner />
+  <Testimonials class="testimonials-section" />
   <SupportMap />
   <Sponsors />
 </BaseLayout>
@@ -66,6 +68,10 @@ import passport from "./home/passport.png";
 </script>
 
 <style>
+  .testimonials-section {
+    padding-block-start: var(--space-3xl);
+  }
+
   .hero {
     width: calc(100% + 2 * var(--space-l));
     padding-inline: var(--space-l);

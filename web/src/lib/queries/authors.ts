@@ -9,12 +9,12 @@ const roleRank = (role: string) => {
 };
 
 const compareByRole = (
-  a: CollectionEntry<"authors">,
-  b: CollectionEntry<"authors">,
+  first: CollectionEntry<"authors">,
+  second: CollectionEntry<"authors">,
 ) =>
-  roleRank(a.data.org.role) - roleRank(b.data.org.role) ||
-  a.data.org.role.localeCompare(b.data.org.role) ||
-  a.data.name.localeCompare(b.data.name);
+  roleRank(first.data.org.role) - roleRank(second.data.org.role) ||
+  first.data.org.role.localeCompare(second.data.org.role) ||
+  first.data.name.localeCompare(second.data.name);
 
 export const getNamesakeAuthors = async () => {
   const authors = await getCollection(

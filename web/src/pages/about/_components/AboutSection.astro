@@ -1,0 +1,28 @@
+---
+import { randomTilt } from "#lib/utils/randomTilt";
+
+interface Props {
+  heading: string;
+  class?: string;
+}
+
+const { heading, class: className, ...rest } = Astro.props;
+---
+
+<section class={className} {...rest}>
+  <h2 data-inverted style={`rotate: ${randomTilt()}`}>{heading}</h2>
+  <slot />
+</section>
+
+<style>
+  section {
+    padding-block-start: var(--space-3xl);
+  }
+
+  h2 {
+    width: fit-content;
+    padding: 0.15em var(--space-xs);
+    margin-block: 0 var(--space-xl);
+    font-weight: var(--weight-bold);
+  }
+</style>

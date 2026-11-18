@@ -3,6 +3,12 @@ import { getCollection } from "astro:content";
 import { shuffle } from "#lib/utils/shuffle";
 import { smartquotes } from "#lib/utils/smartquotes";
 
+interface Props {
+  class?: string;
+}
+
+const { class: className, ...rest } = Astro.props;
+
 const TESTIMONIAL_COUNT = 3;
 
 const testimonials = shuffle(await getCollection("testimonials")).slice(
@@ -18,27 +24,34 @@ const monthYear = new Intl.DateTimeFormat("en-US", {
 ---
 
 {testimonials.length > 0 && (
-  <ul class="testimonials">
-    {testimonials.map(({ data }) => (
-      <li>
-        <figure>
-          <blockquote>
-            <p>{smartquotes(data.quote)}</p>
-          </blockquote>
-          <figcaption>
-            <span class="location">{data.location}</span>
-            <time datetime={data.date.toISOString().slice(0, 10)}>
-              {monthYear.format(data.date)}
-            </time>
-          </figcaption>
-        </figure>
-      </li>
-    ))}
-  </ul>
+  <section class:list={["testimonials", className]} {...rest}>
+    <h2 class="visually-hidden">Testimonials</h2>
+    <ul class="testimonial-list">
+      {testimonials.map(({ data }) => (
+        <li>
+          <figure>
+            <blockquote>
+              <p>{smartquotes(data.quote)}</p>
+            </blockquote>
+            <figcaption>
+              <span class="location">{data.location}</span>
+              <time datetime={data.date.toISOString().slice(0, 10)}>
+                {monthYear.format(data.date)}
+              </time>
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </section>
 )}
 
 <style>
   .testimonials {
+    width: 100%;
+  }
+
+  .testimonial-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
     gap: var(--space-xl);
