@@ -3,32 +3,35 @@ import { Image } from "astro:assets";
 import SocialLinks from "#components/SocialLinks.astro";
 import { siteInfo } from "#constants/site-info";
 import { getNamesakeAuthors } from "#lib/queries/authors";
-import { fetchGitHubContributors } from "#lib/utils/fetchGitHubContributors";
 import { randomTilt } from "#lib/utils/randomTilt";
-import { shuffle } from "#lib/utils/shuffle";
 import { smartquotes } from "#lib/utils/smartquotes";
 
 const REPO = "namesakefyi/namesake";
-const CLUSTER_SIZE = 8;
-const RING_SIZE = CLUSTER_SIZE - 1;
 
-const [team, contributors] = await Promise.all([
-  getNamesakeAuthors(),
-  fetchGitHubContributors(REPO, import.meta.env.GITHUB_TOKEN),
-]);
+const contributors = [
+  { login: "ThomasWCode", id: 172206513 },
+  { login: "molloyzak13", id: 293489914 },
+  { login: "uncenter", id: 47499684 },
+  { login: "zachrburke", id: 1379757 },
+  { login: "taraxvoid", id: 1711810 },
+  { login: "gingerchew", id: 26461046 },
+  { login: "DeclanChidlow", id: 84255570 },
+  { login: "matt-y", id: 278679 },
+];
+const RING_SIZE = contributors.length - 1;
 
-const clusterContributors = shuffle(contributors)
-  .slice(0, CLUSTER_SIZE)
-  .map((contributor, index) => {
-    if (index === 0) return { contributor, x: 0, y: 0, isCenter: true };
-    const angle = ((index - 1) / RING_SIZE) * 2 * Math.PI - Math.PI / 2;
-    return {
-      contributor,
-      x: Math.cos(angle),
-      y: Math.sin(angle),
-      isCenter: false,
-    };
-  });
+const team = await getNamesakeAuthors();
+
+const clusterContributors = contributors.map((contributor, index) => {
+  if (index === 0) return { contributor, x: 0, y: 0, isCenter: true };
+  const angle = ((index - 1) / RING_SIZE) * 2 * Math.PI - Math.PI / 2;
+  return {
+    contributor,
+    x: Math.cos(angle),
+    y: Math.sin(angle),
+    isCenter: false,
+  };
+});
 const volunteersColumn = team.length % 2;
 
 const cardStyle = (order: number) =>
@@ -77,7 +80,7 @@ const teamColumns = [0, 1].map((column) =>
           <SocialLinks class="social" links={member.data.socialLinks} />
         </li>
       ))}
-      {columnIndex === volunteersColumn && clusterContributors.length > 0 && (
+      {columnIndex === volunteersColumn && (
         <li class="member" style={cardStyle(team.length)}>
           <header>
             <h3>
@@ -86,9 +89,7 @@ const teamColumns = [0, 1].map((column) =>
               </span>
             </h3>
             <div class="meta">
-              <span class="role">
-                {contributors.length} Open Source Contributors
-              </span>
+              <span class="role">Open Source Contributors</span>
             </div>
           </header>
           <div class="photo-frame cluster">
@@ -97,7 +98,7 @@ const teamColumns = [0, 1].map((column) =>
                 <img
                   data-circle
                   class:list={["avatar", { center: isCenter }]}
-                  src={`${contributor.avatar_url}&s=120`}
+                  src={`https://avatars.githubusercontent.com/u/${contributor.id}?s=120`}
                   alt={contributor.login}
                   width="56"
                   height="56"
