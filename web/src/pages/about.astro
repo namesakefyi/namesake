@@ -14,6 +14,8 @@ import { randomTilt } from "#lib/utils/randomTilt";
 import AboutSection from "./about/_components/AboutSection.astro";
 import ImpactStats from "./about/_components/ImpactStats.astro";
 import TeamGrid from "./about/_components/TeamGrid.astro";
+import WhatWeDoArrowLeft from "./about/_components/what-we-do-arrow-left.svg";
+import WhatWeDoArrowRight from "./about/_components/what-we-do-arrow-right.svg";
 ---
 
 <BaseLayout title="About" description="Meet the team behind Namesake.">
@@ -28,7 +30,9 @@ import TeamGrid from "./about/_components/TeamGrid.astro";
       for trans people in the U.S.
     </p>
     <h3>
+      <WhatWeDoArrowLeft aria-hidden="true" />
       <span style={`rotate: ${randomTilt()}`}>What we do</span>
+      <WhatWeDoArrowRight aria-hidden="true" />
     </h3>
     <ul>
       <li>
@@ -91,34 +95,50 @@ import TeamGrid from "./about/_components/TeamGrid.astro";
 
   .mission {
     h3 {
-      display: flex;
-      gap: var(--space-s);
+      position: relative;
+      width: fit-content;
       font-size: var(--step-0);
-      align-items: baseline;
       margin-block-start: var(--space-xl);
 
       span {
         display: inline-block;
       }
 
-      &::after {
-        flex: 1;
-        content: "";
-        border-block-start: 2px solid var(--border-color);
+      svg {
+        position: absolute;
+        inset-block-start: 0.35em;
+        width: var(--step-4);
+        height: auto;
+      }
+
+      svg:first-child {
+        display: none;
+        inset-inline-end: calc(100% + var(--space-2xs));
+      }
+
+      svg:last-child {
+        inset-inline-start: calc(100% + var(--space-2xs));
+      }
+
+      /* Once the viewport is wider than main's 1200px max, the left gutter has room for the arrow */
+      @media (width >= 1300px) {
+        svg:first-child {
+          display: block;
+        }
+
+        svg:last-child {
+          display: none;
+        }
       }
     }
 
     ul {
       display: grid;
-      grid-template-columns: minmax(0, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: var(--space-l);
       padding: 0;
       margin: var(--space-l) 0 0;
       list-style-type: none;
-
-      @media (width >= 480px) {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
 
       @media (width >= 900px) {
         grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -132,8 +152,8 @@ import TeamGrid from "./about/_components/TeamGrid.astro";
     }
 
     svg {
-      width: var(--step-4);
-      height: var(--step-4);
+      width: var(--step-3);
+      height: var(--step-3);
     }
 
     strong {
