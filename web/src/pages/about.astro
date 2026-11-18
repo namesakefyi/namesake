@@ -1,4 +1,11 @@
 ---
+import {
+  RiContractLine,
+  RiEdit2Line,
+  RiHandHeartLine,
+  RiInputField,
+  RiSearchLine,
+} from "@remixicon/react";
 import DonateBanner from "#components/DonateBanner.astro";
 import PageHeader from "#components/PageHeader.astro";
 import Testimonials from "#components/Testimonials.astro";
@@ -25,32 +32,36 @@ import TeamGrid from "./about/_components/TeamGrid.astro";
     </h3>
     <ul>
       <li>
-        <div class="placeholder-image" aria-hidden="true"></div>
+        <RiSearchLine aria-hidden="true" />
         <p>
-          <strong>Research</strong> legislative shifts across the U.S. and
-          advocate for legal change to simplify the process.
+          <strong>Research laws</strong> in all states and advocate for legal
+          change.
         </p>
       </li>
       <li>
-        <div class="placeholder-image" aria-hidden="true"></div>
+        <RiEdit2Line aria-hidden="true" />
         <p>
-          <strong>Write</strong> <a href="/guides">guides</a> using plain
-          language to explain what isn't covered on most .gov websites.
+          <strong>
+            Write <a href="/guides">guides</a>
+          </strong>{" "}
+          in plain language to explain what .gov sites don't (or won't).
         </p>
       </li>
       <li>
-        <div class="placeholder-image" aria-hidden="true"></div>
+        <RiContractLine aria-hidden="true" />
         <p>
-          <strong>Build</strong> <a href="/forms">forms</a> that help people
-          securely fill out court petitions, fee waivers, and more.
+          <strong>
+            Build <a href="/forms">forms</a>
+          </strong>{" "}
+          to help fill out court petitions, fee waivers, and more.
         </p>
       </li>
       <li>
-        <div class="placeholder-image" aria-hidden="true"></div>
+        <RiHandHeartLine aria-hidden="true" />
         <p>
-          <strong>Partner</strong> with regional LGBTQ+{" "}
-          <a href="/directory">orgranizations</a> who offer additional legal and
-          financial assistance.
+          <strong>Partner regionally</strong> with{" "}
+          <a href="/directory">orgranizations</a> who offer additional
+          assistance.
         </p>
       </li>
     </ul>
@@ -102,7 +113,7 @@ import TeamGrid from "./about/_components/TeamGrid.astro";
       grid-template-columns: minmax(0, 1fr);
       gap: var(--space-l);
       padding: 0;
-      margin: var(--space-m) 0 0;
+      margin: var(--space-l) 0 0;
       list-style-type: none;
 
       @media (width >= 480px) {
@@ -120,15 +131,14 @@ import TeamGrid from "./about/_components/TeamGrid.astro";
       gap: var(--space-m);
     }
 
+    svg {
+      width: var(--step-4);
+      height: var(--step-4);
+    }
+
     strong {
       font-size: var(--step-1);
       line-height: var(--line-height-single);
-    }
-
-    .placeholder-image {
-      aspect-ratio: 4 / 3;
-      background-color: color-mix(in srgb, var(--text-color) 10%, transparent);
-      border-radius: var(--radius-2xs);
     }
   }
 
