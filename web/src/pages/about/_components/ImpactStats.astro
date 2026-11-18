@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import { siteInfo } from "#constants/site-info";
-import { allForms } from "#lib/forms/allForms";
 
 const NAME_CHANGES_ASSISTED = "1,000+";
 
@@ -26,13 +25,6 @@ const stats = [
     value: formatCount(guides.length),
     label: "Guides",
     href: siteInfo.urls.guides,
-  },
-  {
-    value: formatCount(
-      Object.values(allForms).filter((form) => !form.unlisted).length,
-    ),
-    label: "Forms",
-    href: siteInfo.urls.forms,
   },
   {
     value: formatCount(directoryEntries.length),
