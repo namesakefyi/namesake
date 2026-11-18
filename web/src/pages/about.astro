@@ -14,8 +14,6 @@ import { randomTilt } from "#lib/utils/randomTilt";
 import AboutSection from "./about/_components/AboutSection.astro";
 import ImpactStats from "./about/_components/ImpactStats.astro";
 import TeamGrid from "./about/_components/TeamGrid.astro";
-import WhatWeDoArrowLeft from "./about/_components/what-we-do-arrow-left.svg";
-import WhatWeDoArrowRight from "./about/_components/what-we-do-arrow-right.svg";
 ---
 
 <BaseLayout title="About" description="Meet the team behind Namesake.">
@@ -30,9 +28,19 @@ import WhatWeDoArrowRight from "./about/_components/what-we-do-arrow-right.svg";
       for trans people in the U.S.
     </p>
     <h3>
-      <WhatWeDoArrowLeft aria-hidden="true" />
       <span style={`rotate: ${randomTilt()}`}>What we do</span>
-      <WhatWeDoArrowRight aria-hidden="true" />
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 48 47"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+      >
+        <path d="M42 3.1Q14 18.7 40 42.1" />
+        <path d="M37.5 33.8Q38.9 37.9 40 42.1Q34.9 40.4 29.7 39" />
+      </svg>
     </h3>
     <ul>
       <li>
@@ -107,27 +115,23 @@ import WhatWeDoArrowRight from "./about/_components/what-we-do-arrow-right.svg";
       svg {
         position: absolute;
         inset-block-start: 0.35em;
+        inset-inline-start: calc(100% + var(--space-2xs));
         width: var(--step-4);
         height: auto;
-      }
-
-      svg:first-child {
-        display: none;
-        inset-inline-end: calc(100% + var(--space-2xs));
-      }
-
-      svg:last-child {
-        inset-inline-start: calc(100% + var(--space-2xs));
+        scale: -1 1;
+        rotate: -60deg;
+        /* Rotation pivots on the center; shift the tail back beside the heading */
+        translate: 18% -55%;
       }
 
       /* Once the viewport is wider than main's 1200px max, the left gutter has room for the arrow */
       @media (width >= 1300px) {
-        svg:first-child {
-          display: block;
-        }
-
-        svg:last-child {
-          display: none;
+        svg {
+          inset-inline-start: auto;
+          inset-inline-end: calc(100% + var(--space-2xs));
+          scale: none;
+          rotate: none;
+          translate: none;
         }
       }
     }
@@ -149,6 +153,7 @@ import WhatWeDoArrowRight from "./about/_components/what-we-do-arrow-right.svg";
       display: flex;
       flex-direction: column;
       gap: var(--space-m);
+      text-wrap: pretty;
     }
 
     svg {
@@ -159,6 +164,12 @@ import WhatWeDoArrowRight from "./about/_components/what-we-do-arrow-right.svg";
     strong {
       font-size: var(--step-1);
       line-height: var(--line-height-single);
+
+      /* A forced break instead of display: block keeps the strong inline, so the paragraph's line height still applies */
+      &::after {
+        content: "\A";
+        white-space: pre;
+      }
     }
   }
 
