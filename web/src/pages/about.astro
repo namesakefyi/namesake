@@ -1,17 +1,15 @@
 ---
-import {
-  RiContractLine,
-  RiEdit2Line,
-  RiHandHeartLine,
-  RiInputField,
-  RiSearchLine,
-} from "@remixicon/react";
+import { Image } from "astro:assets";
 import DonateBanner from "#components/DonateBanner.astro";
 import PageHeader from "#components/PageHeader.astro";
 import Testimonials from "#components/Testimonials.astro";
 import BaseLayout from "#layouts/BaseLayout.astro";
 import AboutSection from "./about/_components/AboutSection.astro";
+import formsIllustration from "./about/_components/forms.png";
+import guidesIllustration from "./about/_components/guides.png";
 import ImpactStats from "./about/_components/ImpactStats.astro";
+import partnerIllustration from "./about/_components/partner.png";
+import researchIllustration from "./about/_components/research.png";
 import TeamGrid from "./about/_components/TeamGrid.astro";
 import WhatWeDo from "./about/_components/what-we-do.svg";
 ---
@@ -35,28 +33,43 @@ import WhatWeDo from "./about/_components/what-we-do.svg";
     </h3>
     <ul>
       <li>
-        <RiSearchLine aria-hidden="true" />
+        <Image
+          src={researchIllustration}
+          alt=""
+          height={160}
+          densities={[1, 2]}
+        />
         <p>
           <strong>Research laws</strong> in all states and advocate for legal
           change to reduce barriers.
         </p>
       </li>
       <li>
-        <RiHandHeartLine aria-hidden="true" />
+        <Image
+          src={partnerIllustration}
+          alt=""
+          height={160}
+          densities={[1, 2]}
+        />
         <p>
           <strong>Partner locally</strong> with LGBTQ+ orgs which are already
           doing the work in their community.
         </p>
       </li>
       <li>
-        <RiEdit2Line aria-hidden="true" />
+        <Image
+          src={guidesIllustration}
+          alt=""
+          height={160}
+          densities={[1, 2]}
+        />
         <p>
           <strong>Write guides</strong> in plain language to explain what .gov
           sites don't (or won't).
         </p>
       </li>
       <li>
-        <RiContractLine aria-hidden="true" />
+        <Image src={formsIllustration} alt="" height={160} densities={[1, 2]} />
         <p>
           <strong>Build forms</strong> to help fill out court petitions, fee
           waivers, and more.
@@ -120,9 +133,11 @@ import WhatWeDo from "./about/_components/what-we-do.svg";
       text-wrap: pretty;
     }
 
-    svg {
-      width: var(--step-3);
-      height: var(--step-3);
+    img {
+      align-self: start;
+      width: auto;
+      height: 10rem;
+      mix-blend-mode: multiply;
     }
 
     strong {
