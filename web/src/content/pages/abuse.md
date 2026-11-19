@@ -5,7 +5,7 @@ annotation: crossed-off
 color: brown
 ---
 
-**Last updated: June 6, 2026**
+**Last updated: November 19, 2026**
 
 ## Restricted purposes
 
@@ -21,8 +21,8 @@ When you use any of Namesake’s Services, you acknowledge that you may **not**:
 - Use the Services to “train” generative artificial intelligence (AI) technologies to generate text, images, or other content.
 - Use the Services in a manner inconsistent with any applicable laws or regulations.
 
-Accounts found to be in violation of any of the above are subject to cancellation without prior notice.
+Users found to be in violation of any of the above are subject to an IP ban from our services.
 
 ## How to report abuse
 
-Violations can be reported by emailing [hey@namesake.fyi](mailto:hey@namesake.fyi) and should include detailed information about the account, the content or behavior you are reporting, and how you found it, including URLs or screenshots. If you need a secure file transfer, let us know and we will send you a link. We will not disclose your identity to anyone associated with the reported account.
+Violations can be reported by emailing [hey@namesake.fyi](mailto:hey@namesake.fyi) and should include detailed information about the user, the content or behavior you are reporting, and how you found it, including URLs or screenshots. If you need a secure file transfer, let us know and we will send you a link. We will not disclose your identity to anyone associated with the reported user.
