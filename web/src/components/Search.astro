@@ -12,8 +12,6 @@ import PagefindConfig from "astro-pagefind/components/PagefindConfig.astro";
 <style is:global>
   :root {
     --search-border-width: 1.5px;
-    /* Matches .button svg sizing */
-    --search-icon-size: calc(var(--step-0) * 1.25);
 
     /* Colors */
     --pf-text: var(--text-color);
@@ -108,9 +106,9 @@ import PagefindConfig from "astro-pagefind/components/PagefindConfig.astro";
 
   /* Icon */
   .pf-searchbox-input-wrapper::before {
-    width: var(--search-icon-size) !important;
-    height: var(--search-icon-size) !important;
-    top: calc(50% - var(--search-icon-size) / 2) !important;
+    width: var(--space-l) !important;
+    height: var(--space-l) !important;
+    top: calc(50% - var(--space-l) / 2) !important;
     inset-inline-start: calc(
       var(--space-s) + var(--search-border-width)
     ) !important;
