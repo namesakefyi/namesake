@@ -24,7 +24,7 @@ If you violate any of the Terms, we may terminate your account. That’s a broad
 ## Account Terms
 
 1. You are responsible for maintaining the security of your account and password. The Company cannot and will not be liable for any loss or damage from your failure to comply with this security obligation.
-2. You may not use the Services for any purpose outlined in our [Use Restrictions Policy](https://namesake.fyi/abuse), and you may not permit any of your users to do so, either.
+2. You may not use the Services for any purpose outlined in our [Use Restrictions Policy](https://namesake.fyi/abuse).
 3. You are responsible for all activity that occurs under your account.
 4. You must be a human. Accounts registered by “bots” or other automated methods are not permitted.
 
