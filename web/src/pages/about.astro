@@ -10,10 +10,10 @@ import DonateBanner from "#components/DonateBanner.astro";
 import PageHeader from "#components/PageHeader.astro";
 import Testimonials from "#components/Testimonials.astro";
 import BaseLayout from "#layouts/BaseLayout.astro";
-import { randomTilt } from "#lib/utils/randomTilt";
 import AboutSection from "./about/_components/AboutSection.astro";
 import ImpactStats from "./about/_components/ImpactStats.astro";
 import TeamGrid from "./about/_components/TeamGrid.astro";
+import WhatWeDo from "./about/_components/what-we-do.svg";
 ---
 
 <BaseLayout title="About" description="Meet the team behind Namesake.">
@@ -28,19 +28,7 @@ import TeamGrid from "./about/_components/TeamGrid.astro";
       for trans people in the U.S.
     </p>
     <h3>
-      <span style={`rotate: ${randomTilt()}`}>What we do</span>
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 48 47"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="3"
-        stroke-linejoin="round"
-        stroke-linecap="round"
-      >
-        <path d="M42 3.1Q14 18.7 40 42.1" />
-        <path d="M37.5 33.8Q38.9 37.9 40 42.1Q34.9 40.4 29.7 39" />
-      </svg>
+      <WhatWeDo />
     </h3>
     <ul>
       <li>
@@ -103,36 +91,13 @@ import TeamGrid from "./about/_components/TeamGrid.astro";
 
   .mission {
     h3 {
-      position: relative;
-      width: fit-content;
-      font-size: var(--step-0);
       margin-block-start: var(--space-xl);
 
-      span {
-        display: inline-block;
-      }
-
+      /* The viewBox crops to the lettering (set at 15 of 20 units per em) so the arrows overflow without taking up space */
       svg {
-        position: absolute;
-        inset-block-start: 0.35em;
-        inset-inline-start: calc(100% + var(--space-2xs));
-        width: var(--step-4);
+        display: block;
+        width: 5.25em;
         height: auto;
-        scale: -1 1;
-        rotate: -60deg;
-        /* Rotation pivots on the center; shift the tail back beside the heading */
-        translate: 18% -55%;
-      }
-
-      /* Once the viewport is wider than main's 1200px max, the left gutter has room for the arrow */
-      @media (width >= 1300px) {
-        svg {
-          inset-inline-start: auto;
-          inset-inline-end: calc(100% + var(--space-2xs));
-          scale: none;
-          rotate: none;
-          translate: none;
-        }
       }
     }
 
