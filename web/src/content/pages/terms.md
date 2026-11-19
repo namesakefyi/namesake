@@ -23,7 +23,7 @@ If you violate any of the Terms, we may ban your IP address. That’s a broad st
 
 ## Usage Terms
 
-1. You may not use the Services for any purpose outlined in our [Use Restrictions Policy](https://namesake.fyi/abuse), and you may not permit any of your users to do so, either.
+1. You may not use the Services for any purpose outlined in our [Use Restrictions Policy](https://namesake.fyi/abuse).
 2. You are responsible for all activity that occurs on your device.
 3. You are responsible for maintaining the security of your device. The Company cannot and will not be liable for any loss or damage from your failure to comply with this security obligation.
 4. You must be a human. Usage by “bots” or other automated methods are not permitted.
