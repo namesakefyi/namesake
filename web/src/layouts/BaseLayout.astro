@@ -83,6 +83,7 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · Namesake`;
       title="Namesake"
       href={new URL("rss.xml", Astro.site)}
     />
+    <slot name="head" />
   </head>
   <body data-color={color}>
     <Header />
