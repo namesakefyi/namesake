@@ -21,7 +21,7 @@ When you use any of Namesake’s Services, you acknowledge that you may **not**:
 - Use the Services to “train” generative artificial intelligence (AI) technologies to generate text, images, or other content.
 - Use the Services in a manner inconsistent with any applicable laws or regulations.
 
-Users found to be in violation of any of the above are subject to an IP ban from our services.
+Users found to be in violation of any of the above are subject to an IP ban from the Services.
 
 ## How to report abuse
 
