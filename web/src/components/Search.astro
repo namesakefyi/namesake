@@ -11,6 +11,8 @@ import PagefindConfig from "astro-pagefind/components/PagefindConfig.astro";
 
 <style is:global>
   :root {
+    --search-border-width: 1.5px;
+
     /* Colors */
     --pf-text: var(--text-color);
     --pf-text-secondary: var(--text-color);
@@ -47,8 +49,14 @@ import PagefindConfig from "astro-pagefind/components/PagefindConfig.astro";
     /* Typography */
     --pf-font: var(--font-sans);
 
+    /* Icons */
+    --pf-icon-search: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z'/%3E%3C/svg%3E");
+
     /* Sizing */
-    --pf-input-height: auto;
+    /* Same height as the hero's .button, which has 3px borders */
+    --pf-input-height: calc(
+      var(--step-0) * var(--line-height-body) + 2 * var(--space-s) + 6px
+    );
     --pf-input-font-size: var(
       --step-0
     ); /* Keep at 16px+ to prevent iOS auto-zoom on focus */
@@ -82,13 +90,18 @@ import PagefindConfig from "astro-pagefind/components/PagefindConfig.astro";
     --pf-dropdown-z-index: 9999;
   }
 
+  /* Reserve the input's height before the component script renders it */
+  body pagefind-searchbox {
+    min-height: var(--pf-input-height);
+  }
+
   .pf-searchbox.open .pf-searchbox-input:not(:focus-visible) {
     outline: 2px solid var(--focus-ring-color) !important;
   }
 
   .pf-searchbox-input {
     padding-inline: var(--space-2xl) var(--space-m) !important;
-    padding-block: var(--space-s) !important;
+    border-width: var(--search-border-width) !important;
   }
 
   /* Icon */
@@ -96,7 +109,9 @@ import PagefindConfig from "astro-pagefind/components/PagefindConfig.astro";
     width: var(--space-l) !important;
     height: var(--space-l) !important;
     top: calc(50% - var(--space-l) / 2) !important;
-    inset-inline-start: var(--space-s) !important;
+    inset-inline-start: calc(
+      var(--space-s) + var(--search-border-width)
+    ) !important;
     background-color: var(--text-color) !important;
   }
 

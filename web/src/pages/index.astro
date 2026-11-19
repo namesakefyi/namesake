@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { getImage, Image } from "astro:assets";
 import { RiArrowRightLine } from "@remixicon/react";
 import DonateBanner from "#components/DonateBanner.astro";
 import Search from "#components/Search.astro";
@@ -8,6 +8,9 @@ import SupportMap from "#components/SupportMap.astro";
 import { siteInfo } from "#constants/site-info";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import passport from "./home/passport.png";
+
+const heroImageOptions = { src: passport, width: 440, densities: [1, 2] };
+const heroImage = await getImage(heroImageOptions);
 ---
 
 <BaseLayout
@@ -18,6 +21,14 @@ import passport from "./home/passport.png";
     alt: siteInfo.image.alt,
   }}
 >
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    href={heroImage.src}
+    imagesrcset={heroImage.srcSet.attribute}
+    media="(width >= 580px)"
+  />
   <div class="hero">
     <div class="hero-content">
       <h1>Your name is <span class="hero-highlight">yours</span> to change</h1>
@@ -35,13 +46,7 @@ import passport from "./home/passport.png";
         <a href={siteInfo.urls.chat}>Join us on Discord</a>
       </div>
     </div>
-    <Image
-      class="hero-image"
-      src={passport}
-      alt=""
-      width={440}
-      densities={[1, 2]}
-    />
+    <Image class="hero-image" {...heroImageOptions} alt="" />
   </div>
   <DonateBanner />
   <SupportMap />
