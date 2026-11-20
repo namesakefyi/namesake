@@ -53,7 +53,7 @@
     caret-color: transparent;
     outline: none;
     background: var(--highlight-background);
-    border-radius: var(--radius-2xs);
+    border-radius: var(--radius-xs);
   }
 
   &[data-invalid] {

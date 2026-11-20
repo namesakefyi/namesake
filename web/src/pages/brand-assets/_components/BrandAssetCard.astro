@@ -22,13 +22,19 @@ const { assetName, name, instructions, inverted } = Astro.props;
       <a
         class="button secondary small"
         href={`/site/brand-assets/${assetName}.svg`}
-        download><RiDownloadLine />SVG</a
+        download
       >
+        <RiDownloadLine />
+        SVG
+      </a>
       <a
         class="button secondary small"
         href={`/site/brand-assets/${assetName}.png`}
-        download><RiDownloadLine />PNG</a
+        download
       >
+        <RiDownloadLine />
+        PNG
+      </a>
     </div>
   </div>
 </div>
@@ -53,11 +59,11 @@ const { assetName, name, instructions, inverted } = Astro.props;
 
   .preview {
     aspect-ratio: 5 / 3;
-    border: 3px solid var(--text-color);
+    border: 2px solid var(--text-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 3px;
+    border-radius: var(--radius-xs);
 
     &.inverted {
       background-color: var(--text-color);

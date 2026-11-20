@@ -79,18 +79,6 @@ const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
 <script>
   import { annotate } from "rough-notation";
 
-  const banner = document.querySelector<HTMLElement>(".donate-banner");
-
-  if (banner) {
-    annotate(banner, {
-      type: "box",
-      iterations: 1,
-      animate: false,
-      padding: 2,
-      strokeWidth: 2,
-    }).show();
-  }
-
   const highlight = document.querySelector<HTMLElement>(
     ".donate-banner .highlight",
   );
@@ -143,7 +131,7 @@ const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
     width: 100%;
     max-width: 1200px;
     padding: var(--space-xl);
-    border-radius: var(--radius-2xs);
+    border-radius: var(--radius-xs);
 
     @media (width < 860px) {
       grid-template-columns: 1fr;
@@ -167,8 +155,6 @@ const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
   }
 
   .give {
-    --control-border-width: 1.5px;
-
     container-type: inline-size;
     display: flex;
     flex-direction: column;
@@ -185,29 +171,43 @@ const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
 
     label {
       position: relative;
+      isolation: isolate;
       padding: var(--space-2xs) var(--space-m);
       text-align: center;
       cursor: pointer;
-      border: var(--control-border-width) solid var(--text-color);
+      border: 2px solid transparent;
+
+      &::before {
+        position: absolute;
+        inset: -2px;
+        z-index: -1;
+        pointer-events: none;
+        content: "";
+        border: 2px solid var(--text-color);
+        border-radius: inherit;
+      }
 
       &:first-of-type {
-        border-start-start-radius: var(--radius-2xs);
-        border-end-start-radius: var(--radius-2xs);
+        border-start-start-radius: var(--radius-xs);
+        border-end-start-radius: var(--radius-xs);
       }
 
       /* Overlap the shared border so it doesn't double up */
       &:not(:first-of-type) {
-        margin-inline-start: calc(var(--control-border-width) * -1);
+        margin-inline-start: -2px;
       }
 
       &:last-of-type {
-        border-start-end-radius: var(--radius-2xs);
-        border-end-end-radius: var(--radius-2xs);
+        border-start-end-radius: var(--radius-xs);
+        border-end-end-radius: var(--radius-xs);
       }
 
       &:has(:checked) {
         color: var(--background-color);
-        background-color: var(--text-color);
+
+        &::before {
+          background-color: var(--text-color);
+        }
       }
 
       &:has(:focus-visible) {
@@ -225,11 +225,11 @@ const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
     margin: 0;
     list-style: none;
 
-    --outer-radius: var(--radius-2xs);
+    --outer-radius: var(--radius-xs);
 
     /* Overlap shared borders so they don't double up */
     li:not(:first-child) {
-      margin-inline-start: calc(var(--control-border-width) * -1);
+      margin-inline-start: -2px;
     }
 
     li:first-child .button {
@@ -247,7 +247,7 @@ const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
 
       li:last-child {
         grid-column: 1 / -1;
-        margin-block-start: calc(var(--control-border-width) * -1);
+        margin-block-start: -2px;
         margin-inline-start: 0;
       }
 
@@ -266,9 +266,7 @@ const FREQUENCY_LABELS: Record<DonationFrequency, string> = {
     }
 
     .button {
-      position: relative;
       padding-inline: var(--space-s);
-      border-width: var(--control-border-width);
       border-radius: 0;
 
       &:hover,

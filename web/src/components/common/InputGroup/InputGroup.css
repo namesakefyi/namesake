@@ -8,7 +8,7 @@
     overflow: hidden;
     background: var(--field-background);
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: var(--radius-xs);
     transition: all 200ms;
 
     &[data-focus-within] {

@@ -30,7 +30,7 @@
   forced-color-adjust: none;
   background-color: var(--field-background);
   border: none;
-  border-radius: var(--radius-2xs);
+  border-radius: var(--radius-xs);
 
   &[data-pressed] {
     box-shadow: none;
