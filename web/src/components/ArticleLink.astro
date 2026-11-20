@@ -10,9 +10,11 @@ interface Props {
   authors?: string[] | null;
   description?: string;
   image?: { src: ImageMetadata; alt: string } | null;
+  featured?: boolean;
 }
 
-const { title, date, url, subhead, authors, description, image } = Astro.props;
+const { title, date, url, subhead, authors, description, image, featured } =
+  Astro.props;
 
 const dateObj = new Date(date);
 const formattedDate = new Intl.DateTimeFormat("en-US", {
@@ -21,9 +23,11 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
   year: "numeric",
 }).format(dateObj);
+
+const imageWidth = featured ? 1200 : 800;
 ---
 
-<article class="article">
+<article class="article" data-featured={featured ? "" : undefined}>
   <time class="date" datetime={dateObj.toISOString()}>
     {formattedDate}
   </time>
@@ -36,7 +40,13 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
   {
     image && (
       <a class="image" href={url} tabindex="-1">
-        <Image src={image.src} alt={image.alt} width={800} densities={[1, 2]} />
+        <Image
+          src={image.src}
+          alt={image.alt}
+          width={imageWidth}
+          height={Math.round(imageWidth / 1.91)}
+          densities={[1, 2]}
+        />
       </a>
     )
   }
@@ -82,6 +92,7 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
 
   .image {
     order: -1;
+    width: 100%;
     max-width: 600px;
     margin-block-end: var(--space-s);
     filter: grayscale(100%);
@@ -89,7 +100,49 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
     transform: translate3d(0, 0, 0); /* Safari bugfix */
 
     img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1.91 / 1;
+      object-fit: cover;
+      object-position: center;
       border-radius: 3px;
+    }
+  }
+
+  .article[data-featured] {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-auto-rows: min-content;
+    column-gap: var(--space-2xl);
+    row-gap: var(--space-2xs);
+    align-items: start;
+
+    > * {
+      grid-column: 2;
+    }
+
+    .title {
+      font-size: var(--step-4);
+    }
+
+    .description {
+      font-size: var(--step-1);
+    }
+
+    .image {
+      grid-column: 1;
+      grid-row: 1 / span 6;
+      max-width: none;
+      margin-block-end: 0;
+    }
+
+    @media (width < 800px) {
+      display: flex;
+
+      .image {
+        margin-block-end: var(--space-s);
+      }
     }
   }
 </style>
