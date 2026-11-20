@@ -14,7 +14,7 @@
     white-space: nowrap;
     background: var(--field-background);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-s);
+    border-radius: var(--radius-xs);
 
     &[data-pressed] {
       background: var(--highlight-background);

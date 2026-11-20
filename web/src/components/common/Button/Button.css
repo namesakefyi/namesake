@@ -16,7 +16,7 @@
   outline: none;
   background: var(--background-color);
   border: 1px solid var(--text-color);
-  border-radius: var(--radius-s);
+  border-radius: var(--radius-xs);
   transition: transform 80ms ease-out;
 
   @media (hover: hover) {

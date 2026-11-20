@@ -24,7 +24,7 @@ import { RiArrowRightLine } from "@remixicon/react";
 <style>
   form {
     position: relative;
-    border-radius: 5px;
+    border-radius: var(--radius-xs);
     width: 100%;
     max-width: 520px;
   }
@@ -44,9 +44,15 @@ import { RiArrowRightLine } from "@remixicon/react";
   button {
     border: none;
     background: var(--highlight-background);
-    border-radius: var(--radius-2xs);
+    border-radius: var(--radius-xs);
     color: var(--highlight-foreground);
     padding: var(--space-xs) var(--space-s);
+    mask: var(--grain-edge-small);
+
+    /* The mask would clip the focus ring drawn outside the border box */
+    &:focus-visible {
+      mask: none;
+    }
   }
 
   input {

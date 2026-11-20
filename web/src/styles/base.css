@@ -5,7 +5,6 @@ html {
 }
 
 body {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -18,45 +17,80 @@ body {
   line-height: var(--line-height-body);
   color: var(--text-color);
   background-color: var(--background-color);
-  background-position: center top;
 }
 
-body::before,
-body::after {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  pointer-events: none;
-  content: "";
-  background-position: center top;
+h1 {
+  position: relative;
+
+  &::after {
+    position: absolute;
+    inset: -0.25em;
+    pointer-events: none;
+    content: "";
+    background-color: var(--background-color);
+    mask-image: var(--grain-image);
+    mask-position: center;
+    mask-size: var(--grain-size);
+
+    @media print, (prefers-contrast: more), (forced-colors: active) {
+      display: none;
+    }
+  }
+
+  .rough-annotation {
+    z-index: 1;
+  }
 }
 
-body::before {
-  background-image: url("/site/speckles-black.svg");
+:root {
+  --grain-edge-large:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
+    url("/site/grain-edge-large-top.webp") top / 336px 78px repeat-x,
+    url("/site/grain-edge-large-right.webp") right / 78px 336px repeat-y,
+    url("/site/grain-edge-large-bottom.webp") bottom / 336px 78px repeat-x,
+    url("/site/grain-edge-large-left.webp") left / 78px 336px repeat-y,
+    url("/site/grain-edge-large-top-left.webp") top left / 112px 112px no-repeat,
+    url("/site/grain-edge-large-top-right.webp") top right / 112px 112px
+    no-repeat,
+    url("/site/grain-edge-large-bottom-right.webp") bottom right / 112px 112px
+    no-repeat,
+    url("/site/grain-edge-large-bottom-left.webp") bottom left / 112px 112px
+    no-repeat;
+  --grain-edge-small:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
+    url("/site/grain-edge-small-top.webp") top / 192px 16px repeat-x,
+    url("/site/grain-edge-small-right.webp") right / 16px 192px repeat-y,
+    url("/site/grain-edge-small-bottom.webp") bottom / 192px 16px repeat-x,
+    url("/site/grain-edge-small-left.webp") left / 16px 192px repeat-y,
+    url("/site/grain-edge-small-top-left.webp") top left / 32px 32px no-repeat,
+    url("/site/grain-edge-small-top-right.webp") top right / 32px 32px no-repeat,
+    url("/site/grain-edge-small-bottom-right.webp") bottom right / 32px 32px
+    no-repeat,
+    url("/site/grain-edge-small-bottom-left.webp") bottom left / 32px 32px no-repeat;
+
+  --grain-image: url("/site/grain.webp");
+  --grain-size: 384px;
+
+  --grain-scattered: url("/site/grain-scattered.webp") 0 0 / 384px;
+
+  @media print, (prefers-contrast: more), (forced-colors: active) {
+    --grain-edge-large: none;
+    --grain-edge-small: none;
+    --grain-scattered: none;
+  }
 }
 
-body[data-color="purple"]::after {
-  background-image: url("/site/speckles-purple.svg");
+[data-inverted] {
+  mask: var(--grain-edge-large);
 }
 
-body[data-color="pink"]::after {
-  background-image: url("/site/speckles-pink.svg");
-}
+.button {
+  mask: var(--grain-edge-small);
 
-body[data-color="blue"]::after {
-  background-image: url("/site/speckles-blue.svg");
-}
-
-body[data-color="yellow"]::after {
-  background-image: url("/site/speckles-yellow.svg");
-}
-
-body[data-color="green"]::after {
-  background-image: url("/site/speckles-green.svg");
-}
-
-body[data-color="brown"]::after {
-  background-image: url("/site/speckles-brown.svg");
+  /* The mask would clip the focus ring drawn outside the border box */
+  &:focus-visible {
+    mask: none;
+  }
 }
 
 ::selection {
@@ -202,8 +236,8 @@ textarea:focus-visible {
   font-weight: var(--weight-bold);
   text-decoration: none;
   cursor: pointer;
-  border: 3px solid transparent;
-  border-radius: 5px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-xs);
 
   &.primary {
     color: var(--background-color);
