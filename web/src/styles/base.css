@@ -57,6 +57,9 @@ h1 {
     no-repeat,
     url("/site/grain-edge-large-bottom-left.webp") bottom left / 112px 112px
     no-repeat;
+  --grain-edge-large-top:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
+    url("/site/grain-edge-large-top.webp") top / 336px 78px repeat-x;
   --grain-edge-small:
     linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
     url("/site/grain-edge-small-top.webp") top / 192px 16px repeat-x,
@@ -76,6 +79,7 @@ h1 {
 
   @media print, (prefers-contrast: more), (forced-colors: active) {
     --grain-edge-large: none;
+    --grain-edge-large-top: none;
     --grain-edge-small: none;
     --grain-scattered: none;
   }

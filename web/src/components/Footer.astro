@@ -67,51 +67,53 @@ const linkGroups: LinkGroup[] = [
 ];
 ---
 
-<div class="footer-illustration" data-no-print>
-  <img
-    src="/site/footer/snail.png"
-    alt="A snail moving to the left"
-    width="240"
-  />
-</div>
-<footer data-no-print data-inverted>
-  <div class="content">
-    <Subscribe />
-    <div class="links">
-      {linkGroups.map(({ title, links }) => (
-        <div class="linkGroup">
-          <strong>{title}</strong>
-          {links.map(({ href, label, title }) => (
-            <a {href} {title}>
-              {label}
-            </a>
-          ))}
-        </div>
-      ))}
-    </div>
+<footer data-no-print>
+  <div class="footer-illustration">
+    <img
+      src="/site/footer/snail.png"
+      alt="A snail moving to the left"
+      width="240"
+    />
   </div>
-  <div class="logo">
-    <Logo />
-  </div>
-  <div class="content end">
-    <div class="copyright">
-      T4T <RiHeart3Line className="heart" />
-      <span>
-        Fiscal sponsorship from{" "}
-        <a href={siteInfo.fiscalSponsor.url}>{siteInfo.fiscalSponsor.name}</a>
-      </span>
+  <div data-inverted>
+    <div class="content">
+      <Subscribe />
+      <div class="links">
+        {linkGroups.map(({ title, links }) => (
+          <div class="linkGroup">
+            <strong>{title}</strong>
+            {links.map(({ href, label, title }) => (
+              <a {href} {title}>
+                {label}
+              </a>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
-    <div class="social">
-      {Object.entries(siteInfo.socialLinks).map(
-        ([platform, { href, text }]) => {
-          const Icon = socialIcons[platform as SocialPlatform];
-          return (
-            <a {href} title={text}>
-              <Icon size={28} />
-            </a>
-          );
-        },
-      )}
+    <div class="logo">
+      <Logo />
+    </div>
+    <div class="content end">
+      <div class="copyright">
+        T4T <RiHeart3Line className="heart" />
+        <span>
+          Fiscal sponsorship from{" "}
+          <a href={siteInfo.fiscalSponsor.url}>{siteInfo.fiscalSponsor.name}</a>
+        </span>
+      </div>
+      <div class="social">
+        {Object.entries(siteInfo.socialLinks).map(
+          ([platform, { href, text }]) => {
+            const Icon = socialIcons[platform as SocialPlatform];
+            return (
+              <a {href} title={text}>
+                <Icon size={28} />
+              </a>
+            );
+          },
+        )}
+      </div>
     </div>
   </div>
 </footer>
@@ -120,7 +122,14 @@ const linkGroups: LinkGroup[] = [
   footer {
     line-height: 1.5;
     width: 100%;
-    padding-block-start: var(--space-xl);
+
+    > [data-inverted] {
+      padding-block-start: var(--space-xl);
+
+      &::before {
+        mask: var(--grain-edge-large-top);
+      }
+    }
 
     a {
       text-decoration: none;
