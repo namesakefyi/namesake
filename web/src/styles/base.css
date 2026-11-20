@@ -223,8 +223,6 @@ textarea:focus-visible {
 }
 
 .button {
-  --button-border-width: 2px;
-
   position: relative;
   display: flex;
   gap: var(--space-xs);
@@ -235,7 +233,7 @@ textarea:focus-visible {
   text-decoration: none;
   cursor: pointer;
   background-color: var(--button-fill, transparent);
-  border: var(--button-border-width) solid var(--button-stroke, transparent);
+  border: 2px solid var(--button-stroke, transparent);
   border-radius: var(--radius-xs);
   mask: var(--grain-corner-bottom-left);
 
