@@ -64,9 +64,6 @@ h1 {
   }
 }
 
-/* Grain specks overlay the fill instead of masking the element itself:
-WebKit can skip painting a masked element and not repaint it once the
-mask images load */
 [data-inverted] {
   position: relative;
   background-color: var(--background-color);

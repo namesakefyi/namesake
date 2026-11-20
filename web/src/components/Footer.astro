@@ -92,9 +92,7 @@ const linkGroups: LinkGroup[] = [
       </div>
     </div>
     <div class="logo">
-      <div>
-        <Logo />
-      </div>
+      <Logo />
     </div>
     <div class="content end">
       <div class="copyright">
@@ -273,20 +271,21 @@ const linkGroups: LinkGroup[] = [
     }
 
     padding-inline: var(--space-l);
+    position: relative;
     max-width: 1200px;
     margin-inline: auto;
 
-    > div {
-      position: relative;
-
-      &::after {
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        content: "";
-        background-color: var(--background-color);
-        mask: var(--grain-edge-specks);
-      }
+    /* Inherit the padding so the specks line up with the logo's edges */
+    &::after {
+      position: absolute;
+      inset: 0;
+      padding: inherit;
+      pointer-events: none;
+      content: "";
+      background-color: var(--background-color);
+      background-clip: content-box;
+      mask: var(--grain-edge-specks);
+      mask-origin: content-box;
     }
 
     :global(svg) {
