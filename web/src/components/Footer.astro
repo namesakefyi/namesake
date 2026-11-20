@@ -92,7 +92,9 @@ const linkGroups: LinkGroup[] = [
       </div>
     </div>
     <div class="logo">
-      <Logo />
+      <div>
+        <Logo />
+      </div>
     </div>
     <div class="content end">
       <div class="copyright">
@@ -274,10 +276,23 @@ const linkGroups: LinkGroup[] = [
     max-width: 1200px;
     margin-inline: auto;
 
+    > div {
+      position: relative;
+
+      &::after {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        content: "";
+        background-color: var(--background-color);
+        mask: var(--grain-edge-specks);
+      }
+    }
+
     :global(svg) {
+      display: block;
       width: 100%;
       height: auto;
-      mask: var(--grain-edge);
     }
   }
 </style>
