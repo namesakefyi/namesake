@@ -10,7 +10,9 @@ const { heading, class: className, ...rest } = Astro.props;
 ---
 
 <section class={className} {...rest}>
-  <h2 data-inverted style={`rotate: ${randomTilt()}`}>{heading}</h2>
+  <h2 data-inverted style={`rotate: ${randomTilt()}`}>
+    {heading}
+  </h2>
   <slot />
 </section>
 
@@ -24,5 +26,6 @@ const { heading, class: className, ...rest } = Astro.props;
     padding: 0.15em var(--space-xs);
     margin-block: 0 var(--space-xl);
     font-weight: var(--weight-bold);
+    border-radius: 2px;
   }
 </style>
