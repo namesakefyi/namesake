@@ -28,7 +28,7 @@ h1 {
     pointer-events: none;
     content: "";
     background-color: var(--background-color);
-    mask: var(--grain-edge-large-specks);
+    mask: var(--grain-edge-specks);
 
     @media print, (prefers-contrast: more), (forced-colors: active) {
       display: none;
@@ -41,55 +41,41 @@ h1 {
 }
 
 :root {
-  /* Specks alone, without the solid fill they're subtracted from */
-  --grain-edge-large-specks:
-    url("/site/grain-edge-large-top.webp") top / 336px 78px repeat-x,
-    url("/site/grain-edge-large-right.webp") right / 78px 336px repeat-y,
-    url("/site/grain-edge-large-bottom.webp") bottom / 336px 78px repeat-x,
-    url("/site/grain-edge-large-left.webp") left / 78px 336px repeat-y,
-    url("/site/grain-edge-large-top-left.webp") top left / 112px 112px no-repeat,
-    url("/site/grain-edge-large-top-right.webp") top right / 112px 112px
+  --grain-edge-specks:
+    url("/site/grain-edge-top.webp") top / 336px 78px repeat-x,
+    url("/site/grain-edge-right.webp") right / 78px 336px repeat-y,
+    url("/site/grain-edge-bottom.webp") bottom / 336px 78px repeat-x,
+    url("/site/grain-edge-left.webp") left / 78px 336px repeat-y,
+    url("/site/grain-edge-top-left.webp") top left / 112px 112px no-repeat,
+    url("/site/grain-edge-top-right.webp") top right / 112px 112px
     no-repeat,
-    url("/site/grain-edge-large-bottom-right.webp") bottom right / 112px 112px
+    url("/site/grain-edge-bottom-right.webp") bottom right / 112px 112px
     no-repeat,
-    url("/site/grain-edge-large-bottom-left.webp") bottom left / 112px 112px
+    url("/site/grain-edge-bottom-left.webp") bottom left / 112px 112px
     no-repeat;
-  --grain-edge-large:
+  --grain-edge:
     linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
-    var(--grain-edge-large-specks);
-  --grain-edge-large-top:
+    var(--grain-edge-specks);
+  --grain-edge-top:
     linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
-    url("/site/grain-edge-large-top.webp") top / 336px 78px repeat-x;
-  --grain-edge-small-specks:
-    url("/site/grain-edge-small-top.webp") top / 192px 16px repeat-x,
-    url("/site/grain-edge-small-right.webp") right / 16px 192px repeat-y,
-    url("/site/grain-edge-small-bottom.webp") bottom / 192px 16px repeat-x,
-    url("/site/grain-edge-small-left.webp") left / 16px 192px repeat-y,
-    url("/site/grain-edge-small-top-left.webp") top left / 32px 32px no-repeat,
-    url("/site/grain-edge-small-top-right.webp") top right / 32px 32px no-repeat,
-    url("/site/grain-edge-small-bottom-right.webp") bottom right / 32px 32px
-    no-repeat,
-    url("/site/grain-edge-small-bottom-left.webp") bottom left / 32px 32px no-repeat;
-  --grain-edge-small:
+    url("/site/grain-edge-top.webp") top / 336px 78px repeat-x;
+  --grain-corner-bottom-left:
     linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
-    var(--grain-edge-small-specks);
+    url("/site/grain-edge-bottom-left.webp") bottom left / 112px 112px no-repeat;
 
   @media print, (prefers-contrast: more), (forced-colors: active) {
-    --grain-edge-large: none;
-    --grain-edge-large-top: none;
-    --grain-edge-small: none;
+    --grain-edge: none;
+    --grain-edge-top: none;
+    --grain-corner-bottom-left: none;
   }
 }
 
-/*
- * Grainy surfaces paint their background on a masked layer behind the content
- * instead of masking the element itself, since Safari can drop whole blocks of
- * content inside a masked element
- */
 [data-inverted] {
   position: relative;
   isolation: isolate;
 
+  /* Grain on a pseudo element to prevent Safari performance issues
+  from masking parent + all children */
   &::before {
     position: absolute;
     inset: 0;
@@ -98,7 +84,7 @@ h1 {
     content: "";
     background-color: var(--background-color);
     border-radius: inherit;
-    mask: var(--grain-edge-large);
+    mask: var(--grain-edge);
   }
 }
 
@@ -248,21 +234,14 @@ textarea:focus-visible {
   font-weight: var(--weight-bold);
   text-decoration: none;
   cursor: pointer;
-  border: var(--button-border-width) solid transparent;
+  background-color: var(--button-fill, transparent);
+  border: var(--button-border-width) solid var(--button-stroke, transparent);
   border-radius: var(--radius-xs);
-  isolation: isolate;
+  mask: var(--grain-corner-bottom-left);
 
-  /* Fill and border live on a masked layer so the label isn't masked */
-  &::before {
-    position: absolute;
-    inset: calc(var(--button-border-width) * -1);
-    z-index: -1;
-    pointer-events: none;
-    content: "";
-    background-color: var(--button-fill, transparent);
-    border: var(--button-border-width) solid var(--button-stroke, transparent);
-    border-radius: inherit;
-    mask: var(--grain-edge-small);
+  /* The mask would clip the focus ring drawn outside the border box */
+  &:focus-visible {
+    mask: none;
   }
 
   &.primary {
@@ -270,14 +249,6 @@ textarea:focus-visible {
     --button-stroke: var(--text-color);
 
     color: var(--background-color);
-
-    @media (hover: hover) {
-      &:hover {
-        --button-fill: var(--background-color);
-
-        color: var(--text-color);
-      }
-    }
   }
 
   &.secondary {
