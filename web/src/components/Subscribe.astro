@@ -59,8 +59,8 @@ import { RiArrowRightLine } from "@remixicon/react";
   }
 
   button {
+    position: relative;
     background: var(--highlight-background);
-    mask: var(--grain-corner-bottom-left);
     font-weight: var(--weight-bold);
     flex-shrink: 0;
     cursor: pointer;
@@ -69,8 +69,14 @@ import { RiArrowRightLine } from "@remixicon/react";
     align-items: center;
     padding-inline: var(--space-m);
 
-    &:focus-visible {
-      mask: none;
+    &::after {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      content: "";
+      background-color: var(--background-color);
+      border-radius: inherit;
+      mask: var(--grain-corner-bottom-left);
     }
   }
 </style>

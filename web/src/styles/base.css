@@ -56,35 +56,31 @@ h1 {
   --grain-edge:
     linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
     var(--grain-edge-specks);
-  --grain-edge-top:
-    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
-    url("/site/grain-edge-top.webp") top / 336px 78px repeat-x;
+  --grain-edge-top: url("/site/grain-edge-top.webp") top / 336px 78px repeat-x;
   --grain-corner-bottom-left:
-    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
     url("/site/grain-edge-bottom-left.webp") bottom left / 112px 112px no-repeat;
 
   @media print, (prefers-contrast: more), (forced-colors: active) {
-    --grain-edge: none;
-    --grain-edge-top: none;
-    --grain-corner-bottom-left: none;
+    --grain-edge-specks: linear-gradient(transparent 0 0);
+    --grain-edge-top: linear-gradient(transparent 0 0);
+    --grain-corner-bottom-left: linear-gradient(transparent 0 0);
   }
 }
 
 [data-inverted] {
   position: relative;
+  background-color: var(--background-color);
   isolation: isolate;
 
-  /* Grain on a pseudo element to prevent Safari performance issues
-  from masking parent + all children */
   &::before {
     position: absolute;
     inset: 0;
     z-index: -1;
     pointer-events: none;
     content: "";
-    background-color: var(--background-color);
+    background-color: var(--page-color);
     border-radius: inherit;
-    mask: var(--grain-edge);
+    mask: var(--grain-edge-specks);
   }
 }
 
@@ -235,11 +231,15 @@ textarea:focus-visible {
   background-color: var(--button-fill, transparent);
   border: 2px solid var(--button-stroke, transparent);
   border-radius: var(--radius-xs);
-  mask: var(--grain-corner-bottom-left);
 
-  /* The mask would clip the focus ring drawn outside the border box */
-  &:focus-visible {
-    mask: none;
+  &::before {
+    position: absolute;
+    inset: -2px;
+    pointer-events: none;
+    content: "";
+    background-color: var(--background-color);
+    border-radius: inherit;
+    mask: var(--grain-corner-bottom-left);
   }
 
   &.primary {
