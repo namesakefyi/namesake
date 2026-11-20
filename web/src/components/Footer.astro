@@ -271,27 +271,13 @@ const linkGroups: LinkGroup[] = [
     }
 
     padding-inline: var(--space-l);
-    position: relative;
     max-width: 1200px;
     margin-inline: auto;
 
-    /* Inherit the padding so the specks line up with the logo's edges */
-    &::after {
-      position: absolute;
-      inset: 0;
-      padding: inherit;
-      pointer-events: none;
-      content: "";
-      background-color: var(--background-color);
-      background-clip: content-box;
-      mask: var(--grain-edge-specks);
-      mask-origin: content-box;
-    }
-
     :global(svg) {
-      display: block;
       width: 100%;
       height: auto;
+      mask: var(--grain-edge);
     }
   }
 </style>

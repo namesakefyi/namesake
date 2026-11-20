@@ -53,6 +53,9 @@ h1 {
     no-repeat,
     url("/site/grain-edge-bottom-left.webp") bottom left / 112px 112px
     no-repeat;
+  --grain-edge:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
+    var(--grain-edge-specks);
   --grain-edge-top: url("/site/grain-edge-top.webp") top / 336px 78px repeat-x;
   --grain-corner-bottom-left:
     url("/site/grain-edge-bottom-left.webp") bottom left / 112px 112px no-repeat;
