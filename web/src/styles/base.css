@@ -28,6 +28,7 @@ h1 {
     pointer-events: none;
     content: "";
     background-color: var(--background-color);
+    opacity: 0.5;
     mask-image: var(--grain-image);
     mask-position: center;
     mask-size: var(--grain-size);
