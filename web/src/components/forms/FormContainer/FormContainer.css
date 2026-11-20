@@ -39,9 +39,7 @@
   &::after {
     position: absolute;
     content: "";
-    background:
-      var(--grain-image) center / var(--grain-size),
-      var(--background-color);
+    background: var(--grain-edge-small-specks), var(--background-color);
     border: 1px solid var(--border-color);
     clip-path: polygon(
       calc(100% - var(--sliver)) 0,
@@ -60,17 +58,11 @@
     z-index: -1;
   }
 
-  /* The backmost sheet doubles up the tile at an offset for denser grain */
   &::after {
     --sliver: 6px;
 
     inset: 13px -7px -7px 13px;
     z-index: -2;
-    background:
-      var(--grain-image) center / var(--grain-size),
-      var(--grain-image) calc(var(--grain-size) / 2) calc(var(--grain-size) / 4)
-      / var(--grain-size),
-      var(--background-color);
   }
 
   .form-title-step {

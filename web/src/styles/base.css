@@ -24,14 +24,11 @@ h1 {
 
   &::after {
     position: absolute;
-    inset: -0.25em;
+    inset: 0;
     pointer-events: none;
     content: "";
     background-color: var(--background-color);
-    opacity: 0.5;
-    mask-image: var(--grain-image);
-    mask-position: center;
-    mask-size: var(--grain-size);
+    mask: var(--grain-edge-large-specks);
 
     @media print, (prefers-contrast: more), (forced-colors: active) {
       display: none;
@@ -44,8 +41,8 @@ h1 {
 }
 
 :root {
-  --grain-edge-large:
-    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
+  /* Specks alone, without the solid fill they're subtracted from */
+  --grain-edge-large-specks:
     url("/site/grain-edge-large-top.webp") top / 336px 78px repeat-x,
     url("/site/grain-edge-large-right.webp") right / 78px 336px repeat-y,
     url("/site/grain-edge-large-bottom.webp") bottom / 336px 78px repeat-x,
@@ -57,11 +54,13 @@ h1 {
     no-repeat,
     url("/site/grain-edge-large-bottom-left.webp") bottom left / 112px 112px
     no-repeat;
+  --grain-edge-large:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
+    var(--grain-edge-large-specks);
   --grain-edge-large-top:
     linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
     url("/site/grain-edge-large-top.webp") top / 336px 78px repeat-x;
-  --grain-edge-small:
-    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
+  --grain-edge-small-specks:
     url("/site/grain-edge-small-top.webp") top / 192px 16px repeat-x,
     url("/site/grain-edge-small-right.webp") right / 16px 192px repeat-y,
     url("/site/grain-edge-small-bottom.webp") bottom / 192px 16px repeat-x,
@@ -71,17 +70,14 @@ h1 {
     url("/site/grain-edge-small-bottom-right.webp") bottom right / 32px 32px
     no-repeat,
     url("/site/grain-edge-small-bottom-left.webp") bottom left / 32px 32px no-repeat;
-
-  --grain-image: url("/site/grain.webp");
-  --grain-size: 384px;
-
-  --grain-scattered: url("/site/grain-scattered.webp") 0 0 / 384px;
+  --grain-edge-small:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
+    var(--grain-edge-small-specks);
 
   @media print, (prefers-contrast: more), (forced-colors: active) {
     --grain-edge-large: none;
     --grain-edge-large-top: none;
     --grain-edge-small: none;
-    --grain-scattered: none;
   }
 }
 
