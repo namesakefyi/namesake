@@ -182,7 +182,11 @@ test("Massachusetts Court Order", async ({ page }, testInfo) => {
   await test.step("Residential address (autocomplete)", async () => {
     await page.getByLabel("Previous step").click();
     await page.getByRole("textbox", { name: "City" }).fill("");
-    await page.getByRole("combobox", { name: "State" }).fill("");
+    const state = page.getByRole("combobox", { name: "State" });
+    await state.fill("");
+    // The state list opens on focus and hides the rest of the form until the
+    // user moves on
+    await state.press("Tab");
     await page.getByRole("textbox", { name: "County" }).fill("");
     await page.getByRole("textbox", { name: "ZIP" }).fill("");
     const street = page.getByRole("searchbox", { name: "Street address" });

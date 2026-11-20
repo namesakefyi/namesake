@@ -7,11 +7,6 @@
     background-color: transparent !important;
   }
 
-  body::before,
-  body::after {
-    display: none;
-  }
-
   .rough-annotation {
     display: none;
   }

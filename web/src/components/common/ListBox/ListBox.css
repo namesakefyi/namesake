@@ -47,7 +47,7 @@
   color: var(--text-color);
   cursor: pointer;
   outline: none;
-  border-radius: var(--radius-2xs);
+  border-radius: var(--radius-xs);
 
   &[data-focus-visible] {
     outline: 3px solid var(--focus-ring-color);

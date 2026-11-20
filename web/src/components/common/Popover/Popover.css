@@ -9,8 +9,8 @@
   background: var(--overlay-background);
   border: none;
 
-  border-radius: var(--radius-s);
-  box-shadow: 8px 8px 0 0
+  border-radius: var(--radius-xs);
+  box-shadow: 8px 8px 16px 0
     color-mix(in srgb, var(--border-color) 20%, transparent);
   transition:
     transform 200ms,

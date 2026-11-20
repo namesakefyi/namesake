@@ -1,0 +1,190 @@
+---
+import { getCollection } from "astro:content";
+import { RiArrowLeftLine, RiArrowRightLine } from "@remixicon/react";
+import type { GetStaticPaths, Page } from "astro";
+import ArticleLink from "#components/ArticleLink.astro";
+import PageHeader from "#components/PageHeader.astro";
+import BaseLayout from "#layouts/BaseLayout.astro";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const [allPosts, allAuthors] = await Promise.all([
+    getCollection("posts"),
+    getCollection("authors"),
+  ]);
+
+  const authorNames = Object.fromEntries(
+    allAuthors.map((author) => [author.id, author.data.name]),
+  );
+
+  const posts = allPosts
+    .filter((post) => post.data.publishDate <= new Date())
+    .sort(
+      (first, second) =>
+        second.data.publishDate.getTime() - first.data.publishDate.getTime(),
+    )
+    .map((post) => ({
+      id: post.id,
+      title: post.data.title,
+      date: post.data.publishDate,
+      description: post.data.description,
+      image: post.data.image,
+      authors: post.data.authors?.map((id) => authorNames[id] ?? id),
+    }));
+
+  const [featured, ...rest] = posts;
+
+  return paginate(rest, { pageSize: 6, props: { featured } });
+}) satisfies GetStaticPaths;
+
+type Post = NonNullable<
+  Awaited<ReturnType<typeof getStaticPaths>>[number]["props"]["featured"]
+>;
+
+interface Props {
+  page: Page<Post>;
+  featured?: Post;
+}
+
+const { page, featured } = Astro.props;
+const isFirstPage = page.currentPage === 1;
+const title = isFirstPage ? "Blog" : `Blog: Page ${page.currentPage}`;
+---
+
+<BaseLayout
+  title={title}
+  description="Name change news and site updates."
+  color="blue"
+  previewImage={{
+    src: "/og/blog.png",
+    alt: "Name change news and site updates.",
+  }}
+>
+  <PageHeader title="Blog" description="Name change news and site updates." />
+  {
+    isFirstPage && featured && (
+      <section aria-label="Latest post">
+        <ArticleLink
+          featured
+          authors={featured.authors}
+          title={featured.title}
+          date={featured.date}
+          url={`/blog/${featured.id}`}
+          description={featured.description}
+          image={featured.image}
+        />
+      </section>
+    )
+  }
+  {
+    page.data.length ? (
+      <ul aria-label={isFirstPage ? "More posts" : "Posts"}>
+        {page.data.map((post) => (
+          <li>
+            <ArticleLink
+              authors={post.authors}
+              title={post.title}
+              date={post.date}
+              url={`/blog/${post.id}`}
+              description={post.description}
+              image={post.image}
+            />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      !featured && <p>No posts found.</p>
+    )
+  }
+  {
+    page.lastPage > 1 && (
+      <nav aria-label="Pagination">
+        <a
+          href={page.url.prev}
+          rel="prev"
+          aria-disabled={page.url.prev ? undefined : "true"}
+        >
+          <RiArrowLeftLine size={20} aria-hidden="true" />
+          Newer
+        </a>
+        <a
+          href={page.url.next}
+          rel="next"
+          aria-disabled={page.url.next ? undefined : "true"}
+        >
+          Older
+          <RiArrowRightLine size={20} aria-hidden="true" />
+        </a>
+        <span>
+          Page {page.currentPage} of {page.lastPage}
+        </span>
+      </nav>
+    )
+  }
+</BaseLayout>
+
+<style>
+  section {
+    margin-block-end: var(--space-3xl);
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2xl) var(--space-3xl);
+    padding: 0 0 var(--space-3xl);
+    margin: 0;
+    list-style: none;
+
+    @media (width < 800px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  nav {
+    display: flex;
+    gap: var(--space-s);
+    align-items: center;
+    padding-block: var(--space-l) var(--space-3xl);
+    border-block-start: 1px solid var(--border-color);
+
+    a {
+      display: inline-flex;
+      gap: var(--space-2xs);
+      align-items: center;
+      height: calc(var(--space-2xl) + var(--space-2xs));
+      padding-inline: var(--space-m);
+      font-weight: var(--weight-bold);
+      color: var(--text-color);
+      text-wrap: nowrap;
+      text-decoration: none;
+      background-color: var(--background-color);
+      border: 1px solid var(--text-color);
+      border-radius: var(--radius-s);
+      transition: transform 80ms ease-out;
+
+      @media (hover: hover) {
+        &[href]:hover {
+          transform: scale(1.05);
+        }
+
+        &[href]:active {
+          transform: scale(0.98);
+        }
+      }
+
+      &:focus-visible {
+        outline: 3px solid var(--focus-ring-color);
+        outline-offset: 2px;
+      }
+
+      &[aria-disabled="true"] {
+        opacity: 0.4;
+      }
+    }
+
+    span {
+      margin-inline-start: var(--space-xs);
+      font-variant-numeric: tabular-nums;
+    }
+  }
+</style>

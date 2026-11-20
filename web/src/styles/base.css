@@ -5,7 +5,6 @@ html {
 }
 
 body {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -18,45 +17,71 @@ body {
   line-height: var(--line-height-body);
   color: var(--text-color);
   background-color: var(--background-color);
-  background-position: center top;
 }
 
-body::before,
-body::after {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  pointer-events: none;
-  content: "";
-  background-position: center top;
+h1 {
+  position: relative;
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: "";
+    background-color: var(--background-color);
+    mask: var(--grain-edge-specks);
+
+    @media print, (prefers-contrast: more), (forced-colors: active) {
+      display: none;
+    }
+  }
+
+  .rough-annotation {
+    z-index: 1;
+  }
 }
 
-body::before {
-  background-image: url("/site/speckles-black.svg");
+:root {
+  --grain-edge-specks:
+    url("/site/grain-edge-top.webp") top / 336px 78px repeat-x,
+    url("/site/grain-edge-right.webp") right / 78px 336px repeat-y,
+    url("/site/grain-edge-bottom.webp") bottom / 336px 78px repeat-x,
+    url("/site/grain-edge-left.webp") left / 78px 336px repeat-y,
+    url("/site/grain-edge-top-left.webp") top left / 112px 112px no-repeat,
+    url("/site/grain-edge-top-right.webp") top right / 112px 112px
+    no-repeat,
+    url("/site/grain-edge-bottom-right.webp") bottom right / 112px 112px
+    no-repeat,
+    url("/site/grain-edge-bottom-left.webp") bottom left / 112px 112px
+    no-repeat;
+  --grain-edge:
+    linear-gradient(#000 0 0) 0 0 / 100% 100% no-repeat subtract,
+    var(--grain-edge-specks);
+  --grain-edge-top: url("/site/grain-edge-top.webp") top / 336px 78px repeat-x;
+  --grain-corner-bottom-left:
+    url("/site/grain-edge-bottom-left.webp") bottom left / 112px 112px no-repeat;
+
+  @media print, (prefers-contrast: more), (forced-colors: active) {
+    --grain-edge-specks: linear-gradient(transparent 0 0);
+    --grain-edge-top: linear-gradient(transparent 0 0);
+    --grain-corner-bottom-left: linear-gradient(transparent 0 0);
+  }
 }
 
-body[data-color="purple"]::after {
-  background-image: url("/site/speckles-purple.svg");
-}
+[data-inverted] {
+  position: relative;
+  background-color: var(--background-color);
+  isolation: isolate;
 
-body[data-color="pink"]::after {
-  background-image: url("/site/speckles-pink.svg");
-}
-
-body[data-color="blue"]::after {
-  background-image: url("/site/speckles-blue.svg");
-}
-
-body[data-color="yellow"]::after {
-  background-image: url("/site/speckles-yellow.svg");
-}
-
-body[data-color="green"]::after {
-  background-image: url("/site/speckles-green.svg");
-}
-
-body[data-color="brown"]::after {
-  background-image: url("/site/speckles-brown.svg");
+  &::before {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    content: "";
+    background-color: var(--page-color);
+    border-radius: inherit;
+    mask: var(--grain-edge-specks);
+  }
 }
 
 ::selection {
@@ -194,6 +219,7 @@ textarea:focus-visible {
 }
 
 .button {
+  position: relative;
   display: flex;
   gap: var(--space-xs);
   align-items: center;
@@ -202,31 +228,38 @@ textarea:focus-visible {
   font-weight: var(--weight-bold);
   text-decoration: none;
   cursor: pointer;
-  border: 3px solid transparent;
-  border-radius: 5px;
+  background-color: var(--button-fill, transparent);
+  border: 2px solid var(--button-stroke, transparent);
+  border-radius: var(--radius-xs);
+
+  &::before {
+    position: absolute;
+    inset: -2px;
+    pointer-events: none;
+    content: "";
+    background-color: var(--background-color);
+    border-radius: inherit;
+    mask: var(--grain-corner-bottom-left);
+  }
 
   &.primary {
-    color: var(--background-color);
-    background-color: var(--text-color);
-    border-color: var(--text-color);
+    --button-fill: var(--text-color);
+    --button-stroke: var(--text-color);
 
-    @media (hover: hover) {
-      &:hover {
-        color: var(--text-color);
-        background-color: var(--background-color);
-      }
-    }
+    color: var(--background-color);
   }
 
   &.secondary {
+    --button-fill: var(--background-color);
+    --button-stroke: var(--text-color);
+
     color: var(--text-color);
-    background-color: var(--background-color);
-    border-color: var(--text-color);
 
     @media (hover: hover) {
       &:hover {
+        --button-fill: var(--text-color);
+
         color: var(--background-color);
-        background-color: var(--text-color);
       }
     }
   }

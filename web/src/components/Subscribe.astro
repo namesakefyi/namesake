@@ -24,7 +24,7 @@ import { RiArrowRightLine } from "@remixicon/react";
 <style>
   form {
     position: relative;
-    border-radius: 5px;
+    border-radius: var(--radius-xs);
     width: 100%;
     max-width: 520px;
   }
@@ -43,8 +43,7 @@ import { RiArrowRightLine } from "@remixicon/react";
   input,
   button {
     border: none;
-    background: var(--highlight-background);
-    border-radius: var(--radius-2xs);
+    border-radius: var(--radius-xs);
     color: var(--highlight-foreground);
     padding: var(--space-xs) var(--space-s);
   }
@@ -52,6 +51,7 @@ import { RiArrowRightLine } from "@remixicon/react";
   input {
     flex: 1;
     min-width: 0;
+    background: var(--highlight-background);
 
     &::placeholder {
       color: color-mix(in srgb, var(--highlight-foreground) 50%, transparent);
@@ -59,6 +59,8 @@ import { RiArrowRightLine } from "@remixicon/react";
   }
 
   button {
+    position: relative;
+    background: var(--highlight-background);
     font-weight: var(--weight-bold);
     flex-shrink: 0;
     cursor: pointer;
@@ -66,5 +68,15 @@ import { RiArrowRightLine } from "@remixicon/react";
     gap: var(--space-2xs);
     align-items: center;
     padding-inline: var(--space-m);
+
+    &::after {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      content: "";
+      background-color: var(--background-color);
+      border-radius: inherit;
+      mask: var(--grain-corner-bottom-left);
+    }
   }
 </style>
