@@ -43,21 +43,22 @@ import { RiArrowRightLine } from "@remixicon/react";
   input,
   button {
     border: none;
-    background: var(--highlight-background);
     border-radius: var(--radius-xs);
     color: var(--highlight-foreground);
     padding: var(--space-xs) var(--space-s);
+  }
+
+  /* An input can't hold a ::before layer, but has no content to drop */
+  input {
+    flex: 1;
+    min-width: 0;
+    background: var(--highlight-background);
     mask: var(--grain-edge-small);
 
     /* The mask would clip the focus ring drawn outside the border box */
     &:focus-visible {
       mask: none;
     }
-  }
-
-  input {
-    flex: 1;
-    min-width: 0;
 
     &::placeholder {
       color: color-mix(in srgb, var(--highlight-foreground) 50%, transparent);
@@ -65,6 +66,9 @@ import { RiArrowRightLine } from "@remixicon/react";
   }
 
   button {
+    position: relative;
+    isolation: isolate;
+    background: none;
     font-weight: var(--weight-bold);
     flex-shrink: 0;
     cursor: pointer;
@@ -72,5 +76,16 @@ import { RiArrowRightLine } from "@remixicon/react";
     gap: var(--space-2xs);
     align-items: center;
     padding-inline: var(--space-m);
+
+    &::before {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      content: "";
+      background: var(--highlight-background);
+      border-radius: inherit;
+      mask: var(--grain-edge-small);
+    }
   }
 </style>

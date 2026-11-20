@@ -80,16 +80,24 @@ h1 {
   }
 }
 
+/*
+ * Grainy surfaces paint their background on a masked layer behind the content
+ * instead of masking the element itself, since Safari can drop whole blocks of
+ * content inside a masked element
+ */
 [data-inverted] {
-  mask: var(--grain-edge-large);
-}
+  position: relative;
+  isolation: isolate;
 
-.button {
-  mask: var(--grain-edge-small);
-
-  /* The mask would clip the focus ring drawn outside the border box */
-  &:focus-visible {
-    mask: none;
+  &::before {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    content: "";
+    background-color: var(--background-color);
+    border-radius: inherit;
+    mask: var(--grain-edge-large);
   }
 }
 
@@ -228,6 +236,9 @@ textarea:focus-visible {
 }
 
 .button {
+  --button-border-width: 2px;
+
+  position: relative;
   display: flex;
   gap: var(--space-xs);
   align-items: center;
@@ -236,31 +247,49 @@ textarea:focus-visible {
   font-weight: var(--weight-bold);
   text-decoration: none;
   cursor: pointer;
-  border: 2px solid transparent;
+  border: var(--button-border-width) solid transparent;
   border-radius: var(--radius-xs);
+  isolation: isolate;
+
+  /* Fill and border live on a masked layer so the label isn't masked */
+  &::before {
+    position: absolute;
+    inset: calc(var(--button-border-width) * -1);
+    z-index: -1;
+    pointer-events: none;
+    content: "";
+    background-color: var(--button-fill, transparent);
+    border: var(--button-border-width) solid var(--button-stroke, transparent);
+    border-radius: inherit;
+    mask: var(--grain-edge-small);
+  }
 
   &.primary {
+    --button-fill: var(--text-color);
+    --button-stroke: var(--text-color);
+
     color: var(--background-color);
-    background-color: var(--text-color);
-    border-color: var(--text-color);
 
     @media (hover: hover) {
       &:hover {
+        --button-fill: var(--background-color);
+
         color: var(--text-color);
-        background-color: var(--background-color);
       }
     }
   }
 
   &.secondary {
+    --button-fill: var(--background-color);
+    --button-stroke: var(--text-color);
+
     color: var(--text-color);
-    background-color: var(--background-color);
-    border-color: var(--text-color);
 
     @media (hover: hover) {
       &:hover {
+        --button-fill: var(--text-color);
+
         color: var(--background-color);
-        background-color: var(--text-color);
       }
     }
   }

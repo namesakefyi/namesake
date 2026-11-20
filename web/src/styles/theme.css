@@ -68,7 +68,6 @@ body {
   --background-color: var(--namesake-black);
 
   color: var(--text-color);
-  background-color: var(--background-color);
 }
 
 :root,
