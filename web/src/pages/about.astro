@@ -1,0 +1,272 @@
+---
+import { Image } from "astro:assets";
+import DonateBanner from "#components/DonateBanner.astro";
+import PageHeader from "#components/PageHeader.astro";
+import Testimonials from "#components/Testimonials.astro";
+import BaseLayout from "#layouts/BaseLayout.astro";
+import formsIllustration from "./about/_components/forms.png";
+import guidesIllustration from "./about/_components/guides.png";
+import ImpactStats from "./about/_components/ImpactStats.astro";
+import impactImage from "./about/_components/impact-bg.webp";
+import Mission from "./about/_components/mission.svg";
+import partnerIllustration from "./about/_components/partner.png";
+import researchIllustration from "./about/_components/research.png";
+import TeamGrid from "./about/_components/TeamGrid.astro";
+import Team from "./about/_components/team.svg";
+import Vision from "./about/_components/vision.svg";
+import WhatWeDo from "./about/_components/what-we-do.svg";
+---
+
+<BaseLayout
+  title="About"
+  description="We're a trans-led team of organizers and technologists who think that changing your name should be easy."
+>
+  <PageHeader
+    title="About Namesake"
+    description="We're a trans-led team of organizers and technologists who think that changing your name should be easy."
+    annotation="underline"
+  />
+  <section class="mission">
+    <h2>
+      <Mission />
+    </h2>
+    <p class="lead">
+      Namesake simplifies the process of changing legal names and gender markers
+      for trans people in the U.S. by building technology and advocating for
+      systemic change.
+    </p>
+    <h3>
+      <WhatWeDo />
+    </h3>
+    <ul>
+      <li>
+        <Image
+          src={researchIllustration}
+          alt=""
+          height={160}
+          densities={[1, 2]}
+        />
+        <p>
+          <strong>Research laws</strong> in all states and advocate for legal
+          change to reduce barriers.
+        </p>
+      </li>
+      <li>
+        <Image
+          src={partnerIllustration}
+          alt=""
+          height={160}
+          densities={[1, 2]}
+        />
+        <p>
+          <strong>Partner locally</strong> with LGBTQ+ orgs which are already
+          doing the work in their communities.
+        </p>
+      </li>
+      <li>
+        <Image
+          src={guidesIllustration}
+          alt=""
+          height={160}
+          densities={[1, 2]}
+        />
+        <p>
+          <strong>Write guides</strong> in plain language to explain what .gov
+          sites don't (or won't).
+        </p>
+      </li>
+      <li>
+        <Image src={formsIllustration} alt="" height={160} densities={[1, 2]} />
+        <p>
+          <strong>Build forms</strong> to help fill out court petitions, fee
+          waivers, and more.
+        </p>
+      </li>
+    </ul>
+  </section>
+  <section class="vision">
+    <h2>
+      <Vision />
+    </h2>
+    <p>
+      <span data-inverted>
+        To advance the freedom of <span class="nowrap">self-determination</span>{" "}
+        for all.
+      </span>
+    </p>
+    <figure>
+      <Image
+        src={impactImage}
+        alt="JoJo Ludwig hoists the edge of an enormous trans flag that billows over apartment buildings at the Dyke March."
+      />
+      <figcaption>
+        “2026, Dyke March Cologne 36” by Blauschrift,{" "}
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/">
+          CC BY-SA 4.0
+        </a>
+        , via{" "}
+        <a href="https://commons.wikimedia.org/wiki/File:2026,_Dyke_March_Cologne_36.jpg">
+          Wikimedia Commons
+        </a>
+      </figcaption>
+    </figure>
+  </section>
+  <section>
+    <h2 class="visually-hidden">Impact</h2>
+    <ImpactStats />
+  </section>
+  <section class="team">
+    <h2>
+      <Team />
+    </h2>
+    <TeamGrid />
+  </section>
+  <DonateBanner class="donation" />
+  <Testimonials class="testimonials-section" />
+</BaseLayout>
+
+<style>
+  section {
+    padding-block-start: var(--space-3xl);
+  }
+
+  h2 {
+    margin-block: 0 var(--space-xl);
+    font-size: var(--step-4);
+
+    svg {
+      display: block;
+      width: auto;
+      height: 1.3em;
+    }
+  }
+
+  .lead {
+    max-width: 60ch;
+    font-size: var(--step-3);
+    line-height: var(--line-height-display);
+    text-wrap: pretty;
+  }
+
+  .mission {
+    h3 {
+      margin-block: var(--space-2xl) var(--space-xl);
+
+      svg {
+        display: block;
+        width: 6em;
+        height: auto;
+      }
+    }
+
+    ul {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-xl) var(--space-l);
+      padding: 0;
+      list-style-type: none;
+
+      @media (width >= 900px) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    li {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-l);
+      text-wrap: pretty;
+    }
+
+    img {
+      align-self: start;
+      width: auto;
+      height: 10rem;
+      mix-blend-mode: multiply;
+    }
+
+    strong {
+      font-size: var(--step-1);
+      line-height: var(--line-height-single);
+
+      /* A forced break instead of display: block keeps the strong inline, so the paragraph's line height still applies */
+      &::after {
+        content: "\A";
+        white-space: pre;
+      }
+    }
+  }
+
+  .vision {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    container-type: inline-size;
+
+    h2,
+    > p {
+      z-index: 1;
+      justify-self: end;
+      margin-inline-end: var(--space-l);
+      text-align: end;
+      font-weight: var(--weight-bold);
+    }
+
+    h2 {
+      grid-area: 1 / 1;
+      margin-block: var(--space-m);
+      font-size: max(var(--step-1), 2.75cqi);
+      border-radius: 2px;
+
+      svg {
+        height: 1.9em;
+      }
+    }
+
+    > p {
+      grid-area: 2 / 1;
+      max-width: 24ch;
+      font-size: min(
+        calc((100cqi - 2 * var(--space-l) - 2 * var(--space-xs)) / 13),
+        max(5.75cqi, var(--step-3))
+      );
+      line-height: 1.3;
+      text-wrap: balance;
+
+      > span {
+        padding: 0.1em var(--space-xs);
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+      }
+    }
+
+    figure {
+      grid-area: 1 / 1 / 4 / 2;
+      margin: 0;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius-xs);
+      mix-blend-mode: multiply;
+    }
+
+    figcaption {
+      margin-block-start: var(--space-xs);
+      font-size: var(--step--2);
+    }
+  }
+
+  .team {
+    padding-block-end: var(--space-3xl);
+  }
+
+  .donation {
+    margin-block-end: var(--space-3xl);
+  }
+
+  .testimonials-section {
+    padding-block: 0 var(--space-3xl);
+  }
+</style>

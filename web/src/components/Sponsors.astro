@@ -1,9 +1,10 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
+import { shuffle } from "#lib/utils/shuffle";
 
 const sponsors = await getCollection("sponsors");
-const shuffledSponsors = sponsors.sort(() => 0.5 - Math.random());
+const shuffledSponsors = shuffle(sponsors);
 ---
 
 <section class="sponsors">

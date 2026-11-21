@@ -1,7 +1,9 @@
 ---
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
+import SocialLinks from "#components/SocialLinks.astro";
 import { joinParts } from "#lib/utils/joinParts";
+import { smartquotes } from "#lib/utils/smartquotes";
 
 interface Props {
   authors: CollectionEntry<"authors">[];
@@ -32,18 +34,8 @@ const { authors } = Astro.props;
           <span>{joinParts(author.data.org.role, author.data.org.name)}</span>
         </div>
         <div class="details">
-          <p>{author.data.bio}</p>
-          {author.data.socialLinks && author.data.socialLinks.length > 0 && (
-            <ul class="social">
-              {author.data.socialLinks.map((link) => (
-                <li>
-                  <a href={link.url} target="_blank" rel="noopener noreferrer">
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
+          <p>{smartquotes(author.data.bio)}</p>
+          <SocialLinks links={author.data.socialLinks} />
         </div>
       </div>
     ))}
@@ -92,13 +84,6 @@ const { authors } = Astro.props;
 
     .pronouns {
       font-size: var(--step--1);
-    }
-
-    .social {
-      display: flex;
-      gap: var(--space-s);
-      padding: 0;
-      list-style-type: none;
     }
   }
 </style>

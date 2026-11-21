@@ -1,0 +1,194 @@
+---
+import { getCollection } from "astro:content";
+import { renderInnerHTML } from "number-flow";
+import { siteInfo } from "#constants/site-info";
+
+// TODO: Dynamically store and fetch this value
+const NAME_CHANGES_ASSISTED = 1000;
+
+const [states, guides, orgs] = await Promise.all([
+  getCollection("jurisdictions", ({ data }) => data.namesakeSupport === "full"),
+  getCollection("guides", ({ data }) => !data.unlisted),
+  getCollection("directory"),
+]);
+
+const stats = [
+  {
+    count: states.length,
+    label: "States",
+  },
+  {
+    count: guides.length,
+    label: "Guides",
+    href: siteInfo.urls.guides,
+  },
+  {
+    count: orgs.length,
+    label: "Organizations",
+    href: siteInfo.urls.directory,
+  },
+  {
+    count: NAME_CHANGES_ASSISTED,
+    suffix: "+",
+    label: "Name changes assisted",
+  },
+];
+---
+
+<div class="stats">
+  <dl>
+    {stats.map(({ count, suffix, label, href }) => (
+      <div>
+        <dt>{href ? <a href={href}>{label}</a> : label}</dt>
+        <dd>
+          <data
+            class="visually-hidden"
+            value={count}
+          >{`${count}${suffix ?? ""}`}</data>
+          <number-flow
+            aria-hidden="true"
+            data-count={count}
+            data-suffix={suffix}
+            set:html={renderInnerHTML(count, {
+              numberSuffix: suffix,
+              format: { useGrouping: false },
+            })}
+          />
+        </dd>
+      </div>
+    ))}
+  </dl>
+</div>
+
+<style>
+  .stats {
+    padding-block-end: var(--space-xl);
+  }
+
+  dl {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xl) var(--space-3xl);
+    margin: 0;
+    overflow: hidden;
+
+    @media (width < 420px) {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    > div {
+      display: flex;
+      justify-content: center;
+      flex-direction: column-reverse;
+      gap: 0;
+      align-items: center;
+      text-align: center;
+    }
+
+    dd {
+      margin: 0;
+      font-weight: var(--weight-bold);
+      font-size: var(--step-6);
+      line-height: var(--line-height-single);
+      letter-spacing: var(--letter-spacing-condensed);
+    }
+
+    dt {
+      font-weight: var(--weight-bold);
+      font-size: var(--step-1);
+    }
+
+    number-flow {
+      margin-block: -0.2em;
+    }
+
+    number-flow::part(suffix) {
+      translate: 0 -0.08em;
+    }
+  }
+</style>
+
+<script>
+  import "number-flow";
+  import type NumberFlow from "number-flow";
+  import type { Plugin } from "number-flow/plugins";
+
+  const DURATION = 1600;
+  const STAGGER = 300;
+  const timing = {
+    duration: DURATION,
+    easing: "cubic-bezier(0.83, 0, 0.17, 1)",
+  };
+
+  const changes = new WeakMap<object, { from: number; to: number }>();
+
+  const odometer: Plugin = {
+    onUpdate(data, previous, flow) {
+      changes.set(flow, { from: previous.value, to: data.value });
+    },
+    getDelta(_value, _previous, digit) {
+      const change = changes.get(digit.flow);
+      if (!change) return;
+      const place = 10 ** digit.pos;
+      return Math.floor(change.to / place) - Math.floor(change.from / place);
+    },
+  };
+
+  const list = document.querySelector<HTMLElement>(".stats");
+  const flows = [
+    ...document.querySelectorAll<NumberFlow>(".stats number-flow"),
+  ];
+  const selectionStyles = new CSSStyleSheet();
+  selectionStyles.replaceSync(
+    "::selection { color: var(--background-color); background: var(--text-color); }",
+  );
+
+  for (const flow of flows) {
+    if (!flow.shadowRoot) continue;
+    flow.shadowRoot.adoptedStyleSheets = [
+      ...flow.shadowRoot.adoptedStyleSheets,
+      selectionStyles,
+    ];
+  }
+
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  if (list && !prefersReducedMotion) {
+    for (const flow of flows) {
+      flow.format = { useGrouping: false };
+      flow.plugins = [odometer];
+      flow.spinTiming = timing;
+      flow.transformTiming = timing;
+      flow.animated = false;
+      flow.update(0);
+      flow.animated = true;
+    }
+
+    const countUp = (flow: NumberFlow, delay: number) => {
+      setTimeout(() => flow.update(Number(flow.dataset.count)), delay);
+      if (!flow.dataset.suffix) return;
+      setTimeout(() => {
+        flow.transformTiming = {
+          duration: 600,
+          easing: "cubic-bezier(0.65, 0, 0.35, 1)",
+        };
+        flow.numberSuffix = flow.dataset.suffix;
+        flow.update();
+      }, delay + DURATION);
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        flows.forEach((flow, index) => countUp(flow, index * STAGGER));
+        observer.disconnect();
+      },
+      { rootMargin: "0px 0px -25% 0px" },
+    );
+    observer.observe(list);
+  }
+</script>
