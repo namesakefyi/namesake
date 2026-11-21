@@ -73,6 +73,11 @@ const stats = [
     margin: 0;
     overflow: hidden;
 
+    @media (width < 420px) {
+      flex-direction: column;
+      align-items: center;
+    }
+
     > div {
       display: flex;
       justify-content: center;

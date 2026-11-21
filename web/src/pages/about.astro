@@ -206,13 +206,12 @@ import WhatWeDo from "./about/_components/what-we-do.svg";
     > p {
       grid-area: 2 / 1;
       max-width: 24ch;
-      font-size: 5.75cqi;
+      font-size: min(
+        calc((100cqi - 2 * var(--space-l) - 2 * var(--space-xs)) / 13),
+        max(5.75cqi, var(--step-3))
+      );
       line-height: 1.3;
       text-wrap: balance;
-
-      @media (width < 640px) {
-        font-size: var(--step-3);
-      }
 
       > span {
         padding: 0.1em var(--space-xs);
