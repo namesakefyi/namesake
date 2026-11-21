@@ -135,7 +135,7 @@ import WhatWeDo from "./about/_components/what-we-do.svg";
 
   .mission {
     h3 {
-      margin-block-start: var(--space-2xl);
+      margin-block: var(--space-2xl) var(--space-xl);
 
       svg {
         display: block;
@@ -147,9 +147,8 @@ import WhatWeDo from "./about/_components/what-we-do.svg";
     ul {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: var(--space-l);
+      gap: var(--space-xl) var(--space-l);
       padding: 0;
-      margin: var(--space-l) 0 0;
       list-style-type: none;
 
       @media (width >= 900px) {
