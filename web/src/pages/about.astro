@@ -8,9 +8,12 @@ import formsIllustration from "./about/_components/forms.png";
 import guidesIllustration from "./about/_components/guides.png";
 import ImpactStats from "./about/_components/ImpactStats.astro";
 import impactImage from "./about/_components/impact-bg.webp";
+import Mission from "./about/_components/mission.svg";
 import partnerIllustration from "./about/_components/partner.png";
 import researchIllustration from "./about/_components/research.png";
 import TeamGrid from "./about/_components/TeamGrid.astro";
+import Team from "./about/_components/team.svg";
+import Vision from "./about/_components/vision.svg";
 import WhatWeDo from "./about/_components/what-we-do.svg";
 ---
 
@@ -24,7 +27,9 @@ import WhatWeDo from "./about/_components/what-we-do.svg";
     annotation="underline"
   />
   <section class="mission">
-    <h2>Mission</h2>
+    <h2>
+      <Mission />
+    </h2>
     <p class="lead">
       Namesake simplifies the process of changing legal names and gender markers
       for trans people in the U.S. by building technology and advocating for
@@ -80,7 +85,9 @@ import WhatWeDo from "./about/_components/what-we-do.svg";
     </ul>
   </section>
   <section class="vision">
-    <h2>Vision</h2>
+    <h2>
+      <Vision />
+    </h2>
     <p>
       <span data-inverted>
         To advance the freedom of <span class="nowrap">self-determination</span>{" "}
@@ -109,7 +116,9 @@ import WhatWeDo from "./about/_components/what-we-do.svg";
     <ImpactStats />
   </section>
   <section class="team">
-    <h2>Team</h2>
+    <h2>
+      <Team />
+    </h2>
     <TeamGrid />
   </section>
   <DonateBanner class="donation" />
@@ -124,6 +133,12 @@ import WhatWeDo from "./about/_components/what-we-do.svg";
   h2 {
     margin-block: 0 var(--space-xl);
     font-size: var(--step-4);
+
+    svg {
+      display: block;
+      width: auto;
+      height: 1.3em;
+    }
   }
 
   .lead {
@@ -159,7 +174,7 @@ import WhatWeDo from "./about/_components/what-we-do.svg";
     li {
       display: flex;
       flex-direction: column;
-      gap: var(--space-m);
+      gap: var(--space-l);
       text-wrap: pretty;
     }
 
@@ -201,6 +216,10 @@ import WhatWeDo from "./about/_components/what-we-do.svg";
       margin-block: var(--space-l) var(--space-m);
       font-size: max(var(--step-1), 2.75cqi);
       border-radius: 2px;
+
+      svg {
+        height: 1.9em;
+      }
     }
 
     > p {
