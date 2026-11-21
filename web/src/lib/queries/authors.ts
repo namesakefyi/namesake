@@ -2,9 +2,9 @@ import { type CollectionEntry, getCollection } from "astro:content";
 import { siteInfo } from "#constants/site-info";
 
 const roleRank = (role: string) => {
-  if (/founder/i.test(role)) return 0;
-  if (role === "Executive Director") return 1;
-  if (/director/i.test(role)) return 2;
+  if (role === "Executive Director") return 0;
+  if (/director/i.test(role)) return 1;
+  if (/founder/i.test(role)) return 2;
   return 3;
 };
 
