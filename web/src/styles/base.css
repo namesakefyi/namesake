@@ -159,6 +159,13 @@ a {
   }
 }
 
+tt,
+code,
+kbd,
+samp {
+  font-family: Courier, monospace;
+}
+
 .button-as-link {
   padding: 0;
   margin: 0;
@@ -193,6 +200,10 @@ a {
 
 img {
   max-width: 100%;
+}
+
+.multiply {
+  mix-blend-mode: multiply;
 }
 
 .nowrap {

@@ -1,8 +1,10 @@
 ---
+import { Image } from "astro:assets";
 import { RiDownloadLine } from "@remixicon/react";
 import PageHeader from "#components/PageHeader.astro";
 import BaseLayout from "#layouts/BaseLayout.astro";
 import BrandAssetCard from "./brand-assets/_components/BrandAssetCard.astro";
+import illustration from "./brand-assets/_components/illustration.png";
 import Swatches from "./brand-assets/_components/Swatches.astro";
 ---
 
@@ -52,25 +54,33 @@ import Swatches from "./brand-assets/_components/Swatches.astro";
     <a
       class="button secondary"
       href="/site/brand-assets/namesake-logos.zip"
-      download><RiDownloadLine />Download All</a
+      download
     >
+      <RiDownloadLine />
+      Download All
+    </a>
   </section>
   <section>
     <h2>Typography</h2>
     <p>
-      The text you’re reading now is set in <a
-        href="https://github.com/namesakefyi/atkinson-hyperlegible-soft"
-        >Atkinson Hyperlegible Soft</a
-      >, a rounded modification of <a
-        href="https://www.brailleinstitute.org/freefont/"
-        >Atkinson Hyperlegible</a
-      > from the Braille Institute. It emulates the look of printed text.
+      The text you’re reading now is set in{" "}
+      <a href="https://github.com/namesakefyi/atkinson-hyperlegible-soft">
+        Atkinson Hyperlegible Soft
+      </a>
+      , a rounded modification of{" "}
+      <a href="https://www.brailleinstitute.org/freefont/">
+        Atkinson Hyperlegible
+      </a>{" "}
+      from the Braille Institute. It emulates the look of printed text.
     </p>
     <a
       class="button secondary"
       href="https://github.com/namesakefyi/atkinson-hyperlegible-soft/releases/latest"
-      download><RiDownloadLine />Download Fonts</a
+      download
     >
+      <RiDownloadLine />
+      Download Fonts
+    </a>
   </section>
   <section>
     <h2>Color</h2>
@@ -84,6 +94,33 @@ import Swatches from "./brand-assets/_components/Swatches.astro";
       Text is always set in <strong>Photocopy Black (#111111)</strong>. Most
       pages should use a single background color beneath black text. Text on top
       of a full-page image may use <strong>Photocopy White (#E1E1E1)</strong>.
+    </p>
+  </section>
+  <section>
+    <h2>Illustrations</h2>
+    <p>Illustrations are set in a black-only photocopy style.</p>
+    <Image
+      src={illustration}
+      alt="A collage: a bird rests on a dagger in front of a cloud."
+      width={500}
+      densities={[1, 2]}
+      class="illustration multiply"
+    />
+    <p>
+      Illustrations can be created using Namesake's open source{" "}
+      <a href="https://photocopy.namesake.fyi">Photocopy</a> tool. Import an
+      image (or select a public domain image using the search feature), then
+      arrange your collage and modify parameters to taste. Export when finished.
+    </p>
+    <a class="button secondary" href="https://photocopy.namesake.fyi">
+      Open Photocopy
+    </a>
+    <p>
+      When exporting images for web, enable <strong>shrink to fit</strong> and{" "}
+      <strong>transparent background</strong> in the export dialog. Then use{" "}
+      <code>mix-blend-mode: multiply</code> in the site's CSS. This will make
+      sure that the illustration always matches the background color of the
+      page, even if the color changes in the future.
     </p>
   </section>
 </BaseLayout>
@@ -121,7 +158,11 @@ import Swatches from "./brand-assets/_components/Swatches.astro";
 
   .button {
     display: inline-flex;
-    margin-top: var(--space-m);
+    margin-block: var(--space-m);
     padding-inline: var(--space-m);
+  }
+
+  .illustration {
+    margin-block: var(--space-xl);
   }
 </style>
