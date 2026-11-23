@@ -2,7 +2,6 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import SocialLinks from "#components/SocialLinks.astro";
-import { joinParts } from "#lib/utils/joinParts";
 import { smartquotes } from "#lib/utils/smartquotes";
 
 interface Props {
@@ -31,7 +30,7 @@ const { authors } = Astro.props;
               <span class="pronouns">{author.data.pronouns}</span>
             )}
           </span>
-          <span>{joinParts(author.data.org.role, author.data.org.name)}</span>
+          <span>{author.data.org.name}</span>
         </div>
         <div class="details">
           <p>{smartquotes(author.data.bio)}</p>

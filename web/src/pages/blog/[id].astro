@@ -63,9 +63,7 @@ const previewImage = {
           />
           <div class="author-info">
             <strong data-pagefind-filter="author">{author.data.name}</strong>
-            <span class="role">
-              {joinParts(author.data.org.role, author.data.org.name)}
-            </span>
+            <span class="org">{author.data.org.name}</span>
           </div>
         </span>
       ))}
@@ -102,7 +100,7 @@ const previewImage = {
     }
   }
 
-  .role {
+  .org {
     font-size: var(--step--1);
   }
 

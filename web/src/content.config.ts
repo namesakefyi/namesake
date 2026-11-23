@@ -21,7 +21,7 @@ const authors = defineCollection({
       pronouns: z.string().optional(),
       org: z.object({
         name: z.string(),
-        role: z.string(),
+        role: z.string().optional(),
       }),
       bio: z.string(),
       avatar: image(),

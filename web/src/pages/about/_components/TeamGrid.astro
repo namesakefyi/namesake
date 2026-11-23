@@ -60,12 +60,9 @@ const teamColumns = [0, 1].map((column) =>
                 <span class="name-text">{member.data.name}</span>
               </span>
             </h3>
-            <div class="meta">
-              <span class="role">{member.data.org.role}</span>
-              {member.data.pronouns && (
-                <span class="pronouns">{member.data.pronouns}</span>
-              )}
-            </div>
+            {member.data.pronouns && (
+              <div class="meta">{member.data.pronouns}</div>
+            )}
           </header>
           <div class="photo-frame" data-circle>
             <Image
@@ -88,33 +85,31 @@ const teamColumns = [0, 1].map((column) =>
                 <span class="name-text">&hellip;and all our volunteers</span>
               </span>
             </h3>
-            <div class="meta">
-              <span class="role">Open Source Contributors</span>
-            </div>
           </header>
           <div class="photo-frame cluster">
-            {clusterContributors.map(
-              ({ contributor, x, y, isCenter }) => (
-                <img
-                  data-circle
-                  class:list={["avatar", { center: isCenter }]}
-                  src={`https://avatars.githubusercontent.com/u/${contributor.id}?s=120`}
-                  alt={contributor.login}
-                  width="56"
-                  height="56"
-                  loading="lazy"
-                  style={[
-                    `--x: ${x.toFixed(3)}`,
-                    `--y: ${y.toFixed(3)}`,
-                    `rotate: ${randomTilt()}`,
-                  ].join("; ")}
-                />
-              ),
-            )}
+            {clusterContributors.map(({ contributor, x, y, isCenter }) => (
+              <img
+                data-circle
+                class:list={["avatar", { center: isCenter }]}
+                src={`https://avatars.githubusercontent.com/u/${contributor.id}?s=120`}
+                alt={contributor.login}
+                width="56"
+                height="56"
+                loading="lazy"
+                style={[
+                  `--x: ${x.toFixed(3)}`,
+                  `--y: ${y.toFixed(3)}`,
+                  `rotate: ${randomTilt()}`,
+                ].join("; ")}
+              />
+            ))}
           </div>
           <p>
-            Namesake is built with the help of open source contributors from
-            around the world.{" "}
+            Namesake is built with the help of open source{" "}
+            <a href={`https://github.com/${REPO}/graphs/contributors?all=1`}>
+              contributors
+            </a>{" "}
+            from around the world.{" "}
             <a href={`https://github.com/${REPO}`}>Star Namesake on GitHub</a>!{" "}
             Want to get help write code or edit content?{" "}
             <a href={siteInfo.urls.contribute}>Read the contributor docs</a>.
@@ -192,20 +187,10 @@ const teamColumns = [0, 1].map((column) =>
       }
 
       .meta {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-2xs);
-        rotate: var(--meta-rotation);
-      }
-
-      .role {
         font-weight: var(--weight-bold);
         line-height: var(--line-height-display);
         text-wrap: balance;
-      }
-
-      .pronouns {
-        font-size: var(--step--1);
+        rotate: var(--meta-rotation);
       }
 
       .photo-frame {
