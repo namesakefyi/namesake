@@ -14,40 +14,10 @@ export async function buildPdfPacket({
   instructions: string[];
   documents: readonly { pdf: PdfDefinition; bytes: Uint8Array }[];
 }): Promise<Uint8Array> {
-  const { PDF } = await loadPdfLib();
-
-  const coverPageBytes = await buildCoverPage({
-    title,
-    instructions,
-    documents: documents.map(({ pdf }) => ({
-      title: pdf.title,
-      code: pdf.code,
-    })),
-  });
-
-  const mergedPdf = await PDF.merge([
-    coverPageBytes,
-    ...documents.map(({ bytes }) => bytes),
-  ]);
-  return await mergedPdf.save();
-}
-
-/**
- * Create a cover page PDF for a document packet.
- */
-async function buildCoverPage({
-  title,
-  instructions,
-  documents,
-}: {
-  title: string;
-  instructions: string[];
-  documents: Array<{ title: string; code?: string }>;
-}): Promise<Uint8Array> {
   const { PDF, StandardFonts } = await loadPdfLib();
-
-  const pdf = PDF.create();
-  const page = pdf.addPage({ width: 612, height: 792 }); // Standard US Letter size
+  // Merge the documents first so the first form keeps its AcroForm.
+  const pdf = await PDF.merge(documents.map(({ bytes }) => bytes));
+  const page = pdf.addPage({ size: "letter", insertAt: 0 });
   const { width, height } = { width: page.width, height: page.height };
 
   const margin = 50;
@@ -110,8 +80,8 @@ async function buildCoverPage({
 
   drawList({
     title: "Packet Includes",
-    items: documents.map((doc) =>
-      doc.code ? `${doc.title} (${doc.code})` : doc.title,
+    items: documents.map(({ pdf }) =>
+      pdf.code ? `${pdf.title} (${pdf.code})` : pdf.title,
     ),
     y: height - 270,
   });

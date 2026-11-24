@@ -45,16 +45,23 @@ describe("buildPdfPacket", () => {
     expect(fetch).toHaveBeenCalledWith("/forms/pdf-cover-logo.png");
   });
 
-  it("returns merged PDF bytes with a cover page followed by each PDF", async () => {
+  it("preserves a filled field on the page following the cover", async () => {
+    const source = PDF.create();
+    const page = source.addPage({ size: "a4" });
+    const name = source.getOrCreateForm().createTextField("name");
+    page.drawField(name, { x: 40, y: 700, width: 200, height: 24 });
+    name.setValue("River");
+
     const result = await buildPdfPacket({
       title: "Test Packet",
       instructions: ["First instruction"],
-      documents: [{ pdf: testPdf, bytes: mockPdfBytes }],
+      documents: [{ pdf: testPdf, bytes: await source.save() }],
     });
 
     const pdfDoc = await PDF.load(result);
-    // Cover page + 1 source PDF page
     expect(pdfDoc.getPages()).toHaveLength(2);
+    expect(pdfDoc.getPages()[1].height).toBeCloseTo(page.height);
+    expect(pdfDoc.getForm()?.getTextField("name")?.getValue()).toBe("River");
   });
 
   it("includes one page per PDF, in the given order, after the cover page", async () => {
