@@ -4,6 +4,7 @@ import { expect, test } from "@playwright/test";
 const pages: Record<string, string> = {
   "/": "Your name is yours to change",
   "/404": "Page Not Found",
+  "/about": "About",
   "/blog": "Blog",
   "/brand-assets": "Brand Assets",
   "/directory": "Directory",

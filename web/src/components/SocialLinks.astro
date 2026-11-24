@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  links: CollectionEntry<"authors">["data"]["socialLinks"];
+  class?: string;
+}
+
+const { links, class: className, ...rest } = Astro.props;
+---
+
+{links && links.length > 0 && (
+  <ul class:list={["social-links", className]} {...rest}>
+    {links.map((link) => (
+      <li>
+        <a href={link.url} target="_blank" rel="noopener noreferrer">
+          {link.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+  }
+</style>
