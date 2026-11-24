@@ -259,7 +259,7 @@ export const cmsConfig: CmsConfig = {
               label: "Name",
               hint: 'Use "Namesake" for Namesake team members.',
             },
-            { name: "role", label: "Role" },
+            { name: "role", label: "Role", required: false },
           ],
         },
         { name: "bio", label: "Bio", widget: "text" },
