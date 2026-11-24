@@ -11,7 +11,7 @@ From everyone at Namesake, thank you for using our services! We build them to he
 
 When we say “Company”, “we”, “our”, or “us” in this document, we are referring to Namesake Collaborative, LLC.
 
-When we say “Services”, we mean our websites, including [namesake.fyi](https://namesake.fyi), [app.namesake.fyi](https://app.namesake.fyi), and any product created and maintained by Namesake Collaborative LLC.
+When we say “Services”, we mean our websites, including [namesake.fyi](https://namesake.fyi) and any product created and maintained by Namesake Collaborative LLC.
 
 When we say “You” or “your”, we are referring to the people or organizations that use one or more of our Services.
 
