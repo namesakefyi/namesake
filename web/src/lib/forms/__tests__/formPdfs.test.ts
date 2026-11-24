@@ -29,6 +29,8 @@ function sampleAnswers(config: FormConfig, variant: 0 | 1): FormData {
       else if (type === "list") data[id] = variant === 0 ? keys : [];
       else if (type === "oneOf")
         data[id] = keys.at(variant === 0 ? 0 : -1) ?? "";
+      else if (id.endsWith("ZipCode"))
+        data[id] = variant === 0 ? "10001" : "02108-1234";
       else data[id] = SAMPLE_TEXT[type]?.[variant] ?? `${id} ${variant}`;
     }
   }
