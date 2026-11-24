@@ -311,32 +311,22 @@ export const cmsConfig: CmsConfig = {
     {
       name: "testimonials",
       label: "Testimonials",
-      files: [
+      label_singular: "Testimonial",
+      folder: `${CONTENT}/testimonials`,
+      extension: "yml",
+      identifier_field: "date",
+      sortable_fields: ["date", "location"],
+      fields: [
+        { name: "quote", label: "Quote", widget: "text" },
+        { name: "location", label: "Location" },
         {
-          name: "testimonials",
-          label: "Testimonials",
-          file: `${CONTENT}/testimonials.yml`,
-          fields: [
-            {
-              name: "testimonials",
-              label: "Testimonials",
-              label_singular: "Testimonial",
-              widget: "list",
-              root: true,
-              fields: [
-                { name: "quote", label: "Quote", widget: "text" },
-                { name: "location", label: "Location" },
-                {
-                  name: "date",
-                  label: "Date",
-                  widget: "datetime",
-                  type: "date",
-                },
-              ],
-            },
-          ],
+          name: "date",
+          label: "Date",
+          widget: "datetime",
+          type: "date",
         },
       ],
+      table_columns: ["quote", "date", "location"],
     },
   ],
 };
