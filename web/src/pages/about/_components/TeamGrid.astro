@@ -1,0 +1,259 @@
+---
+import { Image } from "astro:assets";
+import SocialLinks from "#components/SocialLinks.astro";
+import { siteInfo } from "#constants/site-info";
+import { getNamesakeAuthors } from "#lib/queries/authors";
+import { randomTilt } from "#lib/utils/randomTilt";
+import { smartquotes } from "#lib/utils/smartquotes";
+
+const REPO = "namesakefyi/namesake";
+
+const contributors = [
+  { login: "ThomasWCode", id: 172206513 },
+  { login: "molloyzak13", id: 293489914 },
+  { login: "uncenter", id: 47499684 },
+  { login: "zachrburke", id: 1379757 },
+  { login: "taraxvoid", id: 1711810 },
+  { login: "gingerchew", id: 26461046 },
+  { login: "DeclanChidlow", id: 84255570 },
+  { login: "matt-y", id: 278679 },
+];
+const RING_SIZE = contributors.length - 1;
+
+const team = await getNamesakeAuthors();
+
+const clusterContributors = contributors.map((contributor, index) => {
+  if (index === 0) return { contributor, x: 0, y: 0, isCenter: true };
+  const angle = ((index - 1) / RING_SIZE) * 2 * Math.PI - Math.PI / 2;
+  return {
+    contributor,
+    x: Math.cos(angle),
+    y: Math.sin(angle),
+    isCenter: false,
+  };
+});
+const volunteersColumn = team.length % 2;
+
+const cardStyle = (order: number) =>
+  [
+    `order: ${order}`,
+    `--photo-rotation: ${randomTilt()}`,
+    `--name-rotation: ${randomTilt()}`,
+    `--meta-rotation: ${randomTilt()}`,
+  ].join("; ");
+
+const teamColumns = [0, 1].map((column) =>
+  team
+    .map((member, order) => ({ member, order }))
+    .filter(({ order }) => order % 2 === column),
+);
+---
+
+<div class="members">
+  {teamColumns.map((column, columnIndex) => (
+    <ul>
+      {column.map(({ member, order }) => (
+        <li class="member" style={cardStyle(order)}>
+          <header>
+            <h3>
+              <span class="name" data-inverted>
+                <span class="name-text">{member.data.name}</span>
+              </span>
+            </h3>
+            {member.data.pronouns && (
+              <div class="meta">{member.data.pronouns}</div>
+            )}
+          </header>
+          <div class="photo-frame" data-circle>
+            <Image
+              class="avatar"
+              src={member.data.avatar}
+              alt={`${member.data.name} photo`}
+              widths={[160, 320]}
+              sizes="160px"
+            />
+          </div>
+          <p>{smartquotes(member.data.bio)}</p>
+          <SocialLinks class="social" links={member.data.socialLinks} />
+        </li>
+      ))}
+      {columnIndex === volunteersColumn && (
+        <li class="member" style={cardStyle(team.length)}>
+          <header>
+            <h3>
+              <span class="name" data-inverted>
+                <span class="name-text">&hellip;and all our volunteers</span>
+              </span>
+            </h3>
+          </header>
+          <div class="photo-frame cluster">
+            {clusterContributors.map(({ contributor, x, y, isCenter }) => (
+              <img
+                data-circle
+                class:list={["avatar", { center: isCenter }]}
+                src={`https://avatars.githubusercontent.com/u/${contributor.id}?s=120`}
+                alt={contributor.login}
+                width="56"
+                height="56"
+                loading="lazy"
+                style={[
+                  `--x: ${x.toFixed(3)}`,
+                  `--y: ${y.toFixed(3)}`,
+                  `rotate: ${randomTilt()}`,
+                ].join("; ")}
+              />
+            ))}
+          </div>
+          <p>
+            Namesake is built with the help of open source{" "}
+            <a href={`https://github.com/${REPO}/graphs/contributors?all=1`}>
+              contributors
+            </a>{" "}
+            from around the world.{" "}
+            <a href={`https://github.com/${REPO}`}>Star Namesake on GitHub</a>!{" "}
+            Want to get help write code or edit content?{" "}
+            <a href={siteInfo.urls.contribute}>Read the contributor docs</a>.
+          </p>
+        </li>
+      )}
+    </ul>
+  ))}
+</div>
+
+<style>
+  .members {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
+
+    @media (width >= 760px) {
+      flex-direction: row;
+      gap: var(--space-3xl);
+      align-items: flex-start;
+    }
+
+    > ul {
+      display: contents;
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+
+      @media (width >= 760px) {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: var(--space-2xl);
+      }
+    }
+
+    > ul + ul {
+      @media (width >= 760px) {
+        margin-block-start: var(--space-3xl);
+      }
+    }
+
+    .member {
+      --photo-size: 160px;
+
+      display: grid;
+      grid-template-columns: var(--photo-size) 1fr;
+      column-gap: var(--space-m);
+      align-content: start;
+      align-items: center;
+
+      header {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        grid-row: 1;
+        grid-column: 2;
+      }
+
+      h3 {
+        margin-block-end: var(--space-m);
+        margin-inline-start: calc(-1 * (var(--space-l) + var(--space-m)));
+        rotate: var(--name-rotation);
+      }
+
+      .name {
+        padding: 0.15em var(--space-2xs);
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+      }
+
+      .name-text {
+        position: relative;
+      }
+
+      .meta {
+        font-weight: var(--weight-bold);
+        line-height: var(--line-height-display);
+        text-wrap: balance;
+        rotate: var(--meta-rotation);
+      }
+
+      .photo-frame {
+        grid-row: 1;
+        grid-column: 1;
+        width: var(--photo-size);
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1;
+        object-fit: cover;
+        rotate: var(--photo-rotation);
+      }
+
+      p,
+      .social {
+        grid-column: 1 / -1;
+      }
+
+      p {
+        margin: var(--space-m) 0 0;
+      }
+
+      .social {
+        margin: var(--space-xs) 0 0;
+      }
+    }
+
+    .cluster {
+      position: relative;
+      aspect-ratio: 1;
+    }
+
+    .cluster img {
+      position: absolute;
+      top: calc(50% + var(--y) * 36.25%);
+      left: calc(50% + var(--x) * 36.25%);
+      width: 27.5%;
+      translate: -50% -50%;
+
+      &.center {
+        width: 35%;
+      }
+    }
+  }
+</style>
+
+<script>
+  import { annotate } from "rough-notation";
+
+  const isForcedColors = window.matchMedia("(forced-colors: active)").matches;
+
+  if (!isForcedColors) {
+    for (const element of document.querySelectorAll("[data-circle]")) {
+      annotate(element as HTMLElement, {
+        type: "circle",
+        iterations: 1,
+        animate: false,
+        padding: 0,
+      }).show();
+    }
+  }
+</script>

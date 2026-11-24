@@ -20,7 +20,7 @@ const authors = defineCollection({
       pronouns: z.string().optional(),
       org: z.object({
         name: z.string(),
-        role: z.string(),
+        role: z.string().optional(),
       }),
       bio: z.string(),
       avatar: image(),
@@ -155,6 +155,15 @@ const sponsors = defineCollection({
     }),
 });
 
+const testimonials = defineCollection({
+  loader: glob({ base: "./src/content/testimonials", pattern: "**/*.yml" }),
+  schema: z.object({
+    quote: z.string(),
+    location: z.string(),
+    date: z.coerce.date(),
+  }),
+});
+
 export const collections = {
   authors,
   categories,
@@ -165,4 +174,5 @@ export const collections = {
   posts,
   press,
   sponsors,
+  testimonials,
 };

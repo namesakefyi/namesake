@@ -308,5 +308,25 @@ export const cmsConfig: CmsConfig = {
         { name: "logo", label: "Logo", widget: "image" },
       ],
     },
+    {
+      name: "testimonials",
+      label: "Testimonials",
+      label_singular: "Testimonial",
+      folder: `${CONTENT}/testimonials`,
+      extension: "yml",
+      identifier_field: "date",
+      sortable_fields: ["date", "location"],
+      fields: [
+        { name: "quote", label: "Quote", widget: "text" },
+        { name: "location", label: "Location" },
+        {
+          name: "date",
+          label: "Date",
+          widget: "datetime",
+          type: "date",
+        },
+      ],
+      table_columns: ["quote", "date", "location"],
+    },
   ],
 };

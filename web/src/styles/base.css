@@ -290,6 +290,7 @@ textarea:focus-visible {
 .avatar {
   overflow: hidden;
   user-select: none;
+  background-color: var(--background-color);
   border-radius: 100%;
   mix-blend-mode: luminosity;
   filter: grayscale(100%);
