@@ -99,6 +99,21 @@ describe("FormReviewTable", () => {
     expect(definitions[1]).toHaveTextContent("Missing!");
   });
 
+  it("shows an optional suffix on review only when answered", () => {
+    const step: Step = {
+      ...nameStep,
+      questions: [q.shortText("suffix", { label: "Suffix", optional: true })],
+    };
+    const review = <FormReviewTable steps={[step]} />;
+    const { unmount } = renderWithValues(review, { suffix: "" });
+    expect(screen.queryByRole("term")).not.toBeInTheDocument();
+
+    unmount();
+    renderWithValues(review, { suffix: "Jr." });
+    expect(screen.getByRole("term")).toHaveTextContent("Suffix");
+    expect(screen.getByRole("definition")).toHaveTextContent("Jr.");
+  });
+
   it("renders a Change button for each step section", () => {
     renderWithValues(<FormReviewTable steps={[nameStep]} />, {
       oldFirstName: "Sylvia",
