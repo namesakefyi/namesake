@@ -160,7 +160,7 @@ interface LabelOptions extends CommonFieldOptions {
 }
 
 type SingleFieldOptions<K extends keyof SingleFieldPropsByKind> = LabelOptions &
-  SingleFieldPropsByKind[K];
+  SingleFieldPropsByKind[K] & { optional?: boolean };
 
 type AddressOptions<T extends AddressType> = CommonFieldOptions &
   (T extends ExtendedAddressType
@@ -178,7 +178,14 @@ function singleField<K extends keyof SingleFieldPropsByKind>(
   kind: K,
   type: FieldType,
   name: string,
-  { label, description, when, reviewLabel, ...props }: SingleFieldOptions<K>,
+  {
+    label,
+    description,
+    when,
+    reviewLabel,
+    optional,
+    ...props
+  }: SingleFieldOptions<K>,
   options?: OptionLabels,
 ): FieldQuestion<K> {
   return {
@@ -188,7 +195,7 @@ function singleField<K extends keyof SingleFieldPropsByKind>(
     label,
     when,
     reviewLabel,
-    writes: [{ id: name, type, options }],
+    writes: [{ id: name, type, options, optional }],
     props: { ...props, name, description } as FieldPropsByKind[K],
   };
 }
