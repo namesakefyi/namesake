@@ -18,3 +18,8 @@ packageExtensions:
   "@astrojs/astro2tsx@0.1.3":
     dependencies:
       "@emnapi/runtime": 1.11.3
+
+# Starlight pins satteri ^0.10 while astro's markdown-satteri uses ^0.11; mixing them corrupts the docs build.
+# Remove once @astrojs/starlight depends on satteri ^0.11.
+overrides:
+  "@astrojs/starlight>satteri": ^0.11.7
