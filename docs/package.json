@@ -13,10 +13,10 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",
-    "@astrojs/cloudflare": "14.4.6",
+    "@astrojs/cloudflare": "14.4.9",
     "@astrojs/starlight": "0.42.10",
     "@mermaid-js/layout-elk": "^1.0.2",
-    "astro": "7.4.7",
+    "astro": "7.4.13",
     "astro-mermaid": "^2.2.0",
     "astro-og-canvas": "^0.13.3",
     "canvaskit-wasm": "^0.42.0",
@@ -24,7 +24,7 @@
     "sharp": "^0.35.5",
     "starlight-theme-flexoki": "^0.3.0",
     "typescript": "^6.0.3",
-    "wrangler": "^4.161.0"
+    "wrangler": "^4.166.0"
   },
   "devDependencies": {
     "@types/node": "^26.6.6"
